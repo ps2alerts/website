@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col s12 filters center-align">
+        <button
+            ng-class="outfitsServer != 0 ? 'btn-inactive' : ''"
+            class="btn waves-effect waves-light ga-event"
+            ng-click="changeOutfitServer(0)"
+            ga-campaign="Leaderboards - Top Outfits"
+            ga-action="Filters - Servers"
+            ga-label="All">
+                All
+        </button>
+        <button
+            ng-repeat="server in config.serversAlpha"
+            ng-class="outfitsServer != server ? 'btn-inactive' : ''"
+            class="btn waves-effect waves-light ga-event"
+            ng-click="changeOutfitServer(server)"
+            ga-campaign="Leaderboards - Top Outfits"
+            ga-action="Filters - Servers"
+            ga-label="{{::config.serverNames[server]}}">
+                {{::config.serverNames[server]}}
+        </button>
+    </div>
+    <p class="caption center-align">
+        Servers
+    </p>
+    <div class="col s12 filters center-align">
+        <button
+            ng-repeat="sorting in outfitsSortingOptions"
+            ng-class="outfitsSorting.indexOf(sorting) == -1 ? 'btn-inactive' : ''"
+            class="btn waves-effect waves-light ga-event"
+            ng-click="changeOutfitSorting(sorting)"
+            ga-campaign="Leaderboards - Top Outfits"
+            ga-action="Filters - Sorting"
+            ga-label="{{::sorting}}"
+            >
+                {{::sorting }}
+        </button>
+    </div>
+    <p class="caption center-align">
+        Sorting
+    </p>
+</div>

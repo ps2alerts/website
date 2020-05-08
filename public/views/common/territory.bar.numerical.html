@@ -1,0 +1,35 @@
+<div
+    class="territory-bar territory-bar-container z-depth-1 grey darken-3">
+    <div class="percentmark per33" ng-if="showsplitbars" ng-show="total > 0"></div>
+    <div class="percentmark per66" ng-if="showsplitbars" ng-show="total > 0"></div>
+    <div class="loading" ng-hide="total > 0">
+        <i class="fa fa-refresh fa-spin"></i>
+    </div>
+    <div class="segment vs-segment" style="width:{{vs / total * 100 | number: 2}}%" ng-show="vs > 0">
+        <span class="segment-metric" ng-show="(vs / total * 100) > 5" decimal="{{vs}}" percentage="{{vs / total * 100 | number:decimal}}%">
+            {{vs | shortNumber:decimal}}
+        </span>
+    </div>
+    <div class="segment nc-segment" style="width:{{nc / total * 100 | number: 2}}%" ng-show="nc > 0">
+        <span class="segment-metric" ng-show="(nc / total * 100) > 5" decimal="{{nc}}" percentage="{{nc / total * 100 | number:decimal}}%">
+            {{nc | shortNumber:decimal}}
+        </span>
+    </div>
+    <div class="segment tr-segment" style="width:{{tr / total * 100 | number: 2}}%" ng-show="tr > 0">
+        <span class="segment-metric" ng-show="(tr / total * 100) > 5" decimal="{{tr}}" percentage="{{tr / total * 100 | number:decimal}}%">
+            {{tr | shortNumber:decimal}}
+        </span>
+    </div>
+    <div
+        class="segment draw-segment"
+        style="width:{{draw / total * 100 | number: 2}}%"
+        ng-class="draw / total * 100 < 5 ? 'tooltipped' : ''"
+        ng-show="draw > 0"
+        ng-if="draw"
+        data-tooltip="Draws ({{draw / total * 100 | number:decimal}}%)"
+        data-position="top">
+        <span class="segment-metric" ng-show="draw / total * 100 > 5" decimal="{{draw}}" percentage="{{draw / total * 100 | number:decimal}}%">
+            {{vs | shortNumber:decimal}}
+        </span>
+    </div>
+</div>

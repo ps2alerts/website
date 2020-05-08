@@ -1,0 +1,30 @@
+@import 'variables';
+
+#alert-history {
+    #history-list .card {
+        margin-bottom: 0.3rem;
+        border: 1px solid darken(@border-color, 55%);
+        border-radius: 0;
+    }
+
+    #history-list .card-content .row {
+        margin-bottom: 15px;
+    }
+
+    @line-height: 36px;
+
+    #history-list .card-content .row .btn {
+        line-height: @line-height;
+        margin-top: 10px;
+    }
+
+    .alert-history-label {
+        text-align: center;
+        font-size: 1.5rem;
+    }
+
+    .dynamic-caption {
+        margin-top: @margin-base !important;
+        text-align: center;
+    }
+}

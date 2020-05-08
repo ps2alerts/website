@@ -1,0 +1,12 @@
+<section ng-controller="HomeCombatController">
+    <div class="row row-no-margin">
+        <div class="col s12 center-align">
+            <h1 class="header-no-margin">Combat Statistics</h1>
+            <h4>Statistics shown from 29-Oct-2014 to {{today | date : 'dd-MMM-yyyy'}}</h4>
+        </div>
+    </div>
+
+    <div home-combat-metrics id="home-combat-metrics"></div>
+    <div home-class-metrics id="home-class-metrics"></div>
+    <div home-weapon-metrics id="home-weapon-metrics"></div>
+</section>

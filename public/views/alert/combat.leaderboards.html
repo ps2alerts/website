@@ -1,0 +1,150 @@
+<div class="row row-no-margin tab-container" id="combat-leaderboards">
+    <h1 class="center-align">Combat Leaderboards</h1>
+    <div class="col s12">
+        <ul class="tabs">
+            <li class="tab col s3">
+                <a
+                    class="active waves-effect waves-light ga-event"
+                    href="#player-leaderboard-container"
+                    ga-campaign="Alert"
+                    ga-action="Leaderboards - Players"
+                    ga-label="Opened"
+                    data-tab="players"
+                >
+                    Players ({{alert.metrics.players.length}})
+                </a>
+            </li>
+            <li class="tab col s3">
+                <a
+                    class="waves-effect waves-light ga-event"
+                    href="#outfit-leaderboard-container"
+                    ga-campaign="Alert"
+                    ga-action="Leaderboards - Outfits"
+                    ga-label="Opened"
+                    data-tab="outfits"
+                >
+                    Outfits ({{alert.metrics.outfits.length}})
+                </a>
+            </li>
+            <li class="tab col s3">
+                <a
+                    class="waves-effect waves-light ga-event"
+                    href="#weapon-leaderboard-container"
+                    ga-campaign="Alert"
+                    ga-action="Leaderboards - Weapons"
+                    ga-label="Opened"
+                    data-tab="weapons"
+                >
+                    Weapons ({{alert.metrics.weapons.length}})
+                </a>
+            </li>
+            <li class="tab col s3">
+                <a
+                    class="waves-effect waves-light ga-event"
+                    href="#vehicle-leaderboard-container"
+                    ga-campaign="Alert"
+                    ga-action="Leaderboards - Vehicles"
+                    ga-label="Opened"
+                    data-tab="vehicles"
+                >
+                    Vehicles ({{alert.metrics.vehicles.length}})
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div id="player-leaderboard-container" class="col s12 leaderboards">
+        <div class="card blue-grey darken-3">
+            <div class="card-content">
+                <table id="player-leaderboard"></table>
+                <div class="leaderboard-notes">
+                    <ul>
+                        <li>
+                            <small>There is a small chance that headshots get miscalculated in a way where you have more headshots than kills. This is a bug that's been plauging the system for years, and there's no known fix at this time. It's pretty rare.</small>
+                        </li>
+                        <li>
+                            <small><b>KPM / DPM</b> = Kills / Deaths Per Minute - this figure is updated every second</small>
+                        </li>
+                        <li>
+                            <small><b>KPM</b> time is based off total alert duration, not session duration.</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="outfit-leaderboard-container" class="col s12 leaderboards">
+        <div class="card blue-grey darken-3">
+            <div class="card-content">
+                <table id="outfit-leaderboard"></table>
+                <div class="leaderboard-notes">
+                    <ul>
+                        <li>
+                            <small>* Outfits that have less than 5 players in an alert <b>during "Prime Time"</b> will have their K/Ds zeroed, in order to prevent one player from having a high K/D and polluting the outfit stats. This won't affect sitewide metrics, this is purely for visual representation on a per-alert basis. Make your voice heard! <a href="http://strawpoll.me/6936968" target="_blank">Let us know what the limit should be set to!</a></small>
+                        </li>
+                        <li>
+                            <small><b>PP</b> = Per Participant</small>
+                        </li>
+                        <li>
+                            <small><b>KPM / DPM</b> = Kills / Deaths Per Minute - this figure is updated every second</small>
+                        </li>
+                        <li>
+                            <small><b>KPM</b> time is based off total alert duration, not session duration.</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="weapon-leaderboard-container" class="col s12 leaderboards">
+        <div class="card blue-grey darken-3">
+            <div class="card-content">
+                <table id="weapon-leaderboard"></table>
+                <div class="leaderboard-notes">
+                    <ul>
+                        <li>
+                            <small><b>[I]</b> = Infantry Weapons</small>
+                        </li>
+                        <li>
+                            <small><b>[V]</b> = Vehicle Weapons</small>
+                        </li>
+                        <li>
+                            <small>Weapons that are available to all factions (such as the Frag Grenade) are listed as (Grouped), where all their stats are tallied together. They are also listed seperately so you can see a faction breakdown.</small>
+                        </li>
+                        <li>
+                            <small>NS Infantry weapons are regarded as one weapon to the game, so they're automatically grouped together. Faction information for these weapons is not possible currently.</small>
+                        </li>
+                        <li>
+                            <small>Certain weapons are incapable of headshots (such as the frag grenade). Showing 0% is intended.</small>
+                        </li>
+                        <li>
+                            <small><b>KPM</b> time is based off total alert duration, not session duration.</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="vehicle-leaderboard-container" class="col s12 leaderboards">
+        <div class="card blue-grey darken-3">
+            <div class="card-content">
+                <table id="vehicle-leaderboard"></table>
+                <div class="leaderboard-notes">
+                    <ul>
+                        <li>
+                            <small>* Infantry Death calculations are currently broken. Possibly they're being regarded as vehicle deaths by mistake. Sorry!</small>
+                        </li>
+                        <li>
+                            <small><b>Ejections</b> are counted when the player gets out of a vehicle, the vehicle blows up, but there is no subsequent Player Death within a 1 second period.</small>
+                        </li>
+                        <li>
+                            <small>"AA Base Turret??" is a vehicle that keeps cropping up. I've included it to prevent breakage. If you know what the hell this vehicle is (ID 127) please get in touch!</small>
+                        </li>
+                        <li>
+                            <small><b>KPM</b> time is based off total alert duration, not session duration.</small>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

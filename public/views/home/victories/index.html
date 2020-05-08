@@ -1,0 +1,82 @@
+<section ng-controller="HomeVictoryController">
+    <div class="row center-align">
+        <h1 class="header-no-margin">
+            Victory Statistics
+        </h1>
+        <h4>
+            Statistics shown from 29-Oct-2014 to {{today | date : 'dd-MMM-yyyy'}}
+        </h4>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <territory-bar
+                vs="{{victoryStats.totals.alerts.vs}}"
+                nc="{{victoryStats.totals.alerts.nc}}"
+                tr="{{victoryStats.totals.alerts.tr}}"
+                draw="{{victoryStats.totals.alerts.draw}}"
+                total="{{victoryStats.totals.alerts.total}}"
+                decimal="1">
+            </territory-bar>
+        </div>
+    </div>
+    <div class="row row-no-margin">
+        <div class="col s12 no-padding">
+            <div
+                metric-card
+                class="col s12 m6"
+                card-title="Total Alerts"
+                metric="{{victoryStats.totals.alerts.total}}">
+            </div>
+            <div
+                metric-card
+                class="col s12 m6"
+                card-title="Total Dominations"
+                metric="{{victoryStats.totals.dominations.total}}">
+            </div>
+            <div
+                home-faction-card
+                class="col s12 m6 l3"
+                card-class="vs-card"
+                card-title="Vanu Sovereignty"
+                faction="vs">
+            </div>
+            <div
+                home-faction-card
+                class="col s12 m6 l3"
+                card-class="nc-card"
+                card-title="New Conglomerate"
+                faction="nc">
+            </div>
+            <div
+                home-faction-card
+                class="col s12 m6 l3"
+                card-class="tr-card"
+                card-title="Terran Republic"
+                faction="tr">
+            </div>
+            <div
+                home-faction-card
+                class="col s12 m6 l3"
+                card-class="draw-card"
+                card-title="Draws"
+                faction="draw">
+            </div>
+        </div>
+    </div>
+
+    <h2 class="center-align" id="victory-timeline">
+        Victory Timeline
+    </h2>
+
+    <div ng-controller="HomeTimelineController" class="row">
+        <div home-victory-timeline></div>
+    </div>
+
+    <h2 class="center-align">
+        Victory Breakdowns
+    </h2>
+</section>
+<section ng-controller="HomeZoneVictoryController">
+    <div home-victory-breakdowns></div>
+</section>

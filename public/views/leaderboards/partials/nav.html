@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col s12">
+        <ul class="fake-tabs">
+            <li class="tab col s3">
+                <a
+                    ng-class="path == '/leaderboards' ? 'active' : ''"
+                    class="waves-effect waves-light"
+                    href="{{ config.baseUrl }}/leaderboards">
+                    Top 100
+                </a>
+            </li>
+            <li class="tab col s3 disabled">
+                Player Ladder (Coming soon)
+            </li>
+            <li class="tab col s3 disabled">
+                Outfit Ladder (Coming soon)
+            </li>
+            <li class="tab col s3">
+                <a
+                    ng-class="path == '/leaderboards/weapons' ? 'active' : ''"
+                    class="waves-effect waves-light"
+                    href="{{ config.baseUrl }}/leaderboards/weapons"                >
+                    Weapons
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<p class="center-align" style="color: red">
+    <i class="fa fa-bug"></i> Known bug: If player factions or outfits are incorrect, they <b>should</b> be automatically corrected the next time they play in  the next tracked alert.
+</p>

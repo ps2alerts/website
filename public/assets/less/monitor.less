@@ -1,0 +1,81 @@
+@import 'variables';
+
+#alert-monitor {
+    position: relative;
+    padding: (@padding-base / 4) 0;
+    overflow: hidden;
+
+    #websocket-status {
+        position: absolute;
+        top: @margin-base;
+        right: @margin-base;
+        .chip {
+            color: #fff;
+        }
+        @media screen and (max-width: 767px) {
+            display: none;
+        }
+    }
+
+    .message {
+        text-align: center;
+        color: #FF2121;
+    }
+
+    .websocket-disabled.chip {
+        background-color: #676767;
+    }
+
+    .websocket-disconnected.chip {
+        background-color: #B90202;
+    }
+
+    .websocket-middleman-fail.chip {
+        background-color: #B90202;
+    }
+
+    .websocket-connecting.chip {
+        background-color: #FFB100;
+    }
+
+    .websocket-connected.chip {
+        background-color: #279E0A;
+    }
+
+    #websocket-body {
+        padding-bottom: @padding-base / 2;
+        .disabled {
+            h3 {
+                color: #ff9900;
+            }
+        }
+        .monitor-labels {
+            margin-bottom: 5px;
+            @media screen and (max-width: 600px) {
+                display: none;
+            }
+        }
+
+        .monitor-labels span {
+            font-size: 1.3em;
+        }
+
+        .monitor-row {
+            margin-bottom: 2px;
+            @media screen and (max-width: 600px) {
+                margin-bottom: 10px;
+            }
+
+            &.phased {
+                opacity: 0.4;
+            }
+        }
+
+        // Centralize and limit size on big screens
+        @media and (max-width: 1050px) {
+            width: 850px;
+            margin: 0 auto;
+            float: none;
+        }
+    }
+}

@@ -1,0 +1,90 @@
+<div class="col s12">
+    <div class="card card-{{alert.alert.winner | lowercase }}" id="alert-info">
+        <div class="card-content center-align">
+            <div class="row center-align" ng-if="alert.alert.winner">
+                <div class="col s12">
+                    <h1 id="winner" class="heading-caption">
+                        {{::alert.alert.winnerText}}
+                    </h1>
+                    <p class="caption" ng-show="alert.alert.winnerText != 'Draw'">
+                        Winner
+                    </p>
+                </div>
+            </div>
+            <div class="row center-align" ng-if="alert.alert.ended == 0">
+                <div class="col s12">
+                    <h1 class="heading-caption">
+                        <span id="alert-countdown">00:00:00</span>
+                    </h1>
+                    <p class="caption">
+                        Remaining Time
+                    </p>
+                </div>
+            </div>
+
+            <div class="row-seperator"></div>
+
+            <div class="row row-no-margin">
+                <div class="col no-padding s12 m3" ng-if="alert.alert.endedDate">
+                    <h3 class="general-metric heading-caption">
+                        {{::alert.alert.endedDate}}
+                    </h3>
+                    <p class="caption">
+                        Ended
+                    </p>
+                </div>
+                <div class="col no-padding s12 m3" ng-if="!alert.alert.endedDate">
+                    <h3 class="general-metric heading-caption">
+                        {{::alert.alert.startedDate}}
+                    </h3>
+                    <p class="caption">
+                        Started
+                    </p>
+                </div>
+                <div class="col no-padding s4 m2" ng-if="alert.alert.durationTime" alertended="{{ alert.alert.ended }}">
+                    <h3 class="general-metric heading-caption" ng-if="alert.alert.ended != 0">
+                        {{alert.alert.durationTime}}
+                    </h3>
+                    <h3 class="general-metric heading-caption" ng-if="alert.alert.ended == 0">
+                        TBC
+                    </h3>
+                    <p class="caption">
+                        Duration
+                    </p>
+                </div>
+                <div class="col no-padding s4 m2" ng-if="!alert.alert.durationTime">
+                    <h3 class="general-metric heading-caption">
+                        TBD
+                    </h3>
+                    <p class="caption">
+                        Duration
+                    </p>
+                </div>
+                <div class="col no-padding s4 m2">
+                    <h3 class="general-metric heading-caption">
+                        {{::alert.alert.server}}
+                    </h3>
+                    <p class="caption">
+                        Server
+                    </p>
+                </div>
+                <div class="col no-padding s4 m2">
+                    <h3 class="general-metric heading-caption">
+                        {{::alert.alert.zone}}
+                    </h3>
+                    <p class="caption">
+                        Continent
+                    </p>
+                </div>
+                <div class="col no-padding s4 m3">
+                    <h3 class="general-metric heading-caption">
+                        {{::alert.alert.timeBracket}}
+                    </h3>
+                    <p class="caption">
+                        Time Bracket
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+<div class="card blue-grey darken-3">
+    <div class="card-content">
+        <div class="row row-no-margin filters">
+            <div class="col s12 m8 l4 center-align no-padding">
+                <button
+                    ng-repeat="server in config.serversAlpha"
+                    ng-class="filters.servers.indexOf(server) == -1 ? 'btn-inactive' : ''"
+                    class="btn waves-effect waves-light"
+                    ng-click="toggleFilters('servers', server)">
+                        {{::config.serverNames[server]}}
+                </button>
+                <p class="caption center-align">Servers</p>
+            </div>
+            <div class="col s12 m4 l3 center-align no-padding">
+                <button
+                    ng-repeat="zone in config.zonesAlpha"
+                    ng-class="filters.zones.indexOf(zone) == -1 ? 'btn-inactive' : ''"
+                    class="btn waves-effect waves-light"
+                    ng-click="toggleFilters('zones', zone)">
+                        {{::config.zoneNames[zone]}}
+                </button>
+                <p class="caption center-align">Zones</p>
+            </div>
+            <div class="col s12 m4 l3 center-align no-padding">
+                <button
+                    ng-repeat="faction in config.factions"
+                    ng-class="filters.factions.indexOf(faction) == -1 ? 'btn-inactive' : '{{faction}}-back'"
+                    class="btn waves-effect waves-light"
+                    ng-click="toggleFilters('factions', faction)">
+                        {{faction|uppercase}}
+                </button>
+                <p class="caption center-align">Factions</p>
+            </div>
+            <div class="col s12 m8 l2 center-align no-padding">
+                <button
+                    ng-repeat="(bracket, info) in config.timeBrackets"
+                    ng-class="filters.brackets.indexOf(bracket) == -1 ? 'btn-inactive' : ''"
+                    ng-click="toggleFilters('brackets', bracket)"
+                    class="btn waves-effect waves-light tooltipped"
+                    data-tooltip="{{info.desc}}"
+                    data-position="top">
+                        {{info.label}}
+                </button>
+                <p class="caption center-align">Time Brackets</p>
+            </div>
+            <div class="col s12 center-align apply-btns">
+                <button
+                    ng-click="applyFilter()"
+                    ng-show="!data.inProgress"
+                    class="btn btn-apply waves-effect waves-light ga-event"
+                    ga-campaign="Alert History Filters"
+                    ga-action="Filter"
+                    ga-label="Filters"
+                    ga-value="{{filters}}"
+                    ga-dynamic-value="1">
+                    <i class="fa fa-filter"></i> Filter
+                </button>
+                <button
+                    ng-show="data.inProgress"
+                    class="btn disabled btn-apply waves-effect waves-light ga-event"
+                    ga-campaign="Alert History Filters"
+                    ga-action="Clicked Loading Button">
+                    <i class="fa fa-spin fa-refresh"></i> Loading...
+                </button>
+                <button
+                    ng-click="showAll()"
+                    class="btn waves-effect waves-light ga-event"
+                    ga-campaign="Alert History Filters"
+                    ga-action="Show All">
+                    <i class="fa fa-eye"></i> Show All
+                </button>
+                <button
+                    ng-click="clearFilter()"
+                    class="btn btn-inactive waves-effect waves-light ga-event"
+                    ga-campaign="Alert History Filters"
+                    ga-action="Hide All">
+                    <i class="fa fa-eye-slash"></i> Hide All
+                </button>
+                <p class="caption">
+                    If no selections are made for a group of filters, the filter will be ignored.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

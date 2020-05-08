@@ -1,0 +1,56 @@
+#project-status {
+    .territory-bar {
+        margin-bottom: @margin-base / 2;
+    }
+
+    .project-status {
+        h3 {
+            margin-top: 10px;
+        }
+
+        .completed {
+            background-color: #218409;
+        }
+
+        .inprogress {
+            background-color: #AD7C0F;
+        }
+
+        .started {
+            background-color: #c35100;
+        }
+
+        .notstarted {
+            background-color: #920404;
+        }
+
+        .card-content {
+            padding: @padding-base;
+        }
+        .collapsible {
+            margin-top: @margin-base;
+            border-top: 0;
+            border-right: 0;
+            border-left: 0;
+        }
+
+        .collapsible-body {
+            background-color: lighten(#37474F, 10%);
+        }
+
+        .collapsible-body li {
+            list-style-type: initial;
+            margin-left: @margin-base;
+        }
+
+        .collapsible-header, .collapsible-body {
+            border-bottom: 1px solid #263238;
+        }
+
+        .collapsible-header .right {
+            @media screen and (max-width: 420px) {
+                display: none;
+            }
+        }
+    }
+}

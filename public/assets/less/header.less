@@ -1,0 +1,130 @@
+@import 'variables';
+
+header {
+    margin-bottom: @margin-base * 1.5;
+    position: relative;
+
+    img {
+        display: block;
+    }
+
+    #site-notice {
+        padding: @padding-base;
+        text-align: center;
+
+        small {
+            font-weight: normal;
+        }
+
+        &.critical {
+            background-color: @background-tr;
+        }
+        &.warning {
+            background-color: #c57600;
+        }
+        &.notice {
+            background-color: #096ec5;
+        }
+        &.success {
+            background-color: #279e0a;
+        }
+
+        p {
+            margin: 0;
+        }
+    }
+
+    .nav-wrapper {
+        @media screen and (max-width: 992px) {
+            margin-left: @margin-base;
+        }
+    }
+
+    .progress {
+        margin: 0;
+        background-color: #32363A;
+    }
+
+    .progress .determinate,
+    .progress .indeterminate {
+        background-color: @background-tr;
+    }
+
+    .nav-main {
+        font-size: 2.0rem;
+    }
+
+    .nav-seperator {
+        border-left: 1px solid @border-color;
+    }
+
+    nav {
+        .button-collapse i {
+            font-size: 1.7rem;
+        }
+
+        ul {
+            li {
+                a {
+                    padding: 0 10px;
+                }
+
+                &:hover {
+                    background-color: rgba(210, 0, 0, 0.3);
+                }
+
+                a:hover {
+                    color: #fff;
+                }
+
+                .fa {
+                    font-size: 1.2em;
+                }
+            }
+        }
+    }
+
+    .side-nav li:hover,
+    .side-nav li.active {
+        background-color: initial;
+    }
+
+    #changelog-badge {
+        strong {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            text-align: center;
+            font-size: 12px;
+            line-height: 20px;
+            vertical-align: middle;
+            margin-top: -2px;
+            // Default style
+            border-radius: 20px;
+            background-color: #fff;
+            transform: scale(0.5);
+            transition: all 0.5s ease-out;
+
+            &.hasCount {
+                background-color: #c70000;
+                transform: scale(1);
+            }
+
+            &.clearCount {
+                animation: ~"changelogclear" ease-out 0.5s forwards;
+            }
+        }
+    }
+
+    @keyframes changelogclear {
+        0% {
+            background-color: rgb(189, 4, 4);
+            transform: scale(1);
+
+        }
+        100% {
+            background-color: #fff;
+            transform: scale(0.5);
+        }
+    }
+}

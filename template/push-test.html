@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>WebSocket Test</title>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="{{ asset_url }}/js/websocket-test/common.js{{ version }}"></script>
+<script src="{{ asset_url }}/js/websocket-test/push-api.js{{ version }}"></script>
+<script src="{{ asset_url }}/js/websocket-test/ps2alerts-stream.js{{ version }}"></script>
+<script src="{{ asset_url }}/js/websocket-test/census.js{{ version }}"></script>
+
+<h2>WebSocket Test</h2>
+
+<div>
+    <span style="color: #00af00">Push API</span><br>
+    <span style="color: #0000ff">PS2Alerts</span><br>
+    <span style="color: #ef9f07">Census</span><br>
+</div>
+Subscribe to world: <input type="text" id="world"></input><button type="submit" id="subscribe">Subscribe</button>
+<hr>
+<div id="output-pushapi" style="width: 100%"></div>

@@ -1,0 +1,256 @@
+<div class="row">
+    <div class="col s12 m6 offset-m3 center-align">
+        <a href="#" id="breakdowns-percentage" ng-click="changeBreakdownMode('percentage')" class="btn waves-effect waves-light btn-fixed-width" ng-class="mode == 'numerical' ? 'btn-inactive' : ''">
+            Show Percentages
+        </a>
+        <a href="#" id="breakdowns-numeric" ng-click="changeBreakdownMode('numerical')" class="btn waves-effect waves-light btn-fixed-width" ng-class="mode == 'percentage' ? 'btn-inactive' : ''">
+            Show Numerical
+        </a>
+    </div>
+</div>
+
+<div class="col s12 m6 no-padding">
+    <div class="col s12">
+        <div class="card card-mobile blue-grey darken-3">
+            <div class="card-content">
+                <div class="row">
+                    <h2 class="center-align heading-caption">
+                        Global Server Victories
+                    </h2>
+                    <p class="center-align caption">
+                        Breakdown of each faction's victories on a per-server basis
+                    </p>
+                </div>
+                <div id="server-victory-breakdown">
+                    <div ng-repeat="(server, metrics) in victoryStats.victories">
+                        <div class="row breakdown-row">
+                            <div class="col s4 m3 l2">
+                                <p>
+                                    {{::config.serverNames[server]}}
+                                </p>
+                            </div>
+                            <div class="col s8 m9 l10">
+                                <territory-bar
+                                    vs="{{metrics.vs}}"
+                                    nc="{{metrics.nc}}"
+                                    tr="{{metrics.tr}}"
+                                    draw="{{metrics.draw}}"
+                                    total="{{metrics.vs + metrics.nc + metrics.tr + metrics.draw}}"
+                                    decimal="1">
+                                </territory-bar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col s12 m6 no-padding">
+    <div class="col s12">
+        <div class="card card-mobile blue-grey darken-3">
+            <div class="card-content">
+                <div class="row">
+                    <h2 class="center-align heading-caption">
+                        Global Continent Victories
+                    </h2>
+                    <p class="center-align caption">
+                        Breakdown of each faction's victories on a per-continent basis
+                    </p>
+                </div>
+                <div id="zone-victory-breakdown">
+                    <div ng-repeat="(zone, metrics) in zoneStats.zoneTotals">
+                        <div class="row breakdown-row">
+                            <div class="col s4 m3 l2">
+                                <p>
+                                    {{::config.zoneNames[zone]}}
+                                </p>
+                            </div>
+                            <div class="col s8 m9 l10">
+                                <territory-bar
+                                    vs="{{metrics.vs}}"
+                                    nc="{{metrics.nc}}"
+                                    tr="{{metrics.tr}}"
+                                    draw="{{metrics.draw}}"
+                                    total="{{metrics.vs + metrics.nc + metrics.tr + metrics.draw}}"
+                                    decimal="1">
+                                </territory-bar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col s12 no-padding">
+    <div class="col s12">
+        <div class="card card-mobile blue-grey darken-3">
+            <div class="card-content">
+                <div class="row">
+                    <h2 class="center-align heading-caption">
+                        Per-Server Continental Victories
+                    </h2>
+                    <p class="center-align caption">
+                        Shows the breakdown of each Server's victories by Continent.
+                    </p>
+                </div>
+                <div id="server-zone-victory-breakdown"  class="row row-no-margin">
+                    <div class="col m2 l1 hidden-s">
+                        <div ng-repeat="(key, server) in config.servers" class="breakdown-row">
+                            <p>
+                                {{::config.serverNames[server]}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col s12 m10 l11 no-padding">
+                        <div ng-repeat="(zones, servers) in zoneStats.zones" class="col s12 m3 no-padding group">
+                            <div ng-repeat="(server, metrics) in servers" class="row breakdown-row segments-small">
+                                <div class="col s3 visible-s">
+                                    <p>
+                                        {{::config.serverNames[server]}}
+                                    </p>
+                                </div>
+                                <div class="col s9 m12">
+                                    <territory-bar
+                                        vs="{{metrics.vs}}"
+                                        nc="{{metrics.nc}}"
+                                        tr="{{metrics.tr}}"
+                                        draw="{{metrics.draw}}"
+                                        total="{{metrics.vs + metrics.nc + metrics.tr + metrics.draw}}"
+                                        decimal="1">
+                                    </territory-bar>
+                                </div>
+                            </div>
+                            <p class="center-align caption">
+                                {{::config.zoneNames[zones]}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col s12 no-padding">
+    <div class="col s12">
+        <div class="card card-mobile blue-grey darken-3">
+            <div class="card-content">
+                <div class="row">
+                    <h2 class="center-align heading-caption">
+                        Faction Victory Contribution by Server
+                    </h2>
+                    <p class="center-align caption">
+                        Shows the contribution of each server to their factions' victories. Hover over (or tap on mobile) each segment for more detail.
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="col s12" id="faction-victory-breakdowns">
+                        <div class="territory-bar segments-small z-depth-1 grey darken-3">
+                            <div class="loading" ng-hide="loaded">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
+                            <div
+                                ng-repeat="(faction, servers) in zoneStats.serverTotals"
+                                class="segment {{faction}}-segment"
+                                style="width: {{zoneStats.factionTotals[faction] / zoneStats.factionTotals.all * 100 | number: 2}}%"
+                                ng-hide="!loaded">
+                                <div
+                                    ng-repeat="(server, data) in servers"
+                                    class="faction-contribution-segment segment-metric tooltipped"
+                                    style="width: {{data.per | number: 2}}%"
+                                    data-tooltip="{{::config.serverNames[data.server]}} | {{data.value}} | {{data.per | number: 1}}% of faction victories"
+                                    ng-if="server != 'total'">
+                                    <span
+                                        ng-if="faction != 'draw' && data.per > 10"
+                                        class="hidden-s segment-metric"
+                                        percentage="{{data.per | number: 0}}%"
+                                        numerical="{{data.value}}">
+                                        {{data.per | number: 0}}%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-no-margin" id="faction-victory-tables">
+                    <div
+                        class="col s12 m4"
+                        ng-repeat="(faction, servers) in zoneStats.serverTotals"
+                        ng-if="faction != 'draw'">
+                        <h3 class="center-align {{faction}}-table-text">
+                            {{::faction | uppercase}} Breakdown
+                        </h3>
+                        <div class="row header-row">
+                            <div class="col s3">
+                                Server
+                            </div>
+                            <div class="col s3 center-align">
+                                Wins
+                            </div>
+                            <div class="col s3 center-align">
+                                % faction
+                            </div>
+                            <div class="col s3 center-align">
+                                % of all*
+                            </div>
+                        </div>
+                        <div
+                            class="row metric-row"
+                            ng-repeat="value in servers">
+                            <div class="col s12 center-align" ng-show="!loaded">
+                                <i class="fa fa-refresh fa-spin"></i>
+                            </div>
+                            <div ng-show="loaded">
+                                <div class="col s3">
+                                    <span class="metric">
+                                        {{::config.serverNames[value.server]}}
+                                    </span>
+                                </div>
+                                <div class="col s3 center-align">
+                                    <span class="metric">
+                                        {{value.value}}
+                                    </span>
+                                </div>
+                                <div class="col s3 center-align">
+                                    <span
+                                        class="metric"
+                                        ng-show="loaded"
+                                        ng-class="value.per < 14.3 ? 'red-text' : 'green-text'"
+                                        >
+                                        {{value.per | number: 1}}%
+                                    </span>
+                                </div>
+                                <div class="col s3 center-align">
+                                    <i class="fa fa-refresh fa-spin" ng-show="!loaded"></i>
+                                    <span
+                                        class="metric"
+                                        ng-show="loaded"
+                                        ng-class="value.value / zoneStats.factionTotals.all * 100 < 4.8 ? 'red-text' : 'green-text'"
+                                        >
+                                        {{value.value / zoneStats.factionTotals.all * 100 | number: 1}}%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-no-margin">
+                    <div class="col s12">
+                        <p class="caption center-align">
+                            * "% of all" means each server's faction contribution to the overall total, regardless of faction.
+                        </p>
+                        <br />
+                        <p class="caption">
+                            <i class="fa fa-info-circle"></i> <b>Faction % coloring:</b> 100% / 7 servers = <b>14.3%</b>, which gives us the average split across 7 servers for each faction. Any servers below this rate are underperforming for their <b>faction</b>.
+                        </p>
+                        <p class="caption">
+                            <i class="fa fa-info-circle"></i> <b>% of all coloring:</b> 7 servers, 3 factions each (total of 21) split equally, average win rate is <b>4.8%</b> (rounded up). Any servers under this rate are underperforming <b>globally</b>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

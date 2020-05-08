@@ -1,0 +1,67 @@
+<div id="search-tab">
+	<button class="ga-event btn waves-effect waves-light"
+			ga-campaign="Search"
+			ga-action="Opened / Closed Tray"
+	><i class="fa fa-search"></i> Search</button>
+</div>
+<div class="row row-no-margin grey darken-2" ng-controller="SearchController" id="site-search-container">
+	<div class="col l4 m6 s12 offset-l4 offset-m3" id="site-search">
+		<form ng-submit="fireSearch()">
+			<div class="input-field">
+				<div class="col s8" id="search-input">
+					<div id="search-icons">
+						<a href="#" ng-click="fireSearch()" id="search-button">
+							<i class="fa fa-search" ng-hide="service.searching"></i>
+						</a>
+						<i class="fa fa-refresh fa-spin" ng-show="service.searching"></i>
+					</div>
+					<div id="search-fields">
+						<input
+							placeholder="{{placeholder}}"
+							id="term"
+							type="text"
+							ng-model="term"
+							ng-click="show()"
+						>
+						<a id="term-clear" href="#" ng-show="term.length" ng-click="clear()">
+							<i class="fa fa-times-circle" ></i>
+						</a>
+					</div>
+				</div>
+				<div class="col s4" id="search-type">
+					<select class="browser-default" ng-model="type">
+						<option value="player">Players</option>
+						<option value="outfit">Outfits</option>
+					</select>
+				</div>
+			</div>
+		</form>
+		<div id="search-results" class="col s12">
+			<div
+				class="search-result {{result.factionAbv}}-segment"
+				ng-repeat="result in service.results | limitTo: 10"
+				ng-show="service.results.length">
+				<a
+					href="profiles/{{::type}}/{{result.id}}"
+					ng-click="hide()">
+					<b>
+						<span ng-show="result.tag">
+							[{{result.tag}}]
+						</span>
+						{{result.name}}</b> - {{result.server}}
+				</a>
+			</div>
+			<div ng-show="!service.results.length && !service.searching">
+				<h4 class="center-align">No results</h4>
+			</div>
+			<div class="sk-three-bounce" ng-show="service.searching">
+				<div class="sk-child sk-bounce1"></div>
+				<div class="sk-child sk-bounce2"></div>
+				<div class="sk-child sk-bounce3"></div>
+				<p class="caption center-align">
+					Loading
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
