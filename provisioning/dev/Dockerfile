@@ -15,5 +15,3 @@ COPY files/php /usr/local/etc/php/conf.d
 COPY files/php-fpm /usr/local/etc/php-fpm.d
 
 USER www-data
-
-RUN npm install grunt --save-dev
