@@ -13,7 +13,7 @@ You will need a data dump or generate your own data in order to have the project
 
 ## Compilation
 
-The below technologies are used in order to compile the website module:
+The below applications are used in order to compile the website module:
 
 * npm
 * grunt
