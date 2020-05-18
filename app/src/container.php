@@ -5,6 +5,7 @@ $container = new League\Container\Container();
 // Service Providers
 $container->addServiceProvider(Ps2alerts\Frontend\ServiceProvider\ConfigServiceProvider::class);
 $container->addServiceProvider(Ps2alerts\Frontend\ServiceProvider\HttpMessageServiceProvider::class);
+$container->addServiceProvider(Ps2alerts\Frontend\ServiceProvider\LogServiceProvider::class);
 $container->addServiceProvider(Ps2alerts\Frontend\ServiceProvider\TemplateServiceProvider::class);
 
 // Inflectors
