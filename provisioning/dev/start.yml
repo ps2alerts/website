@@ -46,7 +46,7 @@
         user: "{{ id.stdout }}:{{ id.stdout }}"
         command: install
 
-    - name: Start NPM install contianer
+    - name: Start Website NPM install contianer
       docker_container:
         name: ps2alerts-website-npm
         image: digitallyseamless/nodejs-bower-grunt
@@ -55,7 +55,7 @@
           - "{{ playbook_dir }}/../../app:/data"
         user: "{{ id.stdout }}:{{ id.stdout }}"
 
-    - name: Start Bower container
+    - name: Start Website Bower container
       docker_container:
         name: ps2alerts-website-bower
         image: digitallyseamless/nodejs-bower-grunt
@@ -64,7 +64,7 @@
           - "{{ playbook_dir }}/../../app/public:/data"
         user: "{{ id.stdout }}:{{ id.stdout }}"
 
-    - name: Start Grunt install container
+    - name: Start Website Grunt install container (envDev)
       docker_container:
         name: ps2alerts-website-grunt
         image: digitallyseamless/nodejs-bower-grunt
@@ -73,7 +73,7 @@
           - "{{ playbook_dir }}/../../app:/data"
         user: "{{ id.stdout }}:{{ id.stdout }}"
 
-    - name: Start Grunt install container
+    - name: Start Website Grunt install container (grunt)
       docker_container:
         name: ps2alerts-website-grunt
         image: digitallyseamless/nodejs-bower-grunt
@@ -82,7 +82,7 @@
           - "{{ playbook_dir }}/../../app:/data"
         user: "{{ id.stdout }}:{{ id.stdout }}"
 
-    - name: Start Website Dev Container
+    - name: Start Website Dev container
       docker_container:
         name: ps2alerts-website
         image: ps2alerts/website:dev
