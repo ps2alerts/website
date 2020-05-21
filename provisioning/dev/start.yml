@@ -112,6 +112,7 @@
           ENVIRONMENT: "development"
           VERSION: "12345"
         labels:
-          traefik.http.routers.website.rule: "Host(`dev.ps2alerts.com`)"
-          traefik.http.routers.website.tls: "true"
-          traefik.http.routers.website.tls.domains[0].main: "dev.ps2alerts.com"
+          traefik.enable: "true"
+          traefik.http.routers.ps2alerts-website.rule: "Host(`dev.ps2alerts.com`)"
+          traefik.http.routers.ps2alerts-website.tls: "true"
+          traefik.http.routers.ps2alerts-website.tls.domains[0].main: "dev.ps2alerts.com"
