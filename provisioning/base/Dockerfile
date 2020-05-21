@@ -1,7 +1,7 @@
 FROM php:7.4-fpm
 
-# Install required OS packages
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
         nginx \
         runit \
         sudo \
