@@ -102,8 +102,8 @@
         volumes:
           - "{{ playbook_dir }}/../../app:/var/www/html:rw"
         ports:
-          - 80
-          - 443
+          - "80"
+          - "443"
         networks:
           - name: "ps2alerts"
         env:

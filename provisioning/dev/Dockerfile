@@ -11,11 +11,11 @@ RUN apt-get update \
         nodejs \
     && curl -L https://www.npmjs.com/install.sh | sh \
     && npm install -g \
-        bower
+        bower \
         grunt-cli \
     && mkdir /var/www/.npm /var/www/.config \
     && chown -R www-data: /var/www/.npm /var/www/.config \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apk/* \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apk/*
 
 COPY files/nginx /etc/nginx/conf.d
 COPY files/php /usr/local/etc/php/conf.d
