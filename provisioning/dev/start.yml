@@ -1,6 +1,8 @@
 ---
 - hosts: localhost
   tasks:
+    - debug:
+        msg: "========= 🕸️  Starting Website module 🕸️  ========="
     - name: Install docker
       pip:
         name: docker
