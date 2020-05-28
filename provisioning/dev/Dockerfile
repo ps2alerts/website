@@ -17,8 +17,8 @@ RUN apt-get update \
     && chown -R www-data: /var/www/.npm /var/www/.config \
     && rm -rf /var/lib/apt/lists/* /var/cache/apk/*
 
-COPY files/nginx /etc/nginx/conf.d
-COPY files/php /usr/local/etc/php/conf.d
-COPY files/php-fpm /usr/local/etc/php-fpm.d
+COPY ./files/nginx /etc/nginx/conf.d
+COPY ./files/php /usr/local/etc/php/conf.d
+COPY ./files/php-fpm /usr/local/etc/php-fpm.d
 
 USER www-data

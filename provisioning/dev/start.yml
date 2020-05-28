@@ -109,12 +109,10 @@
         networks:
           - name: "ps2alerts"
         env:
-          API_URL: "https://api.dev.ps2alerts.com"
-          BASE_URL: "https://dev.ps2alerts.com"
+          API_URL: "http://api.dev.ps2alerts.com"
+          BASE_URL: "http://dev.ps2alerts.com"
           ENVIRONMENT: "development"
           VERSION: "12345"
         labels:
           traefik.enable: "true"
           traefik.http.routers.ps2alerts-website.rule: "Host(`dev.ps2alerts.com`)"
-          traefik.http.routers.ps2alerts-website.tls: "true"
-          traefik.http.routers.ps2alerts-website.tls.domains[0].main: "dev.ps2alerts.com"
