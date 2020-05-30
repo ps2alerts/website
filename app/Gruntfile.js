@@ -100,9 +100,8 @@ module.exports = function(grunt) {
                     ENV: {
                         environment: 'development',
                         baseUrl: 'http://dev.ps2alerts.com',
-                        apiUrl: 'http://dev.api.ps2alerts.com/v2',
+                        apiUrl: 'http://api.dev.ps2alerts.com/v2',
                         websocketUrl: 'ws://127.0.0.1:1337?apikey=FOOBAR'
-                        //websocketUrl: 'ws.ps2alerts.com:1337?apikey=FOOBAR'
                     }
                 }
             },
