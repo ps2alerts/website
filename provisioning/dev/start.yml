@@ -42,7 +42,7 @@
     - name: Start Composer install container
       docker_container:
         name: composer
-        image: composer/composer
+        image: composer
         volumes:
           - "{{ playbook_dir }}/../../app:/app"
         user: "{{ id.stdout }}:{{ id.stdout }}"
