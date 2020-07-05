@@ -16,6 +16,7 @@ $container->inflector(Ps2alerts\Frontend\Contract\TemplateAwareInterface::class)
 
 // Controllers
 $container->add(Ps2alerts\Frontend\Controller\MainController::class);
+$container->add(Ps2alerts\Frontend\Controller\SplashController::class);
 $container->add(Ps2alerts\Frontend\Controller\LeaderboardController::class);
 $container->add(Ps2alerts\Frontend\Controller\ProfileController::class);
 $container->add(Ps2alerts\Frontend\Controller\ProjectStatusController::class);
