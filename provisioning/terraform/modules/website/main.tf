@@ -47,7 +47,7 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
         }
         container {
           name = var.identifier
-          image: concat("maelstromeous/applications:", var.identifier, "-", var.checksum_version)
+          image = concat("maelstromeous/applications:", var.identifier, "-", var.checksum_version)
           port {
             container_port = 80
           }
