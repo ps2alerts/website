@@ -43,7 +43,7 @@ jobs:
       - name: Save DO kubeconfig
         run: doctl kubernetes cluster kubeconfig save my-cluster
 
-      - name: Update the K8s staging deployment file
+      - name: Inject the GitHub SHA into the deployment file
         run: sed -i 's|{{ version }}|${{ github.sha }}|' provisioning/staging/k8s/deployment.yml
 
       - name: Apply staging K8s Deployment

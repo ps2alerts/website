@@ -26,6 +26,6 @@ spec:
             - name: VERSION
               value: "{{ version }}"
             - name: BASE_URL
-              value: "https://staging-k8s.ps2alerts.com"
+              value: "https://staging.ps2alerts.com"
       imagePullSecrets:
         - name: regcred
