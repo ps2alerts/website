@@ -1,16 +1,16 @@
+---
 name: PHP Composer Validation
 on:
   push:
-    branches: [ master, staging ]
+    branches: [master, staging]
   pull_request:
-    branches: [ master, staging ]
+    branches: [master, staging]
   release:
-    types: [ created ]
+    types: [created]
 jobs:
   composer-validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - name: Validate composer.json and composer.lock
         run: cd app && composer validate
