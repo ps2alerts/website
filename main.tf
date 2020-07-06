@@ -1,11 +1,8 @@
 terraform {
-  backend "remote" {
-    hostname = "app.terraform.io"
-    organization = "PS2Alerts"
-
-    workspaces {
-      name = "ps2alerts-website"
-    }
+  backend "s3" {
+    bucket = "ps2alerts"
+    key    = "terraform/states/ps2alerts"
+    region = "eu-west-2"
   }
 }
 
@@ -43,5 +40,5 @@ module "website_staging" {
   identifier = "ps2alerts-website-staging"
   url = "staging.ps2alerts.com"
   api_url = "api.staging.ps2alerts.com"
-  checksum_version = "0.0.1"
+  checksum_version = var.checksum_version
 }
