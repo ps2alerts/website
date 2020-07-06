@@ -18,7 +18,7 @@ provider "kubernetes" {
   host = data.digitalocean_kubernetes_cluster.cluster.endpoint
   token = data.digitalocean_kubernetes_cluster.cluster.kube_config[0].token
   cluster_ca_certificate = base64decode(
-        data.digitalocean_kubernetes_cluster.cluster.kube_config[0].cluster_ca_certificate
+    data.digitalocean_kubernetes_cluster.cluster.kube_config[0].cluster_ca_certificate
   )
 }
 
@@ -36,17 +36,12 @@ resource "digitalocean_kubernetes_cluster" "mycluster" {
   }
 }
 
-resource "kubernetes_namespace" "ps2alerts_website" {
-  metadata {
-    name = "ps2alerts-website"
-  }
-}
-
-module "staging" {
+module "website_staging" {
   source = "./provisioning/terraform/modules/website"
   namespace = "ps2alerts-website"
   environment = "staging"
   identifier = "ps2alerts-website-staging"
   url = "staging.ps2alerts.com"
+  api_url = "api.staging.ps2alerts.com"
   checksum_version = "0.0.1"
 }
