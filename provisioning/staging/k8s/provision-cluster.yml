@@ -2,11 +2,9 @@
 # This file is run first manually to provision the entire K8s cluster. From then on, the workflows take over to run
 # the deployments as and when required.
 - hosts: localhost
-  vars_files:
-    - "{{ playbook_dir }}/../secrets.yml"
   vars:
     identifier: "ps2alerts-website-staging"
-    url: "https://staging.ps2alerts.com"
+    url: "staging.ps2alerts.com"
     version: "0.0.1"
   tasks:
     - name: Create K8s Service
@@ -62,7 +60,7 @@
                       - name: VERSION
                         value: "{{ version }}"
                       - name: BASE_URL
-                        value: "{{ url }}"
+                        value: "https://{{ url }}"
                 imagePullSecrets:
                   - name: regcred
 
@@ -94,7 +92,7 @@
           apiVersion: extensions/v1beta1
           kind: Ingress
           metadata:
-            name: "{{ identifier }}"-ingress
+            name: "{{ identifier }}-ingress"
             annotations:
               kubernetes.io/ingress.class: nginx
               cert-manager.io/cluster-issuer: "{{ identifier }}-ingress"
