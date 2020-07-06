@@ -1,0 +1,53 @@
+name: Build & Deploy Staging
+on:
+  push:
+    branches: [ staging ]
+jobs:
+  build-docker-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Build base image
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          path: provisioning/base
+          repository: maelstromeous/applications
+          tags: ps2alerts-webocket-base
+
+      - name: Build staging image
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: maelstromeous/applications
+          dockerfile: provisioning/staging/Dockerfile
+          always_pull: true
+          tags: ps2alerts-websocket-staging-${{ github.sha }}
+
+  deploy-to-k8s:
+    needs: build-docker-images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_TOKEN }}
+
+      - name: Save DO kubeconfig
+        run: doctl kubernetes cluster kubeconfig save my-cluster
+
+      - name: Update the K8s staging deployment file
+        run: sed -i 's|{{ version }}|${{ github.sha }}|' provisioning/staging/k8s/deployment.yml
+
+      - name: Apply staging K8s Deployment
+        run: kubectl apply -f provisioning/staging/k8s/deployment.yml
+
+      - name: Verify deployment
+        run: kubectl rollout status deployment/ps2alerts-websocket-staging

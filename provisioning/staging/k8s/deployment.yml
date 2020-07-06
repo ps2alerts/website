@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ps2alerts-website-staging
+  labels:
+    app: ps2alerts-website-staging
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: ps2alerts-website-staging
+  template:
+    metadata:
+      labels:
+        app: ps2alerts-website-staging
+    spec:
+      containers:
+        - name: ps2alerts-website-staging
+          image: maelstromeous/applications:ps2alerts-website-staging-{{ version }}
+          ports:
+            - containerPort: 80
+          env:
+            - name: ENVIRONMENT
+              value: "staging"
+            - name: VERSION
+              value: "{{ version }}"
+            - name: BASE_URL
+              value: "https://staging-k8s.ps2alerts.com"
+      imagePullSecrets:
+        - name: regcred
