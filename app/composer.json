@@ -6,6 +6,7 @@
             "email": "maelstrome26@gmail.com"
         }
     ],
+    "license": "proprietary",
     "require": {
         "league/route": "^2.0",
         "league/container": "^2.2",
