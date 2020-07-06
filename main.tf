@@ -47,6 +47,6 @@ module "staging" {
   namespace = "ps2alerts-website"
   environment = "staging"
   identifier = "ps2alerts-website-staging"
-  uri = "staging.ps2alerts.com"
+  url = "staging.ps2alerts.com"
   checksum_version = "0.0.1"
 }
