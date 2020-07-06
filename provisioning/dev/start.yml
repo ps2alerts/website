@@ -15,7 +15,7 @@
 
     - name: Build Website Base image (grab a snickers)
       docker_image:
-        name: ps2alerts/website # local image
+        name: ps2alerts/website
         state: present
         source: build
         tag: base

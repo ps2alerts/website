@@ -2,7 +2,7 @@
 name: Build & Deploy Staging
 on:
   push:
-    branches: [ staging ]
+    branches: [staging]
 jobs:
   build-docker-images:
     runs-on: ubuntu-latest
@@ -22,12 +22,12 @@ jobs:
       - name: Build staging image
         uses: docker/build-push-action@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{secrets.DOCKERHUB_USERNAME }}
+          password: ${{secrets.DOCKERHUB_TOKEN}}
           repository: maelstromeous/applications
           dockerfile: provisioning/staging/Dockerfile
           always_pull: true
-          tags: ps2alerts-websocket-staging-${{ github.sha }}
+          tags: ps2alerts-websocket-staging-${{github.sha}}
 
   deploy-terraform:
     needs:
@@ -45,29 +45,29 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+          cli_config_credentials_token: ${{secrets.TERRAFORM_CLOUD_TOKEN}}
 
       # Initialize a new or existing Terraform working directory by creating initial
       # files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
         run: terraform init
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
       # Checks that all Terraform configuration files adhere to a canonical format
       - name: Terraform Format
         run: terraform fmt -check
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
       # Generates an execution plan for Terraform, with the injected SHA
       - name: Terraform Plan
-        run: terraform plan -var=' -var='checksum_version=${{ github.sha }}'
+        run: terraform plan -var=' -var='checksum_version=${{github.sha}}'
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
       # Apply the terraform plan and inject the SHA
       # - name: Terraform Apply
