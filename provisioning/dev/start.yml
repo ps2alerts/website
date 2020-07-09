@@ -1,8 +1,15 @@
 ---
 - hosts: localhost
+  vars:
+    root_dir: "{{playbook_dir}}/../../"
   tasks:
     - debug:
         msg: "========= 🕸️  Starting Website module 🕸️  ========="
+
+    - name: Get user's current UID
+      command: "id -u {{ ansible_user_id }}"
+      register: id
+
     - name: Install docker
       pip:
         name: docker
@@ -22,7 +29,7 @@
         force_source: yes
         build:
           pull: no
-          path: "{{ playbook_dir }}/../base"
+          path: "{{root_dir | realpath}}/provisioning/base"
 
     - name: Build Website Dev Container
       docker_image:
@@ -33,18 +40,14 @@
         force_source: yes
         build:
           pull: no
-          path: "{{ playbook_dir }}"
-
-    - name: Get user's current UID
-      command: "id -u {{ ansible_user_id }}"
-      register: id
+          path: "{{root_dir | realpath}}/provisioning/dev"
 
     - name: Start Composer install container
       docker_container:
         name: composer
         image: composer
         volumes:
-          - "{{ playbook_dir }}/../../app:/app"
+          - "{{root_dir | realpath}}/app:/app"
         user: "{{ id.stdout }}:{{ id.stdout }}"
         command: install
         labels:
@@ -54,9 +57,9 @@
       docker_container:
         name: ps2alerts-website-npm
         image: digitallyseamless/nodejs-bower-grunt
-        command: npm install grunt --save-dev
+        command: npm install
         volumes:
-          - "{{ playbook_dir }}/../../app:/data"
+          - "{{root_dir | realpath}}/app:/data"
         user: "{{ id.stdout }}:{{ id.stdout }}"
         labels:
           traefik.enable: "false"
@@ -67,7 +70,7 @@
         image: digitallyseamless/nodejs-bower-grunt
         command: bower install
         volumes:
-          - "{{ playbook_dir }}/../../app/public:/data"
+          - "{{root_dir | realpath}}/app/public:/data"
         user: "{{ id.stdout }}:{{ id.stdout }}"
         labels:
           traefik.enable: "false"
@@ -78,7 +81,7 @@
         image: digitallyseamless/nodejs-bower-grunt
         command: grunt envDev
         volumes:
-          - "{{ playbook_dir }}/../../app:/data"
+          - "{{root_dir | realpath}}/app:/data"
         user: "{{ id.stdout }}:{{ id.stdout }}"
         labels:
           traefik.enable: "false"
@@ -89,7 +92,7 @@
         image: digitallyseamless/nodejs-bower-grunt
         command: grunt
         volumes:
-          - "{{ playbook_dir }}/../../app:/data"
+          - "{{root_dir | realpath}}/app:/data"
         user: "{{ id.stdout }}:{{ id.stdout }}"
         labels:
           traefik.enable: "false"
@@ -102,7 +105,7 @@
         restart: yes
         restart_policy: always
         volumes:
-          - "{{ playbook_dir }}/../../app:/var/www/html:rw"
+          - "{{root_dir | realpath}}/app:/var/www/html:rw"
         ports:
           - "80"
           - "443"
