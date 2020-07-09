@@ -17,5 +17,4 @@ jobs:
           targets: |
             provisioning/dev/start.yml
             provisioning/dev/stop.yml
-            provisioning/init.yml
           args: ""
