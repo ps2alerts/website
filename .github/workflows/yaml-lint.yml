@@ -1,6 +1,8 @@
 ---
 name: Yaml Lint
 on:
+  push:
+    branches: [master, staging]
   pull_request:
 jobs:
   yaml-lint:
