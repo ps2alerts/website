@@ -92,5 +92,5 @@ jobs:
       - name: Save DO kubeconfig
         run: doctl kubernetes cluster kubeconfig save my-cluster
 
-      - name: Apply staging K8s Deployment
-        run: kubectl apply -f provisioning/staging/k8s/provision-cluster.yml
+      - name: Apply Lets Encrypt cluster issuer manifest
+        run: kubectl apply -f provisioning/staging/k8s/manifests/cluster-issuer.yml --namespace=ps2alerts-website
