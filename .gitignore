@@ -1,0 +1,11 @@
+.idea
+
+# App Excludes
+app/logs/*
+app/node_modules
+app/public/assets/js/main.js
+app/public/assets/js/deps.js
+app/public/assets/css/*
+app/public/bower_components
+app/public/config.js
+app/vendor
