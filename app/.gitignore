@@ -1,3 +1,9 @@
 node_modules
 vendor
 logs/*
+
+# App stuff
+app/bower_components
+app/assets/js/main.js
+app/assets/js/deps.js
+app/assets/css/*
