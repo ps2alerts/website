@@ -4,8 +4,6 @@ on:
   push:
     branches: [master, staging]
   pull_request:
-  release:
-    types: [created]
 jobs:
   composer-validate:
     runs-on: ubuntu-latest

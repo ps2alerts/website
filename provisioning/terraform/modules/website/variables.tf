@@ -18,7 +18,7 @@ variable "api_url" {
   default = "https://api.ps2alerts.com"
 }
 
-# This therefore requires the CLI variable to be defined or this module will fail! (which is a good thing)
+# This therefore requires the CLI variable to be defined. If none is supplied it'll use this, which is wrong!
 variable "checksum_version" {
-  default = "0.0.1"
+  default = "UNKNOWN"
 }

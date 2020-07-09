@@ -15,7 +15,7 @@ class SplashController implements ConfigAwareInterface, TemplateAwareInterface
     use TemplateAwareTrait;
 
     /**
-     * Landing Page
+     * Coming Soon slash page
      *
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
