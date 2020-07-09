@@ -38,6 +38,7 @@
     - name: Get user's current UID
       command: "id -u {{ ansible_user_id }}"
       register: id
+      when: id is undefined
 
     - name: Start Composer install container
       docker_container:
