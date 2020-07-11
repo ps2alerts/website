@@ -70,7 +70,7 @@ jobs:
       # Apply the terraform plan and inject the SHA
       - name: Terraform Apply
         if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
-        run: terraform apply -auto-approve -var='checksum_version=${{ github.sha }}' .tfout
+        run: terraform apply -auto-approve .tfout
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
