@@ -15,7 +15,7 @@
 
     - name: Build Website Base image (grab a snickers)
       docker_image:
-        name: ps2alerts/website # local image
+        name: ps2alerts/website
         state: present
         source: build
         tag: base
@@ -38,6 +38,7 @@
     - name: Get user's current UID
       command: "id -u {{ ansible_user_id }}"
       register: id
+      when: id is undefined
 
     - name: Start Composer install container
       docker_container:
