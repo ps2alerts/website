@@ -1,7 +1,6 @@
 FROM php:7.4-fpm
 
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
-    && apt-get update \
+RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         nginx \
         runit \
@@ -40,10 +39,15 @@ RUN adduser www-data sudo \
 RUN usermod -u 1000 www-data \
     && groupmod -g 1000 www-data
 
+# Install NPM
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
+    && mkdir -p /var/www/.npm \
+    && chown -R www-data: /var/www/.npm
+
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer \
-    && mkdir /var/www/.composer \
+    && mkdir -p /var/www/.composer \
     && chown -R www-data: /var/www/.composer
 
 # Run services
