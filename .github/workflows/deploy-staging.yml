@@ -36,6 +36,7 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: provisioning/terraform
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -61,7 +62,7 @@ jobs:
 
       # Generates an execution plan for Terraform, with the injected SHA
       - name: Terraform Plan
-        run: terraform plan -var='checksum_version=${{ github.sha }}' -out='.tfout'
+        run: terraform plan -var='checksum_version=${{ github.sha }}' -target=module.website_staging -out='.tfout'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -95,4 +96,4 @@ jobs:
         run: doctl kubernetes cluster kubeconfig save my-cluster
 
       - name: Apply Lets Encrypt cluster issuer manifest
-        run: kubectl apply -f provisioning/staging/k8s/manifests/cluster-issuer.yml --namespace=ps2alerts-website
+        run: kubectl apply -f provisioning/staging/k8s/manifests/cluster-issuer.yml --namespace=ps2alerts
