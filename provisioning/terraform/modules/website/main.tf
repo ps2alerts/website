@@ -1,4 +1,4 @@
-resource "kubernetes_namespace" "ps2alerts_website" {
+resource "kubernetes_namespace" "ps2alerts" {
   metadata {
     name = var.namespace
   }
@@ -7,7 +7,7 @@ resource "kubernetes_namespace" "ps2alerts_website" {
 resource "kubernetes_service" "ps2alerts_website_service" {
   metadata {
     name = var.identifier
-    namespace = kubernetes_namespace.ps2alerts_website.metadata[0].name
+    namespace = kubernetes_namespace.ps2alerts.metadata[0].name
     labels = {
       app = var.identifier
       environment = var.environment
@@ -29,7 +29,7 @@ resource "kubernetes_service" "ps2alerts_website_service" {
 resource "kubernetes_deployment" "ps2alerts_website_deployment" {
   metadata {
     name = var.identifier
-    namespace = kubernetes_namespace.ps2alerts_website.metadata[0].name
+    namespace = kubernetes_namespace.ps2alerts.metadata[0].name
     labels = {
       app = var.identifier
       environment = var.environment
@@ -89,7 +89,7 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
 resource "kubernetes_ingress" "ps2alerts_website_ingress" {
   metadata {
     name = var.identifier
-    namespace = kubernetes_namespace.ps2alerts_website.metadata[0].name
+    namespace = kubernetes_namespace.ps2alerts.metadata[0].name
     labels = {
       app = var.identifier
       environment = var.environment
