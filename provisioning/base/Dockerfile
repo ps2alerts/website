@@ -1,6 +1,7 @@
 FROM php:7.4-fpm
 
-RUN apt-get update \
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
+    && apt-get update \
     && apt-get install -y --no-install-recommends \
         nginx \
         runit \
@@ -12,6 +13,12 @@ RUN apt-get update \
         python3-pip \
         python3-setuptools \
         wget \
+    && apt-get install -y --no-install-recommends \
+        nodejs \
+    && curl -L https://www.npmjs.com/install.sh | sh \
+    && npm install -g \
+        bower \
+        grunt-cli \
     && rm -rf /var/lib/apt/lists/* /var/cache/apk/* \
     && docker-php-ext-install -j$(nproc) \
         curl \
