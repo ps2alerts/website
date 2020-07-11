@@ -1,5 +1,5 @@
 ---
-name: Yaml Lint
+name: Yaml Linter
 on:
   push:
     branches: [master, staging]
