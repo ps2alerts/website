@@ -89,6 +89,7 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
 resource "kubernetes_ingress" "ps2alerts_website_ingress" {
   metadata {
     name = var.identifier
+    namespace = kubernetes_namespace.ps2alerts_website.metadata[0].name
     labels = {
       app = var.identifier
       environment = var.environment
