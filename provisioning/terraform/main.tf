@@ -15,16 +15,12 @@ provider "kubernetes" {
   host             = data.digitalocean_kubernetes_cluster.cluster.endpoint
   token            = data.digitalocean_kubernetes_cluster.cluster.kube_config[0].token
   cluster_ca_certificate = base64decode(
-    data.digitalocean_kubernetes_cluster.cluster.kube_config[0].cluster_ca_certificate
+  data.digitalocean_kubernetes_cluster.cluster.kube_config[0].cluster_ca_certificate
   )
 }
 
-module "website_staging" {
-  source           = "./provisioning/terraform/modules/website"
-  namespace        = "ps2alerts"
-  environment      = "staging"
-  identifier       = "ps2alerts-website-staging"
-  url              = "staging.ps2alerts.com"
-  api_url          = "api.staging.ps2alerts.com"
-  checksum_version = var.checksum_version
+resource "kubernetes_namespace" "ps2alerts" {
+  metadata {
+    name = "ps2alerts"
+  }
 }
