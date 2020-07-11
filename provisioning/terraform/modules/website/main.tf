@@ -53,7 +53,7 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
       }
       spec {
         image_pull_secrets {
-          name = "regcreg"
+          name = "regcred"
         }
         container {
           name = var.identifier
