@@ -58,9 +58,6 @@ jobs:
       # Checks that all Terraform configuration files adhere to a canonical format
       - name: Terraform Format
         run: terraform fmt -check
-        env:
-          AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
-          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
       # Generates an execution plan for Terraform, with the injected SHA
       - name: Terraform Plan
@@ -68,6 +65,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
           AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          DIGITALOCEAN_TOKEN: ${{secrets.DIGITALOCEAN_TOKEN}}
 
       # Apply the terraform plan and inject the SHA
       # - name: Terraform Apply
