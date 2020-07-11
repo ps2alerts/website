@@ -27,8 +27,6 @@ RUN apt-get update \
         opcache \
         zip \
     # Configure gd and gmp
-    && pecl install -o -f redis \
-    && docker-php-ext-enable redis \
     && rm -rf /tmp/pear
 
 # Add www-data to sudoers
