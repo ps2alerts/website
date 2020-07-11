@@ -1,11 +1,13 @@
 {
     "name": "ps2alerts/website",
+    "description": "The frontend website component to the PS2Alerts project",
     "authors": [
         {
             "name": "Matt Cavanagh",
             "email": "maelstrome26@gmail.com"
         }
     ],
+    "license": "proprietary",
     "require": {
         "league/route": "^2.0",
         "league/container": "^2.2",

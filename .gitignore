@@ -1,4 +1,5 @@
 .idea
+.terraform
 
 # App Excludes
 app/logs/*
@@ -9,3 +10,4 @@ app/public/assets/css/*
 app/public/bower_components
 app/public/config.js
 app/vendor
+

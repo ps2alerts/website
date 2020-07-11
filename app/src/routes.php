@@ -9,7 +9,7 @@ $route = new RouteCollection(
     isset($container) && $container instanceof ContainerInterface ? $container : new Container
 );
 
-$route->get('/', 'Ps2alerts\Frontend\Controller\MainController::landing');
+$route->get('/', 'Ps2alerts\Frontend\Controller\SplashController::splash');
 $route->get('/home', 'Ps2alerts\Frontend\Controller\MainController::landing');
 $route->get('/about', 'Ps2alerts\Frontend\Controller\MainController::about');
 $route->get('/alert-history', 'Ps2alerts\Frontend\Controller\MainController::alertHistory');

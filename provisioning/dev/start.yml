@@ -9,6 +9,7 @@
     - name: Get user's current UID
       command: "id -u {{ ansible_user_id }}"
       register: id
+      when: id is undefined
 
     - name: Install docker
       pip:
@@ -22,14 +23,14 @@
 
     - name: Build Website Base image (grab a snickers)
       docker_image:
-        name: ps2alerts/website # local image
+        name: ps2alerts/website
         state: present
         source: build
         tag: base
         force_source: yes
         build:
           pull: no
-          path: "{{ root_dir | realpath }}/provisioning/base"
+          path: "{{ playbook_dir }}/../base"
 
     - name: Build Website Dev Container
       docker_image:
