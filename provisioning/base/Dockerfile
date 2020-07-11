@@ -39,8 +39,8 @@ RUN usermod -u 1000 www-data \
 
 # Install NPM
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - \
-    && mkdir -p /var/www/.npm \
-    && chown -R www-data: /var/www/.npm
+    && mkdir -p /var/www/.npm /var/www/.config \
+    && chown -R www-data: /var/www/.npm var/www/.config
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php
