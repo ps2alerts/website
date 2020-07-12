@@ -11,11 +11,11 @@ variable "environment" {
 }
 
 variable "url" {
-  default = "https://ps2alerts.com"
+  default = "ps2alerts.com"
 }
 
 variable "api_url" {
-  default = "https://api.ps2alerts.com"
+  default = "api.ps2alerts.com"
 }
 
 # This therefore requires the CLI variable to be defined. If none is supplied it'll use this, which is wrong!

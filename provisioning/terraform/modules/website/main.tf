@@ -77,9 +77,6 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
   }
 }
 
-// TODO: Add LE Certificate Issuer - Currently unable as we're unable to push custom CRDs via Terraform! :'(
-// https://github.com/hashicorp/terraform-provider-kubernetes/issues/215
-
 resource "kubernetes_ingress" "ps2alerts_website_ingress" {
   metadata {
     name = var.identifier
@@ -95,6 +92,10 @@ resource "kubernetes_ingress" "ps2alerts_website_ingress" {
     }
   }
   spec {
+    backend {
+      service_name = kubernetes_service.ps2alerts_website_service.metadata.name
+      service_port = kubernetes_service.ps2alerts_website_service.spec.port
+    }
     tls {
       hosts = [var.url]
       secret_name = var.identifier
@@ -111,3 +112,6 @@ resource "kubernetes_ingress" "ps2alerts_website_ingress" {
     }
   }
 }
+
+// LetsEncrypt Certificate ClusterIssuer has to be defined via manual API call...
+// see provisioning/<env>/k8s/manifests/cluster-issuer.yml
