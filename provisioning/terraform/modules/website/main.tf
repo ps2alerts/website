@@ -93,7 +93,7 @@ resource "kubernetes_ingress" "ps2alerts_website_ingress" {
   }
   spec {
     backend {
-      service_name = kubernetes_service.ps2alerts_website_service.metadata.name
+      service_name = kubernetes_service.ps2alerts_website_service.metadata[0].name
       service_port = kubernetes_service.ps2alerts_website_service.spec.port
     }
     tls {
