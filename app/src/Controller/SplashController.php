@@ -25,7 +25,9 @@ class SplashController implements ConfigAwareInterface, TemplateAwareInterface
     public function splash(ServerRequestInterface $request, ResponseInterface $response)
     {
         $response->getBody()->write(
-            $this->getTemplateDriver()->render('splash.html')
+            $this->getTemplateDriver()->render('splash.html', [
+                'host' => gethostname()
+            ])
         );
 
         return $response;
