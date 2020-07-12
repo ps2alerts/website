@@ -52,6 +52,16 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
         container {
           name = var.identifier
           image = join("", ["maelstromeous/applications:", var.identifier, "-", var.checksum_version])
+          resources {
+            limits {
+              cpu = "500m"
+              memory = "128Mi"
+            }
+            requests {
+              cpu = "100m"
+              memory = "64Mi"
+            }
+          }
           port {
             container_port = 80
           }
