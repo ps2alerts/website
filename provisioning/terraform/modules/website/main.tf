@@ -54,7 +54,7 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
           image = join("", ["maelstromeous/applications:", var.identifier, "-", var.checksum_version])
           resources {
             limits {
-              cpu = "500m"
+              cpu = "250m"
               memory = "128Mi"
             }
             requests {
