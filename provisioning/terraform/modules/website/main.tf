@@ -101,6 +101,7 @@ resource "kubernetes_ingress" "ps2alerts_website_ingress" {
       secret_name = var.identifier
     }
     rule {
+      host = var.url
       http {
         path {
           backend {
