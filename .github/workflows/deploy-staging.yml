@@ -69,13 +69,13 @@ jobs:
           DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
 
       # Apply the terraform plan and inject the SHA
-#      - name: Terraform Apply
-#        if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
-#        run: terraform apply -auto-approve .tfout
-#        env:
-#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#          DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
+        run: terraform apply -auto-approve .tfout
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
 
   # Unfortunately we need to do this step in order to provision the LE cert manager.
   # Terraform currently doesn't support it :'(
