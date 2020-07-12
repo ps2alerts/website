@@ -96,4 +96,4 @@ jobs:
         run: doctl kubernetes cluster kubeconfig save my-cluster
 
       - name: Apply Lets Encrypt cluster issuer manifest
-        run: kubectl apply -f provisioning/staging/k8s/manifests/cluster-issuer.yml --namespace=ps2alerts
+        run: kubectl apply -f provisioning/staging/k8s/manifests/cluster-issuer.yml
