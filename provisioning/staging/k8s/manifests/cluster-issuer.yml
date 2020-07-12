@@ -2,7 +2,6 @@ apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
 metadata:
   name: ps2alerts-website-staging-ingress
-  namespace: ps2alerts
 spec:
   acme:
     email: matt@mattcavanagh.me
