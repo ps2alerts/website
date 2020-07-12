@@ -10,14 +10,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: Build base image
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          path: provisioning/base
-          repository: maelstromeous/applications
-          tags: ps2alerts-website-base
+#      - name: Build base image
+#        uses: docker/build-push-action@v1
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#          path: provisioning/base
+#          repository: maelstromeous/applications
+#          tags: ps2alerts-website-base
 
       - name: Build staging image
         uses: docker/build-push-action@v1
