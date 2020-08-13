@@ -39,61 +39,6 @@
       command: "id -u {{ ansible_user_id }}"
       register: id
 
-    - name: Start Composer install container
-      docker_container:
-        name: composer
-        image: composer/composer
-        volumes:
-          - "{{ playbook_dir }}/../../app:/app"
-        user: "{{ id.stdout }}:{{ id.stdout }}"
-        command: install
-        labels:
-          traefik.enable: "false"
-
-    - name: Start Website NPM install contianer
-      docker_container:
-        name: ps2alerts-website-npm
-        image: digitallyseamless/nodejs-bower-grunt
-        command: npm install grunt --save-dev
-        volumes:
-          - "{{ playbook_dir }}/../../app:/data"
-        user: "{{ id.stdout }}:{{ id.stdout }}"
-        labels:
-          traefik.enable: "false"
-
-    - name: Start Website Bower container
-      docker_container:
-        name: ps2alerts-website-bower
-        image: digitallyseamless/nodejs-bower-grunt
-        command: bower install
-        volumes:
-          - "{{ playbook_dir }}/../../app/public:/data"
-        user: "{{ id.stdout }}:{{ id.stdout }}"
-        labels:
-          traefik.enable: "false"
-
-    - name: Start Website Grunt install container (envDev)
-      docker_container:
-        name: ps2alerts-website-grunt
-        image: digitallyseamless/nodejs-bower-grunt
-        command: grunt envDev
-        volumes:
-          - "{{ playbook_dir }}/../../app:/data"
-        user: "{{ id.stdout }}:{{ id.stdout }}"
-        labels:
-          traefik.enable: "false"
-
-    - name: Start Website Grunt install container (grunt)
-      docker_container:
-        name: ps2alerts-website-grunt
-        image: digitallyseamless/nodejs-bower-grunt
-        command: grunt
-        volumes:
-          - "{{ playbook_dir }}/../../app:/data"
-        user: "{{ id.stdout }}:{{ id.stdout }}"
-        labels:
-          traefik.enable: "false"
-
     - name: Start Website Dev container
       docker_container:
         name: ps2alerts-website
@@ -102,7 +47,7 @@
         restart: yes
         restart_policy: always
         volumes:
-          - "{{ playbook_dir }}/../../app:/var/www/html:rw"
+          - "{{ playbook_dir }}/../../:/var/www/html:rw"
         ports:
           - "80"
           - "443"

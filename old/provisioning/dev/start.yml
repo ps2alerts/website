@@ -1,0 +1,118 @@
+---
+- hosts: localhost
+  tasks:
+    - debug:
+        msg: "========= 🕸️  Starting Website module 🕸️  ========="
+    - name: Install docker
+      pip:
+        name: docker
+        state: present
+
+    - name: Create docker network
+      docker_network:
+        name: ps2alerts
+        state: present
+
+    - name: Build Website Base image (grab a snickers)
+      docker_image:
+        name: ps2alerts/website # local image
+        state: present
+        source: build
+        tag: base
+        force_source: yes
+        build:
+          pull: no
+          path: "{{ playbook_dir }}/../base"
+
+    - name: Build Website Dev Container
+      docker_image:
+        name: ps2alerts/website
+        state: present
+        source: build
+        tag: dev
+        force_source: yes
+        build:
+          pull: no
+          path: "{{ playbook_dir }}"
+
+    - name: Get user's current UID
+      command: "id -u {{ ansible_user_id }}"
+      register: id
+
+    - name: Start Composer install container
+      docker_container:
+        name: composer
+        image: composer/composer
+        volumes:
+          - "{{ playbook_dir }}/../../app:/app"
+        user: "{{ id.stdout }}:{{ id.stdout }}"
+        command: install
+        labels:
+          traefik.enable: "false"
+
+    - name: Start Website NPM install contianer
+      docker_container:
+        name: ps2alerts-website-npm
+        image: digitallyseamless/nodejs-bower-grunt
+        command: npm install grunt --save-dev
+        volumes:
+          - "{{ playbook_dir }}/../../app:/data"
+        user: "{{ id.stdout }}:{{ id.stdout }}"
+        labels:
+          traefik.enable: "false"
+
+    - name: Start Website Bower container
+      docker_container:
+        name: ps2alerts-website-bower
+        image: digitallyseamless/nodejs-bower-grunt
+        command: bower install
+        volumes:
+          - "{{ playbook_dir }}/../../app/public:/data"
+        user: "{{ id.stdout }}:{{ id.stdout }}"
+        labels:
+          traefik.enable: "false"
+
+    - name: Start Website Grunt install container (envDev)
+      docker_container:
+        name: ps2alerts-website-grunt
+        image: digitallyseamless/nodejs-bower-grunt
+        command: grunt envDev
+        volumes:
+          - "{{ playbook_dir }}/../../app:/data"
+        user: "{{ id.stdout }}:{{ id.stdout }}"
+        labels:
+          traefik.enable: "false"
+
+    - name: Start Website Grunt install container (grunt)
+      docker_container:
+        name: ps2alerts-website-grunt
+        image: digitallyseamless/nodejs-bower-grunt
+        command: grunt
+        volumes:
+          - "{{ playbook_dir }}/../../app:/data"
+        user: "{{ id.stdout }}:{{ id.stdout }}"
+        labels:
+          traefik.enable: "false"
+
+    - name: Start Website Dev container
+      docker_container:
+        name: ps2alerts-website
+        image: ps2alerts/website:dev
+        state: started
+        restart: yes
+        restart_policy: always
+        volumes:
+          - "{{ playbook_dir }}/../../app:/var/www/html:rw"
+        ports:
+          - "80"
+          - "443"
+        networks:
+          - name: "ps2alerts"
+        env:
+          API_URL: "http://api.dev.ps2alerts.com"
+          BASE_URL: "http://dev.ps2alerts.com"
+          ENVIRONMENT: "development"
+          VERSION: "12345"
+        labels:
+          traefik.enable: "true"
+          traefik.http.routers.ps2alerts-website.rule: "Host(`dev.ps2alerts.com`)"
