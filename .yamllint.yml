@@ -1,0 +1,10 @@
+---
+extends: default
+ignore: |
+  app/public/bower_components/
+  app/node_modules/
+  app/vendor/
+rules:
+  comments-indentation: disable
+  line-length: disable
+  truthy: disable

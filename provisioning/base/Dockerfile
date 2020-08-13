@@ -2,6 +2,7 @@ FROM nginx:latest
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+        nginx \
         runit \
         sudo \
     && rm -rf /var/lib/apt/lists/* /var/cache/apk/*

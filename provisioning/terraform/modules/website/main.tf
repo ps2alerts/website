@@ -14,8 +14,8 @@ resource "kubernetes_service" "ps2alerts_website_service" {
       environment = var.environment
     }
     port {
-      port = 443
-      target_port = 443
+      port = 80
+      target_port = 80
     }
   }
 }
@@ -30,7 +30,7 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
     }
   }
   spec {
-    replicas = 1
+    replicas = 2
     revision_history_limit = 1
     selector {
       match_labels = {
@@ -116,7 +116,7 @@ resource "kubernetes_ingress" "ps2alerts_website_ingress" {
         path {
           backend {
             service_name = var.identifier
-            service_port = 443
+            service_port = 80
           }
         }
       }

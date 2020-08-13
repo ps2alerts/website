@@ -1,13 +1,13 @@
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
 metadata:
-  name: ps2alerts-websocket-staging-ingress
+  name: ps2alerts-website-staging-ingress
 spec:
   acme:
     email: matt@mattcavanagh.me
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: ps2alerts-websocket-staging
+      name: ps2alerts-website-staging
     solvers:
       - http01:
           ingress:
