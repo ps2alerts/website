@@ -24,7 +24,7 @@
         force_source: yes
         build:
           pull: no
-          path: "{{ playbook_dir }}/../base"
+          path: "{{ root_dir | realpath }}/provisioning/base"
 
     - name: Build Website Dev Container
       docker_image:
@@ -53,7 +53,6 @@
           - "{{ root_dir | realpath }}:/var/www/html:rw"
         ports:
           - "80"
-          - "443"
         networks:
           - name: "ps2alerts"
         env:
