@@ -2,7 +2,6 @@
 name: Build & Deploy Staging
 on:
   push:
-    branches: [staging]
     branches: [staging, features/36-splash]
 jobs:
   build-docker-images:
