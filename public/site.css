@@ -4,14 +4,17 @@ html, body {
 
 body {
     background-color: #263238;
-    display: flex;
-    align-items: center;
     color: #fff;
-    box-shadow: 0 0 50px 15px inset #192225;
+    padding-top: 2rem;
 }
 
 .background, .card {
     background-color: #37474f;
+}
+
+.logo {
+    max-width: 250px;
+    margin-bottom: 1rem;
 }
 
 hr {
@@ -35,4 +38,8 @@ hr {
 
 .list-group-item {
     background-color: #3d5258;
+}
+
+.card {
+    border: 0;
 }
