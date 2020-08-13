@@ -1,0 +1,41 @@
+<div class="card card-{{::metrics.winner|lowercase}}">
+    <div class="card-content">
+        <div class="row">
+            <div class="col s12 m3 center-align">
+                <p class="alert-history-label">{{::metrics.endedDate}}</p>
+                <span class="caption">Ended</span>
+            </div>
+            <div class="col s6 m2 center-align">
+                <p class="alert-history-label">{{::metrics.server}}</p>
+                <span class="caption">Server</span>
+            </div>
+            <div class="col s6 m2 center-align">
+                <p class="alert-history-label">{{::metrics.zone}}</p>
+                <span class="caption">Continent</span>
+            </div>
+            <div class="col s12 m2 center-align">
+                <p class="alert-history-label">{{::metrics.timeBracket}}</p>
+                <span class="caption">Time Bracket</span>
+            </div>
+            <div class="col s12 m3 center-align">
+                <a href="alert/{{::metrics.id}}" class="waves-effect waves-light btn">
+                    <i class="fa fa-bar-chart-o"></i> Statistics
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="row-seperator"></div>
+        </div>
+        <territory-bar
+            vs="{{::metrics.lastMap.controlVS}}"
+            nc="{{::metrics.lastMap.controlNC}}"
+            tr="{{::metrics.lastMap.controlTR}}"
+            draw="0"
+            total="{{::metrics.lastMap.controlTotal}}"
+            decimal="0">
+        </territory-bar>
+        <p class="caption dynamic-caption" ng-show="metrics.dynamic">
+            This result was automatically added as the alert ended recently. Press Filter if you wish to refresh the filtered list.
+        </p>
+    </div>
+</div>
