@@ -1,0 +1,15 @@
+---
+name: Yaml Linter
+on:
+  push:
+    branches: [master, staging]
+  pull_request:
+jobs:
+  yaml-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: yaml-lint
+        uses: ibiqlik/action-yamllint@v1
+        with:
+          config_file: .yamllint.yml
