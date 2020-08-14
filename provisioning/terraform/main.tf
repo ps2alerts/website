@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "ps2alerts"
-    key    = "terraform/states/ps2alerts"
+    key    = "terraform/states/ps2alerts-website"
     region = "eu-west-2"
   }
 }
@@ -17,10 +17,4 @@ provider "kubernetes" {
   cluster_ca_certificate = base64decode(
     data.digitalocean_kubernetes_cluster.cluster.kube_config[0].cluster_ca_certificate
   )
-}
-
-resource "kubernetes_namespace" "ps2alerts" {
-  metadata {
-    name = "ps2alerts"
-  }
 }
