@@ -1,4 +1,5 @@
 #!/bin/sh
 
-echo "=============== STARTING WEBSOCKET (STAGING) ==================="
-pwd && cd app && npm run start
+# Not used for now, since it's just NGINX serving static assets!
+echo "=============== STARTING WEBSITE (STAGING) ==================="
+pwd
