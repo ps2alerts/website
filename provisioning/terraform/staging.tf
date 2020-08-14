@@ -1,4 +1,4 @@
-module "websocket_staging" {
+module "website_staging" {
   source             = "./modules/website"
   namespace          = "ps2alerts"
   environment        = "staging"
