@@ -1,7 +1,0 @@
----
-- hosts: localhost
-  tasks:
-    - name: Stop Website Container
-      docker_container:
-        name: ps2alerts-website
-        state: stopped
