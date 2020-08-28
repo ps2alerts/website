@@ -2,13 +2,8 @@ FROM maelstromeous/applications:ps2alerts-website-base
 
 USER root
 
-RUN ls -lah
-
-RUN pwd
-
-RUN cd provisioning
-
-RUN ls -lah
+RUN ls -lah /etc/service
+RUN ls -lah /etc/nginx
 
 COPY provisioning/staging/files/entrypoint.sh /etc/service/entrypoint.sh
 COPY provisioning/staging/files/nginx/staging.conf /etc/nginx/conf.d
