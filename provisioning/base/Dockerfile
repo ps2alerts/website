@@ -19,3 +19,6 @@ ENTRYPOINT /usr/sbin/entrypoint.sh
 
 # Inject config files
 COPY ./files/nginx /etc/nginx/global
+
+# Ensure web dir is correct
+RUN mkdir -p /var/www/html && chmod -R www-data: /var/www
