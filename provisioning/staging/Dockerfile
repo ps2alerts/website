@@ -2,7 +2,7 @@ FROM maelstromeous/applications:ps2alerts-website-base
 
 USER root
 
-RUN ls -lahR /var/lib/docker/tmp/
+RUN cd $GITHUB_WORKSPACE && pwd && ls -lah
 
 COPY provisioning/staging/files/nginx/staging.conf /etc/nginx/conf.d
 COPY provisioning/staging/files/entrypoint.sh /etc/service/entrypoint.sh
