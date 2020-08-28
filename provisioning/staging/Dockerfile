@@ -5,7 +5,7 @@ COPY provisioning/staging/files/nginx/staging.conf /etc/nginx/conf.d
 
 USER www-data
 
-COPY --chown=www-data:www-data ./public /var/www/html
+COPY --chown=www-data:www-data ./public /var/www/html/public
 
 USER root
 
