@@ -14,14 +14,14 @@ jobs:
         id: sha
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
-#      - name: Build base image
-#        uses: docker/build-push-action@v1
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
-#          path: provisioning/base
-#          repository: maelstromeous/applications
-#          tags: ps2alerts-website-base
+      - name: Build base image
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          path: provisioning/base
+          repository: maelstromeous/applications
+          tags: ps2alerts-website-base
 
       - name: Build staging image
         uses: docker/build-push-action@v1
