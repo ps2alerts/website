@@ -30,7 +30,6 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: maelstromeous/applications
           dockerfile: provisioning/staging/Dockerfile
-          path: .
           always_pull: true
           tags: ps2alerts-website-staging-${{ steps.sha.outputs.sha_short }}
 
