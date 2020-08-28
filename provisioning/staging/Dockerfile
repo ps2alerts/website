@@ -1,8 +1,12 @@
-FROM maelstromeous/applications:ps2alerts-websocket-base
+FROM maelstromeous/applications:ps2alerts-website-base
 
-USER nginx
+COPY provisioning/staging/files/nginx/staging.conf /etc/nginx/conf.d
+#COPY provisioning/staging/files/entrypoint.sh /etc/service/entrypoint.sh
 
-COPY --chown=nginx:nginx ./public /var/www/html
+USER www-data
+
+COPY --chown=www-data:www-data ./public /var/www/html/public
+
+USER root
 
 # Nothing for now, this will eventually have builds in etc
-RUN cd /app

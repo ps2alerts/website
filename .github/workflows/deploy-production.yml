@@ -1,14 +1,14 @@
 ---
-name: Build & Deploy Staging
+name: Build & Deploy Production
 on:
   push:
-    branches: [staging]
+    branches: [master]
 jobs:
   build-docker-images:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1
 
       - name: Get short SHA
         id: sha
@@ -29,9 +29,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: maelstromeous/applications
-          dockerfile: provisioning/staging/Dockerfile
+          dockerfile: provisioning/production/Dockerfile
           always_pull: true
-          tags: ps2alerts-website-staging-${{ steps.sha.outputs.sha_short }}
+          tags: ps2alerts-website-production-${{ steps.sha.outputs.sha_short }}
 
   deploy-terraform:
     needs:
@@ -74,15 +74,14 @@ jobs:
           terraform plan \
             -var='checksum_version=${{ steps.sha.outputs.sha_short }}' \
             -var='api_token=${{ secrets.PS2ALERTS_API_TOKEN }}' \
-            -target=module.website_staging -out='.tfout'
+            -target=module.website_production -out='.tfout'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
-
       # Apply the terraform plan and inject the SHA
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: terraform apply -auto-approve .tfout
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -108,4 +107,4 @@ jobs:
         run: doctl kubernetes cluster kubeconfig save my-cluster
 
       - name: Apply Lets Encrypt cluster issuer manifest
-        run: kubectl apply -f provisioning/staging/k8s/manifests/cluster-issuer.yml
+        run: kubectl apply -f provisioning/production/k8s/manifests/cluster-issuer.yml
