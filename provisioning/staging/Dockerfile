@@ -7,4 +7,6 @@ USER www-data
 
 COPY ./public /var/www/html
 
+USER root
+
 # Nothing for now, this will eventually have builds in etc
