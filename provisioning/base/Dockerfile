@@ -21,4 +21,4 @@ ENTRYPOINT /usr/sbin/entrypoint.sh
 COPY ./files/nginx /etc/nginx/global
 
 # Ensure web dir is correct
-RUN mkdir -p /var/www/html && chmod -R www-data: /var/www
+RUN mkdir -p /var/www/html && chown -R www-data: /var/www
