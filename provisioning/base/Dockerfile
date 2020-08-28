@@ -14,3 +14,5 @@ ENTRYPOINT /usr/sbin/entrypoint.sh
 
 # Inject config files
 COPY ./files/nginx /etc/nginx/global
+
+USER www-data
