@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="site.css">
+    <script src="https://kit.fontawesome.com/031ae7ccd7.js" crossorigin="anonymous"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="theme-color" content="#ffffff">
+    <title>Coming soon...</title>
+</head>
+<body>
+<div class="container">
+    <div class="jumbotron background">
+        <img src="alert-icon.png" class="img-fluid logo mx-auto d-block">
+        <h1 class="display-4 text-center">PS2Alerts is coming back soon!</h1>
+        <p class="lead text-center">PS2Alerts has been on hiatus since 2017. The alert meta will be making a return soon.</p>
+        <p class="text-center"><b>We are looking for contributors to help out! Check out our code on GitHub!</b></p>
+        <div class="row justify-content-center">
+            <div class="col">
+                <div class="btn-group btn-group-lg d-flex justify-content-center" role="group" aria-label="Basic example">
+                    <a href="https://github.com/ps2alerts" class="btn btn-primary"><i class="fab fa-github-square"></i> GitHub</a>
+                    <a href="https://discord.io/ps2alerts" class="btn btn-primary"><i class="fab fa-discord"></i> Discord</a>
+                    <a href="https://github.com/ps2alerts" class="btn btn-primary"><i class="fab fa-reddit"></i> Reddit</a>
+                    <a href="https://github.com/ps2alerts" class="btn btn-primary"><i class="fab fa-twitter"></i> Twitter</a>
+                </div>
+            </div>
+        </div>
+<!--        <br>-->
+<!--        <div class="row justify-content-center">-->
+<!--            <a href="https://old.ps2alerts.com" class="btn btn-secondary">Old website archive</a>-->
+<!--        </div>-->
+        <hr class="my-4">
+
+        <h2 class="text-center">Project Status</h2>
+        <p class="text-center">PS2Alerts is still being written, below is a summary of where we're at for each module:</p>
+
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-center">Websocket</h3>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animate bg-success" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">65%</div>
+                        </div>
+                            <p>The websocket collects the real-time data from census, does logic calculations on it, then passes the info off to our API. It is the beating heart of the application and takes the longest to program.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-center">API</h3>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">10%</div>
+                        </div>
+                        <p>The API accepts the information from the websocket and stores it to our database. It also allows people to read the data via the website and special API access.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-center">Website</h3>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 5%" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <p>What you're viewing now. It's not much, but it's honest work. Eventually this will show the full range of statistics and metrics in real time for each alert.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

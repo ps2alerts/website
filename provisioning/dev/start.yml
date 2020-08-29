@@ -5,11 +5,6 @@
   tasks:
     - debug:
         msg: "========= 🕸️  Starting Website module 🕸️  ========="
-
-    - name: Get user's current UID
-      command: "id -u {{ ansible_user_id }}"
-      register: id
-
     - name: Install docker
       pip:
         name: docker
@@ -22,7 +17,7 @@
 
     - name: Build Website Base image (grab a snickers)
       docker_image:
-        name: ps2alerts/website # local image
+        name: ps2alerts/website
         state: present
         source: build
         tag: base
@@ -42,60 +37,10 @@
           pull: no
           path: "{{ root_dir | realpath }}/provisioning/dev"
 
-    - name: Start Composer install container
-      docker_container:
-        name: composer
-        image: composer
-        volumes:
-          - "{{ root_dir | realpath }}/app:/app"
-        user: "{{ id.stdout }}:{{ id.stdout }}"
-        command: install
-        labels:
-          traefik.enable: "false"
-
-    - name: Start Website NPM install contianer
-      docker_container:
-        name: ps2alerts-website-npm
-        image: digitallyseamless/nodejs-bower-grunt
-        command: npm install
-        volumes:
-          - "{{ root_dir | realpath }}/app:/data"
-        user: "{{ id.stdout }}:{{ id.stdout }}"
-        labels:
-          traefik.enable: "false"
-
-    - name: Start Website Bower container
-      docker_container:
-        name: ps2alerts-website-bower
-        image: digitallyseamless/nodejs-bower-grunt
-        command: bower install
-        volumes:
-          - "{{ root_dir | realpath }}/app/public:/data"
-        user: "{{ id.stdout }}:{{ id.stdout }}"
-        labels:
-          traefik.enable: "false"
-
-    - name: Start Website Grunt install container (envDev)
-      docker_container:
-        name: ps2alerts-website-grunt
-        image: digitallyseamless/nodejs-bower-grunt
-        command: grunt envDev
-        volumes:
-          - "{{ root_dir | realpath }}/app:/data"
-        user: "{{ id.stdout }}:{{ id.stdout }}"
-        labels:
-          traefik.enable: "false"
-
-    - name: Start Website Grunt install container (grunt)
-      docker_container:
-        name: ps2alerts-website-grunt
-        image: digitallyseamless/nodejs-bower-grunt
-        command: grunt
-        volumes:
-          - "{{ root_dir | realpath }}/app:/data"
-        user: "{{ id.stdout }}:{{ id.stdout }}"
-        labels:
-          traefik.enable: "false"
+    - name: Get user's current UID
+      command: "id -u {{ ansible_user_id }}"
+      register: id
+      when: id is undefined
 
     - name: Start Website Dev container
       docker_container:
@@ -105,10 +50,9 @@
         restart: yes
         restart_policy: always
         volumes:
-          - "{{ root_dir | realpath }}/app:/var/www/html:rw"
+          - "{{ root_dir | realpath }}:/var/www/html:rw"
         ports:
           - "80"
-          - "443"
         networks:
           - name: "ps2alerts"
         env:

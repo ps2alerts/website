@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "=============== STARTING NGINX ==================="
+exec /usr/sbin/nginx -c /etc/nginx/nginx.conf -g "daemon off;"
