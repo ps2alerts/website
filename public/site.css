@@ -2,6 +2,10 @@ html, body {
     height: 100%;
 }
 
+.jumbotron {
+    padding-bottom: 1rem;
+}
+
 body {
     background-color: #263238;
     color: #fff;
