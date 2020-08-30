@@ -125,7 +125,7 @@ resource "kubernetes_ingress" "ps2alerts_website_ingress" {
   }
 }
 
-resource "kubernetes_ingress" "ps2alerts_website_ingress" {
+resource "kubernetes_ingress" "ps2alerts_website_ingress_multi" {
   count = var.multi_urls ? 1 : 0
   metadata {
     name = var.identifier
