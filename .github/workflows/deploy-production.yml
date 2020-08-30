@@ -23,7 +23,7 @@ jobs:
           repository: maelstromeous/applications
           tags: ps2alerts-website-base
 
-      - name: Build staging image
+      - name: Build production image
         uses: docker/build-push-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
