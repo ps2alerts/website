@@ -146,7 +146,7 @@ resource "kubernetes_ingress" "ps2alerts_website_ingress_multi" {
       service_port = kubernetes_service.ps2alerts_website_service.spec[0].port[0].port
     }
     tls {
-      hosts = [var.urls]
+      hosts = var.urls
       secret_name = var.identifier
     }
     rule {
