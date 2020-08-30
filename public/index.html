@@ -41,10 +41,10 @@
                 </div>
             </div>
         </div>
-<!--        <br>-->
-<!--        <div class="row justify-content-center">-->
-<!--            <a href="https://old.ps2alerts.com" class="btn btn-secondary">Old website archive</a>-->
-<!--        </div>-->
+        <br>
+        <div class="row justify-content-center">
+            <a href="https://old.ps2alerts.com" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="It is *VERY* broken!">Old website archive</a>
+        </div>
         <hr class="my-4">
 
         <h2 class="text-center">Project Status</h2>
@@ -90,5 +90,10 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
 </body>
 </html>
