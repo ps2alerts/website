@@ -8,7 +8,7 @@ module "website_staging" {
   checksum_version = var.checksum_version
   api_host         = "staging.api.ps2alerts.com"
   api_token        = var.api_token
-  cpu_request      = "25m"
+  cpu_request      = "10m"
   mem_request      = "32Mi"
   cpu_limit        = "150m"
   mem_limit        = "64Mi"
