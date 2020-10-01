@@ -8,8 +8,8 @@ module "website_production" {
   checksum_version = var.checksum_version
   api_host         = "api.ps2alerts.com"
   api_token        = var.api_token
-  cpu_limit        = "250m"
-  mem_limit        = "128Mi"
-  cpu_request      = "125m"
+  cpu_request      = "100m"
   mem_request      = "64Mi"
+  cpu_limit        = "150m"
+  mem_limit        = "64Mi"
 }
