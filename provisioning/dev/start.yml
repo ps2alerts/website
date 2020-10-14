@@ -46,9 +46,9 @@
       docker_container:
         name: ps2alerts-website
         image: ps2alerts/website:dev
+        restart: no
+        recreate: yes
         state: started
-        restart: yes
-        restart_policy: always
         volumes:
           - "{{ root_dir | realpath }}:/var/www/html:rw"
         ports:
