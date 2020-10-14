@@ -1,7 +1,7 @@
 FROM maelstromeous/applications:ps2alerts-website-base
 
-COPY provisioning/staging/files/nginx/staging.conf /etc/nginx/conf.d
-#COPY provisioning/staging/files/entrypoint.sh /etc/service/entrypoint.sh
+COPY provisioning/production/files/nginx/production.conf /etc/nginx/conf.d
+#COPY provisioning/production/files/entrypoint.sh /etc/service/entrypoint.sh
 
 USER www-data
 

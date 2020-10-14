@@ -10,9 +10,9 @@ variable "environment" {
   default = "dev"
 }
 
-variable "url" {
-  default = "ps2alerts.com"
-}
+variable "urls" {}
+
+variable "multi_urls" {}
 
 variable "api_host" {
   default = "foo"

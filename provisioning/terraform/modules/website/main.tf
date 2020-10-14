@@ -88,6 +88,7 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
 }
 
 resource "kubernetes_ingress" "ps2alerts_website_ingress" {
+  count = var.multi_urls ? 0 : 1
   metadata {
     name = var.identifier
     namespace = var.namespace
@@ -107,11 +108,60 @@ resource "kubernetes_ingress" "ps2alerts_website_ingress" {
       service_port = kubernetes_service.ps2alerts_website_service.spec[0].port[0].port
     }
     tls {
-      hosts = [var.url]
+      hosts = var.urls
       secret_name = var.identifier
     }
     rule {
-      host = var.url
+      host = var.urls[0]
+      http {
+        path {
+          backend {
+            service_name = var.identifier
+            service_port = 80
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_ingress" "ps2alerts_website_ingress_multi" {
+  count = var.multi_urls ? 1 : 0
+  metadata {
+    name = var.identifier
+    namespace = var.namespace
+    labels = {
+      app = var.identifier
+      environment = var.environment
+    }
+    annotations = {
+      "kubernetes.io/ingress.class" = "nginx"
+      "cert-manager.io/cluster-issuer" = var.identifier
+      "nginx.ingress.kubernetes.io/proxy-body-size" = "10m"
+    }
+  }
+  spec {
+    backend {
+      service_name = kubernetes_service.ps2alerts_website_service.metadata[0].name
+      service_port = kubernetes_service.ps2alerts_website_service.spec[0].port[0].port
+    }
+    tls {
+      hosts = var.urls
+      secret_name = var.identifier
+    }
+    rule {
+      host = var.urls[0]
+      http {
+        path {
+          backend {
+            service_name = var.identifier
+            service_port = 80
+          }
+        }
+      }
+    }
+    rule {
+      host = var.urls[1]
       http {
         path {
           backend {
