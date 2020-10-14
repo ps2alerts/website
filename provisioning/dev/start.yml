@@ -3,44 +3,10 @@
   vars:
     root_dir: "{{ playbook_dir }}/../../"
   tasks:
-    - debug:
-        msg: "========= 🕸️  Starting Website module 🕸️  ========="
-    - name: Install docker
-      pip:
-        name: docker
-        state: present
-
-    - name: Create docker network
-      docker_network:
-        name: ps2alerts
-        state: present
-
-    - name: Build Website Base image (grab a snickers)
-      docker_image:
-        name: ps2alerts/website
-        state: present
-        source: build
-        tag: base
-        force_source: yes
-        build:
-          pull: no
-          path: "{{ root_dir | realpath }}/provisioning/base"
-
-    - name: Build Website Dev Container
-      docker_image:
-        name: ps2alerts/website
-        state: present
-        source: build
-        tag: dev
-        force_source: yes
-        build:
-          pull: no
-          path: "{{ root_dir | realpath }}/provisioning/dev"
-
-    - name: Get user's current UID
-      command: "id -u {{ ansible_user_id }}"
-      register: id
-      when: id is undefined
+    - name: Delete dist folder
+      file:
+        path: "{{ root_dir }}/dist"
+        state: absent
 
     - name: Start Website Dev container
       docker_container:
@@ -50,13 +16,13 @@
         recreate: yes
         state: started
         volumes:
-          - "{{ root_dir | realpath }}:/var/www/html:rw"
+          - "{{ root_dir | realpath }}:/app"
         ports:
           - "80"
         networks:
           - name: "ps2alerts"
         env:
-          API_URL: "http://api.dev.ps2alerts.com"
+          API_URL: "http://dev.api.ps2alerts.com"
           BASE_URL: "http://dev.ps2alerts.com"
           ENVIRONMENT: "development"
           VERSION: "12345"

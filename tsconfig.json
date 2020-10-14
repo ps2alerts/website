@@ -9,6 +9,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
