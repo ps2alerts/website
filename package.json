@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "serve:dev": "vue-cli-service serve --port 80 --environment devlopment",
+    "serve:dev": "vue-cli-service serve --port 3000 --environment devlopment",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "lint:fix": "vue-cli-service lint --fix"

@@ -16,7 +16,7 @@
         recreate: yes
         state: started
         volumes:
-          - "{{ root_dir | realpath }}:/app"
+          - "{{ root_dir | realpath }}:/app:rw"
         ports:
           - "80"
         networks:
@@ -28,4 +28,8 @@
           VERSION: "12345"
         labels:
           traefik.enable: "true"
-          traefik.http.routers.ps2alerts-website.rule: "Host(`dev.ps2alerts.com`)"
+          traefik.http.routers.ps2alerts_website.rule: "Host(`dev.ps2alerts.com`)"
+          traefik.http.routers.ps2alerts_website.service: "ps2alerts_website_service"
+          traefik.http.services.ps2alerts_website_service.loadbalancer.server.port: "3000"
+          traefik.http.services.ps2alerts_website_service.loadbalancer.server.scheme: "http"
+          traefik.http.services.ps2alerts_website_service.loadbalancer.passhostheader: "true"

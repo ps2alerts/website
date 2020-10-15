@@ -54,30 +54,3 @@
         command: "npm install --prefix /app"
         labels:
           traefik.enable: "false"
-
-    - name: Delete dist folder
-      file:
-        path: "{{ root_dir }}/dist"
-        state: absent
-
-    - name: Start Website Dev container
-      docker_container:
-        name: ps2alerts-website
-        image: ps2alerts/website:dev
-        restart: no
-        recreate: yes
-        state: started
-        volumes:
-          - "{{ root_dir | realpath }}:/app"
-        ports:
-          - "80"
-        networks:
-          - name: "ps2alerts"
-        env:
-          API_URL: "http://dev.api.ps2alerts.com"
-          BASE_URL: "http://dev.ps2alerts.com"
-          ENVIRONMENT: "development"
-          VERSION: "12345"
-        labels:
-          traefik.enable: "true"
-          traefik.http.routers.ps2alerts-website.rule: "Host(`dev.ps2alerts.com`)"
