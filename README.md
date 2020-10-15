@@ -11,4 +11,4 @@ This module uses [Vue3](https://v3.vuejs.org/), a JavaScript frontend Framework 
 
 ## TL;DR
 
-Run `ps2alerts-website-init` on first run then after that `ps2alerts-website-dev`.
+Run `ps2alerts-website-init` on first run. For any subsequent starts, run `ps2alerts-website-dev`.
