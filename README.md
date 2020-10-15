@@ -9,25 +9,6 @@ Please see the [ps2alerts/stack](https://github.com/ps2alerts/stack) repository 
 
 This module uses [Vue3](https://v3.vuejs.org/), a JavaScript frontend Framework with native support for Typescript. 
 
-## Module setup
-```
-npm install
-```
+## TL;DR
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration for Vue
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Run `ps2alerts-website-init` on first run then after that `ps2alerts-website-dev`.
