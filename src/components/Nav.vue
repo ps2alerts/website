@@ -13,7 +13,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 #nav {
   padding: 10px;
   border-bottom: 1px solid #ccc;
