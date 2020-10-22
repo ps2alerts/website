@@ -5,8 +5,8 @@ USER root
 RUN npm install -g @vue/cli serve
 
 # Run services
-COPY ./entrypoint.sh /usr/sbin/entrypoint.sh
+COPY ./entrypoint.sh /etc/service/entrypoint.sh
 
 USER node
 
-ENTRYPOINT /usr/sbin/entrypoint.sh
+ENTRYPOINT /etc/service/entrypoint.sh

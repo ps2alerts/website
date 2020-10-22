@@ -2,12 +2,8 @@ FROM maelstromeous/applications:ps2alerts-website-base
 
 USER root
 
-RUN echo $GITHUB_WORKSPACE
-RUN pwd
-RUN cd $GITHUB_WORKSPACE
-RUN ls -lah
-
-COPY $GITHUB_WORKSPACE/provisioning/staging/entrypoint.sh /usr/sbin/entrypoint.sh
+RUN env
+COPY provisioning/staging/entrypoint.sh /etc/service/entrypoint.sh
 
 USER node
 
