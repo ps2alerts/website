@@ -56,7 +56,6 @@ export default defineComponent({
       const date = new Date('2020-01-01 00:00:00'); // Time needs to be set to 00:00:00 for any date
       date.setSeconds(this.remainingTime());
       this.remainingTimeText = date.toISOString().substr(11, 8);
-      console.log(date);
     },
     tickTock() {
       this.remaining = this.remaining - 1;
