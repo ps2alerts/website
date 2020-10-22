@@ -1,3 +1,3 @@
 FROM maelstromeous/applications:ps2alerts-website-base
 
-RUN npm run build
+RUN cd /app && npm run build
