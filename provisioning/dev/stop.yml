@@ -5,3 +5,5 @@
       docker_container:
         name: ps2alerts-website
         state: stopped
+      ignore_errors: yes
+
