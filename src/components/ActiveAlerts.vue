@@ -18,7 +18,7 @@
         :key="alert[1].instanceId"
       >
         <ActiveAlert
-          :world="alert[1].server"
+          :world="alert[1].world"
           :zone="alert[1].zone"
           :started="alert[1].timeStarted"
           :duration="alert[1].duration"
