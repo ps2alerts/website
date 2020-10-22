@@ -1,5 +1,5 @@
 export default class Config {
   public readonly api = {
-      url: 'http://dev.api.ps2alerts.com'
+      url: 'http://staging.api.ps2alerts.com'
   }
 }

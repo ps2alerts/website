@@ -15,7 +15,7 @@ export default defineComponent({
   name: "App",
   components: {
     Nav: Nav,
-    ActiveAlerts: ActiveAlerts
+    ActiveAlerts
   }
 });
 </script>

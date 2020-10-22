@@ -8,7 +8,8 @@ export interface ActiveAlertInterface {
   world: World,
   zone: Zone,
   timeStarted: string;
-  censusMetagameEventType: number,
-  duration: number,
-  state: Ps2alertsEventState
+  censusMetagameEventType: number;
+  duration: number;
+  state: Ps2alertsEventState;
+  remaining: number; // Calculated remaining time
 }
