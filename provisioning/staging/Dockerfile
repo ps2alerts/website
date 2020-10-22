@@ -3,9 +3,9 @@ FROM maelstromeous/applications:ps2alerts-website-base
 USER root
 
 RUN echo $GITHUB_WORKSPACE
-RUN echo pwd
-RUN echo cd $GITHUB_WORKSPACE
-RUN echo ls -lah
+RUN pwd
+RUN cd $GITHUB_WORKSPACE
+RUN ls -lah
 
 COPY $GITHUB_WORKSPACE/provisioning/staging/entrypoint.sh /usr/sbin/entrypoint.sh
 
