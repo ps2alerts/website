@@ -31,7 +31,7 @@ jobs:
         with:
           context: provisioning/base
           file: provisioning/base/Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/386
+          platforms: linux/amd64
           push: true
           tags: ps2alerts-website-base
 
@@ -40,7 +40,7 @@ jobs:
         with:
           context: .
           file: provisioning/staging/Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/386
+          platforms: linux/amd64
           push: true
           tags: ps2alerts-website-staging-${{ steps.sha.outputs.sha_short }}
 
