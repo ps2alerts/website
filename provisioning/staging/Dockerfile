@@ -2,8 +2,7 @@ FROM maelstromeous/applications:ps2alerts-website-base
 
 USER root
 
-RUN env
-COPY provisioning/staging/entrypoint.sh /etc/service/entrypoint.sh
+COPY ./provisioning/staging/entrypoint.sh /etc/service/entrypoint.sh
 
 USER node
 
