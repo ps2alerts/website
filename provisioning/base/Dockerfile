@@ -1,12 +1,14 @@
 FROM node:12
-
 USER root
-
-RUN npm install -g @vue/cli serve
-
-# Run services
-COPY ./entrypoint.sh /etc/service/entrypoint.sh
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    nginx \
+    runit \
+    sudo \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apk/*
+RUN adduser www-data sudo && \
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+COPY ./files/runit /etc/service
+COPY ./entrypoint.sh /usr/sbin/entrypoint.sh
 
 USER node
-
-ENTRYPOINT /etc/service/entrypoint.sh
+ENTRYPOINT /usr/sbin/entrypoint.sh
