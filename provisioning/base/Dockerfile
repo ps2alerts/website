@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN adduser node sudo && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 COPY ./files/runit /etc/service
+COPY ./files/nginx /etc/nginx/conf.d
 COPY ./entrypoint.sh /usr/sbin/entrypoint.sh
 
 USER node
