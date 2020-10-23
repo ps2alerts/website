@@ -1,4 +1,4 @@
 #!/bin/sh
 
 echo "=============== STARTING WEBSITE SERVICES ==================="
-sudo --preserve-env root runsvdir -P /etc/service
+sudo -e -u root runsvdir -P /etc/service
