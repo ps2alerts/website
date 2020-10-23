@@ -34,6 +34,7 @@ jobs:
           file: provisioning/base/Dockerfile
           platforms: linux/amd64
           push: true
+          no-cache: true
           tags: maelstromeous/applications:ps2alerts-website-base
 
       - name: Build and push staging image
@@ -42,6 +43,7 @@ jobs:
           file: provisioning/staging/Dockerfile
           platforms: linux/amd64
           push: true
+          no-cache: true
           tags: maelstromeous/applications:ps2alerts-website-staging-${{ steps.sha.outputs.sha_short }}
 
 #      - name: Build staging image
