@@ -53,6 +53,15 @@ export default defineComponent({
       return AlertRemainingTime(this.started, this.duration);
     },
     remainingTimeTextGenerate() {
+      if (this.remaining < 0) {
+        this.remainingTimeText = 'Ending...'
+        return;
+      }
+      if (this.remaining < -30) {
+        this.remainingTimeText = 'Overdue!'
+        return;
+      }
+
       const date = new Date('2020-01-01 00:00:00'); // Time needs to be set to 00:00:00 for any date
       date.setSeconds(this.remainingTime());
       this.remainingTimeText = date.toISOString().substr(11, 8);
