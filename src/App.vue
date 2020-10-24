@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Nav />
-    <ActiveAlerts />
+    <RealTimeMonitor />
     <router-view />
   </div>
 </template>
@@ -9,13 +9,13 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Nav from "@/components/Nav.vue";
-import ActiveAlerts from "@/components/ActiveAlerts.vue";
+import RealTimeMonitor from "@/components/RealTimeMonitor.vue";
 
 export default defineComponent({
   name: "App",
   components: {
     Nav: Nav,
-    ActiveAlerts
+    RealTimeMonitor
   }
 });
 </script>
