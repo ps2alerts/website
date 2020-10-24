@@ -3,6 +3,7 @@
     <Nav />
     <RealTimeMonitor />
     <router-view />
+    <Footer />
   </div>
 </template>
 
@@ -10,12 +11,14 @@
 import { defineComponent } from "vue";
 import Nav from "@/components/Nav.vue";
 import RealTimeMonitor from "@/components/RealTimeMonitor.vue";
+import Footer from "@/components/Footer.vue";
 
 export default defineComponent({
   name: "App",
   components: {
     Nav: Nav,
-    RealTimeMonitor
+    RealTimeMonitor,
+    Footer
   }
 });
 </script>

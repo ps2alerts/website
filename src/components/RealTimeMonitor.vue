@@ -31,7 +31,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import ApiRequest from "@/api-request";
-import Config from "@/config";
 import { ActiveAlertInterface } from "@/interfaces/ActiveAlertInterface";
 import ActiveAlert from "@/components/RTM/ActiveAlert.vue";
 
@@ -42,7 +41,6 @@ export default defineComponent({
   },
   data() {
     return {
-      config: new Config(),
       loading: true,
       error: null,
       actives: new Map<string, ActiveAlertInterface>(),
