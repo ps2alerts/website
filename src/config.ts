@@ -1,5 +1,5 @@
 export default class Config {
   public readonly api = {
-      url: 'http://staging.api.ps2alerts.com'
+      url: process.env.API_HOST ? process.env.API_HOST : 'http://dev.api.ps2alerts.com'
   }
 }

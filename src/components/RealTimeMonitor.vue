@@ -36,7 +36,7 @@ import { ActiveAlertInterface } from "@/interfaces/ActiveAlertInterface";
 import ActiveAlert from "@/components/RTM/ActiveAlert.vue";
 
 export default defineComponent({
-  name: "ActiveAlerts",
+  name: "RealTimeMonitor",
   components: {
     ActiveAlert,
   },
