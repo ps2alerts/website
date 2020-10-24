@@ -69,7 +69,11 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
             container_port = 443
           }
           env {
-            name = "VERSION"
+            name = "NODE_ENV"
+            value = var.environment
+          }
+          env {
+            name = "VUE_APP_VERSION"
             value = var.checksum_version
           }
         }
