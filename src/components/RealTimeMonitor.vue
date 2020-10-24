@@ -67,7 +67,6 @@ export default defineComponent({
           this.loading = false;
           this.error = null;
           this.actives = alerts.data
-          console.log(alerts.data);
         })
         .catch(e => {
           this.loading = false;
