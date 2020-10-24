@@ -69,20 +69,8 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
             container_port = 443
           }
           env {
-            name = "NODE_ENV"
-            value = var.environment
-          }
-          env {
             name = "VERSION"
             value = var.checksum_version
-          }
-          env {
-            name = "API_HOST"
-            value = var.api_host
-          }
-          env {
-            name = "API_TOKEN"
-            value = var.api_token
           }
         }
       }

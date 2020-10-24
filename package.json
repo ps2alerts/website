@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "serve:dev": "vue-cli-service serve --port 3000 --environment devlopment",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --development",
+    "build:staging": "vue-cli-service build --staging",
+    "build:production": "vue-cli-service build --production",
     "lint": "vue-cli-service lint",
     "lint:fix": "vue-cli-service lint --fix"
   },
