@@ -6,7 +6,6 @@ module "website_staging" {
   urls             = ["staging.ps2alerts.com"]
   multi_urls       = false
   checksum_version = var.checksum_version
-  api_host         = "https://staging.api.ps2alerts.com"
   api_token        = var.api_token
   cpu_request      = "10m"
   mem_request      = "32Mi"

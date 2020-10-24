@@ -9,7 +9,6 @@ variable "identifier" {
 variable "environment" {}
 variable "urls" {}
 variable "multi_urls" {}
-variable "api_host" {}
 
 variable "api_token" {
   default = "foo"
