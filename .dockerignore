@@ -1,3 +1,5 @@
 old
 .idea
 provisioning
+**/node_modules
+**/dist

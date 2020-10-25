@@ -4,14 +4,18 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "serve:dev": "vue-cli-service serve --port 3000 --environment devlopment",
-    "build": "vue-cli-service build",
+    "serve:dev": "vue-cli-service serve --port 3000",
+    "build": "vue-cli-service build --mode development",
+    "build:staging": "vue-cli-service build --mode staging",
+    "build:production": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint",
     "lint:fix": "vue-cli-service lint --fix"
   },
   "dependencies": {
+    "axios": "^0.20.0",
     "core-js": "^3.6.5",
-    "vue": "^3.0.0",
+    "moment": "^2.29.1",
+    "vue": "^3.0.1",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },

@@ -1,4 +1,4 @@
 #!/bin/sh
 
-echo "=============== STARTING Website (DEV) ==================="
-cd /app && npm run serve:dev
+echo "=============== STARTING WEBSITE SERVICES ==================="
+sudo -E -u root runsvdir -P /etc/service

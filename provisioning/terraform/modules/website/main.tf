@@ -29,8 +29,11 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
       environment = var.environment
     }
   }
+  lifecycle {
+    ignore_changes = ["spec[0].replicas"]
+  }
   spec {
-    replicas = 2
+    replicas = var.replicas
     revision_history_limit = 1
     selector {
       match_labels = {
@@ -70,16 +73,8 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
             value = var.environment
           }
           env {
-            name = "VERSION"
+            name = "VUE_APP_VERSION"
             value = var.checksum_version
-          }
-          env {
-            name = "API_HOST"
-            value = var.api_host
-          }
-          env {
-            name = "API_TOKEN"
-            value = var.api_token
           }
         }
       }
