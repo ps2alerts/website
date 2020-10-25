@@ -1,7 +1,6 @@
 <template>
   <footer>
     Version: {{ version }}
-    env: {{ env }}
   </footer>
 </template>
 

@@ -7,7 +7,6 @@
     <p v-if="error">
       {{ error }}
     </p>
-    {{ actives }}
     <table
       v-show="actives.length > 0"
       id="alert-list"
@@ -68,7 +67,7 @@ export default defineComponent({
   methods: {
     async activeAlerts(): Promise<void> {
       await this.ApiRequest.client
-        .get("/instances/active")
+        .get("/instances/active?sortBy=timeStarted")
         .then(alerts => {
           this.loading = false;
           this.error = null;
