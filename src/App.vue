@@ -10,7 +10,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Nav from "@/components/Nav.vue";
-import RealTimeMonitor from "@/components/RealTimeMonitor.vue";
+import RealTimeMonitor from "@/components/RTM/RealTimeMonitor.vue";
 import Footer from "@/components/Footer.vue";
 
 export default defineComponent({
