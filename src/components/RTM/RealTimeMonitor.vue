@@ -84,6 +84,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 #alert-list {
+  margin: 0 auto 1rem auto;
   padding: 0;
   list-style: none;
   li {
