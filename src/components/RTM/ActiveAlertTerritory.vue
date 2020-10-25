@@ -4,6 +4,14 @@
   <td>
     {{ remainingTimeText }}
   </td>
+  <td>
+    <TerritoryBar
+      :vs="result.vs"
+      :nc="result.nc"
+      :tr="result.tr"
+      :cutoff="result.cutoff"
+    />
+  </td>
 </template>
 
 <script lang="ts">
@@ -11,9 +19,13 @@ import { defineComponent } from "vue";
 import {World} from "@/constants/World";
 import {Zone} from "@/constants/Zone";
 import {AlertRemainingTime} from "@/filters/AlertRemainingTime";
+import TerritoryBar from "@/components/common/TerritoryBar.vue";
 
 export default defineComponent({
-  name: "ActiveAlert",
+  name: "ActiveAlertTerritory",
+  components: {
+    TerritoryBar
+  },
   props: {
     world: {
       type: Number,
@@ -34,16 +46,31 @@ export default defineComponent({
       type: Number,
       default: 0,
       required: true
+    },
+    result: {
+      type: Object,
+      default: () => {
+        return {
+          vs: 33,
+          nc: 33,
+          tr: 33,
+          cutoff: 0,
+          winner: null,
+          draw: false
+        }
+      }
     }
   },
   data() {
     return {
       remaining: 0,
-      remainingTimeText: 'eternity'
+      remainingTimeText: '01:30:00'
     }
   },
   created() {
     this.remaining = this.remainingTime()
+    this.tickTock();
+
     setInterval(() => {
       this.tickTock()
     }, 1000);

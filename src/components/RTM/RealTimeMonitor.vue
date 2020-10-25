@@ -7,21 +7,29 @@
     <p v-if="error">
       {{ error }}
     </p>
-    <table id="alert-list">
+    {{ actives }}
+    <table
+      v-show="actives.length > 0"
+      id="alert-list"
+    >
       <tr>
         <th>Server</th>
         <th>Cont</th>
         <th>Time left</th>
+        <th class="territory-bar">
+          Territory
+        </th>
       </tr>
       <tr
         v-for="alert in actives.entries()"
         :key="alert[1].instanceId"
       >
-        <ActiveAlert
+        <ActiveAlertTerritory
           :world="alert[1].world"
           :zone="alert[1].zone"
           :started="alert[1].timeStarted"
           :duration="alert[1].duration"
+          :result="alert[1].result"
         />
       </tr>
     </table>
@@ -32,12 +40,12 @@
 import { defineComponent } from "vue";
 import ApiRequest from "@/api-request";
 import { ActiveAlertInterface } from "@/interfaces/ActiveAlertInterface";
-import ActiveAlert from "@/components/RTM/ActiveAlert.vue";
+import ActiveAlertTerritory from "@/components/RTM/ActiveAlertTerritory.vue";
 
 export default defineComponent({
   name: "RealTimeMonitor",
   components: {
-    ActiveAlert,
+    ActiveAlertTerritory,
   },
   data() {
     return {
@@ -82,6 +90,10 @@ export default defineComponent({
   li {
     text-decoration: none;
     color: red;
+  }
+
+  .territory-bar {
+    width: 200px;
   }
 }
 </style>
