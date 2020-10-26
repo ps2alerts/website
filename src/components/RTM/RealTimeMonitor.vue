@@ -22,13 +22,10 @@
       <thead>
         <tr>
           <th class="px-1">
-            Server
+            Location
           </th>
           <th class="px-1">
-            Cont
-          </th>
-          <th class="px-1">
-            Time
+            Remaining
           </th>
           <th class="w-3/5 px-1">
             Territory

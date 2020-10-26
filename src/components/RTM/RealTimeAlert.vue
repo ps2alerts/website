@@ -4,10 +4,7 @@
     :remaining="remaining"
     :instanceId="instanceId"
   >
-    {{ $filters.worldName(world) }}
-  </td>
-  <td class="px-1 text-center">
-    {{ $filters.zoneName(zone) }}
+    {{ $filters.worldName(world) }} - {{ $filters.zoneName(zone) }}
   </td>
   <td class="px-1 text-center">
     {{ remainingTimeText }}
