@@ -1,5 +1,8 @@
 <template>
-  <td class="px-1 text-center">
+  <td
+    class="px-1 text-center"
+    :remaining="remaining"
+  >
     {{ $filters.worldName(world) }}
   </td>
   <td class="px-1 text-center">
@@ -24,6 +27,7 @@ import {World} from "@/constants/World";
 import {Zone} from "@/constants/Zone";
 import {AlertRemainingTime} from "@/filters/AlertRemainingTime";
 import TerritoryBar from "@/components/common/TerritoryBar.vue";
+import {AlertRemainingTimeText} from "@/filters/AlertRemainingTimeText";
 
 export default defineComponent({
   name: "RealTimeAlert",
@@ -67,39 +71,29 @@ export default defineComponent({
   },
   data() {
     return {
-      remaining: 0,
-      remainingTimeText: '01:30:00'
+      remaining: AlertRemainingTime(this.started, this.duration)
+    }
+  },
+  computed: {
+    remainingTimeText(): string {
+      if (this.remaining < 0) {
+        return 'Ending...';
+      }
+      if (this.remaining < -30) {
+        return 'Overdue!';
+      }
+
+      return AlertRemainingTimeText(this.remaining);
     }
   },
   created() {
-    this.remaining = this.remainingTime()
-    this.tickTock();
-
     setInterval(() => {
       this.tickTock()
     }, 1000);
   },
   methods: {
-    remainingTime() {
-      return AlertRemainingTime(this.started, this.duration);
-    },
-    remainingTimeTextGenerate() {
-      if (this.remaining < 0) {
-        this.remainingTimeText = 'Ending...'
-        return;
-      }
-      if (this.remaining < -30) {
-        this.remainingTimeText = 'Overdue!'
-        return;
-      }
-
-      const date = new Date('2020-01-01 00:00:00'); // Time needs to be set to 00:00:00 for any date
-      date.setSeconds(this.remainingTime());
-      this.remainingTimeText = date.toISOString().substr(11, 8);
-    },
     tickTock() {
       this.remaining = this.remaining - 1;
-      this.remainingTimeTextGenerate()
     }
   }
 });

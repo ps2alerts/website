@@ -20,7 +20,7 @@
     </div>
     <div
       class="territory-bar-segment bg-gray-600 text-center text-white"
-      :style="{ width: cutoff + remainderPercent+'%' }"
+      :style="{ width: cutoff+'%' }"
     >
       {{ cutoff >= 10 ? cutoff : '' }}
     </div>
@@ -56,7 +56,7 @@ export default defineComponent({
   },
   computed: {
     remainderPercent(): number {
-      return (100 - this.vs - this.nc - this.tr - this.cutoff) / 4;
+      return (100 - this.vs - this.nc - this.tr - this.cutoff) / 3;
     }
   },
 });
