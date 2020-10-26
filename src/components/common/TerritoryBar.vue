@@ -1,7 +1,7 @@
 <template>
   <div class="territory-bar">
     <div
-      class="territory-bar-segment bg-purple-700 text-center text-white rounded-l-md"
+      class="territory-bar-segment bg-purple-700 text-center text-white rounded-l"
       :style="{ width: vs + remainderPercent+'%' }"
     >
       {{ vs >= 10 ? vs : '' }}
@@ -15,14 +15,14 @@
     <div
       class="territory-bar-segment bg-red-600 text-center text-white"
       :style="{ width: tr + remainderPercent+'%' }"
-      :class="{'rounded-r-md': cutoff === 0}"
+      :class="{'rounded-r': cutoff === 0}"
     >
       {{ tr >= 10 ? tr : '' }}
     </div>
     <div
       class="territory-bar-segment bg-gray-600 text-center text-white"
       :style="{ width: cutoff+'%' }"
-      :class="{'rounded-r-md': cutoff > 0}"
+      :class="{'rounded-r': cutoff > 0}"
     >
       {{ cutoff >= 10 ? cutoff : '' }}
     </div>
