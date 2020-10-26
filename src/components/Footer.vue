@@ -1,5 +1,5 @@
 <template>
-  <footer class="text-center">
+  <footer class="text-center pt-4">
     Version: {{ version }}
   </footer>
 </template>
@@ -18,19 +18,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style scoped lang="scss">
-footer {
-  padding: 10px;
-  border-top: 1px solid #ccc;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #c82828;
-    }
-  }
-}
-</style>

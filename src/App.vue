@@ -9,13 +9,11 @@
     >
       <Header />
       <div class="px-4 md:px-0">
-        <Search />
-        <RealTimeMonitor />
         <Navigation />
+        <!-- <Search />-->
+        <RealTimeMonitor />
       </div>
-      <footer class="hidden md:block">
-        <FooterShard />
-      </footer>
+      <FooterShard class="hidden md:block" />
     </div>
     <div
       id="panel-right"
@@ -23,16 +21,14 @@
     >
       <router-view />
     </div>
-    <footer class="md:hidden">
-      <FooterShard />
-    </footer>
+    <FooterShard class="md:hidden" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 import Header from "@/components/Header.vue";
-import Search from "@/components/Search.vue";
+// import Search from "@/components/Search.vue";
 import RealTimeMonitor from "@/components/RTM/RealTimeMonitor.vue";
 import Navigation from "@/components/Navigation.vue";
 import FooterShard from "@/components/Footer.vue";
@@ -42,7 +38,7 @@ export default defineComponent({
   name: "App",
   components: {
     Header,
-    Search,
+    // Search,
     RealTimeMonitor,
     Navigation,
     FooterShard,

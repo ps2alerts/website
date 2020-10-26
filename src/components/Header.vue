@@ -1,6 +1,6 @@
 <template>
   <header>
-    <nav class="items-center justify-center bg-red-500 px-4 py-6">
+    <nav class="items-center justify-center bg-red-500 px-4 py-4">
       <div class="flex text-white px-6 justify-center items-center ">
         <img
           class="ps2alerts-logo mr-2 w-16"
@@ -12,7 +12,7 @@
         </h1>
       </div>
       <div class="flex w-auto block justify-center px-6 mt-4">
-        <div class="bg-red-700 btn text-white inline-block text-lg px-4 py-2 leading-none rounded">
+        <div class="bg-red-700 text-white inline-block text-lg px-4 py-2 leading-none rounded">
           PRE-ALPHA
         </div>
       </div>
