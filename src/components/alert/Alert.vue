@@ -1,6 +1,9 @@
 <template>
   <article class="prose lg:prose-xl">
     <h1>Alert {{ instanceId }}</h1>
+    <p>
+      Hello there
+    </p>
   </article>
 </template>
 
