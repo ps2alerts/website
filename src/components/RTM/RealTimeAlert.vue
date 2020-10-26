@@ -8,12 +8,9 @@
   <td class="px-1 text-center">
     {{ remainingTimeText }}
   </td>
-  <td
-    class="pl-2 align-middle"
-  >
+  <td class="pl-2 align-middle">
     <TerritoryBar
-      :vs="
-        result.vs"
+      :vs="result.vs"
       :nc="result.nc"
       :tr="result.tr"
       :cutoff="result.cutoff"

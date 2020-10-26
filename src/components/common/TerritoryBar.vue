@@ -2,25 +2,25 @@
   <div class="territory-bar">
     <div
       class="territory-bar-segment bg-purple-700 text-center text-white"
-      :style="{ width: vs+'%' }"
+      :style="{ width: vs + remainderPercent+'%' }"
     >
       {{ vs >= 10 ? vs : '' }}
     </div>
     <div
       class="territory-bar-segment bg-blue-700 text-center text-white"
-      :style="{ width: nc+'%' }"
+      :style="{ width: nc + remainderPercent+'%' }"
     >
       {{ nc >= 10 ? nc : '' }}
     </div>
     <div
       class="territory-bar-segment bg-red-600 text-center text-white"
-      :style="{ width: tr+'%' }"
+      :style="{ width: tr + remainderPercent+'%' }"
     >
       {{ tr >= 10 ? tr : '' }}
     </div>
     <div
       class="territory-bar-segment bg-gray-600 text-center text-white"
-      :style="{ width: cutoff+'%' }"
+      :style="{ width: cutoff + remainderPercent+'%' }"
     >
       {{ cutoff >= 10 ? cutoff : '' }}
     </div>
@@ -52,6 +52,11 @@ export default defineComponent({
       type: Number,
       default: 0,
       required: true
+    }
+  },
+  computed: {
+    remainderPercent(): number {
+      return (100 - this.vs - this.nc - this.tr - this.cutoff) / 4;
     }
   },
 });
