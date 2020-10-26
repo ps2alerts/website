@@ -8,12 +8,12 @@
       class="w-full"
     >
       <Header />
-      <div>
+      <div class="px-4 md:px-0">
         <Search />
         <RealTimeMonitor />
         <Navigation />
       </div>
-      <footer class="col-auto">
+      <footer class="hidden md:block">
         <FooterShard />
       </footer>
     </div>
@@ -23,6 +23,9 @@
     >
       <router-view />
     </div>
+    <footer class="md:hidden">
+      <FooterShard />
+    </footer>
   </div>
 </template>
 
@@ -52,10 +55,17 @@ body {
   margin: 0;
 }
 
-#panel-left {
+#app {
+  @media (max-width: 767px) {
+    display: block;
+  }
+}
 
+#panel-left {
   max-width: 500px;
 
-
+  @media (max-width: 767px) {
+    max-width: inherit;
+  }
 }
 </style>

@@ -27,7 +27,7 @@
   </div>
   <div class="col-span-3 ss:col-span-4 h-full flex items-center justify-center bg-gray-300">
     <div class="text-center">
-      <h1 class="text-3xl">
+      <h1>
         Global Combat Statistics
       </h1>
       <p>This page is heavily WIP!</p>
