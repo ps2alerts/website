@@ -81,13 +81,12 @@ export default defineComponent({
   },
   computed: {
     remainingTimeText(): string {
-      if (this.remaining < 0) {
-        return 'Ending...';
-      }
       if (this.remaining < -30) {
         return 'Overdue!';
       }
-
+      if (this.remaining < 0) {
+        return 'Ending...';
+      }
       return AlertRemainingTimeText(this.remaining);
     }
   },
