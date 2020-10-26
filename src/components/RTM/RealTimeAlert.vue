@@ -4,12 +4,15 @@
     :remaining="remaining"
     :instanceId="instanceId"
   >
-    {{ $filters.worldName(world) }} - {{ $filters.zoneName(zone) }}
+    {{ $filters.worldName(world) }}
+  </td>
+  <td class="px-1 text-center">
+    {{ $filters.zoneName(zone) }}
   </td>
   <td class="px-1 text-center">
     {{ remainingTimeText }}
   </td>
-  <td class="pl-2 align-middle">
+  <td class="pl-2 text-center">
     <TerritoryBar
       :vs="result.vs"
       :nc="result.nc"

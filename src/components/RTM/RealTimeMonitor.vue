@@ -21,13 +21,16 @@
     >
       <thead>
         <tr>
-          <th class="px-1">
-            Location
+          <th class="w-1/6 px-1">
+            Server
           </th>
-          <th class="px-1">
+          <th class="w-1/6 px-1">
+            Cont
+          </th>
+          <th class="w-1/6 px-1">
             Remaining
           </th>
-          <th class="w-3/5 px-1">
+          <th class="w-3/6 px-1">
             Territory
           </th>
         </tr>
