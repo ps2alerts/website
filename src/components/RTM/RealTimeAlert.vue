@@ -2,6 +2,7 @@
   <td
     class="px-1 text-center"
     :remaining="remaining"
+    :instanceId="instanceId"
   >
     {{ $filters.worldName(world) }}
   </td>
@@ -35,6 +36,10 @@ export default defineComponent({
     TerritoryBar
   },
   props: {
+    instanceId: {
+      type: String,
+      required: true
+    },
     world: {
       type: Number,
       default: World.MILLER,

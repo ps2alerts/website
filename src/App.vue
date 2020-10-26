@@ -1,14 +1,14 @@
 <template>
   <div
     id="app"
-    class="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-12 gap-2 font-sans"
+    class="font-sans flex"
   >
     <div
       id="panel-left"
-      class="col-span-1 sm:col-span-4 md:col-span-6 lg:col-span-4 xl:col-span-4 ss:col-span-3"
+      class="w-full"
     >
       <Header />
-      <div class="px-4">
+      <div>
         <Search />
         <RealTimeMonitor />
         <Navigation />
@@ -19,7 +19,7 @@
     </div>
     <div
       id="panel-right"
-      class="col-span-1 sm:col-span-4 md:col-span-6 lg:col-span-6 xl:col-span-8 ss:col-span-9"
+      class="w-full h-full px-4 grid grid-cols-2 lg:grid-cols-3 ss:grid-cols-4 gap-4"
     >
       <router-view />
     </div>
@@ -42,7 +42,7 @@ export default defineComponent({
     Search,
     RealTimeMonitor,
     Navigation,
-    FooterShard
+    FooterShard,
   }
 });
 </script>
@@ -50,5 +50,12 @@ export default defineComponent({
 <style lang="scss">
 body {
   margin: 0;
+}
+
+#panel-left {
+
+  max-width: 500px;
+
+
 }
 </style>

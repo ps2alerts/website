@@ -1,7 +1,7 @@
 <template>
   <div
     id="rtm-active-alerts"
-    class="py-4 border-t-2 border-b-2 border-red-600"
+    class="py-4 border-t-2 border-b-2 border-red-600 text-sm"
   >
     <div class="rtm-top text-center">
       <p v-if="loading">
@@ -21,13 +21,13 @@
     >
       <thead>
         <tr>
-          <th class="w-1/5 px-1">
+          <th class="px-1">
             Server
           </th>
-          <th class="w-1/5 px-1">
+          <th class="px-1">
             Cont
           </th>
-          <th class="w-1/5 px-1">
+          <th class="px-1">
             Time
           </th>
           <th class="w-3/5 px-1">
@@ -46,13 +46,14 @@
             :started="alert[1].timeStarted"
             :duration="alert[1].duration"
             :result="alert[1].result"
+            :instance-id="alert[1].instanceId"
           />
         </tr>
       </tbody>
     </table>
     <p
       v-show="actives.length > 0"
-      class="text-center text-gray-500 text-xs pt-2"
+      class="text-center text-gray-600 text-xs pt-2"
     >
       Gray bars indicate cutoffs
     </p>

@@ -6,6 +6,9 @@ import {WorldName} from "@/filters/WorldName";
 import {ZoneName} from "@/filters/ZoneName";
 import {AlertRemainingTime} from "@/filters/AlertRemainingTime";
 import {AlertEndTime} from "@/filters/AlertEndTime";
+import {library} from "@fortawesome/fontawesome-svg-core";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {faGithub, faTwitter} from "@fortawesome/free-brands-svg-icons";
 
 const app = createApp(App)
 app.config.globalProperties.$filters = {
@@ -14,6 +17,10 @@ app.config.globalProperties.$filters = {
   worldName: WorldName,
   zoneName: ZoneName
 }
+
+library.add(faGithub, faTwitter);
+app.component('FontAwesomeIcon', FontAwesomeIcon)
+
 app.use(store)
 app.use(router)
 app.mount("#app");
