@@ -1,12 +1,9 @@
 <template>
   <div
-    id="active-alerts"
-    class="p-2"
+    id="rtm-active-alerts"
+    class="py-4 border-t-2 border-b-2 border-red-600"
   >
     <div class="rtm-top text-center">
-      <h1 class="text-2xl text-center">
-        Real Time Alert Monitor
-      </h1>
       <p v-if="loading">
         Loading...
       </p>
@@ -53,6 +50,12 @@
         </tr>
       </tbody>
     </table>
+    <p
+      v-show="actives.length > 0"
+      class="text-center text-gray-500 text-xs pt-2"
+    >
+      Gray bars indicate cutoffs
+    </p>
   </div>
 </template>
 

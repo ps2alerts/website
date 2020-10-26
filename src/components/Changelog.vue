@@ -1,7 +1,6 @@
 <template>
   <article class="prose lg:prose-xl">
-    <h1>Hello there</h1>
-    <p>General Kenobi</p>
+    <h1>Change log</h1>
   </article>
 </template>
 
@@ -9,7 +8,7 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "Home"
+  name: "Changelog"
 });
 </script>
 

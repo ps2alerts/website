@@ -8,7 +8,11 @@
       class="col-span-1 sm:col-span-4 md:col-span-6 lg:col-span-4 xl:col-span-4 ss:col-span-3"
     >
       <Header />
-      <RealTimeMonitor />
+      <div class="px-4">
+        <Search />
+        <RealTimeMonitor />
+        <Navigation />
+      </div>
       <footer class="col-auto">
         <FooterShard />
       </footer>
@@ -25,7 +29,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Header from "@/components/Header.vue";
+import Search from "@/components/Search.vue";
 import RealTimeMonitor from "@/components/RTM/RealTimeMonitor.vue";
+import Navigation from "@/components/Navigation.vue";
 import FooterShard from "@/components/Footer.vue";
 import './assets/styles/tailwind.css';
 
@@ -33,7 +39,9 @@ export default defineComponent({
   name: "App",
   components: {
     Header,
+    Search,
     RealTimeMonitor,
+    Navigation,
     FooterShard
   }
 });

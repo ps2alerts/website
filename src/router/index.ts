@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import NotFound from "../views/NotFound.vue";
 import Home from "@/components/Home.vue";
 import AllAlerts from "@/components/AllAlerts.vue";
+import Changelog from "@/components/Changelog.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -13,6 +14,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/all-alerts",
     name: "AllAlerts",
     component: AllAlerts
+  },
+  {
+    path: "/changelog",
+    name: "Changelog",
+    component: Changelog
   },
   {
     // Serve 404s on unknown routes

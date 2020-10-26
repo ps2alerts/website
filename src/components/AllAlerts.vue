@@ -1,7 +1,7 @@
 <template>
-  <div id="all-alerts">
+  <article class="prose lg:prose-xl">
     <h1>All Alerts</h1>
-  </div>
+  </article>
 </template>
 
 <script lang="ts">

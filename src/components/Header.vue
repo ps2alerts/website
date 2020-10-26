@@ -1,6 +1,6 @@
 <template>
   <header>
-    <nav class="flex items-center justify-between flex-wrap bg-red-500 p-6">
+    <nav class="flex items-center justify-between flex-wrap bg-red-500 px-4 py-6">
       <div class="flex items-center flex-shrink-0 text-white mr-6">
         <img
           class="ps2alerts-logo mr-2 w-12"
@@ -29,12 +29,8 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Navigation from "@/components/Navigation.vue";
 
 export default defineComponent({
   name: "Header",
-  components: {
-    // Navigation
-  }
 });
 </script>
