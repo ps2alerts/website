@@ -1,12 +1,19 @@
 <template>
-  <td>{{ $filters.worldName(world) }} </td>
-  <td>{{ $filters.zoneName(zone) }}</td>
-  <td>
+  <td class="px-1 text-center">
+    {{ $filters.worldName(world) }}
+  </td>
+  <td class="px-1 text-center">
+    {{ $filters.zoneName(zone) }}
+  </td>
+  <td class="px-1 text-center">
     {{ remainingTimeText }}
   </td>
-  <td>
+  <td
+    class="pl-2 align-middle"
+  >
     <TerritoryBar
-      :vs="result.vs"
+      :vs="
+        result.vs"
       :nc="result.nc"
       :tr="result.tr"
       :cutoff="result.cutoff"
@@ -22,7 +29,7 @@ import {AlertRemainingTime} from "@/filters/AlertRemainingTime";
 import TerritoryBar from "@/components/common/TerritoryBar.vue";
 
 export default defineComponent({
-  name: "ActiveAlertTerritory",
+  name: "RealTimeAlert",
   components: {
     TerritoryBar
   },

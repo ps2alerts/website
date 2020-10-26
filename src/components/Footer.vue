@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <footer class="text-center">
     Version: {{ version }}
   </footer>
 </template>

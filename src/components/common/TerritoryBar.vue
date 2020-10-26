@@ -1,28 +1,28 @@
 <template>
   <div class="territory-bar">
     <div
-      class="territory-bar-segment vs"
+      class="territory-bar-segment bg-purple-700 text-center text-white"
       :style="{ width: vs+'%' }"
     >
-      {{ vs > 5 ? vs : '' }}
+      {{ vs >= 10 ? vs : '' }}
     </div>
     <div
-      class="territory-bar-segment nc"
+      class="territory-bar-segment bg-blue-700 text-center text-white"
       :style="{ width: nc+'%' }"
     >
-      {{ nc > 5 ? nc : '' }}
+      {{ nc >= 10 ? nc : '' }}
     </div>
     <div
-      class="territory-bar-segment tr"
+      class="territory-bar-segment bg-red-600 text-center text-white"
       :style="{ width: tr+'%' }"
     >
-      {{ tr > 5 ? tr : '' }}
+      {{ tr >= 10 ? tr : '' }}
     </div>
     <div
-      class="territory-bar-segment cutoff"
+      class="territory-bar-segment bg-gray-600 text-center text-white"
       :style="{ width: cutoff+'%' }"
     >
-      {{ cutoff > 5 ? cutoff : '' }}
+      {{ cutoff >= 10 ? cutoff : '' }}
     </div>
   </div>
 </template>
@@ -56,32 +56,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped lang="scss">
-.territory-bar {
-  display: inline-block;
-  width: 100%;
-  height: 30px;
-  color: white;
-
-  .territory-bar-segment {
-    width: 33%;
-    height: 100%;
-    display: inline-block;
-    background-color: grey;
-    float: left;
-
-    &.vs {
-      background-color: rebeccapurple;
-    }
-
-    &.nc {
-      background-color: darkblue;
-    }
-
-    &.tr {
-      background-color: red;
-    }
-  }
-}
-</style>

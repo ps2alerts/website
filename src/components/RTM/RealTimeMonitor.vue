@@ -1,36 +1,57 @@
 <template>
-  <div id="active-alerts">
-    <h1>Active Alerts</h1>
-    <p v-if="loading">
-      Loading alerts...
-    </p>
-    <p v-if="error">
-      {{ error }}
-    </p>
+  <div
+    id="active-alerts"
+    class="p-2"
+  >
+    <div class="rtm-top text-center">
+      <h1 class="text-2xl text-center">
+        Real Time Alert Monitor
+      </h1>
+      <p v-if="loading">
+        Loading...
+      </p>
+      <p v-if="error">
+        {{ error }}
+      </p>
+      <p v-show="actives.length === 0">
+        There are no alerts currently running!
+      </p>
+    </div>
     <table
       v-show="actives.length > 0"
       id="alert-list"
+      class="table-fixed border-collapse border-0 w-full mb-0"
     >
-      <tr>
-        <th>Server</th>
-        <th>Cont</th>
-        <th>Time left</th>
-        <th class="territory-bar">
-          Territory
-        </th>
-      </tr>
-      <tr
-        v-for="alert in actives.entries()"
-        :key="alert[1].instanceId"
-      >
-        <ActiveAlertTerritory
-          :world="alert[1].world"
-          :zone="alert[1].zone"
-          :started="alert[1].timeStarted"
-          :duration="alert[1].duration"
-          :result="alert[1].result"
-        />
-      </tr>
+      <thead>
+        <tr>
+          <th class="w-1/5 px-1">
+            Server
+          </th>
+          <th class="w-1/5 px-1">
+            Cont
+          </th>
+          <th class="w-1/5 px-1">
+            Time
+          </th>
+          <th class="w-3/5 px-1">
+            Territory
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="alert in actives.entries()"
+          :key="alert[1].instanceId"
+        >
+          <ActiveAlertTerritory
+            :world="alert[1].world"
+            :zone="alert[1].zone"
+            :started="alert[1].timeStarted"
+            :duration="alert[1].duration"
+            :result="alert[1].result"
+          />
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>
@@ -39,12 +60,12 @@
 import { defineComponent } from "vue";
 import ApiRequest from "@/api-request";
 import { ActiveAlertInterface } from "@/interfaces/ActiveAlertInterface";
-import ActiveAlertTerritory from "@/components/RTM/ActiveAlertTerritory.vue";
+import RealTimeAlert from "@/components/RTM/RealTimeAlert.vue";
 
 export default defineComponent({
   name: "RealTimeMonitor",
   components: {
-    ActiveAlertTerritory,
+    ActiveAlertTerritory: RealTimeAlert,
   },
   data() {
     return {
@@ -81,19 +102,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style scoped lang="scss">
-#alert-list {
-  margin: 0 auto 1rem auto;
-  padding: 0;
-  list-style: none;
-  li {
-    text-decoration: none;
-    color: red;
-  }
-
-  .territory-bar {
-    width: 200px;
-  }
-}
-</style>
