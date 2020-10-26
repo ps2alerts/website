@@ -21,17 +21,20 @@
     >
       <thead>
         <tr>
-          <th class="w-1/6 px-1">
+          <th class="w-2/12 px-1">
             Server
           </th>
-          <th class="w-1/6 px-1">
+          <th class="w-2/12 px-1">
             Cont
           </th>
-          <th class="w-1/6 px-1">
+          <th class="w-2/12 px-1">
             Remaining
           </th>
-          <th class="w-3/6 px-1">
-            Territory
+          <th class="w-5/12 px-1">
+            Territory %
+          </th>
+          <th class="w-1/12 px-1">
+            &nbsp;
           </th>
         </tr>
       </thead>
@@ -53,9 +56,9 @@
     </table>
     <p
       v-show="actives.length > 0"
-      class="text-center text-gray-600 text-xs pt-2"
+      class="text-center text-gray-600 text-xs pt-1"
     >
-      Gray bars indicate cutoffs
+      Gray segments indicate cutoffs
     </p>
   </div>
 </template>

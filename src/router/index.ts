@@ -3,6 +3,7 @@ import NotFound from "../views/NotFound.vue";
 import Home from "@/components/Home.vue";
 import AllAlerts from "@/components/AllAlerts.vue";
 import Changelog from "@/components/Changelog.vue";
+import Alert from "@/components/alert/Alert.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -19,6 +20,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/changelog",
     name: "Changelog",
     component: Changelog
+  },
+  {
+    path: "/alert/:instanceId",
+    name: "Alert",
+    component: Alert,
+    props: true
   },
   {
     // Serve 404s on unknown routes

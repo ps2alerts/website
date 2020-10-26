@@ -12,13 +12,21 @@
   <td class="px-1 text-center">
     {{ remainingTimeText }}
   </td>
-  <td class="pl-2 text-center">
+  <td class="text-center">
     <TerritoryBar
       :vs="result.vs"
       :nc="result.nc"
       :tr="result.tr"
       :cutoff="result.cutoff"
     />
+  </td>
+  <td class="text-center">
+    <router-link
+      class="btn btn-sm"
+      :to="{ name: 'Alert', params: { instanceId: instanceId }}"
+    >
+      <FontAwesomeIcon :icon="['fas', 'eye']" />
+    </router-link>
   </td>
 </template>
 
@@ -76,7 +84,7 @@ export default defineComponent({
   },
   data() {
     return {
-      remaining: AlertRemainingTime(this.started, this.duration)
+      remaining: AlertRemainingTime(this.started, this.duration),
     }
   },
   computed: {

@@ -18,7 +18,7 @@
     .btn:hover {
         @apply bg-red-700 text-white;
     }
-    .btn-small {
+    .btn-sm {
         @apply font-bold py-1 px-2 rounded;
     }
 
