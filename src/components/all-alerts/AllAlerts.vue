@@ -37,7 +37,7 @@ export default defineComponent({
   methods: {
     async pull(): Promise<void> {
       await this.ApiRequest.client
-        .get("/instances/territory-control?sortBy=timeStarted&order=desc")
+        .get("/instances/territory-control?sortBy=timeStarted&order=desc&pageSize=50")
         .then(alerts => {
           this.loading = false;
           this.error = null;
