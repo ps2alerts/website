@@ -1,13 +1,13 @@
 
 
 <template>
-  <div class="bg-gray-300 col-span-3 ss:col-span-4 px-4 py-2 mb-2 bg-gray-300">
+  <div class="bg-gray-300 col-span-3 ss:col-span-4 px-4 py-4 mb-2 bg-gray-300">
     {{ $filters.worldName(alert.world) }} - {{ $filters.zoneName(alert.zone) }}
     <p v-show="alert.state === 1">
-      Started: {{ alert.timeStarted }}
+      Started: {{ started }}
     </p>
     <p v-show="alert.state === 2">
-      Ended: {{ alert.timeEnded }}
+      Ended: {{ ended }}
     </p>
     <div v-if="alert.result">
       <TerritoryBar
@@ -26,6 +26,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import TerritoryBar from "@/components/common/TerritoryBar.vue";
+import moment, {Moment} from "moment-timezone";
 
 export default defineComponent({
   name: "AllAlertsEntry",
@@ -38,5 +39,13 @@ export default defineComponent({
       required: true
     }
   },
+  computed: {
+    started():string {
+      return moment(this.alert.timeStarted).format('DD-MMM-YYYY HH:mm:ss');
+    },
+    ended():string {
+      return moment(this.alert.timeEnded).format('DD-MMM-YYYY HH:mm:ss');
+    }
+  }
 });
 </script>
