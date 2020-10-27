@@ -11,5 +11,6 @@ export interface ActiveAlertInterface {
   censusMetagameEventType: number;
   duration: number;
   state: Ps2alertsEventState;
+  result: object;
   remaining: number; // Calculated remaining time
 }

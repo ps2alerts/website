@@ -31,7 +31,15 @@
             Remaining
           </th>
           <th class="w-5/12 px-1">
-            Territory %
+            <button
+              class="btn btn-sm"
+              :class="{ btnActive: territoryMode === true}"
+            >
+              Territory
+            </button>
+            <button class="btn btn-sm">
+              Pops
+            </button>
           </th>
           <th class="w-1/12 px-1">
             &nbsp;
@@ -79,8 +87,15 @@ export default defineComponent({
       loading: true,
       error: null,
       actives: new Map<string, ActiveAlertInterface>(),
-      ApiRequest: new ApiRequest()
+      ApiRequest: new ApiRequest(),
+      territoryMode: true,
+      popsMode: false,
     };
+  },
+  computed: {
+    // mode() {
+    //   return this.territoryMode === true ? 'territory' : 'pops'
+    // }
   },
   watch: {
     $route: "activeAlerts"
