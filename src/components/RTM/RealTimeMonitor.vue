@@ -51,7 +51,7 @@
           v-for="alert in actives.entries()"
           :key="alert[1].instanceId"
         >
-          <ActiveAlertTerritory
+          <RealTimeAlert
             :world="alert[1].world"
             :zone="alert[1].zone"
             :started="alert[1].timeStarted"
@@ -80,7 +80,7 @@ import RealTimeAlert from "@/components/RTM/RealTimeAlert.vue";
 export default defineComponent({
   name: "RealTimeMonitor",
   components: {
-    ActiveAlertTerritory: RealTimeAlert,
+    RealTimeAlert,
   },
   data() {
     return {

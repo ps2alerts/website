@@ -7,17 +7,17 @@
       {{ vs >= 5 ? `${vs}%` : '' }}
     </div>
     <div
-      class="territory-bar-segment bg-blue-700 text-center text-white"
-      :style="{ width: nc + remainderPercent+'%' }"
-    >
-      {{ nc >= 5 ? `${nc}%` : '' }}
-    </div>
-    <div
       class="territory-bar-segment bg-red-600 text-center text-white"
       :style="{ width: tr + remainderPercent+'%' }"
       :class="{'rounded-r': cutoff === 0}"
     >
       {{ tr >= 5 ? `${tr}%` : '' }}
+    </div>
+    <div
+      class="territory-bar-segment bg-blue-700 text-center text-white"
+      :style="{ width: nc + remainderPercent+'%' }"
+    >
+      {{ nc >= 5 ? `${nc}%` : '' }}
     </div>
     <div
       class="territory-bar-segment bg-gray-600 text-center text-white"
