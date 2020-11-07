@@ -1,6 +1,6 @@
 <template>
   <header>
-    <nav class="items-center justify-center bg-red-500 px-4 py-4">
+    <nav class="items-center justify-center bg-tint px-4 py-4">
       <div class="flex text-white px-6 justify-center items-center ">
         <img
           class="ps2alerts-logo mr-2 w-16"

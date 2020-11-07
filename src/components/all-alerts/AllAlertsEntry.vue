@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-300 col-span-3 ss:col-span-4 px-4 py-4 mb-2 bg-gray-300">
+  <div class="col-span-3 ss:col-span-4 px-4 py-4 mb-2 bg-tint">
     {{ $filters.worldName(alert.world) }} - {{ $filters.zoneName(alert.zone) }}
     <p v-show="alert.state === 1">
       Started: {{ started }}

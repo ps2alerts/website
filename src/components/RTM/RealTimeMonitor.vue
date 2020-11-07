@@ -170,3 +170,11 @@ export default defineComponent({
   }
 });
 </script>
+
+<style lang="scss">
+table {
+  tr:not(:last-child) {
+    border-bottom: 1px solid #fdfdfd2b;
+  }
+}
+</style>

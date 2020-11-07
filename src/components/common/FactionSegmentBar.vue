@@ -72,6 +72,11 @@ export default defineComponent({
       required: false
     },
   },
+  data() {
+    return {
+      displayCutoffPercent: 10
+    }
+  },
   computed: {
     total(): number {
       return this.vs + this.nc + this.tr + this.other;
@@ -93,39 +98,39 @@ export default defineComponent({
     },
     vsString(): string {
       if (this.showAsCalculatedPercentage) {
-        return this.percentVS > 5 ? `${this.percentVS.toFixed(0)}%` : ''
+        return this.percentVS > this.displayCutoffPercent ? `${this.percentVS.toFixed(0)}%` : ''
       }
       if (this.isPercentage) {
-        return this.vs > 5 ? `${this.vs}%` : ''
+        return this.vs > this.displayCutoffPercent ? `${this.vs}%` : ''
       }
-      return this.percentVS > 5 ? `${this.vs}` : ''
+      return this.percentVS > this.displayCutoffPercent ? `${this.vs}` : ''
     },
     ncString(): string {
       if (this.showAsCalculatedPercentage) {
-        return this.percentNC > 5 ? `${this.percentNC.toFixed(0)}%` : ''
+        return this.percentNC > this.displayCutoffPercent ? `${this.percentNC.toFixed(0)}%` : ''
       }
       if (this.isPercentage) {
-        return this.nc > 5 ? `${this.nc}%` : ''
+        return this.nc > this.displayCutoffPercent ? `${this.nc}%` : ''
       }
-      return this.percentNC > 5 ? `${this.nc}` : ''
+      return this.percentNC > this.displayCutoffPercent ? `${this.nc}` : ''
     },
     trString(): string {
       if (this.showAsCalculatedPercentage) {
-        return this.percentTR > 5 ? `${this.percentTR.toFixed(0)}%` : ''
+        return this.percentTR > this.displayCutoffPercent ? `${this.percentTR.toFixed(0)}%` : ''
       }
       if (this.isPercentage) {
-        return this.tr > 5 ? `${this.tr}%` : ''
+        return this.tr > this.displayCutoffPercent ? `${this.tr}%` : ''
       }
-      return this.percentTR > 5 ? `${this.tr}` : ''
+      return this.percentTR > this.displayCutoffPercent ? `${this.tr}` : ''
     },
     otherString(): string {
       if (this.showAsCalculatedPercentage) {
-        return this.percentOther > 5 ? `${this.percentOther.toFixed(0)}%` : ''
+        return this.percentOther > this.displayCutoffPercent ? `${this.percentOther.toFixed(0)}%` : ''
       }
       if (this.isPercentage) {
-        return this.other > 5 ? `${this.other}%` : ''
+        return this.other > this.displayCutoffPercent ? `${this.other}%` : ''
       }
-      return this.percentOther > 5 ? `${this.other}` : ''
+      return this.percentOther > this.displayCutoffPercent ? `${this.other}` : ''
     },
   },
 });

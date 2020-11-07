@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  .bg-main {
+    background-color: #263239;
+  }
+  .bg-tint {
+    background-color: #37474f;
+  }
   h1 {
     @apply text-3xl;
   }
@@ -10,13 +16,13 @@
 
 @layer utilities {
   .router-link-active, .btn-active {
-    @apply bg-red-700 text-white !important;
+    @apply bg-red-800 !important;
   }
   .btn {
-    @apply bg-red-200 font-bold border border-white rounded-md text-red-500 py-2 px-4 m-1 inline-block font-medium;
+    @apply bg-red-600 font-bold rounded-md py-2 px-4 m-1 inline-block font-medium border-transparent;
   }
   .btn:hover {
-    @apply bg-red-700 text-white;
+    @apply bg-red-800;
   }
   .btn-sm {
     @apply font-bold py-1 px-2 rounded;

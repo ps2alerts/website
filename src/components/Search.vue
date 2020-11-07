@@ -24,6 +24,3 @@ export default defineComponent({
   name: "Search"
 });
 </script>
-
-<style scoped lang="scss">
-</style>
