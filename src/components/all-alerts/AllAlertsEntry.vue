@@ -10,11 +10,11 @@
       Ended: {{ ended }}
     </p>
     <div v-if="alert.result">
-      <TerritoryBar
+      <FactionSegmentBar
         :vs="alert.result.vs"
         :nc="alert.result.nc"
         :tr="alert.result.tr"
-        :cutoff="alert.result.cutoff"
+        :other="alert.result.cutoff"
       />
     </div>
     <div v-if="!alert.result">
@@ -25,14 +25,14 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import TerritoryBar from "@/components/common/TerritoryBar.vue";
 import moment from "moment-timezone";
 import {TIMEFORMAT} from "@/constants/Time";
+import FactionSegmentBar from "@/components/common/FactionSegmentBar.vue";
 
 export default defineComponent({
   name: "AllAlertsEntry",
   components: {
-    TerritoryBar
+    FactionSegmentBar
   },
   props: {
     alert: {

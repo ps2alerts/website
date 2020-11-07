@@ -33,11 +33,16 @@
           <th class="w-5/12 px-1">
             <button
               class="btn btn-sm"
-              :class="{ btnActive: territoryMode === true}"
+              :class="{ btnActive: mode === 'territory'}"
+              @click="updateMode('territory')"
             >
               Territory
             </button>
-            <button class="btn btn-sm">
+            <button
+              class="btn btn-sm"
+              :class="{ btnActive: mode === 'pops'}"
+              @click="updateMode('pops')"
+            >
               Pops
             </button>
           </th>
@@ -58,6 +63,8 @@
             :duration="alert[1].duration"
             :result="alert[1].result"
             :instance-id="alert[1].instanceId"
+            :mode="mode"
+            :pops="getPops(alert[1].instanceId)"
           />
         </tr>
       </tbody>
@@ -66,7 +73,8 @@
       v-show="actives.length > 0"
       class="text-center text-gray-600 text-xs pt-1"
     >
-      Gray segments indicate cutoffs
+      <span v-show="mode === 'territory'">Gray = cutoff territory</span>
+      <span v-show="mode === 'pops'">Gray = NSO</span>
     </p>
   </div>
 </template>
@@ -74,8 +82,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import ApiRequest from "@/api-request";
-import { ActiveAlertInterface } from "@/interfaces/ActiveAlertInterface";
 import RealTimeAlert from "@/components/RTM/RealTimeAlert.vue";
+import {ActiveAlertInterface} from "@/interfaces/ActiveAlertInterface";
+import {AlertPopulationInterface} from "@/interfaces/AlertPopulationInterface";
 
 export default defineComponent({
   name: "RealTimeMonitor",
@@ -87,15 +96,10 @@ export default defineComponent({
       loading: true,
       error: null,
       actives: new Map<string, ActiveAlertInterface>(),
+      populations: new Map<string, AlertPopulationInterface>(),
       ApiRequest: new ApiRequest(),
-      territoryMode: true,
-      popsMode: false,
+      mode: 'territory'
     };
-  },
-  computed: {
-    // mode() {
-    //   return this.territoryMode === true ? 'territory' : 'pops'
-    // }
   },
   watch: {
     $route: "activeAlerts"
@@ -104,7 +108,12 @@ export default defineComponent({
     this.activeAlerts();
     // TEMP until real time websocket is implemented
     setInterval(() => {
+      this.error = null
       void this.activeAlerts();
+
+      this.actives.forEach((instance) => {
+        void this.alertPops(instance.instanceId)
+      });
     }, 5000);
   },
   methods: {
@@ -121,6 +130,25 @@ export default defineComponent({
           this.error = e.message;
         });
     },
+    async alertPops(id: string): Promise<void> {
+      await this.ApiRequest.client
+        .get(`/aggregates/instance/${id}/population?sortBy=timestamp`)
+        .then(data => {
+          const pops = data.data[0];
+          if (pops.total && pops.total > 0) {
+            this.populations.set(id, pops)
+          }
+        })
+        .catch(e => {
+          this.error = e.message;
+        });
+    },
+    updateMode(value: string): void {
+      this.mode = value;
+    },
+    getPops(instance: string): AlertPopulationInterface | undefined {
+      return this.populations.get(instance);
+    }
   }
 });
 </script>

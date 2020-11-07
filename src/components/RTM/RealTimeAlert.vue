@@ -12,12 +12,28 @@
   <td class="px-1 text-center">
     {{ remainingTimeText }}
   </td>
-  <td class="text-center">
-    <TerritoryBar
+  <td
+    v-show="mode === 'territory'"
+    class="text-center"
+  >
+    <FactionSegmentBar
       :vs="result.vs"
       :nc="result.nc"
       :tr="result.tr"
-      :cutoff="result.cutoff"
+      :other="result.cutoff"
+    />
+  </td>
+  <td
+    v-show="mode === 'pops'"
+    class="text-center"
+  >
+    <FactionSegmentBar
+      :vs="pops.vs"
+      :nc="pops.nc"
+      :tr="pops.tr"
+      :other="pops.nso"
+      :total="pops.total"
+      :is-percentage="false"
     />
   </td>
   <td class="text-center">
@@ -35,13 +51,13 @@ import { defineComponent } from "vue";
 import {World} from "@/constants/World";
 import {Zone} from "@/constants/Zone";
 import {AlertRemainingTime} from "@/filters/AlertRemainingTime";
-import TerritoryBar from "@/components/common/TerritoryBar.vue";
+import FactionSegmentBar from "@/components/common/FactionSegmentBar.vue";
 import {AlertRemainingTimeText} from "@/filters/AlertRemainingTimeText";
 
 export default defineComponent({
   name: "RealTimeAlert",
   components: {
-    TerritoryBar
+    FactionSegmentBar
   },
   props: {
     instanceId: {
@@ -68,6 +84,22 @@ export default defineComponent({
       default: 0,
       required: true
     },
+    mode: {
+      type: String,
+      default: 'territory',
+      required: true,
+    },
+    pops: {
+      type: Object,
+      default: () => {
+        return {
+          vs: 33,
+          nc: 33,
+          tr: 33,
+          nso: 0,
+        }
+      }
+    },
     result: {
       type: Object,
       default: () => {
@@ -75,9 +107,8 @@ export default defineComponent({
           vs: 33,
           nc: 33,
           tr: 33,
-          cutoff: 0,
-          winner: null,
-          draw: false
+          nso: 33,
+          total: 33,
         }
       }
     }
