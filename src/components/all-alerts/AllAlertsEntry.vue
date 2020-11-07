@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="bg-gray-300 col-span-3 ss:col-span-4 px-4 py-4 mb-2 bg-gray-300">
     {{ $filters.worldName(alert.world) }} - {{ $filters.zoneName(alert.zone) }}
@@ -26,7 +24,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import moment from "moment-timezone";
-import {TIMEFORMAT} from "@/constants/Time";
+import {DATE_TIME_FORMAT} from "@/constants/Time";
 import FactionSegmentBar from "@/components/common/FactionSegmentBar.vue";
 
 export default defineComponent({
@@ -42,10 +40,10 @@ export default defineComponent({
   },
   computed: {
     started():string {
-      return moment(this.alert.timeStarted).format(TIMEFORMAT);
+      return moment(this.alert.timeStarted).format(DATE_TIME_FORMAT);
     },
     ended():string {
-      return moment(this.alert.timeEnded).format(TIMEFORMAT);
+      return moment(this.alert.timeEnded).format(DATE_TIME_FORMAT);
     }
   }
 });

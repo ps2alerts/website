@@ -32,7 +32,6 @@
       :nc="pops.nc"
       :tr="pops.tr"
       :other="pops.nso"
-      :total="pops.total"
       :is-percentage="false"
     />
   </td>
@@ -93,9 +92,9 @@ export default defineComponent({
       type: Object,
       default: () => {
         return {
-          vs: 33,
-          nc: 33,
-          tr: 33,
+          vs: 0,
+          nc: 0,
+          tr: 0,
           nso: 0,
         }
       }

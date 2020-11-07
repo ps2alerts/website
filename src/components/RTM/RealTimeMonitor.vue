@@ -33,14 +33,14 @@
           <th class="w-5/12 px-1">
             <button
               class="btn btn-sm"
-              :class="{ btnActive: mode === 'territory'}"
+              :class="{ 'btn-active': mode === 'territory'}"
               @click="updateMode('territory')"
             >
               Territory
             </button>
             <button
               class="btn btn-sm"
-              :class="{ btnActive: mode === 'pops'}"
+              :class="{ 'btn-active': mode === 'pops'}"
               @click="updateMode('pops')"
             >
               Pops
@@ -73,8 +73,8 @@
       v-show="actives.length > 0"
       class="text-center text-gray-600 text-xs pt-1"
     >
-      <span v-show="mode === 'territory'">Gray = cutoff territory</span>
-      <span v-show="mode === 'pops'">Gray = NSO</span>
+      <span v-show="mode === 'territory'">Gray = cutoff territory<br>Updated: {{ lastUpdated }}</span>
+      <span v-show="mode === 'pops'">Gray = NSO<br> Updated: {{ lastUpdated }} | Pop data generated every 30 secs</span>
     </p>
   </div>
 </template>
@@ -85,6 +85,8 @@ import ApiRequest from "@/api-request";
 import RealTimeAlert from "@/components/RTM/RealTimeAlert.vue";
 import {ActiveAlertInterface} from "@/interfaces/ActiveAlertInterface";
 import {AlertPopulationInterface} from "@/interfaces/AlertPopulationInterface";
+import {TIME_FORMAT} from "@/constants/Time";
+import moment from "moment-timezone";
 
 export default defineComponent({
   name: "RealTimeMonitor",
@@ -95,6 +97,7 @@ export default defineComponent({
     return {
       loading: true,
       error: null,
+      lastUpdated: 'fetching...',
       actives: new Map<string, ActiveAlertInterface>(),
       populations: new Map<string, AlertPopulationInterface>(),
       ApiRequest: new ApiRequest(),
@@ -124,6 +127,7 @@ export default defineComponent({
           this.loading = false;
           this.error = null;
           this.actives = alerts.data
+          this.lastUpdated = moment().format(TIME_FORMAT)
         })
         .catch(e => {
           this.loading = false;

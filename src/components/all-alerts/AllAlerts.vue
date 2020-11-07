@@ -15,7 +15,7 @@ import {ActiveAlertInterface} from "@/interfaces/ActiveAlertInterface";
 import ApiRequest from "@/api-request";
 import AllAlertsEntry from "@/components/all-alerts/AllAlertsEntry.vue";
 import moment from "moment-timezone";
-import {TIMEFORMAT} from "@/constants/Time";
+import {DATE_TIME_FORMAT} from "@/constants/Time";
 
 export default defineComponent({
   name: "AllAlerts",
@@ -51,7 +51,7 @@ export default defineComponent({
           this.loading = false;
           this.error = e.message;
         });
-      this.lastUpdated = moment().format(TIMEFORMAT)
+      this.lastUpdated = moment().format(DATE_TIME_FORMAT)
     },
     debug (event: never, loc = '') {
       console.log(loc, event)
