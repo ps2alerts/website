@@ -42,7 +42,7 @@
       :to="{ name: 'Alert', params: { instanceId: instanceId }}"
     >
       <FontAwesomeIcon
-        fixed-width="true"
+        fixed-width
         :icon="['fas', 'eye']"
       />
     </router-link>

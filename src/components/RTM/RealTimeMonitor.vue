@@ -54,7 +54,7 @@
               @click="toggleShowPopPercent()"
             >
               <FontAwesomeIcon
-                fixed-width="true"
+                fixed-width
                 :icon="['fas', 'percent']"
               />
             </button>
