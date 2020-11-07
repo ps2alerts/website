@@ -1,5 +1,5 @@
 <template>
-  <div class="py-4 text-center">
+  <nav class="py-4 text-center">
     <router-link
       :to="{ name: 'Home' }"
       class="btn"
@@ -19,14 +19,26 @@
       Change Log
     </router-link>
     <div class="inline-flex pb-2 mt-1">
-      <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l">
+      <a
+        href="https://github.com/ps2alerts"
+        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+      >
         <FontAwesomeIcon :icon="['fab', 'github']" /> GitHub
-      </button>
-      <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r">
+      </a>
+      <a
+        href="https://twitter.com/ps2alerttracker"
+        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
+      >
         <FontAwesomeIcon :icon="['fab', 'twitter']" /> Twitter
-      </button>
+      </a>
+      <a
+        href="https://discord.io/ps2alerts"
+        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+      >
+        <FontAwesomeIcon :icon="['fab', 'discord']" /> Discord
+      </a>
     </div>
-  </div>
+  </nav>
 </template>
 
 <script lang="ts">

@@ -1,6 +1,6 @@
 <template>
   <header>
-    <nav class="items-center justify-center bg-tint px-4 py-4">
+    <header class="items-center justify-center bg-tint p-4">
       <div class="flex text-white px-6 justify-center items-center ">
         <img
           class="ps2alerts-logo mr-2 w-16"
@@ -21,7 +21,7 @@
           This is <b>not</b> representative of the final product and is subject to vast changes!
         </p>
       </div>
-    </nav>
+    </header>
   </header>
 </template>
 

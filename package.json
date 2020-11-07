@@ -22,6 +22,7 @@
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.31",
     "vue": "^3.0.1",
+    "vue-meta": "^2.4.0",
     "vue-router": "^4.0.0-rc.1",
     "vuex": "^4.0.0-0"
   },
