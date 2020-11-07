@@ -6,6 +6,9 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "NotFound"
+  name: "NotFound",
+  created() {
+    document.title = 'Page not found!';
+  }
 });
 </script>

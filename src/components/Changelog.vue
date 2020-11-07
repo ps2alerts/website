@@ -8,7 +8,10 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "Changelog"
+  name: "Changelog",
+  created() {
+    document.title = 'Change Log';
+  }
 });
 </script>
 

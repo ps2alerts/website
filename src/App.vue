@@ -42,7 +42,7 @@ export default defineComponent({
     RealTimeMonitor,
     Navigation,
     FooterShard,
-  }
+  },
 });
 </script>
 

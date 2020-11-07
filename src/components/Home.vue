@@ -83,7 +83,10 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "Home"
+  name: "Home",
+  created() {
+    document.title = 'PS2Alerts';
+  }
 });
 </script>
 

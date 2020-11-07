@@ -28,6 +28,7 @@ export default defineComponent({
     };
   },
   async created() {
+    document.title = 'Alert History';
     this.pull();
     // TEMP until real time websocket is implemented
     setInterval(() => {

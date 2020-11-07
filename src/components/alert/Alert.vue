@@ -17,6 +17,9 @@ export default defineComponent({
       type: String,
       default: "1-0000"
     }
+  },
+  created() {
+    document.title = 'Alert #' + this.instanceId;
   }
 });
 </script>
