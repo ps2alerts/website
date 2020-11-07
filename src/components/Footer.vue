@@ -1,5 +1,5 @@
 <template>
-  <footer class="text-center px-2 py-4 text-sm">
+  <footer class="text-center px-2 py-4 pb-0 text-sm">
     <div>
       Version: {{ version }} | Build: {{ build }}
     </div>
