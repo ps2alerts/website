@@ -8,7 +8,7 @@
       class="w-full"
     >
       <Header />
-      <div class="px-4 md:px-0">
+      <div class="xs:px-0 md:px-4">
         <Navigation />
         <!-- <Search />-->
         <RealTimeMonitor />

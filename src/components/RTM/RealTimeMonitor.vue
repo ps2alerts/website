@@ -17,39 +17,39 @@
     <table
       v-show="actives.length > 0"
       id="alert-list"
-      class="table-fixed border-collapse border-0 w-full mb-0"
+      class="table-fixed border-collapse border-0 w-full mb-0 text-center"
     >
       <thead>
         <tr>
-          <th class="w-2/12 px-1">
+          <th class="rtm-server">
             Server
           </th>
-          <th class="w-2/12 px-1">
+          <th class="rtm-cont">
             Cont
           </th>
-          <th class="w-2/12 px-1">
-            Remaining
+          <th class="rtm-remaining">
+            Ends in
           </th>
-          <th class="w-5/12 px-1">
+          <th>
             <button
-              class="btn btn-sm"
+              class="btn btn-sm rtm-btn"
               :class="{ 'btn-active': mode === 'territory'}"
               @click="updateMode('territory')"
             >
               Territory
             </button>
             <button
-              class="btn btn-sm"
+              class="btn btn-sm rtm-btn"
               :class="{ 'btn-active': mode === 'pops'}"
               @click="updateMode('pops')"
             >
               Pops
             </button>
           </th>
-          <th class="w-1/12">
+          <th class="rtm-btns">
             <button
               v-show="mode === 'pops'"
-              class="btn btn-sm"
+              class="btn btn-sm rtm-btn"
               :class="{ 'btn-active': showPopPercent}"
               @click="toggleShowPopPercent()"
             >
@@ -172,9 +172,26 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.rtm-server {
+  width: 70px;
+}
+.rtm-cont {
+  width: 60px;
+}
+.rtm-remaining{
+  width: 70px;
+}
+.rtm-btns {
+  width: 45px;
+}
 table {
   tr:not(:last-child) {
     border-bottom: 1px solid #fdfdfd2b;
+  }
+}
+@media (max-width: 425px) {
+  .rtm-btn {
+    padding: 0.15rem !important;
   }
 }
 </style>

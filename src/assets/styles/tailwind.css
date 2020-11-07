@@ -27,6 +27,9 @@
   .btn-sm {
     @apply text-sm py-1 px-2 rounded;
   }
+  .btn-xs {
+    @apply text-xs p-1 rounded;
+  }
 
   .faction-bar {
     width: 100%;

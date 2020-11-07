@@ -1,20 +1,14 @@
 <template>
   <td
-    class="px-1 text-center"
     :remaining="remaining"
     :instanceId="instanceId"
   >
     {{ $filters.worldName(world) }}
   </td>
-  <td class="px-1 text-center">
-    {{ $filters.zoneName(zone) }}
-  </td>
-  <td class="px-1 text-center">
-    {{ remainingTimeText }}
-  </td>
+  <td>{{ $filters.zoneName(zone) }}</td>
+  <td>{{ remainingTimeText }}</td>
   <td
     v-show="mode === 'territory'"
-    class="text-center"
   >
     <FactionSegmentBar
       :vs="result.vs"
