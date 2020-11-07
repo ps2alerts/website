@@ -4,36 +4,36 @@
       :to="{ name: 'Home' }"
       class="btn"
     >
-      Home
+      <FontAwesomeIcon :icon="['fas', 'chart-area']" /> Stats
     </router-link>
     <router-link
       :to="{ name: 'AllAlerts' }"
       class="btn"
     >
-      Alert History
+      <FontAwesomeIcon :icon="['fas', 'poll-h']" /> All Alerts
     </router-link>
     <router-link
       :to="{ name: 'Changelog' }"
       class="btn"
     >
-      Change Log
+      <FontAwesomeIcon :icon="['fas', 'tasks']" /> Change Log
     </router-link>
-    <div class="inline-flex pb-2 mt-1">
+    <div class="mt-2">
       <a
         href="https://github.com/ps2alerts"
-        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+        class="btn btn-sm"
       >
         <FontAwesomeIcon :icon="['fab', 'github']" /> GitHub
       </a>
       <a
         href="https://twitter.com/ps2alerttracker"
-        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
+        class="btn btn-sm"
       >
         <FontAwesomeIcon :icon="['fab', 'twitter']" /> Twitter
       </a>
       <a
         href="https://discord.io/ps2alerts"
-        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+        class="btn btn-sm"
       >
         <FontAwesomeIcon :icon="['fab', 'discord']" /> Discord
       </a>

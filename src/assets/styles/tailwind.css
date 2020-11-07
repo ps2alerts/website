@@ -25,7 +25,7 @@
     @apply bg-red-800;
   }
   .btn-sm {
-    @apply font-bold py-1 px-2 rounded;
+    @apply text-sm py-1 px-2 rounded;
   }
 
   .faction-bar {
