@@ -12,6 +12,9 @@
         </h1>
       </div>
       <div class="flex w-auto block justify-center px-6 mt-4">
+        <p v-html="motto" />
+      </div>
+      <div class="flex w-auto block justify-center px-6 mt-4">
         <div class="bg-red-700 text-white inline-block text-lg px-4 py-2 leading-none rounded">
           PRE-ALPHA
         </div>
@@ -30,5 +33,26 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "Header",
+  data() {
+    return {
+      motto: "",
+      mottos: [
+        "The metagame <b>everyone</b> plays!",
+        "Powered via continent locks!",
+        "Powered by ISO",
+        "The ultimate proof that \"X is OP\"!",
+        "Miller server best server?",
+        "V26 Maelstrom Turbo Laser needs a buff!",
+        "Tracking all your alert kills, and all your C4 suicides...",
+        "Making Alerts great again!",
+        "How many revives did <b>YOU</b> get last alert?",
+        "Measuring E-Peens since 2014",
+      ]
+    }
+  },
+  created () {
+    const rand = Math.floor(Math.random() * this.mottos.length);
+    this.motto = this.mottos[rand]
+  }
 });
 </script>
