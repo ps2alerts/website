@@ -3,36 +3,36 @@
 @tailwind utilities;
 
 @layer base {
-    h1 {
-        @apply text-3xl;
-    }
+  h1 {
+    @apply text-3xl;
+  }
 }
 
 @layer utilities {
-    .router-link-active, .btn-active {
-        @apply bg-red-700 text-white !important;
-    }
-    .btn {
-        @apply bg-red-200 font-bold border border-white rounded-md text-red-500 py-2 px-4 m-1 inline-block font-medium;
-    }
-    .btn:hover {
-        @apply bg-red-700 text-white;
-    }
-    .btn-sm {
-        @apply font-bold py-1 px-2 rounded;
-    }
+  .router-link-active, .btn-active {
+    @apply bg-red-700 text-white !important;
+  }
+  .btn {
+    @apply bg-red-200 font-bold border border-white rounded-md text-red-500 py-2 px-4 m-1 inline-block font-medium;
+  }
+  .btn:hover {
+    @apply bg-red-700 text-white;
+  }
+  .btn-sm {
+    @apply font-bold py-1 px-2 rounded;
+  }
 
-    .faction-bar {
-        width: 100%;
-        height: 30px;
-        white-space: nowrap;
-    }
+  .faction-bar {
+    width: 100%;
+    height: 30px;
+    white-space: nowrap;
+  }
 
-    .faction-bar-segment {
-        width: 33%;
-        height: 100%;
-        display: inline-block;
-        float: left;
-        line-height: 30px;
-    }
+  .faction-bar-segment {
+    width: 33%;
+    height: 100%;
+    display: inline-block;
+    float: left;
+    line-height: 30px;
+  }
 }
