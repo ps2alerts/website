@@ -65,7 +65,12 @@ export default defineComponent({
       type: Boolean,
       default: true,
       required: false
-    }
+    },
+    showAsCalculatedPercentage: {
+      type: Boolean,
+      default: true,
+      required: false
+    },
   },
   computed: {
     total(): number {
@@ -87,24 +92,36 @@ export default defineComponent({
       return (this.total - this.vs - this.nc - this.tr - this.other) / 3;
     },
     vsString(): string {
+      if (this.showAsCalculatedPercentage) {
+        return this.percentVS > 5 ? `${this.percentVS.toFixed(0)}%` : ''
+      }
       if (this.isPercentage) {
         return this.vs > 5 ? `${this.vs}%` : ''
       }
       return this.percentVS > 5 ? `${this.vs}` : ''
     },
     ncString(): string {
+      if (this.showAsCalculatedPercentage) {
+        return this.percentNC > 5 ? `${this.percentNC.toFixed(0)}%` : ''
+      }
       if (this.isPercentage) {
         return this.nc > 5 ? `${this.nc}%` : ''
       }
       return this.percentNC > 5 ? `${this.nc}` : ''
     },
     trString(): string {
+      if (this.showAsCalculatedPercentage) {
+        return this.percentTR > 5 ? `${this.percentTR.toFixed(0)}%` : ''
+      }
       if (this.isPercentage) {
         return this.tr > 5 ? `${this.tr}%` : ''
       }
       return this.percentTR > 5 ? `${this.tr}` : ''
     },
     otherString(): string {
+      if (this.showAsCalculatedPercentage) {
+        return this.percentOther > 5 ? `${this.percentOther.toFixed(0)}%` : ''
+      }
       if (this.isPercentage) {
         return this.other > 5 ? `${this.other}%` : ''
       }

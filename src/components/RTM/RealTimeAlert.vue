@@ -32,6 +32,7 @@
       :nc="pops.nc"
       :tr="pops.tr"
       :other="pops.nso"
+      :show-as-calculated-percentage="isPercentage"
       :is-percentage="false"
     />
   </td>
@@ -40,7 +41,10 @@
       class="btn btn-sm"
       :to="{ name: 'Alert', params: { instanceId: instanceId }}"
     >
-      <FontAwesomeIcon :icon="['fas', 'eye']" />
+      <FontAwesomeIcon
+        fixed-width="true"
+        :icon="['fas', 'eye']"
+      />
     </router-link>
   </td>
 </template>
@@ -87,6 +91,10 @@ export default defineComponent({
       type: String,
       default: 'territory',
       required: true,
+    },
+    isPercentage: {
+      type: Boolean,
+      default: false,
     },
     pops: {
       type: Object,

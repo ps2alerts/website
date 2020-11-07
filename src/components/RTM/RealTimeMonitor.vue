@@ -46,8 +46,18 @@
               Pops
             </button>
           </th>
-          <th class="w-1/12 px-1">
-            &nbsp;
+          <th class="w-1/12">
+            <button
+              v-show="mode === 'pops'"
+              class="btn btn-sm"
+              :class="{ 'btn-active': showPopPercent}"
+              @click="toggleShowPopPercent()"
+            >
+              <FontAwesomeIcon
+                fixed-width="true"
+                :icon="['fas', 'percent']"
+              />
+            </button>
           </th>
         </tr>
       </thead>
@@ -65,6 +75,7 @@
             :instance-id="alert[1].instanceId"
             :mode="mode"
             :pops="getPops(alert[1].instanceId)"
+            :is-percentage="showPopPercent"
           />
         </tr>
       </tbody>
@@ -74,7 +85,7 @@
       class="text-center text-gray-600 text-xs pt-1"
     >
       <span v-show="mode === 'territory'">Gray = cutoff territory<br>Updated: {{ lastUpdated }}</span>
-      <span v-show="mode === 'pops'">Gray = NSO<br> Updated: {{ lastUpdated }} | Pop data generated every 30 secs</span>
+      <span v-show="mode === 'pops'">Gray = NSO<br> Updated: {{ lastUpdated }} | Pop data generated every 60 secs</span>
     </p>
   </div>
 </template>
@@ -101,7 +112,8 @@ export default defineComponent({
       actives: new Map<string, ActiveAlertInterface>(),
       populations: new Map<string, AlertPopulationInterface>(),
       ApiRequest: new ApiRequest(),
-      mode: 'territory'
+      mode: 'territory',
+      showPopPercent: true,
     };
   },
   watch: {
@@ -113,10 +125,6 @@ export default defineComponent({
     setInterval(() => {
       this.error = null
       void this.activeAlerts();
-
-      this.actives.forEach((instance) => {
-        void this.alertPops(instance.instanceId)
-      });
     }, 5000);
   },
   methods: {
@@ -128,6 +136,9 @@ export default defineComponent({
           this.error = null;
           this.actives = alerts.data
           this.lastUpdated = moment().format(TIME_FORMAT)
+          this.actives.forEach((instance) => {
+            void this.alertPops(instance.instanceId)
+          });
         })
         .catch(e => {
           this.loading = false;
@@ -139,7 +150,7 @@ export default defineComponent({
         .get(`/aggregates/instance/${id}/population?sortBy=timestamp`)
         .then(data => {
           const pops = data.data[0];
-          if (pops.total && pops.total > 0) {
+          if (pops && pops.total > 0) {
             this.populations.set(id, pops)
           }
         })
@@ -147,12 +158,15 @@ export default defineComponent({
           this.error = e.message;
         });
     },
+    getPops(instance: string): AlertPopulationInterface | undefined {
+      return this.populations.get(instance);
+    },
     updateMode(value: string): void {
       this.mode = value;
     },
-    getPops(instance: string): AlertPopulationInterface | undefined {
-      return this.populations.get(instance);
-    }
+    toggleShowPopPercent(): void {
+      this.showPopPercent = !this.showPopPercent;
+    },
   }
 });
 </script>
