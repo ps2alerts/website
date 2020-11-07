@@ -26,7 +26,8 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import TerritoryBar from "@/components/common/TerritoryBar.vue";
-import moment, {Moment} from "moment-timezone";
+import moment from "moment-timezone";
+import {TIMEFORMAT} from "@/constants/Time";
 
 export default defineComponent({
   name: "AllAlertsEntry",
@@ -41,10 +42,10 @@ export default defineComponent({
   },
   computed: {
     started():string {
-      return moment(this.alert.timeStarted).format('DD-MMM-YYYY HH:mm:ss');
+      return moment(this.alert.timeStarted).format(TIMEFORMAT);
     },
     ended():string {
-      return moment(this.alert.timeEnded).format('DD-MMM-YYYY HH:mm:ss');
+      return moment(this.alert.timeEnded).format(TIMEFORMAT);
     }
   }
 });
