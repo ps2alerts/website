@@ -1,6 +1,8 @@
 <template>
   <article class="prose lg:prose-xl">
-    <h1>Change log foobar</h1>
+    <h1 class="text-gray-900">
+      Change log foobar
+    </h1>
   </article>
 </template>
 
