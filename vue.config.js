@@ -4,14 +4,22 @@ module.exports = {
   devServer: {
     disableHostCheck: true
   },
+  chainWebpack: config => {
+    config
+      .plugin('html')
+      .tap(args => {
+        args[0].title = 'PS2Alerts'
+        return args
+      })
+  },
   configureWebpack: {
+    mode: 'development',
     entry: path.resolve(__dirname, 'src/main.ts'),
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: '[name].[hash].js'
+      filename: process.env.NODE_ENV === 'development' ? '[name].[hash].js' : '[name].[chunkhash].js',
     },
     optimization: {
-      runtimeChunk: 'single',
       splitChunks: {
         chunks: 'all',
         maxInitialRequests: Infinity,
