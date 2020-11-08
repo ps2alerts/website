@@ -120,6 +120,7 @@ export default defineComponent({
     $route: "activeAlerts"
   },
   async created() {
+    console.log("created");
     this.activeAlerts();
     // TEMP until real time websocket is implemented
     setInterval(() => {
@@ -129,6 +130,7 @@ export default defineComponent({
   },
   methods: {
     async activeAlerts(): Promise<void> {
+      console.log('activealerts');
       await this.ApiRequest.client
         .get("/instances/active?sortBy=timeStarted")
         .then(alerts => {

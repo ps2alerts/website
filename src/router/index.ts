@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Home from "@/components/Home.vue";
-import AllAlerts from "@/components/all-alerts/AllAlerts.vue";
-import Changelog from "@/components/Changelog.vue";
-import Alert from "@/components/alert/Alert.vue";
-import NotFound from "@/components/NotFound.vue";
+
+const Home = () => import("@/components/Home.vue")
+const AllAlerts = () => import("@/components/all-alerts/AllAlerts.vue")
+const Changelog = () => import("@/components/Changelog.vue")
+const NotFound = () => import("@/components/NotFound.vue")
+const Alert = () => import("@/components/alert/Alert.vue")
 
 const routes: Array<RouteRecordRaw> = [
   {
