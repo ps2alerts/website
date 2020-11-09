@@ -14,7 +14,7 @@ module.exports = {
       })
   },
   configureWebpack: {
-    mode: process.env.NODE_ENV,
+    mode: devMode ? 'development' : 'production',
     entry: path.resolve(__dirname, 'src/main.ts'),
     output: {
       path: path.resolve(__dirname, 'dist'),
