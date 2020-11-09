@@ -1,4 +1,5 @@
 const path = require('path')
+const devMode = process.env.NODE_ENV === 'development';
 
 module.exports = {
   devServer: {
@@ -17,7 +18,7 @@ module.exports = {
     entry: path.resolve(__dirname, 'src/main.ts'),
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: process.env.NODE_ENV === 'development' ? '[name].[hash].js' : '[name].[chunkhash].js',
+      filename: devMode ? '[name].[hash].js' : '[name].[chunkhash].js',
     },
     optimization: {
       splitChunks: {
