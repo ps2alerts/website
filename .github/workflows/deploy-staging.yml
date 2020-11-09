@@ -49,16 +49,6 @@ jobs:
           build-args: |
             SHA=${{ steps.sha.outputs.sha_short }}
 
-#      - name: Build staging image
-#        uses: docker/build-push-action@v1
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
-#          repository: maelstromeous/applications
-#          dockerfile: provisioning/staging/Dockerfile
-#          always_pull: true
-#          tags: ps2alerts-website-staging-${{ steps.sha.outputs.sha_short }}
-
   deploy-terraform:
     needs:
       - build-docker-images
