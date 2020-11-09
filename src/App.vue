@@ -26,22 +26,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import Header from "@/components/Header.vue";
+import { defineComponent, defineAsyncComponent } from "vue";
 // import Search from "@/components/Search.vue";
-import RealTimeMonitor from "@/components/RTM/RealTimeMonitor.vue";
-import Navigation from "@/components/Navigation.vue";
-import FooterShard from "@/components/Footer.vue";
 import './assets/styles/tailwind.css';
+import Header from "@/components/Header.vue";
 
 export default defineComponent({
   name: "App",
   components: {
     Header,
     // Search,
-    RealTimeMonitor,
-    Navigation,
-    FooterShard,
+    RealTimeMonitor: defineAsyncComponent(() => import(/* webpackChunkName: "RealTimeMonitor" */ "@/components/RTM/RealTimeMonitor.vue")),
+    Navigation: defineAsyncComponent(() => import(/* webpackChunkName: "Navigation" */ "@/components/Navigation.vue")),
+    FooterShard: defineAsyncComponent(() => import(/* webpackChunkName: "Footer" */ "@/components/Footer.vue")),
   },
 });
 </script>

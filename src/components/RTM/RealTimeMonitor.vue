@@ -91,9 +91,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineAsyncComponent, defineComponent} from "vue";
 import ApiRequest from "@/api-request";
-import RealTimeAlert from "@/components/RTM/RealTimeAlert.vue";
 import {ActiveAlertInterface} from "@/interfaces/ActiveAlertInterface";
 import {AlertPopulationInterface} from "@/interfaces/AlertPopulationInterface";
 import {TIME_FORMAT} from "@/constants/Time";
@@ -102,7 +101,7 @@ import moment from "moment-timezone";
 export default defineComponent({
   name: "RealTimeMonitor",
   components: {
-    RealTimeAlert,
+    RealTimeAlert: defineAsyncComponent(() => import(/* webpackChunkName: "RealTimeAlert" */ "@/components/RTM/RealTimeAlert.vue")),
   },
   data() {
     return {
