@@ -147,7 +147,7 @@ export default defineComponent({
     },
     async alertPops(id: string): Promise<void> {
       await this.ApiRequest.client
-        .get(`/aggregates/instance/${id}/population?sortBy=timestamp`)
+        .get(`/aggregates/instance/${id}/population?sortBy=timestamp&order=desc&pageSize=1`)
         .then(data => {
           const pops = data.data[0];
           if (pops && pops.total > 0) {
