@@ -27,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
     // Serve 404s on unknown routes
     name: "not-found",
     path: "/:pathMatch(.*)*",
-    component: () => import(/* webpackChunkName: "NotFound" */ "@/components/NotFound.vue")
+    component: () => import(/* webpackChunkName: "NotFound" */ "@/views/NotFound.vue")
   }
 ];
 
