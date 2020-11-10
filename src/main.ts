@@ -10,6 +10,7 @@ import {library} from "@fortawesome/fontawesome-svg-core";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {faDiscord, faGithub, faTwitter} from "@fortawesome/free-brands-svg-icons";
 import {faChartArea, faEye, faInfoCircle, faPercent, faPollH, faTasks} from "@fortawesome/free-solid-svg-icons";
+import VueGtag from "vue-gtag-next";
 
 const app = createApp(App)
 app.config.globalProperties.$filters = {
@@ -24,4 +25,10 @@ app.component('FontAwesomeIcon', FontAwesomeIcon)
 
 app.use(store)
 app.use(router)
+app.use(VueGtag, {
+  property: {
+    id: process.env.VUE_APP_GOOGLE_ANALYTICS_ID
+  }
+});
+
 app.mount("#app");

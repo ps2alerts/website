@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import {trackRouter} from "vue-gtag-next";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -34,5 +35,7 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 });
+
+trackRouter(router);
 
 export default router;
