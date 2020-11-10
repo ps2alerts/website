@@ -4,6 +4,7 @@ import AllAlerts from "@/components/all-alerts/AllAlerts.vue";
 import Changelog from "@/components/Changelog.vue";
 import Alert from "@/components/alert/Alert.vue";
 import NotFound from "@/components/NotFound.vue";
+import {trackRouter} from "vue-gtag-next";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -39,5 +40,7 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 });
+
+trackRouter(router);
 
 export default router;
