@@ -19,7 +19,7 @@ import {DATE_TIME_FORMAT} from "@/constants/Time";
 export default defineComponent({
   name: "AllAlerts",
   components: {
-    AllAlertsEntry: defineAsyncComponent(() => import(/* webpackChunkName: "AllAlertsEntry" */ "@/components/all-alerts/AllAlertsEntry.vue")),
+    AllAlertsEntry: defineAsyncComponent(() => import(/* webpackChunkName: "AllAlertsEntry" */ "@/views/all-alerts/AllAlertsEntry.vue")),
   },
   data() {
     return {
