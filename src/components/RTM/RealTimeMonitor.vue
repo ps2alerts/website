@@ -85,7 +85,7 @@
       class="text-center text-gray-600 text-xs pt-1"
     >
       <span v-show="mode === 'territory'">Gray = cutoff territory<br>Updated: {{ lastUpdated }}</span>
-      <span v-show="mode === 'pops'">Gray = NSO<br> Updated: {{ lastUpdated }} | Pop data generated every 60 secs</span>
+      <span v-show="mode === 'pops'">Gray = NSO<br> Updated: {{ popsLastUpdated }} | Pop data generated every 60 secs</span>
     </p>
   </div>
 </template>
@@ -109,6 +109,7 @@ export default defineComponent({
       loading: true,
       error: null,
       lastUpdated: 'fetching...',
+      popsLastUpdated: 'fetching...',
       actives: new Map<string, ActiveAlertInterface>(),
       populations: new Map<string, AlertPopulationInterface>(),
       ApiRequest: new ApiRequest(),
@@ -120,12 +121,20 @@ export default defineComponent({
     $route: "activeAlerts"
   },
   async created() {
-    this.activeAlerts();
-    // TEMP until real time websocket is implemented
+    // TEMP polling until real time websocket is implemented
+    void this.activeAlerts();
+    setTimeout(() => {
+      void this.alertPops();
+    }, 5000)
+
+    // After initial data is gathered, now continue to poll for data
     setInterval(() => {
       this.error = null
       void this.activeAlerts();
     }, 5000);
+    setInterval(() => {
+      void this.alertPops();
+    }, 30000);
   },
   methods: {
     async activeAlerts(): Promise<void> {
@@ -136,27 +145,27 @@ export default defineComponent({
           this.error = null;
           this.actives = alerts.data
           this.lastUpdated = moment().format(TIME_FORMAT)
-          this.actives.forEach((instance) => {
-            void this.alertPops(instance.instanceId)
-          });
         })
         .catch(e => {
           this.loading = false;
           this.error = e.message;
         });
     },
-    async alertPops(id: string): Promise<void> {
-      await this.ApiRequest.client
-        .get(`/aggregates/instance/${id}/population?sortBy=timestamp&order=desc&pageSize=1`)
-        .then(data => {
-          const pops = data.data[0];
-          if (pops && pops.total > 0) {
-            this.populations.set(id, pops)
-          }
-        })
-        .catch(e => {
-          this.error = e.message;
-        });
+    async alertPops(): Promise<void> {
+      this.actives.forEach((instance: ActiveAlertInterface) => {
+        void this.ApiRequest.client
+          .get(`/aggregates/instance/${instance.instanceId}/population?sortBy=timestamp&order=desc&pageSize=1`)
+          .then(data => {
+            const pops = data.data[0];
+            if (pops && pops.total > 0) {
+              this.populations.set(instance.instanceId, pops)
+            }
+          })
+          .catch(e => {
+            this.error = e.message;
+          });
+      });
+      this.popsLastUpdated = moment().format(TIME_FORMAT)
     },
     getPops(instance: string): AlertPopulationInterface | undefined {
       return this.populations.get(instance);
