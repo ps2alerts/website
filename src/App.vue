@@ -13,7 +13,7 @@
         <!-- <Search />-->
         <RealTimeMonitor />
       </div>
-      <FooterShard class="hidden md:block" />
+      <Footer class="hidden md:block" />
     </div>
     <div
       id="panel-right"
@@ -21,7 +21,7 @@
     >
       <router-view />
     </div>
-    <FooterShard class="md:hidden" />
+    <Footer class="md:hidden" />
   </div>
 </template>
 
@@ -30,15 +30,18 @@ import { defineComponent, defineAsyncComponent } from "vue";
 // import Search from "@/components/Search.vue";
 import './assets/styles/tailwind.css';
 import Header from "@/components/Header.vue";
+import RealTimeMonitor from "@/components/RTM/RealTimeMonitor.vue";
+import Navigation from "@/components/Navigation.vue";
+import Footer from "@/components/Footer.vue";
 
 export default defineComponent({
   name: "App",
   components: {
     Header,
     // Search,
-    RealTimeMonitor: defineAsyncComponent(() => import(/* webpackChunkName: "RealTimeMonitor" */ "@/components/RTM/RealTimeMonitor.vue")),
-    Navigation: defineAsyncComponent(() => import(/* webpackChunkName: "Navigation" */ "@/components/Navigation.vue")),
-    FooterShard: defineAsyncComponent(() => import(/* webpackChunkName: "Footer" */ "@/components/Footer.vue")),
+    RealTimeMonitor,
+    Navigation,
+    Footer
   },
 });
 </script>
