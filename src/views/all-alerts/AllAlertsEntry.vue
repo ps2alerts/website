@@ -22,15 +22,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineAsyncComponent, defineComponent} from "vue";
 import moment from "moment-timezone";
 import {DATE_TIME_FORMAT} from "@/constants/Time";
-import FactionSegmentBar from "@/components/common/FactionSegmentBar.vue";
 
 export default defineComponent({
   name: "AllAlertsEntry",
   components: {
-    FactionSegmentBar
+    FactionSegmentBar: defineAsyncComponent(() => import(/* webpackChunkName: "FactionSegmentBar" */ "@/components/common/FactionSegmentBar.vue")),
   },
   props: {
     alert: {

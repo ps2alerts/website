@@ -10,17 +10,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
+import AllAlertsEntry from "@/views/all-alerts/AllAlertsEntry.vue";
 import {ActiveAlertInterface} from "@/interfaces/ActiveAlertInterface";
 import ApiRequest from "@/api-request";
-import AllAlertsEntry from "@/components/all-alerts/AllAlertsEntry.vue";
 import moment from "moment-timezone";
 import {DATE_TIME_FORMAT} from "@/constants/Time";
 
 export default defineComponent({
   name: "AllAlerts",
   components: {
-    AllAlertsEntry
+    AllAlertsEntry,
   },
   data() {
     return {

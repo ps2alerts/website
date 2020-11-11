@@ -1,38 +1,33 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Home from "@/components/Home.vue";
-import AllAlerts from "@/components/all-alerts/AllAlerts.vue";
-import Changelog from "@/components/Changelog.vue";
-import Alert from "@/components/alert/Alert.vue";
-import NotFound from "@/components/NotFound.vue";
 import {trackRouter} from "vue-gtag-next";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Home",
-    component: Home
+    component: () => import(/* webpackChunkName: "Home" */ "@/views/Home.vue")
   },
   {
     path: "/all-alerts",
     name: "AllAlerts",
-    component: AllAlerts
+    component: () => import(/* webpackChunkName: "AllAlerts" */ "@/views/all-alerts/AllAlerts.vue")
   },
   {
     path: "/changelog",
     name: "Changelog",
-    component: Changelog
+    component: () => import(/* webpackChunkName: "Changelog" */ "@/views/Changelog.vue")
   },
   {
     path: "/alert/:instanceId",
     name: "Alert",
-    component: Alert,
+    component: () => import(/* webpackChunkName: "Alert" */ "@/views/alert/Alert.vue"),
     props: true
   },
   {
     // Serve 404s on unknown routes
     name: "not-found",
     path: "/:pathMatch(.*)*",
-    component: NotFound
+    component: () => import(/* webpackChunkName: "NotFound" */ "@/views/NotFound.vue")
   }
 ];
 

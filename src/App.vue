@@ -13,7 +13,7 @@
         <!-- <Search />-->
         <RealTimeMonitor />
       </div>
-      <FooterShard class="hidden md:block" />
+      <Footer class="hidden md:block" />
     </div>
     <div
       id="panel-right"
@@ -21,18 +21,18 @@
     >
       <router-view />
     </div>
-    <FooterShard class="md:hidden" />
+    <Footer class="md:hidden" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import Header from "@/components/Header.vue";
+import { defineComponent, defineAsyncComponent } from "vue";
 // import Search from "@/components/Search.vue";
+import './assets/styles/tailwind.css';
+import Header from "@/components/Header.vue";
 import RealTimeMonitor from "@/components/RTM/RealTimeMonitor.vue";
 import Navigation from "@/components/Navigation.vue";
-import FooterShard from "@/components/Footer.vue";
-import './assets/styles/tailwind.css';
+import Footer from "@/components/Footer.vue";
 
 export default defineComponent({
   name: "App",
@@ -41,7 +41,7 @@ export default defineComponent({
     // Search,
     RealTimeMonitor,
     Navigation,
-    FooterShard,
+    Footer
   },
 });
 </script>

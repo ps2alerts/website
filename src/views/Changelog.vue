@@ -1,6 +1,8 @@
 <template>
-  <article class="prose lg:prose-xl">
-    <h1>Change log</h1>
+  <article class="">
+    <h1 class="text-green-500">
+      Change log foobar
+    </h1>
   </article>
 </template>
 
@@ -14,6 +16,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style scoped lang="scss">
-</style>

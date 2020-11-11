@@ -44,17 +44,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineAsyncComponent, defineComponent} from "vue";
 import {World} from "@/constants/World";
 import {Zone} from "@/constants/Zone";
 import {AlertRemainingTime} from "@/filters/AlertRemainingTime";
-import FactionSegmentBar from "@/components/common/FactionSegmentBar.vue";
 import {AlertRemainingTimeText} from "@/filters/AlertRemainingTimeText";
 
 export default defineComponent({
   name: "RealTimeAlert",
   components: {
-    FactionSegmentBar
+    FactionSegmentBar: defineAsyncComponent(() => import(/* webpackChunkName: "FactionSegmentBar" */ "@/components/common/FactionSegmentBar.vue")),
   },
   props: {
     instanceId: {
