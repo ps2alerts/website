@@ -1,6 +1,6 @@
 <template>
   <article class="">
-    <h1 class="text-green-500">
+    <h1 class="text-red-500">
       Change log foobar
     </h1>
   </article>
