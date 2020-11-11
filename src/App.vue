@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, defineAsyncComponent } from "vue";
+import { defineComponent } from "vue";
 // import Search from "@/components/Search.vue";
 import './assets/styles/tailwind.css';
 import Header from "@/components/Header.vue";

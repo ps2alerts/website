@@ -18,9 +18,12 @@ module.exports = {
     entry: path.resolve(__dirname, 'src/main.ts'),
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: devMode ? '[name].[hash].js' : '[name].[chunkhash].js',
+      filename: devMode ? '[name].js' : '[name].[contenthash].js',
+      chunkFilename: devMode ? '[name].js' : '[name].[contenthash].js',
     },
     optimization: {
+      moduleIds: 'hashed',
+      runtimeChunk: 'single',
       splitChunks: {
         chunks: 'all',
         maxInitialRequests: Infinity,
@@ -28,6 +31,7 @@ module.exports = {
         cacheGroups: {
           vendor: {
             test: /[\\/]node_modules[\\/]/,
+            chunks: 'all',
             name(module) {
               // get the name. E.g. node_modules/packageName/not/this/part.js
               // or node_modules/packageName
