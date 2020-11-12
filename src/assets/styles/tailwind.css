@@ -6,11 +6,25 @@
   .bg-main {
     background-color: #263239;
   }
+
   .bg-tint {
     background-color: #37474f;
   }
+
   h1 {
     @apply text-3xl;
+  }
+
+  .text-title {
+    @apply text-5xl;
+  }
+
+  .text-subtitle {
+    @apply text-3xl;
+  }
+
+  .content-spacing {
+    @apply mb-4;
   }
 }
 
@@ -29,6 +43,22 @@
   }
   .btn-xs {
     @apply text-xs p-1 rounded;
+  }
+
+  .card {
+    @apply rounded p-4
+  }
+  .card-sm {
+    @apply rounded p-2
+  }
+
+  .editorial p {
+    @apply content-spacing
+  }
+
+  .editorial .text-title,
+  .editorial .text-subtitle {
+    @apply content-spacing
   }
 
   .faction-bar {
