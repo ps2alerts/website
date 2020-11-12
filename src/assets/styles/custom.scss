@@ -40,6 +40,10 @@
   .btn-xs {
     @apply text-xs p-1 rounded;
   }
+  .btn-alt {
+    @extend .btn;
+    @apply bg-gray-700;
+  }
 
   .card {
     @extend .bg-tint;
