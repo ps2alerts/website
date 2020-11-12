@@ -10,7 +10,9 @@
       <FontAwesomeIcon
         :icon="['fas', 'circle']"
         class="animate-pulse"
-      /> Live
+      />
+      <span class="animate-ping rounded-max ping-circle" />
+      Live
     </div>
     {{ $filters.worldName(alert.world) }} - {{ $filters.zoneName(alert.zone) }}
     <p v-show="alert.state === 1">
