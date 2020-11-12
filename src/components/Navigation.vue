@@ -1,5 +1,5 @@
 <template>
-  <nav class="py-4 text-center">
+  <nav class="py-4 text-center col-span-4 border-b-2 border-red-700">
     <router-link
       :to="{ name: 'Home' }"
       class="btn"

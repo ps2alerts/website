@@ -12,6 +12,7 @@
     <div
       class="faction-bar-segment tr text-center text-white"
       :style="{ width: percentTR+'%' }"
+      :class="{'rounded-l': vs === 0}"
     >
       {{ trString }}
     </div>
@@ -71,10 +72,10 @@ export default defineComponent({
       default: true,
       required: false
     },
-  },
-  data() {
-    return {
-      displayCutoffPercent: 10
+    displayCutoffPercent: {
+      type: Number,
+      default: 5,
+      required: false,
     }
   },
   computed: {

@@ -39,9 +39,11 @@
   /* Buttons */
   .btn {
     @apply bg-red-600 font-bold rounded-md py-2 px-4 m-1 inline-block font-medium border-transparent;
-  }
-  .btn:hover {
-    @apply bg-red-800;
+    transition: background-color 0.25s ease-out;
+
+    &:hover {
+      @apply bg-red-800;
+    }
   }
   .btn-sm {
     @apply text-sm py-1 px-2 rounded;
@@ -52,6 +54,10 @@
   .btn-alt {
     @extend .btn;
     @apply bg-gray-700;
+
+    &:hover {
+      @apply bg-gray-600;
+    }
   }
 
   .card {

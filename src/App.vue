@@ -9,8 +9,6 @@
     >
       <Header />
       <div class="xs:px-0 md:px-4">
-        <Navigation />
-        <!-- <Search />-->
         <RealTimeMonitor />
       </div>
       <Footer class="hidden md:block" />
@@ -19,6 +17,8 @@
       id="panel-right"
       class="w-full h-full px-4 grid grid-cols-2 lg:grid-cols-3 ss:grid-cols-4 gap-4"
     >
+      <Navigation />
+      <!-- <Search />-->
       <router-view />
     </div>
     <Footer class="md:hidden" />

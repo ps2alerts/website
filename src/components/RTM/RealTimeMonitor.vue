@@ -1,7 +1,7 @@
 <template>
   <div
     id="rtm-active-alerts"
-    class="py-4 border-t-2 border-b-2 border-red-600 text-sm"
+    class="py-4 border-b-2 border-red-700 text-sm"
   >
     <div class="rtm-top text-center">
       <p v-if="loading">
