@@ -104,7 +104,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 %tag {
-  @apply py-1 px-2 rounded-tl rounded-tr text-xs text-center;
+  @apply py-1 px-2 rounded-tl rounded-tr text-xs text-center font-semibold;
   margin: -1rem;
   margin-bottom: 1rem;
 }
