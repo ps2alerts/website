@@ -7,12 +7,12 @@
       v-show="alert.state === 1"
       class="alert-status in-progress"
     >
+      <span class="animate-ping rounded-max ping-circle" />
+      Live
       <FontAwesomeIcon
         :icon="['fas', 'circle']"
         class="animate-pulse"
       />
-      <span class="animate-ping rounded-max ping-circle" />
-      Live
     </div>
     {{ $filters.worldName(alert.world) }} - {{ $filters.zoneName(alert.zone) }}
     <p v-show="alert.state === 1">

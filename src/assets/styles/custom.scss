@@ -9,10 +9,10 @@
     @apply bg-purple-900;
   }
   .bg-nc {
-    @apply bg-red-900;
+    @apply bg-blue-900;
   }
   .bg-tr {
-    @apply bg-blue-900;
+    @apply bg-red-900;
   }
 
   h1 {
@@ -74,21 +74,25 @@
 
   .in-progress {
     @extend .alert-status;
-    @apply bg-gray-600 rounded-tl-none rounded-br-none;
+    @apply rounded-tl-none rounded-br-none;
 
     svg {
-      @apply text-red-600 mr-1;
+      @apply text-red-600 ml-1;
     }
 
     .ping-circle {
-      @apply w-4 h-4 absolute bg-red-800 rounded-full opacity-75;
+      @apply w-4 h-4 absolute bg-red-800 rounded-full opacity-100;
       top: 0.4rem;
-      left: 0.4rem;
+      right: 0.45rem;
     }
-  }
 
-  .blink {
-    animation: blinker 1.5s cubic-bezier(.5, 0, 1, 1) infinite alternate;
+    .animate-ping {
+      animation-duration: 2s;
+    }
+
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.3, 0, 0, 0.9) infinite;
+    }
   }
   @keyframes blinker {
     from { opacity: 1; }
