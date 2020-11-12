@@ -6,18 +6,21 @@
     >
       <FontAwesomeIcon :icon="['fas', 'chart-area']" /> Stats
     </router-link>
+
     <router-link
       :to="{ name: 'AllAlerts' }"
       class="btn"
     >
-      <FontAwesomeIcon :icon="['fas', 'poll-h']" /> All Alerts
+      <FontAwesomeIcon :icon="['fas', 'poll-h']" /> Alert History
     </router-link>
+
     <router-link
       :to="{ name: 'Changelog' }"
       class="btn"
     >
       <FontAwesomeIcon :icon="['fas', 'tasks']" /> Change Log
     </router-link>
+
     <div class="mt-2">
       <a
         href="https://github.com/ps2alerts"

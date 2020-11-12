@@ -29,6 +29,7 @@
 import { defineComponent } from "vue";
 // import Search from "@/components/Search.vue";
 import './assets/styles/tailwind.css';
+import './assets/styles/custom.scss';
 import Header from "@/components/Header.vue";
 import RealTimeMonitor from "@/components/RTM/RealTimeMonitor.vue";
 import Navigation from "@/components/Navigation.vue";

@@ -1,5 +1,17 @@
 <template>
-  <div class="col-span-3 ss:col-span-4 px-4 py-4 mb-2 bg-tint">
+  <div
+    class="col-span-3 ss:col-span-4 px-4 py-4 mb-2 bg-tint rounded relative"
+    :class="winnerClass"
+  >
+    <div
+      v-show="alert.state === 1"
+      class="alert-status in-progress"
+    >
+      <FontAwesomeIcon
+        :icon="['fas', 'circle']"
+        class="animate-pulse"
+      /> Live
+    </div>
     {{ $filters.worldName(alert.world) }} - {{ $filters.zoneName(alert.zone) }}
     <p v-show="alert.state === 1">
       Started: {{ started }}
@@ -25,6 +37,7 @@
 import {defineAsyncComponent, defineComponent} from "vue";
 import moment from "moment-timezone";
 import {DATE_TIME_FORMAT} from "@/constants/Time";
+import {Faction} from "@/constants/Faction";
 
 export default defineComponent({
   name: "AllAlertsEntry",
@@ -38,11 +51,22 @@ export default defineComponent({
     }
   },
   computed: {
-    started():string {
+    started(): string {
       return moment(this.alert.timeStarted).format(DATE_TIME_FORMAT);
     },
-    ended():string {
+    ended(): string {
       return moment(this.alert.timeEnded).format(DATE_TIME_FORMAT);
+    },
+    winnerClass(): object {
+      console.log(this.alert.result);
+      if (!this.alert.result || !this.alert.result.winner) {
+        return {};
+      }
+      return {
+        'bg-vs': this.alert.result.winner === Faction.VANU_SOVEREIGNTY,
+        'bg-nc': this.alert.result.winner === Faction.NEW_CONGLOMERATE,
+        'bg-tr': this.alert.result.winner === Faction.TERRAN_REPUBLIC,
+      }
     }
   }
 });

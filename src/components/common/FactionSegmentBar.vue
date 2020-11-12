@@ -135,3 +135,19 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped lang="scss">
+.faction-bar {
+  width: 100%;
+  height: 30px;
+  white-space: nowrap;
+}
+
+.faction-bar-segment {
+  width: 33%;
+  height: 100%;
+  display: inline-block;
+  float: left;
+  line-height: 30px;
+}
+</style>

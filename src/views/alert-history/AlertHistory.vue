@@ -1,5 +1,12 @@
 <template>
-  <p>Last updated: {{ lastUpdated }}</p>
+  <div class="col-span-3 ss:col-span-4">
+    <div class="text-center h-full">
+      <h1 class="text-title">
+        Alert History
+      </h1>
+      <p>Last updated: {{ lastUpdated }}</p>
+    </div>
+  </div>
   <div class="col-span-3 ss:col-span-4 h-full items-center justify-center">
     <AllAlertsEntry
       v-for="alert in alerts"
@@ -11,14 +18,14 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import AllAlertsEntry from "@/views/all-alerts/AllAlertsEntry.vue";
+import AllAlertsEntry from "@/views/alert-history/AlertHistoryEntry.vue";
 import {ActiveAlertInterface} from "@/interfaces/ActiveAlertInterface";
 import ApiRequest from "@/api-request";
 import moment from "moment-timezone";
 import {DATE_TIME_FORMAT} from "@/constants/Time";
 
 export default defineComponent({
-  name: "AllAlerts",
+  name: "AlertHistory",
   components: {
     AllAlertsEntry,
   },
