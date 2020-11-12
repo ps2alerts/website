@@ -14,72 +14,55 @@
         There are no alerts currently running!
       </p>
     </div>
-    <table
+    <div
       v-show="actives.length > 0"
-      id="alert-list"
-      class="table-fixed border-collapse border-0 w-full mb-0 text-center"
+      class="text-center"
     >
-      <thead>
-        <tr>
-          <th class="rtm-server">
-            Server
-          </th>
-          <th class="rtm-cont">
-            Cont
-          </th>
-          <th class="rtm-remaining">
-            Ends in
-          </th>
-          <th>
-            <button
-              class="btn btn-sm rtm-btn"
-              :class="{ 'btn-active': mode === 'territory'}"
-              @click="updateMode('territory')"
-            >
-              Territory
-            </button>
-            <button
-              class="btn btn-sm rtm-btn"
-              :class="{ 'btn-active': mode === 'pops'}"
-              @click="updateMode('pops')"
-            >
-              Pops
-            </button>
-          </th>
-          <th class="rtm-btns">
-            <button
-              v-show="mode === 'pops'"
-              class="btn btn-sm rtm-btn"
-              :class="{ 'btn-active': showPopPercent}"
-              @click="toggleShowPopPercent()"
-            >
-              <FontAwesomeIcon
-                fixed-width
-                :icon="['fas', 'percent']"
-              />
-            </button>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="alert in actives.entries()"
-          :key="alert[1].instanceId"
+      <div class="flex justify-center">
+        <button
+          class="btn btn-sm rtm-btn"
+          :class="{ 'btn-active': mode === 'territory'}"
+          @click="updateMode('territory')"
         >
-          <RealTimeAlert
-            :world="alert[1].world"
-            :zone="alert[1].zone"
-            :started="alert[1].timeStarted"
-            :duration="alert[1].duration"
-            :result="alert[1].result"
-            :instance-id="alert[1].instanceId"
-            :mode="mode"
-            :pops="getPops(alert[1].instanceId)"
-            :is-percentage="showPopPercent"
+          Territory
+        </button>
+        <button
+          class="btn btn-sm rtm-btn"
+          :class="{ 'btn-active': mode === 'pops'}"
+          @click="updateMode('pops')"
+        >
+          Pops
+        </button>
+        <button
+          v-show="mode === 'pops'"
+          class="btn btn-sm rtm-btn"
+          :class="{ 'btn-active': showPopPercent}"
+          @click="toggleShowPopPercent()"
+        >
+          <FontAwesomeIcon
+            fixed-width
+            :icon="['fas', 'percent']"
           />
-        </tr>
-      </tbody>
-    </table>
+        </button>
+      </div>
+
+      <div
+        v-for="alert in actives.entries()"
+        :key="alert[1].instanceId"
+      >
+        <RealTimeAlert
+          :world="alert[1].world"
+          :zone="alert[1].zone"
+          :started="alert[1].timeStarted"
+          :duration="alert[1].duration"
+          :result="alert[1].result"
+          :instance-id="alert[1].instanceId"
+          :mode="mode"
+          :pops="getPops(alert[1].instanceId)"
+          :is-percentage="showPopPercent"
+        />
+      </div>
+    </div>
     <p
       v-show="actives.length > 0"
       class="text-center text-gray-600 text-xs pt-1"

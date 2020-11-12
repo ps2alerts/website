@@ -12,7 +12,7 @@ import {faDiscord, faGithub, faTwitter} from "@fortawesome/free-brands-svg-icons
 import {
   faChartArea, faCircle,
   faEye,
-  faInfoCircle,
+  faInfoCircle, faLink,
   faPercent,
   faPollH,
   faTasks
@@ -27,7 +27,7 @@ app.config.globalProperties.$filters = {
   zoneName: ZoneName
 }
 
-library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle);
+library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink);
 app.component('FontAwesomeIcon', FontAwesomeIcon)
 
 app.use(store)

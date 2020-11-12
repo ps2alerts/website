@@ -24,19 +24,19 @@
     <div class="mt-2">
       <a
         href="https://github.com/ps2alerts"
-        class="btn btn-sm"
+        class="btn btn-sm btn-alt"
       >
         <FontAwesomeIcon :icon="['fab', 'github']" /> GitHub
       </a>
       <a
         href="https://twitter.com/ps2alerttracker"
-        class="btn btn-sm"
+        class="btn btn-sm btn-alt"
       >
         <FontAwesomeIcon :icon="['fab', 'twitter']" /> Twitter
       </a>
       <a
         href="https://discord.io/ps2alerts"
-        class="btn btn-sm"
+        class="btn btn-sm btn-alt"
       >
         <FontAwesomeIcon :icon="['fab', 'discord']" /> Discord
       </a>

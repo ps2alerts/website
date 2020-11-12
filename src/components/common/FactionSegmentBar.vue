@@ -4,26 +4,26 @@
     class="faction-bar"
   >
     <div
-      class="faction-bar-segment bg-purple-700 text-center text-white rounded-l"
+      class="faction-bar-segment vs text-center text-white rounded-l"
       :style="{ width: percentVS+'%' }"
     >
       {{ vsString }}
     </div>
     <div
-      class="faction-bar-segment bg-red-600 text-center text-white"
+      class="faction-bar-segment tr text-center text-white"
       :style="{ width: percentTR+'%' }"
     >
       {{ trString }}
     </div>
     <div
-      class="faction-bar-segment bg-blue-700 text-center text-white"
+      class="faction-bar-segment nc text-center text-white"
       :style="{ width: percentNC+'%' }"
       :class="{'rounded-r': other === 0}"
     >
       {{ ncString }}
     </div>
     <div
-      class="faction-bar-segment bg-gray-600 text-center text-white"
+      class="faction-bar-segment nso text-center text-white"
       :style="{ width: percentOther+'%' }"
       :class="{'rounded-r': other > 0}"
     >

@@ -29,6 +29,7 @@
 import { defineComponent } from "vue";
 // import Search from "@/components/Search.vue";
 import './assets/styles/tailwind.css';
+import './assets/styles/colors.scss';
 import './assets/styles/custom.scss';
 import Header from "@/components/Header.vue";
 import RealTimeMonitor from "@/components/RTM/RealTimeMonitor.vue";
@@ -44,6 +45,12 @@ export default defineComponent({
     Navigation,
     Footer
   },
+  created() {
+    const elem = document.getElementById('cache-notice');
+    if (elem) {
+      elem.remove();
+    }
+  }
 });
 </script>
 
@@ -59,7 +66,7 @@ body {
 }
 
 #panel-left {
-  max-width: 500px;
+  max-width: 400px;
 
   @media (max-width: 767px) {
     max-width: inherit;
