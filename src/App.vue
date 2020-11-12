@@ -45,6 +45,12 @@ export default defineComponent({
     Navigation,
     Footer
   },
+  created() {
+    const elem = document.getElementById('cache-notice');
+    if (elem) {
+      elem.remove();
+    }
+  }
 });
 </script>
 
