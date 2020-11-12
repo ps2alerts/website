@@ -13,7 +13,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "AllAlerts" */ "@/views/all-alerts/AllAlerts.vue")
   },
   {
-    path: "/changelog",
+    path: "/change-log",
     name: "Changelog",
     component: () => import(/* webpackChunkName: "Changelog" */ "@/views/Changelog.vue")
   },
