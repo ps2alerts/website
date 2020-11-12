@@ -12,6 +12,19 @@
     @apply bg-gray-600;
   }
 
+  .text-vs {
+    @apply text-purple-500;
+  }
+  .text-nc {
+    @apply text-blue-500;
+  }
+  .text-tr {
+    @apply text-red-500;
+  }
+  .text-nso {
+    @apply text-gray-600;
+  }
+
   .bg-vs {
     @apply bg-purple-900;
   }
