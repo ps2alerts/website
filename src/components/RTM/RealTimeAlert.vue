@@ -1,46 +1,53 @@
 <template>
-  <td
+  <div
     :remaining="remaining"
     :instanceId="instanceId"
+    class="bg-tint my-2 rounded-md"
   >
-    {{ $filters.worldName(world) }}
-  </td>
-  <td>{{ $filters.zoneName(zone) }}</td>
-  <td>{{ remainingTimeText }}</td>
-  <td
-    v-show="mode === 'territory'"
-  >
-    <FactionSegmentBar
-      :vs="result.vs"
-      :nc="result.nc"
-      :tr="result.tr"
-      :other="result.cutoff"
-    />
-  </td>
-  <td
-    v-show="mode === 'pops'"
-    class="text-center"
-  >
-    <FactionSegmentBar
-      :vs="pops.vs"
-      :nc="pops.nc"
-      :tr="pops.tr"
-      :other="pops.nso"
-      :show-as-calculated-percentage="isPercentage"
-      :is-percentage="false"
-    />
-  </td>
-  <td class="text-center">
-    <router-link
-      class="btn btn-sm"
-      :to="{ name: 'Alert', params: { instanceId: instanceId }}"
-    >
-      <FontAwesomeIcon
-        fixed-width
-        :icon="['fas', 'eye']"
+    <div class="grid grid-cols-12 place-items-center">
+      <div class="col-span-3 col-start-2 text-base">
+        {{ $filters.worldName(world) }}
+      </div>
+
+      <div class="col-span-3 text-base">
+        {{ $filters.zoneName(zone) }}
+      </div>
+
+      <div class="col-span-3 text-base font-bold">
+        {{ remainingTimeText }}
+      </div>
+
+      <div class="mr-2 col-start-12">
+        <router-link
+          class="btn btn-sm"
+          :to="{ name: 'Alert', params: { instanceId: instanceId }}"
+        >
+          <FontAwesomeIcon
+            fixed-width
+            :icon="['fas', 'link']"
+          />
+        </router-link>
+      </div>
+    </div>
+    <div v-show="mode === 'territory'">
+      <FactionSegmentBar
+        :vs="result.vs"
+        :nc="result.nc"
+        :tr="result.tr"
+        :other="result.cutoff"
       />
-    </router-link>
-  </td>
+    </div>
+    <div v-show="mode === 'pops'">
+      <FactionSegmentBar
+        :vs="pops.vs"
+        :nc="pops.nc"
+        :tr="pops.tr"
+        :other="pops.nso"
+        :show-as-calculated-percentage="isPercentage"
+        :is-percentage="false"
+      />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">

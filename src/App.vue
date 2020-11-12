@@ -66,7 +66,7 @@ body {
 }
 
 #panel-left {
-  max-width: 500px;
+  max-width: 400px;
 
   @media (max-width: 767px) {
     max-width: inherit;
