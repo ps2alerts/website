@@ -5,14 +5,8 @@
   .bg-tint {
     background-color: #37474f;
   }
-  .bg-vs {
-    @apply bg-purple-900;
-  }
-  .bg-nc {
-    @apply bg-red-900;
-  }
-  .bg-tr {
-    @apply bg-blue-900;
+  .bg-tint-light {
+    @apply bg-gray-600;
   }
 
   h1 {
@@ -48,10 +42,30 @@
   }
 
   .card {
+    @extend .bg-tint;
     @apply rounded p-4;
   }
   .card-sm {
     @apply rounded p-2;
+  }
+
+  .metric-card {
+    @extend .card;
+    @apply p-2 m-2 justify-center;
+  }
+
+  .metric-card-fw {
+    @extend .metric-card;
+    @apply pb-0;
+
+    div {
+      margin-left: -0.5rem;
+      margin-right: -0.5rem;
+    }
+
+    :last-child {
+      @apply rounded-bl rounded-br;
+    }
   }
 
   /* Typography */
