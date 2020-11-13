@@ -16,10 +16,15 @@
         v-html="motto"
       />
     </div>
-    <div class="flex w-auto block justify-center px-6">
+    <div class="flex w-auto block justify-center px-6 mb-4">
       <div class="bg-red-700 text-white inline-block text-lg px-4 py-2 leading-none rounded">
         PRE-ALPHA
       </div>
+    </div>
+    <div class="w-full block text-center">
+      <p class="text-white text-xs">
+        This is <b>not</b> representative of the final product and is subject to vast changes!
+      </p>
     </div>
   </header>
 </template>
