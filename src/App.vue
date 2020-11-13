@@ -8,10 +8,8 @@
       class="w-full"
     >
       <Header />
-      <div class="xs:px-0 md:px-4">
-        <RealTimeMonitor />
-      </div>
-      <Footer class="hidden md:block" />
+      <RealTimeMonitor />
+      <Footer class="hidden lg:block" />
     </div>
     <div
       id="panel-right"
@@ -21,7 +19,7 @@
       <!-- <Search />-->
       <router-view />
     </div>
-    <Footer class="md:hidden" />
+    <Footer class="lg:hidden" />
   </div>
 </template>
 
@@ -60,15 +58,15 @@ body {
 }
 
 #app {
-  @media (max-width: 767px) {
+  @media (max-width: 1023px) {
     display: block;
   }
 }
 
 #panel-left {
-  max-width: 400px;
+  max-width: 350px;
 
-  @media (max-width: 767px) {
+  @media (max-width: 1023px) {
     max-width: inherit;
   }
 }

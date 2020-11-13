@@ -2,7 +2,6 @@
   <div
     :remaining="remaining"
     :instanceId="instanceId"
-    class="bg-tint my-2 rounded-md"
   >
     <div class="grid grid-cols-12 place-items-center">
       <div class="col-span-3 col-start-2 text-base">
