@@ -9,7 +9,7 @@ import {AlertRemainingTime} from "@/filters/AlertRemainingTime";
 import {AlertEndTime} from "@/filters/AlertEndTime";
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {faDiscord, faGithub, faTwitter} from "@fortawesome/free-brands-svg-icons";
+import {faDiscord, faGithub, faPatreon, faTwitter} from "@fortawesome/free-brands-svg-icons";
 import {
   faChartArea, faCircle,
   faEye, faFilter, faFlag,
@@ -29,7 +29,7 @@ app.config.globalProperties.$filters = {
   factionName: FactionName
 }
 
-library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink, faUser, faFlag, faFilter);
+library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink, faUser, faFlag, faPatreon, faFilter);
 app.component('FontAwesomeIcon', FontAwesomeIcon)
 
 app.use(store)

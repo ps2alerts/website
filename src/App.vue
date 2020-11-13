@@ -65,9 +65,17 @@ body {
 
 #panel-left {
   max-width: 350px;
-
   @media (max-width: 1023px) {
     max-width: inherit;
+  }
+  @media (min-width: 1024px) {
+    position: fixed;
+  }
+}
+
+#panel-right {
+  @media (min-width: 1024px) {
+    margin-left: 350px;
   }
 }
 </style>
