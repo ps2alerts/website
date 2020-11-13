@@ -1,6 +1,6 @@
 <template>
   <div
-    class="col-span-3 ss:col-span-4 px-4 py-4 mb-2 bg-tint rounded relative"
+    class="px-4 py-4 mb-2 bg-tint rounded relative"
     :class="winnerClass"
   >
     <div
@@ -15,8 +15,8 @@
       />
     </div>
 
-    <div class="grid grid-cols-4 place-items-center mb-4 text-center">
-      <div class="col-span-1 text-2xl">
+    <div class="grid grid-cols-4 lg:grid-cols-5 place-items-center mb-2 lg:mb-4 text-center">
+      <div class="col-span-2 lg:col-span-1 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
         <div v-show="alert.state === 1">
           <div class="mb-1">
             {{ started }}
@@ -34,7 +34,7 @@
           </div>
         </div>
       </div>
-      <div class="col-span-1 text-2xl">
+      <div class="col-span-2 lg:col-span-1 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
         <div class="mb-1">
           {{ $filters.worldName(alert.world) }}
         </div>
@@ -42,7 +42,7 @@
           Server
         </div>
       </div>
-      <div class="col-span-1 text-2xl">
+      <div class="col-span-2 lg:col-span-1 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
         <div class="mb-1">
           {{ $filters.zoneName(alert.zone) }}
         </div>
@@ -50,15 +50,26 @@
           Continent
         </div>
       </div>
-      <div class="col-span-1 text-2xl">
+      <div class="col-span-2 lg:col-span-1 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
         <div class="mb-1">
           <span v-show="alert.state === 1">TBD</span>
-          <span v-show="alert.state === 2 && alert.result.draw === false">{{ $filters.factionName(alert.result.winner) }}</span>
-          <span v-show="alert.state === 2 && alert.result.draw === true">Draw</span>
+          <span v-show="alert.state === 2 && draw">Draw</span>
+          <span v-show="alert.state === 2 && !draw">{{ $filters.factionName(winner) }}</span>
         </div>
         <div class="text-xs text-gray-500">
           Victor
         </div>
+      </div>
+      <div class="col-span-2 col-start-2 lg:col-start-5 lg:col-span-1 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
+        <router-link
+          class="btn btn-sm"
+          :to="{ name: 'Alert', params: { instanceId: alert.instanceId }}"
+        >
+          <FontAwesomeIcon
+            fixed-width
+            :icon="['fas', 'link']"
+          /> More details
+        </router-link>
       </div>
     </div>
 
@@ -102,7 +113,6 @@ export default defineComponent({
       return moment(this.alert.timeEnded).format(DATE_TIME_FORMAT);
     },
     winnerClass(): object {
-      console.log(this.alert.result);
       if (!this.alert.result || !this.alert.result.winner) {
         return {};
       }
@@ -111,6 +121,12 @@ export default defineComponent({
         'bg-nc': this.alert.result.winner === Faction.NEW_CONGLOMERATE,
         'bg-tr': this.alert.result.winner === Faction.TERRAN_REPUBLIC,
       }
+    },
+    draw(): boolean {
+      return this.alert.result ? this.alert.result.draw : false
+    },
+    winner(): Faction {
+      return this.alert.result ? this.alert.result.winner : null
     }
   }
 });

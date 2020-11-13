@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-3 ss:col-span-4">
+  <div class="col-span-2 lg:col-span-3 ss:col-span-4">
     <div class="text-center h-full">
       <h1 class="text-title">
         Alert History
@@ -7,7 +7,7 @@
       <p>Last updated: {{ lastUpdated }}</p>
     </div>
   </div>
-  <div class="col-span-3 ss:col-span-4 h-full items-center justify-center">
+  <div class="col-span-2 lg:col-span-3 ss:col-span-4 h-full items-center justify-center">
     <AllAlertsEntry
       v-for="alert in alerts"
       :key="alert.instanceId"
@@ -59,9 +59,6 @@ export default defineComponent({
           this.error = e.message;
         });
       this.lastUpdated = moment().format(DATE_TIME_FORMAT)
-    },
-    debug (event: never, loc = '') {
-      console.log(loc, event)
     }
   }
 });
