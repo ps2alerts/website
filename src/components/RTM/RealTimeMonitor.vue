@@ -1,9 +1,9 @@
 <template>
   <div
     id="rtm-active-alerts"
-    class="py-4 border-b-2 border-red-700 text-sm"
+    class="px-4 lg:px-0 pb-4 border-b-2 border-red-700 text-sm text-center"
   >
-    <div class="rtm-top text-center">
+    <div class="rtm-top">
       <p v-if="loading">
         Loading...
       </p>
@@ -16,7 +16,6 @@
     </div>
     <div
       v-show="actives.length > 0"
-      class="text-center"
     >
       <div class="flex justify-center">
         <button
@@ -24,6 +23,10 @@
           :class="{ 'btn-active': mode === 'territory'}"
           @click="updateMode('territory')"
         >
+          <FontAwesomeIcon
+            fixed-width
+            :icon="['fas', 'flag']"
+          />
           Territory
         </button>
         <button
@@ -31,12 +34,14 @@
           :class="{ 'btn-active': mode === 'pops'}"
           @click="updateMode('pops')"
         >
-          Pops
+          <FontAwesomeIcon
+            fixed-width
+            :icon="['fas', 'user']"
+          /> Population
         </button>
         <button
-          v-show="mode === 'pops'"
+          v-show="mode === 'pops' && showPopPercent"
           class="btn btn-sm rtm-btn"
-          :class="{ 'btn-active': showPopPercent}"
           @click="toggleShowPopPercent()"
         >
           <FontAwesomeIcon
@@ -44,11 +49,19 @@
             :icon="['fas', 'percent']"
           />
         </button>
+        <button
+          v-show="mode === 'pops' && !showPopPercent"
+          class="btn btn-sm rtm-btn"
+          @click="toggleShowPopPercent()"
+        >
+          ##
+        </button>
       </div>
 
       <div
         v-for="alert in actives.entries()"
         :key="alert[1].instanceId"
+        class="bg-tint my-2 rounded-md lg:rounded-r-md lg:rounded-l-none"
       >
         <RealTimeAlert
           :world="alert[1].world"
@@ -163,26 +176,13 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.rtm-server {
-  width: 70px;
+.rtm-btn {
+  margin-top: 0;
 }
-.rtm-cont {
-  width: 60px;
+.faction-bar {
+  height: 25px !important;
 }
-.rtm-remaining{
-  width: 70px;
-}
-.rtm-btns {
-  width: 45px;
-}
-table {
-  tr:not(:last-child) {
-    border-bottom: 1px solid #fdfdfd2b;
-  }
-}
-@media (max-width: 425px) {
-  .rtm-btn {
-    padding: 0.15rem !important;
-  }
+.faction-bar-segment {
+  line-height: 25px !important;
 }
 </style>

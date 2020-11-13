@@ -11,11 +11,11 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {faDiscord, faGithub, faTwitter} from "@fortawesome/free-brands-svg-icons";
 import {
   faChartArea, faCircle,
-  faEye,
+  faEye, faFlag,
   faInfoCircle, faLink,
   faPercent,
   faPollH,
-  faTasks
+  faTasks, faUser
 } from "@fortawesome/free-solid-svg-icons";
 import VueGtag from "vue-gtag-next";
 
@@ -27,7 +27,7 @@ app.config.globalProperties.$filters = {
   zoneName: ZoneName
 }
 
-library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink);
+library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink, faUser, faFlag);
 app.component('FontAwesomeIcon', FontAwesomeIcon)
 
 app.use(store)
