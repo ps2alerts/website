@@ -8,7 +8,7 @@
       class="w-full"
     >
       <Header />
-      <div class="xs:px-0 md:px-4">
+      <div class="">
         <RealTimeMonitor />
       </div>
       <Footer class="hidden md:block" />
@@ -60,7 +60,7 @@ body {
 }
 
 #app {
-  @media (max-width: 767px) {
+  @media (max-width: 1023px) {
     display: block;
   }
 }
@@ -68,7 +68,7 @@ body {
 #panel-left {
   max-width: 400px;
 
-  @media (max-width: 767px) {
+  @media (max-width: 1023px) {
     max-width: inherit;
   }
 }
