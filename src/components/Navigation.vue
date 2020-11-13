@@ -25,20 +25,30 @@
       <a
         href="https://github.com/ps2alerts"
         class="btn btn-sm btn-alt"
+        target="_blank"
       >
         <FontAwesomeIcon :icon="['fab', 'github']" /> GitHub
       </a>
       <a
         href="https://twitter.com/ps2alerttracker"
         class="btn btn-sm btn-alt"
+        target="_blank"
       >
         <FontAwesomeIcon :icon="['fab', 'twitter']" /> Twitter
       </a>
       <a
         href="https://discord.io/ps2alerts"
         class="btn btn-sm btn-alt"
+        target="_blank"
       >
         <FontAwesomeIcon :icon="['fab', 'discord']" /> Discord
+      </a>
+      <a
+        href="https://www.patreon.com/PS2Alerts"
+        class="btn btn-sm btn-alt"
+        target="_blank"
+      >
+        <FontAwesomeIcon :icon="['fab', 'patreon']" /> Support the project!
       </a>
     </div>
   </nav>
