@@ -14,8 +14,7 @@
         class="animate-pulse"
       />
     </div>
-
-    <div class="grid grid-cols-4 lg:grid-cols-5 place-items-center mb-2 lg:mb-4 text-center">
+    <div class="grid grid-cols-4 lg:grid-cols-6 place-items-center mb-2 lg:mb-4 text-center">
       <div class="col-span-2 lg:col-span-1 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
         <div v-show="alert.state === 1">
           <div class="mb-1">
@@ -60,7 +59,15 @@
           Victor
         </div>
       </div>
-      <div class="col-span-2 col-start-2 lg:col-start-5 lg:col-span-1 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
+      <div class="col-span-2 lg:col-span-1 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
+        <div class="mb-1">
+          BRACKET
+        </div>
+        <div class="text-xs text-gray-500">
+          Bracket
+        </div>
+      </div>
+      <div class="col-span-2 lg:col-span-1 lg col-start-2 lg:col-start-6 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
         <router-link
           class="btn btn-sm"
           :to="{ name: 'Alert', params: { instanceId: alert.instanceId }}"

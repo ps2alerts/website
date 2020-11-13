@@ -12,7 +12,7 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {faDiscord, faGithub, faTwitter} from "@fortawesome/free-brands-svg-icons";
 import {
   faChartArea, faCircle,
-  faEye, faFlag,
+  faEye, faFilter, faFlag,
   faInfoCircle, faLink,
   faPercent,
   faPollH,
@@ -29,7 +29,7 @@ app.config.globalProperties.$filters = {
   factionName: FactionName
 }
 
-library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink, faUser, faFlag);
+library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink, faUser, faFlag, faFilter);
 app.component('FontAwesomeIcon', FontAwesomeIcon)
 
 app.use(store)
