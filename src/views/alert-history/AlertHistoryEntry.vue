@@ -98,7 +98,7 @@
 <script lang="ts">
 import {defineAsyncComponent, defineComponent} from "vue";
 import moment from "moment-timezone";
-import {DATE_TIME_FORMAT} from "@/constants/Time";
+import {DATE_TIME_FORMAT_SHORT} from "@/constants/Time";
 import {Faction} from "@/constants/Faction";
 
 export default defineComponent({
@@ -114,10 +114,10 @@ export default defineComponent({
   },
   computed: {
     started(): string {
-      return moment(this.alert.timeStarted).format(DATE_TIME_FORMAT);
+      return moment(this.alert.timeStarted).format(DATE_TIME_FORMAT_SHORT);
     },
     ended(): string {
-      return moment(this.alert.timeEnded).format(DATE_TIME_FORMAT);
+      return moment(this.alert.timeEnded).format(DATE_TIME_FORMAT_SHORT);
     },
     winnerClass(): object {
       if (!this.alert.result || !this.alert.result.winner) {
