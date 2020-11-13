@@ -4,6 +4,7 @@ import App from "@/App.vue";
 import store from "./store";
 import {WorldName} from "@/filters/WorldName";
 import {ZoneName} from "@/filters/ZoneName";
+import {FactionName} from "@/filters/FactionName";
 import {AlertRemainingTime} from "@/filters/AlertRemainingTime";
 import {AlertEndTime} from "@/filters/AlertEndTime";
 import {library} from "@fortawesome/fontawesome-svg-core";
@@ -11,7 +12,7 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {faDiscord, faGithub, faPatreon, faTwitter} from "@fortawesome/free-brands-svg-icons";
 import {
   faChartArea, faCircle,
-  faEye, faFlag,
+  faEye, faFilter, faFlag, faPatreon,
   faInfoCircle, faLink,
   faPercent,
   faPollH,
@@ -24,10 +25,11 @@ app.config.globalProperties.$filters = {
   alertRemainingTime: AlertRemainingTime,
   alertEndTime: AlertEndTime,
   worldName: WorldName,
-  zoneName: ZoneName
+  zoneName: ZoneName,
+  factionName: FactionName
 }
 
-library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink, faUser, faFlag, faPatreon);
+library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink, faUser, faFlag, faPatreon, faFilter);
 app.component('FontAwesomeIcon', FontAwesomeIcon)
 
 app.use(store)

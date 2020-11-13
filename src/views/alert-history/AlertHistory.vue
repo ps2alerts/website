@@ -1,18 +1,115 @@
 <template>
-  <div class="col-span-3 ss:col-span-4">
-    <div class="text-center h-full">
-      <h1 class="text-title">
-        Alert History
-      </h1>
-      <p>Last updated: {{ lastUpdated }}</p>
+  <div class="col-span-2 lg:col-span-3 ss:col-span-4 text-center">
+    <h1 class="text-title">
+      Alert History
+    </h1>
+    <p>Last updated: {{ lastUpdated }}</p>
+  </div>
+  <div class="col-span-2 lg:col-span-3 ss:col-span-4 text-center">
+    <div class="grid grid-cols-4">
+      <div class="col-span-1">
+        <h1 class="text-2xl">
+          Servers
+        </h1>
+        <div class="inline-flex flex-wrap justify-center">
+          <button class="btn btn-sm btn-alt">
+            All
+          </button>
+          <button class="btn btn-sm btn-alt">
+            Connery
+          </button>
+          <button class="btn btn-sm btn-alt">
+            Cobalt
+          </button>
+          <button class="btn btn-sm btn-alt">
+            Emerald
+          </button>
+          <button class="btn btn-sm btn-alt">
+            Miller
+          </button>
+          <button class="btn btn-sm btn-alt">
+            Jaeger
+          </button>
+          <button class="btn btn-sm btn-alt">
+            SolTech
+          </button>
+        </div>
+      </div>
+      <div class="col-span-1">
+        <h1 class="text-2xl">
+          Continents
+        </h1>
+        <div class="inline-flex flex-wrap justify-center">
+          <button class="btn btn-sm btn-alt">
+            All
+          </button>
+          <button class="btn btn-sm btn-alt">
+            Amerish
+          </button>
+          <button class="btn btn-sm btn-alt">
+            Esamir
+          </button>
+          <button class="btn btn-sm btn-alt">
+            Hosin
+          </button>
+          <button class="btn btn-sm btn-alt">
+            Indar
+          </button>
+        </div>
+      </div>
+      <div class="col-span-1">
+        <h1 class="text-2xl">
+          Time Bracket
+        </h1>
+        <div class="inline-flex flex-wrap justify-center">
+          <button class="btn btn-sm btn-alt">
+            All
+          </button>
+          <button class="btn btn-sm btn-alt">
+            Prime (17-00)
+          </button>
+          <button class="btn btn-sm btn-alt">
+            Morning (00-12)
+          </button>
+          <button class="btn btn-sm btn-alt">
+            Afternoon (12-17)
+          </button>
+        </div>
+      </div>
+      <div class="col-span-1">
+        <h1 class="text-2xl">
+          Dates
+        </h1>
+        <div class="inline-flex flex-wrap justify-center">
+          <div>
+            <button class="btn btn-sm btn-alt">
+              From
+            </button>
+            <input type="text">
+          </div>
+          <div>
+            <button class="btn btn-sm btn-alt">
+              To
+            </button>
+            <input type="text">
+          </div>
+        </div>
+      </div>
+      <div class="col-span-5 text-center">
+        <button class="btn">
+          <FontAwesomeIcon :icon="['fas', 'filter']" /> Filter (DOESN'T WORK YET)
+        </button>
+      </div>
     </div>
   </div>
-  <div class="col-span-3 ss:col-span-4 h-full items-center justify-center">
-    <AllAlertsEntry
-      v-for="alert in alerts"
-      :key="alert.instanceId"
-      :alert="alert"
-    />
+  <div class="col-span-2 lg:col-span-3 ss:col-span-4 text-center">
+    <div class="col-span-2 lg:col-span-3 ss:col-span-4 h-full items-center justify-center">
+      <AllAlertsEntry
+        v-for="alert in alerts"
+        :key="alert.instanceId"
+        :alert="alert"
+      />
+    </div>
   </div>
 </template>
 
@@ -59,9 +156,6 @@ export default defineComponent({
           this.error = e.message;
         });
       this.lastUpdated = moment().format(DATE_TIME_FORMAT)
-    },
-    debug (event: never, loc = '') {
-      console.log(loc, event)
     }
   }
 });
