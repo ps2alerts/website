@@ -4,6 +4,7 @@ import App from "@/App.vue";
 import store from "./store";
 import {WorldName} from "@/filters/WorldName";
 import {ZoneName} from "@/filters/ZoneName";
+import {FactionName} from "@/filters/FactionName";
 import {AlertRemainingTime} from "@/filters/AlertRemainingTime";
 import {AlertEndTime} from "@/filters/AlertEndTime";
 import {library} from "@fortawesome/fontawesome-svg-core";
@@ -24,7 +25,8 @@ app.config.globalProperties.$filters = {
   alertRemainingTime: AlertRemainingTime,
   alertEndTime: AlertEndTime,
   worldName: WorldName,
-  zoneName: ZoneName
+  zoneName: ZoneName,
+  factionName: FactionName
 }
 
 library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink, faUser, faFlag);

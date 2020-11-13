@@ -14,19 +14,61 @@
         class="animate-pulse"
       />
     </div>
-    {{ $filters.worldName(alert.world) }} - {{ $filters.zoneName(alert.zone) }}
-    <p v-show="alert.state === 1">
-      Started: {{ started }}
-    </p>
-    <p v-show="alert.state === 2">
-      Ended: {{ ended }}
-    </p>
+
+    <div class="grid grid-cols-4 place-items-center mb-4 text-center">
+      <div class="col-span-1 text-2xl">
+        <div v-show="alert.state === 1">
+          <div class="mb-1">
+            {{ started }}
+          </div>
+          <div class="text-xs text-gray-500">
+            Started
+          </div>
+        </div>
+        <div v-show="alert.state === 2">
+          <div class="mb-1">
+            {{ ended }}
+          </div>
+          <div class="text-xs text-gray-500">
+            Ended
+          </div>
+        </div>
+      </div>
+      <div class="col-span-1 text-2xl">
+        <div class="mb-1">
+          {{ $filters.worldName(alert.world) }}
+        </div>
+        <div class="text-xs text-gray-500">
+          Server
+        </div>
+      </div>
+      <div class="col-span-1 text-2xl">
+        <div class="mb-1">
+          {{ $filters.zoneName(alert.zone) }}
+        </div>
+        <div class="text-xs text-gray-500">
+          Continent
+        </div>
+      </div>
+      <div class="col-span-1 text-2xl">
+        <div class="mb-1">
+          <span v-show="alert.state === 1">TBD</span>
+          <span v-show="alert.state === 2 && alert.result.draw === false">{{ $filters.factionName(alert.result.winner) }}</span>
+          <span v-show="alert.state === 2 && alert.result.draw === true">Draw</span>
+        </div>
+        <div class="text-xs text-gray-500">
+          Victor
+        </div>
+      </div>
+    </div>
+
     <div v-if="alert.result">
       <FactionSegmentBar
         :vs="alert.result.vs"
         :nc="alert.result.nc"
         :tr="alert.result.tr"
         :other="alert.result.cutoff"
+        :display-cutoff-percent="2"
       />
     </div>
     <div v-if="!alert.result">
