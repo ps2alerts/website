@@ -12,7 +12,7 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {faDiscord, faGithub, faPatreon, faTwitter} from "@fortawesome/free-brands-svg-icons";
 import {
   faChartArea, faCircle,
-  faEye, faFilter, faFlag, faPatreon,
+  faEye, faFilter, faFlag,
   faInfoCircle, faLink,
   faPercent,
   faPollH,
