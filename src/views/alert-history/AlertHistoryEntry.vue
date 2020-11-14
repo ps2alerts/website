@@ -103,7 +103,7 @@ import {DATE_TIME_FORMAT_SHORT} from "@/constants/Time";
 import {Faction} from "@/constants/Faction";
 
 export default defineComponent({
-  name: "AllAlertsEntry",
+  name: "AlertHistoryEntry",
   components: {
     FactionSegmentBar: defineAsyncComponent(() => import(/* webpackChunkName: "FactionSegmentBar" */ "@/components/common/FactionSegmentBar.vue")),
   },

@@ -794,5 +794,6 @@ module.exports = {
   corePlugins: {},
   plugins: [
     require('@tailwindcss/typography'),
+    require('@tailwindcss/ui'),
   ]
 };

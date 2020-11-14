@@ -5,58 +5,17 @@
     </h1>
     <p>Last updated: {{ lastUpdated }}</p>
   </div>
+  <div class="col-span-2 lg:col-span-3 ss:col-span-4">
+    <p>SELECTED WORLD: {{ selectedWorld }}</p>
+    <p>SELECTED ZONE: {{ selectedZone }}</p>
+    <p>SELECTED BRACKET: {{ selectedBracket }}</p>
+    <p>SELECTED DATE FROM: {{ selectedDateFrom }}</p>
+    <p>SELECTED DATE TO: {{ selectedDateTo }}</p>
+  </div>
   <div class="col-span-2 lg:col-span-3 ss:col-span-4 text-center">
     <div class="grid grid-cols-4">
-      <div class="col-span-1">
-        <h1 class="text-2xl">
-          Servers
-        </h1>
-        <div class="inline-flex flex-wrap justify-center">
-          <button class="btn btn-sm btn-alt">
-            All
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Connery
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Cobalt
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Emerald
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Miller
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Jaeger
-          </button>
-          <button class="btn btn-sm btn-alt">
-            SolTech
-          </button>
-        </div>
-      </div>
-      <div class="col-span-1">
-        <h1 class="text-2xl">
-          Continents
-        </h1>
-        <div class="inline-flex flex-wrap justify-center">
-          <button class="btn btn-sm btn-alt">
-            All
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Amerish
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Esamir
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Hosin
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Indar
-          </button>
-        </div>
-      </div>
+      <FilterWorld @world-changed="updateWorld" />
+      <FilterZone @zone-changed="updateZone" />
       <div class="col-span-1">
         <h1 class="text-2xl">
           Time Bracket
@@ -103,36 +62,56 @@
     </div>
   </div>
   <div class="col-span-2 lg:col-span-3 ss:col-span-4 text-center">
-    <div class="col-span-2 lg:col-span-3 ss:col-span-4 h-full items-center justify-center">
-      <AllAlertsEntry
+    <div
+      v-if="length > 0"
+      class="col-span-2 lg:col-span-3 ss:col-span-4 h-full items-center justify-center"
+    >
+      <AlertHistoryEntry
         v-for="alert in alerts"
         :key="alert.instanceId"
         :alert="alert"
       />
     </div>
+    <div
+      v-else
+      class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
+    />
+    <h1>No alerts found for specified criteria!</h1>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import AllAlertsEntry from "@/views/alert-history/AlertHistoryEntry.vue";
+import AlertHistoryEntry from "@/views/alert-history/AlertHistoryEntry.vue";
 import {InstanceTerritoryControlResponseInterface} from "@/interfaces/InstanceTerritoryControlResponseInterface";
 import ApiRequest from "@/api-request";
 import moment from "moment-timezone";
 import {DATE_TIME_FORMAT} from "@/constants/Time";
+import FilterWorld from "@/views/alert-history/FilterWorld.vue";
+import FilterZone from "@/views/alert-history/FilterZone.vue";
+import {World} from "@/constants/World";
+import {Zone} from "@/constants/Zone";
 
 export default defineComponent({
   name: "AlertHistory",
   components: {
-    AllAlertsEntry,
+    AlertHistoryEntry,
+    FilterWorld,
+    FilterZone,
   },
   data() {
     return {
       loading: true,
       error: null,
       alerts: new Map<string, InstanceTerritoryControlResponseInterface>(),
+      length: 0,
       ApiRequest: new ApiRequest(),
       lastUpdated: 'Fetching...',
+      selectedWorld: 0,
+      selectedZone: 0,
+      selectedBracket: '',
+      selectedDateFrom: null,
+      selectedDateTo: null,
     };
   },
   async created() {
@@ -150,15 +129,29 @@ export default defineComponent({
           this.loading = false;
           this.error = null;
           this.alerts = alerts.data;
+          this.length = Object.keys(this.alerts).length
         })
         .catch(e => {
           this.loading = false;
           this.error = e.message;
         });
       this.lastUpdated = moment().format(DATE_TIME_FORMAT)
+    },
+    updateWorld(world: World) {
+      this.selectedWorld = world;
+      this.filter();
+    },
+    updateZone(zone: Zone) {
+      this.selectedZone = zone
+      this.filter();
+    },
+    updateBracket(bracket: string) {
+      this.selectedBracket = bracket
+      this.filter();
+    },
+    async filter(): Promise<void> {
+      console.log('updated world', this.selectedWorld)
     }
   }
 });
 </script>
-
-<style scoped lang="scss"></style>
