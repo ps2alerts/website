@@ -1,8 +1,9 @@
 import {World} from "@/constants/World";
 import {Zone} from "@/constants/Zone";
 import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
+import {TerritoryResultInterface} from "@/interfaces/InstanceTerritoryResultInterface";
 
-export interface ActiveAlertInterface {
+export interface InstanceTerritoryControlResponseInterface {
   instanceId: string;
   censusInstanceId: string;
   world: World,
@@ -11,6 +12,6 @@ export interface ActiveAlertInterface {
   censusMetagameEventType: number;
   duration: number;
   state: Ps2alertsEventState;
-  result: object;
+  result: TerritoryResultInterface;
   remaining: number; // Calculated remaining time
 }

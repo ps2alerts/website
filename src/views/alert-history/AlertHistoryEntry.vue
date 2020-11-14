@@ -25,6 +25,7 @@
         :nc="alert.result.nc"
         :tr="alert.result.tr"
         :other="alert.result.cutoff"
+        :out-of-play="alert.result.outOfPlay"
       />
     </div>
     <div v-if="!alert.result">
