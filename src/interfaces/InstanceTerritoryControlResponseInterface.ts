@@ -2,6 +2,7 @@ import {World} from "@/constants/World";
 import {Zone} from "@/constants/Zone";
 import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
 import {TerritoryResultInterface} from "@/interfaces/InstanceTerritoryResultInterface";
+import {Bracket} from "@/constants/Bracket";
 
 export interface InstanceTerritoryControlResponseInterface {
   instanceId: string;
@@ -13,5 +14,5 @@ export interface InstanceTerritoryControlResponseInterface {
   duration: number;
   state: Ps2alertsEventState;
   result: TerritoryResultInterface;
-  remaining: number; // Calculated remaining time
+  // bracket: Bracket
 }

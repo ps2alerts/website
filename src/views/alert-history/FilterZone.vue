@@ -1,45 +1,31 @@
 <template>
-  <div class="col-span-1">
-    <h1 class="text-2xl">
-      Continents
-    </h1>
-    <div class="inline-flex flex-wrap justify-center">
-      <button
-        class="btn btn-sm btn-alt"
-        :class="{ 'btn-active': zone === 0}"
-        @click="changeZone(0)"
-      >
+  <div class="col-span-4 lg:col-span-2 lg:pl2 px-2 lg:pl-0">
+    <select
+      id="zone"
+      v-model="zone"
+      class="block w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
+      @change="changeZone()"
+    >
+      <option value="0">
         All
-      </button>
-      <button
-        class="btn btn-sm btn-alt"
-        :class="{ 'btn-active': zone === AMERISH}"
-        @click="changeZone(AMERISH)"
-      >
+      </option>
+      <option :value="AMERISH">
         Amerish
-      </button>
-      <button
-        class="btn btn-sm btn-alt"
-        :class="{ 'btn-active': zone === ESAMIR}"
-        @click="changeZone(ESAMIR)"
-      >
+      </option>
+      <option :value="ESAMIR">
         Esamir
-      </button>
-      <button
-        class="btn btn-sm btn-alt"
-        :class="{ 'btn-active': zone === HOSSIN}"
-        @click="changeZone(HOSSIN)"
-      >
+      </option>
+      <option :value="HOSSIN">
         Hossin
-      </button>
-      <button
-        class="btn btn-sm btn-alt"
-        :class="{ 'btn-active': zone === INDAR}"
-        @click="changeZone(INDAR)"
-      >
+      </option>
+      <option :value="INDAR">
         Indar
-      </button>
-    </div>
+      </option>
+    </select>
+    <label
+      class="text-center text-sm"
+      for="zone"
+    >Continent</label>
   </div>
 </template>
 
@@ -60,10 +46,9 @@ export default defineComponent({
     }
   },
   methods: {
-    changeZone(zone: Zone): void {
-      this.zone = zone
+    changeZone(): void {
       console.log('Zone', this.zone);
-      this.$emit('zone-changed', zone)
+      this.$emit('zone-changed', this.zone)
     }
   }
 });

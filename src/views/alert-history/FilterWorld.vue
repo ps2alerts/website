@@ -1,74 +1,43 @@
 <template>
-  <div class="col-span-1">
-    <h1 class="text-2xl">
-      Servers
-    </h1>
-    <div class="inline-flex flex-wrap justify-center">
-      <button
-        class="btn btn-sm btn-alt"
-        :class="{ 'btn-active': world === 0}"
-        @click="changeWorld(0)"
-      >
+  <div class="col-span-4 lg:col-span-2 lg:col-start-2 lg:pl2 px-2 lg:pl-0">
+    <select
+      id="server"
+      v-model="world"
+      class="block w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
+      @change="changeWorld()"
+    >
+      <option value="0">
         All
-      </button>
-      <button
-        class="btn btn-sm btn-alt"
-        :class="{ 'btn-active': world === CERES}"
-        @click="changeWorld(CERES)"
-      >
+      </option>
+      <option :value="CERES">
         Ceres (PS4)
-      </button>
-      <button
-        class="btn btn-sm btn-alt"
-        :class="{ 'btn-active': world === COBALT}"
-        @click="changeWorld(COBALT)"
-      >
+      </option>
+      <option :value="COBALT">
         Cobalt
-      </button>
-      <button
-        class="btn btn-sm btn-alt"
-        :class="{ 'btn-active': world === CONNERY}"
-        @click="changeWorld(CONNERY)"
-      >
+      </option>
+      <option :value="CONNERY">
         Connery
-      </button>
-      <button
-        class="btn btn-sm btn-alt"
-        :class="{ 'btn-active': world === EMERALD}"
-        @click="changeWorld(EMERALD)"
-      >
+      </option>
+      <option :value="EMERALD">
         Emerald
-      </button>
-      <button
-        class="btn btn-sm btn-alt"
-        :class="{ 'btn-active': world === GENUDINE}"
-        @click="changeWorld(GENUDINE)"
-      >
+      </option>
+      <option :value="GENUDINE">
         Genudine (PS4)
-      </button>
-      <button
-        class="btn btn-sm btn-alt"
-        :class="{ 'btn-active': world === JAEGER}"
-        @click="changeWorld(JAEGER)"
-      >
-        Jaeger
-      </button>
-      <button
-        class="btn btn-sm btn-alt"
-        :class="{ 'btn-active': world === MILLER}"
-        @click="changeWorld(MILLER)"
-      >
+      </option>
+      <option :value="JAEGER">
+        Jaeger (PC Events)
+      </option>
+      <option :value="MILLER">
         Miller
-      </button>
-
-      <button
-        class="btn btn-sm btn-alt"
-        :class="{ 'btn-active': world === SOLTECH}"
-        @click="changeWorld(SOLTECH)"
-      >
-        SolTech
-      </button>
-    </div>
+      </option>
+      <option :value="SOLTECH">
+        Soltech
+      </option>
+    </select>
+    <label
+      class="text-center text-sm"
+      for="server"
+    >Server</label>
   </div>
 </template>
 
@@ -93,10 +62,9 @@ export default defineComponent({
     }
   },
   methods: {
-    changeWorld(world: World): void {
-      this.world = world
+    changeWorld(): void {
       console.log('World', this.world);
-      this.$emit('world-changed', world)
+      this.$emit('world-changed', this.world)
     }
   }
 });

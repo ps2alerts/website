@@ -44,6 +44,9 @@
     &:hover {
       @apply bg-red-800;
     }
+    &:disabled {
+      @apply bg-gray-500;
+    }
   }
   .btn-sm {
     @apply text-sm py-1 px-2 rounded;
