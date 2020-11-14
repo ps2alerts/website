@@ -89,7 +89,7 @@
 <script lang="ts">
 import {defineAsyncComponent, defineComponent} from "vue";
 import ApiRequest from "@/api-request";
-import {ActiveAlertInterface} from "@/interfaces/ActiveAlertInterface";
+import {InstanceTerritoryControlResponseInterface} from "@/interfaces/InstanceTerritoryControlResponseInterface";
 import {AlertPopulationInterface} from "@/interfaces/AlertPopulationInterface";
 import {TIME_FORMAT} from "@/constants/Time";
 import moment from "moment-timezone";
@@ -105,7 +105,7 @@ export default defineComponent({
       error: null,
       lastUpdated: 'fetching...',
       popsLastUpdated: 'fetching...',
-      actives: new Map<string, ActiveAlertInterface>(),
+      actives: new Map<string, InstanceTerritoryControlResponseInterface>(),
       populations: new Map<string, AlertPopulationInterface>(),
       ApiRequest: new ApiRequest(),
       mode: 'territory',
@@ -147,7 +147,7 @@ export default defineComponent({
         });
     },
     async alertPops(): Promise<void> {
-      this.actives.forEach((instance: ActiveAlertInterface) => {
+      this.actives.forEach((instance: InstanceTerritoryControlResponseInterface) => {
         void this.ApiRequest.client
           .get(`/aggregates/instance/${instance.instanceId}/population?sortBy=timestamp&order=desc&pageSize=1`)
           .then(data => {

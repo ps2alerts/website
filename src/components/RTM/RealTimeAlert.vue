@@ -34,6 +34,7 @@
         :nc="result.nc"
         :tr="result.tr"
         :other="result.cutoff"
+        :out-of-play="result.outOfPlay"
       />
     </div>
     <div v-show="mode === 'pops'">
@@ -114,7 +115,7 @@ export default defineComponent({
           nc: 33,
           tr: 33,
           nso: 33,
-          total: 33,
+          outofPlay: 33,
         }
       }
     }

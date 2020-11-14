@@ -86,7 +86,8 @@
         :nc="alert.result.nc"
         :tr="alert.result.tr"
         :other="alert.result.cutoff"
-        :display-cutoff-percent="2"
+        :out-of-play="alert.result.outOfPlay"
+        :dropoff-percent="2"
       />
     </div>
     <div v-if="!alert.result">

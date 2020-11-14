@@ -116,7 +116,7 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import AllAlertsEntry from "@/views/alert-history/AlertHistoryEntry.vue";
-import {ActiveAlertInterface} from "@/interfaces/ActiveAlertInterface";
+import {InstanceTerritoryControlResponseInterface} from "@/interfaces/InstanceTerritoryControlResponseInterface";
 import ApiRequest from "@/api-request";
 import moment from "moment-timezone";
 import {DATE_TIME_FORMAT} from "@/constants/Time";
@@ -130,7 +130,7 @@ export default defineComponent({
     return {
       loading: true,
       error: null,
-      alerts: new Map<string, ActiveAlertInterface>(),
+      alerts: new Map<string, InstanceTerritoryControlResponseInterface>(),
       ApiRequest: new ApiRequest(),
       lastUpdated: 'Fetching...',
     };

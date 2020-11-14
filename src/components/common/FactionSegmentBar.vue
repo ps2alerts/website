@@ -19,14 +19,21 @@
     <div
       class="faction-bar-segment nc text-center text-white"
       :style="{ width: percentNC+'%' }"
-      :class="{'rounded-r': other === 0}"
+      :class="{'rounded-r': other === 0 && outOfPlay === 0}"
     >
       {{ ncString }}
     </div>
     <div
       class="faction-bar-segment nso text-center text-white"
       :style="{ width: percentOther+'%' }"
-      :class="{'rounded-r': other > 0}"
+      :class="{'rounded-r': other > 0 && outOfPlay === 0}"
+    >
+      {{ otherString }}
+    </div>
+    <div
+      class="faction-bar-segment outofplay text-center text-white"
+      :style="{ width: percentOutOfPlay+'%' }"
+      :class="{'rounded-r': outOfPlay > 0}"
     >
       {{ otherString }}
     </div>
@@ -57,10 +64,15 @@ export default defineComponent({
       default: 33,
       required: true
     },
-    other: {
+    other: { // Currently used for cutoffs & representing NSO
       type: Number,
       default: 0,
       required: true
+    },
+    outOfPlay: {
+      type: Number,
+      default: 0,
+      required: false
     },
     isPercentage: {
       type: Boolean,
@@ -72,15 +84,15 @@ export default defineComponent({
       default: true,
       required: false
     },
-    displayCutoffPercent: {
+    dropoffPercent: {
       type: Number,
       default: 5,
       required: false,
-    }
+    },
   },
   computed: {
     total(): number {
-      return this.vs + this.nc + this.tr + this.other;
+      return this.vs + this.nc + this.tr + this.other + this.outOfPlay;
     },
     percentVS(): number {
       return this.vs / this.total * 100;
@@ -94,44 +106,31 @@ export default defineComponent({
     percentOther(): number {
       return this.other / this.total * 100;
     },
+    percentOutOfPlay(): number {
+      return this.outOfPlay / this.total * 100;
+    },
     percentRemainder(): number {
       return (this.total - this.vs - this.nc - this.tr - this.other) / 3;
     },
     vsString(): string {
-      if (this.showAsCalculatedPercentage) {
-        return this.percentVS > this.displayCutoffPercent ? `${this.percentVS.toFixed(0)}%` : ''
-      }
-      if (this.isPercentage) {
-        return this.vs > this.displayCutoffPercent ? `${this.vs}%` : ''
-      }
-      return this.percentVS > this.displayCutoffPercent ? `${this.vs}` : ''
+      const value = this.percentVS.toFixed(0);
+      const suffix = this.isPercentage ? '%' : '';
+      return this.percentVS > this.dropoffPercent ? `${value}${suffix}` : '';
     },
     ncString(): string {
-      if (this.showAsCalculatedPercentage) {
-        return this.percentNC > this.displayCutoffPercent ? `${this.percentNC.toFixed(0)}%` : ''
-      }
-      if (this.isPercentage) {
-        return this.nc > this.displayCutoffPercent ? `${this.nc}%` : ''
-      }
-      return this.percentNC > this.displayCutoffPercent ? `${this.nc}` : ''
+      const value = this.percentNC.toFixed(0);
+      const suffix = this.isPercentage ? '%' : '';
+      return this.percentNC > this.dropoffPercent ? `${value}${suffix}` : '';
     },
     trString(): string {
-      if (this.showAsCalculatedPercentage) {
-        return this.percentTR > this.displayCutoffPercent ? `${this.percentTR.toFixed(0)}%` : ''
-      }
-      if (this.isPercentage) {
-        return this.tr > this.displayCutoffPercent ? `${this.tr}%` : ''
-      }
-      return this.percentTR > this.displayCutoffPercent ? `${this.tr}` : ''
+      const value = this.percentTR.toFixed(0);
+      const suffix = this.isPercentage ? '%' : '';
+      return this.percentTR > this.dropoffPercent ? `${value}${suffix}` : '';
     },
     otherString(): string {
-      if (this.showAsCalculatedPercentage) {
-        return this.percentOther > this.displayCutoffPercent ? `${this.percentOther.toFixed(0)}%` : ''
-      }
-      if (this.isPercentage) {
-        return this.other > this.displayCutoffPercent ? `${this.other}%` : ''
-      }
-      return this.percentOther > this.displayCutoffPercent ? `${this.other}` : ''
+      const value = this.percentOther.toFixed(0);
+      const suffix = this.isPercentage ? '%' : '';
+      return this.percentOther > this.dropoffPercent ? `${value}${suffix}` : '';
     },
   },
 });
