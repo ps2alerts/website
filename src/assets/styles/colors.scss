@@ -11,6 +11,10 @@
   .nso {
     @apply bg-gray-600;
   }
+  .outofplay {
+    @apply bg-gray-800;
+    background: repeating-linear-gradient(45deg, #801a1a, #631c1c 10px, #881a1a 10px, #b94b4b 20px);
+  }
 
   .text-vs {
     @apply text-purple-500;
