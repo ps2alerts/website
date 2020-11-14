@@ -34,9 +34,7 @@
       class="faction-bar-segment outofplay text-center text-white"
       :style="{ width: percentOutOfPlay+'%' }"
       :class="{'rounded-r': outOfPlay > 0}"
-    >
-      {{ otherString }}
-    </div>
+    />
   </div>
   <p v-show="total === 0">
     Awaiting data...
