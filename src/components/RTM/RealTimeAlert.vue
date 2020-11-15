@@ -44,7 +44,7 @@
         :tr="pops.tr"
         :other="pops.nso"
         :show-as-calculated-percentage="isPercentage"
-        :is-percentage="false"
+        :is-percentage="isPercentage"
       />
     </div>
   </div>

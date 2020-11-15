@@ -111,22 +111,22 @@ export default defineComponent({
       return (this.total - this.vs - this.nc - this.tr - this.other) / 3;
     },
     vsString(): string {
-      const value = this.percentVS.toFixed(0);
+      const value = this.showAsCalculatedPercentage ? this.percentVS.toFixed(0) : this.vs;
       const suffix = this.isPercentage ? '%' : '';
       return this.percentVS > this.dropoffPercent ? `${value}${suffix}` : '';
     },
     ncString(): string {
-      const value = this.percentNC.toFixed(0);
+      const value = this.showAsCalculatedPercentage ? this.percentNC.toFixed(0) : this.nc;
       const suffix = this.isPercentage ? '%' : '';
       return this.percentNC > this.dropoffPercent ? `${value}${suffix}` : '';
     },
     trString(): string {
-      const value = this.percentTR.toFixed(0);
+      const value = this.showAsCalculatedPercentage ? this.percentTR.toFixed(0) : this.tr;
       const suffix = this.isPercentage ? '%' : '';
       return this.percentTR > this.dropoffPercent ? `${value}${suffix}` : '';
     },
     otherString(): string {
-      const value = this.percentOther.toFixed(0);
+      const value = this.showAsCalculatedPercentage ? this.percentOther.toFixed(0) : this.other;
       const suffix = this.isPercentage ? '%' : '';
       return this.percentOther > this.dropoffPercent ? `${value}${suffix}` : '';
     },
