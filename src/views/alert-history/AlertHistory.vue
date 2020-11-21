@@ -7,25 +7,25 @@
   </div>
   <div class="col-span-2 lg:col-span-3 ss:col-span-4 text-center">
     <div class="grid grid-cols-12 gap-2">
-      <div class="col-span-4 lg:col-span-2 lg:col-start-3">
+      <div class="col-span-6 lg:col-span-2 lg:col-start-3">
         <FilterWorld
           :world-filter="selectedWorld"
           @world-changed="updateWorld"
         />
       </div>
-      <div class="col-span-4 lg:col-span-2">
+      <div class="col-span-6 lg:col-span-2">
         <FilterZone
           :zone-filter="selectedZone"
           @zone-changed="updateZone"
         />
       </div>
-      <div class="col-span-4 lg:col-span-2">
+      <div class="col-span-6 lg:col-span-2">
         <FilterBracket
           :bracket-filter="selectedBracket"
           @bracket-changed="updateBracket"
         />
       </div>
-      <div class="col-span-4 lg:col-span-2">
+      <div class="col-span-6 lg:col-span-2">
         <FilterVictor
           :victor-filter="selectedVictor"
           @Victor-changed="updateVictor"

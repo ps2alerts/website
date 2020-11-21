@@ -15,7 +15,7 @@
       />
     </div>
     <div class="grid grid-cols-4 lg:grid-cols-6 place-items-center mb-2 lg:mb-4 text-center">
-      <div class="col-span-2 lg:col-span-1 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
+      <div class="col-span-2 lg:col-span-1 text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
         <div v-show="alert.state === 1">
           <div class="mb-1">
             {{ started }}
@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      <div class="col-span-2 lg:col-span-1 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
+      <div class="col-span-2 lg:col-span-1 text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
         <div class="mb-1">
           {{ $filters.worldName(alert.world) }}
         </div>
@@ -41,7 +41,7 @@
           Server
         </div>
       </div>
-      <div class="col-span-2 lg:col-span-1 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
+      <div class="col-span-2 lg:col-span-1 text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
         <div class="mb-1">
           {{ $filters.zoneName(alert.zone) }}
         </div>
@@ -49,7 +49,7 @@
           Continent
         </div>
       </div>
-      <div class="col-span-2 lg:col-span-1 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
+      <div class="col-span-2 lg:col-span-1 text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
         <div class="mb-1">
           <span v-show="alert.state === 1">TBD</span>
           <span v-show="alert.state === 2 && draw">Draw</span>
@@ -59,7 +59,7 @@
           Victor
         </div>
       </div>
-      <div class="col-span-2 lg:col-span-1 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
+      <div class="col-span-2 lg:col-span-1 text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
         <div class="mb-1">
           {{ $filters.bracketName(alert.bracket) }}
         </div>
@@ -67,7 +67,7 @@
           Bracket
         </div>
       </div>
-      <div class="col-span-2 lg:col-span-1 lg col-start-2 lg:col-start-6 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
+      <div class="col-span-2 lg:col-span-1 lg:col-start-6 text-sm lg:text-xl ss:text-2xl mb-2 lg:mb-0">
         <router-link
           class="btn btn-sm"
           :to="{ name: 'Alert', params: { instanceId: alert.instanceId }}"

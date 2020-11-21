@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-4 lg:col-start-3">
+  <div class="col-span-6 lg:col-start-3">
     <input
       id="dateFrom"
       v-model="dateFrom"
@@ -14,7 +14,7 @@
       From
     </label>
   </div>
-  <div class="col-span-4">
+  <div class="col-span-6">
     <input
       id="dateTo"
       v-model="dateTo"

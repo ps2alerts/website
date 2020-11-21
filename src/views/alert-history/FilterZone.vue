@@ -6,7 +6,7 @@
     @change="changeZone()"
   >
     <option value="0">
-      All
+      Any
     </option>
     <option :value="AMERISH">
       Amerish

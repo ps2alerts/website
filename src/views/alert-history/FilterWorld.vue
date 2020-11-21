@@ -6,7 +6,7 @@
     @change="changeWorld()"
   >
     <option value="0">
-      All
+      Any
     </option>
     <option :value="CERES">
       Ceres (PS4)
