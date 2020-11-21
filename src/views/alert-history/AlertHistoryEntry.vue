@@ -1,7 +1,7 @@
 <template>
   <div
     class="px-4 py-4 mb-2 bg-tint rounded relative"
-    :class="VictorClass"
+    :class="victorClass"
   >
     <div
       v-show="alert.state === 1"
@@ -53,7 +53,7 @@
         <div class="mb-1">
           <span v-show="alert.state === 1">TBD</span>
           <span v-show="alert.state === 2 && draw">Draw</span>
-          <span v-show="alert.state === 2 && !draw">{{ $filters.factionName(Victor) }}</span>
+          <span v-show="alert.state === 2 && !draw">{{ $filters.factionName(victor) }}</span>
         </div>
         <div class="text-xs text-gray-500">
           Victor
@@ -120,21 +120,21 @@ export default defineComponent({
     ended(): string {
       return moment(this.alert.timeEnded).format(DATE_TIME_FORMAT_SHORT);
     },
-    VictorClass(): object {
-      if (!this.alert.result || !this.alert.result.Victor) {
+    victorClass(): object {
+      if (!this.alert.result || !this.alert.result.victor) {
         return {};
       }
       return {
-        'bg-vs': this.alert.result.Victor === Faction.VANU_SOVEREIGNTY,
-        'bg-nc': this.alert.result.Victor === Faction.NEW_CONGLOMERATE,
-        'bg-tr': this.alert.result.Victor === Faction.TERRAN_REPUBLIC,
+        'bg-vs': this.alert.result.victor === Faction.VANU_SOVEREIGNTY,
+        'bg-nc': this.alert.result.victor === Faction.NEW_CONGLOMERATE,
+        'bg-tr': this.alert.result.victor === Faction.TERRAN_REPUBLIC,
       }
     },
     draw(): boolean {
       return this.alert.result ? this.alert.result.draw : false
     },
-    Victor(): Faction {
-      return this.alert.result ? this.alert.result.Victor : null
+    victor(): Faction {
+      return this.alert.result ? this.alert.result.victor : null
     }
   }
 });
