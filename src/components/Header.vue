@@ -23,7 +23,7 @@
     </div>
     <div class="w-full block text-center">
       <p class="text-white text-xs">
-        This is <b>not</b> representative of the final product and is subject to vast changes!
+        This is <b>not</b> representative of the final product and is subject to vast changes and data wipes!
       </p>
     </div>
   </header>
