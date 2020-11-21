@@ -1,9 +1,9 @@
 <template>
-  <div class="col-span-6 lg:col-start-3">
+  <div class="col-span-6 lg:col-span-4 lg:col-start-3">
     <input
       id="dateFrom"
       v-model="dateFrom"
-      class="w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
+      class="w-full bg-tint border border-gray-600 py-3 px-4 rounded"
       type="datetime-local"
       @change="changeDate()"
     ><br>
@@ -14,11 +14,11 @@
       From
     </label>
   </div>
-  <div class="col-span-6">
+  <div class="col-span-6 lg:col-span-4">
     <input
       id="dateTo"
       v-model="dateTo"
-      class="w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
+      class="w-full bg-tint border border-gray-600 py-3 px-4 rounded"
       type="datetime-local"
       @change="changeDate()"
     ><br>
