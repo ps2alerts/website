@@ -26,9 +26,9 @@
         />
       </div>
       <div class="col-span-4 lg:col-span-2">
-        <FilterWinner
-          :winner-filter="selectedWinner"
-          @winner-changed="updateWinner"
+        <FilterVictor
+          :victor-filter="selectedVictor"
+          @Victor-changed="updateVictor"
         />
       </div>
       <FilterDate @date-changed="updateDate" />
@@ -97,7 +97,7 @@ import ApiRequest from "@/api-request";
 import {DATE_TIME_FORMAT} from "@/constants/Time";
 import FilterWorld from "@/views/alert-history/FilterWorld.vue";
 import FilterZone from "@/views/alert-history/FilterZone.vue";
-import FilterWinner from "@/views/alert-history/FilterWinner.vue";
+import FilterVictor from "@/views/alert-history/FilterVictor.vue";
 import FilterBracket from "@/views/alert-history/FilterBracket.vue";
 import FilterDate from "@/views/alert-history/FilterDate.vue";
 import {World} from "@/constants/World";
@@ -114,7 +114,7 @@ export default defineComponent({
     FilterWorld,
     FilterZone,
     FilterBracket,
-    FilterWinner,
+    FilterVictor,
     FilterDate,
   },
   data() {
@@ -130,7 +130,7 @@ export default defineComponent({
       selectedWorld: 0,
       selectedZone: 0,
       selectedBracket: Bracket.NONE,
-      selectedWinner: Faction.NONE,
+      selectedVictor: Faction.NONE,
       selectedDateFrom: now,
       selectedDateTo: now,
       dateNow: now
@@ -145,7 +145,7 @@ export default defineComponent({
       if (this.selectedWorld > 0) filter.world = this.selectedWorld;
       if (this.selectedZone > 0) filter.zone = this.selectedZone;
       if (this.selectedBracket !== Bracket.NONE) filter.bracket = this.selectedBracket;
-      if (this.selectedWinner !== Faction.NONE) filter.winner = this.selectedWinner;
+      if (this.selectedVictor !== Faction.NONE) filter.victor = this.selectedVictor;
       if (this.selectedDateFrom !== this.dateNow && this.selectedDateTo !== this.dateNow) {
         filter.timeStartedFrom = this.selectedDateFrom.format('x');
         filter.timeStartedTo = this.selectedDateTo.format('x');
@@ -185,8 +185,8 @@ export default defineComponent({
     updateBracket(bracket: Bracket) {
       this.selectedBracket = bracket
     },
-    updateWinner(winner: Faction) {
-      this.selectedWinner = winner
+    updateVictor(victor: Faction) {
+      this.selectedVictor = victor
     },
     updateDate(dates: {dateFrom: moment.Moment, dateTo: moment.Moment}) {
       this.selectedDateFrom = dates.dateFrom.utc(); // This converts the user's time back into UTC
@@ -202,7 +202,7 @@ export default defineComponent({
       this.selectedWorld = 0;
       this.selectedZone = 0;
       this.selectedBracket = Bracket.NONE;
-      this.selectedWinner = Faction.NONE;
+      this.selectedVictor = Faction.NONE;
       this.selectedDateFrom = now;
       this.selectedDateTo = now;
       this.dateNow = now;

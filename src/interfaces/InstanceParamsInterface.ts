@@ -4,7 +4,7 @@ import {Faction} from "@/constants/Faction";
 
 export interface InstanceParamsInterface extends CommonApiParamsInterface {
   bracket?: Bracket
-  winner?: Faction
+  victor?: Faction
   timeStartedFrom?: string
   timeStartedTo?: string
 }

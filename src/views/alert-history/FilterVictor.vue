@@ -1,9 +1,9 @@
 <template>
   <select
-    id="winner"
-    v-model="winner"
+    id="victor"
+    v-model="victor"
     class="block w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
-    @change="changeWinner()"
+    @change="changeVictor()"
   >
     <option :value="NONE">
       Any
@@ -20,8 +20,8 @@
   </select>
   <label
     class="text-center text-sm"
-    for="winner"
-  >Winner</label>
+    for="victor"
+  >Victor</label>
 </template>
 
 <script lang="ts">
@@ -29,17 +29,17 @@ import { defineComponent } from "vue";
 import {Faction} from "@/constants/Faction";
 
 export default defineComponent({
-  name: "FilterWinner",
+  name: "FilterVictor",
   props: {
-    winnerFilter: {
+    victorFilter: {
       type: Number,
       default: 0
     }
   },
-  emits: ['winner-changed'],
+  emits: ['victor-changed'],
   data: function() {
     return {
-      winner: Faction.NONE,
+      victor: Faction.NONE,
       NONE: Faction.NONE,
       VANU_SOVEREIGNTY: Faction.VANU_SOVEREIGNTY,
       NEW_CONGLOMERATE: Faction.NEW_CONGLOMERATE,
@@ -47,14 +47,13 @@ export default defineComponent({
     }
   },
   watch: {
-    winnerFilter(winner: Faction): void {
-      this.winner = winner
+    victorFilter(Victor: Faction): void {
+      this.victor = Victor
     }
   },
   methods: {
-    changeWinner(): void {
-      console.log('Winner', this.winner);
-      this.$emit('winner-changed', this.winner)
+    changeVictor(): void {
+      this.$emit('victor-changed', this.victor)
     }
   }
 });
