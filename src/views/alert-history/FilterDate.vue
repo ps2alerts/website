@@ -1,35 +1,33 @@
 <template>
-  <div class="col-span-4 lg:col-span-8 lg:col-start-2 mt-2 inline-flex">
-    <div>
-      <input
-        id="dateFrom"
-        v-model="dateFrom"
-        class="bg-tint border border-gray-600 py-3 px-4 pr-8 rounded mr-0 lg:mr-2"
-        type="datetime-local"
-        @change="changeDate()"
-      ><br>
-      <label
-        class="text-center text-sm"
-        for="dateFrom"
-      >
-        From
-      </label>
-    </div>
-    <div>
-      <input
-        id="dateTo"
-        v-model="dateTo"
-        class="bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
-        type="datetime-local"
-        @change="changeDate()"
-      ><br>
-      <label
-        class="text-center text-sm"
-        for="dateTo"
-      >
-        To
-      </label>
-    </div>
+  <div class="col-span-4 lg:col-start-3">
+    <input
+      id="dateFrom"
+      v-model="dateFrom"
+      class="w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
+      type="datetime-local"
+      @change="changeDate()"
+    ><br>
+    <label
+      class="text-center text-sm"
+      for="dateFrom"
+    >
+      From
+    </label>
+  </div>
+  <div class="col-span-4">
+    <input
+      id="dateTo"
+      v-model="dateTo"
+      class="w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
+      type="datetime-local"
+      @change="changeDate()"
+    ><br>
+    <label
+      class="text-center text-sm"
+      for="dateTo"
+    >
+      To
+    </label>
   </div>
 </template>
 

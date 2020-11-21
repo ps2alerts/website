@@ -1,32 +1,30 @@
 <template>
-  <div class="col-span-4 lg:col-span-2 lg:pl2 px-2 lg:pl-0">
-    <select
-      id="zone"
-      v-model="zone"
-      class="block w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
-      @change="changeZone()"
-    >
-      <option value="0">
-        All
-      </option>
-      <option :value="AMERISH">
-        Amerish
-      </option>
-      <option :value="ESAMIR">
-        Esamir
-      </option>
-      <option :value="HOSSIN">
-        Hossin
-      </option>
-      <option :value="INDAR">
-        Indar
-      </option>
-    </select>
-    <label
-      class="text-center text-sm"
-      for="zone"
-    >Continent</label>
-  </div>
+  <select
+    id="zone"
+    v-model="zone"
+    class="block w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
+    @change="changeZone()"
+  >
+    <option value="0">
+      All
+    </option>
+    <option :value="AMERISH">
+      Amerish
+    </option>
+    <option :value="ESAMIR">
+      Esamir
+    </option>
+    <option :value="HOSSIN">
+      Hossin
+    </option>
+    <option :value="INDAR">
+      Indar
+    </option>
+  </select>
+  <label
+    class="text-center text-sm"
+    for="zone"
+  >Continent</label>
 </template>
 
 <script lang="ts">
@@ -35,6 +33,12 @@ import {Zone} from "@/constants/Zone";
 
 export default defineComponent({
   name: "FilterZone",
+  props: {
+    zoneFilter: {
+      type: Number,
+      default: 0
+    }
+  },
   emits: ['zone-changed'],
   data: function() {
     return {
@@ -43,6 +47,11 @@ export default defineComponent({
       ESAMIR: Zone.ESAMIR,
       HOSSIN: Zone.HOSSIN,
       INDAR: Zone.INDAR,
+    }
+  },
+  watch: {
+    zoneFilter(zone: Zone | 0): void {
+      this.zone = zone
     }
   },
   methods: {

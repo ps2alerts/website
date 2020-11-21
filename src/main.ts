@@ -2,11 +2,12 @@ import { createApp } from 'vue';
 import router from "./router";
 import App from "@/App.vue";
 import store from "./store";
+import {AlertRemainingTime} from "@/filters/AlertRemainingTime";
+import {AlertEndTime} from "@/filters/AlertEndTime";
 import {WorldName} from "@/filters/WorldName";
 import {ZoneName} from "@/filters/ZoneName";
 import {FactionName} from "@/filters/FactionName";
-import {AlertRemainingTime} from "@/filters/AlertRemainingTime";
-import {AlertEndTime} from "@/filters/AlertEndTime";
+import {BracketName} from "@/filters/BracketName";
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {faDiscord, faGithub, faPatreon, faTwitter} from "@fortawesome/free-brands-svg-icons";
@@ -16,7 +17,7 @@ import {
   faInfoCircle, faLink,
   faPercent,
   faPollH,
-  faTasks, faUser
+  faTasks, faUndo, faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import VueGtag from "vue-gtag-next";
 
@@ -26,10 +27,11 @@ app.config.globalProperties.$filters = {
   alertEndTime: AlertEndTime,
   worldName: WorldName,
   zoneName: ZoneName,
-  factionName: FactionName
+  factionName: FactionName,
+  bracketName: BracketName
 }
 
-library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink, faUser, faFlag, faPatreon, faFilter);
+library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink, faUser, faFlag, faPatreon, faFilter, faUndo);
 app.component('FontAwesomeIcon', FontAwesomeIcon)
 
 app.use(store)

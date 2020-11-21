@@ -1,44 +1,42 @@
 <template>
-  <div class="col-span-4 lg:col-span-2 lg:col-start-2 lg:pl2 px-2 lg:pl-0">
-    <select
-      id="server"
-      v-model="world"
-      class="block w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
-      @change="changeWorld()"
-    >
-      <option value="0">
-        All
-      </option>
-      <option :value="CERES">
-        Ceres (PS4)
-      </option>
-      <option :value="COBALT">
-        Cobalt
-      </option>
-      <option :value="CONNERY">
-        Connery
-      </option>
-      <option :value="EMERALD">
-        Emerald
-      </option>
-      <option :value="GENUDINE">
-        Genudine (PS4)
-      </option>
-      <option :value="JAEGER">
-        Jaeger (PC Events)
-      </option>
-      <option :value="MILLER">
-        Miller
-      </option>
-      <option :value="SOLTECH">
-        Soltech
-      </option>
-    </select>
-    <label
-      class="text-center text-sm"
-      for="server"
-    >Server</label>
-  </div>
+  <select
+    id="server"
+    v-model="world"
+    class="block w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
+    @change="changeWorld()"
+  >
+    <option value="0">
+      All
+    </option>
+    <option :value="CERES">
+      Ceres (PS4)
+    </option>
+    <option :value="COBALT">
+      Cobalt
+    </option>
+    <option :value="CONNERY">
+      Connery
+    </option>
+    <option :value="EMERALD">
+      Emerald
+    </option>
+    <option :value="GENUDINE">
+      Genudine (PS4)
+    </option>
+    <option :value="JAEGER">
+      Jaeger (PC Events)
+    </option>
+    <option :value="MILLER">
+      Miller
+    </option>
+    <option :value="SOLTECH">
+      Soltech
+    </option>
+  </select>
+  <label
+    class="text-center text-sm"
+    for="server"
+  >Server</label>
 </template>
 
 <script lang="ts">
@@ -47,6 +45,12 @@ import {World} from "@/constants/World";
 
 export default defineComponent({
   name: "FilterWorld",
+  props: {
+    worldFilter: {
+      type: Number,
+      default: 0
+    }
+  },
   emits: ['world-changed'],
   data: function() {
     return {
@@ -59,6 +63,11 @@ export default defineComponent({
       JAEGER: World.JAEGER,
       MILLER: World.MILLER,
       SOLTECH: World.SOLTECH,
+    }
+  },
+  watch: {
+    worldFilter(world: World | 0): void {
+      this.world = world
     }
   },
   methods: {

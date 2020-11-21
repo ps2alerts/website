@@ -1,9 +1,10 @@
 import {Bracket} from "@/constants/Bracket";
 import {CommonApiParamsInterface} from "@/interfaces/CommonApiParmsInterface";
-import {Moment} from "moment";
+import {Faction} from "@/constants/Faction";
 
 export interface InstanceParamsInterface extends CommonApiParamsInterface {
   bracket?: Bracket
-  timeStartedFrom?: Moment
-  timeStartedTo?: Moment
+  winner?: Faction
+  timeStartedFrom?: string
+  timeStartedTo?: string
 }

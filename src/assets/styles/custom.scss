@@ -1,21 +1,23 @@
 @layer base {
-  .bg-main {
-    background-color: #263239;
+  body {
+    background-image: url('../img/bg_tile.jpg');
+    background-repeat: repeat;
   }
+
   .bg-tint {
-    background-color: #37474f;
+    @apply bg-primary bg-opacity-80;
   }
   .bg-tint-light {
-    @apply bg-gray-600;
+    @apply bg-gray-600 bg-opacity-50;
   }
   .bg-vs {
-    @apply bg-purple-900;
+    @apply bg-purple-900 bg-opacity-50;
   }
   .bg-nc {
-    @apply bg-blue-900;
+    @apply bg-blue-900 bg-opacity-50;
   }
   .bg-tr {
-    @apply bg-red-900;
+    @apply bg-red-900 bg-opacity-50;
   }
 
   h1 {

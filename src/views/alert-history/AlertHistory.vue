@@ -5,27 +5,77 @@
     </h1>
     <p>Last updated: {{ lastUpdated }}</p>
   </div>
-  <div class="col-span-2 lg:col-span-3 ss:col-span-4">
-    <p>{{ filter }}</p>
-  </div>
   <div class="col-span-2 lg:col-span-3 ss:col-span-4 text-center">
-    <div class="grid grid-cols-8">
-      <FilterWorld @world-changed="updateWorld" />
-      <FilterZone @zone-changed="updateZone" />
-      <FilterBracket @bracket-changed="updateBracket" />
+    <div class="grid grid-cols-12 gap-2">
+      <div class="col-span-4 lg:col-span-2 lg:col-start-3">
+        <FilterWorld
+          :world-filter="selectedWorld"
+          @world-changed="updateWorld"
+        />
+      </div>
+      <div class="col-span-4 lg:col-span-2">
+        <FilterZone
+          :zone-filter="selectedZone"
+          @zone-changed="updateZone"
+        />
+      </div>
+      <div class="col-span-4 lg:col-span-2">
+        <FilterBracket
+          :bracket-filter="selectedBracket"
+          @bracket-changed="updateBracket"
+        />
+      </div>
+      <div class="col-span-4 lg:col-span-2">
+        <FilterWinner
+          :winner-filter="selectedWinner"
+          @winner-changed="updateWinner"
+        />
+      </div>
       <FilterDate @date-changed="updateDate" />
-      <div class="col-span-8 text-center mt-4">
+      <div class="col-span-12 text-center">
         <button
           class="btn"
           :disabled="loading === true"
-          @click="updateResults()"
+          @click="filterResults()"
         >
           <FontAwesomeIcon :icon="['fas', 'filter']" /> Filter
+        </button>
+        <button
+          class="btn"
+          :disabled="loading === true || (loading === false && filtered === false)"
+          @click="clearFilter()"
+        >
+          <FontAwesomeIcon :icon="['fas', 'undo']" /> Clear
         </button>
       </div>
     </div>
   </div>
   <div class="col-span-2 lg:col-span-3 ss:col-span-4 text-center">
+    <div
+      v-show="loading === false && length > 0"
+      class="col-span-2 lg:col-span-3 ss:col-span-4 text-center mb-4"
+    >
+      <p>{{ length }} alert{{ length > 1 ? 's' : '' }} found</p>
+    </div>
+    <div
+      v-show="loading === false && error.message === '' && length === 0"
+      class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
+    >
+      <h1>No alerts found for specified criteria!</h1>
+    </div>
+    <div
+      v-show="loading === true"
+      class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
+    >
+      <h1>Loading...</h1>
+    </div>
+    <div
+      v-show="error.message !== ''"
+      class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
+    >
+      <h1>Error loading results!</h1>
+      <p>{{ error.message }}</p>
+    </div>
     <div
       v-if="loading === false && length > 0"
       class="col-span-2 lg:col-span-3 ss:col-span-4 h-full items-center justify-center"
@@ -37,26 +87,6 @@
       />
     </div>
   </div>
-  <div
-    v-show="loading === false && error.message === '' && length === 0"
-    class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
-  >
-    <h1>No alerts found for specified criteria!</h1>
-  </div>
-  <div
-    v-show="loading === true"
-    class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
-  >
-    <h1>Loading...</h1>
-  </div>
-
-  <div
-    v-show="error.message !== ''"
-    class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
-  >
-    <h1>Error loading results!</h1>
-    <p>{{ error.message }}</p>
-  </div>
 </template>
 
 <script lang="ts">
@@ -67,13 +97,15 @@ import ApiRequest from "@/api-request";
 import {DATE_TIME_FORMAT} from "@/constants/Time";
 import FilterWorld from "@/views/alert-history/FilterWorld.vue";
 import FilterZone from "@/views/alert-history/FilterZone.vue";
+import FilterWinner from "@/views/alert-history/FilterWinner.vue";
+import FilterBracket from "@/views/alert-history/FilterBracket.vue";
+import FilterDate from "@/views/alert-history/FilterDate.vue";
 import {World} from "@/constants/World";
 import {Zone} from "@/constants/Zone";
-import FilterBracket from "@/views/alert-history/FilterBracket.vue";
 import {InstanceParamsInterface} from "@/interfaces/InstanceParamsInterface";
 import {Bracket} from "@/constants/Bracket";
-import FilterDate from "@/views/alert-history/FilterDate.vue";
 import moment from "moment";
+import {Faction} from "@/constants/Faction";
 
 export default defineComponent({
   name: "AlertHistory",
@@ -82,11 +114,14 @@ export default defineComponent({
     FilterWorld,
     FilterZone,
     FilterBracket,
+    FilterWinner,
     FilterDate,
   },
   data() {
+    const now = moment();
     return {
       loading: true,
+      filtered: false,
       error: {message: ''},
       alerts: new Map<string, InstanceTerritoryControlResponseInterface>(),
       length: 0,
@@ -95,9 +130,10 @@ export default defineComponent({
       selectedWorld: 0,
       selectedZone: 0,
       selectedBracket: Bracket.NONE,
-      selectedDateFrom: moment(),
-      selectedDateTo: moment(),
-      dateNow: moment()
+      selectedWinner: Faction.NONE,
+      selectedDateFrom: now,
+      selectedDateTo: now,
+      dateNow: now
     };
   },
   computed: {
@@ -109,13 +145,14 @@ export default defineComponent({
       if (this.selectedWorld > 0) filter.world = this.selectedWorld;
       if (this.selectedZone > 0) filter.zone = this.selectedZone;
       if (this.selectedBracket !== Bracket.NONE) filter.bracket = this.selectedBracket;
+      if (this.selectedWinner !== Faction.NONE) filter.winner = this.selectedWinner;
       if (this.selectedDateFrom !== this.dateNow && this.selectedDateTo !== this.dateNow) {
-        filter.timeStartedFrom = this.selectedDateFrom;
-        filter.timeStartedTo = this.selectedDateTo;
+        filter.timeStartedFrom = this.selectedDateFrom.format('x');
+        filter.timeStartedTo = this.selectedDateTo.format('x');
       }
 
       return filter;
-    }
+    },
   },
   async created() {
     document.title = 'Alert History';
@@ -148,12 +185,32 @@ export default defineComponent({
     updateBracket(bracket: Bracket) {
       this.selectedBracket = bracket
     },
-    updateDate(dates: {dateFrom: moment.Moment, dateTo: moment.Moment}) {
-      this.selectedDateFrom = dates.dateFrom;
-      this.selectedDateTo = dates.dateTo;
+    updateWinner(winner: Faction) {
+      this.selectedWinner = winner
     },
-    async updateResults(): Promise<void> {
+    updateDate(dates: {dateFrom: moment.Moment, dateTo: moment.Moment}) {
+      this.selectedDateFrom = dates.dateFrom.utc(); // This converts the user's time back into UTC
+      this.selectedDateTo = dates.dateTo.utc();
+    },
+    async filterResults(): Promise<void> {
+      // If filter keys length is 2, it hasn't changed therefore mark it as unfiltered.
+      this.filtered = Object.keys(this.filter).length !== 2;
       await this.pull();
+    },
+    clearFilter(): void {
+      const now = moment();
+      this.selectedWorld = 0;
+      this.selectedZone = 0;
+      this.selectedBracket = Bracket.NONE;
+      this.selectedWinner = Faction.NONE;
+      this.selectedDateFrom = now;
+      this.selectedDateTo = now;
+      this.dateNow = now;
+
+      if (this.filtered) {
+        this.filterResults();
+      }
+      this.filtered = false;
     }
   }
 });
