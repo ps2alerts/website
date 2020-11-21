@@ -53,9 +53,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-body {
-  margin: 0;
-}
 
 #app {
   @media (max-width: 1023px) {
@@ -74,6 +71,11 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
   }
+}
+
+#panel-left::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
 }
 
 #panel-right {
