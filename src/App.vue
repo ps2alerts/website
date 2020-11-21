@@ -70,6 +70,9 @@ body {
   }
   @media (min-width: 1024px) {
     position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 }
 

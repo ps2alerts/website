@@ -61,7 +61,7 @@
       </div>
       <div class="col-span-2 lg:col-span-1 text-sm md:text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0">
         <div class="mb-1">
-          BRACKET
+          {{ $filters.bracketName(alert.bracket) }}
         </div>
         <div class="text-xs text-gray-500">
           Bracket
@@ -103,7 +103,7 @@ import {DATE_TIME_FORMAT_SHORT} from "@/constants/Time";
 import {Faction} from "@/constants/Faction";
 
 export default defineComponent({
-  name: "AllAlertsEntry",
+  name: "AlertHistoryEntry",
   components: {
     FactionSegmentBar: defineAsyncComponent(() => import(/* webpackChunkName: "FactionSegmentBar" */ "@/components/common/FactionSegmentBar.vue")),
   },

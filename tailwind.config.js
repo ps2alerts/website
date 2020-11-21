@@ -129,7 +129,8 @@ module.exports = {
         700: "#b83280",
         800: "#97266d",
         900: "#702459"
-      }
+      },
+      primary: '#37474f'
     },
     spacing: {
       px: "1px",
@@ -389,7 +390,10 @@ module.exports = {
       0: "0",
       25: "0.25",
       50: "0.5",
-      75: "0.75",
+      60: "0.6",
+      70: "0.7",
+      80: "0.8",
+      90: "0.9",
       100: "1"
     },
     order: {
@@ -794,5 +798,6 @@ module.exports = {
   corePlugins: {},
   plugins: [
     require('@tailwindcss/typography'),
+    require('@tailwindcss/ui'),
   ]
 };

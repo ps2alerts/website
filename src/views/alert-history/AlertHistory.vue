@@ -6,105 +6,81 @@
     <p>Last updated: {{ lastUpdated }}</p>
   </div>
   <div class="col-span-2 lg:col-span-3 ss:col-span-4 text-center">
-    <div class="grid grid-cols-4">
-      <div class="col-span-1">
-        <h1 class="text-2xl">
-          Servers
-        </h1>
-        <div class="inline-flex flex-wrap justify-center">
-          <button class="btn btn-sm btn-alt">
-            All
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Connery
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Cobalt
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Emerald
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Miller
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Jaeger
-          </button>
-          <button class="btn btn-sm btn-alt">
-            SolTech
-          </button>
-        </div>
+    <div class="grid grid-cols-12 gap-2">
+      <div class="col-span-4 lg:col-span-2 lg:col-start-3">
+        <FilterWorld
+          :world-filter="selectedWorld"
+          @world-changed="updateWorld"
+        />
       </div>
-      <div class="col-span-1">
-        <h1 class="text-2xl">
-          Continents
-        </h1>
-        <div class="inline-flex flex-wrap justify-center">
-          <button class="btn btn-sm btn-alt">
-            All
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Amerish
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Esamir
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Hosin
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Indar
-          </button>
-        </div>
+      <div class="col-span-4 lg:col-span-2">
+        <FilterZone
+          :zone-filter="selectedZone"
+          @zone-changed="updateZone"
+        />
       </div>
-      <div class="col-span-1">
-        <h1 class="text-2xl">
-          Time Bracket
-        </h1>
-        <div class="inline-flex flex-wrap justify-center">
-          <button class="btn btn-sm btn-alt">
-            All
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Prime (17-00)
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Morning (00-12)
-          </button>
-          <button class="btn btn-sm btn-alt">
-            Afternoon (12-17)
-          </button>
-        </div>
+      <div class="col-span-4 lg:col-span-2">
+        <FilterBracket
+          :bracket-filter="selectedBracket"
+          @bracket-changed="updateBracket"
+        />
       </div>
-      <div class="col-span-1">
-        <h1 class="text-2xl">
-          Dates
-        </h1>
-        <div class="inline-flex flex-wrap justify-center">
-          <div>
-            <button class="btn btn-sm btn-alt">
-              From
-            </button>
-            <input type="text">
-          </div>
-          <div>
-            <button class="btn btn-sm btn-alt">
-              To
-            </button>
-            <input type="text">
-          </div>
-        </div>
+      <div class="col-span-4 lg:col-span-2">
+        <FilterWinner
+          :winner-filter="selectedWinner"
+          @winner-changed="updateWinner"
+        />
       </div>
-      <div class="col-span-5 text-center">
-        <button class="btn">
-          <FontAwesomeIcon :icon="['fas', 'filter']" /> Filter (DOESN'T WORK YET)
+      <FilterDate @date-changed="updateDate" />
+      <div class="col-span-12 text-center">
+        <button
+          class="btn"
+          :disabled="loading === true"
+          @click="filterResults()"
+        >
+          <FontAwesomeIcon :icon="['fas', 'filter']" /> Filter
+        </button>
+        <button
+          class="btn"
+          :disabled="loading === true || (loading === false && filtered === false)"
+          @click="clearFilter()"
+        >
+          <FontAwesomeIcon :icon="['fas', 'undo']" /> Clear
         </button>
       </div>
     </div>
   </div>
   <div class="col-span-2 lg:col-span-3 ss:col-span-4 text-center">
-    <div class="col-span-2 lg:col-span-3 ss:col-span-4 h-full items-center justify-center">
-      <AllAlertsEntry
+    <div
+      v-show="loading === false && length > 0"
+      class="col-span-2 lg:col-span-3 ss:col-span-4 text-center mb-4"
+    >
+      <p>{{ length }} alert{{ length > 1 ? 's' : '' }} found</p>
+    </div>
+    <div
+      v-show="loading === false && error.message === '' && length === 0"
+      class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
+    >
+      <h1>No alerts found for specified criteria!</h1>
+    </div>
+    <div
+      v-show="loading === true"
+      class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
+    >
+      <h1>Loading...</h1>
+    </div>
+    <div
+      v-show="error.message !== ''"
+      class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
+    >
+      <h1>Error loading results!</h1>
+      <p>{{ error.message }}</p>
+    </div>
+    <div
+      v-if="loading === false && length > 0"
+      class="col-span-2 lg:col-span-3 ss:col-span-4 h-full items-center justify-center"
+    >
+      <AlertHistoryEntry
         v-for="alert in alerts"
         :key="alert.instanceId"
         :alert="alert"
@@ -115,25 +91,68 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import AllAlertsEntry from "@/views/alert-history/AlertHistoryEntry.vue";
+import AlertHistoryEntry from "@/views/alert-history/AlertHistoryEntry.vue";
 import {InstanceTerritoryControlResponseInterface} from "@/interfaces/InstanceTerritoryControlResponseInterface";
 import ApiRequest from "@/api-request";
-import moment from "moment-timezone";
 import {DATE_TIME_FORMAT} from "@/constants/Time";
+import FilterWorld from "@/views/alert-history/FilterWorld.vue";
+import FilterZone from "@/views/alert-history/FilterZone.vue";
+import FilterWinner from "@/views/alert-history/FilterWinner.vue";
+import FilterBracket from "@/views/alert-history/FilterBracket.vue";
+import FilterDate from "@/views/alert-history/FilterDate.vue";
+import {World} from "@/constants/World";
+import {Zone} from "@/constants/Zone";
+import {InstanceParamsInterface} from "@/interfaces/InstanceParamsInterface";
+import {Bracket} from "@/constants/Bracket";
+import moment from "moment";
+import {Faction} from "@/constants/Faction";
 
 export default defineComponent({
   name: "AlertHistory",
   components: {
-    AllAlertsEntry,
+    AlertHistoryEntry,
+    FilterWorld,
+    FilterZone,
+    FilterBracket,
+    FilterWinner,
+    FilterDate,
   },
   data() {
+    const now = moment();
     return {
       loading: true,
-      error: null,
+      filtered: false,
+      error: {message: ''},
       alerts: new Map<string, InstanceTerritoryControlResponseInterface>(),
+      length: 0,
       ApiRequest: new ApiRequest(),
       lastUpdated: 'Fetching...',
+      selectedWorld: 0,
+      selectedZone: 0,
+      selectedBracket: Bracket.NONE,
+      selectedWinner: Faction.NONE,
+      selectedDateFrom: now,
+      selectedDateTo: now,
+      dateNow: now
     };
+  },
+  computed: {
+    filter() {
+      const filter: InstanceParamsInterface = {
+        sortBy: 'timeStarted',
+        order: 'desc',
+      };
+      if (this.selectedWorld > 0) filter.world = this.selectedWorld;
+      if (this.selectedZone > 0) filter.zone = this.selectedZone;
+      if (this.selectedBracket !== Bracket.NONE) filter.bracket = this.selectedBracket;
+      if (this.selectedWinner !== Faction.NONE) filter.winner = this.selectedWinner;
+      if (this.selectedDateFrom !== this.dateNow && this.selectedDateTo !== this.dateNow) {
+        filter.timeStartedFrom = this.selectedDateFrom.format('x');
+        filter.timeStartedTo = this.selectedDateTo.format('x');
+      }
+
+      return filter;
+    },
   },
   async created() {
     document.title = 'Alert History';
@@ -144,21 +163,55 @@ export default defineComponent({
   },
   methods: {
     async pull(): Promise<void> {
-      await this.ApiRequest.client
-        .get("/instances/territory-control?sortBy=timeStarted&order=desc&pageSize=50")
-        .then(alerts => {
-          this.loading = false;
-          this.error = null;
-          this.alerts = alerts.data;
-        })
-        .catch(e => {
-          this.loading = false;
-          this.error = e.message;
-        });
+      this.loading = true
+      this.error = {message: ''};
+      this.alerts = new Map<string, InstanceTerritoryControlResponseInterface>()
+
+      try {
+        this.alerts = await this.ApiRequest.get('instances/territory-control', this.filter);
+      } catch (e) {
+        this.error = e;
+      }
+      this.loading = false;
       this.lastUpdated = moment().format(DATE_TIME_FORMAT)
+      this.length = Object.keys(this.alerts).length
+    },
+    updateWorld(world: World) {
+      this.selectedWorld = world;
+    },
+    updateZone(zone: Zone) {
+      this.selectedZone = zone
+    },
+    updateBracket(bracket: Bracket) {
+      this.selectedBracket = bracket
+    },
+    updateWinner(winner: Faction) {
+      this.selectedWinner = winner
+    },
+    updateDate(dates: {dateFrom: moment.Moment, dateTo: moment.Moment}) {
+      this.selectedDateFrom = dates.dateFrom.utc(); // This converts the user's time back into UTC
+      this.selectedDateTo = dates.dateTo.utc();
+    },
+    async filterResults(): Promise<void> {
+      // If filter keys length is 2, it hasn't changed therefore mark it as unfiltered.
+      this.filtered = Object.keys(this.filter).length !== 2;
+      await this.pull();
+    },
+    clearFilter(): void {
+      const now = moment();
+      this.selectedWorld = 0;
+      this.selectedZone = 0;
+      this.selectedBracket = Bracket.NONE;
+      this.selectedWinner = Faction.NONE;
+      this.selectedDateFrom = now;
+      this.selectedDateTo = now;
+      this.dateNow = now;
+
+      if (this.filtered) {
+        this.filterResults();
+      }
+      this.filtered = false;
     }
   }
 });
 </script>
-
-<style scoped lang="scss"></style>
