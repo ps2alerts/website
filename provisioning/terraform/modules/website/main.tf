@@ -76,6 +76,10 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
             name = "VUE_APP_BUILD"
             value = var.checksum_version
           }
+          env {
+            name = "BASE_URL"
+            value = var.base_url
+          }
         }
       }
     }

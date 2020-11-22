@@ -4,6 +4,7 @@ module "website_staging" {
   environment      = "staging"
   identifier       = "ps2alerts-website-staging"
   urls             = ["staging.ps2alerts.com"]
+  base_url         = "staging.ps2alerts.com"
   multi_urls       = false
   checksum_version = var.checksum_version
   api_token        = var.api_token

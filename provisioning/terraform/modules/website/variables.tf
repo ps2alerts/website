@@ -32,6 +32,10 @@ variable "mem_request" {
 
 variable "replicas" {}
 
+variable "base_url" {
+  default = 'http://dev.ps2alers.com'
+}
+
 # This therefore requires the CLI variable to be defined. If none is supplied it'll use this, which is wrong!
 variable "checksum_version" {
   default = "UNKNOWN"
