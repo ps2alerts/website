@@ -1,6 +1,5 @@
 const path = require('path')
 const devMode = process.env.NODE_ENV === 'development';
-const baseUrl = process.env.BASE_URL ? process.env.BASE_URL : 'http://test.com';
 
 module.exports = {
   devServer: {
@@ -11,7 +10,7 @@ module.exports = {
       .plugin('html')
       .tap(args => {
         args[0].title = 'PS2Alerts'
-        args[0].baseUrl = baseUrl
+        args[0].baseUrl = process.env.BASE_URL ? process.env.BASE_URL : 'http://dev.ps2alerts.com'
         return args
       })
   },
