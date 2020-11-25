@@ -6,11 +6,19 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="/favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta name="description" content="<%= htmlWebpackPlugin.options.description %>">
     <meta name="og:title" content="<%= htmlWebpackPlugin.options.title %>">
-    <meta name="og:description" content="PS2Alerts - Building the Planetside 2 Metagame">
+    <meta name="og:description" content="<%= htmlWebpackPlugin.options.description %>">
     <meta name="og:image" content="<%= htmlWebpackPlugin.options.baseUrl %>/assets/img/alert-icon.png">
     <meta name="og:url" content="<%= htmlWebpackPlugin.options.baseUrl %>">
     <meta name="og:type" content="website">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@PS2AlertTracker">
+    <meta name="twitter:creator" content="@Maelstromeous">
+    <meta name="twitter:url" content="<%= htmlWebpackPlugin.options.baseUrl %>">
+    <meta name="twitter:title" content="<%= htmlWebpackPlugin.options.title %>">
+    <meta name="twitter:description" content="<%= htmlWebpackPlugin.options.description %>">
+    <meta name="twitter:image" content="<%= htmlWebpackPlugin.options.baseUrl %>/assets/img/alert-icon.png">
   </head>
   <body class="bg-main text-gray-200">
     <noscript>
