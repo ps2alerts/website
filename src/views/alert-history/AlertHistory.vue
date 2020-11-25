@@ -55,7 +55,12 @@
       v-show="loading === false && length > 0"
       class="col-span-2 lg:col-span-3 ss:col-span-4 text-center mb-4"
     >
-      <p>{{ length }} alert{{ length > 1 ? 's' : '' }} found</p>
+      <p v-show="!filtered">
+        {{ length }} alert{{ length > 1 ? 's' : '' }} found (50 max when not filtered)
+      </p>
+      <p v-show="filtered">
+        {{ length }} alert{{ length > 1 ? 's' : '' }} found
+      </p>
     </div>
     <div
       v-show="loading === false && error.message === '' && length === 0"
@@ -166,9 +171,14 @@ export default defineComponent({
       this.loading = true
       this.error = {message: ''};
       this.alerts = new Map<string, InstanceTerritoryControlResponseInterface>()
+      let queryParams = '?pageSize=50';
+
+      if (this.filtered) {
+        queryParams = '';
+      }
 
       try {
-        this.alerts = await this.ApiRequest.get('instances/territory-control', this.filter);
+        this.alerts = await this.ApiRequest.get('instances/territory-control' + queryParams, this.filter);
       } catch (e) {
         this.error = e;
       }
