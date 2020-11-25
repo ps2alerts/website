@@ -10,7 +10,8 @@ module.exports = {
       .plugin('html')
       .tap(args => {
         args[0].title = 'PS2Alerts'
-        args[0].baseUrl = process.env.BASE_URL ? process.env.BASE_URL : 'http://dev.ps2alerts.com'
+        args[0].baseUrl = process.env.VUE_APP_BASE_URL ? process.env.VUE_APP_BASE_URL : 'http://dev.ps2alerts.com'
+        args[0].description = "PS2Alerts - Building Planetside 2's Alert metagame"
         return args
       })
   },
