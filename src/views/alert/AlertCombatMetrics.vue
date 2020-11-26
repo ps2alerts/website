@@ -45,16 +45,16 @@
         KD
       </h1>
       <div class="bg-vs w-full">
-        {{ (combatData.vs.kills / combatData.vs.deaths).toPrecision(2) }}
+        {{ (combatData.vs.kills / combatData.vs.deaths).toFixed(2) }}
       </div>
       <div class="bg-tr w-full">
-        {{ (combatData.tr.kills / combatData.tr.deaths).toPrecision(2) }}
+        {{ (combatData.tr.kills / combatData.tr.deaths).toFixed(2) }}
       </div>
       <div class="bg-nc w-full">
-        {{ (combatData.nc.kills / combatData.nc.deaths).toPrecision(2) }}
+        {{ (combatData.nc.kills / combatData.nc.deaths).toFixed(2) }}
       </div>
       <div class="bg-nso w-full">
-        {{ (combatData.nso.kills / combatData.nso.deaths).toPrecision(2) }}
+        {{ (combatData.nso.kills / combatData.nso.deaths).toFixed(2) }}
       </div>
     </div>
     <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
