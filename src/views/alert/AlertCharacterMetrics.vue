@@ -6,6 +6,11 @@
     v-if="loaded"
     class="grid grid-cols-12"
   >
+    <div class="col-span-12 mb-4">
+      <div class="col-span-12">
+        Total players: {{ data.length }}
+      </div>
+    </div>
     <table class="table-auto text-center">
       <thead>
         <tr>
