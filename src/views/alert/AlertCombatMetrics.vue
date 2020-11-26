@@ -2,16 +2,113 @@
   <div class="tag section">
     Combat Metrics
   </div>
-  <h1>VS</h1>
-  {{ combatData.vs }}
-  <h1>NC</h1>
-  {{ combatData.nc }}
-  <h1>TR</h1>
-  {{ combatData.tr }}
-  <h1>NSO</h1>
-  {{ combatData.nso }}
-  <h1>TOTALS</h1>
-  {{ combatData.totals }}
+  <div
+    v-if="loaded"
+    class="grid grid-cols-12"
+  >
+    <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
+      <h1 class="text-xl">
+        Kills
+      </h1>
+      <div class="bg-vs w-full">
+        {{ combatData.vs.kills }}
+      </div>
+      <div class="bg-tr w-full">
+        {{ combatData.tr.kills }}
+      </div>
+      <div class="bg-nc w-full">
+        {{ combatData.nc.kills }}
+      </div>
+      <div class="bg-nso w-full">
+        {{ combatData.nso.kills }}
+      </div>
+    </div>
+    <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
+      <h1 class="text-xl">
+        Deaths
+      </h1>
+      <div class="bg-vs w-full">
+        {{ combatData.vs.deaths }}
+      </div>
+      <div class="bg-tr w-full">
+        {{ combatData.tr.deaths }}
+      </div>
+      <div class="bg-nc w-full">
+        {{ combatData.nc.deaths }}
+      </div>
+      <div class="bg-nso w-full">
+        {{ combatData.nso.deaths }}
+      </div>
+    </div>
+    <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
+      <h1 class="text-xl">
+        KD
+      </h1>
+      <div class="bg-vs w-full">
+        {{ (combatData.vs.deaths / combatData.vs.kills).toPrecision(2) }}
+      </div>
+      <div class="bg-tr w-full">
+        {{ (combatData.tr.deaths / combatData.tr.kills).toPrecision(2) }}
+      </div>
+      <div class="bg-nc w-full">
+        {{ (combatData.nc.deaths / combatData.nc.kills).toPrecision(2) }}
+      </div>
+      <div class="bg-nso w-full">
+        {{ (combatData.nso.deaths / combatData.nso.kills).toPrecision(2) }}
+      </div>
+    </div>
+    <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
+      <h1 class="text-xl">
+        Teamkills
+      </h1>
+      <div class="bg-vs w-full">
+        {{ combatData.vs.teamKills }}
+      </div>
+      <div class="bg-tr w-full">
+        {{ combatData.tr.teamKills }}
+      </div>
+      <div class="bg-nc w-full">
+        {{ combatData.nc.teamKills }}
+      </div>
+      <div class="bg-nso w-full">
+        {{ combatData.nso.teamKills }}
+      </div>
+    </div>
+    <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
+      <h1 class="text-xl">
+        Suicides
+      </h1>ss:col-span-2
+      <div class="bg-vs w-full">
+        {{ combatData.vs.suicides }}
+      </div>
+      <div class="bg-tr w-full">
+        {{ combatData.tr.suicides }}
+      </div>
+      <div class="bg-nc w-full">
+        {{ combatData.nc.suicides }}
+      </div>
+      <div class="bg-nso w-full">
+        {{ combatData.nso.suicides }}
+      </div>
+    </div>
+    <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
+      <h1 class="text-xl">
+        Headshots
+      </h1>
+      <div class="bg-vs w-full">
+        {{ combatData.vs.headshots }}
+      </div>
+      <div class="bg-tr w-full">
+        {{ combatData.tr.headshots }}
+      </div>
+      <div class="bg-nc w-full">
+        {{ combatData.nc.headshots }}
+      </div>
+      <div class="bg-nso w-full">
+        {{ combatData.nso.headshots }}
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
