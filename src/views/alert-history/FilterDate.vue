@@ -37,12 +37,27 @@ import moment from "moment";
 
 export default defineComponent({
   name: "FilterDate",
+  props: {
+    isFiltered: {
+      type: Boolean,
+      default: false
+    },
+  },
   emits: ['date-changed'],
   data: function() {
     return {
       dateFrom: '',
       dateTo: ''
     }
+  },
+  watch: {
+    isFiltered(filtered: boolean): void {
+      console.log('isFilered', filtered);
+      if (!filtered) {
+        this.dateFrom = '';
+        this.dateTo = '';
+      }
+    },
   },
   methods: {
     changeDate(): void {
