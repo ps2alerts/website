@@ -116,7 +116,7 @@ export default defineComponent({
     this.pull();
     setInterval(() => {
       void this.pull();
-    }, 30000);
+    }, 10000);
   },
   methods: {
     async pull(): Promise<void> {
