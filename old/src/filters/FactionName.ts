@@ -1,6 +1,6 @@
 import {Faction} from "@/constants/Faction";
 
-export const FactionName = function(value: Faction) {
+export const FactionName = function(value: Faction | null) {
   switch (value) {
     case Faction.VANU_SOVEREIGNTY:
       return 'Vanu Sovereignty'
