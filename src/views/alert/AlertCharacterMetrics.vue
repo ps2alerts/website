@@ -15,6 +15,9 @@
       <thead>
         <tr>
           <td class="py-2 pr-4">
+            Rank
+          </td>
+          <td class="py-2 pr-4">
             Character
           </td>
           <td class="py-2 pr-4">
@@ -45,10 +48,13 @@
       </thead>
       <tbody>
         <tr
-          v-for="character in data"
+          v-for="(character, index) in data"
           :key="character.character"
           class="mb-2"
         >
+          <td class="pr-4 text-left">
+            {{ index + 1 }}
+          </td>
           <td class="pr-4 text-left">
             {{ character.character }}
           </td>
