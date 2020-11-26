@@ -77,7 +77,7 @@
     <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
       <h1 class="text-xl">
         Suicides
-      </h1>ss:col-span-2
+      </h1>
       <div class="bg-vs w-full">
         {{ combatData.vs.suicides }}
       </div>
