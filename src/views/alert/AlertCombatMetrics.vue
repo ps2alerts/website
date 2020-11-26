@@ -108,6 +108,23 @@
         {{ combatData.nso.headshots }}
       </div>
     </div>
+    <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
+      <h1 class="text-xl">
+        HSR %
+      </h1>
+      <div class="bg-vs w-full">
+        {{ ((combatData.vs.headshots / combatData.vs.kills) * 100).toFixed(2) }}
+      </div>
+      <div class="bg-tr w-full">
+        {{ ((combatData.tr.headshots / combatData.tr.kills) * 100).toFixed(2) }}
+      </div>
+      <div class="bg-nc w-full">
+        {{ ((combatData.nc.headshots / combatData.nc.kills) * 100).toFixed(2) }}
+      </div>
+      <div class="bg-nso w-full">
+        {{ ((combatData.nso.headshots / combatData.nso.kills) * 100).toFixed(2) }}
+      </div>
+    </div>
   </div>
 </template>
 
