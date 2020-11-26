@@ -1,4 +1,4 @@
-export interface AlertPopulationInterface {
+export interface InstancePopulationAggregateResponseInterface {
   instanceId: string;
   timestamp: string;
   vs: number;

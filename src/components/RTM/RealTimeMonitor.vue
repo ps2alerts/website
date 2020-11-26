@@ -59,19 +59,19 @@
       </div>
 
       <div
-        v-for="alert in actives.entries()"
-        :key="alert[1].instanceId"
+        v-for="alert in actives"
+        :key="alert.instanceId"
         class="bg-tint my-2 rounded-md lg:rounded-r-md lg:rounded-l-none"
       >
         <RealTimeAlert
-          :world="alert[1].world"
-          :zone="alert[1].zone"
-          :started="alert[1].timeStarted"
-          :duration="alert[1].duration"
-          :result="alert[1].result"
-          :instance-id="alert[1].instanceId"
+          :world="alert.world"
+          :zone="alert.zone"
+          :started="alert.timeStarted"
+          :duration="alert.duration"
+          :result="alert.result"
+          :instance-id="alert.instanceId"
           :mode="mode"
-          :pops="getPops(alert[1].instanceId)"
+          :pops="getPops(alert.instanceId)"
           :is-percentage="showPopPercent"
         />
       </div>
@@ -90,9 +90,10 @@
 import {defineAsyncComponent, defineComponent} from "vue";
 import ApiRequest from "@/api-request";
 import {InstanceTerritoryControlResponseInterface} from "@/interfaces/InstanceTerritoryControlResponseInterface";
-import {AlertPopulationInterface} from "@/interfaces/AlertPopulationInterface";
+import {InstancePopulationAggregateResponseInterface} from "@/interfaces/aggregates/instance/InstancePopulationAggregateResponseInterface";
 import {TIME_FORMAT} from "@/constants/Time";
 import moment from "moment-timezone";
+import {Endpoints} from "@/constants/Endpoints";
 
 export default defineComponent({
   name: "RealTimeMonitor",
@@ -105,8 +106,8 @@ export default defineComponent({
       error: null,
       lastUpdated: 'fetching...',
       popsLastUpdated: 'fetching...',
-      actives: new Map<string, InstanceTerritoryControlResponseInterface>(),
-      populations: new Map<string, AlertPopulationInterface>(),
+      actives: [] as InstanceTerritoryControlResponseInterface[],
+      populations: new Map<string, InstancePopulationAggregateResponseInterface>(),
       ApiRequest: new ApiRequest(),
       mode: 'territory',
       showPopPercent: true,
@@ -133,36 +134,41 @@ export default defineComponent({
   },
   methods: {
     async activeAlerts(): Promise<void> {
-      await this.ApiRequest.client
-        .get("/instances/active?sortBy=timeStarted")
-        .then(alerts => {
+      await new ApiRequest().get<InstanceTerritoryControlResponseInterface[]>(
+        Endpoints.INSTANCES_ACTIVE,
+        {sortBy: 'timeStarted'}
+      )
+        .then(result => {
           this.loading = false;
           this.error = null;
-          this.actives = alerts.data
+          this.actives = result
           this.lastUpdated = moment().format(TIME_FORMAT)
         })
         .catch(e => {
           this.loading = false;
           this.error = e.message;
-        });
+        })
     },
     async alertPops(): Promise<void> {
       this.actives.forEach((instance: InstanceTerritoryControlResponseInterface) => {
-        void this.ApiRequest.client
-          .get(`/aggregates/instance/${instance.instanceId}/population?sortBy=timestamp&order=desc&pageSize=1`)
-          .then(data => {
-            const pops = data.data[0];
-            if (pops && pops.total > 0) {
-              this.populations.set(instance.instanceId, pops)
+        const endpoint = Endpoints.AGGREGATES_INSTANCE_POPULATION.replace('{instance}', instance.instanceId);
+        new ApiRequest().get<InstancePopulationAggregateResponseInterface[]>(
+          endpoint,
+          {sortBy: 'timestamp', order: 'desc', pageSize: 1}
+        )
+          .then(result => {
+            if (result[0] && result[0].total > 0) {
+              this.populations.set(instance.instanceId, result[0])
             }
           })
           .catch(e => {
+            this.loading = false;
             this.error = e.message;
-          });
+          })
       });
       this.popsLastUpdated = moment().format(TIME_FORMAT)
     },
-    getPops(instance: string): AlertPopulationInterface | undefined {
+    getPops(instance: string): InstancePopulationAggregateResponseInterface | undefined {
       return this.populations.get(instance);
     },
     updateMode(value: string): void {
