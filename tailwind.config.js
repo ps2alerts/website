@@ -130,7 +130,8 @@ module.exports = {
         800: "#97266d",
         900: "#702459"
       },
-      primary: '#37474f'
+      primary: '#37474f',
+      'primary-dark': '#303a40',
     },
     spacing: {
       px: "1px",

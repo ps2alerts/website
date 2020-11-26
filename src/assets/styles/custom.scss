@@ -21,6 +21,16 @@
     @apply bg-red-900 bg-opacity-50;
   }
 
+  .theme-vs > div {
+    @apply bg-purple-900 bg-opacity-80;
+  }
+  .theme-nc > div {
+    @apply bg-blue-900 bg-opacity-80;
+  }
+  .theme-tr > div {
+    @apply bg-red-900 bg-opacity-80;
+  }
+
   h1 {
     @apply text-3xl;
   }
@@ -136,5 +146,36 @@
   @keyframes blinker {
     from { opacity: 1; }
     to { opacity: 0; }
+  }
+
+  %tag {
+    @apply py-1 px-2 rounded-tl rounded-tr text-xs text-center font-bold;
+    margin: -1rem;
+    margin-bottom: 1rem;
+  }
+
+  .section {
+    @extend %tag;
+    @apply bg-primary-dark;
+  }
+
+  .feature {
+    @extend %tag;
+    @apply bg-green-800;
+  }
+
+  .enhancement {
+    @extend %tag;
+    @apply bg-blue-800;
+  }
+
+  .fix {
+    @extend %tag;
+    @apply bg-red-800;
+  }
+
+  .known-issue {
+    @extend %tag;
+    @apply bg-yellow-800;
   }
 }

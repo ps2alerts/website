@@ -4,5 +4,5 @@ export interface InstanceResultInterface {
   vs: number;
   nc: number;
   tr: number;
-  Victor: Faction | null;
+  victor: Faction | null;
 }
