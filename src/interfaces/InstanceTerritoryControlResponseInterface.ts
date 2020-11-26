@@ -14,5 +14,5 @@ export interface InstanceTerritoryControlResponseInterface {
   duration: number;
   state: Ps2alertsEventState;
   result: TerritoryResultInterface;
-  // bracket: Bracket
+  bracket: Bracket
 }

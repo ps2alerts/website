@@ -4,6 +4,7 @@ import {Zone} from "@/constants/Zone";
 export interface CommonApiParamsInterface {
   world?: World;
   zone?: Zone;
-  sortBy: string;
-  order: string
+  sortBy?: string;
+  order?: string
+  pageSize?: number,
 }
