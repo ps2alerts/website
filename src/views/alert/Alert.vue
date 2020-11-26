@@ -17,6 +17,11 @@
       >
         <AlertCombatMetrics :alert="alert" />
       </div>
+      <div
+        class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
+      >
+        <AlertCharacterMetrics :alert="alert" />
+      </div>
     </div>
   </div>
 </template>
@@ -30,6 +35,7 @@ import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
 import AlertDetails from "@/views/alert/AlertDetails.vue";
 import AlertCombatMetrics from "@/views/alert/AlertFactionCombatMetrics.vue";
 import {Endpoints} from "@/constants/Endpoints";
+import AlertCharacterMetrics from "@/views/alert/AlertCharacterMetrics.vue";
 
 export default defineComponent({
   name: "Alert",
@@ -37,6 +43,7 @@ export default defineComponent({
     AlertResultBar,
     AlertDetails,
     AlertCombatMetrics,
+    AlertCharacterMetrics,
   },
   beforeRouteUpdate(to, from, next) {
     this.init(to.params.instanceId.toString())
