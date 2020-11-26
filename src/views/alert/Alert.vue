@@ -38,15 +38,14 @@ export default defineComponent({
     AlertDetails,
     AlertCombatMetrics,
   },
-  props: {
-    instanceId: {
-      type: String,
-      default: "1-0000"
-    },
+  beforeRouteUpdate(to, from, next) {
+    this.init(to.params.instanceId.toString())
+    next();
   },
   data: function() {
     return {
       error: null,
+      interval: undefined as number | undefined,
       alert: {} as InstanceTerritoryControlResponseInterface,
     }
   },
@@ -55,22 +54,27 @@ export default defineComponent({
     //   return InstanceEventDetails(this.alert.censusMetagameEventType);
     // },
   },
-  created() {
-    document.title = 'Alert #' + this.instanceId;
-    this.pull();
-    setInterval(() => {
-      void this.pull();
-    }, 30000);
+  created: function () {
+    this.init(this.$route.params.instanceId.toString());
   },
   methods: {
-    async pull(): Promise<void> {
+    init(instanceId: string): void {
+      document.title = 'Alert #' + instanceId;
+      this.pull(instanceId);
+      clearInterval(this.interval);
+      this.interval = setInterval(() => {
+        void this.pull(instanceId);
+      }, 30000);
+    },
+    async pull(instanceId: string): Promise<void> {
       if (this.alert && this.alert.state === Ps2alertsEventState.ENDED) {
         return;
       }
 
-      await new ApiRequest().get<InstanceTerritoryControlResponseInterface>(Endpoints.INSTANCE.replace('{instance}', this.instanceId))
+      await new ApiRequest().get<InstanceTerritoryControlResponseInterface>(Endpoints.INSTANCE.replace('{instance}', instanceId))
         .then(alert => {
           this.alert = alert;
+          // Need to emit to client components that route has changed
         })
         .catch(e => {
           this.error = e.message;

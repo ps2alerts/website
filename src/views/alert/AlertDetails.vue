@@ -23,8 +23,11 @@
               <div class="mr-4 font-bold">
                 Ended
               </div>
-              <div>
+              <div v-if="ended">
                 {{ $filters.dateTimeFormat(alert.timeEnded) }}
+              </div>
+              <div v-if="!ended">
+                TBD
               </div>
             </div>
           </td>
@@ -85,6 +88,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import {InstanceTerritoryControlResponseInterface} from "@/interfaces/InstanceTerritoryControlResponseInterface";
+import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
 
 export default defineComponent({
   name: "AlertDetails",
@@ -95,5 +99,10 @@ export default defineComponent({
       required: true
     }
   },
+  computed: {
+    ended(): boolean {
+      return this.alert.state === Ps2alertsEventState.ENDED;
+    },
+  }
 });
 </script>
