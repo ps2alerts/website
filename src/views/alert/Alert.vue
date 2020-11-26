@@ -13,7 +13,7 @@
         <AlertDetails :alert="alert" />
       </div>
       <div
-        class="col-span-3 lg:col-span-6 ss:col-span-9 px-4 py-4 mb-2 bg-tint rounded"
+        class="col-span-12 lg:col-span-6 ss:col-span-9 px-4 py-4 mb-2 bg-tint rounded"
       >
         <AlertCombatMetrics :alert="alert" />
       </div>
