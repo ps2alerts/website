@@ -28,10 +28,13 @@
       <div class="col-span-6 lg:col-span-2">
         <FilterVictor
           :victor-filter="selectedVictor"
-          @Victor-changed="updateVictor"
+          @victor-changed="updateVictor"
         />
       </div>
-      <FilterDate @date-changed="updateDate" />
+      <FilterDate
+        :is-filtered="filtered"
+        @date-changed="updateDate"
+      />
       <div class="col-span-12 text-center">
         <button
           class="btn"
@@ -55,11 +58,14 @@
       v-show="loading === false && length > 0"
       class="col-span-2 lg:col-span-3 ss:col-span-4 text-center mb-4"
     >
-      <p v-show="!filtered">
-        {{ length }} alert{{ length > 1 ? 's' : '' }} found (50 max when not filtered)
+      <p v-show="!filteredByDate()">
+        {{ length }} alert{{ length > 1 ? 's' : '' }} found (50 max when not filtered by date)
       </p>
-      <p v-show="filtered">
+      <p v-show="filteredByDate()">
         {{ length }} alert{{ length > 1 ? 's' : '' }} found
+      </p>
+      <p v-show="length === 250">
+        Hard limit of 250 alerts reached. Please narrow your criteria.
       </p>
     </div>
     <div
@@ -67,6 +73,12 @@
       class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
     >
       <h1>No alerts found for specified criteria!</h1>
+    </div>
+    <div
+      v-show="loading === false && error.message === '' && length === 0 && (selectedDateFrom || selectedDateTo)"
+      class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
+    >
+      <p>Both from and to dates need to be defined.</p>
     </div>
     <div
       v-show="loading === true"
@@ -86,8 +98,8 @@
       class="col-span-2 lg:col-span-3 ss:col-span-4 h-full items-center justify-center"
     >
       <AlertHistoryEntry
-        v-for="alert in alerts"
-        :key="alert.instanceId"
+        v-for="(alert, index) in alerts"
+        :key="index"
         :alert="alert"
       />
     </div>
@@ -111,6 +123,8 @@ import {InstanceParamsInterface} from "@/interfaces/InstanceParamsInterface";
 import {Bracket} from "@/constants/Bracket";
 import moment from "moment";
 import {Faction} from "@/constants/Faction";
+import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
+import {Endpoints} from "@/constants/Endpoints";
 
 export default defineComponent({
   name: "AlertHistory",
@@ -128,7 +142,7 @@ export default defineComponent({
       loading: true,
       filtered: false,
       error: {message: ''},
-      alerts: new Map<string, InstanceTerritoryControlResponseInterface>(),
+      alerts: [] as InstanceTerritoryControlResponseInterface[],
       length: 0,
       ApiRequest: new ApiRequest(),
       lastUpdated: 'Fetching...',
@@ -161,51 +175,90 @@ export default defineComponent({
   },
   async created() {
     document.title = 'Alert History';
-    this.pull();
+    this.fullPull();
     setInterval(() => {
-      void this.pull();
-    }, 30000);
+      void this.partialPull();
+    }, 5000);
   },
   methods: {
-    async pull(): Promise<void> {
+    async fullPull(): Promise<void> {
       this.loading = true
-      this.error = {message: ''};
-      this.alerts = new Map<string, InstanceTerritoryControlResponseInterface>()
-      let queryParams = '?pageSize=50';
-
-      if (this.filtered) {
-        queryParams = '';
-      }
+      const queryParams = this.setUpRequest();
+      this.alerts = [];
 
       try {
-        this.alerts = await this.ApiRequest.get('instances/territory-control' + queryParams, this.filter);
+        this.alerts = await this.ApiRequest.get(Endpoints.INSTANCES_TERRITORY_CONTROL + queryParams, this.filter);
       } catch (e) {
         this.error = e;
       }
+
+      this.updateStatus()
+    },
+    async partialPull(): Promise<void> {
+      const queryParams = this.setUpRequest();
+      // Scan the current LIVE alerts on the board and update them only, we don't need to update the entire lot!
+      const liveAlerts = this.alerts.filter((alert) => {
+        return alert.state === Ps2alertsEventState.STARTED;
+      })
+
+      for (const instance of liveAlerts) {
+        try {
+          const result = await this.ApiRequest.get(Endpoints.INSTANCE.replace('{instance}', instance.instanceId) + queryParams, this.filter);
+
+          const key = this.alerts.find((val, key) => {
+            if (val.instanceId === instance.instanceId) {
+              return key;
+            }
+          });
+
+          if (key) {
+            const index = this.alerts.indexOf(key);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+            // @ts-ignore
+            index ? this.alerts[index] = result : null
+          }
+        } catch (e) {
+          this.error = e;
+        }
+      }
+      this.updateStatus()
+    },
+
+    setUpRequest(): string {
+      this.error = {message: ''};
+      let queryParams = '?pageSize=50';
+
+      if (this.filteredByDate()) {
+        queryParams = '?pageSize=250';
+      }
+
+      return queryParams
+    },
+    updateStatus(): void {
       this.loading = false;
       this.lastUpdated = moment().format(DATE_TIME_FORMAT)
       this.length = Object.keys(this.alerts).length
     },
-    updateWorld(world: World) {
+    updateWorld(world: World): void {
       this.selectedWorld = world;
     },
-    updateZone(zone: Zone) {
+    updateZone(zone: Zone): void {
       this.selectedZone = zone
     },
-    updateBracket(bracket: Bracket) {
+    updateBracket(bracket: Bracket): void {
       this.selectedBracket = bracket
     },
-    updateVictor(victor: Faction) {
+    updateVictor(victor: Faction): void {
       this.selectedVictor = victor
     },
-    updateDate(dates: {dateFrom: moment.Moment, dateTo: moment.Moment}) {
+    updateDate(dates: {dateFrom: moment.Moment, dateTo: moment.Moment}): void {
       this.selectedDateFrom = dates.dateFrom.utc(); // This converts the user's time back into UTC
       this.selectedDateTo = dates.dateTo.utc();
     },
     async filterResults(): Promise<void> {
       // If filter keys length is 2, it hasn't changed therefore mark it as unfiltered.
       this.filtered = Object.keys(this.filter).length !== 2;
-      await this.pull();
+      await this.fullPull();
     },
     clearFilter(): void {
       const now = moment();
@@ -221,6 +274,9 @@ export default defineComponent({
         this.filterResults();
       }
       this.filtered = false;
+    },
+    filteredByDate(): boolean {
+      return this.filtered && (this.selectedDateFrom !== this.dateNow && this.selectedDateTo !== this.dateNow)
     }
   }
 });
