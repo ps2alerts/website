@@ -28,7 +28,7 @@ import AlertResultBar from "@/views/alert/AlertResultBar.vue";
 import ApiRequest from "@/api-request";
 import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
 import AlertDetails from "@/views/alert/AlertDetails.vue";
-import AlertCombatMetrics from "@/views/alert/AlertCombatMetrics.vue";
+import AlertCombatMetrics from "@/views/alert/AlertFactionCombatMetrics.vue";
 import {Endpoints} from "@/constants/Endpoints";
 
 export default defineComponent({
