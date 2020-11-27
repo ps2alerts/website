@@ -15,7 +15,17 @@
       <div
         class="col-span-12 lg:col-span-6 ss:col-span-9 px-4 py-4 mb-2 bg-tint rounded"
       >
-        <AlertCombatMetrics :alert="alert" />
+        <AlertFactionCombatMetrics :alert="alert" />
+      </div>
+      <div
+        class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
+      >
+        <AlertCharacterMetrics :alert="alert" />
+      </div>
+      <div
+        class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
+      >
+        <AlertOutfitMetrics :alert="alert" />
       </div>
     </div>
   </div>
@@ -28,15 +38,19 @@ import AlertResultBar from "@/views/alert/AlertResultBar.vue";
 import ApiRequest from "@/api-request";
 import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
 import AlertDetails from "@/views/alert/AlertDetails.vue";
-import AlertCombatMetrics from "@/views/alert/AlertCombatMetrics.vue";
+import AlertFactionCombatMetrics from "@/views/alert/AlertFactionCombatMetrics.vue";
 import {Endpoints} from "@/constants/Endpoints";
+import AlertCharacterMetrics from "@/views/alert/AlertCharacterMetrics.vue";
+import AlertOutfitMetrics from "@/views/alert/AlertOutfitMetrics.vue";
 
 export default defineComponent({
   name: "Alert",
   components: {
     AlertResultBar,
     AlertDetails,
-    AlertCombatMetrics,
+    AlertFactionCombatMetrics,
+    AlertCharacterMetrics,
+    AlertOutfitMetrics,
   },
   beforeRouteUpdate(to, from, next) {
     this.init(to.params.instanceId.toString())
