@@ -4,127 +4,131 @@
   </div>
   <div
     v-if="loaded"
-    class="grid grid-cols-12"
+    class="grid grid-cols-12 text-center"
   >
-    <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
+    <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
       <h1 class="text-xl">
         Kills
       </h1>
       <div class="bg-vs w-full">
-        {{ combatData.vs.kills }}
+        {{ data.vs.kills ?? 0 }}
       </div>
       <div class="bg-tr w-full">
-        {{ combatData.tr.kills }}
+        {{ data.tr.kills ?? 0 }}
       </div>
       <div class="bg-nc w-full">
-        {{ combatData.nc.kills }}
+        {{ data.nc.kills ?? 0 }}
       </div>
       <div class="bg-nso w-full">
-        {{ combatData.nso.kills }}
+        {{ data.nso.kills ?? 0 }}<sup>*1</sup>
       </div>
     </div>
-    <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
+    <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
       <h1 class="text-xl">
         Deaths
       </h1>
       <div class="bg-vs w-full">
-        {{ combatData.vs.deaths }}
+        {{ data.vs.deaths ?? 0 }}
       </div>
       <div class="bg-tr w-full">
-        {{ combatData.tr.deaths }}
+        {{ data.tr.deaths ?? 0 }}
       </div>
       <div class="bg-nc w-full">
-        {{ combatData.nc.deaths }}
+        {{ data.nc.deaths ?? 0 }}
       </div>
       <div class="bg-nso w-full">
-        {{ combatData.nso.deaths }}
+        {{ data.nso.deaths ?? 0 }}
       </div>
     </div>
-    <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
+    <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
       <h1 class="text-xl">
         KD
       </h1>
       <div class="bg-vs w-full">
-        {{ (combatData.vs.kills / combatData.vs.deaths).toFixed(2) }}
+        {{ data.vs.kills && data.vs.deaths ? (data.vs.kills / data.vs.deaths).toFixed(2) : data.vs.kills ?? 0 }}
       </div>
       <div class="bg-tr w-full">
-        {{ (combatData.tr.kills / combatData.tr.deaths).toFixed(2) }}
+        {{ data.tr.kills && data.tr.deaths ? (data.tr.kills / data.tr.deaths).toFixed(2) : data.tr.kills ?? 0 }}
       </div>
       <div class="bg-nc w-full">
-        {{ (combatData.nc.kills / combatData.nc.deaths).toFixed(2) }}
+        {{ data.nc.kills && data.nc.deaths ? (data.nc.kills / data.nc.deaths).toFixed(2) : data.nc.kills ?? 0 }}
       </div>
       <div class="bg-nso w-full">
-        {{ (combatData.nso.kills / combatData.nso.deaths).toFixed(2) }}
+        {{ data.nso.kills && data.nso.deaths ? (data.nso.kills / data.nso.deaths).toFixed(2) : data.nso.kills ?? 0 }}
       </div>
     </div>
-    <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
+    <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
       <h1 class="text-xl">
         Teamkills
       </h1>
       <div class="bg-vs w-full">
-        {{ combatData.vs.teamKills }}
+        {{ data.vs.teamKills ?? 0 }}
       </div>
       <div class="bg-tr w-full">
-        {{ combatData.tr.teamKills }}
+        {{ data.tr.teamKills ?? 0 }}
       </div>
       <div class="bg-nc w-full">
-        {{ combatData.nc.teamKills }}
+        {{ data.nc.teamKills ?? 0 }}
       </div>
       <div class="bg-nso w-full">
-        {{ combatData.nso.teamKills }}
+        N/A<sup>*2</sup>
       </div>
     </div>
-    <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
+    <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
       <h1 class="text-xl">
         Suicides
       </h1>
       <div class="bg-vs w-full">
-        {{ combatData.vs.suicides }}
+        {{ data.vs.suicides ?? 0 }}
       </div>
       <div class="bg-tr w-full">
-        {{ combatData.tr.suicides }}
+        {{ data.tr.suicides ?? 0 }}
       </div>
       <div class="bg-nc w-full">
-        {{ combatData.nc.suicides }}
+        {{ data.nc.suicides ?? 0 }}
       </div>
       <div class="bg-nso w-full">
-        {{ combatData.nso.suicides }}
+        {{ data.nso.suicides ?? 0 }}
       </div>
     </div>
-    <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
+    <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
       <h1 class="text-xl">
         Headshots
       </h1>
       <div class="bg-vs w-full">
-        {{ combatData.vs.headshots }}
+        {{ data.vs.headshots ?? 0 }}
       </div>
       <div class="bg-tr w-full">
-        {{ combatData.tr.headshots }}
+        {{ data.tr.headshots ?? 0 }}
       </div>
       <div class="bg-nc w-full">
-        {{ combatData.nc.headshots }}
+        {{ data.nc.headshots ?? 0 }}
       </div>
       <div class="bg-nso w-full">
-        {{ combatData.nso.headshots }}
+        {{ data.nso.headshots ?? 0 }}
       </div>
     </div>
-    <div class="col-span-6 lg:col-span-3 ss:col-span-2 text-center">
+    <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
       <h1 class="text-xl">
         HSR %
       </h1>
       <div class="bg-vs w-full">
-        {{ ((combatData.vs.headshots / combatData.vs.kills) * 100).toFixed(2) }}
+        {{ data.vs.headshots && data.vs.kills ? ((data.vs.headshots / data.vs.kills) * 100).toFixed(2) : 0 }}
       </div>
       <div class="bg-tr w-full">
-        {{ ((combatData.tr.headshots / combatData.tr.kills) * 100).toFixed(2) }}
+        {{ data.tr.headshots && data.tr.kills ? ((data.tr.headshots / data.tr.kills) * 100).toFixed(2) : 0 }}
       </div>
       <div class="bg-nc w-full">
-        {{ ((combatData.nc.headshots / combatData.nc.kills) * 100).toFixed(2) }}
+        {{ data.nc.headshots && data.nc.kills ? ((data.nc.headshots / data.nc.kills) * 100).toFixed(2) : 0 }}
       </div>
       <div class="bg-nso w-full">
-        {{ ((combatData.nso.headshots / combatData.nso.kills) * 100).toFixed(2) }}
+        {{ data.nso.headshots && data.nso.kills ? ((data.nso.headshots / data.nso.kills) * 100).toFixed(2) : 0 }}
       </div>
     </div>
+  </div>
+  <div class="col-span-12 text-xs text-gray-500 text-left">
+    <p>*1 does not include NSO vs NSO kills.</p>
+    <p>*2 NSO Teamkills are not tracked it's currently incalculable accurately.</p>
   </div>
 </template>
 
@@ -149,7 +153,7 @@ export default defineComponent({
     return {
       error: null,
       loaded: false,
-      combatData: {} as InstanceFactionCombatAggregateResponseInterface,
+      data: {} as InstanceFactionCombatAggregateResponseInterface,
     }
   },
   created() {
@@ -166,7 +170,7 @@ export default defineComponent({
 
       await new ApiRequest().get<InstanceFactionCombatAggregateResponseInterface>(Endpoints.AGGREGATES_INSTANCE_FACTION.replace('{instance}', this.alert.instanceId))
         .then(result => {
-          this.combatData = result
+          this.data = result
           this.loaded = true;
         })
         .catch(e => {

@@ -1,6 +1,6 @@
 <template>
   <div class="tag section">
-    Character Metrics
+    Outfit Metrics
   </div>
   <div
     v-if="loaded"
@@ -8,7 +8,7 @@
   >
     <div class="col-span-12 mb-4">
       <div class="col-span-12">
-        Total players: {{ data.length }}
+        Total outfits: {{ data.length }}
       </div>
     </div>
     <table class="table-auto text-center">
@@ -18,10 +18,7 @@
             Rank
           </td>
           <td class="py-2 pr-4 text-left">
-            Character
-          </td>
-          <td class="py-2 pr-4 text-left">
-            Outfit
+            [TAG] Outfit
           </td>
           <td class="py-2 pr-4">
             Kills
@@ -42,16 +39,16 @@
             Headshots
           </td>
           <td class="py-2 pr-4">
-            HSR %
+            HSR
           </td>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="(character, index) in data"
-          :key="character.character"
+          v-for="(outfit, index) in data"
+          :key="outfit.id"
           class="mb-2"
-          :class="rowClass(character)"
+          :class="rowClass(outfit)"
         >
           <td class="pr-4 text-left">
             {{ index + 1 }}
@@ -66,22 +63,22 @@
             </span>
           </td>
           <td class="pr-4">
-            {{ character.kills ?? 0 }}
+            {{ character.kills ? character.kills : 0 }}
           </td>
           <td class="pr-4">
-            {{ character.deaths ?? 0 }}
+            {{ character.deaths ? character.deaths : 0 }}
           </td>
           <td class="pr-4">
             {{ character.kills && character.deaths ? (character.kills / character.deaths).toFixed(2) : character.kills }}
           </td>
           <td class="pr-4">
-            {{ character.teamKills ?? 0 }}
+            {{ character.teamKills ? character.teamKills : 0 }}
           </td>
           <td class="pr-4">
-            {{ character.suicides ?? 0 }}
+            {{ character.suicides ? character.suicides : 0 }}
           </td>
           <td class="pr-4">
-            {{ character.headshots ?? 0 }}
+            {{ character.headshots ? character.headshots : 0 }}
           </td>
           <td class="pr-4">
             {{ character.headshots && character.kills ? ((character.headshots / character.kills) * 100).toFixed(2) : 0 }}
@@ -98,11 +95,11 @@ import {InstanceTerritoryControlResponseInterface} from "@/interfaces/InstanceTe
 import ApiRequest from "@/api-request";
 import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
 import {Endpoints} from "@/constants/Endpoints";
-import {InstanceCharacterAggregateResponseInterface} from "@/interfaces/aggregates/instance/InstanceCharacterAggregateResponseInterface";
+import {InstanceOutfitAggregateResponseInterface} from "@/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface";
 import {Faction} from "@/constants/Faction";
 
 export default defineComponent({
-  name: "AlertCharacterMetrics",
+  name: "AlertOutfitMetrics",
   props: {
     alert: {
       type: Object as () => InstanceTerritoryControlResponseInterface,
@@ -114,7 +111,7 @@ export default defineComponent({
     return {
       error: null,
       loaded: false,
-      data: {} as InstanceCharacterAggregateResponseInterface[],
+      data: {} as InstanceOutfitAggregateResponseInterface[],
     }
   },
   created() {
@@ -129,8 +126,8 @@ export default defineComponent({
         return;
       }
 
-      await new ApiRequest().get<InstanceCharacterAggregateResponseInterface[]>(
-        Endpoints.AGGREGATES_INSTANCE_CHARACTER.replace('{instance}', this.alert.instanceId),
+      await new ApiRequest().get<InstanceOutfitAggregateResponseInterface[]>(
+        Endpoints.AGGREGATES_INSTANCE_OUTFIT.replace('{instance}', this.alert.instanceId),
         {
           sortBy: 'kills',
           order: 'desc'
@@ -143,12 +140,12 @@ export default defineComponent({
           this.error = e.message;
         })
     },
-    rowClass(character: InstanceCharacterAggregateResponseInterface): object {
+    rowClass(outfit: InstanceOutfitAggregateResponseInterface): object {
       return {
-        'bg-vs': character.character.faction === Faction.VANU_SOVEREIGNTY,
-        'bg-nc': character.character.faction === Faction.NEW_CONGLOMERATE,
-        'bg-tr': character.character.faction === Faction.TERRAN_REPUBLIC,
-        'bg-nso': character.character.faction === Faction.NS_OPERATIVES,
+        'bg-vs': outfit.outfit.faction === Faction.VANU_SOVEREIGNTY,
+        'bg-nc': outfit.outfit.faction === Faction.NEW_CONGLOMERATE,
+        'bg-tr': outfit.outfit.faction === Faction.TERRAN_REPUBLIC,
+        'bg-nso': outfit.outfit.faction === Faction.NS_OPERATIVES,
       }
     },
   }
