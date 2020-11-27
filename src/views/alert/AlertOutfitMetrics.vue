@@ -54,34 +54,29 @@
             {{ index + 1 }}
           </td>
           <td class="pr-4 text-left">
-            {{ character.character.name }}
-          </td>
-          <td class="pr-4 text-left">
-            <span v-if="character.character.outfit">
-              <span v-if="character.character.outfit.tag">[{{ character.character.outfit.tag }}]</span>
-              {{ character.character.outfit.name }}
-            </span>
+            <span v-if="outfit.outfit.tag">[{{ outfit.outfit.tag }}]</span>
+            {{ outfit.outfit.name ?? "-- Outfitless Players --" }}
           </td>
           <td class="pr-4">
-            {{ character.kills ? character.kills : 0 }}
+            {{ outfit.kills ?? 0 }}
           </td>
           <td class="pr-4">
-            {{ character.deaths ? character.deaths : 0 }}
+            {{ outfit.deaths ?? 0 }}
           </td>
           <td class="pr-4">
-            {{ character.kills && character.deaths ? (character.kills / character.deaths).toFixed(2) : character.kills }}
+            {{ outfit.kills && outfit.deaths ? (outfit.kills / outfit.deaths).toFixed(2) : outfit.kills }}
           </td>
           <td class="pr-4">
-            {{ character.teamKills ? character.teamKills : 0 }}
+            {{ outfit.teamKills ?? 0 }}
           </td>
           <td class="pr-4">
-            {{ character.suicides ? character.suicides : 0 }}
+            {{ outfit.suicides ?? 0 }}
           </td>
           <td class="pr-4">
-            {{ character.headshots ? character.headshots : 0 }}
+            {{ outfit.headshots ?? 0 }}
           </td>
           <td class="pr-4">
-            {{ character.headshots && character.kills ? ((character.headshots / character.kills) * 100).toFixed(2) : 0 }}
+            {{ outfit.headshots && outfit.kills ? ((outfit.headshots / outfit.kills) * 100).toFixed(2) : 0 }}
           </td>
         </tr>
       </tbody>
@@ -142,10 +137,10 @@ export default defineComponent({
     },
     rowClass(outfit: InstanceOutfitAggregateResponseInterface): object {
       return {
-        'bg-vs': outfit.outfit.faction === Faction.VANU_SOVEREIGNTY,
-        'bg-nc': outfit.outfit.faction === Faction.NEW_CONGLOMERATE,
-        'bg-tr': outfit.outfit.faction === Faction.TERRAN_REPUBLIC,
-        'bg-nso': outfit.outfit.faction === Faction.NS_OPERATIVES,
+        'bg-vs': outfit.outfit.faction === Faction.VANU_SOVEREIGNTY || outfit.outfit.id === "-1",
+        'bg-nc': outfit.outfit.faction === Faction.NEW_CONGLOMERATE || outfit.outfit.id === "-2",
+        'bg-tr': outfit.outfit.faction === Faction.TERRAN_REPUBLIC || outfit.outfit.id === "-3",
+        'bg-nso': outfit.outfit.faction === Faction.NS_OPERATIVES || outfit.outfit.id === "-4",
       }
     },
   }
