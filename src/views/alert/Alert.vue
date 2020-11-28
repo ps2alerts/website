@@ -17,6 +17,11 @@
       >
         <AlertFactionCombatMetrics :alert="alert" />
       </div>
+      <div class="col-span-12 px-4 py-4 mb-2">
+        <button class="btn">
+          Players
+        </button>
+      </div>
       <div
         class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
       >

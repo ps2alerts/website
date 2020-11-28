@@ -1,6 +1,6 @@
 <template>
   <div class="tag section">
-    Character Metrics
+    Player Metrics
   </div>
   <div
     v-if="loaded"
@@ -18,7 +18,7 @@
             Rank
           </td>
           <td class="py-2 pr-4 text-left">
-            Character
+            Player
           </td>
           <td class="py-2 pr-4 text-left">
             Outfit
