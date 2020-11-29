@@ -61,11 +61,6 @@ export default defineComponent({
       alert: {} as InstanceTerritoryControlResponseInterface,
     }
   },
-  computed: {
-    // instanceEventDetails(): MetagameDetailsInterface | null {
-    //   return InstanceEventDetails(this.alert.censusMetagameEventType);
-    // },
-  },
   created: function () {
     this.init(this.$route.params.instanceId.toString());
   },
