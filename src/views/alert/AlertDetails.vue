@@ -75,7 +75,7 @@
                 Triggered by
               </div>
               <div>
-                {{ $filters.bracketName(alert.bracket) }}
+                {{ $filters.factionName(instanceEventDetails.triggeringFaction) }}
               </div>
             </div>
           </td>
@@ -89,6 +89,8 @@
 import { defineComponent } from "vue";
 import {InstanceTerritoryControlResponseInterface} from "@/interfaces/InstanceTerritoryControlResponseInterface";
 import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
+import {InstanceEventDetails} from "@/filters/InstanceEventDetails";
+import {MetagameDetailsInterface} from "@/interfaces/MetagameDetailsInterface";
 
 export default defineComponent({
   name: "AlertDetails",
@@ -102,6 +104,9 @@ export default defineComponent({
   computed: {
     ended(): boolean {
       return this.alert.state === Ps2alertsEventState.ENDED;
+    },
+    instanceEventDetails(): MetagameDetailsInterface | null {
+      return InstanceEventDetails(this.alert.censusMetagameEventType);
     },
   }
 });

@@ -114,11 +114,6 @@ export default defineComponent({
       showVehicles: false
     }
   },
-  computed: {
-    // instanceEventDetails(): MetagameDetailsInterface | null {
-    //   return InstanceEventDetails(this.alert.censusMetagameEventType);
-    // },
-  },
   created: function () {
     this.init(this.$route.params.instanceId.toString());
   },
