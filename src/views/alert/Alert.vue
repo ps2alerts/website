@@ -17,7 +17,7 @@
       >
         <AlertFactionCombatMetrics :alert="alert" />
       </div>
-      <div class="col-span-12 px-4 py-4 mb-2">
+      <div class="col-span-12 px-4 py-4 mb-2 text-center">
         <button
           class="btn"
           :class="{'btn-active': !showPlayers}"
