@@ -62,7 +62,7 @@
               <span v-if="!outfit.outfit.name">-- Outfitless players --</span>
             </td>
             <td class="pr-4">
-              {{ outfit.participants ?? 'wut' }}
+              {{ outfit.participants ?? '???' }}
             </td>
             <td class="pr-4">
               {{ outfit.kills ?? 0 }}
@@ -173,16 +173,15 @@ export default defineComponent({
     },
     applyOutfitParticipants() {
       for (const outfitId in this.outfitParticipants) {
-        /* eslint-disable */
-        // @ts-ignore
-        const key = Object.keys(this.data).find(key => this.data[key].outfit.id === outfitId);
+        const stringKey = Object.keys(this.data).find((i) => {
+          const iNum = parseInt(i, 10);
+          return this.data[iNum].outfit.id === outfitId;
+        });
 
-        // @ts-ignore
-        if (key && this.data[key]) {
-          // @ts-ignore
-          this.data[key].participants = this.outfitParticipants[outfitId].length;
+        if (stringKey) {
+          const key = parseInt(stringKey, 10);
+          this.data[key] ? this.data[key].participants = this.outfitParticipants[outfitId].length : null;
         }
-        /* eslint-enable */
       }
     }
   }

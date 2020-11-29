@@ -9,7 +9,7 @@
     <div class="col-span-12 mb-4">
       Total weapons: {{ data.length }}
     </div>
-    <div class="col-span-12 mb-4">
+    <div class="col-span-12">
       <table class="w-full text-center">
         <thead>
           <tr>
