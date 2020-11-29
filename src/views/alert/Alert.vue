@@ -27,6 +27,11 @@
       >
         <AlertOutfitMetrics :alert="alert" />
       </div>
+      <div
+        class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
+      >
+        <AlertWeaponMetrics :alert="alert" />
+      </div>
     </div>
   </div>
 </template>
@@ -37,11 +42,12 @@ import {InstanceTerritoryControlResponseInterface} from "@/interfaces/InstanceTe
 import AlertResultBar from "@/views/alert/AlertResultBar.vue";
 import ApiRequest from "@/api-request";
 import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
+import {Endpoints} from "@/constants/Endpoints";
 import AlertDetails from "@/views/alert/AlertDetails.vue";
 import AlertFactionCombatMetrics from "@/views/alert/AlertFactionCombatMetrics.vue";
-import {Endpoints} from "@/constants/Endpoints";
 import AlertCharacterMetrics from "@/views/alert/AlertCharacterMetrics.vue";
 import AlertOutfitMetrics from "@/views/alert/AlertOutfitMetrics.vue";
+import AlertWeaponMetrics from "@/views/alert/AlertWeaponMetrics.vue";
 
 export default defineComponent({
   name: "Alert",
@@ -51,6 +57,7 @@ export default defineComponent({
     AlertFactionCombatMetrics,
     AlertCharacterMetrics,
     AlertOutfitMetrics,
+    AlertWeaponMetrics,
   },
   beforeRouteUpdate(to, from, next) {
     this.init(to.params.instanceId.toString())
