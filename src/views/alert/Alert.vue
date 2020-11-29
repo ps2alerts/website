@@ -18,24 +18,58 @@
         <AlertFactionCombatMetrics :alert="alert" />
       </div>
       <div class="col-span-12 px-4 py-4 mb-2">
-        <button class="btn">
+        <button
+          class="btn"
+          :class="{'btn-active': !showPlayers}"
+          @click="togglePlayers()"
+        >
           Players
+        </button>
+        <button
+          class="btn"
+          :class="{'btn-active': !showOutfits}"
+          @click="toggleOutfits()"
+        >
+          Outfits
+        </button>
+        <button
+          class="btn"
+          :class="{'btn-active': !showWeapons}"
+          @click="toggleWeapons()"
+        >
+          Weapons
+        </button>
+        <button
+          class="btn"
+          :class="{'btn-active': !showVehicles}"
+          @click="toggleVehicles()"
+        >
+          Vehicles
         </button>
       </div>
       <div
+        v-show="showPlayers === true"
         class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
       >
         <AlertCharacterMetrics :alert="alert" />
       </div>
       <div
+        v-show="showOutfits === true"
         class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
       >
         <AlertOutfitMetrics :alert="alert" />
       </div>
       <div
+        v-show="showWeapons === true"
         class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
       >
         <AlertWeaponMetrics :alert="alert" />
+      </div>
+      <div
+        v-show="showVehicles === true"
+        class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
+      >
+        Vehicles
       </div>
     </div>
   </div>
@@ -73,6 +107,10 @@ export default defineComponent({
       error: null,
       interval: undefined as number | undefined,
       alert: {} as InstanceTerritoryControlResponseInterface,
+      showPlayers: true,
+      showOutfits: false,
+      showWeapons: false,
+      showVehicles: false
     }
   },
   computed: {
@@ -106,6 +144,28 @@ export default defineComponent({
           this.error = e.message;
         })
     },
+    hideAll() {
+      this.showPlayers = false;
+      this.showOutfits = false;
+      this.showWeapons = false;
+      this.showVehicles = false;
+    },
+    togglePlayers() {
+      this.hideAll();
+      this.showPlayers = !this.showPlayers;
+    },
+    toggleOutfits() {
+      this.hideAll();
+      this.showOutfits = !this.showOutfits;
+    },
+    toggleWeapons() {
+      this.hideAll();
+      this.showWeapons = !this.showWeapons;
+    },
+    toggleVehicles() {
+      this.hideAll();
+      this.showVehicles = !this.showVehicles;
+    }
   }
 });
 </script>
