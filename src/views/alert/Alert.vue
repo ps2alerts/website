@@ -52,13 +52,20 @@
         v-show="showPlayers === true"
         class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
       >
-        <AlertCharacterMetrics :alert="alert" />
+        <AlertCharacterMetrics
+          :alert="alert"
+          @outfit-participants-changed="outfitParticipantsChanged"
+        />
       </div>
       <div
         v-show="showOutfits === true"
         class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
       >
-        <AlertOutfitMetrics :alert="alert" />
+        <AlertOutfitMetrics
+          ref="outfit"
+          :alert="alert"
+          :outfit-participants="outfitParticipants"
+        />
       </div>
       <div
         v-show="showWeapons === true"
@@ -111,7 +118,8 @@ export default defineComponent({
       showPlayers: true,
       showOutfits: false,
       showWeapons: false,
-      showVehicles: false
+      showVehicles: false,
+      outfitParticipants: {} as {[k: string]: string[]},
     }
   },
   created: function () {
@@ -161,6 +169,16 @@ export default defineComponent({
     toggleVehicles() {
       this.hideAll();
       this.showVehicles = !this.showVehicles;
+    },
+    // Used by AlertOutfitMetrics.vue component
+    outfitParticipantsChanged(participants: {[k: string]: string[]}) {
+      this.outfitParticipants = participants;
+      const outfitRef = this.$refs.outfit;
+      if (outfitRef) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        outfitRef.applyOutfitParticipants();
+      }
     }
   }
 });

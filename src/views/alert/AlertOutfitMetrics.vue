@@ -20,6 +20,9 @@
               [TAG] Outfit
             </td>
             <td class="py-2 pr-4">
+              Players
+            </td>
+            <td class="py-2 pr-4">
               Kills
             </td>
             <td class="py-2 pr-4">
@@ -57,6 +60,9 @@
                 <span v-if="outfit.outfit.tag">[{{ outfit.outfit.tag }}]</span> {{ outfit.outfit.name }}
               </span>
               <span v-if="!outfit.outfit.name">-- Outfitless players --</span>
+            </td>
+            <td class="pr-4">
+              {{ outfit.participants ?? 'wut' }}
             </td>
             <td class="pr-4">
               {{ outfit.kills ?? 0 }}
@@ -103,12 +109,32 @@ export default defineComponent({
       default: {},
       required: true
     },
+    outfitParticipants: {
+      type: Object as () => {[k: string]: string[]},
+      default: {},
+      required: true,
+    }
   },
   data: function() {
     return {
       error: null,
       loaded: false,
       data: {} as InstanceOutfitAggregateResponseInterface[],
+    }
+  },
+  watch: {
+    // If the players component completes before this one, we store the data and apply it after load. If loaded late, apply it at load.
+    // outfitParticipants() also updates live when player data changes.
+    outfitParticipants() {
+      console.log('watch outfitParticipants');
+      this.applyOutfitParticipants();
+    },
+    loaded() {
+      console.log('watch loaded');
+      this.applyOutfitParticipants();
+    },
+    data() {
+      this.applyOutfitParticipants();
     }
   },
   created() {
@@ -145,6 +171,20 @@ export default defineComponent({
         'bg-nso': outfit.outfit.faction === Faction.NS_OPERATIVES || outfit.outfit.id === "-4",
       }
     },
+    applyOutfitParticipants() {
+      for (const outfitId in this.outfitParticipants) {
+        /* eslint-disable */
+        // @ts-ignore
+        const key = Object.keys(this.data).find(key => this.data[key].outfit.id === outfitId);
+
+        // @ts-ignore
+        if (key && this.data[key]) {
+          // @ts-ignore
+          this.data[key].participants = this.outfitParticipants[outfitId].length;
+        }
+        /* eslint-enable */
+      }
+    }
   }
 });
 </script>

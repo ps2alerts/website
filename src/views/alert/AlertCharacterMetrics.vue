@@ -110,11 +110,13 @@ export default defineComponent({
       required: true
     },
   },
+  emits: ['outfit-participants-changed'],
   data: function() {
     return {
       error: null,
       loaded: false,
       data: {} as InstanceCharacterAggregateResponseInterface[],
+      outfitParticipants: {} as {[k: string]: string[]},
     }
   },
   created() {
@@ -138,10 +140,36 @@ export default defineComponent({
         .then(result => {
           this.data = result
           this.loaded = true;
+          this.calculateOutfitParticipants();
         })
         .catch(e => {
           this.error = e.message;
         })
+    },
+    // This bubbles up to the Alert.vue component, then back down via a prop bind to AlertOutfitMetrics.vue, which enables
+    // us to render the outfit participants.
+    calculateOutfitParticipants(): void {
+      this.data.forEach((character: InstanceCharacterAggregateResponseInterface) => {
+        let outfitId = `-${character.character.faction.toString()}`;
+
+        if (character.character.outfit) {
+          outfitId = character.character.outfit?.id;
+        }
+
+        const characterId = character.character.id;
+
+        if (!this.outfitParticipants[outfitId]) {
+          this.outfitParticipants[outfitId] = []
+        }
+
+        if (this.outfitParticipants[outfitId].indexOf(characterId) === -1) {
+          this.outfitParticipants[outfitId].push(characterId);
+        }
+      });
+
+      if (Object.keys(this.outfitParticipants).length > 0) {
+        this.$emit('outfit-participants-changed', this.outfitParticipants)
+      }
     },
     rowClass(character: InstanceCharacterAggregateResponseInterface): object {
       return {
