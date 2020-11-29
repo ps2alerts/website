@@ -55,7 +55,7 @@
             <td class="pr-4 text-left">
               <span v-if="outfit.outfit.tag">
                 <span v-if="outfit.outfit.tag">[{{ outfit.outfit.tag }}]</span>
-                {{ outfit.outfit.name }}
+                {{ outfit.outfit.name ?? "-- Outfitless Players --" }}
               </span>
             </td>
             <td class="pr-4">
