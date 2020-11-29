@@ -56,7 +56,7 @@
               <span v-if="outfit.outfit">
                 <span v-if="outfit.outfit.tag">[{{ outfit.outfit.tag }}]</span> {{ outfit.outfit.name }}
               </span>
-              <span v-if="!outfit.outfit">-- Outfitless players --</span>
+              <span v-if="!outfit.outfit.name">-- Outfitless players --</span>
             </td>
             <td class="pr-4">
               {{ outfit.kills ?? 0 }}
