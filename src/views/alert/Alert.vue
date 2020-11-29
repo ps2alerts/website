@@ -17,7 +17,7 @@
       >
         <AlertFactionCombatMetrics :alert="alert" />
       </div>
-      <div class="col-span-12 px-4 py-4 mb-2 text-center">
+      <div class="col-span-12 text-center">
         <button
           class="btn"
           :class="{'btn-active': !showPlayers}"
@@ -46,6 +46,7 @@
         >
           Vehicles
         </button>
+        <p>Filtering and sorting coming very soon!</p>
       </div>
       <div
         v-show="showPlayers === true"
