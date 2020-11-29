@@ -53,10 +53,10 @@
               {{ index + 1 }}
             </td>
             <td class="pr-4 text-left">
-              <span v-if="outfit.outfit.tag">
-                <span v-if="outfit.outfit.tag">[{{ outfit.outfit.tag }}]</span>
-                {{ outfit.outfit.name ?? "-- Outfitless Players --" }}
+              <span v-if="outfit.outfit">
+                <span v-if="outfit.outfit.tag">[{{ outfit.outfit.tag }}]</span> {{ outfit.outfit.name }}
               </span>
+              <span v-if="!outfit.outfit">-- Outfitless players --</span>
             </td>
             <td class="pr-4">
               {{ outfit.kills ?? 0 }}
