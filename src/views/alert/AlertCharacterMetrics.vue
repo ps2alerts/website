@@ -7,88 +7,88 @@
     class="grid grid-cols-12"
   >
     <div class="col-span-12 mb-4">
-      <div class="col-span-12">
-        Total players: {{ data.length }}
-      </div>
+      Total players: {{ data.length }}
     </div>
-    <table class="table-auto text-center">
-      <thead>
-        <tr>
-          <td class="py-2 pr-4 text-left">
-            Rank
-          </td>
-          <td class="py-2 pr-4 text-left">
-            Character
-          </td>
-          <td class="py-2 pr-4 text-left">
-            Outfit
-          </td>
-          <td class="py-2 pr-4">
-            Kills
-          </td>
-          <td class="py-2 pr-4">
-            Deaths
-          </td>
-          <td class="py-2 pr-4">
-            KD
-          </td>
-          <td class="py-2 pr-4">
-            TKs
-          </td>
-          <td class="py-2 pr-4">
-            Suicides
-          </td>
-          <td class="py-2 pr-4">
-            Headshots
-          </td>
-          <td class="py-2 pr-4">
-            HSR %
-          </td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="(character, index) in data"
-          :key="character.character"
-          class="mb-2"
-          :class="rowClass(character)"
-        >
-          <td class="pr-4 text-left">
-            {{ index + 1 }}
-          </td>
-          <td class="pr-4 text-left">
-            {{ character.character.name }}
-          </td>
-          <td class="pr-4 text-left">
-            <span v-if="character.character.outfit">
-              <span v-if="character.character.outfit.tag">[{{ character.character.outfit.tag }}]</span>
-              {{ character.character.outfit.name }}
-            </span>
-          </td>
-          <td class="pr-4">
-            {{ character.kills ?? 0 }}
-          </td>
-          <td class="pr-4">
-            {{ character.deaths ?? 0 }}
-          </td>
-          <td class="pr-4">
-            {{ character.kills && character.deaths ? (character.kills / character.deaths).toFixed(2) : character.kills }}
-          </td>
-          <td class="pr-4">
-            {{ character.teamKills ?? 0 }}
-          </td>
-          <td class="pr-4">
-            {{ character.suicides ?? 0 }}
-          </td>
-          <td class="pr-4">
-            {{ character.headshots ?? 0 }}
-          </td>
-          <td class="pr-4">
-            {{ character.headshots && character.kills ? ((character.headshots / character.kills) * 100).toFixed(2) : 0 }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="col-span-12 mb-4">
+      <table class="w-full text-center">
+        <thead>
+          <tr>
+            <td class="py-2 pr-4 text-left">
+              Rank
+            </td>
+            <td class="py-2 pr-4 text-left">
+              Player
+            </td>
+            <td class="py-2 pr-4 text-left">
+              Outfit
+            </td>
+            <td class="py-2 pr-4">
+              Kills
+            </td>
+            <td class="py-2 pr-4">
+              Deaths
+            </td>
+            <td class="py-2 pr-4">
+              KD
+            </td>
+            <td class="py-2 pr-4">
+              TKs
+            </td>
+            <td class="py-2 pr-4">
+              Suicides
+            </td>
+            <td class="py-2 pr-4">
+              Headshots
+            </td>
+            <td class="py-2 pr-4">
+              HSR %
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(character, index) in data"
+            :key="character.character"
+            class="mb-2"
+            :class="rowClass(character)"
+          >
+            <td class="pr-4 text-left">
+              {{ index + 1 }}
+            </td>
+            <td class="pr-4 text-left">
+              {{ character.character.name }}
+            </td>
+            <td class="pr-4 text-left">
+              <span v-if="character.character.outfit">
+                <span v-if="character.character.outfit.tag">[{{ character.character.outfit.tag }}]</span>
+                {{ character.character.outfit.name }}
+              </span>
+            </td>
+            <td class="pr-4">
+              {{ character.kills ?? 0 }}
+            </td>
+            <td class="pr-4">
+              {{ character.deaths ?? 0 }}
+            </td>
+            <td class="pr-4">
+              {{ character.kills && character.deaths ? (character.kills / character.deaths).toFixed(2) : character.kills ?? 0 }}
+            </td>
+            <td class="pr-4">
+              {{ character.teamKills ?? 0 }}
+            </td>
+            <td class="pr-4">
+              {{ character.suicides ?? 0 }}
+            </td>
+            <td class="pr-4">
+              {{ character.headshots ?? 0 }}
+            </td>
+            <td class="pr-4">
+              {{ character.headshots && character.kills ? ((character.headshots / character.kills) * 100).toFixed(2) : 0 }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 

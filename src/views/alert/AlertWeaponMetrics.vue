@@ -7,68 +7,68 @@
     class="grid grid-cols-12"
   >
     <div class="col-span-12 mb-4">
-      <div class="col-span-12">
-        Total Weapons: {{ data.length }}
-      </div>
+      Total weapons: {{ data.length }}
     </div>
-    <table class="table-auto text-center">
-      <thead>
-        <tr>
-          <td class="py-2 pr-4 text-left">
-            Rank
-          </td>
-          <td class="py-2 pr-4 text-left">
-            Weapon
-          </td>
-          <td class="py-2 pr-4">
-            Kills
-          </td>
-          <td class="py-2 pr-4">
-            TKs
-          </td>
-          <td class="py-2 pr-4">
-            Suicides
-          </td>
-          <td class="py-2 pr-4">
-            Headshots
-          </td>
-          <td class="py-2 pr-4">
-            HSR
-          </td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="(weapon, index) in data"
-          :key="weapon.id"
-          class="mb-2"
-          :class="rowClass(weapon)"
-        >
-          <td class="pr-4 text-left">
-            {{ index + 1 }}
-          </td>
-          <td class="pr-4 text-left">
-            <span v-if="weapon.weapon.tag">[{{ weapon.weapon.tag }}]</span>
-            {{ weapon.weapon.name ?? "-- Outfitless Players --" }}
-          </td>
-          <td class="pr-4">
-            {{ weapon.kills ?? 0 }}
-          </td>
-          <td class="pr-4">
-            {{ weapon.teamKills ?? 0 }}
-          </td>
-          <td class="pr-4">
-            {{ weapon.suicides ?? 0 }}
-          </td>
-          <td class="pr-4">
-            {{ weapon.headshots ?? 0 }}
-          </td>
-          <td class="pr-4">
-            {{ weapon.headshots && weapon.kills ? ((weapon.headshots / weapon.kills) * 100).toFixed(2) : 0 }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="col-span-12 mb-4">
+      <table class="w-full text-center">
+        <thead>
+          <tr>
+            <td class="py-2 pr-4 text-left">
+              Rank
+            </td>
+            <td class="py-2 pr-4 text-left">
+              Weapon
+            </td>
+            <td class="py-2 pr-4">
+              Kills
+            </td>
+            <td class="py-2 pr-4">
+              TKs
+            </td>
+            <td class="py-2 pr-4">
+              Suicides
+            </td>
+            <td class="py-2 pr-4">
+              Headshots
+            </td>
+            <td class="py-2 pr-4">
+              HSR
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(weapon, index) in data"
+            :key="weapon.id"
+            class="mb-2"
+            :class="rowClass(weapon)"
+          >
+            <td class="pr-4 text-left">
+              {{ index + 1 }}
+            </td>
+            <td class="pr-4 text-left">
+              <span v-if="weapon.weapon.tag">[{{ weapon.weapon.tag }}]</span>
+              {{ weapon.weapon.name ?? "-- Outfitless Players --" }}
+            </td>
+            <td class="pr-4">
+              {{ weapon.kills ?? 0 }}
+            </td>
+            <td class="pr-4">
+              {{ weapon.teamKills ?? 0 }}
+            </td>
+            <td class="pr-4">
+              {{ weapon.suicides ?? 0 }}
+            </td>
+            <td class="pr-4">
+              {{ weapon.headshots ?? 0 }}
+            </td>
+            <td class="pr-4">
+              {{ weapon.headshots && weapon.kills ? ((weapon.headshots / weapon.kills) * 100).toFixed(2) : 0 }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
