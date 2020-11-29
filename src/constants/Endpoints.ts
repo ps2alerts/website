@@ -32,8 +32,8 @@ export const Endpoints = {
   AGGREGATES_INSTANCE_VEHICLE_CHARACTER: '/aggregates/instance/vehicle/character',
   AGGREGATES_INSTANCE_VEHICLE_CHARACTER_SINGLE: '/aggregates/instance/vehicle/character/{character}',
   AGGREGATES_INSTANCE_VEHICLE_CHARACTER_SINGLE_VEHICLE: '/aggregates/instance/vehicle/character/{character}/{vehicle}',
-  AGGREGATES_INSTANCE_WEAPON: '/aggregates/instance/weapon',
-  AGGREGATES_INSTANCE_WEAPON_SINGLE: '/aggregates/instance/weapon/{weapon}',
+  AGGREGATES_INSTANCE_WEAPON: '/aggregates/instance/{instance}/weapon',
+  AGGREGATES_INSTANCE_WEAPON_SINGLE: '/aggregates/instance/{instance}/weapon/{weapon}',
 
   INSTANCE_FACILITY_CONTROL_ENTRIES: '/instance-entries/{instance}/facility',
   INSTANCE_FACILITY_CONTROL_ENTRIES_FACILITY: '/instance-entries/{instance}/facility/{facility}',
