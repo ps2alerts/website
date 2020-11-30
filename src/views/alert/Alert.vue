@@ -20,28 +20,28 @@
       <div class="col-span-12 text-center">
         <button
           class="btn"
-          :class="{'btn-active': !showPlayers}"
+          :class="{'btn-active': showPlayers}"
           @click="togglePlayers()"
         >
           Players
         </button>
         <button
           class="btn"
-          :class="{'btn-active': !showOutfits}"
+          :class="{'btn-active': showOutfits}"
           @click="toggleOutfits()"
         >
           Outfits
         </button>
         <button
           class="btn"
-          :class="{'btn-active': !showWeapons}"
+          :class="{'btn-active': showWeapons}"
           @click="toggleWeapons()"
         >
           Weapons
         </button>
         <button
           class="btn"
-          :class="{'btn-active': !showVehicles}"
+          :class="{'btn-active': showVehicles}"
           @click="toggleVehicles()"
         >
           Vehicles

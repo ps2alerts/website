@@ -54,16 +54,21 @@
 @layer utilities {
   /* Buttons */
   .btn {
-    @apply bg-red-600 font-bold rounded-md py-2 px-4 m-1 inline-block font-medium border-transparent;
+    @apply bg-red-800 font-bold rounded-md py-2 px-4 m-1 inline-block font-medium border-transparent;
     transition: background-color 0.25s ease-out;
 
+    &:focus, &:active {
+      @apply border-transparent outline-none;
+    }
+
     &:hover {
-      @apply bg-red-800;
+      @apply bg-red-600;
     }
     &:disabled {
       @apply bg-gray-500;
     }
   }
+
   .btn-sm {
     @apply text-sm py-1 px-2 rounded;
   }
