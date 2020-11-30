@@ -43,13 +43,16 @@
     @apply bg-gray-600 bg-opacity-50;
   }
   .bg-vs {
-    @apply bg-purple-900 bg-opacity-50;
+    @apply bg-purple-800 bg-opacity-50;
   }
   .bg-nc {
-    @apply bg-blue-900 bg-opacity-50;
+    @apply bg-blue-700 bg-opacity-50;
   }
   .bg-tr {
-    @apply bg-red-900 bg-opacity-50;
+    @apply bg-red-800 bg-opacity-50;
+  }
+  .bg-nso {
+    @apply bg-gray-700;
   }
 
   h1 {
