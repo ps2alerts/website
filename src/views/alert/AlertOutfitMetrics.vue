@@ -6,8 +6,19 @@
     v-if="loaded"
     class="grid grid-cols-12"
   >
-    <div class="col-span-12 mb-4">
-      Total outfits: {{ data.length }}
+    <div class="col-span-12 mb-4 flex">
+      <div class="pr-2 py-2">
+        Outfit Counts:
+      </div>
+      <div
+        v-for="(count, index) in counts"
+        :key="index"
+        :class="factionClass(parseInt(index, 10))"
+        class="p-2"
+      >
+        <span v-if="index === 'total'">= </span>
+        {{ count ?? 0 }}
+      </div>
     </div>
     <div class="col-span-12">
       <table class="table-auto w-full text-center">
@@ -50,7 +61,7 @@
             v-for="(outfit, index) in data"
             :key="outfit.id"
             class="mb-2"
-            :class="rowClass(outfit)"
+            :class="factionClass(outfit.outfit.faction)"
           >
             <td class="pr-4 text-left">
               {{ index + 1 }}
@@ -59,7 +70,6 @@
               <span v-if="outfit.outfit">
                 <span v-if="outfit.outfit.tag">[{{ outfit.outfit.tag }}]</span> {{ outfit.outfit.name }}
               </span>
-              <span v-if="!outfit.outfit.name">-- Outfitless players --</span>
             </td>
             <td class="pr-4">
               {{ outfit.participants ?? '???' }}
@@ -122,6 +132,30 @@ export default defineComponent({
       data: {} as InstanceOutfitAggregateResponseInterface[],
     }
   },
+  computed: {
+    counts(): {1: number, 2: number, 3: number, 4: number, total: number} {
+      const counts = {1: 0, 2: 0, 3: 0, 4: 0, total: 0};
+      this.data.forEach((outfit) => {
+        switch (outfit.outfit.faction) {
+        case Faction.VANU_SOVEREIGNTY:
+          counts[Faction.VANU_SOVEREIGNTY]++;
+          break;
+        case Faction.NEW_CONGLOMERATE:
+          counts[Faction.NEW_CONGLOMERATE]++;
+          break;
+        case Faction.TERRAN_REPUBLIC:
+          counts[Faction.TERRAN_REPUBLIC]++;
+          break;
+        case Faction.NS_OPERATIVES:
+          counts[Faction.NS_OPERATIVES]++;
+          break;
+        }
+        counts.total++;
+      })
+
+      return counts;
+    },
+  },
   watch: {
     // If the players component completes before this one, we store the data and apply it after load. If loaded late, apply it at load.
     // outfitParticipants() also updates live when player data changes.
@@ -131,6 +165,7 @@ export default defineComponent({
     },
     loaded() {
       console.log('watch loaded');
+      console.log('data', this.data);
       this.applyOutfitParticipants();
     },
     data() {
@@ -163,12 +198,12 @@ export default defineComponent({
           this.error = e.message;
         })
     },
-    rowClass(outfit: InstanceOutfitAggregateResponseInterface): object {
+    factionClass(faction: Faction): object {
       return {
-        'bg-vs': outfit.outfit.faction === Faction.VANU_SOVEREIGNTY || outfit.outfit.id === "-1",
-        'bg-nc': outfit.outfit.faction === Faction.NEW_CONGLOMERATE || outfit.outfit.id === "-2",
-        'bg-tr': outfit.outfit.faction === Faction.TERRAN_REPUBLIC || outfit.outfit.id === "-3",
-        'bg-nso': outfit.outfit.faction === Faction.NS_OPERATIVES || outfit.outfit.id === "-4",
+        'bg-vs': faction === Faction.VANU_SOVEREIGNTY,
+        'bg-nc': faction === Faction.NEW_CONGLOMERATE,
+        'bg-tr': faction === Faction.TERRAN_REPUBLIC,
+        'bg-nso': faction === Faction.NS_OPERATIVES,
       }
     },
     applyOutfitParticipants() {

@@ -6,8 +6,19 @@
     v-if="loaded"
     class="grid grid-cols-12"
   >
-    <div class="col-span-12 mb-4">
-      Total players: {{ data.length }}
+    <div class="col-span-12 mb-4 flex">
+      <div class="pr-2 py-2">
+        Player Counts:
+      </div>
+      <div
+        v-for="(count, index) in counts"
+        :key="index"
+        :class="factionClass(parseInt(index, 10))"
+        class="p-2"
+      >
+        <span v-if="index === 'total'">= </span>
+        {{ count ?? 0 }}
+      </div>
     </div>
     <div class="col-span-12">
       <table class="w-full text-center">
@@ -50,7 +61,7 @@
             v-for="(character, index) in data"
             :key="character.character"
             class="mb-2"
-            :class="rowClass(character)"
+            :class="factionClass(character.character.faction)"
           >
             <td class="pr-4 text-left">
               {{ index + 1 }}
@@ -119,6 +130,30 @@ export default defineComponent({
       outfitParticipants: {} as {[k: string]: string[]},
     }
   },
+  computed: {
+    counts(): {1: number, 2: number, 3: number, 4: number, total: number} {
+      const counts = {1: 0, 2: 0, 3: 0, 4: 0, total: 0};
+      this.data.forEach((character) => {
+        switch (character.character.faction) {
+        case Faction.VANU_SOVEREIGNTY:
+          counts[Faction.VANU_SOVEREIGNTY]++;
+          break;
+        case Faction.NEW_CONGLOMERATE:
+          counts[Faction.NEW_CONGLOMERATE]++;
+          break;
+        case Faction.TERRAN_REPUBLIC:
+          counts[Faction.TERRAN_REPUBLIC]++;
+          break;
+        case Faction.NS_OPERATIVES:
+          counts[Faction.NS_OPERATIVES]++;
+          break;
+        }
+        counts.total++;
+      })
+
+      return counts;
+    },
+  },
   created() {
     this.pull();
     setInterval(() => {
@@ -171,12 +206,12 @@ export default defineComponent({
         this.$emit('outfit-participants-changed', this.outfitParticipants)
       }
     },
-    rowClass(character: InstanceCharacterAggregateResponseInterface): object {
+    factionClass(faction: Faction): object {
       return {
-        'bg-vs': character.character.faction === Faction.VANU_SOVEREIGNTY,
-        'bg-nc': character.character.faction === Faction.NEW_CONGLOMERATE,
-        'bg-tr': character.character.faction === Faction.TERRAN_REPUBLIC,
-        'bg-nso': character.character.faction === Faction.NS_OPERATIVES,
+        'bg-vs': faction === Faction.VANU_SOVEREIGNTY,
+        'bg-nc': faction === Faction.NEW_CONGLOMERATE,
+        'bg-tr': faction === Faction.TERRAN_REPUBLIC,
+        'bg-nso': faction === Faction.NS_OPERATIVES,
       }
     },
   }
