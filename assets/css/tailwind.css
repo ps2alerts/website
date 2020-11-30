@@ -9,6 +9,6 @@
 
 @layer utilities {
   .router-link-active, .btn-active {
-    @apply bg-red-800 !important;
+    @apply bg-red-600 !important;
   }
 }
