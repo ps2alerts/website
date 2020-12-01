@@ -17,10 +17,10 @@
               Vehicle
             </td>
             <td class="py-2 pr-4">
-              Total Kills
+              Kills
             </td>
             <td class="py-2 pr-4">
-              Total Deaths
+              Deaths
             </td>
             <td class="py-2 pr-4">
               K/D
@@ -70,19 +70,19 @@
             {{ vehicle.vehicleName }}
           </td>
           <td class="pr-4">
-            {{ (vehicle.vehicles ? vehicle.vehicles.kills ?? 0 : 0) + (vehicle.infantry ? vehicle.infantry.kills ?? 0 : 0) }}
+            {{ vehicle.totals ? vehicle.totals.kills ?? 0 : 0 }}
           </td>
           <td class="pr-4">
-            {{ (vehicle.vehicles ? vehicle.vehicles.deaths ?? 0 : 0) + (vehicle.infantry ? vehicle.infantry.deaths ?? 0 : 0) }}
+            {{ vehicle.totals ? vehicle.totals.deaths ?? 0 : 0 }}
           </td>
           <td class="pr-4">
-            {{ (vehicle.vehicles ? vehicle.vehicles.deaths ?? 0 : 0) + (vehicle.infantry ? vehicle.infantry.deaths ?? 0 : 0) }}
+            {{ vehicle.totals ? vehicle.totals.kills && vehicle.totals.deaths ? (vehicle.totals.kills / vehicle.totals.deaths).toFixed(2) : vehicle.totals.kills ?? 0 : 0 }}
           </td>
           <td class="pr-4">
-            {{ (vehicle.vehicles ? vehicle.vehicles.teamkills ?? 0 : 0) + (vehicle.infantry ? vehicle.infantry.teamkills ?? 0 : 0) }}
+            {{ vehicle.totals ? vehicle.totals.teamkills ?? 0 : 0 }}
           </td>
           <td class="pr-4">
-            {{ (vehicle.vehicles ? vehicle.vehicles.teamkilled ?? 0 : 0) + (vehicle.infantry ? vehicle.infantry.teamkilled ?? 0 : 0) }}
+            {{ vehicle.totals ? vehicle.totals.teamkilled ?? 0 : 0 }}
           </td>
           <td class="pr-4">
             {{ vehicle.vehicles ? vehicle.suicides ?? 0 : 0 }}
@@ -191,8 +191,14 @@ export default defineComponent({
             })
             result[key].vehicleName = vehicleData ? vehicleData.name : `UNKNOWN (ID: ${vehicle.vehicle})`;
             result[key].vehicleFaction = vehicleData ? vehicleData.faction : Faction.NONE;
+            result[key].totals = {
+              kills: (vehicle.vehicles ? vehicle.vehicles.kills ?? 0 : 0) + (vehicle.infantry ? vehicle.infantry.kills ?? 0 : 0),
+              deaths: (vehicle.vehicles ? vehicle.vehicles.deaths ?? 0 : 0) + (vehicle.infantry ? vehicle.infantry.deaths ?? 0 : 0),
+              teamkills: (vehicle.vehicles ? vehicle.vehicles.teamkills ?? 0 : 0) + (vehicle.infantry ? vehicle.infantry.teamkills ?? 0 : 0),
+              teamkilled: (vehicle.vehicles ? vehicle.vehicles.teamkilled ?? 0 : 0) + (vehicle.infantry ? vehicle.infantry.teamkilled ?? 0 : 0),
+            }
           });
-          this.data = result
+          this.data = result;
           this.loaded = true;
         })
         .catch(e => {

@@ -17,4 +17,10 @@ export interface InstanceVehicleAggregateResponseInterface {
   suicides?: number;
   vehicles?: VehicleStatsInterface;
   infantry?: VehicleStatsInterface;
+  totals?: {
+    kills: number;
+    deaths: number;
+    teamkills: number;
+    teamkilled: number;
+  }
 }
