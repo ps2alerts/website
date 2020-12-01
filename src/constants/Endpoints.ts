@@ -42,3 +42,7 @@ export const Endpoints = {
   INSTANCES_ACTIVE: '/instances/active',
   INSTANCES_TERRITORY_CONTROL: '/instances/territory-control',
 }
+
+export const CensusEndpoints = {
+  VEHICLE_DATA: 's:{serviceId}/get/ps2:v2/vehicle?c:limit=1000'
+}

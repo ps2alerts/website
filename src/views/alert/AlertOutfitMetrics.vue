@@ -160,12 +160,9 @@ export default defineComponent({
     // If the players component completes before this one, we store the data and apply it after load. If loaded late, apply it at load.
     // outfitParticipants() also updates live when player data changes.
     outfitParticipants() {
-      console.log('watch outfitParticipants');
       this.applyOutfitParticipants();
     },
     loaded() {
-      console.log('watch loaded');
-      console.log('data', this.data);
       this.applyOutfitParticipants();
     },
     data() {

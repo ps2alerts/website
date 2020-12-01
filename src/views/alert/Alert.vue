@@ -77,7 +77,7 @@
         v-show="showVehicles === true"
         class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
       >
-        Vehicles
+        <AlertVehicleMetrics :alert="alert" />
       </div>
     </div>
   </div>
@@ -95,6 +95,7 @@ import AlertFactionCombatMetrics from "@/views/alert/AlertFactionCombatMetrics.v
 import AlertCharacterMetrics from "@/views/alert/AlertCharacterMetrics.vue";
 import AlertOutfitMetrics from "@/views/alert/AlertOutfitMetrics.vue";
 import AlertWeaponMetrics from "@/views/alert/AlertWeaponMetrics.vue";
+import AlertVehicleMetrics from "@/views/alert/AlertVehicleMetrics.vue";
 
 export default defineComponent({
   name: "Alert",
@@ -105,6 +106,7 @@ export default defineComponent({
     AlertCharacterMetrics,
     AlertOutfitMetrics,
     AlertWeaponMetrics,
+    AlertVehicleMetrics
   },
   beforeRouteUpdate(to, from, next) {
     this.init(to.params.instanceId.toString())
