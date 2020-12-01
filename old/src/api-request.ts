@@ -5,9 +5,9 @@ import {CommonApiParamsInterface} from "@/interfaces/CommonApiParmsInterface";
 export default class ApiRequest {
   public client: AxiosInstance;
 
-  constructor() {
+  constructor(baseUrl?: string) {
     this.client = axios.create({
-      baseURL: Config.api.url,
+      baseURL: baseUrl ?? Config.api.url,
       responseType: 'json',
     })
   }
