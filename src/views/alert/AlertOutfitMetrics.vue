@@ -52,7 +52,7 @@
               Headshots
             </td>
             <td class="py-2 pr-4">
-              HSR
+              HSR %
             </td>
           </tr>
         </thead>
