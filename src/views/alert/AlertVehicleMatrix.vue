@@ -34,7 +34,7 @@
           Kills / Deaths
         </button>
       </div>
-      <table class="w-full text-center table-fixed hover">
+      <table class="w-full text-center table-fixed hover border-col border-row">
         <thead>
           <tr>
             <td class="py-2">
@@ -56,13 +56,12 @@
           :key="vehicle.id"
           class="mb-2"
         >
-          <td class="font-bold border-gray-600 border-b">
+          <td class="font-bold">
             {{ vehicle.vehicleName }}
           </td>
           <td
             v-for="i in [1,2,3,4,5,6,7,8,9,10,11,12,14,15]"
             :key="i"
-            class="border-gray-600 border"
             :class="{'same-class': vehicle.vehicle === i}"
           >
             <div v-if="mode === 'kills'">

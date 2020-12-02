@@ -10,10 +10,10 @@
       Total weapons: {{ data.length }}
     </div>
     <div class="col-span-12">
-      <table class="w-full text-center">
+      <table class="w-full text-center border-col">
         <thead>
-          <tr>
-            <td class="w-1/12 py-2 pr-4 text-left">
+          <tr class="border-b border-gray-600 font-bold">
+            <td class="w-1/20 py-2 pr-4 text-left">
               Rank
             </td>
             <td class="w-2/12 py-2 pr-4 text-left">

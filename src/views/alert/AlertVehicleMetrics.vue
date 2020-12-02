@@ -10,52 +10,52 @@
       Total vehicles: {{ data.length }}
     </div>
     <div class="col-span-12">
-      <table class="w-full text-center">
+      <table class="w-full text-center border-col border-row hover">
         <thead>
-          <tr>
-            <td class="py-2 pr-4">
+          <tr class="border-b border-gray-600 font-bold">
+            <td class="w-2/20 pb-1 mb-2 text-left">
               Vehicle
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/20 pb-1 mb-2">
               Kills
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/20 pb-1 mb-2">
               Deaths
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/20 pb-1 mb-2">
               K/D
             </td>
-            <td class="py-2 pr-4">
-              Total TKs
+            <td class="w-1/20 pb-1 mb-2">
+              TKs
             </td>
-            <td class="py-2 pr-4">
-              Total TKed
+            <td class="w-1/20 pb-1 mb-2">
+              TKed
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/20 pb-1 mb-2">
               Suicides
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/20 pb-1 mb-2">
               V Kills
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/20 pb-1 mb-2">
               V Deaths
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/20 pb-1 mb-2">
               V TKs
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/20 pb-1 mb-2">
               V TKed
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/20 pb-1 mb-2">
               I Kills
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/20 pb-1 mb-2">
               I Deaths
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/20 pb-1 mb-2">
               I TKs
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/20 pb-1 mb-2">
               I TKed
             </td>
           </tr>
@@ -66,49 +66,49 @@
           class="mb-2"
           :class="rowClass(vehicle.vehicleFaction)"
         >
-          <td class="pr-4">
+          <td class="text-left">
             {{ vehicle.vehicleName }}
           </td>
-          <td class="pr-4">
+          <td>
             {{ vehicle.totals ? vehicle.totals.kills ?? 0 : 0 }}
           </td>
-          <td class="pr-4">
+          <td>
             {{ vehicle.totals ? vehicle.totals.deaths ?? 0 : 0 }}
           </td>
-          <td class="pr-4">
+          <td>
             {{ vehicle.totals ? vehicle.totals.kills && vehicle.totals.deaths ? (vehicle.totals.kills / vehicle.totals.deaths).toFixed(2) : vehicle.totals.kills ?? 0 : 0 }}
           </td>
-          <td class="pr-4">
+          <td>
             {{ vehicle.totals ? vehicle.totals.teamkills ?? 0 : 0 }}
           </td>
-          <td class="pr-4">
+          <td>
             {{ vehicle.totals ? vehicle.totals.teamkilled ?? 0 : 0 }}
           </td>
-          <td class="pr-4">
+          <td>
             {{ vehicle.vehicles ? vehicle.suicides ?? 0 : 0 }}
           </td>
-          <td class="pr-4">
+          <td>
             {{ vehicle.vehicles ? vehicle.vehicles.kills ?? 0 : 0 }}
           </td>
-          <td class="pr-4">
+          <td>
             {{ vehicle.vehicles ? vehicle.vehicles.deaths ?? 0 : 0 }}
           </td>
-          <td class="pr-4">
+          <td>
             {{ vehicle.vehicles ? vehicle.vehicles.teamkills ?? 0 : 0 }}
           </td>
-          <td class="pr-4">
+          <td>
             {{ vehicle.vehicles ? vehicle.vehicles.teamkilled ?? 0 : 0 }}
           </td>
-          <td class="pr-4">
+          <td>
             {{ vehicle.infantry ? vehicle.infantry.kills ?? 0 : 0 }}
           </td>
-          <td class="pr-4">
+          <td>
             {{ vehicle.infantry ? vehicle.infantry.deaths ?? 0 : 0 }}
           </td>
-          <td class="pr-4">
+          <td>
             {{ vehicle.infantry ? vehicle.infantry.teamkills ?? 0 : 0 }}
           </td>
-          <td class="pr-4">
+          <td>
             {{ vehicle.infantry ? vehicle.infantry.teamkilled ?? 0 : 0 }}
           </td>
         </tr>
@@ -129,6 +129,7 @@ import {Faction} from "@/constants/Faction";
 import {CensusVehicleResponseInterface} from "@/interfaces/CensusVehicleResponseInterface";
 import {FactionBgClass} from "@/filters/FactionBgClass";
 import {VehicleFaction} from "@/filters/VehicleFaction";
+import {VehicleShortName} from "@/filters/VehicleShortName";
 
 export default defineComponent({
   name: "AlertVehicleMetrics",
@@ -190,7 +191,7 @@ export default defineComponent({
                 return this.vehicleData[key];
               }
             })
-            result[key].vehicleName = vehicleData ? vehicleData.name : `UNKNOWN (ID: ${vehicle.vehicle})`;
+            result[key].vehicleName = vehicleData ? VehicleShortName(vehicleData.name) : `UNKNOWN (ID: ${vehicle.vehicle})`;
             result[key].vehicleFaction = vehicleData ? vehicleData.faction : Faction.NONE;
             result[key].totals = {
               kills: (vehicle.vehicles ? vehicle.vehicles.kills ?? 0 : 0) + (vehicle.infantry ? vehicle.infantry.kills ?? 0 : 0),

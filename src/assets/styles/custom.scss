@@ -198,6 +198,22 @@
         @apply bg-gray-800;
       }
     }
+    &.border-row {
+      thead, tr {
+        @apply border-b border-gray-600
+      }
+      tr:last-of-type {
+        @apply border-b-0
+      }
+    }
+    &.border-col {
+      td {
+        @apply border-r border-gray-600
+      }
+      td:last-child{
+        @apply border-0;
+      }
+    }
     &.hover {
       overflow: hidden;
 
