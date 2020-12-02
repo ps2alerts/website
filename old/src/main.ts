@@ -21,6 +21,7 @@ import {
   faTasks, faUndo, faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import VueGtag from "vue-gtag-next";
+import {VehicleFaction} from "@/filters/VehicleFaction";
 
 const app = createApp(App)
 app.config.globalProperties.$filters = {
@@ -30,7 +31,8 @@ app.config.globalProperties.$filters = {
   zoneName: ZoneName,
   factionName: FactionName,
   bracketName: BracketName,
-  dateTimeFormat: DateTimeFormat
+  dateTimeFormat: DateTimeFormat,
+  vehicleFaction: VehicleFaction,
 }
 
 library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink, faUser, faFlag, faPatreon, faFilter, faUndo);
