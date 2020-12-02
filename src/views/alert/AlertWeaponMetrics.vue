@@ -10,29 +10,29 @@
       Total weapons: {{ data.length }}
     </div>
     <div class="col-span-12">
-      <table class="w-full text-center border-col">
+      <table class="table-fixed w-full text-center border-col border-row">
         <thead>
           <tr class="border-b border-gray-600 font-bold">
-            <td class="w-1/20 py-2 pr-4 text-left">
+            <td class="w-1/12 py-2 text-left">
               Rank
             </td>
-            <td class="w-2/12 py-2 pr-4 text-left">
+            <td class="w-8/12 py-2 text-left">
               Weapon
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               Kills
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               TKs
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               Suicides
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               Headshots
             </td>
-            <td class="w-1/12 py-2 pr-4">
-              HSR
+            <td class="w-1/12 py-2">
+              HSR %
             </td>
           </tr>
         </thead>
@@ -43,26 +43,26 @@
             class="mb-2"
             :class="rowClass(weapon)"
           >
-            <td class="pr-4 text-left">
+            <td class="text-left">
               {{ index + 1 }}
             </td>
-            <td class="pr-4 text-left">
+            <td class="text-left">
               <span v-if="weapon.weapon.tag">[{{ weapon.weapon.tag }}]</span>
-              {{ weapon.weapon.name ?? "-- Outfitless Players --" }}
+              {{ $filters.itemShortName(weapon.weapon.name) }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ weapon.kills ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ weapon.teamKills ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ weapon.suicides ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ weapon.headshots ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ weapon.headshots && weapon.kills ? ((weapon.headshots / weapon.kills) * 100).toFixed(2) : 0 }}
             </td>
           </tr>

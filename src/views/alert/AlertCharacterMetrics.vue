@@ -21,37 +21,37 @@
       </div>
     </div>
     <div class="col-span-12">
-      <table class="w-full text-center">
-        <thead>
+      <table class="w-full text-center border-col border-row">
+        <thead class="font-bold">
           <tr>
-            <td class="w-1/12 py-2 pr-4 text-left">
+            <td class="w-1/12 py-2 text-left">
               Rank
             </td>
-            <td class="w-2/12 py-2 pr-4 text-left">
+            <td class="w-2/12 py-2 text-left">
               Player
             </td>
-            <td class="w-2/12 py-2 pr-4 text-left">
+            <td class="w-2/12 py-2 text-left">
               Outfit
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               Kills
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               Deaths
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               KD
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               TKs
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               Suicides
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               Headshots
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               HSR %
             </td>
           </tr>
@@ -63,37 +63,37 @@
             class="mb-2"
             :class="factionClass(character.character.faction)"
           >
-            <td class="pr-4 text-left">
+            <td class="text-left">
               {{ index + 1 }}
             </td>
-            <td class="pr-4 text-left">
+            <td class="text-left">
               {{ character.character.name }}
             </td>
-            <td class="pr-4 text-left">
+            <td class="text-left">
               <span v-if="character.character.outfit">
                 <span v-if="character.character.outfit.tag">[{{ character.character.outfit.tag }}]</span>
                 {{ character.character.outfit.name }}
               </span>
             </td>
-            <td class="pr-4">
+            <td>
               {{ character.kills ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ character.deaths ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ character.kills && character.deaths ? (character.kills / character.deaths).toFixed(2) : character.kills ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ character.teamKills ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ character.suicides ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ character.headshots ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ character.headshots && character.kills ? ((character.headshots / character.kills) * 100).toFixed(2) : 0 }}
             </td>
           </tr>

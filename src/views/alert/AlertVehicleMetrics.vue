@@ -129,7 +129,7 @@ import {Faction} from "@/constants/Faction";
 import {CensusVehicleResponseInterface} from "@/interfaces/CensusVehicleResponseInterface";
 import {FactionBgClass} from "@/filters/FactionBgClass";
 import {VehicleFaction} from "@/filters/VehicleFaction";
-import {VehicleShortName} from "@/filters/VehicleShortName";
+import {ItemShortName} from "@/filters/ItemShortName";
 
 export default defineComponent({
   name: "AlertVehicleMetrics",
@@ -191,7 +191,7 @@ export default defineComponent({
                 return this.vehicleData[key];
               }
             })
-            result[key].vehicleName = vehicleData ? VehicleShortName(vehicleData.name) : `UNKNOWN (ID: ${vehicle.vehicle})`;
+            result[key].vehicleName = vehicleData ? ItemShortName(vehicleData.name) : `UNKNOWN (ID: ${vehicle.vehicle})`;
             result[key].vehicleFaction = vehicleData ? vehicleData.faction : Faction.NONE;
             result[key].totals = {
               kills: (vehicle.vehicles ? vehicle.vehicles.kills ?? 0 : 0) + (vehicle.infantry ? vehicle.infantry.kills ?? 0 : 0),

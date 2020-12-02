@@ -21,37 +21,37 @@
       </div>
     </div>
     <div class="col-span-12">
-      <table class="table-auto w-full text-center">
-        <thead>
+      <table class="table-fixed w-full text-center border-col border-row">
+        <thead class="font-bold">
           <tr>
-            <td class="w-1/12 py-2 pr-4 text-left">
+            <td class="w-1/20 py-2 text-left">
               Rank
             </td>
-            <td class="w-2/12 py-2 pr-4 text-left">
+            <td class="w-6/12 py-2 text-left">
               [TAG] Outfit
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               Players
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               Kills
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               Deaths
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               KD
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               TKs
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               Suicides
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               Headshots
             </td>
-            <td class="w-1/12 py-2 pr-4">
+            <td class="w-1/12 py-2">
               HSR %
             </td>
           </tr>
@@ -63,36 +63,36 @@
             class="mb-2"
             :class="factionClass(outfit.outfit.faction)"
           >
-            <td class="pr-4 text-left">
+            <td class="text-left">
               {{ index + 1 }}
             </td>
-            <td class="pr-4 text-left">
+            <td class="text-left">
               <span v-if="outfit.outfit">
                 <span v-if="outfit.outfit.tag">[{{ outfit.outfit.tag }}]</span> {{ outfit.outfit.name }}
               </span>
             </td>
-            <td class="pr-4">
+            <td>
               {{ outfit.participants ?? '???' }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ outfit.kills ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ outfit.deaths ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ outfit.kills && outfit.deaths ? (outfit.kills / outfit.deaths).toFixed(2) : outfit.kills ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ outfit.teamKills ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ outfit.suicides ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ outfit.headshots ?? 0 }}
             </td>
-            <td class="pr-4">
+            <td>
               {{ outfit.headshots && outfit.kills ? ((outfit.headshots / outfit.kills) * 100).toFixed(2) : 0 }}
             </td>
           </tr>
