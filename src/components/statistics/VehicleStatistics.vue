@@ -125,9 +125,9 @@ import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
 import {CensusEndpoints, Endpoints} from "@/constants/Endpoints";
 import {InstanceVehicleAggregateResponseInterface} from "@/interfaces/aggregates/instance/InstanceVehicleAggregateResponseInterface";
 import {VehicleDataInterface} from "@/interfaces/VehicleDataInterface";
-import {Vehicle} from "@/constants/Vehicle";
 import {Faction} from "@/constants/Faction";
 import {CensusVehicleResponseInterface} from "@/interfaces/CensusVehicleResponseInterface";
+import {vehicleFaction} from "@/calculators/vehicle-faction";
 import {factionBgClass} from "@/calculators/faction";
 
 export default defineComponent({
@@ -167,7 +167,7 @@ export default defineComponent({
             const vehicleData: VehicleDataInterface = {
               id: parseInt(vehicle.vehicle_id, 10),
               name: vehicle.name.en,
-              faction: this.getVehicleFaction(parseInt(vehicle.vehicle_id, 10))
+              faction: vehicleFaction(parseInt(vehicle.vehicle_id, 10))
             }
             this.vehicleData.push(vehicleData);
           });
@@ -205,27 +205,6 @@ export default defineComponent({
         .catch(e => {
           this.error = e.message;
         })
-    },
-    getVehicleFaction(vehicle: number) {
-      switch (vehicle) {
-      case Vehicle.MAGRIDER:
-      case Vehicle.SCYTHE:
-      case Vehicle.SCYTHE_INTERCEPTOR:
-        return Faction.VANU_SOVEREIGNTY;
-      case Vehicle.VANGUARD:
-      case Vehicle.REAVER:
-      case Vehicle.REAVER_INTERCEPTOR:
-        return Faction.NEW_CONGLOMERATE;
-      case Vehicle.PROWLER:
-      case Vehicle.MOSQUITO:
-      case Vehicle.MOSQUITO_INTERCEPTOR:
-        return Faction.TERRAN_REPUBLIC;
-      case Vehicle.JAVELIN:
-      case Vehicle.JAVELIN_2:
-        return Faction.NS_OPERATIVES;
-      default:
-        return Faction.NONE
-      }
     },
     rowClass(faction: Faction): object {
       return factionBgClass(faction);

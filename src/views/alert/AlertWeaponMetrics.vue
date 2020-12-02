@@ -78,8 +78,8 @@ import {InstanceTerritoryControlResponseInterface} from "@/interfaces/InstanceTe
 import ApiRequest from "@/api-request";
 import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
 import {Endpoints} from "@/constants/Endpoints";
-import {Faction} from "@/constants/Faction";
 import {InstanceWeaponAggregateResponseInterface} from "@/interfaces/aggregates/instance/InstanceWeaponAggregateResponseInterface";
+import {factionBgClass} from "@/calculators/faction";
 
 export default defineComponent({
   name: "AlertWeaponMetrics",
@@ -124,12 +124,7 @@ export default defineComponent({
         })
     },
     rowClass(weapon: InstanceWeaponAggregateResponseInterface): object {
-      return {
-        'bg-vs': weapon.weapon.faction === Faction.VANU_SOVEREIGNTY,
-        'bg-nc': weapon.weapon.faction === Faction.NEW_CONGLOMERATE,
-        'bg-tr': weapon.weapon.faction === Faction.TERRAN_REPUBLIC,
-        'bg-nso': weapon.weapon.faction === Faction.NS_OPERATIVES,
-      }
+      return factionBgClass(weapon.weapon.faction);
     },
   }
 });
