@@ -8,9 +8,6 @@
   >
     <div class="col-span-12 text-center">
       <p>Vehicles of the same class will always show the total deaths <span class="text-red-600">(red background)</span> since killing a vehicle on one faction counts as a death on another, so it's the exact same metric.</p>
-      <p v-if="mode === both">
-        Below stats are in Kills / Deaths. E.g. Magrider vs Vanguard is {{ exampleKills }}
-      </p>
       <div class="mt-2">
         <button
           class="btn btn-sm"
@@ -60,7 +57,7 @@
             {{ vehicle.vehicleName }}
           </td>
           <td
-            v-for="i in [1,2,3,4,5,6,7,8,9,10,11,12,14,15]"
+            v-for="i in [1,2,3,4,5,6,7,8,9,10,11,12,14,15,2007,2019]"
             :key="i"
             :class="{'same-class': vehicle.vehicle === i}"
           >
@@ -94,6 +91,7 @@ import {Faction} from "@/constants/Faction";
 import {CensusVehicleResponseInterface} from "@/interfaces/CensusVehicleResponseInterface";
 import {FactionBgClass} from "@/filters/FactionBgClass";
 import {VehicleFaction} from "@/filters/VehicleFaction";
+import {ItemShortName} from "@/filters/ItemShortName";
 
 export default defineComponent({
   name: "AlertVehicleMatrix",
@@ -165,13 +163,13 @@ export default defineComponent({
                 return this.vehicleData[key];
               }
             })
-            result[key].vehicleName = vehicleData ? vehicleData.name : `UNKNOWN (ID: ${vehicle.vehicle})`;
+            result[key].vehicleName = vehicleData ? ItemShortName(vehicleData.name) : `UNKNOWN (ID: ${vehicle.vehicle})`;
             result[key].vehicleFaction = vehicleData ? vehicleData.faction : Faction.NONE;
           });
 
           // Destroy all other data beyond ID 15, we don't care about feckin turrets man.
           this.data = result.filter((vehicle) => {
-            return vehicle.vehicle <= 15 && vehicle.vehicle !== 13;
+            return (vehicle.vehicle <= 15 || vehicle.vehicle === 2007 || vehicle.vehicle === 2019) && vehicle.vehicle !== 13;
           });
           this.loaded = true;
         })
