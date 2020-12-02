@@ -1,6 +1,6 @@
 import {Zone} from "@/constants/Zone";
 
-export const ZoneName = function(value: Zone) {
+export const ZoneName = (value: Zone) => {
   switch (value) {
     case Zone.INDAR:
       return 'Indar'

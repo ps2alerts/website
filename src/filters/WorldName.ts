@@ -1,6 +1,6 @@
 import {World} from "@/constants/World";
 
-export const WorldName = function(world: World) {
+export const WorldName = (world: World) => {
   switch (world) {
     // PC worlds
     case World.COBALT:
