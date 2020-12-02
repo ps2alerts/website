@@ -1,6 +1,6 @@
 import {Faction} from "@/constants/Faction";
 
-export const factionBgClass = (faction: Faction) => {
+export const FactionBgClass = (faction: Faction) => {
   return {
     'bg-vs': faction === Faction.VANU_SOVEREIGNTY,
     'bg-nc': faction === Faction.NEW_CONGLOMERATE,

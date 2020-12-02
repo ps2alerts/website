@@ -110,7 +110,7 @@ import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
 import {Endpoints} from "@/constants/Endpoints";
 import {InstanceOutfitAggregateResponseInterface} from "@/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface";
 import {Faction} from "@/constants/Faction";
-import {factionBgClass} from "@/calculators/faction";
+import {FactionBgClass} from "@/filters/FactionBgClass";
 
 export default defineComponent({
   name: "AlertOutfitMetrics",
@@ -197,7 +197,7 @@ export default defineComponent({
         })
     },
     factionClass(faction: Faction): object {
-      return factionBgClass(faction)
+      return FactionBgClass(faction)
     },
     applyOutfitParticipants() {
       for (const outfitId in this.outfitParticipants) {

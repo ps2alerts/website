@@ -127,8 +127,8 @@ import {InstanceVehicleAggregateResponseInterface} from "@/interfaces/aggregates
 import {VehicleDataInterface} from "@/interfaces/VehicleDataInterface";
 import {Faction} from "@/constants/Faction";
 import {CensusVehicleResponseInterface} from "@/interfaces/CensusVehicleResponseInterface";
-import {vehicleFaction} from "@/calculators/vehicle-faction";
-import {factionBgClass} from "@/calculators/faction";
+import {VehicleFaction} from "@/filters/VehicleFaction";
+import {FactionBgClass} from "@/filters/FactionBgClass";
 
 export default defineComponent({
   name: "AlertVehicleMetrics",
@@ -167,7 +167,7 @@ export default defineComponent({
             const vehicleData: VehicleDataInterface = {
               id: parseInt(vehicle.vehicle_id, 10),
               name: vehicle.name.en,
-              faction: vehicleFaction(parseInt(vehicle.vehicle_id, 10))
+              faction: VehicleFaction(parseInt(vehicle.vehicle_id, 10))
             }
             this.vehicleData.push(vehicleData);
           });
@@ -207,7 +207,7 @@ export default defineComponent({
         })
     },
     rowClass(faction: Faction): object {
-      return factionBgClass(faction);
+      return FactionBgClass(faction);
     },
   }
 });

@@ -79,7 +79,7 @@ import ApiRequest from "@/api-request";
 import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
 import {Endpoints} from "@/constants/Endpoints";
 import {InstanceWeaponAggregateResponseInterface} from "@/interfaces/aggregates/instance/InstanceWeaponAggregateResponseInterface";
-import {factionBgClass} from "@/calculators/faction";
+import {FactionBgClass} from "@/filters/FactionBgClass";
 
 export default defineComponent({
   name: "AlertWeaponMetrics",
@@ -124,7 +124,7 @@ export default defineComponent({
         })
     },
     rowClass(weapon: InstanceWeaponAggregateResponseInterface): object {
-      return factionBgClass(weapon.weapon.faction);
+      return FactionBgClass(weapon.weapon.faction);
     },
   }
 });

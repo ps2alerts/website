@@ -111,7 +111,7 @@ import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
 import {Endpoints} from "@/constants/Endpoints";
 import {InstanceCharacterAggregateResponseInterface} from "@/interfaces/aggregates/instance/InstanceCharacterAggregateResponseInterface";
 import {Faction} from "@/constants/Faction";
-import {factionBgClass} from "@/calculators/faction";
+import {FactionBgClass} from "@/filters/FactionBgClass";
 
 export default defineComponent({
   name: "AlertCharacterMetrics",
@@ -208,7 +208,7 @@ export default defineComponent({
       }
     },
     factionClass(faction: Faction): object {
-      return factionBgClass(faction);
+      return FactionBgClass(faction);
     },
   }
 });

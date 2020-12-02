@@ -101,7 +101,7 @@ import {defineAsyncComponent, defineComponent} from "vue";
 import moment from "moment-timezone";
 import {DATE_TIME_FORMAT_SHORT} from "@/constants/Time";
 import {Faction} from "@/constants/Faction";
-import {factionBgClass} from "@/calculators/faction";
+import {FactionBgClass} from "@/filters/FactionBgClass";
 
 export default defineComponent({
   name: "AlertHistoryEntry",
@@ -125,7 +125,7 @@ export default defineComponent({
       if (!this.alert.result || !this.alert.result.victor) {
         return {};
       }
-      return factionBgClass(this.alert.result.victor);
+      return FactionBgClass(this.alert.result.victor);
     },
     draw(): boolean {
       return this.alert.result ? this.alert.result.draw : false

@@ -1,7 +1,7 @@
 import {Vehicle} from "@/constants/Vehicle";
 import {Faction} from "@/constants/Faction";
 
-export const vehicleFaction = (vehicle: Vehicle) => {
+export const VehicleFaction = (vehicle: Vehicle) => {
   switch (vehicle) {
     case Vehicle.MAGRIDER:
     case Vehicle.SCYTHE:

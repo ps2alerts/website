@@ -46,7 +46,7 @@ import FactionSegmentBar from "@/components/common/FactionSegmentBar.vue";
 import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
 import {InstanceTerritoryControlResponseInterface} from "@/interfaces/InstanceTerritoryControlResponseInterface";
 import {FactionName} from "@/filters/FactionName";
-import {factionBgClass} from "@/calculators/faction";
+import {FactionBgClass} from "@/filters/FactionBgClass";
 
 export default defineComponent({
   name: "AlertResultBar",
@@ -79,7 +79,7 @@ export default defineComponent({
       }
       return {
         'bg-tint': this.alert.state !== Ps2alertsEventState.ENDED,
-        ...factionBgClass(this.alert.result.victor)
+        ...FactionBgClass(this.alert.result.victor)
       }
     },
   },
