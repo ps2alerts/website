@@ -14,6 +14,8 @@ export interface InstanceVehicleAggregateResponseInterface {
   vehicleFaction?: Faction;
   vehicleDeathMatrix?: {[k:string]: number};
   vehicleKillMatrix?: {[k:string]: number};
+  vehicleTeamkillMatrix?: {[k:string]: number};
+  vehicleTeamkilledMatrix?: {[k:string]: number};
   suicides?: number;
   vehicles?: VehicleStatsInterface;
   infantry?: VehicleStatsInterface;
