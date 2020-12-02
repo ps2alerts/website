@@ -24,34 +24,34 @@
       <table class="table-auto w-full text-center">
         <thead>
           <tr>
-            <td class="py-2 pr-4 text-left">
+            <td class="w-1/12 py-2 pr-4 text-left">
               Rank
             </td>
-            <td class="py-2 pr-4 text-left">
+            <td class="w-2/12 py-2 pr-4 text-left">
               [TAG] Outfit
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/12 py-2 pr-4">
               Players
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/12 py-2 pr-4">
               Kills
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/12 py-2 pr-4">
               Deaths
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/12 py-2 pr-4">
               KD
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/12 py-2 pr-4">
               TKs
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/12 py-2 pr-4">
               Suicides
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/12 py-2 pr-4">
               Headshots
             </td>
-            <td class="py-2 pr-4">
+            <td class="w-1/12 py-2 pr-4">
               HSR %
             </td>
           </tr>
@@ -212,6 +212,7 @@ export default defineComponent({
 
         if (stringKey) {
           const key = parseInt(stringKey, 10);
+          // noinspection JSUnfilteredForInLoop
           this.data[key] ? this.data[key].participants = this.outfitParticipants[outfitId].length : null;
         }
       }
