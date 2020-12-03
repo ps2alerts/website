@@ -26,9 +26,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 // import Search from "@/components/Search.vue";
-import './assets/styles/tailwind.css';
-import './assets/styles/colors.scss';
-import './assets/styles/custom.scss';
+import '../website/assets/css/tailwind.css';
+import '../website/assets/css/colors.scss';
+import '../website/assets/css/custom.scss';
 import Header from "@/components/Header.vue";
 import RealTimeMonitor from "@/components/RTM/RealTimeMonitor.vue";
 import Navigation from "@/components/Navigation.vue";
@@ -53,34 +53,4 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-
-#app {
-  @media (max-width: 1023px) {
-    display: block;
-  }
-}
-
-#panel-left {
-  max-width: 350px;
-  @media (max-width: 1023px) {
-    max-width: inherit;
-  }
-  @media (min-width: 1024px) {
-    position: fixed;
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-}
-
-#panel-left::-webkit-scrollbar {
-  width: 0;
-  background: transparent;
-}
-
-#panel-right {
-  @media (min-width: 1024px) {
-    margin-left: 350px;
-  }
-}
 </style>

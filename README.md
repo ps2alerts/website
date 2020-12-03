@@ -1,14 +1,20 @@
-# ps2alerts/website
-This module is the publicly facing section of the PS2Alerts project. Users are able to visit the site and read the statistics metrics on a per-alert or global basis and much more.
+# website
 
-If you wish to contribute, please join our Discord located at: https://discord.gg/7xF65ap
+## Build Setup
 
-## Running the module
+```bash
+# install dependencies
+$ npm install
 
-Please see the [ps2alerts/stack](https://github.com/ps2alerts/stack) repository for information on how to install the dev environment and start this project.
+# serve with hot reload at localhost:3000
+$ npm run dev
 
-This module uses [Vue3](https://v3.vuejs.org/), a JavaScript frontend Framework with native support for Typescript. 
+# build for production and launch server
+$ npm run build
+$ npm run start
 
-## TL;DR
+# generate static project
+$ npm run generate
+```
 
-Run `ps2alerts-website-init` on first run. For any subsequent starts, run `ps2alerts-website-dev`.
+For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).

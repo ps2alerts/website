@@ -20,7 +20,7 @@
       </p>
       <img
         class="object-contain mx-auto content-spacing rounded-lg"
-        src="../assets/img/change-log/alert-history.png"
+        src="../../website/assets/img/change-log/alert-history.png"
         alt="Picture showing alert history example"
       >
       <p>
@@ -51,7 +51,7 @@
       </p>
       <img
         class="object-contain mx-auto content-spacing rounded-lg"
-        src="../assets/img/change-log/rtm.png"
+        src="../../website/assets/img/change-log/rtm.png"
         alt="Real Time Monitor example"
         height="322"
         width="441"
