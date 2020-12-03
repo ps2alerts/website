@@ -81,6 +81,12 @@
     &:disabled {
       @apply bg-gray-500;
     }
+
+    &.no-hover {
+      &:hover {
+        @apply bg-red-600;
+      }
+    }
   }
   .btn-sm {
     @apply text-sm py-1 px-2 rounded;

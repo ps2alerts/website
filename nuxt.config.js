@@ -1,6 +1,11 @@
 import join from 'memory-fs/lib/join'
 
 export default {
+  server: {
+    port: 3000,
+    host: '0.0.0.0',
+    timing: false,
+  },
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: 'PS2Alerts',
@@ -66,5 +71,8 @@ export default {
         },
       },
     },
+  },
+  publicRuntimeConfig: {
+    baseUrl: process.env.BASE_URL ?? 'dev.ps2alerts.com.test',
   },
 }

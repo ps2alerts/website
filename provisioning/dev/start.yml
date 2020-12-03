@@ -15,6 +15,8 @@
         restart: no
         recreate: yes
         state: started
+        interactive: yes
+        tty: yes
         volumes:
           - "{{ root_dir | realpath }}:/app:rw"
         ports:
