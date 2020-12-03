@@ -117,14 +117,6 @@ export default defineComponent({
       vehicleData: [] as VehicleDataInterface[],
     }
   },
-  computed: {
-    exampleKills(): number {
-      return this.data[1].vehicleKillMatrix && this.data[1].vehicleKillMatrix[2] ? this.data[1].vehicleKillMatrix[2] : 0;
-    },
-    exampleDeaths(): number {
-      return this.data[1].vehicleDeathMatrix && this.data[1].vehicleDeathMatrix[2] ? this.data[1].vehicleDeathMatrix[2] : 0;
-    }
-  },
   async created() {
     await this.pullVehicleData();
     await this.pull();
