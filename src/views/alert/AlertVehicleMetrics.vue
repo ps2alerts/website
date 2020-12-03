@@ -7,7 +7,7 @@
     class="grid grid-cols-12"
   >
     <div class="col-span-12 mb-4">
-      Total vehicles: {{ data.length }}
+      <p>Total vehicles: {{ data.length }}</p>
     </div>
     <div class="col-span-12">
       <table class="w-full text-center border-col border-row hover">
@@ -85,7 +85,7 @@
             {{ vehicle.totals ? vehicle.totals.teamkilled ?? 0 : 0 }}
           </td>
           <td>
-            {{ vehicle.vehicles ? vehicle.suicides ?? 0 : 0 }}
+            {{ vehicle.suicides ? vehicle.suicides ?? 0 : 0 }}
           </td>
           <td>
             {{ vehicle.vehicles ? vehicle.vehicles.kills ?? 0 : 0 }}
@@ -185,6 +185,30 @@ export default defineComponent({
       await new ApiRequest().get<InstanceVehicleAggregateResponseInterface[]>(
         Endpoints.AGGREGATES_INSTANCE_VEHICLE.replace('{instance}', this.alert.instanceId))
         .then(result => {
+          const total = {
+            instanceId: this.alert.instanceId,
+            vehicleName: "Totals",
+            vehicle: 0,
+            suicides: 0,
+            vehicles: {
+              kills: 0,
+              deaths: 0,
+              teamkills: 0,
+              teamkilled: 0,
+            },
+            infantry: {
+              kills: 0,
+              deaths: 0,
+              teamkills: 0,
+              teamkilled: 0,
+            },
+            totals: {
+              kills: 0,
+              deaths: 0,
+              teamkills: 0,
+              teamkilled: 0
+            }
+          }
           result.forEach((vehicle, key) => {
             const vehicleData = this.vehicleData.find((val, key) => {
               if (val.id === vehicle.vehicle) {
@@ -199,7 +223,24 @@ export default defineComponent({
               teamkills: (vehicle.vehicles ? vehicle.vehicles.teamkills ?? 0 : 0) + (vehicle.infantry ? vehicle.infantry.teamkills ?? 0 : 0),
               teamkilled: (vehicle.vehicles ? vehicle.vehicles.teamkilled ?? 0 : 0) + (vehicle.infantry ? vehicle.infantry.teamkilled ?? 0 : 0),
             }
+            // Tot it up
+            total.vehicles.kills += result[key].vehicles?.kills ?? 0;
+            total.vehicles.deaths += result[key].vehicles?.deaths ?? 0;
+            total.vehicles.teamkills += result[key].vehicles?.teamkills ?? 0;
+            total.vehicles.teamkilled += result[key].vehicles?.teamkilled ?? 0;
+            total.infantry.kills += result[key].infantry?.kills ?? 0;
+            total.infantry.deaths += result[key].infantry?.deaths ?? 0;
+            total.infantry.teamkills += result[key].infantry?.teamkills ?? 0;
+            total.infantry.teamkilled += result[key].infantry?.teamkilled ?? 0;
+            total.suicides += result[key].suicides ?? 0;
+            total.totals.kills += result[key]?.totals?.kills ?? 0;
+            total.totals.deaths += result[key]?.totals?.deaths ?? 0;
+            total.totals.teamkills += result[key]?.totals?.teamkills ?? 0;
+            total.totals.teamkilled += result[key]?.totals?.teamkilled ?? 0;
           });
+
+          // Add total row
+          result.push(total);
           this.data = result;
           this.loaded = true;
         })

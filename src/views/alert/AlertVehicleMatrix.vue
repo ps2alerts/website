@@ -122,7 +122,6 @@ export default defineComponent({
   async created() {
     await this.pullVehicleData();
     await this.pull();
-    console.log(this.data);
     setInterval(() => {
       void this.pull();
     }, 10000);
