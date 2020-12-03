@@ -1,6 +1,6 @@
 <template>
   <div class="tag section">
-    Vehicle Combat Matrix
+    Vehicular Combat Matrix
   </div>
   <div
     v-if="!loaded"
@@ -14,6 +14,9 @@
   >
     <div class="col-span-12 text-center">
       <p>Vehicles of the same class will always show the total deaths <span class="text-red-600">(red background)</span> since killing a vehicle of the same type on one faction counts as a death on another, so it's the exact same metric.</p>
+      <p class="text-sm">
+        * Empire specific vehicles are based off teamkills
+      </p>
       <div class="mt-2">
         <button
           class="btn btn-sm"
@@ -67,16 +70,21 @@
             :key="item.vehicle"
             :class="{'same-class': vehicle.vehicle === item.vehicle}"
           >
-            <div v-if="mode === 'kills'">
-              <span>{{ vehicle.vehicleDeathMatrix[item.vehicle] ?? 0 }}</span>
+            <div v-if="[3,4,5,6,7,8,9].indexOf(item.vehicle) > 0 && vehicle.vehicle === item.vehicle">
+              {{ vehicle.vehicleTeamkillMatrix ? vehicle.vehicleTeamkillMatrix[item.vehicle] ?? 0 : 0 }}<sup>*</sup>
             </div>
-            <div v-if="mode === 'deaths'">
-              <span>{{ vehicle.vehicleKillMatrix[item.vehicle] ?? 0 }}</span>
-            </div>
-            <div v-if="mode === 'both'">
-              <span v-if="vehicle.vehicle !== item.vehicle">{{ vehicle.vehicleDeathMatrix[item.vehicle] ?? 0 }} / </span>
-              <span v-if="vehicle.vehicle !== item.vehicle">{{ vehicle.vehicleKillMatrix[item.vehicle] ?? 0 }}</span>
-              <span v-if="vehicle.vehicle === item.vehicle">{{ vehicle.vehicleDeathMatrix[item.vehicle] ?? 0 }}</span>
+            <div v-else>
+              <div v-if="mode === 'kills'">
+                <span>{{ vehicle.vehicleDeathMatrix ? vehicle.vehicleDeathMatrix[item.vehicle] ?? 0 : 0 }}</span>
+              </div>
+              <div v-if="mode === 'deaths'">
+                <span>{{ vehicle.vehicleKillMatrix ? vehicle.vehicleKillMatrix[item.vehicle] ?? 0 : 0 }}</span>
+              </div>
+              <div v-if="mode === 'both'">
+                <span v-if="vehicle.vehicle !== item.vehicle">{{ vehicle.vehicleDeathMatrix ? vehicle.vehicleDeathMatrix[item.vehicle] ?? 0 : 0 }} / </span>
+                <span v-if="vehicle.vehicle !== item.vehicle">{{ vehicle.vehicleKillMatrix ? vehicle.vehicleKillMatrix[item.vehicle] ?? 0 : 0 }}</span>
+                <span v-if="vehicle.vehicle === item.vehicle">{{ vehicle.vehicleDeathMatrix ? vehicle.vehicleDeathMatrix[item.vehicle] ?? 0 : 0 }}</span>
+              </div>
             </div>
           </td>
         </tr>
