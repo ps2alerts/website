@@ -1,88 +1,194 @@
 <template>
   <div
-    class="col-span-3 ss:col-span-4 px-4 py-4 mb-2 bg-tint rounded relative"
+    v-if="alert.result"
+    class="col-span-3 ss:col-span-4"
   >
-    <div v-if="alert.result">
-      <FactionSegmentBar
-        :vs="alert.result.vs"
-        :nc="alert.result.nc"
-        :tr="alert.result.tr"
-        :other="alert.result.cutoff"
-        :out-of-play="alert.result.outOfPlay"
-      />
+    <div class="mb-2">
+      <AlertResultBar :alert="alert" />
     </div>
-
-
-    <div>
-      {{ alert }}
-    </div>
-    <div>
-      {{ instanceEventDetails }}
+    <div class="grid grid-cols-12 gap-2">
+      <div
+        class="col-span-12 lg:col-span-6 ss:col-span-3 px-4 py-4 mb-2 bg-tint rounded"
+      >
+        <AlertDetails :alert="alert" />
+      </div>
+      <div
+        class="col-span-12 lg:col-span-6 ss:col-span-9 px-4 py-4 mb-2 bg-tint rounded"
+      >
+        <AlertFactionCombatMetrics :alert="alert" />
+      </div>
+      <div class="col-span-12 text-center">
+        <button
+          class="btn"
+          :class="{'btn-active': showPlayers}"
+          @click="togglePlayers()"
+        >
+          Players
+        </button>
+        <button
+          class="btn"
+          :class="{'btn-active': showOutfits}"
+          @click="toggleOutfits()"
+        >
+          Outfits
+        </button>
+        <button
+          class="btn"
+          :class="{'btn-active': showWeapons}"
+          @click="toggleWeapons()"
+        >
+          Weapons
+        </button>
+        <button
+          class="btn"
+          :class="{'btn-active': showVehicles}"
+          @click="toggleVehicles()"
+        >
+          Vehicles
+        </button>
+        <p>Filtering and sorting coming very soon!</p>
+      </div>
+      <div
+        v-show="showPlayers === true"
+        class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
+      >
+        <AlertCharacterMetrics
+          :alert="alert"
+          @outfit-participants-changed="outfitParticipantsChanged"
+        />
+      </div>
+      <div
+        v-show="showOutfits === true"
+        class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
+      >
+        <AlertOutfitMetrics
+          ref="outfit"
+          :alert="alert"
+          :outfit-participants="outfitParticipants"
+        />
+      </div>
+      <div
+        v-show="showWeapons === true"
+        class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
+      >
+        <AlertWeaponMetrics :alert="alert" />
+      </div>
+      <div
+        v-show="showVehicles === true"
+        class="col-span-12"
+      >
+        <div class="col-span-12 mb-4 col-span-12 px-4 py-4 mb-2 bg-tint rounded">
+          <AlertVehicleMetrics :alert="alert" />
+        </div>
+        <div class="col-span-12 mb-4 col-span-12 px-4 py-4 mb-2 bg-tint rounded">
+          <AlertVehicleMatrix :alert="alert" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import moment from "moment-timezone";
-import {DATE_TIME_FORMAT} from "@/constants/Time";
+import {InstanceTerritoryControlResponseInterface} from "@/interfaces/InstanceTerritoryControlResponseInterface";
+import AlertResultBar from "@/views/alert/AlertResultBar.vue";
 import ApiRequest from "@/api-request";
-import FactionSegmentBar from "@/components/common/FactionSegmentBar.vue";
-import {InstanceEventDetails} from "@/filters/InstanceEventDetails";
-import {MetagameDetailsInterface} from "@/interfaces/MetagameDetailsInterface";
+import {Ps2alertsEventState} from "@/constants/Ps2alertsEventState";
+import {Endpoints} from "@/constants/Endpoints";
+import AlertDetails from "@/views/alert/AlertDetails.vue";
+import AlertFactionCombatMetrics from "@/views/alert/AlertFactionCombatMetrics.vue";
+import AlertCharacterMetrics from "@/views/alert/AlertCharacterMetrics.vue";
+import AlertOutfitMetrics from "@/views/alert/AlertOutfitMetrics.vue";
+import AlertWeaponMetrics from "@/views/alert/AlertWeaponMetrics.vue";
+import AlertVehicleMetrics from "@/views/alert/AlertVehicleMetrics.vue";
+import AlertVehicleMatrix from "@/views/alert/AlertVehicleMatrix.vue";
 
 export default defineComponent({
   name: "Alert",
   components: {
-    FactionSegmentBar,
+    AlertResultBar,
+    AlertDetails,
+    AlertFactionCombatMetrics,
+    AlertCharacterMetrics,
+    AlertOutfitMetrics,
+    AlertWeaponMetrics,
+    AlertVehicleMetrics,
+    AlertVehicleMatrix,
   },
-  props: {
-    instanceId: {
-      type: String,
-      default: "1-0000"
-    },
+  beforeRouteUpdate(to, from, next) {
+    this.init(to.params.instanceId.toString())
+    next();
   },
   data: function() {
     return {
-      loaded: false,
       error: null,
-      alert: {censusMetagameEventType: 0},
-      ApiRequest: new ApiRequest(),
-      lastUpdated: 'Fetching...',
+      interval: undefined as number | undefined,
+      alert: {} as InstanceTerritoryControlResponseInterface,
+      showPlayers: true,
+      showOutfits: false,
+      showWeapons: false,
+      showVehicles: false,
+      outfitParticipants: {} as {[k: string]: string[]},
     }
   },
-  computed: {
-    instanceEventDetails(): MetagameDetailsInterface | null {
-      return InstanceEventDetails(this.alert.censusMetagameEventType);
-    }
-  },
-  created() {
-    document.title = 'Alert #' + this.instanceId;
-    this.pull();
-    setInterval(() => {
-      void this.pull();
-    }, 30000);
+  created: function () {
+    this.init(this.$route.params.instanceId.toString());
   },
   methods: {
-    async pull(): Promise<void> {
-      await this.ApiRequest.client
-        .get(`/instances/${this.instanceId}`)
-        .then(response => {
-          this.error = null;
-          this.alert = response.data;
-          console.log(this.alert);
-          this.loaded = true;
+    init(instanceId: string): void {
+      document.title = 'Alert #' + instanceId;
+      this.pull(instanceId);
+      clearInterval(this.interval);
+      this.interval = setInterval(() => {
+        void this.pull(instanceId);
+      }, 30000);
+    },
+    async pull(instanceId: string): Promise<void> {
+      if (this.alert && this.alert.state === Ps2alertsEventState.ENDED) {
+        return;
+      }
+
+      await new ApiRequest().get<InstanceTerritoryControlResponseInterface>(Endpoints.INSTANCE.replace('{instance}', instanceId))
+        .then(alert => {
+          this.alert = alert;
+          // Need to emit to client components that route has changed
         })
         .catch(e => {
           this.error = e.message;
-        });
-      this.lastUpdated = moment().format(DATE_TIME_FORMAT)
+        })
     },
-    debug(event: never, loc = '') {
-      console.log(loc, event)
+    hideAll() {
+      this.showPlayers = false;
+      this.showOutfits = false;
+      this.showWeapons = false;
+      this.showVehicles = false;
     },
+    togglePlayers() {
+      this.hideAll();
+      this.showPlayers = !this.showPlayers;
+    },
+    toggleOutfits() {
+      this.hideAll();
+      this.showOutfits = !this.showOutfits;
+    },
+    toggleWeapons() {
+      this.hideAll();
+      this.showWeapons = !this.showWeapons;
+    },
+    toggleVehicles() {
+      this.hideAll();
+      this.showVehicles = !this.showVehicles;
+    },
+    // Used by AlertOutfitMetrics.vue component
+    outfitParticipantsChanged(participants: {[k: string]: string[]}) {
+      this.outfitParticipants = participants;
+      const outfitRef = this.$refs.outfit;
+      if (outfitRef) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+        // @ts-ignore
+        outfitRef.applyOutfitParticipants();
+      }
+    }
   }
 });
 </script>
-
-<style scoped lang="scss"></style>

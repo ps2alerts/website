@@ -1,6 +1,6 @@
 import {Bracket} from "@/constants/Bracket";
 
-export const BracketName = function(value: Bracket) {
+export const BracketName = (value: Bracket) => {
   switch (value) {
     case Bracket.NONE:
       return 'N/A'

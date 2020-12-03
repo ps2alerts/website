@@ -139,7 +139,6 @@ export default defineComponent({
         {sortBy: 'timeStarted'}
       )
         .then(result => {
-          console.log('rtm result', result);
           this.loading = false;
           this.error = null;
           this.actives = result

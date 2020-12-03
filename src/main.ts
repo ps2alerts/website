@@ -8,6 +8,7 @@ import {WorldName} from "@/filters/WorldName";
 import {ZoneName} from "@/filters/ZoneName";
 import {FactionName} from "@/filters/FactionName";
 import {BracketName} from "@/filters/BracketName";
+import {DateTimeFormat} from "@/filters/DateTimeFormat";
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {faDiscord, faGithub, faPatreon, faTwitter} from "@fortawesome/free-brands-svg-icons";
@@ -20,6 +21,8 @@ import {
   faTasks, faUndo, faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import VueGtag from "vue-gtag-next";
+import {VehicleFaction} from "@/filters/VehicleFaction";
+import {ItemShortName} from "@/filters/ItemShortName";
 
 const app = createApp(App)
 app.config.globalProperties.$filters = {
@@ -28,7 +31,10 @@ app.config.globalProperties.$filters = {
   worldName: WorldName,
   zoneName: ZoneName,
   factionName: FactionName,
-  bracketName: BracketName
+  bracketName: BracketName,
+  dateTimeFormat: DateTimeFormat,
+  vehicleFaction: VehicleFaction,
+  itemShortName: ItemShortName,
 }
 
 library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink, faUser, faFlag, faPatreon, faFilter, faUndo);

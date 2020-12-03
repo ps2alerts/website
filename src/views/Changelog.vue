@@ -140,29 +140,4 @@ ul {
   margin-left: 1rem;
   margin-bottom: 1rem;
 }
-%tag {
-  @apply py-1 px-2 rounded-tl rounded-tr text-xs text-center font-semibold;
-  margin: -1rem;
-  margin-bottom: 1rem;
-}
-
-.feature {
-  @extend %tag;
-  @apply bg-green-800;
-}
-
-.enhancement {
-  @extend %tag;
-  @apply bg-blue-800;
-}
-
-.fix {
-  @extend %tag;
-  @apply bg-red-800;
-}
-
-.known-issue {
-  @extend %tag;
-  @apply bg-yellow-800;
-}
 </style>
