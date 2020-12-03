@@ -4,7 +4,7 @@
       <img
         class="ps2alerts-logo mr-2 w-16"
         alt="PS2Alerts Logo"
-        src="../../website/assets/img/alert-icon.png"
+        src="../assets/img/alert-icon.png"
       />
       <h1 class="font-semibold text-4xl">PS2Alerts</h1>
     </div>
