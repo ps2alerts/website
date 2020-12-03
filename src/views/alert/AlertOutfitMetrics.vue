@@ -3,6 +3,12 @@
     Outfit Metrics
   </div>
   <div
+    v-if="!loaded"
+    class="text-center"
+  >
+    <h1>Loading...</h1>
+  </div>
+  <div
     v-if="loaded"
     class="grid grid-cols-12"
   >
