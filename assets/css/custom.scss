@@ -1,8 +1,39 @@
 @layer base {
   body {
+    @apply text-white;
     background-image: url('../img/bg-tile.jpg');
     background-repeat: repeat;
     margin: 0;
+  }
+
+  #app {
+    @media (max-width: 1023px) {
+      display: block;
+    }
+  }
+
+  #panel-left {
+    max-width: 350px;
+    @media (max-width: 1023px) {
+      max-width: inherit;
+    }
+    @media (min-width: 1024px) {
+      position: fixed;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  }
+
+  #panel-left::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+
+  #panel-right {
+    @media (min-width: 1024px) {
+      margin-left: 350px;
+    }
   }
 
   .bg-tint {
