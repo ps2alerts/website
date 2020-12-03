@@ -13,7 +13,7 @@
     class="grid grid-cols-12"
   >
     <div class="col-span-12 text-center">
-      <p>Vehicles of the same class will always show the total deaths <span class="text-red-600">(red background)</span> since killing a vehicle on one faction counts as a death on another, so it's the exact same metric.</p>
+      <p>Vehicles of the same class will always show the total deaths <span class="text-red-600">(red background)</span> since killing a vehicle of the same type on one faction counts as a death on another, so it's the exact same metric.</p>
       <div class="mt-2">
         <button
           class="btn btn-sm"
@@ -48,7 +48,7 @@
             <td
               v-for="vehicle in data"
               :key="vehicle.id"
-              class="border-gray-600 border-r"
+              class="border-gray-600 border-r font-bold"
             >
               {{ vehicle.vehicleName }}
             </td>
@@ -59,24 +59,24 @@
           :key="vehicle.id"
           class="mb-2"
         >
-          <td class="font-bold">
+          <td>
             {{ vehicle.vehicleName }}
           </td>
           <td
-            v-for="i in [1,2,3,4,5,6,7,8,9,10,11,12,14,15,2007,2019]"
-            :key="i"
-            :class="{'same-class': vehicle.vehicle === i}"
+            v-for="item in data"
+            :key="item.vehicle"
+            :class="{'same-class': vehicle.vehicle === item.vehicle}"
           >
             <div v-if="mode === 'kills'">
-              <span>{{ vehicle.vehicleKillMatrix ? vehicle.vehicleKillMatrix[i] ?? 0 : 0 }}</span>
+              <span>{{ vehicle.vehicleDeathMatrix[item.vehicle] ?? 0 }}</span>
             </div>
             <div v-if="mode === 'deaths'">
-              <span>{{ vehicle.vehicleDeathMatrix ? vehicle.vehicleDeathMatrix[i] ?? 0 : 0 }}</span>
+              <span>{{ vehicle.vehicleKillMatrix[item.vehicle] ?? 0 }}</span>
             </div>
             <div v-if="mode === 'both'">
-              <span v-if="vehicle.vehicle !== i">{{ vehicle.vehicleKillMatrix ? vehicle.vehicleKillMatrix[i] ?? 0 : 0 }} / </span>
-              <span v-if="vehicle.vehicle !== i">{{ vehicle.vehicleDeathMatrix ? vehicle.vehicleDeathMatrix[i] ?? 0 : 0 }}</span>
-              <span v-if="vehicle.vehicle === i">{{ vehicle.vehicleDeathMatrix ? vehicle.vehicleDeathMatrix[i] ?? 0 : 0 }}</span>
+              <span v-if="vehicle.vehicle !== item.vehicle">{{ vehicle.vehicleDeathMatrix[item.vehicle] ?? 0 }} / </span>
+              <span v-if="vehicle.vehicle !== item.vehicle">{{ vehicle.vehicleKillMatrix[item.vehicle] ?? 0 }}</span>
+              <span v-if="vehicle.vehicle === item.vehicle">{{ vehicle.vehicleDeathMatrix[item.vehicle] ?? 0 }}</span>
             </div>
           </td>
         </tr>
