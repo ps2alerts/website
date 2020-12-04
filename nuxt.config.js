@@ -25,7 +25,14 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: [
+    { src: '@/filters/AlertEndTime', mode: 'client' },
+    { src: '@/filters/AlertRemainingTime', mode: 'client' },
+    { src: '@/filters/BracketName', mode: 'client' },
+    { src: '@/filters/FactionName', mode: 'client' },
+    { src: '@/filters/WorldName', mode: 'client' },
+    { src: '@/filters/ZoneName', mode: 'client' },
+  ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
@@ -44,6 +51,21 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
+    [
+      'nuxt-fontawesome',
+      {
+        imports: [
+          {
+            set: '@fortawesome/free-solid-svg-icons',
+            icons: ['fas'],
+          },
+          {
+            set: '@fortawesome/free-brands-svg-icons',
+            icons: ['fab'],
+          },
+        ],
+      },
+    ],
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)

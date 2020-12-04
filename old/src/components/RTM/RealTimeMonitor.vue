@@ -23,7 +23,7 @@
           :class="{ 'btn-active': mode === 'territory'}"
           @click="updateMode('territory')"
         >
-          <FontAwesomeIcon
+          <font-awesome-icon
             fixed-width
             :icon="['fas', 'flag']"
           />
@@ -34,7 +34,7 @@
           :class="{ 'btn-active': mode === 'pops'}"
           @click="updateMode('pops')"
         >
-          <FontAwesomeIcon
+          <font-awesome-icon
             fixed-width
             :icon="['fas', 'user']"
           /> Population
@@ -44,7 +44,7 @@
           class="btn btn-sm rtm-btn"
           @click="toggleShowPopPercent()"
         >
-          <FontAwesomeIcon
+          <font-awesome-icon
             fixed-width
             :icon="['fas', 'percent']"
           />

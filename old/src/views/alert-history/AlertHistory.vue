@@ -41,14 +41,14 @@
           :disabled="loading === true"
           @click="filterResults()"
         >
-          <FontAwesomeIcon :icon="['fas', 'filter']" /> Filter
+          <font-awesome-icon :icon="['fas', 'filter']" /> Filter
         </button>
         <button
           class="btn"
           :disabled="loading === true || (loading === false && filtered === false)"
           @click="clearFilter()"
         >
-          <FontAwesomeIcon :icon="['fas', 'undo']" /> Clear
+          <font-awesome-icon :icon="['fas', 'undo']" /> Clear
         </button>
       </div>
     </div>

@@ -6,15 +6,15 @@
         <!--        <RealTimeMonitor />-->
       </client-only>
 
-      <!--      <Footer class="hidden lg:block" />-->
+      <Footer class="hidden lg:block" />
     </div>
     <div
       id="panel-right"
       class="w-full h-full px-4 grid grid-cols-2 lg:grid-cols-3 ss:grid-cols-4 gap-4"
     >
-      <!--      <Navigation />-->
+      <Navigation />
       <Nuxt />
     </div>
-    <!--    <Footer class="lg:hidden" />-->
+    <Footer class="lg:hidden" />
   </div>
 </template>

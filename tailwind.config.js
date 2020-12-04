@@ -5,10 +5,10 @@ module.exports = {
       'components/**/*.vue',
       'layouts/**/*.vue',
       'pages/**/*.vue',
-      'plugins/**/*.js',
+      'filters/**/*.js',
       'nuxt.config.js',
       // TypeScript
-      'plugins/**/*.ts',
+      'filters/**/*.ts',
       'nuxt.config.ts',
     ],
   },

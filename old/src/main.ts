@@ -10,7 +10,7 @@ import {FactionName} from "@/filters/FactionName";
 import {BracketName} from "@/filters/BracketName";
 import {DateTimeFormat} from "@/filters/DateTimeFormat";
 import {library} from "@fortawesome/fontawesome-svg-core";
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {font-awesome-icon} from "@fortawesome/vue-fontawesome";
 import {faDiscord, faGithub, faPatreon, faTwitter} from "@fortawesome/free-brands-svg-icons";
 import {
   faChartArea, faCircle,
@@ -38,7 +38,7 @@ app.config.globalProperties.$filters = {
 }
 
 library.add(faGithub, faTwitter, faInfoCircle, faEye, faPercent, faDiscord, faChartArea, faPollH, faTasks, faCircle, faLink, faUser, faFlag, faPatreon, faFilter, faUndo);
-app.component('FontAwesomeIcon', FontAwesomeIcon)
+app.component('font-awesome-icon', font-awesome-icon)
 
 app.use(store)
 app.use(router)

@@ -21,7 +21,7 @@
           class="btn btn-sm"
           :to="{ name: 'Alert', params: { instanceId: instanceId }}"
         >
-          <FontAwesomeIcon
+          <font-awesome-icon
             fixed-width
             :icon="['fas', 'link']"
           />
