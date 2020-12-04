@@ -1,15 +1,12 @@
 <template>
-  <div
-    :remaining="remaining"
-    :instanceId="instanceId"
-  >
+  <div :remaining="remaining" :instanceId="instanceId">
     <div class="grid grid-cols-12 place-items-center">
       <div class="col-span-3 col-start-2 text-base">
-        {{ $filters.worldName(world) }}
+        {{ world | worldName }}
       </div>
 
       <div class="col-span-3 text-base">
-        {{ $filters.zoneName(zone) }}
+        {{ zone | zoneName }}
       </div>
 
       <div class="col-span-3 text-base font-bold">
@@ -19,12 +16,9 @@
       <div class="mr-2 col-start-12">
         <router-link
           class="btn btn-sm"
-          :to="{ name: 'Alert', params: { instanceId: instanceId }}"
+          :to="{ name: 'Alert', params: { instanceId: instanceId } }"
         >
-          <font-awesome-icon
-            fixed-width
-            :icon="['fas', 'link']"
-          />
+          <font-awesome-icon fixed-width :icon="['fas', 'link']" />
         </router-link>
       </div>
     </div>
@@ -51,41 +45,38 @@
 </template>
 
 <script lang="ts">
-import {defineAsyncComponent, defineComponent} from "vue";
-import {World} from "@/constants/World";
-import {Zone} from "@/constants/Zone";
-import {AlertRemainingTime} from "@/filters/AlertRemainingTime";
-import {AlertRemainingTimeText} from "@/filters/AlertRemainingTimeText";
+import Vue from 'vue'
+import { World } from '@/constants/World'
+import { Zone } from '@/constants/Zone'
+import alertRemainingTime from '@/filters/AlertRemainingTime'
+import alertRemainingTimeText from '@/filters/AlertRemainingTimeText'
 
-export default defineComponent({
-  name: "RealTimeAlert",
-  components: {
-    FactionSegmentBar: defineAsyncComponent(() => import(/* webpackChunkName: "FactionSegmentBar" */ "@/components/common/FactionSegmentBar.vue")),
-  },
+export default Vue.extend({
+  name: 'RealTimeAlert',
   props: {
     instanceId: {
       type: String,
-      required: true
+      required: true,
     },
     world: {
       type: Number,
       default: World.MILLER,
-      required: true
+      required: true,
     },
     zone: {
       type: Number,
       default: Zone.INDAR,
-      required: true
+      required: true,
     },
     started: {
       type: String,
       default: 'Jan 1st 1970 00:00:00',
-      required: true
+      required: true,
     },
     duration: {
       type: Number,
       default: 0,
-      required: true
+      required: true,
     },
     mode: {
       type: String,
@@ -105,7 +96,7 @@ export default defineComponent({
           tr: 0,
           nso: 0,
         }
-      }
+      },
     },
     result: {
       type: Object,
@@ -117,34 +108,34 @@ export default defineComponent({
           nso: 33,
           outofPlay: 33,
         }
-      }
-    }
+      },
+    },
   },
   data() {
     return {
-      remaining: AlertRemainingTime(this.started, this.duration),
+      remaining: alertRemainingTime(this.started, this.duration),
     }
   },
   computed: {
     remainingTimeText(): string {
       if (this.remaining < -30) {
-        return 'Overdue!';
+        return 'Overdue!'
       }
       if (this.remaining < 0) {
-        return 'Ending...';
+        return 'Ending...'
       }
-      return AlertRemainingTimeText(this.remaining);
-    }
+      return alertRemainingTimeText(this.remaining)
+    },
   },
   created() {
     setInterval(() => {
       this.tickTock()
-    }, 1000);
+    }, 1000)
   },
   methods: {
     tickTock() {
-      this.remaining = this.remaining - 1;
-    }
-  }
-});
+      this.remaining = this.remaining - 1
+    },
+  },
+})
 </script>

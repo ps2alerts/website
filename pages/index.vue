@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <div class="col-span-3 ss:col-span-4">
-      <div class="text-center h-full">
-        <h1 class="text-title">Alert Statistics</h1>
-        <p>All data is currently subject to wipe!</p>
-      </div>
+  <div class="col-span-3 ss:col-span-4">
+    <div class="text-center">
+      <h1 class="text-title">Alert Statistics</h1>
+      <p>All data is currently subject to wipe!</p>
     </div>
-    <div class="col-span-3 ss:col-span-4 card">
+    <div class="col-span-3 ss:col-span-4 bg-tint rounded">
       <div class="text-center">
         <h1>Victory Statistics</h1>
         <p>TO BE FINISHED!</p>
