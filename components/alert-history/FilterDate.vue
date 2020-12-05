@@ -56,7 +56,6 @@ export default Vue.extend({
         dateTo: moment(this.dateTo),
       }
       this.$emit('date-changed', dateObject)
-      console.log('foo')
     },
   },
 })

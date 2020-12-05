@@ -105,7 +105,6 @@ import { Faction } from '@/constants/Faction'
 import { CensusVehicleResponseInterface } from '@/interfaces/CensusVehicleResponseInterface'
 import { FactionBgClass } from '@/constants/FactionBgClass'
 import vehicleFaction from '@/filters/VehicleFaction'
-import itemShortName from '@/filters/ItemShortName'
 
 export default Vue.extend({
   name: 'AlertVehicleMetrics',
@@ -133,8 +132,9 @@ export default Vue.extend({
     this.init()
   },
   methods: {
-    init(): void {
-      this.pull()
+    async init(): Promise<void> {
+      await this.pullVehicleData()
+      await this.pull()
       this.interval = window.setInterval(() => {
         this.pull()
       }, 10000)
@@ -212,7 +212,7 @@ export default Vue.extend({
               }
             })
             result[key].vehicleName = vehicleData
-              ? itemShortName(vehicleData.name)
+              ? this.$options.filters?.itemShortName(vehicleData.name)
               : `UNKNOWN (ID: ${vehicle.vehicle})`
             result[key].vehicleFaction = vehicleData
               ? vehicleData.faction
