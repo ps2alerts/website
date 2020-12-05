@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-2">
+  <div class="grid grid-cols-2 gap-2">
     <div class="col-span-1">
       <input
         id="dateFrom"

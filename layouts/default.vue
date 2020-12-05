@@ -1,5 +1,5 @@
 <template>
-  <div class="font-sans flex">
+  <div class="font-sans lg:flex">
     <div id="panel-left" class="w-full">
       <client-only>
         <Header />
@@ -12,9 +12,9 @@
         <Navigation />
         <Nuxt />
       </client-only>
+      <client-only>
+        <Footer class="lg:hidden" />
+      </client-only>
     </div>
-    <client-only>
-      <Footer class="lg:hidden" />
-    </client-only>
   </div>
 </template>

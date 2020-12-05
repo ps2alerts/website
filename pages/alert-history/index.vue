@@ -1,111 +1,92 @@
 <template>
-  <div class="col-span-2 lg:col-span-3 ss:col-span-4 text-center">
-    <div>
+  <div class="grid grid-cols-12 gap-2 text-center">
+    <div class="col-span-12">
       <h1 class="text-title">Alert History</h1>
       <p>Last updated: {{ lastUpdated }}</p>
     </div>
-    <div>
-      <div class="grid grid-cols-12 gap-2">
-        <div class="col-span-6 lg:col-span-2 lg:col-start-3">
-          <FilterWorld
-            :world-filter="selectedWorld"
-            @world-changed="updateWorld"
-          />
-        </div>
-        <div class="col-span-6 lg:col-span-2">
-          <FilterZone :zone-filter="selectedZone" @zone-changed="updateZone" />
-        </div>
-        <div class="col-span-6 lg:col-span-2">
-          <FilterBracket
-            :bracket-filter="selectedBracket"
-            @bracket-changed="updateBracket"
-          />
-        </div>
-        <div class="col-span-6 lg:col-span-2">
-          <FilterVictor
-            :victor-filter="selectedVictor"
-            @victor-changed="updateVictor"
-          />
-        </div>
-        <div class="col-span-12 lg:col-span-8 lg:col-start-3">
-          <FilterDate :is-filtered="filtered" @date-changed="updateDate" />
-        </div>
-        <div class="col-span-12 text-center">
-          <button
-            class="btn"
-            :disabled="loading === true"
-            @click="filterResults()"
-          >
-            <font-awesome-icon :icon="['fas', 'filter']" /> Filter
-          </button>
-          <button
-            class="btn"
-            :disabled="
-              loading === true || (loading === false && filtered === false)
-            "
-            @click="clearFilter()"
-          >
-            <font-awesome-icon :icon="['fas', 'undo']" /> Clear
-          </button>
-        </div>
-      </div>
+    <div class="col-span-6 lg:col-span-2 lg:col-start-3">
+      <FilterWorld :world-filter="selectedWorld" @world-changed="updateWorld" />
     </div>
-    <div>
-      <div
-        v-show="loading === false && length > 0"
-        class="col-span-2 lg:col-span-3 ss:col-span-4 text-center mb-4"
-      >
-        <p v-show="!filteredByDate()">
-          {{ length }} alert{{ length > 1 ? 's' : '' }} found (50 max when not
-          filtered by date)
-        </p>
-        <p v-show="filteredByDate()">
-          {{ length }} alert{{ length > 1 ? 's' : '' }} found
-        </p>
-        <p v-show="length === 250">
-          Hard limit of 250 alerts reached. Please narrow your criteria.
-        </p>
-      </div>
-      <div
-        v-show="loading === false && error.message === '' && length === 0"
-        class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
-      >
-        <h1>No alerts found for specified criteria!</h1>
-      </div>
-      <div
-        v-show="
-          loading === false &&
-          error.message === '' &&
-          length === 0 &&
-          (selectedDateFrom || selectedDateTo)
+    <div class="col-span-6 lg:col-span-2">
+      <FilterZone :zone-filter="selectedZone" @zone-changed="updateZone" />
+    </div>
+    <div class="col-span-6 lg:col-span-2">
+      <FilterBracket
+        :bracket-filter="selectedBracket"
+        @bracket-changed="updateBracket"
+      />
+    </div>
+    <div class="col-span-6 lg:col-span-2">
+      <FilterVictor
+        :victor-filter="selectedVictor"
+        @victor-changed="updateVictor"
+      />
+    </div>
+    <div class="col-span-12 lg:col-span-8 lg:col-start-3">
+      <FilterDate :is-filtered="filtered" @date-changed="updateDate" />
+    </div>
+    <div class="col-span-12 text-center">
+      <button class="btn" :disabled="loading === true" @click="filterResults()">
+        <font-awesome-icon :icon="['fas', 'filter']" /> Filter
+      </button>
+      <button
+        class="btn"
+        :disabled="
+          loading === true || (loading === false && filtered === false)
         "
-        class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
+        @click="clearFilter()"
       >
-        <p>Both from and to dates need to be defined.</p>
-      </div>
-      <div
-        v-show="loading === true"
-        class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
-      >
-        <h1>Loading...</h1>
-      </div>
-      <div
-        v-show="error.message !== ''"
-        class="col-span-2 lg:col-span-3 ss:col-span-4 text-center"
-      >
-        <h1>Error loading results!</h1>
-        <p>{{ error.message }}</p>
-      </div>
-      <div
-        v-if="loading === false && length > 0"
-        class="col-span-2 lg:col-span-3 ss:col-span-4 h-full items-center justify-center"
-      >
-        <AlertHistoryEntry
-          v-for="(alert, index) in alerts"
-          :key="index"
-          :alert="alert"
-        />
-      </div>
+        <font-awesome-icon :icon="['fas', 'undo']" /> Clear
+      </button>
+    </div>
+    <div
+      v-show="loading === false && length > 0"
+      class="col-span-12 text-center mb-4"
+    >
+      <p v-show="!filteredByDate()">
+        {{ length }} alert{{ length > 1 ? 's' : '' }} found (50 max when not
+        filtered by date)
+      </p>
+      <p v-show="filteredByDate()">
+        {{ length }} alert{{ length > 1 ? 's' : '' }} found
+      </p>
+      <p v-show="length === 250">
+        Hard limit of 250 alerts reached. Please narrow your criteria.
+      </p>
+    </div>
+    <div
+      v-show="loading === false && error.message === '' && length === 0"
+      class="col-span-12 text-center"
+    >
+      <h1>No alerts found for specified criteria!</h1>
+    </div>
+    <div
+      v-show="
+        loading === false &&
+        error.message === '' &&
+        length === 0 &&
+        (selectedDateFrom || selectedDateTo)
+      "
+      class="col-span-12 text-center"
+    >
+      <p>Both from and to dates need to be defined.</p>
+    </div>
+    <div v-show="loading === true" class="col-span-12 text-center">
+      <h1>Loading...</h1>
+    </div>
+    <div v-show="error.message !== ''" class="col-span-12 text-center">
+      <h1>Error loading results!</h1>
+      <p>{{ error.message }}</p>
+    </div>
+    <div
+      v-if="loading === false && length > 0"
+      class="col-span-12 h-full items-center justify-center"
+    >
+      <AlertHistoryEntry
+        v-for="(alert, index) in alerts"
+        :key="index"
+        :alert="alert"
+      />
     </div>
   </div>
 </template>
