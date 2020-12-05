@@ -28,6 +28,7 @@
           BASE_URL: "http://dev.ps2alerts.com"
           ENVIRONMENT: "development"
           VERSION: "12345"
+          BUILD: "DEV"
         labels:
           traefik.enable: "true"
           traefik.http.routers.ps2alerts_website.rule: "Host(`dev.ps2alerts.com`)"
