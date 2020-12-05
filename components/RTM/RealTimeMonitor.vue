@@ -86,9 +86,13 @@ import { InstancePopulationAggregateResponseInterface } from '@/interfaces/aggre
 import { TIME_FORMAT } from '@/constants/Time'
 import moment from 'moment-timezone'
 import { Endpoints } from '@/constants/Endpoints'
+import RealTimeAlert from '~/components/RTM/RealTimeAlert.vue'
 
 export default Vue.extend({
   name: 'RealTimeMonitor',
+  components: {
+    RealTimeAlert,
+  },
   data() {
     return {
       loading: true,
@@ -111,18 +115,16 @@ export default Vue.extend({
   // eslint-disable-next-line require-await
   async created() {
     // TEMP polling until real time websocket is implemented
-    void this.activeAlerts()
-    setTimeout(() => {
-      void this.alertPops()
-    }, 5000)
+    await this.activeAlerts()
+    await this.alertPops()
 
     // After initial data is gathered, now continue to poll for data
     setInterval(() => {
       this.error = null
-      void this.activeAlerts()
+      this.activeAlerts()
     }, 5000)
     setInterval(() => {
-      void this.alertPops()
+      this.alertPops()
     }, 30000)
   },
   methods: {
@@ -143,7 +145,7 @@ export default Vue.extend({
           this.error = e.message
         })
     },
-    async alertPops(): Promise<void> {
+    alertPops(): Promise<void> {
       if (!this.actives) {
         return
       }

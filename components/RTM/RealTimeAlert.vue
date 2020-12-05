@@ -50,9 +50,13 @@ import { World } from '@/constants/World'
 import { Zone } from '@/constants/Zone'
 import AlertRemainingTime from '@/constants/AlertRemainingTime'
 import AlertRemainingTimeText from '@/constants/AlertRemainingTimeText'
+import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
 
 export default Vue.extend({
   name: 'RealTimeAlert',
+  components: {
+    FactionSegmentBar,
+  },
   props: {
     instanceId: {
       type: String,
