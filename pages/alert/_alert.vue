@@ -1,19 +1,12 @@
 <template>
-  <div v-if="alert.result" class="col-span-3 ss:col-span-4">
-    <div class="mb-2">
-      <AlertResultBar :alert="alert" />
+  <div>
+    <div v-if="!alert.result" class="text-center">
+      <h1>Loading...</h1>
     </div>
-    <div class="grid grid-cols-12 gap-2">
-      <div
-        class="col-span-12 lg:col-span-6 ss:col-span-3 px-4 py-4 mb-2 bg-tint rounded"
-      >
-        <AlertDetails :alert="alert" />
-      </div>
-      <div
-        class="col-span-12 lg:col-span-6 ss:col-span-9 px-4 py-4 mb-2 bg-tint rounded"
-      >
-        <AlertFactionCombatMetrics :alert="alert" />
-      </div>
+    <div v-if="alert.result" class="grid grid-cols-12 gap-2">
+      <AlertResult :alert="alert" />
+      <AlertDetails :alert="alert" />
+      <AlertFactionCombatMetrics :alert="alert" />
       <div class="col-span-12 text-center">
         <button
           class="btn"
@@ -45,29 +38,20 @@
         </button>
         <p>Filtering and sorting coming very soon!</p>
       </div>
-      <div
-        v-show="showPlayers === true"
-        class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
-      >
+      <div v-show="showPlayers === true" class="col-span-12 card">
         <AlertCharacterMetrics
           :alert="alert"
           @outfit-participants-changed="outfitParticipantsChanged"
         />
       </div>
-      <div
-        v-show="showOutfits === true"
-        class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
-      >
+      <div v-show="showOutfits === true" class="col-span-12 card">
         <AlertOutfitMetrics
           ref="outfit"
           :alert="alert"
           :outfit-participants="outfitParticipants"
         />
       </div>
-      <div
-        v-show="showWeapons === true"
-        class="col-span-12 px-4 py-4 mb-2 bg-tint rounded"
-      >
+      <div v-show="showWeapons === true" class="col-span-12 card">
         <AlertWeaponMetrics :alert="alert" />
       </div>
       <div v-show="showVehicles === true" class="col-span-12">
@@ -83,24 +67,24 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
-import AlertResultBar from '@/views/alert/AlertResult.vue'
 import ApiRequest from '@/api-request'
 import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
-import AlertDetails from '@/views/alert/AlertDetails.vue'
-import AlertFactionCombatMetrics from '@/views/alert/AlertFactionCombatMetrics.vue'
-import AlertCharacterMetrics from '@/views/alert/AlertCharacterMetrics.vue'
-import AlertOutfitMetrics from '@/views/alert/AlertOutfitMetrics.vue'
-import AlertWeaponMetrics from '@/views/alert/AlertWeaponMetrics.vue'
-import AlertVehicleMetrics from '@/views/alert/AlertVehicleMetrics.vue'
-import AlertVehicleMatrix from '@/views/alert/AlertVehicleMatrix.vue'
+import AlertDetails from '@/components/alert/AlertDetails.vue'
+import AlertFactionCombatMetrics from '@/components/alert/AlertFactionCombatMetrics.vue'
+import AlertCharacterMetrics from '@/components/alert/AlertCharacterMetrics.vue'
+import AlertOutfitMetrics from '@/components/alert/AlertOutfitMetrics.vue'
+import AlertWeaponMetrics from '@/components/alert/AlertWeaponMetrics.vue'
+import AlertVehicleMetrics from '@/components/alert/AlertVehicleMetrics.vue'
+import AlertVehicleMatrix from '@/components/alert/AlertVehicleMatrix.vue'
+import AlertResult from '~/components/alert/AlertResult.vue'
 
-export default defineComponent({
+export default Vue.extend({
   name: 'Alert',
   components: {
-    AlertResultBar,
+    AlertResult,
     AlertDetails,
     AlertFactionCombatMetrics,
     AlertCharacterMetrics,
@@ -109,6 +93,7 @@ export default defineComponent({
     AlertVehicleMetrics,
     AlertVehicleMatrix,
   },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   beforeRouteUpdate(to, from, next) {
     this.init(to.params.instanceId.toString())
     next()
@@ -116,7 +101,7 @@ export default defineComponent({
   data() {
     return {
       error: null,
-      interval: undefined as number | undefined,
+      interval: undefined as undefined | number,
       alert: {} as InstanceTerritoryControlResponseInterface,
       showPlayers: true,
       showOutfits: false,
@@ -126,15 +111,15 @@ export default defineComponent({
     }
   },
   created() {
-    this.init(this.$route.params.instanceId.toString())
+    this.init(this.$route.params.alert.toString())
   },
   methods: {
     init(instanceId: string): void {
       document.title = 'Alert #' + instanceId
       this.pull(instanceId)
       clearInterval(this.interval)
-      this.interval = setInterval(() => {
-        void this.pull(instanceId)
+      this.interval = window.setInterval(() => {
+        this.pull(instanceId)
       }, 30000)
     },
     async pull(instanceId: string): Promise<void> {
@@ -181,7 +166,6 @@ export default defineComponent({
       this.outfitParticipants = participants
       const outfitRef = this.$refs.outfit
       if (outfitRef) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
         // @ts-ignore
         outfitRef.applyOutfitParticipants()
       }

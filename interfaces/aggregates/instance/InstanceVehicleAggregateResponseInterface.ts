@@ -1,28 +1,23 @@
-import {Faction} from "@/constants/Faction";
+import { Faction } from '@/constants/Faction'
 
 interface VehicleStatsInterface {
-  kills?: number;
-  deaths?: number;
-  teamkills?: number;
-  teamkilled?: number;
+  kills?: number
+  deaths?: number
+  teamkills?: number
+  teamkilled?: number
 }
 
 export interface InstanceVehicleAggregateResponseInterface {
-  instanceId: string;
-  vehicle: number;
-  vehicleName?: string;
-  vehicleFaction?: Faction;
-  vehicleDeathMatrix?: {[k:string]: number};
-  vehicleKillMatrix?: {[k:string]: number};
-  vehicleTeamkillMatrix?: {[k:string]: number};
-  vehicleTeamkilledMatrix?: {[k:string]: number};
-  suicides?: number;
-  vehicles?: VehicleStatsInterface;
-  infantry?: VehicleStatsInterface;
-  totals?: {
-    kills: number;
-    deaths: number;
-    teamkills: number;
-    teamkilled: number;
-  }
+  instanceId: string
+  vehicle: number
+  vehicleName?: string
+  vehicleFaction?: Faction
+  vehicleDeathMatrix?: { [k: string]: number }
+  vehicleKillMatrix?: { [k: string]: number }
+  vehicleTeamkillMatrix?: { [k: string]: number }
+  vehicleTeamkilledMatrix?: { [k: string]: number }
+  suicides?: number
+  vehicles?: VehicleStatsInterface
+  infantry?: VehicleStatsInterface
+  totals?: VehicleStatsInterface
 }

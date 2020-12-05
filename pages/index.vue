@@ -1,16 +1,18 @@
 <template>
-  <div class="col-span-3 ss:col-span-4">
-    <div class="text-center">
-      <h1 class="text-title">Alert Statistics</h1>
-      <p>All data is currently subject to wipe!</p>
+  <div class="grid grid-cols-12 gap-2">
+    <div class="col-span-12">
+      <div class="text-center">
+        <h1 class="text-title">Alert Statistics</h1>
+        <p>All data is currently subject to wipe!</p>
+      </div>
     </div>
-    <div class="col-span-3 ss:col-span-4 bg-tint rounded">
+    <div class="col-span-12 bg-tint card">
       <div class="text-center">
         <h1>Victory Statistics</h1>
         <p>TO BE FINISHED!</p>
       </div>
     </div>
-    <div class="col-span-3 ss:col-span-4 card">
+    <div class="col-span-12 bg-tint card">
       <div class="text-center">
         <h1>Combat Statistics</h1>
         <p>TO BE FINISHED!</p>
@@ -609,7 +611,7 @@
         </div>
       </div>
     </div>
-    <div class="col-span-3 ss:col-span-4 card">
+    <div class="col-span-12 bg-tint card">
       <div class="text-center">
         <h1>Combat Statistics</h1>
         <p>TO BE FINISHED!</p>

@@ -123,8 +123,22 @@ import ApiRequest from '~/api-request'
 import { World } from '~/constants/World'
 import { Ps2alertsEventState } from '~/constants/Ps2alertsEventState'
 import { Faction } from '~/constants/Faction'
+import AlertHistoryEntry from '~/components/alert-history/AlertHistoryEntry.vue'
+import FilterWorld from '~/components/alert-history/FilterWorld.vue'
+import FilterZone from '~/components/alert-history/FilterZone.vue'
+import FilterBracket from '~/components/alert-history/FilterBracket.vue'
+import FilterVictor from '~/components/alert-history/FilterVictor.vue'
+import FilterDate from '~/components/alert-history/FilterDate.vue'
 
 export default Vue.extend({
+  components: {
+    AlertHistoryEntry,
+    FilterWorld,
+    FilterZone,
+    FilterBracket,
+    FilterVictor,
+    FilterDate,
+  },
   data() {
     const now = moment()
     return {
@@ -168,9 +182,9 @@ export default Vue.extend({
     },
   },
   async created() {
-    this.fullPull()
+    await this.fullPull()
     setInterval(() => {
-      void this.partialPull()
+      await this.partialPull()
     }, 5000)
   },
   methods: {
@@ -213,7 +227,6 @@ export default Vue.extend({
 
           if (key) {
             const index = this.alerts.indexOf(key)
-            // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
             // @ts-ignore
             index ? (this.alerts[index] = result) : null
           }

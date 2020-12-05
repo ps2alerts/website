@@ -2,7 +2,7 @@ import { createApp } from 'vue';
 import router from "./router";
 import App from "@/App.vue";
 import store from "./store";
-import {AlertRemainingTime} from "@/filters/AlertRemainingTime";
+import {AlertRemainingTime} from "@/constants/AlertRemainingTime";
 import {AlertEndTime} from "@/filters/AlertEndTime";
 import {WorldName} from "@/filters/WorldName";
 import {ZoneName} from "@/filters/ZoneName";

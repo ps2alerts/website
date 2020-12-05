@@ -27,9 +27,11 @@ export default {
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     { src: '@/filters/AlertEndTime', mode: 'client' },
-    { src: '@/filters/AlertRemainingTime', mode: 'client' },
     { src: '@/filters/BracketName', mode: 'client' },
+    // { src: '@/filters/DateTimeFormat', mode: 'client' },
     { src: '@/filters/FactionName', mode: 'client' },
+    // { src: '@/filters/ItemShortName', mode: 'client' },
+    { src: '@/filters/VehicleFaction', mode: 'client' },
     { src: '@/filters/WorldName', mode: 'client' },
     { src: '@/filters/ZoneName', mode: 'client' },
   ],
@@ -83,6 +85,7 @@ export default {
         tailwindcss: join(__dirname, 'tailwind.config.js'),
         'postcss-import': {},
         'postcss-nested': {},
+        'postcss-extend': {},
         'postcss-normalize': {},
         autoprefixer: {},
       },

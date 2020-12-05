@@ -48,8 +48,8 @@
 import Vue from 'vue'
 import { World } from '@/constants/World'
 import { Zone } from '@/constants/Zone'
-import alertRemainingTime from '@/filters/AlertRemainingTime'
-import alertRemainingTimeText from '@/filters/AlertRemainingTimeText'
+import AlertRemainingTime from '@/constants/AlertRemainingTime'
+import AlertRemainingTimeText from '@/constants/AlertRemainingTimeText'
 
 export default Vue.extend({
   name: 'RealTimeAlert',
@@ -113,7 +113,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      remaining: alertRemainingTime(this.started, this.duration),
+      remaining: AlertRemainingTime(this.started, this.duration),
     }
   },
   computed: {
@@ -124,7 +124,7 @@ export default Vue.extend({
       if (this.remaining < 0) {
         return 'Ending...'
       }
-      return alertRemainingTimeText(this.remaining)
+      return AlertRemainingTimeText(this.remaining)
     },
   },
   created() {

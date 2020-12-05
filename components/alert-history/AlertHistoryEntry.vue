@@ -63,12 +63,12 @@
       <div
         class="col-span-2 lg:col-span-1 lg:col-start-6 text-sm lg:text-xl ss:text-2xl mb-2 lg:mb-0"
       >
-        <router-link
+        <NuxtLink
+          :to="{ name: 'alert-alert', params: { alert: alert.instanceId } }"
           class="btn btn-sm"
-          :to="{ name: 'Alert', params: { instanceId: alert.instanceId } }"
         >
           <font-awesome-icon fixed-width :icon="['fas', 'link']" /> More details
-        </router-link>
+        </NuxtLink>
       </div>
     </div>
 
@@ -89,14 +89,17 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue'
 import moment from 'moment-timezone'
 import { DATE_TIME_FORMAT_SHORT } from '@/constants/Time'
 import { Faction } from '@/constants/Faction'
-import { FactionBgClass } from '@/filters/FactionBgClass'
-
-import Vue from 'vue'
+import { FactionBgClass } from '@/constants/FactionBgClass'
+import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
 
 export default Vue.extend({
+  components: {
+    FactionSegmentBar,
+  },
   props: {
     alert: {
       type: Object,
