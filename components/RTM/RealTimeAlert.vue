@@ -14,12 +14,12 @@
       </div>
 
       <div class="mr-2 col-start-12">
-        <router-link
+        <NuxtLink
           class="btn btn-sm"
-          :to="{ name: 'Alert', params: { instanceId: instanceId } }"
+          :to="{ name: 'alert-alert', params: { alert: instanceId } }"
         >
           <font-awesome-icon fixed-width :icon="['fas', 'link']" />
-        </router-link>
+        </NuxtLink>
       </div>
     </div>
     <div v-show="mode === 'territory'">

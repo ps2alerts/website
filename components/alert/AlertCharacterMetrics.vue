@@ -36,7 +36,7 @@
           <tbody>
             <tr
               v-for="(character, index) in data"
-              :key="character.character"
+              :key="character.id"
               class="mb-2"
               :class="factionClass(character.character.faction)"
             >

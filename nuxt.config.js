@@ -28,9 +28,9 @@ export default {
   plugins: [
     { src: '@/filters/AlertEndTime', mode: 'client' },
     { src: '@/filters/BracketName', mode: 'client' },
-    // { src: '@/filters/DateTimeFormat', mode: 'client' },
+    { src: '@/filters/DateTimeFormat', mode: 'client' },
     { src: '@/filters/FactionName', mode: 'client' },
-    // { src: '@/filters/ItemShortName', mode: 'client' },
+    { src: '@/filters/ItemShortName', mode: 'client' },
     { src: '@/filters/VehicleFaction', mode: 'client' },
     { src: '@/filters/WorldName', mode: 'client' },
     { src: '@/filters/ZoneName', mode: 'client' },
