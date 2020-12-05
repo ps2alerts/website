@@ -28,6 +28,7 @@ import Vue from 'vue'
 import moment from 'moment'
 
 export default Vue.extend({
+  name: 'FilterDate',
   props: {
     isFiltered: {
       type: Boolean,
@@ -55,6 +56,7 @@ export default Vue.extend({
         dateTo: moment(this.dateTo),
       }
       this.$emit('date-changed', dateObject)
+      console.log('foo')
     },
   },
 })
