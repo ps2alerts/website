@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div v-if="!alert.result" class="text-center">
+    <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
-    <div v-if="alert.result" class="grid grid-cols-12 gap-2">
+    <div v-if="loaded && alert.result" class="grid grid-cols-12 gap-2">
       <AlertResult :alert="alert" />
       <AlertDetails :alert="alert" />
       <AlertFactionCombatMetrics :alert="alert" />
@@ -99,35 +99,50 @@ export default Vue.extend({
   },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   beforeRouteUpdate(to, from, next) {
-    this.init(to.params.instanceId.toString())
+    this.reset()
+    next()
+  },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  beforeRouteLeave(to, from, next) {
+    this.reset()
     next()
   },
   data() {
     return {
       error: null,
+      loaded: false,
       interval: undefined as undefined | number,
       alert: {} as InstanceTerritoryControlResponseInterface,
-      showPlayers: false,
-      showOutfits: true,
+      showPlayers: true,
+      showOutfits: false,
       showWeapons: false,
       showVehicles: false,
       outfitParticipants: {} as { [k: string]: string[] },
       playersLoaded: false,
     }
   },
+  beforeDestroy() {
+    this.reset()
+  },
   created() {
+    console.log('created')
+    this.reset()
     this.init(this.$route.params.alert.toString())
   },
   methods: {
+    reset() {
+      this.loaded = false
+      clearInterval(this.interval)
+    },
     init(instanceId: string): void {
       document.title = 'Alert #' + instanceId
       this.pull(instanceId)
-      clearInterval(this.interval)
       this.interval = window.setInterval(() => {
         this.pull(instanceId)
-      }, 30000)
+      }, 5000)
     },
     async pull(instanceId: string): Promise<void> {
+      console.log('pull', instanceId)
       if (this.alert && this.alert.state === Ps2alertsEventState.ENDED) {
         return
       }
@@ -138,7 +153,7 @@ export default Vue.extend({
         )
         .then((alert) => {
           this.alert = alert
-          // Need to emit to client components that route has changed
+          this.loaded = true
         })
         .catch((e) => {
           this.error = e.message

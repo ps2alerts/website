@@ -114,6 +114,7 @@ export default Vue.extend({
     return {
       error: null,
       loaded: false,
+      interval: undefined as undefined | number,
       data: {} as InstanceCharacterAggregateResponseInterface[],
       outfitParticipants: {} as { [k: string]: string[] },
     }
@@ -142,14 +143,22 @@ export default Vue.extend({
       return counts
     },
   },
+  beforeDestroy() {
+    clearInterval(this.interval)
+  },
   created() {
-    this.pull()
-    setInterval(() => {
-      this.pull()
-    }, 10000)
+    clearInterval(this.interval)
+    this.init()
   },
   methods: {
+    init(): void {
+      this.pull()
+      this.interval = window.setInterval(() => {
+        this.pull()
+      }, 10000)
+    },
     async pull(): Promise<void> {
+      console.log('AlertCharacterMetrics.pull', this.alert.instanceId)
       if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
         return
       }

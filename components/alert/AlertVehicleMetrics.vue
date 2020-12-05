@@ -120,18 +120,25 @@ export default Vue.extend({
     return {
       error: null,
       loaded: false,
+      interval: undefined as undefined | number,
       data: {} as InstanceVehicleAggregateResponseInterface[],
       vehicleData: [] as VehicleDataInterface[],
     }
   },
-  async created() {
-    await this.pullVehicleData()
-    await this.pull()
-    setInterval(() => {
-      this.pull()
-    }, 10000)
+  beforeDestroy() {
+    clearInterval(this.interval)
+  },
+  created() {
+    clearInterval(this.interval)
+    this.init()
   },
   methods: {
+    init(): void {
+      this.pull()
+      this.interval = window.setInterval(() => {
+        this.pull()
+      }, 10000)
+    },
     async pullVehicleData(): Promise<void> {
       if (this.loaded) {
         return
@@ -156,6 +163,8 @@ export default Vue.extend({
         })
     },
     async pull(): Promise<void> {
+      console.log('AlertVehicleMetrics.pull', this.alert.instanceId)
+
       if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
         return
       }
