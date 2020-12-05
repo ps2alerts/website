@@ -2,9 +2,9 @@ import join from 'memory-fs/lib/join'
 
 export default {
   env: {
+    environment: process.env.NODE_ENV ?? 'UNKNOWN ENVIRONMENT',
     build: process.env.BUILD ?? 'UNKNOWN BUILD',
     version: process.env.VERSION ?? 'UNKNOWN VERSION',
-    environment: process.env.ENVIRONMENT ?? 'UNKNOWN ENVIRONMENT',
     apiUrl: process.env.API_HOST ?? 'http://dev.api.ps2alerts.com',
   },
   server: {

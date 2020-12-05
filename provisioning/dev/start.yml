@@ -26,9 +26,9 @@
         env:
           API_URL: "http://dev.api.ps2alerts.com"
           BASE_URL: "http://dev.ps2alerts.com"
-          ENVIRONMENT: "development"
-          VERSION: "12345"
-          BUILD: "DEV"
+          NODE_ENV: "development"
+          VERSION: "v3.0.0-dev"
+          BUILD: "abc12345"
         labels:
           traefik.enable: "true"
           traefik.http.routers.ps2alerts_website.rule: "Host(`dev.ps2alerts.com`)"
