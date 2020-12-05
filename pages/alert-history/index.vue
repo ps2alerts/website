@@ -184,7 +184,7 @@ export default Vue.extend({
   async created() {
     await this.fullPull()
     setInterval(() => {
-      await this.partialPull()
+      this.partialPull()
     }, 5000)
   },
   methods: {
@@ -228,7 +228,7 @@ export default Vue.extend({
           if (key) {
             const index = this.alerts.indexOf(key)
             // @ts-ignore
-            index ? (this.alerts[index] = result) : null
+            return index ? (this.alerts[index] = result) : null
           }
         } catch (e) {
           this.error = e
