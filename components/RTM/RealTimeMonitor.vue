@@ -145,7 +145,7 @@ export default Vue.extend({
           this.error = e.message
         })
     },
-    alertPops(): Promise<void> {
+    alertPops() {
       if (!this.actives) {
         return
       }
