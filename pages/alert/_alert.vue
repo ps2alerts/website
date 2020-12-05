@@ -40,7 +40,9 @@
       </div>
       <div v-show="showPlayers === true" class="col-span-12 card">
         <AlertCharacterMetrics
+          ref="character"
           :alert="alert"
+          @players-loaded="playersLoadedEvent"
           @outfit-participants-changed="outfitParticipantsChanged"
         />
       </div>
@@ -49,6 +51,8 @@
           ref="outfit"
           :alert="alert"
           :outfit-participants="outfitParticipants"
+          :players-loaded="playersLoaded"
+          @request-outfit-participants="requestOutfitParticipants"
         />
       </div>
       <div v-show="showWeapons === true" class="col-span-12 card">
@@ -103,11 +107,12 @@ export default Vue.extend({
       error: null,
       interval: undefined as undefined | number,
       alert: {} as InstanceTerritoryControlResponseInterface,
-      showPlayers: true,
-      showOutfits: false,
+      showPlayers: false,
+      showOutfits: true,
       showWeapons: false,
       showVehicles: false,
       outfitParticipants: {} as { [k: string]: string[] },
+      playersLoaded: false,
     }
   },
   created() {
@@ -164,11 +169,15 @@ export default Vue.extend({
     // Used by AlertOutfitMetrics.vue component
     outfitParticipantsChanged(participants: { [k: string]: string[] }) {
       this.outfitParticipants = participants
-      const outfitRef = this.$refs.outfit
-      if (outfitRef) {
+    },
+    requestOutfitParticipants() {
+      if (this.$refs.character) {
         // @ts-ignore
-        outfitRef.applyOutfitParticipants()
+        this.$refs.character.calculateOutfitParticipants()
       }
+    },
+    playersLoadedEvent() {
+      this.playersLoaded = true
     },
   },
 })

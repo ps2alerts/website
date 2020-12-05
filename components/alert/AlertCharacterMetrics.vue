@@ -170,7 +170,7 @@ export default Vue.extend({
         .then((result) => {
           this.data = result
           this.loaded = true
-          this.calculateOutfitParticipants()
+          this.$emit('players-loaded')
         })
         .catch((e) => {
           this.error = e.message
@@ -179,6 +179,10 @@ export default Vue.extend({
     // This bubbles up to the _alert.vue component, then back down via a prop bind to AlertOutfitMetrics.vue, which enables
     // us to render the outfit participants.
     calculateOutfitParticipants(): void {
+      if (!this.data) {
+        return
+      }
+
       this.data.forEach(
         (character: InstanceCharacterAggregateResponseInterface) => {
           let outfitId = `-${character.character.faction.toString()}`

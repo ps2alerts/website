@@ -114,6 +114,11 @@ export default Vue.extend({
       default: {},
       required: true,
     },
+    playersLoaded: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
   },
   data() {
     return {
@@ -152,11 +157,15 @@ export default Vue.extend({
     outfitParticipants() {
       this.applyOutfitParticipants()
     },
-    loaded() {
-      this.applyOutfitParticipants()
+    playersLoaded() {
+      if (this.loaded) {
+        this.$emit('request-outfit-participants')
+      }
     },
-    data() {
-      this.applyOutfitParticipants()
+    loaded() {
+      if (this.playersLoaded) {
+        this.$emit('request-outfit-participants')
+      }
     },
   },
   created() {
@@ -196,20 +205,16 @@ export default Vue.extend({
       return FactionBgClass(faction)
     },
     applyOutfitParticipants() {
-      for (const outfitId in this.outfitParticipants) {
-        const stringKey = Object.keys(this.data).find((i) => {
-          const iNum = parseInt(i, 10)
-          return this.data[iNum].outfit.id === outfitId
-        })
-
-        if (stringKey) {
-          const key = parseInt(stringKey, 10)
-          // noinspection JSUnfilteredForInLoop
-          this.data[key]
-            ? (this.data[key].participants = this.outfitParticipants[
-                outfitId
-              ].length)
-            : null
+      for (const [partOutfit] of Object.entries(this.outfitParticipants)) {
+        for (const [dataKey, dataOutfit] of Object.entries(this.data)) {
+          if (dataOutfit.outfit.id === partOutfit) {
+            const iKey = parseInt(dataKey, 10)
+            const newData = this.data[iKey]
+            newData.participants =
+              this.outfitParticipants[partOutfit].length ?? 0
+            this.$set(this.data, iKey, newData)
+            break
+          }
         }
       }
     },
