@@ -90,22 +90,7 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
           port {
             container_port = 443
           }
-          env {
-            name = "NODE_ENV"
-            value = var.environment
-          }
-          env {
-            name = "NUXT_ENV_VERSION"
-            value = var.application_version
-          }
-          env {
-            name = "NUXT_ENV_BUILD"
-            value = var.checksum_version
-          }
-          env {
-            name = "NUXT_ENV_API_HOST"
-            value = var.api_host
-          }
+          // ENV is now baked into the image
         }
       }
     }

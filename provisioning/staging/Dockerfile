@@ -3,5 +3,10 @@ USER root
 COPY ./provisioning/staging/files/nginx/staging.conf /etc/nginx/conf.d
 COPY --chown=node:node . /app
 
+ENV NODE_ENV="staging"
+ENV VERSION="v3.0.0-prealpha"
+ENV BUILD="abc12345"
+ENV API_HOST="https://staging.api.ps2alerts.com"
+
 USER node
-RUN cd /app && npm ci && npm prune --production
+RUN cd /app && npm ci && npm run generate && npm prune --production
