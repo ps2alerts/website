@@ -20,6 +20,7 @@ import Vue from 'vue'
 import { Faction } from '@/constants/Faction'
 
 export default Vue.extend({
+  name: 'FilterVictor',
   props: {
     victorFilter: {
       type: Number,

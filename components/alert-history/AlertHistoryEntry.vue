@@ -97,6 +97,7 @@ import { FactionBgClass } from '@/constants/FactionBgClass'
 import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
 
 export default Vue.extend({
+  name: 'AlertHistoryEntry',
   components: {
     FactionSegmentBar,
   },

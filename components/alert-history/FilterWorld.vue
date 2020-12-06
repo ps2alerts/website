@@ -25,6 +25,7 @@ import Vue from 'vue'
 import { World } from '@/constants/World'
 
 export default Vue.extend({
+  name: 'FilterWorld',
   props: {
     worldFilter: {
       type: Number,

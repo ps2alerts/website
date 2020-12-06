@@ -20,6 +20,7 @@ import Vue from 'vue'
 import { Bracket } from '@/constants/Bracket'
 
 export default Vue.extend({
+  name: 'FilterBracket',
   props: {
     bracketFilter: {
       type: Number,
