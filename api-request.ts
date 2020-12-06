@@ -6,7 +6,7 @@ export default class ApiRequest {
 
   constructor(baseUrl?: string) {
     this.client = axios.create({
-      baseURL: baseUrl ?? process.env.apiUrl,
+      baseURL: baseUrl ?? process.env.apiHost,
       responseType: 'json',
     })
   }
