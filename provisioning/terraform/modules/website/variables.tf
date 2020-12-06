@@ -14,21 +14,10 @@ variable "api_token" {
   default = "foo"
 }
 
-variable "cpu_limit" {
-  default = "250m"
-}
-
-variable "mem_limit" {
-  default = "2Gi"
-}
-
-variable "cpu_request" {
-  default = "250m"
-}
-
-variable "mem_request" {
-  default = "2Gi"
-}
+variable "cpu_limit" {}
+variable "mem_limit" {}
+variable "cpu_request" {}
+variable "mem_request" {}
 
 variable "replicas" {}
 

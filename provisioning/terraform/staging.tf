@@ -9,9 +9,9 @@ module "website_staging" {
   checksum_version    = var.checksum_version
   application_version = var.app_version
   api_token           = var.api_token
-  cpu_request         = "10m"
-  mem_request         = "32Mi"
+  cpu_request         = "75m"
+  mem_request         = "128Mi"
   cpu_limit           = "150m"
-  mem_limit           = "64Mi"
+  mem_limit           = "256Mi"
   replicas            = 1
 }
