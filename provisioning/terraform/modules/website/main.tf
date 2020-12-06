@@ -60,11 +60,11 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
               path = "/"
               port = 3000
             }
-            initial_delay_seconds = 120
-            period_seconds        = 30
-            success_threshold     = 1
+            initial_delay_seconds = 60
+            period_seconds        = 15
+            success_threshold     = 2
             failure_threshold     = 4
-            timeout_seconds       = 10
+            timeout_seconds       = 15
           }
           readiness_probe {
             http_get {
@@ -72,10 +72,10 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
               port = 3000
             }
             initial_delay_seconds = 30
-            period_seconds        = 30
+            period_seconds        = 15
             success_threshold     = 1
             failure_threshold     = 4
-            timeout_seconds       = 10
+            timeout_seconds       = 15
           }
           resources {
             limits {
@@ -103,8 +103,8 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
             value = var.checksum_version
           }
           env {
-            name = "BASE_URL"
-            value = var.base_url
+            name = "API_HOST"
+            value = var.api_host
           }
         }
       }

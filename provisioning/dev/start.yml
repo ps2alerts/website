@@ -29,7 +29,7 @@
         networks:
           - name: "ps2alerts"
         env:
-          API_URL: "http://dev.api.ps2alerts.com"
+          API_HOST: "http://dev.api.ps2alerts.com"
           BASE_URL: "http://dev.ps2alerts.com"
           NODE_ENV: "development"
           VERSION: "v3.0.0-dev"
