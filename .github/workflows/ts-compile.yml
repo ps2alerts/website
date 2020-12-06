@@ -1,0 +1,19 @@
+---
+name: Typescript Compile
+on:
+  push:
+  pull_request:
+jobs:
+  typescript-compile:
+    name: Typescript Compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: install node v14
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install
+        run: npm install
+      - name: Build
+        run: npm run build
