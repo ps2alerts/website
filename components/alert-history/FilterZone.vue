@@ -1,0 +1,50 @@
+<template>
+  <div>
+    <select
+      id="zone"
+      v-model="zone"
+      class="block w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
+      @change="changeZone()"
+    >
+      <option value="0">Any</option>
+      <option :value="AMERISH">Amerish</option>
+      <option :value="ESAMIR">Esamir</option>
+      <option :value="HOSSIN">Hossin</option>
+      <option :value="INDAR">Indar</option>
+    </select>
+    <label class="text-center text-sm" for="zone">Continent</label>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+import { Zone } from '@/constants/Zone'
+
+export default Vue.extend({
+  props: {
+    zoneFilter: {
+      type: Number,
+      default: 0,
+    },
+  },
+  data() {
+    return {
+      zone: 0,
+      AMERISH: Zone.AMERISH,
+      ESAMIR: Zone.ESAMIR,
+      HOSSIN: Zone.HOSSIN,
+      INDAR: Zone.INDAR,
+    }
+  },
+  watch: {
+    zoneFilter(zone: Zone | 0): void {
+      this.zone = zone
+    },
+  },
+  methods: {
+    changeZone(): void {
+      this.$emit('zone-changed', this.zone)
+    },
+  },
+})
+</script>

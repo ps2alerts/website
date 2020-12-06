@@ -73,7 +73,11 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
             value = var.environment
           }
           env {
-            name = "VUE_APP_BUILD"
+            name = "VERSION"
+            value = var.application_version
+          }
+          env {
+            name = "BUILD"
             value = var.checksum_version
           }
           env {

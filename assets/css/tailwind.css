@@ -1,0 +1,18 @@
+@import './colors.scss';
+@import './custom.scss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply bg-gray-800;
+  }
+}
+
+@layer utilities {
+  .router-link-active, .btn-active {
+    @apply bg-red-600 !important;
+  }
+}
