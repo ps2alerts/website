@@ -10,7 +10,7 @@ module "website_staging" {
   application_version = var.app_version
   api_token           = var.api_token
   cpu_request         = "75m"
-  mem_request         = "128Mi"
+  mem_request         = "256Mi"
   cpu_limit           = "150m"
   mem_limit           = "256Mi"
   replicas            = 1
