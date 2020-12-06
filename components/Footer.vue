@@ -8,7 +8,7 @@
       <br />
       Planetside 2&reg; is the lawful property of
       <a class="text-gray-500" href="https://www.rogueplanetgaming.com"
-        >Rouge Planet Games&trade;</a
+        >Rogue Planet Games&trade;</a
       >, subsidiary of
       <a class="text-gray-500" href="https://daybreakgames.com"
         >Daybreak Game Company LLC</a
@@ -28,6 +28,7 @@
 import Vue from 'vue'
 
 export default Vue.extend({
+  name: 'Footer',
   data() {
     return {
       version: process.env.version,
