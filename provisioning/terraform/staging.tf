@@ -7,8 +7,8 @@ module "website_staging" {
   base_url            = "staging.ps2alerts.com"
   multi_urls          = false
   checksum_version    = var.checksum_version
-  application_version = 'v3.0.0-prealpha'
-  api_host            = 'https://staging.api.ps2alerts.com'
+  application_version = "v3.0.0-prealpha"
+  api_host            = "https://staging.api.ps2alerts.com"
   cpu_request         = "75m"
   mem_request         = "256Mi"
   cpu_limit           = "150m"
