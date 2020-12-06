@@ -5,7 +5,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {}
+@layer base {
+  html, body {
+    @apply bg-gray-800;
+  }
+}
 
 @layer utilities {
   .router-link-active, .btn-active {
