@@ -23,7 +23,7 @@
     "moment-timezone": "^0.5.32",
     "nuxt": "^2.14.6",
     "nuxt-fontawesome": "^0.4.0",
-    "postcss": "^8.1.13"
+    "postcss": "^8.1.14"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.9",
