@@ -62,7 +62,7 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
             }
             initial_delay_seconds = 60
             period_seconds        = 15
-            success_threshold     = 2
+            success_threshold     = 1
             failure_threshold     = 4
             timeout_seconds       = 15
           }
