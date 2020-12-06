@@ -1,6 +1,6 @@
 module.exports = {
   purge: {
-    enabled: process.env.NODE_ENV === 'production',
+    enabled: process.env.NODE_ENV !== 'development',
     content: [
       'components/**/*.vue',
       'layouts/**/*.vue',
@@ -405,7 +405,6 @@ module.exports = {
       50: '0.5',
       60: '0.6',
       70: '0.7',
-      75: '0.75',
       80: '0.8',
       90: '0.9',
       100: '1',
