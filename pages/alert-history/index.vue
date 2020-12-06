@@ -112,6 +112,7 @@ import FilterVictor from '~/components/alert-history/FilterVictor.vue'
 import FilterDate from '~/components/alert-history/FilterDate.vue'
 
 export default Vue.extend({
+  name: 'AlertHistory',
   components: {
     AlertHistoryEntry,
     FilterWorld,
