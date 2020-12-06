@@ -55,6 +55,28 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
         container {
           name = var.identifier
           image = join("", ["maelstromeous/applications:", var.identifier, "-", var.checksum_version])
+          liveness_probe {
+            http_get {
+              path = "/"
+              port = 3000
+            }
+            initial_delay_seconds = 30
+            period_seconds        = 15
+            success_threshold     = 1
+            failure_threshold     = 4
+            timeout_seconds       = 15
+          }
+          readiness_probe {
+            http_get {
+              path = "/"
+              port = 3000
+            }
+            initial_delay_seconds = 15
+            period_seconds        = 5
+            success_threshold     = 1
+            failure_threshold     = 4
+            timeout_seconds       = 5
+          }
           resources {
             limits {
               cpu = var.cpu_limit
@@ -68,22 +90,7 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
           port {
             container_port = 443
           }
-          env {
-            name = "NODE_ENV"
-            value = var.environment
-          }
-          env {
-            name = "VERSION"
-            value = var.application_version
-          }
-          env {
-            name = "BUILD"
-            value = var.checksum_version
-          }
-          env {
-            name = "BASE_URL"
-            value = var.base_url
-          }
+          // ENV is now baked into the image
         }
       }
     }

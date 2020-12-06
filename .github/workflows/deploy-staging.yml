@@ -48,15 +48,15 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
 #       TODO: RE-ENABLE ONCE SITE IS PROPERLY LIVE
-#      - name: Build and push base image
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: provisioning/base
-#          file: provisioning/base/Dockerfile
-#          platforms: linux/amd64
-#          push: true
-#          no-cache: true
-#          tags: maelstromeous/applications:ps2alerts-website-base
+      - name: Build and push base image
+        uses: docker/build-push-action@v2
+        with:
+          context: provisioning/base
+          file: provisioning/base/Dockerfile
+          platforms: linux/amd64
+          push: true
+          no-cache: true
+          tags: maelstromeous/applications:ps2alerts-website-base
 
       - name: Build and push staging image
         uses: docker/build-push-action@v2
@@ -108,7 +108,6 @@ jobs:
           terraform plan \
             -var='checksum_version=${{ steps.sha.outputs.sha_short }}' \
             -var='app_version=${{ steps.sha.outputs.sha_short }}' \
-            -var='api_token=${{ secrets.PS2ALERTS_API_TOKEN }}' \
             -target=module.website_staging -out='.tfout'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

@@ -6,8 +6,13 @@
 @tailwind utilities;
 
 @layer base {
-  html, body {
+  html {
     @apply bg-gray-800;
+  }
+
+  /* Fix for background showing on top of image when content is quite short */
+  body {
+    height: 100%;
   }
 }
 

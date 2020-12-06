@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "=============== STARTING APP SERVER ==================="
+exec npm run --prefix /app start

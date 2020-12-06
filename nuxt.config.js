@@ -1,17 +1,22 @@
 import join from 'memory-fs/lib/join'
 
 export default {
+  // We're forced to use env injection for this otherwise we can't build it into class constructors.
   env: {
+    apiHost: process.env.API_HOST ?? 'http://dev.api.ps2alerts.com',
+  },
+  publicRuntimeConfig: {
     environment: process.env.NODE_ENV ?? 'UNKNOWN ENVIRONMENT',
     build: process.env.BUILD ?? 'UNKNOWN BUILD',
     version: process.env.VERSION ?? 'UNKNOWN VERSION',
-    apiUrl: process.env.API_HOST ?? 'http://dev.api.ps2alerts.com',
   },
   server: {
     port: 3000,
     host: '0.0.0.0',
     timing: false,
   },
+  target: 'static',
+
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: 'PS2Alerts',
@@ -102,8 +107,5 @@ export default {
         },
       },
     },
-  },
-  publicRuntimeConfig: {
-    baseUrl: process.env.BASE_URL ?? 'dev.ps2alerts.com.test',
   },
 }

@@ -1,12 +1,12 @@
-FROM node:12
+FROM node:14
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nginx \
     runit \
     sudo \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apk/* \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apk/*
 RUN adduser node sudo && \
-    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+    echo '%node ALL=(ALL) NOPASSWD:SETENV:ALL' >> /etc/sudoers
 COPY ./files/runit /etc/service
 COPY ./files/nginx /etc/nginx/global
 COPY ./entrypoint.sh /usr/sbin/entrypoint.sh

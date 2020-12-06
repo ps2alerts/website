@@ -21,6 +21,7 @@ import Vue from 'vue'
 import { Zone } from '@/constants/Zone'
 
 export default Vue.extend({
+  name: 'FilterZone',
   props: {
     zoneFilter: {
       type: Number,
