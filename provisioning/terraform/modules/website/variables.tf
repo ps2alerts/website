@@ -40,3 +40,7 @@ variable "base_url" {
 variable "checksum_version" {
   default = "UNKNOWN"
 }
+
+variable "application_version" {
+  default = "UNKNOWN"
+}

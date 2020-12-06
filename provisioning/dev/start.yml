@@ -8,6 +8,11 @@
         path: "{{ root_dir }}/dist"
         state: absent
 
+    - name: Delete nuxt folder
+      file:
+        path: "{{ root_dir }}/.nuxt"
+        state: absent
+
     - name: Start Website Dev container
       docker_container:
         name: ps2alerts-website
@@ -15,6 +20,8 @@
         restart: no
         recreate: yes
         state: started
+        interactive: yes
+        tty: yes
         volumes:
           - "{{ root_dir | realpath }}:/app:rw"
         ports:
@@ -24,8 +31,9 @@
         env:
           API_URL: "http://dev.api.ps2alerts.com"
           BASE_URL: "http://dev.ps2alerts.com"
-          ENVIRONMENT: "development"
-          VERSION: "12345"
+          NODE_ENV: "development"
+          VERSION: "v3.0.0-dev"
+          BUILD: "abc12345"
         labels:
           traefik.enable: "true"
           traefik.http.routers.ps2alerts_website.rule: "Host(`dev.ps2alerts.com`)"

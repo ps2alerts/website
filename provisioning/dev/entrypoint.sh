@@ -1,4 +1,5 @@
 #!/bin/sh
 
 echo "=============== STARTING WEBSITE (DEV) ==================="
-cd /app && npm run serve:dev
+
+cd /app && npm run dev

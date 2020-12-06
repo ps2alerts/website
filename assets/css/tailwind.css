@@ -1,0 +1,14 @@
+@import './colors.scss';
+@import './custom.scss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {}
+
+@layer utilities {
+  .router-link-active, .btn-active {
+    @apply bg-red-600 !important;
+  }
+}

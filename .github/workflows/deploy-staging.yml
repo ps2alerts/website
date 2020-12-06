@@ -5,10 +5,29 @@ on:
     branches: [staging]
 jobs:
   build-docker-images:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [14]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+#      - name: Setup node env 🏗
+#        uses: actions/setup-node@v2.1.2
+#        with:
+#          node-version: ${{ matrix.node }}
+
+#      - name: Cache node_modules 📦
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.npm
+#          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+#          restore-keys: |
+#            ${{ runner.os }}-node-
 
       - name: Get short SHA
         id: sha
@@ -47,8 +66,6 @@ jobs:
           push: true
           no-cache: true
           tags: maelstromeous/applications:ps2alerts-website-staging-${{ steps.sha.outputs.sha_short }}
-          build-args: |
-            SHA=${{ steps.sha.outputs.sha_short }}
 
   deploy-terraform:
     needs:
@@ -90,6 +107,7 @@ jobs:
         run: >
           terraform plan \
             -var='checksum_version=${{ steps.sha.outputs.sha_short }}' \
+            -var='app_version=${{ steps.sha.outputs.sha_short }}' \
             -var='api_token=${{ secrets.PS2ALERTS_API_TOKEN }}' \
             -target=module.website_staging -out='.tfout'
         env:
