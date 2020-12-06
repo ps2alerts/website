@@ -5,10 +5,8 @@
   >
     <div class="rtm-top">
       <p v-if="loading">Loading...</p>
-      <p v-if="error">
-        {{ error }}
-      </p>
-      <p v-show="actives.length === 0">
+      <p v-if="error">ERROR: {{ error }}</p>
+      <p v-show="actives.length === 0 && !error">
         There are no alerts currently running!
       </p>
     </div>
