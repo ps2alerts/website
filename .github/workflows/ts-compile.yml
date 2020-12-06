@@ -2,6 +2,7 @@
 name: Typescript Compile
 on:
   push:
+    branches: [revive]
   pull_request:
 jobs:
   typescript-compile:

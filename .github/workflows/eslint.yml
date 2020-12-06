@@ -2,6 +2,7 @@
 name: ESLint
 on:
   push:
+    branches: [revive]
   pull_request:
 jobs:
   eslint:
