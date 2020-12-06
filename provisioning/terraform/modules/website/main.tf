@@ -60,7 +60,7 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
               path = "/"
               port = 3000
             }
-            initial_delay_seconds = 60
+            initial_delay_seconds = 30
             period_seconds        = 15
             success_threshold     = 1
             failure_threshold     = 4
@@ -71,11 +71,11 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
               path = "/"
               port = 3000
             }
-            initial_delay_seconds = 30
-            period_seconds        = 15
+            initial_delay_seconds = 15
+            period_seconds        = 5
             success_threshold     = 1
             failure_threshold     = 4
-            timeout_seconds       = 15
+            timeout_seconds       = 5
           }
           resources {
             limits {
