@@ -19,7 +19,7 @@ variable "cpu_limit" {
 }
 
 variable "mem_limit" {
-  default = "256Mi"
+  default = "1Gi"
 }
 
 variable "cpu_request" {
@@ -27,7 +27,7 @@ variable "cpu_request" {
 }
 
 variable "mem_request" {
-  default = "256Mi"
+  default = "1Gi"
 }
 
 variable "replicas" {}
