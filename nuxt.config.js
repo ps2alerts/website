@@ -7,8 +7,8 @@ export default {
   },
   publicRuntimeConfig: {
     environment: process.env.NODE_ENV ?? 'UNKNOWN ENVIRONMENT',
-    build: process.env.BUILD ?? 'UNKNOWN BUILD',
-    version: process.env.VERSION ?? 'UNKNOWN VERSION',
+    build: process.env.NUXT_ENV_BUILD ?? 'UNKNOWN BUILD',
+    version: process.env.NUXT_ENV_VERSION ?? 'UNKNOWN VERSION',
   },
   server: {
     port: 3000,

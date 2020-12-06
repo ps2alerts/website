@@ -95,15 +95,15 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
             value = var.environment
           }
           env {
-            name = "VERSION"
+            name = "NUXT_ENV_VERSION"
             value = var.application_version
           }
           env {
-            name = "BUILD"
+            name = "NUXT_ENV_BUILD"
             value = var.checksum_version
           }
           env {
-            name = "API_HOST"
+            name = "NUXT_ENV_API_HOST"
             value = var.api_host
           }
         }
