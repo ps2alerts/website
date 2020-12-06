@@ -106,6 +106,8 @@ jobs:
       - name: Terraform Plan
         run: >
           terraform plan \
+            -var='checksum_version=${{ steps.sha.outputs.sha_short }}' \
+            -var='app_version=${{ steps.sha.outputs.sha_short }}' \
             -target=module.website_production -out='.tfout'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
