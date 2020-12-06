@@ -1,4 +1,4 @@
-module "website_staging" {
+module "website_production" {
   source           = "./modules/website"
   namespace        = "ps2alerts"
   environment      = "production"
