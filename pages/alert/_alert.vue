@@ -125,7 +125,6 @@ export default Vue.extend({
     this.reset()
   },
   created() {
-    console.log('created')
     this.reset()
     this.init(this.$route.params.alert.toString())
   },

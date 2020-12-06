@@ -8,6 +8,11 @@
         path: "{{ root_dir }}/dist"
         state: absent
 
+    - name: Delete nuxt folder
+      file:
+        path: "{{ root_dir }}/.nuxt"
+        state: absent
+
     - name: Start Website Dev container
       docker_container:
         name: ps2alerts-website

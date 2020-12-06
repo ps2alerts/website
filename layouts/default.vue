@@ -4,16 +4,14 @@
       <client-only>
         <Header />
         <RealTimeMonitor />
-        <Footer class="hidden lg:block" />
+        <LazyFooter class="hidden lg:block" />
       </client-only>
     </div>
     <div id="panel-right" class="w-full h-full px-4">
       <client-only>
         <Navigation />
         <Nuxt />
-      </client-only>
-      <client-only>
-        <Footer class="lg:hidden" />
+        <LazyFooter class="lg:hidden" />
       </client-only>
     </div>
   </div>

@@ -5,3 +5,7 @@ variable "checksum_version" {
 variable "api_token" {
   default = "foo"
 }
+
+variable "app_version" {
+  default = "UNKNOWN!"
+}

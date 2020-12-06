@@ -66,8 +66,6 @@ jobs:
           push: true
           no-cache: true
           tags: maelstromeous/applications:ps2alerts-website-staging-${{ steps.sha.outputs.sha_short }}
-          build-args: |
-            SHA=${{ steps.sha.outputs.sha_short }}
 
   deploy-terraform:
     needs:
@@ -109,6 +107,7 @@ jobs:
         run: >
           terraform plan \
             -var='checksum_version=${{ steps.sha.outputs.sha_short }}' \
+            -var='app_version=${{ steps.sha.outputs.sha_short }}' \
             -var='api_token=${{ secrets.PS2ALERTS_API_TOKEN }}' \
             -target=module.website_staging -out='.tfout'
         env:
