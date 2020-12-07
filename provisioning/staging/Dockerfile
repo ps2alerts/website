@@ -9,4 +9,4 @@ ENV BUILD="abc12345"
 ENV API_HOST="https://staging.api.ps2alerts.com"
 
 USER node
-RUN cd /app && npm ci && npm run generate && npm prune --production
+RUN cd /app && npm ci --also=dev && npm run generate && npm prune --production
