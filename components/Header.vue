@@ -12,7 +12,7 @@
       <p class="text-center" v-html="motto" />
     </div>
     <div class="flex w-auto block justify-center px-6 mb-4">
-      <div class="btn">PRE-ALPHA</div>
+      <div class="btn">ALPHA</div>
     </div>
     <div class="w-full block text-center">
       <p class="text-xs">

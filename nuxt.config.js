@@ -80,6 +80,9 @@ export default {
       },
     ],
   ],
+  tailwindcss: {
+    configPath: 'tailwind.config.js',
+  },
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},
