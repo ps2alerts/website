@@ -66,6 +66,8 @@ jobs:
           push: true
           no-cache: true
           tags: maelstromeous/applications:ps2alerts-website-staging-${{ steps.sha.outputs.sha_short }}
+          build-args: |
+            BUILD_SHA=${{ steps.sha.outputs.sha_short }}
 
   deploy-terraform:
     needs:
