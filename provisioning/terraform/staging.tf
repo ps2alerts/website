@@ -6,9 +6,9 @@ module "website_staging" {
   urls             = ["staging.ps2alerts.com"]
   multi_urls       = false
   checksum_version = var.checksum_version
-  cpu_request      = "75m"
-  mem_request      = "256Mi"
-  cpu_limit        = "150m"
-  mem_limit        = "256Mi"
+  cpu_request      = "25m"
+  mem_request      = "128Mi"
+  cpu_limit        = "50m"
+  mem_limit        = "128Mi"
   replicas         = 1
 }
