@@ -183,35 +183,30 @@
     to { opacity: 0; }
   }
 
-  %tag {
+  .tag {
     @apply py-1 px-2 rounded-tl rounded-tr text-xs text-center font-bold;
     margin: -1rem;
     margin-bottom: 1rem;
-  }
 
-  .section {
-    @extend %tag;
-    @apply bg-primary-dark;
-  }
+    &.section {
+      @apply bg-primary-dark;
+    }
 
-  .feature {
-    @extend %tag;
-    @apply bg-green-800;
-  }
+    &.feature {
+      @apply bg-green-800;
+    }
 
-  .enhancement {
-    @extend %tag;
-    @apply bg-blue-800;
-  }
+    &.enhancement {
+      @apply bg-blue-800;
+    }
 
-  .fix {
-    @extend %tag;
-    @apply bg-red-800;
-  }
+    &.fix {
+      @apply bg-red-800;
+    }
 
-  .known-issue {
-    @extend %tag;
-    @apply bg-yellow-800;
+    &.known-issue {
+      @apply bg-yellow-800;
+    }
   }
 
   table {
