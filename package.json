@@ -23,7 +23,8 @@
     "moment-timezone": "^0.5.32",
     "nuxt": "^2.14.6",
     "nuxt-fontawesome": "^0.4.0",
-    "postcss": "^8.1.14"
+    "postcss": "^8.1.14",
+    "vuejs-datatable": "^2.0.0-alpha.7"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.9",

@@ -211,7 +211,10 @@
 
   table {
     &.striped-row {
-      tr:nth-child(even) {
+      tbody > tr:nth-child(odd) {
+        background-color: rgb(68 85 95);
+      }
+      tbody > tr:nth-child(even) {
         @apply bg-gray-800;
       }
     }

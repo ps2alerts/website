@@ -18,74 +18,24 @@
         </div>
       </div>
       <div class="col-span-12">
-        <table class="w-full text-center border-col border-row">
-          <thead class="font-bold">
-            <tr>
-              <td class="w-1/12 py-2 text-left">Rank</td>
-              <td class="w-2/12 py-2 text-left">Player</td>
-              <td class="w-2/12 py-2 text-left">Outfit</td>
-              <td class="w-1/12 py-2">Kills</td>
-              <td class="w-1/12 py-2">Deaths</td>
-              <td class="w-1/12 py-2">KD</td>
-              <td class="w-1/12 py-2">TKs</td>
-              <td class="w-1/12 py-2">Suicides</td>
-              <td class="w-1/12 py-2">Headshots</td>
-              <td class="w-1/12 py-2">HSR %</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(character, index) in data"
-              :key="character.id"
-              class="mb-2"
-              :class="factionClass(character.character.faction)"
-            >
-              <td class="text-left">
-                {{ index + 1 }}
-              </td>
-              <td class="text-left">
-                {{ character.character.name }}
-              </td>
-              <td class="text-left">
-                <span v-if="character.character.outfit">
-                  <span v-if="character.character.outfit.tag"
-                    >[{{ character.character.outfit.tag }}]</span
-                  >
-                  {{ character.character.outfit.name }}
-                </span>
-              </td>
-              <td>
-                {{ character.kills || 0 }}
-              </td>
-              <td>
-                {{ character.deaths || 0 }}
-              </td>
-              <td>
-                {{
-                  character.kills && character.deaths
-                    ? (character.kills / character.deaths).toFixed(2)
-                    : character.kills || 0
-                }}
-              </td>
-              <td>
-                {{ character.teamKills || 0 }}
-              </td>
-              <td>
-                {{ character.suicides || 0 }}
-              </td>
-              <td>
-                {{ character.headshots || 0 }}
-              </td>
-              <td>
-                {{
-                  character.headshots && character.kills
-                    ? ((character.headshots / character.kills) * 100).toFixed(2)
-                    : 0
-                }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="flex items-center py-2">
+          <input
+            v-model="filter"
+            class="appearance-none bg-tint-light rounded border-none w-full text-gray-500 p-2 leading-tight focus:outline-none"
+            type="text"
+            placeholder="[TAG] Player"
+            aria-label="Player Name"
+            @keydown="$event.stopImmediatePropagation()"
+          />
+        </div>
+        <datatable
+          :columns="columns"
+          :data="data"
+          :filter="filter"
+          :per-page="50"
+        >
+          <template #no-results> No results found. </template>
+        </datatable>
       </div>
     </div>
   </div>
@@ -99,7 +49,10 @@ import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceCharacterAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceCharacterAggregateResponseInterface'
 import { Faction } from '@/constants/Faction'
-import { FactionBgClass } from '@/constants/FactionBgClass'
+import {
+  FactionBgClass,
+  FactionBgClassString,
+} from '@/constants/FactionBgClass'
 
 export default Vue.extend({
   name: 'AlertCharacterMetrics',
@@ -117,6 +70,89 @@ export default Vue.extend({
       interval: undefined as undefined | number,
       data: {} as InstanceCharacterAggregateResponseInterface[],
       outfitParticipants: {} as { [k: string]: string[] },
+      filter: '',
+      page: 1,
+      columns: [
+        {
+          label: 'Character',
+          field: 'character.name',
+          class: (row: InstanceCharacterAggregateResponseInterface) =>
+            this.factionClassTable(row.character.faction),
+        },
+        {
+          label: 'Outfit',
+          class: (row: InstanceCharacterAggregateResponseInterface) =>
+            this.factionClassTable(row.character.faction),
+          representedAs: (row: InstanceCharacterAggregateResponseInterface) => {
+            if (row.character.outfit?.tag) {
+              return `[${row.character.outfit.tag}] ${row.character.outfit.name}`
+            }
+
+            return row.character.outfit?.name
+          },
+        },
+        {
+          label: 'Kills',
+          class: (row: InstanceCharacterAggregateResponseInterface) =>
+            this.factionClassTable(row.character.faction),
+          filterable: false,
+          representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
+            row.kills ?? 0,
+        },
+        {
+          label: 'Deaths',
+          class: (row: InstanceCharacterAggregateResponseInterface) =>
+            this.factionClassTable(row.character.faction),
+          filterable: false,
+          representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
+            row.deaths ?? 0,
+        },
+        {
+          label: 'K/D',
+          class: (row: InstanceCharacterAggregateResponseInterface) =>
+            this.factionClassTable(row.character.faction),
+          filterable: false,
+          representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
+            row.kills && row.deaths
+              ? (row.kills / row.deaths).toFixed(2)
+              : row.kills || 0,
+        },
+        {
+          label: 'TKs',
+          class: (row: InstanceCharacterAggregateResponseInterface) =>
+            this.factionClassTable(row.character.faction),
+          filterable: false,
+          representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
+            row.teamKills ?? 0,
+        },
+        {
+          label: 'Suicides',
+          class: (row: InstanceCharacterAggregateResponseInterface) =>
+            this.factionClassTable(row.character.faction),
+          filterable: false,
+          representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
+            row.suicides ?? 0,
+        },
+        {
+          label: 'Headshots',
+          class: (row: InstanceCharacterAggregateResponseInterface) =>
+            this.factionClassTable(row.character.faction),
+          filterable: false,
+          representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
+            row.headshots ?? 0,
+        },
+
+        {
+          label: 'HSR %',
+          class: (row: InstanceCharacterAggregateResponseInterface) =>
+            this.factionClassTable(row.character.faction),
+          filterable: false,
+          representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
+            row.headshots && row.kills
+              ? ((row.headshots / row.kills) * 100).toFixed(2)
+              : 0,
+        },
+      ],
     }
   },
   computed: {
@@ -218,6 +254,9 @@ export default Vue.extend({
     },
     factionClass(faction: Faction): object {
       return FactionBgClass(faction)
+    },
+    factionClassTable(faction: Faction): string {
+      return `${FactionBgClassString(faction)} text-center`
     },
   },
 })

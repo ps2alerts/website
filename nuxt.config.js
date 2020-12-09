@@ -45,6 +45,7 @@ export default {
     { src: '@/filters/VehicleFaction', mode: 'client' },
     { src: '@/filters/WorldName', mode: 'client' },
     { src: '@/filters/ZoneName', mode: 'client' },
+    { src: '@/plugins/DatatableFactory', mode: 'client' },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
