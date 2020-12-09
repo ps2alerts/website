@@ -6,12 +6,13 @@ VuejsDatatableFactory.useDefaultType(false).registerTableType(
   (tableType) =>
     tableType.mergeSettings({
       table: {
-        class: 'border-row border-col',
+        class: 'w-full border-row border-col datatable',
       },
       pager: {
         classes: {
-          pager: 'text-center btn',
-          selected: 'btn-active',
+          pager: 'flex justify-center rounded',
+          li: 'btn disabled',
+          selected: 'btn-alt',
         },
       },
     })

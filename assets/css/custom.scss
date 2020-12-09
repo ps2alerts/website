@@ -210,6 +210,18 @@
   }
 
   table {
+    &.datatable {
+      thead {
+        th {
+          @apply px-2
+        }
+      }
+      tbody {
+        td {
+          @apply px-2
+        }
+      }
+    }
     &.striped-row {
       tbody > tr:nth-child(odd) {
         background-color: rgb(68 85 95);

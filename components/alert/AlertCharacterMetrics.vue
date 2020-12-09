@@ -28,14 +28,16 @@
             @keydown="$event.stopImmediatePropagation()"
           />
         </div>
+
         <datatable
           :columns="columns"
           :data="data"
           :filter="filter"
-          :per-page="50"
+          :per-page="25"
         >
-          <template #no-results> No results found. </template>
+          <template #no-results>No results found.</template>
         </datatable>
+        <datatable-pager v-model="page" type="short"></datatable-pager>
       </div>
     </div>
   </div>
@@ -77,12 +79,12 @@ export default Vue.extend({
           label: 'Character',
           field: 'character.name',
           class: (row: InstanceCharacterAggregateResponseInterface) =>
-            this.factionClassTable(row.character.faction),
+            FactionBgClassString(row.character.faction),
         },
         {
           label: 'Outfit',
           class: (row: InstanceCharacterAggregateResponseInterface) =>
-            this.factionClassTable(row.character.faction),
+            FactionBgClassString(row.character.faction),
           representedAs: (row: InstanceCharacterAggregateResponseInterface) => {
             if (row.character.outfit?.tag) {
               return `[${row.character.outfit.tag}] ${row.character.outfit.name}`
@@ -94,24 +96,28 @@ export default Vue.extend({
         {
           label: 'Kills',
           class: (row: InstanceCharacterAggregateResponseInterface) =>
-            this.factionClassTable(row.character.faction),
+            FactionBgClassString(row.character.faction),
           filterable: false,
+          align: 'center',
           representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
             row.kills ?? 0,
+          type: 'number',
         },
         {
           label: 'Deaths',
           class: (row: InstanceCharacterAggregateResponseInterface) =>
-            this.factionClassTable(row.character.faction),
+            FactionBgClassString(row.character.faction),
           filterable: false,
+          align: 'center',
           representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
             row.deaths ?? 0,
         },
         {
           label: 'K/D',
           class: (row: InstanceCharacterAggregateResponseInterface) =>
-            this.factionClassTable(row.character.faction),
+            FactionBgClassString(row.character.faction),
           filterable: false,
+          align: 'center',
           representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
             row.kills && row.deaths
               ? (row.kills / row.deaths).toFixed(2)
@@ -120,24 +126,27 @@ export default Vue.extend({
         {
           label: 'TKs',
           class: (row: InstanceCharacterAggregateResponseInterface) =>
-            this.factionClassTable(row.character.faction),
+            FactionBgClassString(row.character.faction),
           filterable: false,
+          align: 'center',
           representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
             row.teamKills ?? 0,
         },
         {
           label: 'Suicides',
           class: (row: InstanceCharacterAggregateResponseInterface) =>
-            this.factionClassTable(row.character.faction),
+            FactionBgClassString(row.character.faction),
           filterable: false,
+          align: 'center',
           representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
             row.suicides ?? 0,
         },
         {
           label: 'Headshots',
           class: (row: InstanceCharacterAggregateResponseInterface) =>
-            this.factionClassTable(row.character.faction),
+            FactionBgClassString(row.character.faction),
           filterable: false,
+          align: 'center',
           representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
             row.headshots ?? 0,
         },
@@ -145,8 +154,9 @@ export default Vue.extend({
         {
           label: 'HSR %',
           class: (row: InstanceCharacterAggregateResponseInterface) =>
-            this.factionClassTable(row.character.faction),
+            FactionBgClassString(row.character.faction),
           filterable: false,
+          align: 'center',
           representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
             row.headshots && row.kills
               ? ((row.headshots / row.kills) * 100).toFixed(2)
@@ -254,9 +264,6 @@ export default Vue.extend({
     },
     factionClass(faction: Faction): object {
       return FactionBgClass(faction)
-    },
-    factionClassTable(faction: Faction): string {
-      return `${FactionBgClassString(faction)} text-center`
     },
   },
 })

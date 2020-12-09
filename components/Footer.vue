@@ -20,7 +20,6 @@
       <p class="mt-4">
         Version: {{ version }} | Build: {{ build }} | Env: {{ env }}
       </p>
-      <p>{{ config }}</p>
     </div>
   </footer>
 </template>
