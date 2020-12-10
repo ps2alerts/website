@@ -21,7 +21,7 @@
         <div class="flex items-center py-2">
           <input
             v-model="filter"
-            class="appearance-none bg-tint-light rounded border-none w-full text-gray-500 p-2 leading-tight focus:outline-none"
+            class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight focus:outline-none"
             type="text"
             placeholder="[TAG] Player"
             aria-label="Player Name"
@@ -29,15 +29,50 @@
           />
         </div>
 
-        <datatable
-          :columns="columns"
-          :data="data"
-          :filter="filter"
-          :per-page="25"
+        <v-data-table
+          class="datatable"
+          dense
+          show-expand
+          hide-default-footer
+          item-key="character.id"
+          :headers="headers"
+          :items="data"
+          :search="filter"
+          :dark="true"
+          :item-class="tableItemClass"
+          :sort-by="['kills']"
+          :sort-desc="[true]"
+          :single-expand="true"
+          :expanded.sync="expanded"
+          :items-per-page="itemsPerPage"
+          :page.sync="page"
+          :must-sort="true"
+          @page-count="pageCount = $event"
         >
-          <template #no-results>No results found.</template>
-        </datatable>
-        <datatable-pager v-model="page" type="short"></datatable-pager>
+          <template #no-results>
+            <div class="text-2xl text-white font-bold my-6">No results!</div>
+          </template>
+          <template #expanded-item="{ headers }">
+            <td :colspan="headers.length">More info about Foo</td>
+          </template>
+        </v-data-table>
+        <div class="text-center pt-2">
+          <v-pagination
+            v-model="page"
+            :length="pageCount"
+            :total-visible="7"
+            :dark="true"
+          ></v-pagination>
+          <v-text-field
+            :value="itemsPerPage"
+            :dark="true"
+            label="Items per page"
+            type="number"
+            min="1"
+            max="50"
+            @input="itemsPerPage = parseInt($event, 10)"
+          ></v-text-field>
+        </div>
       </div>
     </div>
   </div>
@@ -45,7 +80,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
 import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
@@ -55,6 +89,8 @@ import {
   FactionBgClass,
   FactionBgClassString,
 } from '@/constants/FactionBgClass'
+import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
+import { AlertCharacterTableDataInterface } from '~/interfaces/AlertCharacterTableDataInterface'
 
 export default Vue.extend({
   name: 'AlertCharacterMetrics',
@@ -67,102 +103,71 @@ export default Vue.extend({
   },
   data() {
     return {
+      expanded: [],
+      headers: [
+        {
+          text: 'Character',
+          align: 'left',
+          value: 'character.name',
+        },
+        {
+          text: 'Outfit',
+          align: 'left',
+          value: 'character.outfit.name',
+        },
+        {
+          text: 'Kills',
+          align: 'middle',
+          filterable: false,
+          value: 'kills',
+        },
+        {
+          text: 'Deaths',
+          align: 'middle',
+          filterable: false,
+          value: 'deaths',
+        },
+        {
+          text: 'KD',
+          align: 'middle',
+          filterable: false,
+          value: 'kd',
+        },
+        {
+          text: 'TKs',
+          align: 'middle',
+          filterable: false,
+          value: 'teamKills',
+        },
+        {
+          text: 'Suicides',
+          align: 'middle',
+          filterable: false,
+          value: 'suicides',
+        },
+        {
+          text: 'Headshots',
+          align: 'middle',
+          filterable: false,
+          value: 'headshots',
+        },
+        {
+          text: 'HSR %',
+          align: 'middle',
+          filterable: false,
+          value: 'hsr',
+        },
+        { text: '', value: 'data-table-expand' },
+      ],
       error: null,
       loaded: false,
       interval: undefined as undefined | number,
-      data: {} as InstanceCharacterAggregateResponseInterface[],
+      data: {} as AlertCharacterTableDataInterface[],
       outfitParticipants: {} as { [k: string]: string[] },
       filter: '',
       page: 1,
-      columns: [
-        {
-          label: 'Character',
-          field: 'character.name',
-          class: (row: InstanceCharacterAggregateResponseInterface) =>
-            FactionBgClassString(row.character.faction),
-        },
-        {
-          label: 'Outfit',
-          class: (row: InstanceCharacterAggregateResponseInterface) =>
-            FactionBgClassString(row.character.faction),
-          representedAs: (row: InstanceCharacterAggregateResponseInterface) => {
-            if (row.character.outfit?.tag) {
-              return `[${row.character.outfit.tag}] ${row.character.outfit.name}`
-            }
-
-            return row.character.outfit?.name
-          },
-        },
-        {
-          label: 'Kills',
-          class: (row: InstanceCharacterAggregateResponseInterface) =>
-            FactionBgClassString(row.character.faction),
-          filterable: false,
-          align: 'center',
-          representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
-            row.kills ?? 0,
-          type: 'number',
-        },
-        {
-          label: 'Deaths',
-          class: (row: InstanceCharacterAggregateResponseInterface) =>
-            FactionBgClassString(row.character.faction),
-          filterable: false,
-          align: 'center',
-          representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
-            row.deaths ?? 0,
-        },
-        {
-          label: 'K/D',
-          class: (row: InstanceCharacterAggregateResponseInterface) =>
-            FactionBgClassString(row.character.faction),
-          filterable: false,
-          align: 'center',
-          representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
-            row.kills && row.deaths
-              ? (row.kills / row.deaths).toFixed(2)
-              : row.kills || 0,
-        },
-        {
-          label: 'TKs',
-          class: (row: InstanceCharacterAggregateResponseInterface) =>
-            FactionBgClassString(row.character.faction),
-          filterable: false,
-          align: 'center',
-          representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
-            row.teamKills ?? 0,
-        },
-        {
-          label: 'Suicides',
-          class: (row: InstanceCharacterAggregateResponseInterface) =>
-            FactionBgClassString(row.character.faction),
-          filterable: false,
-          align: 'center',
-          representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
-            row.suicides ?? 0,
-        },
-        {
-          label: 'Headshots',
-          class: (row: InstanceCharacterAggregateResponseInterface) =>
-            FactionBgClassString(row.character.faction),
-          filterable: false,
-          align: 'center',
-          representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
-            row.headshots ?? 0,
-        },
-
-        {
-          label: 'HSR %',
-          class: (row: InstanceCharacterAggregateResponseInterface) =>
-            FactionBgClassString(row.character.faction),
-          filterable: false,
-          align: 'center',
-          representedAs: (row: InstanceCharacterAggregateResponseInterface) =>
-            row.headshots && row.kills
-              ? ((row.headshots / row.kills) * 100).toFixed(2)
-              : 0,
-        },
-      ],
+      pageCount: 0,
+      itemsPerPage: 20,
     }
   },
   computed: {
@@ -223,7 +228,8 @@ export default Vue.extend({
           }
         )
         .then((result) => {
-          this.data = result
+          this.data = this.transformData(result)
+
           this.loaded = true
           this.$emit('players-loaded')
         })
@@ -264,6 +270,55 @@ export default Vue.extend({
     },
     factionClass(faction: Faction): object {
       return FactionBgClass(faction)
+    },
+    tableItemClass(item: AlertCharacterTableDataInterface): string {
+      return FactionBgClassString(item.character.faction) + ' text-center'
+    },
+    transformData(
+      data: InstanceCharacterAggregateResponseInterface[]
+    ): AlertCharacterTableDataInterface[] {
+      const newData: AlertCharacterTableDataInterface[] = []
+
+      data.forEach((character: InstanceCharacterAggregateResponseInterface) => {
+        // Ensure table displays all data even if zero
+        character.kills = character.kills ?? 0
+        character.deaths = character.deaths ?? 0
+        character.teamKills = character.teamKills ?? 0
+        character.suicides = character.suicides ?? 0
+        character.headshots = character.headshots ?? 0
+
+        // Outfit name formatting
+        if (character.character.outfit) {
+          character.character.outfit.name = character.character.outfit?.tag
+            ? `[${character.character.outfit.tag}] ${character.character.outfit.name}`
+            : character.character.outfit?.name
+        } else {
+          character.character.outfit = {
+            name: '-- NO OUTFIT --',
+            id: '0',
+            faction: character.character.faction,
+            world: character.character.world,
+            leader: 'foo',
+          }
+        }
+
+        const tempData: AlertCharacterTableDataInterface = Object.assign(
+          character,
+          {
+            kd:
+              character.kills && character.deaths
+                ? (character.kills / character.deaths).toFixed(2)
+                : character.kills || 0,
+            hsr:
+              character.headshots && character.kills
+                ? ((character.headshots / character.kills) * 100).toFixed(2)
+                : 0,
+          }
+        )
+        newData.push(tempData)
+      })
+
+      return newData
     },
   },
 })
