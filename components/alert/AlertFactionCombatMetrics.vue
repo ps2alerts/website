@@ -19,8 +19,8 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded" class="grid grid-cols-12 text-center">
-      <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
-        <h1 class="text-xl">Kills</h1>
+      <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
+        <h1 class="text-base">Kills</h1>
         <div v-if="data.vs" class="bg-vs w-full">
           {{ data.vs.kills || 0 }}
         </div>
@@ -34,8 +34,8 @@
           {{ data.nso.kills || 0 }}<sup>*1</sup>
         </div>
       </div>
-      <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
-        <h1 class="text-xl">Deaths</h1>
+      <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
+        <h1 class="text-base">Deaths</h1>
         <div v-if="data.vs" class="bg-vs w-full">
           {{ data.vs.deaths || 0 }}
         </div>
@@ -49,8 +49,8 @@
           {{ data.nso.deaths || 0 }}
         </div>
       </div>
-      <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
-        <h1 class="text-xl">KD</h1>
+      <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
+        <h1 class="text-base">KD</h1>
         <div v-if="data.vs" class="bg-vs w-full">
           {{
             data.vs.kills && data.vs.deaths
@@ -80,8 +80,8 @@
           }}
         </div>
       </div>
-      <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
-        <h1 class="text-xl">Teamkills</h1>
+      <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
+        <h1 class="text-base">TKs</h1>
         <div v-if="data.vs" class="bg-vs w-full">
           {{ data.vs.teamKills || 0 }}
         </div>
@@ -93,8 +93,8 @@
         </div>
         <div v-if="data.nso" class="bg-nso w-full">N/A<sup>*2</sup></div>
       </div>
-      <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
-        <h1 class="text-xl">Suicides</h1>
+      <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
+        <h1 class="text-base">Suicides</h1>
         <div v-if="data.vs" class="bg-vs w-full">
           {{ data.vs.suicides || 0 }}
         </div>
@@ -108,8 +108,8 @@
           {{ data.nso.suicides || 0 }}
         </div>
       </div>
-      <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
-        <h1 class="text-xl">Headshots</h1>
+      <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
+        <h1 class="text-base">Headshots</h1>
         <div v-if="data.vs" class="bg-vs w-full">
           {{ data.vs.headshots || 0 }}
         </div>
@@ -123,8 +123,8 @@
           {{ data.nso.headshots || 0 }}
         </div>
       </div>
-      <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
-        <h1 class="text-xl">HSR %</h1>
+      <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
+        <h1 class="text-base">HSR %</h1>
         <div v-if="data.vs" class="bg-vs w-full">
           {{
             data.vs.headshots && data.vs.kills

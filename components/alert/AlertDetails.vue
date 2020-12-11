@@ -5,7 +5,7 @@
       <table class="min-w-full divide-y divide-gray-500">
         <tbody class="divide-y divide-gray-200">
           <tr>
-            <td class="px-2 py-4 whitespace-nowrap">
+            <td class="px-2 py-1 whitespace-nowrap">
               <div class="flex justify-between">
                 <div class="mr-4 font-bold">Started</div>
                 <div>
@@ -15,7 +15,7 @@
             </td>
           </tr>
           <tr>
-            <td class="px-2 py-4 whitespace-nowrap">
+            <td class="px-2 py-1 whitespace-nowrap">
               <div class="flex justify-between">
                 <div class="mr-4 font-bold">Ended</div>
                 <div v-if="ended">
@@ -26,7 +26,7 @@
             </td>
           </tr>
           <tr>
-            <td class="px-2 py-4 whitespace-nowrap">
+            <td class="px-2 py-1 whitespace-nowrap">
               <div class="flex justify-between">
                 <div class="mr-4 font-bold">Server</div>
                 <div>
@@ -36,7 +36,7 @@
             </td>
           </tr>
           <tr>
-            <td class="px-2 py-4 whitespace-nowrap">
+            <td class="px-2 py-1 whitespace-nowrap">
               <div class="flex justify-between">
                 <div class="mr-4 font-bold">Continent</div>
                 <div>
@@ -46,7 +46,7 @@
             </td>
           </tr>
           <tr>
-            <td class="px-2 py-4 whitespace-nowrap">
+            <td class="px-2 py-1 whitespace-nowrap">
               <div class="flex justify-between">
                 <div class="mr-4 font-bold">Bracket</div>
                 <div>
@@ -56,7 +56,7 @@
             </td>
           </tr>
           <tr>
-            <td class="px-2 py-4 whitespace-nowrap">
+            <td class="px-2 py-1 whitespace-nowrap">
               <div class="flex justify-between">
                 <div class="mr-4 font-bold">Triggered by</div>
                 <div>
