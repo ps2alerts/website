@@ -1,93 +1,49 @@
 <template>
-  <div>
+  <div class="card mb-2 relative">
     <div class="tag section">Vehicle Metrics</div>
+    <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
+      <v-tooltip left>
+        <template #activator="{ on, attrs }">
+          <v-progress-circular
+            :value="updateCountdownPercent"
+            :rotate="-90"
+            :size="14"
+            v-bind="attrs"
+            v-on="on"
+          ></v-progress-circular>
+        </template>
+        <span>Updates every {{ updateRate / 1000 }} secs</span>
+      </v-tooltip>
+    </div>
     <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded" class="grid grid-cols-12">
-      <div class="col-span-12 mb-4">
-        <p>Total vehicles: {{ data.length }}</p>
-      </div>
       <div class="col-span-12">
-        <table class="w-full text-center border-col border-row hover">
-          <thead>
-            <tr class="border-b border-gray-600 font-bold">
-              <td class="w-2/20 pb-1 mb-2 text-left">Vehicle</td>
-              <td class="w-1/20 pb-1 mb-2">Kills</td>
-              <td class="w-1/20 pb-1 mb-2">Deaths</td>
-              <td class="w-1/20 pb-1 mb-2">K/D</td>
-              <td class="w-1/20 pb-1 mb-2">TKs</td>
-              <td class="w-1/20 pb-1 mb-2">TKed</td>
-              <td class="w-1/20 pb-1 mb-2">Suicides</td>
-              <td class="w-1/20 pb-1 mb-2">V Kills</td>
-              <td class="w-1/20 pb-1 mb-2">V Deaths</td>
-              <td class="w-1/20 pb-1 mb-2">V TKs</td>
-              <td class="w-1/20 pb-1 mb-2">V TKed</td>
-              <td class="w-1/20 pb-1 mb-2">I Kills</td>
-              <td class="w-1/20 pb-1 mb-2">I Deaths</td>
-              <td class="w-1/20 pb-1 mb-2">I TKs</td>
-              <td class="w-1/20 pb-1 mb-2">I TKed</td>
-            </tr>
-          </thead>
-          <tr
-            v-for="vehicle in data"
-            :key="vehicle.id"
-            class="mb-2"
-            :class="rowClass(vehicle.vehicleFaction)"
-          >
-            <td class="text-left">
-              {{ vehicle.vehicleName }}
-            </td>
-            <td>
-              {{ vehicle.totals ? vehicle.totals.kills || 0 : 0 }}
-            </td>
-            <td>
-              {{ vehicle.totals ? vehicle.totals.deaths || 0 : 0 }}
-            </td>
-            <td>
-              {{
-                vehicle.totals
-                  ? vehicle.totals.kills && vehicle.totals.deaths
-                    ? (vehicle.totals.kills / vehicle.totals.deaths).toFixed(2)
-                    : vehicle.totals.kills || 0
-                  : 0
-              }}
-            </td>
-            <td>
-              {{ vehicle.totals ? vehicle.totals.teamkills || 0 : 0 }}
-            </td>
-            <td>
-              {{ vehicle.totals ? vehicle.totals.teamkilled || 0 : 0 }}
-            </td>
-            <td>
-              {{ vehicle.suicides ? vehicle.suicides || 0 : 0 }}
-            </td>
-            <td>
-              {{ vehicle.vehicles ? vehicle.vehicles.kills || 0 : 0 }}
-            </td>
-            <td>
-              {{ vehicle.vehicles ? vehicle.vehicles.deaths || 0 : 0 }}
-            </td>
-            <td>
-              {{ vehicle.vehicles ? vehicle.vehicles.teamkills || 0 : 0 }}
-            </td>
-            <td>
-              {{ vehicle.vehicles ? vehicle.vehicles.teamkilled || 0 : 0 }}
-            </td>
-            <td>
-              {{ vehicle.infantry ? vehicle.infantry.kills || 0 : 0 }}
-            </td>
-            <td>
-              {{ vehicle.infantry ? vehicle.infantry.deaths || 0 : 0 }}
-            </td>
-            <td>
-              {{ vehicle.infantry ? vehicle.infantry.teamkills || 0 : 0 }}
-            </td>
-            <td>
-              {{ vehicle.infantry ? vehicle.infantry.teamkilled || 0 : 0 }}
-            </td>
-          </tr>
-        </table>
+        <div class="my-2">
+          <input
+            v-model="filter"
+            class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
+            type="text"
+            placeholder="Vehicle name"
+            aria-label="Vehicle name"
+            @keydown="$event.stopImmediatePropagation()"
+          />
+        </div>
+        <v-data-table
+          class="datatable"
+          dense
+          item-key="vehicle.id"
+          :headers="headers"
+          :items="data"
+          :search="filter"
+          :item-class="tableItemClass"
+          v-bind="leaderboardConfig"
+        >
+          <template #no-results>
+            <div class="text-2xl text-white font-bold my-6">No results!</div>
+          </template>
+        </v-data-table>
       </div>
     </div>
   </div>
@@ -103,8 +59,16 @@ import { InstanceVehicleAggregateResponseInterface } from '@/interfaces/aggregat
 import { VehicleDataInterface } from '@/interfaces/VehicleDataInterface'
 import { Faction } from '@/constants/Faction'
 import { CensusVehicleResponseInterface } from '@/interfaces/CensusVehicleResponseInterface'
-import { FactionBgClass } from '@/constants/FactionBgClass'
+import {
+  FactionBgClass,
+  FactionBgClassString,
+} from '@/constants/FactionBgClass'
 import vehicleFaction from '@/filters/VehicleFaction'
+import { AlertVehicleLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
+import {
+  AlertVehicleMetricsDataTableInterface,
+  VehicleStatsWithKd,
+} from '~/interfaces/AlertVehicleMetricsDataTableInterface'
 
 export default Vue.extend({
   name: 'AlertVehicleMetrics',
@@ -119,25 +83,148 @@ export default Vue.extend({
     return {
       error: null,
       loaded: false,
+      updateRate: 30000,
+      updateCountdown: 30,
+      updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
-      data: {} as InstanceVehicleAggregateResponseInterface[],
+      data: {} as AlertVehicleMetricsDataTableInterface[],
       vehicleData: [] as VehicleDataInterface[],
+      filter: '',
+      leaderboardConfig: AlertVehicleLeaderboardConfig,
+      headers: [
+        {
+          text: 'Vehicle',
+          align: 'left',
+          value: 'vehicleName',
+        },
+        {
+          text: 'Kills',
+          align: 'middle',
+          filterable: false,
+          value: 'totals.kills',
+        },
+        {
+          text: 'Deaths',
+          align: 'middle',
+          filterable: false,
+          value: 'totals.deaths',
+        },
+        {
+          text: 'K/D',
+          align: 'middle',
+          filterable: false,
+          value: 'totals.kd',
+        },
+        {
+          text: 'TKs',
+          align: 'middle',
+          filterable: false,
+          value: 'totals.teamkills',
+        },
+        {
+          text: 'TKed',
+          align: 'middle',
+          filterable: false,
+          value: 'totals.teamkilled',
+        },
+        {
+          text: 'Suicides',
+          align: 'middle',
+          filterable: false,
+          value: 'suicides',
+        },
+        {
+          text: 'V Kills',
+          align: 'middle',
+          filterable: false,
+          value: 'vehicles.kills',
+        },
+        {
+          text: 'V Deaths',
+          align: 'middle',
+          filterable: false,
+          value: 'vehicles.deaths',
+        },
+        {
+          text: 'V TKs',
+          align: 'middle',
+          filterable: false,
+          value: 'vehicles.teamkills',
+        },
+        {
+          text: 'V TKed',
+          align: 'middle',
+          filterable: false,
+          value: 'vehicles.teamkilled',
+        },
+        {
+          text: 'I Kills',
+          align: 'middle',
+          filterable: false,
+          value: 'infantry.kills',
+        },
+        {
+          text: 'I Deaths',
+          align: 'middle',
+          filterable: false,
+          value: 'infantry.deaths',
+        },
+        {
+          text: 'I TKs',
+          align: 'middle',
+          filterable: false,
+          value: 'infantry.teamkills',
+        },
+        {
+          text: 'I TKed',
+          align: 'middle',
+          filterable: false,
+          value: 'infantry.teamkilled',
+        },
+      ],
     }
   },
+  computed: {
+    updateCountdownPercent(): number {
+      return (100 / (this.updateRate / 1000)) * this.updateCountdown
+    },
+  },
+  watch: {
+    'alert.state'() {
+      if (this.alert.state === Ps2alertsEventState.ENDED) {
+        this.clearTimers()
+        this.pull()
+      }
+    },
+  },
   beforeDestroy() {
-    clearInterval(this.interval)
+    this.reset()
   },
   created() {
-    clearInterval(this.interval)
+    this.reset()
     this.init()
   },
   methods: {
+    reset() {
+      this.loaded = false
+      this.clearTimers()
+    },
+    clearTimers() {
+      clearInterval(this.interval)
+      clearInterval(this.updateCountdownInterval)
+    },
     async init(): Promise<void> {
       await this.pullVehicleData()
       await this.pull()
-      this.interval = window.setInterval(() => {
-        this.pull()
-      }, 10000)
+      if (this.alert.state === Ps2alertsEventState.STARTED) {
+        this.updateCountdownInterval = window.setInterval(() => {
+          return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
+        }, 1000)
+
+        this.interval = window.setInterval(() => {
+          this.pull()
+        }, this.updateRate)
+      }
     },
     async pullVehicleData(): Promise<void> {
       if (this.loaded) {
@@ -163,11 +250,11 @@ export default Vue.extend({
         })
     },
     async pull(): Promise<void> {
-      console.log('AlertVehicleMetrics.pull', this.alert.instanceId)
-
       if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
         return
       }
+
+      console.log('AlertVehicleMetrics.pull', this.alert.instanceId)
 
       await new ApiRequest()
         .get<InstanceVehicleAggregateResponseInterface[]>(
@@ -179,78 +266,9 @@ export default Vue.extend({
           )
         )
         .then((result) => {
-          const total = {
-            instanceId: this.alert.instanceId
-              ? this.alert.instanceId.toString()
-              : 'whatever',
-            vehicleName: 'Totals',
-            vehicle: 0,
-            suicides: 0,
-            vehicles: {
-              kills: 0,
-              deaths: 0,
-              teamkills: 0,
-              teamkilled: 0,
-            },
-            infantry: {
-              kills: 0,
-              deaths: 0,
-              teamkills: 0,
-              teamkilled: 0,
-            },
-            totals: {
-              kills: 0,
-              deaths: 0,
-              teamkills: 0,
-              teamkilled: 0,
-            },
-          }
-          result.forEach((vehicle, key) => {
-            const vehicleData = this.vehicleData.find((val, key) => {
-              if (val.id === vehicle.vehicle) {
-                return this.vehicleData[key]
-              }
-            })
-            result[key].vehicleName = vehicleData
-              ? this.$options.filters?.itemShortName(vehicleData.name)
-              : `UNKNOWN (ID: ${vehicle.vehicle})`
-            result[key].vehicleFaction = vehicleData
-              ? vehicleData.faction
-              : Faction.NONE
-            result[key].totals = {
-              kills:
-                (vehicle.vehicles ? vehicle.vehicles.kills || 0 : 0) +
-                (vehicle.infantry ? vehicle.infantry.kills || 0 : 0),
-              deaths:
-                (vehicle.vehicles ? vehicle.vehicles.deaths || 0 : 0) +
-                (vehicle.infantry ? vehicle.infantry.deaths || 0 : 0),
-              teamkills:
-                (vehicle.vehicles ? vehicle.vehicles.teamkills || 0 : 0) +
-                (vehicle.infantry ? vehicle.infantry.teamkills || 0 : 0),
-              teamkilled:
-                (vehicle.vehicles ? vehicle.vehicles.teamkilled || 0 : 0) +
-                (vehicle.infantry ? vehicle.infantry.teamkilled || 0 : 0),
-            }
-            // Tot it up
-            total.vehicles.kills += result[key].vehicles?.kills || 0
-            total.vehicles.deaths += result[key].vehicles?.deaths || 0
-            total.vehicles.teamkills += result[key].vehicles?.teamkills || 0
-            total.vehicles.teamkilled += result[key].vehicles?.teamkilled || 0
-            total.infantry.kills += result[key].infantry?.kills || 0
-            total.infantry.deaths += result[key].infantry?.deaths || 0
-            total.infantry.teamkills += result[key].infantry?.teamkills || 0
-            total.infantry.teamkilled += result[key].infantry?.teamkilled || 0
-            total.suicides += result[key].suicides || 0
-            total.totals.kills += result[key]?.totals?.kills || 0
-            total.totals.deaths += result[key]?.totals?.deaths || 0
-            total.totals.teamkills += result[key]?.totals?.teamkills || 0
-            total.totals.teamkilled += result[key]?.totals?.teamkilled || 0
-          })
-
-          // Add total row
-          result.push(total)
-          this.data = result
+          this.data = this.transformData(result)
           this.loaded = true
+          this.updateCountdown = this.updateRate / 1000
         })
         .catch((e) => {
           this.error = e.message
@@ -258,6 +276,68 @@ export default Vue.extend({
     },
     rowClass(faction: Faction): object {
       return FactionBgClass(faction)
+    },
+    tableItemClass(item: AlertVehicleMetricsDataTableInterface): string {
+      return FactionBgClassString(item.vehicleFaction) + ' text-center'
+    },
+    transformData(
+      data: InstanceVehicleAggregateResponseInterface[]
+    ): AlertVehicleMetricsDataTableInterface[] {
+      const newData: AlertVehicleMetricsDataTableInterface[] = []
+
+      data.forEach((vehicle: InstanceVehicleAggregateResponseInterface) => {
+        const vehicleData = this.vehicleData.find((val, key) => {
+          if (val.id === vehicle.vehicle) {
+            return this.vehicleData[key]
+          }
+        })
+
+        vehicle.suicides = vehicle.suicides ?? 0
+
+        // Ensure all values display
+        vehicle.vehicles = {
+          kills: vehicle.vehicles?.kills ?? 0,
+          deaths: vehicle.vehicles?.deaths ?? 0,
+          teamkills: vehicle.vehicles?.teamkills ?? 0,
+          teamkilled: vehicle.vehicles?.teamkilled ?? 0,
+        }
+
+        vehicle.infantry = {
+          kills: vehicle.infantry?.kills ?? 0,
+          deaths: vehicle.infantry?.deaths ?? 0,
+          teamkills: vehicle.infantry?.teamkills ?? 0,
+          teamkilled: vehicle.infantry?.teamkilled ?? 0,
+        }
+
+        const totals: VehicleStatsWithKd = {
+          kills:
+            (vehicle.vehicles?.kills ?? 0) + (vehicle.infantry?.kills ?? 0),
+          deaths:
+            (vehicle.vehicles?.deaths ?? 0) + (vehicle.infantry?.deaths ?? 0),
+          teamkills:
+            (vehicle.vehicles?.teamkills ?? 0) +
+            (vehicle.infantry?.teamkills ?? 0),
+          teamkilled:
+            (vehicle.vehicles?.teamkilled ?? 0) +
+            (vehicle.infantry?.teamkilled ?? 0),
+        }
+        totals.kd = ((totals.kills ?? 0) / (totals.deaths ?? 0)).toFixed(2)
+
+        const tempData: AlertVehicleMetricsDataTableInterface = Object.assign(
+          vehicle,
+          {
+            vehicleName: vehicleData
+              ? this.$options.filters?.itemShortName(vehicleData.name)
+              : `UNKNOWN (ID: ${vehicle.vehicle})`,
+            vehicleFaction: vehicleData ? vehicleData.faction : Faction.NONE,
+            totals,
+          }
+        )
+
+        newData.push(tempData)
+      })
+
+      return newData
     },
   },
 })

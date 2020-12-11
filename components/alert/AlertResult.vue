@@ -3,18 +3,36 @@
     <div class="text-center">
       <h1 class="text-4xl">Alert #{{ alert.instanceId }}</h1>
     </div>
-    <div v-if="ended" class="mb-2 text-center">
+    <div v-if="alert.state === 2" class="mb-2 text-center">
       <h2 class="text-2xl">
         {{ victorText }}
       </h2>
     </div>
-    <div v-if="!ended" class="mb-2 relative text-2xl btn btn-alt">
-      <span class="animate-ping rounded-max ping-circle" />
-      Live
-      <font-awesome-icon :icon="['fas', 'circle']" class="animate-pulse" />
+    <div v-if="alert.state === 1" class="mb-2 text-center">
+      <h2 class="text-2xl">
+        <font-awesome-icon
+          class="animate-spin spin-slow"
+          :icon="['fas', 'sync-alt']"
+        />
+        In progress...
+      </h2>
     </div>
-    <div class="rounded px-4 py-4 bg-tint" :class="victorClass">
+    <div class="rounded px-4 py-4 bg-tint relative" :class="victorClass">
       <div class="tag section">Result</div>
+      <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
+        <v-tooltip left>
+          <template #activator="{ on, attrs }">
+            <v-progress-circular
+              :value="updateCountdownPercent"
+              :rotate="-90"
+              :size="14"
+              v-bind="attrs"
+              v-on="on"
+            ></v-progress-circular>
+          </template>
+          <span>Updates every {{ 10000 / 1000 }} secs</span>
+        </v-tooltip>
+      </div>
       <FactionSegmentBar
         :vs="alert.result.vs"
         :nc="alert.result.nc"
@@ -45,6 +63,11 @@ export default Vue.extend({
       default: {},
       required: true,
     },
+    updateCountdownPercent: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
   },
   data() {
     return {
@@ -52,11 +75,8 @@ export default Vue.extend({
     }
   },
   computed: {
-    ended(): boolean {
-      return this.alert.state === Ps2alertsEventState.ENDED
-    },
     victorText(): string {
-      return !this.ended
+      return this.alert.state === Ps2alertsEventState.STARTED
         ? 'In progress...'
         : this.alert.result?.draw === true
         ? 'Draw!'

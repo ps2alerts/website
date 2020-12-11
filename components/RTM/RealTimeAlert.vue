@@ -13,9 +13,9 @@
         {{ remainingTimeText }}
       </div>
 
-      <div class="mr-2 col-start-12">
+      <div class="col-start-12">
         <NuxtLink
-          class="btn btn-sm"
+          class="btn btn-sm rounded-r mr-1"
           :to="{ name: 'alert-alert', params: { alert: instanceId } }"
         >
           <font-awesome-icon fixed-width :icon="['fas', 'link']" />

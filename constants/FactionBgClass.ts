@@ -9,7 +9,11 @@ export const FactionBgClass = (faction: Faction) => {
   }
 }
 
-export const FactionBgClassString = (faction: Faction): string => {
+export const FactionBgClassString = (faction: Faction | undefined): string => {
+  if (!faction) {
+    return ''
+  }
+
   switch (faction) {
     case Faction.VANU_SOVEREIGNTY:
       return 'bg-vs'
@@ -18,8 +22,6 @@ export const FactionBgClassString = (faction: Faction): string => {
     case Faction.TERRAN_REPUBLIC:
       return 'bg-tr'
     case Faction.NS_OPERATIVES:
-      return 'bg-nso'
-    default:
       return 'bg-nso'
   }
 }

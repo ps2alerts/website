@@ -1,38 +1,73 @@
 <template>
   <div>
     <div v-show="total > 0" class="faction-bar">
-      <div
-        class="faction-bar-segment vs text-center text-white rounded-l"
-        :style="{ width: percentVS + '%' }"
-      >
-        {{ vsString }}
-      </div>
-      <div
-        class="faction-bar-segment tr text-center text-white"
-        :style="{ width: percentTR + '%' }"
-        :class="{ 'rounded-l': vs === 0 }"
-      >
-        {{ trString }}
-      </div>
-      <div
-        class="faction-bar-segment nc text-center text-white"
-        :style="{ width: percentNC + '%' }"
-        :class="{ 'rounded-r': other === 0 && outOfPlay === 0 }"
-      >
-        {{ ncString }}
-      </div>
-      <div
-        class="faction-bar-segment nso text-center text-white"
-        :style="{ width: percentOther + '%' }"
-        :class="{ 'rounded-r': other > 0 && outOfPlay === 0 }"
-      >
-        {{ otherString }}
-      </div>
-      <div
-        class="faction-bar-segment outofplay text-center text-white"
-        :style="{ width: percentOutOfPlay + '%' }"
-        :class="{ 'rounded-r': outOfPlay > 0 }"
-      />
+      <v-tooltip bottom>
+        <template #activator="{ on, attrs }">
+          <div
+            class="faction-bar-segment vs text-center text-white rounded-l"
+            :style="{ width: percentVS + '%' }"
+            v-bind="attrs"
+            v-on="on"
+          >
+            {{ vsString }}
+          </div>
+        </template>
+        <span>VS: {{ vsString }}</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template #activator="{ on, attrs }">
+          <div
+            class="faction-bar-segment tr text-center text-white"
+            :style="{ width: percentTR + '%' }"
+            v-bind="attrs"
+            :class="{ 'rounded-l': vs === 0 }"
+            v-on="on"
+          >
+            {{ trString }}
+          </div>
+        </template>
+        <span>TR: {{ trString }}</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template #activator="{ on, attrs }">
+          <div
+            class="faction-bar-segment nc text-center text-white"
+            :style="{ width: percentNC + '%' }"
+            v-bind="attrs"
+            :class="{ 'rounded-r': other === 0 && outOfPlay === 0 }"
+            v-on="on"
+          >
+            {{ ncString }}
+          </div>
+        </template>
+        <span>NC: {{ ncString }}</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template #activator="{ on, attrs }">
+          <div
+            class="faction-bar-segment nso text-center text-white"
+            :style="{ width: percentOther + '%' }"
+            v-bind="attrs"
+            :class="{ 'rounded-r': other > 0 && outOfPlay === 0 }"
+            v-on="on"
+          >
+            {{ otherString }}
+          </div>
+        </template>
+        <span>Cutoff: {{ otherString }}</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template #activator="{ on, attrs }">
+          <div
+            class="faction-bar-segment outofplay text-center text-white"
+            :style="{ width: percentOutOfPlay + '%' }"
+            v-bind="attrs"
+            :class="{ 'rounded-r': outOfPlay > 0 }"
+            v-on="on"
+          ></div>
+        </template>
+        <span>Out of play: {{ outOfPlayString }}</span>
+      </v-tooltip>
     </div>
     <p v-show="total === 0">Awaiting data...</p>
   </div>
@@ -105,9 +140,6 @@ export default Vue.extend({
     percentOutOfPlay(): number {
       return (this.outOfPlay / this.total) * 100
     },
-    percentRemainder(): number {
-      return (this.total - this.vs - this.nc - this.tr - this.other) / 3
-    },
     vsString(): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentVS.toFixed(0)
@@ -135,6 +167,13 @@ export default Vue.extend({
         : this.other
       const suffix = this.isPercentage ? '%' : ''
       return this.percentOther > this.dropoffPercent ? `${value}${suffix}` : ''
+    },
+    outOfPlayString(): string {
+      const value = this.showAsCalculatedPercentage
+        ? this.outOfPlay.toFixed(0)
+        : this.outOfPlay
+      const suffix = this.isPercentage ? '%' : ''
+      return this.outOfPlay > this.dropoffPercent ? `${value}${suffix}` : ''
     },
   },
 })

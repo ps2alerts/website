@@ -1,6 +1,20 @@
 <template>
   <div>
     <div class="tag section">Player Metrics</div>
+    <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
+      <v-tooltip left>
+        <template #activator="{ on, attrs }">
+          <v-progress-circular
+            :value="updateCountdownPercent"
+            :rotate="-90"
+            :size="14"
+            v-bind="attrs"
+            v-on="on"
+          ></v-progress-circular>
+        </template>
+        <span>Updates every {{ updateRate / 1000 }} secs</span>
+      </v-tooltip>
+    </div>
     <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
@@ -18,61 +32,38 @@
         </div>
       </div>
       <div class="col-span-12">
-        <div class="flex items-center py-2">
+        <div class="my-2">
           <input
             v-model="filter"
-            class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight focus:outline-none"
+            class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
             type="text"
             placeholder="[TAG] Player"
             aria-label="Player Name"
             @keydown="$event.stopImmediatePropagation()"
           />
         </div>
-
         <v-data-table
           class="datatable"
           dense
           show-expand
-          hide-default-footer
           item-key="character.id"
           :headers="headers"
           :items="data"
           :search="filter"
-          :dark="true"
           :item-class="tableItemClass"
-          :sort-by="['kills']"
-          :sort-desc="[true]"
-          :single-expand="true"
           :expanded.sync="expanded"
-          :items-per-page="itemsPerPage"
-          :page.sync="page"
-          :must-sort="true"
-          @page-count="pageCount = $event"
+          v-bind="leaderboardConfig"
         >
           <template #no-results>
             <div class="text-2xl text-white font-bold my-6">No results!</div>
           </template>
           <template #expanded-item="{ headers }">
-            <td :colspan="headers.length">More info about Foo</td>
+            <td :colspan="headers.length">
+              Detailed player specific metrics coming soon! This will include
+              per-player weapons metrics and vehicle usage.
+            </td>
           </template>
         </v-data-table>
-        <div class="text-center pt-2">
-          <v-pagination
-            v-model="page"
-            :length="pageCount"
-            :total-visible="7"
-            :dark="true"
-          ></v-pagination>
-          <v-text-field
-            :value="itemsPerPage"
-            :dark="true"
-            label="Items per page"
-            type="number"
-            min="1"
-            max="50"
-            @input="itemsPerPage = parseInt($event, 10)"
-          ></v-text-field>
-        </div>
       </div>
     </div>
   </div>
@@ -91,6 +82,7 @@ import {
 } from '@/constants/FactionBgClass'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { AlertCharacterTableDataInterface } from '~/interfaces/AlertCharacterTableDataInterface'
+import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
 
 export default Vue.extend({
   name: 'AlertCharacterMetrics',
@@ -103,6 +95,16 @@ export default Vue.extend({
   },
   data() {
     return {
+      error: null,
+      loaded: false,
+      updateRate: 10000,
+      updateCountdown: 10,
+      updateCountdownInterval: undefined as undefined | number,
+      interval: undefined as undefined | number,
+      data: {} as AlertCharacterTableDataInterface[],
+      outfitParticipants: {} as { [k: string]: string[] },
+      filter: '',
+      leaderboardConfig: AlertLeaderboardConfig,
       expanded: [],
       headers: [
         {
@@ -159,15 +161,6 @@ export default Vue.extend({
         },
         { text: '', value: 'data-table-expand' },
       ],
-      error: null,
-      loaded: false,
-      interval: undefined as undefined | number,
-      data: {} as AlertCharacterTableDataInterface[],
-      outfitParticipants: {} as { [k: string]: string[] },
-      filter: '',
-      page: 1,
-      pageCount: 0,
-      itemsPerPage: 20,
     }
   },
   computed: {
@@ -193,26 +186,53 @@ export default Vue.extend({
 
       return counts
     },
+    updateCountdownPercent(): number {
+      return (100 / (this.updateRate / 1000)) * this.updateCountdown
+    },
+  },
+  watch: {
+    'alert.state'() {
+      if (this.alert.state === Ps2alertsEventState.ENDED) {
+        this.clearTimers()
+        this.pull()
+      }
+    },
   },
   beforeDestroy() {
-    clearInterval(this.interval)
+    this.reset()
   },
   created() {
-    clearInterval(this.interval)
+    this.reset()
     this.init()
   },
   methods: {
+    reset() {
+      this.loaded = false
+      this.clearTimers()
+    },
+    clearTimers() {
+      clearInterval(this.interval)
+      clearInterval(this.updateCountdownInterval)
+    },
     init(): void {
       this.pull()
-      this.interval = window.setInterval(() => {
-        this.pull()
-      }, 10000)
+
+      if (this.alert.state === Ps2alertsEventState.STARTED) {
+        this.updateCountdownInterval = window.setInterval(() => {
+          return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
+        }, 1000)
+
+        this.interval = window.setInterval(() => {
+          this.pull()
+        }, this.updateRate)
+      }
     },
     async pull(): Promise<void> {
-      console.log('AlertCharacterMetrics.pull', this.alert.instanceId)
       if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
         return
       }
+
+      console.log('AlertCharacterMetrics.pull', this.alert.instanceId)
 
       await new ApiRequest()
         .get<InstanceCharacterAggregateResponseInterface[]>(
@@ -221,16 +241,13 @@ export default Vue.extend({
             this.alert.instanceId
               ? this.alert.instanceId.toString()
               : 'whatever'
-          ),
-          {
-            sortBy: 'kills',
-            order: 'desc',
-          }
+          )
         )
         .then((result) => {
           this.data = this.transformData(result)
 
           this.loaded = true
+          this.updateCountdown = this.updateRate / 1000
           this.$emit('players-loaded')
         })
         .catch((e) => {

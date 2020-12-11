@@ -1,6 +1,23 @@
 <template>
-  <div class="col-span-12 lg:col-span-6 card">
+  <div class="col-span-12 lg:col-span-6 ss:col-span-8 card relative">
     <div class="tag section">Combat Metrics</div>
+    <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
+      <v-tooltip left>
+        <template #activator="{ on, attrs }">
+          <v-progress-circular
+            :value="updateCountdownPercent"
+            :rotate="-90"
+            :size="14"
+            v-bind="attrs"
+            v-on="on"
+          ></v-progress-circular>
+        </template>
+        <span>Updates every {{ updateRate / 1000 }} secs</span>
+      </v-tooltip>
+    </div>
+    <div v-if="!loaded" class="text-center">
+      <h1>Loading...</h1>
+    </div>
     <div v-if="loaded" class="grid grid-cols-12 text-center">
       <div class="col-span-6 lg:col-span-3 ss:col-span-2 mb-4">
         <h1 class="text-xl">Kills</h1>
@@ -168,29 +185,60 @@ export default Vue.extend({
     return {
       error: null,
       loaded: false,
+      updateRate: 10000,
+      updateCountdown: 10,
+      updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       data: {} as InstanceFactionCombatAggregateResponseInterface,
     }
   },
+  computed: {
+    updateCountdownPercent(): number {
+      return (100 / (this.updateRate / 1000)) * this.updateCountdown
+    },
+  },
+  watch: {
+    'alert.state'() {
+      if (this.alert.state === Ps2alertsEventState.ENDED) {
+        this.clearTimers()
+        this.pull()
+      }
+    },
+  },
   beforeDestroy() {
-    clearInterval(this.interval)
+    this.reset()
   },
   created() {
-    clearInterval(this.interval)
+    this.reset()
     this.init()
   },
   methods: {
+    reset() {
+      this.loaded = false
+      this.clearTimers()
+    },
+    clearTimers() {
+      clearInterval(this.interval)
+      clearInterval(this.updateCountdownInterval)
+    },
     init(): void {
       this.pull()
-      this.interval = window.setInterval(() => {
-        this.pull()
-      }, 10000)
+      if (this.alert.state === Ps2alertsEventState.STARTED) {
+        this.updateCountdownInterval = window.setInterval(() => {
+          return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
+        }, 1000)
+
+        this.interval = window.setInterval(() => {
+          this.pull()
+        }, this.updateRate)
+      }
     },
     async pull(): Promise<void> {
-      console.log('AlertFactionCombatMetrics.pull', this.alert.instanceId)
       if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
         return
       }
+
+      console.log('AlertFactionCombatMetrics.pull', this.alert.instanceId)
 
       await new ApiRequest()
         .get<InstanceFactionCombatAggregateResponseInterface>(
@@ -204,6 +252,7 @@ export default Vue.extend({
         .then((result) => {
           this.data = result
           this.loaded = true
+          this.updateCountdown = this.updateRate / 1000
         })
         .catch((e) => {
           this.error = e.message
