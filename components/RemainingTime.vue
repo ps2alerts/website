@@ -45,14 +45,17 @@ export default Vue.extend({
     },
   },
   created() {
-    this.interval = setInterval(() => {
-      this.tickTock()
-    }, 1000)
+    this.init()
   },
   destroyed() {
     clearInterval(this.interval)
   },
   methods: {
+    init() {
+      this.interval = window.setInterval(() => {
+        this.tickTock()
+      }, 1000)
+    },
     tickTock() {
       this.remaining = this.remaining - 1
     },
