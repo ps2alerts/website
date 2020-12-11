@@ -56,12 +56,13 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
-
     '@nuxtjs/vuetify',
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
+    // https://github.com/nuxt-community/google-gtag-module
+    '@nuxtjs/google-gtag',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/content
@@ -96,6 +97,11 @@ export default {
   vuetify: {
     theme: { dark: true },
     treeShake: true, // required for scss vars to work
+  },
+
+  'google-gtag': {
+    id: process.env.GOOGLE_PROPERTY,
+    debug: process.env.NODE_ENV === 'development', // enable to track in dev mode
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
