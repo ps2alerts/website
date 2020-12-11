@@ -56,6 +56,8 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
+
+    '@nuxtjs/vuetify',
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
@@ -89,6 +91,12 @@ export default {
 
   // Content module configuration (https://go.nuxtjs.dev/config-content)
   content: {},
+
+  // https://www.npmjs.com/package/@nuxtjs/vuetify
+  vuetify: {
+    theme: { dark: true },
+    treeShake: true, // required for scss vars to work
+  },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {

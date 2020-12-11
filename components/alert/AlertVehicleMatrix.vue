@@ -1,6 +1,20 @@
 <template>
-  <div>
+  <div class="card relative">
     <div class="tag section">Vehicular Combat Matrix</div>
+    <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
+      <v-tooltip left>
+        <template #activator="{ on, attrs }">
+          <v-progress-circular
+            :value="updateCountdownPercent"
+            :rotate="-90"
+            :size="14"
+            v-bind="attrs"
+            v-on="on"
+          ></v-progress-circular>
+        </template>
+        <span>Updates every {{ updateRate / 1000 }} secs</span>
+      </v-tooltip>
+    </div>
     <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
@@ -149,25 +163,55 @@ export default Vue.extend({
       error: null,
       loaded: false,
       mode: 'kills',
+      updateRate: 30000,
+      updateCountdown: 30,
+      updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       data: {} as InstanceVehicleAggregateResponseInterface[],
       vehicleData: [] as VehicleDataInterface[],
     }
   },
+  computed: {
+    updateCountdownPercent(): number {
+      return (100 / (this.updateRate / 1000)) * this.updateCountdown
+    },
+  },
+  watch: {
+    'alert.state'() {
+      if (this.alert.state === Ps2alertsEventState.ENDED) {
+        this.clearTimers()
+        this.pull()
+      }
+    },
+  },
   beforeDestroy() {
-    clearInterval(this.interval)
+    this.reset()
   },
   created() {
-    clearInterval(this.interval)
+    this.reset()
     this.init()
   },
   methods: {
+    reset() {
+      this.loaded = false
+      this.clearTimers()
+    },
+    clearTimers() {
+      clearInterval(this.interval)
+      clearInterval(this.updateCountdownInterval)
+    },
     async init(): Promise<void> {
       await this.pullVehicleData()
       await this.pull()
-      this.interval = window.setInterval(() => {
-        this.pull()
-      }, 10000)
+      if (this.alert.state === Ps2alertsEventState.STARTED) {
+        this.updateCountdownInterval = window.setInterval(() => {
+          return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
+        }, 1000)
+
+        this.interval = window.setInterval(() => {
+          this.pull()
+        }, this.updateRate)
+      }
     },
     async pullVehicleData(): Promise<void> {
       if (this.loaded) {
@@ -193,10 +237,11 @@ export default Vue.extend({
         })
     },
     async pull(): Promise<void> {
-      console.log('AlertVehicleMatrix.pull', this.alert.instanceId)
       if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
         return
       }
+
+      console.log('AlertVehicleMatrix.pull', this.alert.instanceId)
 
       await new ApiRequest()
         .get<InstanceVehicleAggregateResponseInterface[]>(
@@ -214,7 +259,6 @@ export default Vue.extend({
                 return this.vehicleData[key]
               }
             })
-            console.log('vehicleData', vehicleData)
             result[key].vehicleName = vehicleData
               ? this.$options.filters?.itemShortName(vehicleData.name)
               : `UNKNOWN (ID: ${vehicle.vehicle})`
@@ -233,6 +277,7 @@ export default Vue.extend({
             )
           })
           this.loaded = true
+          this.updateCountdown = this.updateRate / 1000
         })
         .catch((e) => {
           this.error = e.message

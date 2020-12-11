@@ -4,41 +4,43 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded && alert.result" class="grid grid-cols-12 gap-2">
-      <AlertResult :alert="alert" />
+      <AlertResult
+        :alert="alert"
+        :update-countdown-percent="updateCountdownPercent"
+      />
       <AlertDetails :alert="alert" />
       <AlertFactionCombatMetrics :alert="alert" />
-      <div class="col-span-12 text-center">
+      <div class="col-span-12 justify-center btn-group">
         <button
           class="btn"
           :class="{ 'btn-active': showPlayers }"
           @click="togglePlayers()"
         >
-          Players
+          <font-awesome-icon :icon="['fas', 'user']" /> Players
         </button>
         <button
           class="btn"
           :class="{ 'btn-active': showOutfits }"
           @click="toggleOutfits()"
         >
-          Outfits
+          <font-awesome-icon :icon="['fas', 'users']" /> Outfits
         </button>
         <button
           class="btn"
           :class="{ 'btn-active': showWeapons }"
           @click="toggleWeapons()"
         >
-          Weapons
+          <font-awesome-icon :icon="['fas', 'bomb']" /> Weapons
         </button>
         <button
           class="btn"
           :class="{ 'btn-active': showVehicles }"
           @click="toggleVehicles()"
         >
-          Vehicles
+          <font-awesome-icon :icon="['fas', 'fighter-jet']" /> Vehicles
         </button>
-        <p>Filtering and sorting coming very soon!</p>
       </div>
-      <div v-show="showPlayers === true" class="col-span-12 card">
+      <div v-show="showPlayers === true" class="col-span-12 card relative">
         <AlertCharacterMetrics
           ref="character"
           :alert="alert"
@@ -46,7 +48,7 @@
           @outfit-participants-changed="outfitParticipantsChanged"
         />
       </div>
-      <div v-show="showOutfits === true" class="col-span-12 card">
+      <div v-show="showOutfits === true" class="col-span-12 card relative">
         <AlertOutfitMetrics
           ref="outfit"
           :alert="alert"
@@ -55,16 +57,12 @@
           @request-outfit-participants="requestOutfitParticipants"
         />
       </div>
-      <div v-show="showWeapons === true" class="col-span-12 card">
+      <div v-show="showWeapons === true" class="col-span-12 card relative">
         <AlertWeaponMetrics :alert="alert" />
       </div>
       <div v-show="showVehicles === true" class="col-span-12">
-        <div class="col-span-12 card">
-          <AlertVehicleMetrics :alert="alert" />
-        </div>
-        <div class="col-span-12 card">
-          <AlertVehicleMatrix :alert="alert" />
-        </div>
+        <AlertVehicleMetrics :alert="alert" />
+        <AlertVehicleMatrix :alert="alert" />
       </div>
     </div>
   </div>
@@ -111,6 +109,9 @@ export default Vue.extend({
     return {
       error: null,
       loaded: false,
+      updateRate: 10000,
+      updateCountdown: 10,
+      updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       alert: {} as InstanceTerritoryControlResponseInterface,
       showPlayers: true,
@@ -120,6 +121,18 @@ export default Vue.extend({
       outfitParticipants: {} as { [k: string]: string[] },
       playersLoaded: false,
     }
+  },
+  computed: {
+    updateCountdownPercent(): number {
+      return (100 / (this.updateRate / 1000)) * this.updateCountdown
+    },
+  },
+  watch: {
+    'alert.state'() {
+      if (this.alert.state === Ps2alertsEventState.ENDED) {
+        this.clearTimers()
+      }
+    },
   },
   beforeDestroy() {
     this.reset()
@@ -131,20 +144,32 @@ export default Vue.extend({
   methods: {
     reset() {
       this.loaded = false
-      clearInterval(this.interval)
+      this.clearTimers()
     },
-    init(instanceId: string): void {
+    clearTimers() {
+      clearInterval(this.interval)
+      clearInterval(this.updateCountdownInterval)
+    },
+    async init(instanceId: string): Promise<void> {
       document.title = 'Alert #' + instanceId
-      this.pull(instanceId)
-      this.interval = window.setInterval(() => {
-        this.pull(instanceId)
-      }, 5000)
+      await this.pull(instanceId)
+
+      if (this.alert.state === Ps2alertsEventState.STARTED) {
+        this.updateCountdownInterval = window.setInterval(() => {
+          return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
+        }, 1000)
+
+        this.interval = window.setInterval(() => {
+          this.pull(instanceId)
+        }, this.updateRate)
+      }
     },
     async pull(instanceId: string): Promise<void> {
-      console.log('pull', instanceId)
       if (this.alert && this.alert.state === Ps2alertsEventState.ENDED) {
         return
       }
+
+      console.log('Alert details pull', instanceId)
 
       await new ApiRequest()
         .get<InstanceTerritoryControlResponseInterface>(
@@ -153,6 +178,7 @@ export default Vue.extend({
         .then((alert) => {
           this.alert = alert
           this.loaded = true
+          this.updateCountdown = this.updateRate / 1000
         })
         .catch((e) => {
           this.error = e.message

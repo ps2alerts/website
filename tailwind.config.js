@@ -145,6 +145,11 @@ module.exports = {
       primary: '#37474f',
       'primary-dark': '#303a40',
     },
+    extend: {
+      animation: {
+        'spin-slow': 'spin 3s linear infinite',
+      },
+    },
     spacing: {
       px: '1px',
       0: '0',

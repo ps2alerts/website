@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main data-app="true">
     <IntroSplash v-if="$config.environment === 'production'"></IntroSplash>
     <div v-if="$config.environment !== 'production'" class="font-sans lg:flex">
       <div id="panel-left" class="w-full">

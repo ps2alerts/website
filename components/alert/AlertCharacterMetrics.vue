@@ -1,6 +1,20 @@
 <template>
   <div>
     <div class="tag section">Player Metrics</div>
+    <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
+      <v-tooltip left>
+        <template #activator="{ on, attrs }">
+          <v-progress-circular
+            :value="updateCountdownPercent"
+            :rotate="-90"
+            :size="14"
+            v-bind="attrs"
+            v-on="on"
+          ></v-progress-circular>
+        </template>
+        <span>Updates every {{ updateRate / 1000 }} secs</span>
+      </v-tooltip>
+    </div>
     <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
@@ -18,74 +32,38 @@
         </div>
       </div>
       <div class="col-span-12">
-        <table class="w-full text-center border-col border-row">
-          <thead class="font-bold">
-            <tr>
-              <td class="w-1/12 py-2 text-left">Rank</td>
-              <td class="w-2/12 py-2 text-left">Player</td>
-              <td class="w-2/12 py-2 text-left">Outfit</td>
-              <td class="w-1/12 py-2">Kills</td>
-              <td class="w-1/12 py-2">Deaths</td>
-              <td class="w-1/12 py-2">KD</td>
-              <td class="w-1/12 py-2">TKs</td>
-              <td class="w-1/12 py-2">Suicides</td>
-              <td class="w-1/12 py-2">Headshots</td>
-              <td class="w-1/12 py-2">HSR %</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(character, index) in data"
-              :key="character.id"
-              class="mb-2"
-              :class="factionClass(character.character.faction)"
-            >
-              <td class="text-left">
-                {{ index + 1 }}
-              </td>
-              <td class="text-left">
-                {{ character.character.name }}
-              </td>
-              <td class="text-left">
-                <span v-if="character.character.outfit">
-                  <span v-if="character.character.outfit.tag"
-                    >[{{ character.character.outfit.tag }}]</span
-                  >
-                  {{ character.character.outfit.name }}
-                </span>
-              </td>
-              <td>
-                {{ character.kills || 0 }}
-              </td>
-              <td>
-                {{ character.deaths || 0 }}
-              </td>
-              <td>
-                {{
-                  character.kills && character.deaths
-                    ? (character.kills / character.deaths).toFixed(2)
-                    : character.kills || 0
-                }}
-              </td>
-              <td>
-                {{ character.teamKills || 0 }}
-              </td>
-              <td>
-                {{ character.suicides || 0 }}
-              </td>
-              <td>
-                {{ character.headshots || 0 }}
-              </td>
-              <td>
-                {{
-                  character.headshots && character.kills
-                    ? ((character.headshots / character.kills) * 100).toFixed(2)
-                    : 0
-                }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="my-2">
+          <input
+            v-model="filter"
+            class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
+            type="text"
+            placeholder="[TAG] Player"
+            aria-label="Player Name"
+            @keydown="$event.stopImmediatePropagation()"
+          />
+        </div>
+        <v-data-table
+          class="datatable"
+          dense
+          show-expand
+          item-key="character.id"
+          :headers="headers"
+          :items="data"
+          :search="filter"
+          :item-class="tableItemClass"
+          :expanded.sync="expanded"
+          v-bind="leaderboardConfig"
+        >
+          <template #no-results>
+            <div class="text-2xl text-white font-bold my-6">No results!</div>
+          </template>
+          <template #expanded-item="{ headers }">
+            <td :colspan="headers.length">
+              Detailed player specific metrics coming soon! This will include
+              per-player weapons metrics and vehicle usage.
+            </td>
+          </template>
+        </v-data-table>
       </div>
     </div>
   </div>
@@ -93,13 +71,18 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
 import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceCharacterAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceCharacterAggregateResponseInterface'
 import { Faction } from '@/constants/Faction'
-import { FactionBgClass } from '@/constants/FactionBgClass'
+import {
+  FactionBgClass,
+  FactionBgClassString,
+} from '@/constants/FactionBgClass'
+import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
+import { AlertCharacterTableDataInterface } from '~/interfaces/AlertCharacterTableDataInterface'
+import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
 
 export default Vue.extend({
   name: 'AlertCharacterMetrics',
@@ -114,9 +97,70 @@ export default Vue.extend({
     return {
       error: null,
       loaded: false,
+      updateRate: 10000,
+      updateCountdown: 10,
+      updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
-      data: {} as InstanceCharacterAggregateResponseInterface[],
+      data: {} as AlertCharacterTableDataInterface[],
       outfitParticipants: {} as { [k: string]: string[] },
+      filter: '',
+      leaderboardConfig: AlertLeaderboardConfig,
+      expanded: [],
+      headers: [
+        {
+          text: 'Character',
+          align: 'left',
+          value: 'character.name',
+        },
+        {
+          text: 'Outfit',
+          align: 'left',
+          value: 'character.outfit.name',
+        },
+        {
+          text: 'Kills',
+          align: 'middle',
+          filterable: false,
+          value: 'kills',
+        },
+        {
+          text: 'Deaths',
+          align: 'middle',
+          filterable: false,
+          value: 'deaths',
+        },
+        {
+          text: 'KD',
+          align: 'middle',
+          filterable: false,
+          value: 'kd',
+        },
+        {
+          text: 'TKs',
+          align: 'middle',
+          filterable: false,
+          value: 'teamKills',
+        },
+        {
+          text: 'Suicides',
+          align: 'middle',
+          filterable: false,
+          value: 'suicides',
+        },
+        {
+          text: 'Headshots',
+          align: 'middle',
+          filterable: false,
+          value: 'headshots',
+        },
+        {
+          text: 'HSR %',
+          align: 'middle',
+          filterable: false,
+          value: 'hsr',
+        },
+        { text: '', value: 'data-table-expand' },
+      ],
     }
   },
   computed: {
@@ -142,26 +186,53 @@ export default Vue.extend({
 
       return counts
     },
+    updateCountdownPercent(): number {
+      return (100 / (this.updateRate / 1000)) * this.updateCountdown
+    },
+  },
+  watch: {
+    'alert.state'() {
+      if (this.alert.state === Ps2alertsEventState.ENDED) {
+        this.clearTimers()
+        this.pull()
+      }
+    },
   },
   beforeDestroy() {
-    clearInterval(this.interval)
+    this.reset()
   },
   created() {
-    clearInterval(this.interval)
+    this.reset()
     this.init()
   },
   methods: {
+    reset() {
+      this.loaded = false
+      this.clearTimers()
+    },
+    clearTimers() {
+      clearInterval(this.interval)
+      clearInterval(this.updateCountdownInterval)
+    },
     init(): void {
       this.pull()
-      this.interval = window.setInterval(() => {
-        this.pull()
-      }, 10000)
+
+      if (this.alert.state === Ps2alertsEventState.STARTED) {
+        this.updateCountdownInterval = window.setInterval(() => {
+          return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
+        }, 1000)
+
+        this.interval = window.setInterval(() => {
+          this.pull()
+        }, this.updateRate)
+      }
     },
     async pull(): Promise<void> {
-      console.log('AlertCharacterMetrics.pull', this.alert.instanceId)
       if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
         return
       }
+
+      console.log('AlertCharacterMetrics.pull', this.alert.instanceId)
 
       await new ApiRequest()
         .get<InstanceCharacterAggregateResponseInterface[]>(
@@ -170,15 +241,13 @@ export default Vue.extend({
             this.alert.instanceId
               ? this.alert.instanceId.toString()
               : 'whatever'
-          ),
-          {
-            sortBy: 'kills',
-            order: 'desc',
-          }
+          )
         )
         .then((result) => {
-          this.data = result
+          this.data = this.transformData(result)
+
           this.loaded = true
+          this.updateCountdown = this.updateRate / 1000
           this.$emit('players-loaded')
         })
         .catch((e) => {
@@ -218,6 +287,55 @@ export default Vue.extend({
     },
     factionClass(faction: Faction): object {
       return FactionBgClass(faction)
+    },
+    tableItemClass(item: AlertCharacterTableDataInterface): string {
+      return FactionBgClassString(item.character.faction) + ' text-center'
+    },
+    transformData(
+      data: InstanceCharacterAggregateResponseInterface[]
+    ): AlertCharacterTableDataInterface[] {
+      const newData: AlertCharacterTableDataInterface[] = []
+
+      data.forEach((character: InstanceCharacterAggregateResponseInterface) => {
+        // Ensure table displays all data even if zero
+        character.kills = character.kills ?? 0
+        character.deaths = character.deaths ?? 0
+        character.teamKills = character.teamKills ?? 0
+        character.suicides = character.suicides ?? 0
+        character.headshots = character.headshots ?? 0
+
+        // Outfit name formatting
+        if (character.character.outfit) {
+          character.character.outfit.name = character.character.outfit?.tag
+            ? `[${character.character.outfit.tag}] ${character.character.outfit.name}`
+            : character.character.outfit?.name
+        } else {
+          character.character.outfit = {
+            name: '-- NO OUTFIT --',
+            id: '0',
+            faction: character.character.faction,
+            world: character.character.world,
+            leader: 'foo',
+          }
+        }
+
+        const tempData: AlertCharacterTableDataInterface = Object.assign(
+          character,
+          {
+            kd:
+              character.kills && character.deaths
+                ? (character.kills / character.deaths).toFixed(2)
+                : character.kills || 0,
+            hsr:
+              character.headshots && character.kills
+                ? ((character.headshots / character.kills) * 100).toFixed(2)
+                : 0,
+          }
+        )
+        newData.push(tempData)
+      })
+
+      return newData
     },
   },
 })

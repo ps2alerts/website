@@ -12,21 +12,24 @@
     </div>
     <div v-show="actives.length > 0">
       <div class="flex justify-center">
-        <button
-          class="btn btn-sm rtm-btn"
-          :class="{ 'btn-active': mode === 'territory' }"
-          @click="updateMode('territory')"
-        >
-          <font-awesome-icon fixed-width :icon="['fas', 'flag']" />
-          Territory
-        </button>
-        <button
-          class="btn btn-sm rtm-btn"
-          :class="{ 'btn-active': mode === 'pops' }"
-          @click="updateMode('pops')"
-        >
-          <font-awesome-icon fixed-width :icon="['fas', 'user']" /> Population
-        </button>
+        <div class="btn-group mr-2">
+          <button
+            class="btn btn-sm rtm-btn"
+            :class="{ 'btn-active': mode === 'territory' }"
+            @click="updateMode('territory')"
+          >
+            <font-awesome-icon fixed-width :icon="['fas', 'flag']" />
+            Territory
+          </button>
+          <button
+            class="btn btn-sm rtm-btn"
+            :class="{ 'btn-active': mode === 'pops' }"
+            @click="updateMode('pops')"
+          >
+            <font-awesome-icon fixed-width :icon="['fas', 'user']" /> Population
+          </button>
+        </div>
+
         <button
           v-show="mode === 'pops' && showPopPercent"
           class="btn btn-sm rtm-btn"
@@ -51,7 +54,7 @@
         <RealTimeAlert
           :world="alert.world"
           :zone="alert.zone"
-          :started="alert.timeStarted"
+          :time-started="alert.timeStarted"
           :duration="alert.duration"
           :result="alert.result"
           :instance-id="alert.instanceId"

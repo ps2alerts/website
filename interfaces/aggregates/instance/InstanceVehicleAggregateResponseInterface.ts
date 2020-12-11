@@ -1,6 +1,6 @@
 import { Faction } from '@/constants/Faction'
 
-interface VehicleStatsInterface {
+export interface VehicleStatsInterface {
   kills?: number
   deaths?: number
   teamkills?: number
@@ -19,5 +19,4 @@ export interface InstanceVehicleAggregateResponseInterface {
   suicides?: number
   vehicles?: VehicleStatsInterface
   infantry?: VehicleStatsInterface
-  totals?: VehicleStatsInterface
 }
