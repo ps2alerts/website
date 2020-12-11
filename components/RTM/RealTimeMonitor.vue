@@ -54,7 +54,7 @@
         <RealTimeAlert
           :world="alert.world"
           :zone="alert.zone"
-          :started="alert.timeStarted"
+          :time-started="alert.timeStarted"
           :duration="alert.duration"
           :result="alert.result"
           :instance-id="alert.instanceId"

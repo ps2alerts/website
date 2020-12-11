@@ -1,5 +1,5 @@
 <template>
-  <div :remaining="remaining" :instanceId="instanceId">
+  <div :instanceId="instanceId">
     <div class="grid grid-cols-12 place-items-center">
       <div class="col-span-3 col-start-2 text-base">
         {{ world | worldName }}
@@ -10,7 +10,10 @@
       </div>
 
       <div class="col-span-3 text-base font-bold">
-        {{ remainingTimeText }}
+        <remaining-time
+          :started="timeStarted"
+          :duration="duration"
+        ></remaining-time>
       </div>
 
       <div class="col-start-12">
@@ -48,8 +51,6 @@
 import Vue from 'vue'
 import { World } from '@/constants/World'
 import { Zone } from '@/constants/Zone'
-import AlertRemainingTime from '@/constants/AlertRemainingTime'
-import AlertRemainingTimeText from '@/constants/AlertRemainingTimeText'
 import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
 
 export default Vue.extend({
@@ -72,7 +73,7 @@ export default Vue.extend({
       default: Zone.INDAR,
       required: true,
     },
-    started: {
+    timeStarted: {
       type: String,
       default: 'Jan 1st 1970 00:00:00',
       required: true,
@@ -113,32 +114,6 @@ export default Vue.extend({
           outofPlay: 33,
         }
       },
-    },
-  },
-  data() {
-    return {
-      remaining: AlertRemainingTime(this.started, this.duration),
-    }
-  },
-  computed: {
-    remainingTimeText(): string {
-      if (this.remaining < -30) {
-        return 'Overdue!'
-      }
-      if (this.remaining < 0) {
-        return 'Ending...'
-      }
-      return AlertRemainingTimeText(this.remaining)
-    },
-  },
-  created() {
-    setInterval(() => {
-      this.tickTock()
-    }, 1000)
-  },
-  methods: {
-    tickTock() {
-      this.remaining = this.remaining - 1
     },
   },
 })

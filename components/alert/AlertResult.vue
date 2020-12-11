@@ -8,14 +8,12 @@
         {{ victorText }}
       </h2>
     </div>
-    <div v-if="alert.state === 1" class="mb-2 text-center">
-      <h2 class="text-2xl">
-        <font-awesome-icon
-          class="animate-spin spin-slow"
-          :icon="['fas', 'sync-alt']"
-        />
-        In progress...
-      </h2>
+    <div v-if="alert.state === 1" class="mb-2 text-center text-2xl">
+      <remaining-time
+        :started="alert.timeStarted"
+        :duration="alert.duration"
+        show-remaining="true"
+      ></remaining-time>
     </div>
     <div class="rounded px-4 py-4 bg-tint relative" :class="victorClass">
       <div class="tag section">Result</div>
