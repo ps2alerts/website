@@ -7,11 +7,23 @@
       @change="changeBracket()"
     >
       <option :value="NONE">Any</option>
-      <option :value="MORNING">Morning (00:00 - 11:59)</option>
-      <option :value="AFTERNOON">Afternoon (12:00 - 16:59)</option>
-      <option :value="PRIME">Prime (17:00 - 23:59)</option>
+      <option :value="MORNING">Morning (23:00 - 11:59)</option>
+      <option :value="AFTERNOON">Afternoon (12:00 - 15:59)</option>
+      <option :value="PRIME">Prime (16:00 - 22:59)</option>
     </select>
-    <label class="text-center text-sm" for="bracket">Time Bracket</label>
+    <v-tooltip bottom>
+      <template #activator="{ on, attrs }">
+        <label class="text-center text-sm" for="bracket"
+          >Time Bracket
+          <font-awesome-icon
+            :icon="['fas', 'info-circle']"
+            v-bind="attrs"
+            v-on="on"
+          ></font-awesome-icon
+        ></label>
+      </template>
+      Determined from Alert start time
+    </v-tooltip>
   </div>
 </template>
 

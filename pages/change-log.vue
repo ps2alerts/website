@@ -3,7 +3,98 @@
     <div class="col-span-12">
       <div class="text-center h-full">
         <h1 class="text-title">Change Log</h1>
-        <p>Last updated: 11th Nov 2020</p>
+        <p>Last updated: 12th Dec 2020</p>
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-6 bg-tint card editorial relative">
+      <div class="tag announcement">
+        <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>
+        Announcement
+      </div>
+      <div class="h-full">
+        <h1 class="text-subtitle text-center">PS2Alerts now in Alpha!</h1>
+        <p class="content-spacing text-center">Added: 12th Dev 2020</p>
+        <p>
+          PS2Alerts is now in Alpha stage! The basic minimum viable product of
+          the tracker is now a reality, featuring the following:
+        </p>
+        <ul>
+          <li>
+            Real time alert tracking, with an active alert log to the left (or
+            top on mobile) allowing you see at a glance all the alerts going on
+            in PS2 (for PC only right now)
+          </li>
+          <li>
+            Historical Alert Searches, enabling you to go back in time (as of
+            Jan 2021, which is the projects release date) and revisit or share
+            an alert to your fellow planetmans. It is also filterable, allowing
+            you to see alerts on Indar during Primetime for example.
+          </li>
+          <li>
+            Real time updating of per-alert statistics. It shows a plethora of
+            information, including but won't be limited to:
+            <ul>
+              <li>
+                Alert details e.g. continent, time bracket, server, which
+                faction triggered it, etc.
+              </li>
+              <li>
+                Filterable and sortable per player, weapon, outfit and vehicle
+                combat statistics
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-6 bg-tint card editorial relative">
+      <div class="tag feature">
+        <font-awesome-icon :icon="['fas', 'certificate']"></font-awesome-icon>
+        New feature
+      </div>
+      <div class="h-full">
+        <h1 class="text-subtitle text-center">Alert Result Pages</h1>
+        <p class="content-spacing text-center">Added: 12th Dev 2020</p>
+        <a href="/change-log/alert.jpg">
+          <img
+            class="object-contain mx-auto content-spacing rounded-lg"
+            src="/change-log/alert.jpg"
+            alt="Picture showing alert history example"
+          />
+        </a>
+        <p>
+          The first iteration of the Alert Result pages are finished! They
+          provide the following statistics on a per-alert basis, updating the
+          data frequently for in progress alerts:
+        </p>
+        <ul>
+          <li>Alert territory % and winner</li>
+          <li>
+            Combat metrics for each faction inc NSO: kills, deaths, K/D,
+            teamkills, suicides, headshots, HSR
+          </li>
+          <li>
+            Time Bracket (Mornings = 23:00-11:59, Afternoons = 12:00-15:59,
+            Prime = 16:00-22:59)
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <font-awesome-icon
+                  :icon="['fas', 'info-circle']"
+                  v-bind="attrs"
+                  v-on="on"
+                ></font-awesome-icon>
+              </template>
+              Determined from Alert start time
+            </v-tooltip>
+          </li>
+          <li>
+            Sortable and filterable per-player, outfit, weapon and vehicle
+            statistics. For the first time in PS2Alerts, we have detailed
+            Vehicle matrix tracking (which vehicle killed what other vehicles
+            etc).
+          </li>
+        </ul>
+        <p>This feature will be expanded in the Beta release of PS2Alerts!</p>
       </div>
     </div>
     <div class="col-span-12 lg:col-span-6 bg-tint card editorial relative">
@@ -11,11 +102,13 @@
       <div class="h-full">
         <h1 class="text-subtitle text-center">Filterable Alert History</h1>
         <p class="content-spacing text-center">Added: 21st Nov 2020</p>
-        <img
-          class="object-contain mx-auto content-spacing rounded-lg"
-          src="../assets/img/change-log/alert-history.png"
-          alt="Picture showing alert history example"
-        />
+        <a href="/change-log/alert-history.jpg">
+          <img
+            class="object-contain mx-auto content-spacing rounded-lg"
+            src="/change-log/alert-history.jpg"
+            alt="Picture showing alert history example"
+          />
+        </a>
         <p>
           Filterable Alert History is now available! This shows a list of alerts
           filtered down by a variety of options. This list continuously updates
@@ -26,8 +119,8 @@
           <li>Server</li>
           <li>Continent</li>
           <li>
-            Time Bracket (Mornings = 00:00-11:59, Afternoons = 12:00-15:59,
-            Prime = 16:00-00:00)
+            Time Bracket (Mornings = 00:00-10:59, Afternoons = 11:00-15:59,
+            Prime = 16:00-22:59)
           </li>
           <li>Victor</li>
           <li>Date &amp; Time Range</li>
@@ -44,13 +137,15 @@
       <div class="h-full">
         <h1 class="text-subtitle text-center">Real Time Monitor</h1>
         <p class="content-spacing text-center">Added: 8th Nov 2020</p>
-        <img
-          class="object-contain mx-auto content-spacing rounded-lg"
-          src="../assets/img/change-log/rtm.png"
-          alt="Real Time Monitor example"
-          height="322"
-          width="441"
-        />
+        <a href="/change-log/rtm.jpg">
+          <img
+            class="object-contain mx-auto content-spacing rounded-lg"
+            src="/change-log/rtm.jpg"
+            alt="Real Time Monitor example"
+            height="322"
+            width="441"
+          />
+        </a>
         <p>
           The Real Time Alert Monitor has returned! At the left of your screen
           (top if you're on mobile) you're now able to see a live list of
@@ -65,63 +160,6 @@
         </p>
       </div>
     </div>
-
-    <!--  <div class="col-span-3 ss:col-span-2 bg-tint card editorial relative">-->
-    <!--    <div class="tag enhancement">-->
-    <!--      Enhancement-->
-    <!--    </div>-->
-    <!--    <div class="h-full">-->
-    <!--      <h1 class="text-subtitle text-center">-->
-    <!--        Example Enhancement-->
-    <!--      </h1>-->
-    <!--      <p class="content-spacing text-center">-->
-    <!--        Added: 8th Nov 2020-->
-    <!--      </p>-->
-    <!--      <p>-->
-    <!--        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus vitae elit quam. Maecenas enim ipsum, ornare elementum pulvinar et, vestibulum eu eros. Nullam bibendum vulputate mi. Nulla sed felis at enim euismod ornare. Morbi semper felis eget nunc convallis, ac aliquet quam porttitor. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas vitae tortor lorem. Phasellus non neque neque. Etiam placerat enim ipsum, porttitor gravida dui imperdiet malesuada. Pellentesque sit amet nulla mollis, tristique dolor id, posuere neque. Praesent lectus elit, consectetur ac nibh id, sollicitudin pulvinar leo. Vivamus venenatis risus neque, sed euismod sem finibus ut. Quisque laoreet ipsum neque, id aliquam ex feugiat nec. Mauris dapibus, nibh nec faucibus sodales, lacus mi pellentesque nulla, quis elementum nunc augue sit amet nisl. Phasellus nec felis et erat vulputate molestie.-->
-    <!--      </p>-->
-    <!--      <p>-->
-    <!--        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam imperdiet nulla dui, sed finibus purus sodales sit amet. In vitae risus velit. Phasellus sit amet scelerisque ligula. Nullam eget sapien ut lectus lobortis facilisis sit amet nec odio. Suspendisse convallis justo id neque iaculis molestie. Nunc tincidunt nisl sit amet ultricies facilisis. Vestibulum purus turpis, accumsan eu accumsan eu, congue id mauris. Nulla vulputate metus in neque placerat eleifend. Integer pellentesque luctus hendrerit.-->
-    <!--      </p>-->
-    <!--    </div>-->
-    <!--  </div>-->
-
-    <!--  <div class="col-span-3 ss:col-span-2 bg-tint card editorial relative">-->
-    <!--    <div class="tag fix">-->
-    <!--      Bugfix-->
-    <!--    </div>-->
-    <!--    <div class="h-full">-->
-    <!--      <h1 class="text-subtitle text-center">-->
-    <!--        Example Bugfix-->
-    <!--      </h1>-->
-    <!--      <p class="content-spacing text-center">-->
-    <!--        Added: 8th Nov 2020-->
-    <!--      </p>-->
-    <!--      <p>-->
-    <!--        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam imperdiet nulla dui, sed finibus purus sodales sit amet. In vitae risus velit. Phasellus sit amet scelerisque ligula. Nullam eget sapien ut lectus lobortis facilisis sit amet nec odio. Suspendisse convallis justo id neque iaculis molestie. Nunc tincidunt nisl sit amet ultricies facilisis. Vestibulum purus turpis, accumsan eu accumsan eu, congue id mauris. Nulla vulputate metus in neque placerat eleifend. Integer pellentesque luctus hendrerit.-->
-    <!--      </p>-->
-    <!--      <p>-->
-    <!--        Aenean feugiat consectetur nulla eu bibendum. Duis rutrum arcu sed congue laoreet. Phasellus et lectus ac orci eleifend gravida. Morbi congue justo id mollis ultricies. Vestibulum at eleifend enim, eget viverra velit. Donec nec tellus congue, suscipit dui eget, varius sem. Vivamus suscipit magna risus, at condimentum velit pretium vitae. Donec sed orci mi. Morbi accumsan massa vel eros lacinia faucibus.-->
-    <!--      </p>-->
-    <!--    </div>-->
-    <!--  </div>-->
-
-    <!--  <div class="col-span-3 ss:col-span-2 bg-tint card editorial relative">-->
-    <!--    <div class="tag known-issue">-->
-    <!--      Known issue-->
-    <!--    </div>-->
-    <!--    <div class="h-full">-->
-    <!--      <h1 class="text-subtitle text-center">-->
-    <!--        Example Known Issue-->
-    <!--      </h1>-->
-    <!--      <p class="content-spacing text-center">-->
-    <!--        Added: 8th Nov 2020-->
-    <!--      </p>-->
-    <!--      <p>-->
-    <!--        Aenean feugiat consectetur nulla eu bibendum. Duis rutrum arcu sed congue laoreet. Phasellus et lectus ac orci eleifend gravida. Morbi congue justo id mollis ultricies. Vestibulum at eleifend enim, eget viverra velit. Donec nec tellus congue, suscipit dui eget, varius sem. Vivamus suscipit magna risus, at condimentum velit pretium vitae. Donec sed orci mi. Morbi accumsan massa vel eros lacinia faucibus.-->
-    <!--      </p>-->
-    <!--    </div>-->
-    <!--  </div>-->
   </div>
 </template>
 
@@ -132,11 +170,3 @@ export default Vue.extend({
   name: 'Changelog',
 })
 </script>
-
-<style scoped lang="scss">
-ul {
-  list-style-type: disc;
-  margin-left: 1rem;
-  margin-bottom: 1rem;
-}
-</style>
