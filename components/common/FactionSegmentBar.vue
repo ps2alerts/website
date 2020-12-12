@@ -6,67 +6,84 @@
           <div
             class="faction-bar-segment vs text-center text-white rounded-l"
             :style="{ width: percentVS + '%' }"
+            :class="{
+              'rounded-r':
+                nc === 0 && tr === 0 && other === 0 && outOfPlay === 0,
+            }"
             v-bind="attrs"
             v-on="on"
           >
-            {{ vsString }}
+            {{ vsString() }}
           </div>
         </template>
-        <span>VS: {{ vsString }}</span>
+        <span>VS: {{ vsString(true) }}</span>
       </v-tooltip>
+
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
             class="faction-bar-segment tr text-center text-white"
             :style="{ width: percentTR + '%' }"
+            :class="{
+              'rounded-l': vs === 0,
+              'rounded-r': nc === 0 && other === 0 && outOfPlay === 0,
+            }"
             v-bind="attrs"
-            :class="{ 'rounded-l': vs === 0 }"
             v-on="on"
           >
-            {{ trString }}
+            {{ trString() }}
           </div>
         </template>
-        <span>TR: {{ trString }}</span>
+        <span>TR: {{ trString(true) }}</span>
       </v-tooltip>
+
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
             class="faction-bar-segment nc text-center text-white"
             :style="{ width: percentNC + '%' }"
+            :class="{
+              'rounded-l': vs === 0,
+              'rounded-r': tr === 0 && other === 0 && outOfPlay === 0,
+            }"
             v-bind="attrs"
-            :class="{ 'rounded-r': other === 0 && outOfPlay === 0 }"
             v-on="on"
           >
-            {{ ncString }}
+            {{ ncString() }}
           </div>
         </template>
-        <span>NC: {{ ncString }}</span>
+        <span>NC: {{ ncString(true) }}</span>
       </v-tooltip>
+
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
             class="faction-bar-segment nso text-center text-white"
             :style="{ width: percentOther + '%' }"
+            :class="{
+              'rounded-l': vs === 0 && nc === 0 && tr === 0,
+              'rounded-r': other > 0 && outOfPlay === 0,
+            }"
             v-bind="attrs"
-            :class="{ 'rounded-r': other > 0 && outOfPlay === 0 }"
             v-on="on"
           >
-            {{ otherString }}
+            {{ otherString() }}
           </div>
         </template>
-        <span>Cutoff: {{ otherString }}</span>
+        <span>Cutoff: {{ otherString(true) }}</span>
       </v-tooltip>
+
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
             class="faction-bar-segment outofplay text-center text-white"
             :style="{ width: percentOutOfPlay + '%' }"
-            v-bind="attrs"
             :class="{ 'rounded-r': outOfPlay > 0 }"
+            v-bind="attrs"
             v-on="on"
           ></div>
         </template>
-        <span>Out of play: {{ outOfPlayString }}</span>
+        <span>Out of play: {{ outOfPlayString(true) }}</span>
       </v-tooltip>
     </div>
     <p v-show="total === 0">Awaiting data...</p>
@@ -140,39 +157,56 @@ export default Vue.extend({
     percentOutOfPlay(): number {
       return (this.outOfPlay / this.total) * 100
     },
-    vsString(): string {
+  },
+  methods: {
+    vsString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentVS.toFixed(0)
         : this.vs
       const suffix = this.isPercentage ? '%' : ''
+      if (bypassDropoff) {
+        return `${value}${suffix}`
+      }
       return this.percentVS > this.dropoffPercent ? `${value}${suffix}` : ''
     },
-    ncString(): string {
+    ncString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentNC.toFixed(0)
         : this.nc
       const suffix = this.isPercentage ? '%' : ''
+      if (bypassDropoff) {
+        return `${value}${suffix}`
+      }
       return this.percentNC > this.dropoffPercent ? `${value}${suffix}` : ''
     },
-    trString(): string {
+    trString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentTR.toFixed(0)
         : this.tr
       const suffix = this.isPercentage ? '%' : ''
+      if (bypassDropoff) {
+        return `${value}${suffix}`
+      }
       return this.percentTR > this.dropoffPercent ? `${value}${suffix}` : ''
     },
-    otherString(): string {
+    otherString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentOther.toFixed(0)
         : this.other
       const suffix = this.isPercentage ? '%' : ''
+      if (bypassDropoff) {
+        return `${value}${suffix}`
+      }
       return this.percentOther > this.dropoffPercent ? `${value}${suffix}` : ''
     },
-    outOfPlayString(): string {
+    outOfPlayString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
-        ? this.outOfPlay.toFixed(0)
+        ? this.percentOutOfPlay.toFixed(0)
         : this.outOfPlay
       const suffix = this.isPercentage ? '%' : ''
+      if (bypassDropoff) {
+        return `${value}${suffix}`
+      }
       return this.outOfPlay > this.dropoffPercent ? `${value}${suffix}` : ''
     },
   },
