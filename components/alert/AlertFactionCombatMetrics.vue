@@ -19,7 +19,7 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded" class="text-center">
-      <table class="w-full table-auto border-row text-sm md:text-base mb-2">
+      <table class="w-full table-fixed border-row text-sm md:text-base mb-2">
         <thead>
           <tr class="font-bold">
             <td class="text-left">Metric</td>
