@@ -43,8 +43,8 @@
             class="faction-bar-segment nc text-center text-white"
             :style="{ width: percentNC + '%' }"
             :class="{
-              'rounded-l': vs === 0,
-              'rounded-r': tr === 0 && other === 0 && outOfPlay === 0,
+              'rounded-l': vs === 0 && tr === 0,
+              'rounded-r': other === 0 && outOfPlay === 0,
             }"
             v-bind="attrs"
             v-on="on"
