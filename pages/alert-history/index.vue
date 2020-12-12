@@ -1,8 +1,21 @@
 <template>
-  <div class="grid grid-cols-12 gap-2 text-center">
+  <div class="grid grid-cols-12 gap-2 text-center relative">
     <div class="col-span-12">
       <h1 class="text-title">Alert History</h1>
-      <p>Last updated: {{ lastUpdated }}</p>
+      <div class="absolute top-0 right-0 mr-2">
+        <v-tooltip left>
+          <template #activator="{ on, attrs }">
+            <v-progress-circular
+              :value="updateCountdownPercent"
+              :rotate="-90"
+              :size="20"
+              v-bind="attrs"
+              v-on="on"
+            ></v-progress-circular>
+          </template>
+          <span>Updates every {{ updateRate / 1000 }} secs</span>
+        </v-tooltip>
+      </div>
     </div>
     <div class="col-span-6 lg:col-span-2 lg:col-start-3">
       <FilterWorld :world-filter="selectedWorld" @world-changed="updateWorld" />
@@ -26,21 +39,19 @@
       <FilterDate :is-filtered="filtered" @date-changed="updateDate" />
     </div>
     <div class="col-span-12 text-center">
-      <button class="btn" :disabled="loading === true" @click="filterResults()">
+      <button class="btn" :disabled="loaded === false" @click="filterResults()">
         <font-awesome-icon :icon="['fas', 'filter']" /> Filter
       </button>
       <button
         class="btn"
-        :disabled="
-          loading === true || (loading === false && filtered === false)
-        "
+        :disabled="loaded === false || (loaded === true && filtered === false)"
         @click="clearFilter()"
       >
         <font-awesome-icon :icon="['fas', 'undo']" /> Clear
       </button>
     </div>
     <div
-      v-show="loading === false && length > 0"
+      v-show="loaded === true && length > 0"
       class="col-span-12 text-center mb-4"
     >
       <p v-show="!filteredByDate()">
@@ -55,14 +66,14 @@
       </p>
     </div>
     <div
-      v-show="loading === false && error.message === '' && length === 0"
+      v-show="loaded === true && error.message === '' && length === 0"
       class="col-span-12 text-center"
     >
       <h1>No alerts found for specified criteria!</h1>
     </div>
     <div
       v-show="
-        loading === false &&
+        loaded === true &&
         error.message === '' &&
         length === 0 &&
         (selectedDateFrom || selectedDateTo)
@@ -71,7 +82,7 @@
     >
       <p>Both from and to dates need to be defined.</p>
     </div>
-    <div v-show="loading === true" class="col-span-12 text-center">
+    <div v-show="loaded === false" class="col-span-12 text-center">
       <h1>Loading...</h1>
     </div>
     <div v-show="error.message !== ''" class="col-span-12 text-center">
@@ -79,7 +90,7 @@
       <p>{{ error.message }}</p>
     </div>
     <div
-      v-if="loading === false && length > 0"
+      v-if="loaded === true && length > 0"
       class="col-span-12 h-full items-center justify-center"
     >
       <AlertHistoryEntry
@@ -98,7 +109,6 @@ import { InstanceTerritoryControlResponseInterface } from '~/interfaces/Instance
 import { Endpoints } from '~/constants/Endpoints'
 import { Bracket } from '~/constants/Bracket'
 import { InstanceParamsInterface } from '~/interfaces/InstanceParamsInterface'
-import { DATE_TIME_FORMAT } from '~/constants/Time'
 import { Zone } from '~/constants/Zone'
 import ApiRequest from '~/api-request'
 import { World } from '~/constants/World'
@@ -124,13 +134,16 @@ export default Vue.extend({
   data() {
     const now = moment()
     return {
-      loading: true,
+      loaded: false,
       filtered: false,
       error: { message: '' },
       alerts: [] as InstanceTerritoryControlResponseInterface[],
       length: 0,
       ApiRequest: new ApiRequest(),
-      lastUpdated: 'Fetching...',
+      updateRate: 10000,
+      updateCountdown: 10,
+      updateCountdownInterval: undefined as undefined | number,
+      interval: undefined as undefined | number,
       selectedWorld: 0,
       selectedZone: 0,
       selectedBracket: Bracket.NONE,
@@ -162,16 +175,40 @@ export default Vue.extend({
 
       return filter
     },
+    updateCountdownPercent(): number {
+      return (100 / (this.updateRate / 1000)) * this.updateCountdown
+    },
   },
-  async created() {
-    await this.fullPull()
-    setInterval(() => {
-      this.partialPull()
-    }, 5000)
+  beforeDestroy() {
+    this.reset()
+  },
+  created() {
+    this.reset()
+    this.init()
   },
   methods: {
+    reset() {
+      this.loaded = false
+      this.clearTimers()
+    },
+    clearTimers() {
+      clearInterval(this.interval)
+      clearInterval(this.updateCountdownInterval)
+    },
+    created() {
+      this.init()
+    },
+    async init(): Promise<void> {
+      await this.fullPull()
+      this.updateCountdownInterval = window.setInterval(() => {
+        return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
+      }, 1000)
+      this.interval = window.setInterval(() => {
+        this.partialPull()
+      }, this.updateRate)
+    },
     async fullPull(): Promise<void> {
-      this.loading = true
+      console.log('AlertHistory.fullPull')
       const queryParams = this.setUpRequest()
       this.alerts = []
 
@@ -193,7 +230,10 @@ export default Vue.extend({
         return alert.state === Ps2alertsEventState.STARTED
       })
 
-      for (const instance of liveAlerts) {
+      console.log('AlertHistory.partialPull')
+      this.updateStatus()
+
+      for await (const instance of liveAlerts) {
         try {
           const result = await this.ApiRequest.get(
             Endpoints.INSTANCE.replace('{instance}', instance.instanceId) +
@@ -216,7 +256,6 @@ export default Vue.extend({
           this.error = e
         }
       }
-      this.updateStatus()
     },
 
     setUpRequest(): string {
@@ -230,9 +269,9 @@ export default Vue.extend({
       return queryParams
     },
     updateStatus(): void {
-      this.loading = false
-      this.lastUpdated = moment().format(DATE_TIME_FORMAT)
+      this.loaded = true
       this.length = Object.keys(this.alerts).length
+      this.updateCountdown = this.updateRate / 1000
     },
     updateWorld(world: World): void {
       this.selectedWorld = world
