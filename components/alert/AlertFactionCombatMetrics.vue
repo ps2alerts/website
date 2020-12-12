@@ -91,7 +91,9 @@
         <div v-if="data.nc" class="bg-nc w-full">
           {{ data.nc.teamKills || 0 }}
         </div>
-        <div v-if="data.nso" class="bg-nso w-full">N/A<sup>*2</sup></div>
+        <div v-if="data.nso" class="bg-nso w-full">
+          {{ data.nso.teamKills || 0 }}<sup>*2</sup>
+        </div>
       </div>
       <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
         <h1 class="text-base">Suicides</h1>
@@ -158,7 +160,9 @@
     <div class="col-span-12 text-xs text-gray-500 text-left">
       <p>*1 does not include NSO vs NSO kills.</p>
       <p>
-        *2 NSO Teamkills are not tracked it's currently incalculable accurately.
+        *2 NSO Teamkills represent NSO vs NSO. It is currently not possible to
+        track what faction NSO's are on via the API without some
+        <b>major</b> hacking.
       </p>
     </div>
   </div>
