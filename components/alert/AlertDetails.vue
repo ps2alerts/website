@@ -1,73 +1,71 @@
 <template>
   <div class="col-span-12 lg:col-span-6 ss:col-span-4 card">
     <div class="tag section">General Info</div>
-    <div class="rounded">
-      <table class="min-w-full divide-y divide-gray-500">
-        <tbody class="divide-y divide-gray-200">
-          <tr>
-            <td class="px-2 py-1 whitespace-nowrap">
-              <div class="flex justify-between">
-                <div class="mr-4 font-bold">Started</div>
-                <div>
-                  {{ alert.timeStarted | dateTimeFormat }}
-                </div>
+    <table class="min-w-full divide-y divide-gray-500">
+      <tbody class="divide-y divide-gray-200">
+        <tr>
+          <td class="px-2 py-1 whitespace-nowrap">
+            <div class="flex justify-between">
+              <div class="mr-4 font-bold">Started</div>
+              <div>
+                {{ alert.timeStarted | dateTimeFormat }}
               </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="px-2 py-1 whitespace-nowrap">
-              <div class="flex justify-between">
-                <div class="mr-4 font-bold">Ended</div>
-                <div v-if="ended">
-                  {{ alert.timeEnded | dateTimeFormat }}
-                </div>
-                <div v-if="!ended">TBD</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="px-2 py-1 md:py-2 whitespace-nowrap">
+            <div class="flex justify-between">
+              <div class="mr-4 font-bold">Ended</div>
+              <div v-if="ended">
+                {{ alert.timeEnded | dateTimeFormat }}
               </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="px-2 py-1 whitespace-nowrap">
-              <div class="flex justify-between">
-                <div class="mr-4 font-bold">Server</div>
-                <div>
-                  {{ alert.world | worldName }}
-                </div>
+              <div v-if="!ended">TBD</div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="px-2 py-1 md:py-2 whitespace-nowrap">
+            <div class="flex justify-between">
+              <div class="mr-4 font-bold">Server</div>
+              <div>
+                {{ alert.world | worldName }}
               </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="px-2 py-1 whitespace-nowrap">
-              <div class="flex justify-between">
-                <div class="mr-4 font-bold">Continent</div>
-                <div>
-                  {{ alert.zone | zoneName }}
-                </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="px-2 py-1 md:py-2 whitespace-nowrap">
+            <div class="flex justify-between">
+              <div class="mr-4 font-bold">Continent</div>
+              <div>
+                {{ alert.zone | zoneName }}
               </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="px-2 py-1 whitespace-nowrap">
-              <div class="flex justify-between">
-                <div class="mr-4 font-bold">Bracket</div>
-                <div>
-                  {{ alert.bracket | bracketName }}
-                </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="px-2 py-1 md:py-2 whitespace-nowrap">
+            <div class="flex justify-between">
+              <div class="mr-4 font-bold">Bracket</div>
+              <div>
+                {{ alert.bracket | bracketName }}
               </div>
-            </td>
-          </tr>
-          <tr>
-            <td class="px-2 py-1 whitespace-nowrap">
-              <div class="flex justify-between">
-                <div class="mr-4 font-bold">Triggered by</div>
-                <div>
-                  {{ instanceEventDetails.triggeringFaction | factionName }}
-                </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="px-2 py-1 md:py-2 whitespace-nowrap">
+            <div class="flex justify-between">
+              <div class="mr-4 font-bold">Triggered by</div>
+              <div>
+                {{ instanceEventDetails.triggeringFaction | factionName }}
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 

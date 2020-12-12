@@ -18,144 +18,177 @@
     <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
-    <div v-if="loaded" class="grid grid-cols-12 text-center">
-      <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
-        <h1 class="text-base">Kills</h1>
-        <div v-if="data.vs" class="bg-vs w-full">
-          {{ data.vs.kills || 0 }}
-        </div>
-        <div v-if="data.tr" class="bg-tr w-full">
-          {{ data.tr.kills || 0 }}
-        </div>
-        <div v-if="data.nc" class="bg-nc w-full">
-          {{ data.nc.kills || 0 }}
-        </div>
-        <div v-if="data.nso" class="bg-nso w-full">
-          {{ data.nso.kills || 0 }}<sup>*1</sup>
-        </div>
-      </div>
-      <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
-        <h1 class="text-base">Deaths</h1>
-        <div v-if="data.vs" class="bg-vs w-full">
-          {{ data.vs.deaths || 0 }}
-        </div>
-        <div v-if="data.tr" class="bg-tr w-full">
-          {{ data.tr.deaths || 0 }}
-        </div>
-        <div v-if="data.nc" class="bg-nc w-full">
-          {{ data.nc.deaths || 0 }}
-        </div>
-        <div v-if="data.nso" class="bg-nso w-full">
-          {{ data.nso.deaths || 0 }}
-        </div>
-      </div>
-      <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
-        <h1 class="text-base">KD</h1>
-        <div v-if="data.vs" class="bg-vs w-full">
-          {{
-            data.vs.kills && data.vs.deaths
-              ? (data.vs.kills / data.vs.deaths).toFixed(2)
-              : data.vs.kills || 0
-          }}
-        </div>
-        <div v-if="data.tr" class="bg-tr w-full">
-          {{
-            data.tr.kills && data.tr.deaths
-              ? (data.tr.kills / data.tr.deaths).toFixed(2)
-              : data.tr.kills || 0
-          }}
-        </div>
-        <div v-if="data.nc" class="bg-nc w-full">
-          {{
-            data.nc.kills && data.nc.deaths
-              ? (data.nc.kills / data.nc.deaths).toFixed(2)
-              : data.nc.kills || 0
-          }}
-        </div>
-        <div v-if="data.nso" class="bg-nso w-full">
-          {{
-            data.nso.kills && data.nso.deaths
-              ? (data.nso.kills / data.nso.deaths).toFixed(2)
-              : data.nso.kills || 0
-          }}
-        </div>
-      </div>
-      <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
-        <h1 class="text-base">TKs</h1>
-        <div v-if="data.vs" class="bg-vs w-full">
-          {{ data.vs.teamKills || 0 }}
-        </div>
-        <div v-if="data.tr" class="bg-tr w-full">
-          {{ data.tr.teamKills || 0 }}
-        </div>
-        <div v-if="data.nc" class="bg-nc w-full">
-          {{ data.nc.teamKills || 0 }}
-        </div>
-        <div v-if="data.nso" class="bg-nso w-full">
-          {{ data.nso.teamKills || 0 }}<sup>*2</sup>
-        </div>
-      </div>
-      <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
-        <h1 class="text-base">Suicides</h1>
-        <div v-if="data.vs" class="bg-vs w-full">
-          {{ data.vs.suicides || 0 }}
-        </div>
-        <div v-if="data.tr" class="bg-tr w-full">
-          {{ data.tr.suicides || 0 }}
-        </div>
-        <div v-if="data.nc" class="bg-nc w-full">
-          {{ data.nc.suicides || 0 }}
-        </div>
-        <div v-if="data.nso" class="bg-nso w-full">
-          {{ data.nso.suicides || 0 }}
-        </div>
-      </div>
-      <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
-        <h1 class="text-base">Headshots</h1>
-        <div v-if="data.vs" class="bg-vs w-full">
-          {{ data.vs.headshots || 0 }}
-        </div>
-        <div v-if="data.tr" class="bg-tr w-full">
-          {{ data.tr.headshots || 0 }}
-        </div>
-        <div v-if="data.nc" class="bg-nc w-full">
-          {{ data.nc.headshots || 0 }}
-        </div>
-        <div v-if="data.nso" class="bg-nso w-full">
-          {{ data.nso.headshots || 0 }}
-        </div>
-      </div>
-      <div class="col-span-6 lg:col-span-3 ss:col-span-1 mb-4">
-        <h1 class="text-base">HSR %</h1>
-        <div v-if="data.vs" class="bg-vs w-full">
-          {{
-            data.vs.headshots && data.vs.kills
-              ? ((data.vs.headshots / data.vs.kills) * 100).toFixed(2)
-              : 0
-          }}
-        </div>
-        <div v-if="data.tr" class="bg-tr w-full">
-          {{
-            data.tr.headshots && data.tr.kills
-              ? ((data.tr.headshots / data.tr.kills) * 100).toFixed(2)
-              : 0
-          }}
-        </div>
-        <div v-if="data.nc" class="bg-nc w-full">
-          {{
-            data.nc.headshots && data.nc.kills
-              ? ((data.nc.headshots / data.nc.kills) * 100).toFixed(2)
-              : 0
-          }}
-        </div>
-        <div v-if="data.nso" class="bg-nso w-full">
-          {{
-            data.nso.headshots && data.nso.kills
-              ? ((data.nso.headshots / data.nso.kills) * 100).toFixed(2)
-              : 0
-          }}
-        </div>
-      </div>
+    <div v-if="loaded" class="text-center">
+      <table class="w-full table-auto border-row text-sm md:text-base mb-2">
+        <thead>
+          <tr class="font-bold">
+            <td class="text-left">Metric</td>
+            <td class="bg-vs px-4">VS</td>
+            <td class="bg-tr px-4">TR</td>
+            <td class="bg-nc px-4">NC</td>
+            <td class="bg-nso px-4">NSO</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-left">Kills</td>
+            <td class="bg-vs">
+              <span v-if="data.vs">{{ data.vs.kills || 0 }}</span>
+            </td>
+            <td class="bg-tr">
+              <span v-if="data.tr">{{ data.tr.kills || 0 }}</span>
+            </td>
+            <td class="bg-nc">
+              <span v-if="data.nc">{{ data.nc.kills || 0 }}</span>
+            </td>
+            <td class="bg-nso">
+              <span v-if="data.nso"
+                >{{ data.nso.kills || 0 }}<sup>*1</sup></span
+              >
+            </td>
+          </tr>
+          <tr>
+            <td class="text-left">Deaths</td>
+            <td class="bg-vs">
+              <span v-if="data.vs">{{ data.vs.deaths || 0 }}</span>
+            </td>
+            <td class="bg-tr">
+              <span v-if="data.tr">{{ data.tr.deaths || 0 }}</span>
+            </td>
+            <td class="bg-nc">
+              <span v-if="data.nc">{{ data.nc.deaths || 0 }}</span>
+            </td>
+            <td class="bg-nso">
+              <span v-if="data.nso">{{ data.nso.deaths || 0 }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-left">K/D</td>
+            <td class="bg-vs">
+              <span v-if="data.vs">
+                {{
+                  data.vs.kills && data.vs.deaths
+                    ? (data.vs.kills / data.vs.deaths).toFixed(2)
+                    : data.vs.kills || 0
+                }}
+              </span>
+            </td>
+            <td class="bg-tr">
+              <span v-if="data.tr">
+                {{
+                  data.tr.kills && data.tr.deaths
+                    ? (data.tr.kills / data.tr.deaths).toFixed(2)
+                    : data.tr.kills || 0
+                }}
+              </span>
+            </td>
+            <td class="bg-nc">
+              <span v-if="data.nc">
+                {{
+                  data.nc.kills && data.nc.deaths
+                    ? (data.nc.kills / data.nc.deaths).toFixed(2)
+                    : data.nc.kills || 0
+                }}
+              </span>
+            </td>
+            <td class="bg-nso">
+              <span v-if="data.nso">
+                {{
+                  data.nso.kills && data.nso.deaths
+                    ? (data.nso.kills / data.nso.deaths).toFixed(2)
+                    : data.nso.kills || 0
+                }}
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-left">Teamkills</td>
+            <td class="bg-vs">
+              <span v-if="data.vs">{{ data.vs.teamKills || 0 }}</span>
+            </td>
+            <td class="bg-tr">
+              <span v-if="data.tr">{{ data.tr.teamKills || 0 }}</span>
+            </td>
+            <td class="bg-nc">
+              <span v-if="data.nc">{{ data.nc.teamKills || 0 }}</span>
+            </td>
+            <td class="bg-nso">
+              <span v-if="data.nso"
+                >{{ data.nso.teamKills || 0 }}<sup>*2</sup>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-left">Suicides</td>
+            <td class="bg-vs">
+              <span v-if="data.vs">{{ data.vs.suicides || 0 }}</span>
+            </td>
+            <td class="bg-tr">
+              <span v-if="data.tr">{{ data.tr.suicides || 0 }}</span>
+            </td>
+            <td class="bg-nc">
+              <span v-if="data.nc">{{ data.nc.suicides || 0 }}</span>
+            </td>
+            <td class="bg-nso">
+              <span v-if="data.nso">{{ data.nso.suicides || 0 }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-left">Headshots</td>
+            <td class="bg-vs">
+              <span v-if="data.vs">{{ data.vs.headshots || 0 }}</span>
+            </td>
+            <td class="bg-tr">
+              <span v-if="data.tr">{{ data.tr.headshots || 0 }}</span>
+            </td>
+            <td class="bg-nc">
+              <span v-if="data.nc">{{ data.nc.headshots || 0 }}</span>
+            </td>
+            <td class="bg-nso">
+              <span v-if="data.nso">{{ data.nso.headshots || 0 }}</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-left">HSR</td>
+            <td class="bg-vs">
+              <span v-if="data.vs">
+                {{
+                  data.vs.headshots && data.vs.kills
+                    ? ((data.vs.headshots / data.vs.kills) * 100).toFixed(2)
+                    : 0
+                }}%
+              </span>
+            </td>
+            <td class="bg-tr">
+              <span v-if="data.tr">
+                {{
+                  data.tr.headshots && data.tr.kills
+                    ? ((data.tr.headshots / data.tr.kills) * 100).toFixed(2)
+                    : 0
+                }}%
+              </span>
+            </td>
+            <td class="bg-nc">
+              <span v-if="data.nc">
+                {{
+                  data.nc.headshots && data.nc.kills
+                    ? ((data.nc.headshots / data.nc.kills) * 100).toFixed(2)
+                    : 0
+                }}%
+              </span>
+            </td>
+            <td class="bg-nso">
+              <span v-if="data.nso">
+                {{
+                  data.nso.headshots && data.nso.kills
+                    ? ((data.nso.headshots / data.nso.kills) * 100).toFixed(2)
+                    : 0
+                }}%
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="col-span-12 text-xs text-gray-500 text-left">
       <p>*1 does not include NSO vs NSO kills.</p>
@@ -189,7 +222,7 @@ export default Vue.extend({
     return {
       error: null,
       loaded: false,
-      updateRate: 10000,
+      updateRate: 5000,
       updateCountdown: 10,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
