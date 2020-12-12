@@ -38,7 +38,7 @@
     "@nuxtjs/vuetify": "^1.11.2",
     "@tailwindcss/typography": "^0.2.0",
     "@tailwindcss/ui": "^0.7.2",
-    "autoprefixer": "^9.0.0",
+    "autoprefixer": "^10.1.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.10.0",
     "eslint-config-prettier": "^7.0.0",
