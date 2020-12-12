@@ -8,7 +8,7 @@ module "website_staging" {
   checksum_version = var.checksum_version
   cpu_request      = "50m"
   mem_request      = "128Mi"
-  cpu_limit        = "125m"
+  cpu_limit        = "150m"
   mem_limit        = "128Mi"
   replicas         = 1
 }
