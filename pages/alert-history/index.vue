@@ -112,7 +112,6 @@ import { InstanceParamsInterface } from '~/interfaces/InstanceParamsInterface'
 import { Zone } from '~/constants/Zone'
 import ApiRequest from '~/api-request'
 import { World } from '~/constants/World'
-import { Ps2alertsEventState } from '~/constants/Ps2alertsEventState'
 import { Faction } from '~/constants/Faction'
 import AlertHistoryEntry from '~/components/alert-history/AlertHistoryEntry.vue'
 import FilterWorld from '~/components/alert-history/FilterWorld.vue'
@@ -199,62 +198,28 @@ export default Vue.extend({
       this.init()
     },
     async init(): Promise<void> {
-      await this.fullPull()
+      await this.pull()
       this.updateCountdownInterval = window.setInterval(() => {
         return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
       }, 1000)
       this.interval = window.setInterval(() => {
-        this.partialPull()
+        this.pull()
       }, this.updateRate)
     },
-    async fullPull(): Promise<void> {
-      console.log('AlertHistory.fullPull')
+    async pull(): Promise<void> {
+      console.log('AlertHistory.pull')
       const queryParams = this.setUpRequest()
-      this.alerts = []
 
       try {
         this.alerts = await this.ApiRequest.get(
           Endpoints.INSTANCES_TERRITORY_CONTROL + queryParams,
           this.filter
         )
+        this.loaded = true
+        this.length = Object.keys(this.alerts).length
+        this.updateCountdown = this.updateRate / 1000
       } catch (e) {
         this.error = e
-      }
-
-      this.updateStatus()
-    },
-    async partialPull(): Promise<void> {
-      const queryParams = this.setUpRequest()
-      // Scan the current LIVE alerts on the board and update them only, we don't need to update the entire lot!
-      const liveAlerts = this.alerts.filter((alert) => {
-        return alert.state === Ps2alertsEventState.STARTED
-      })
-
-      console.log('AlertHistory.partialPull')
-      this.updateStatus()
-
-      for await (const instance of liveAlerts) {
-        try {
-          const result = await this.ApiRequest.get(
-            Endpoints.INSTANCE.replace('{instance}', instance.instanceId) +
-              queryParams,
-            this.filter
-          )
-
-          const key = this.alerts.find((val, key) => {
-            if (val.instanceId === instance.instanceId) {
-              return key
-            }
-          })
-
-          if (key) {
-            const index = this.alerts.indexOf(key)
-            // @ts-ignore
-            return index ? (this.alerts[index] = result) : null
-          }
-        } catch (e) {
-          this.error = e
-        }
       }
     },
 
@@ -267,11 +232,6 @@ export default Vue.extend({
       }
 
       return queryParams
-    },
-    updateStatus(): void {
-      this.loaded = true
-      this.length = Object.keys(this.alerts).length
-      this.updateCountdown = this.updateRate / 1000
     },
     updateWorld(world: World): void {
       this.selectedWorld = world
@@ -295,7 +255,7 @@ export default Vue.extend({
     async filterResults(): Promise<void> {
       // If filter keys length is 2, it hasn't changed therefore mark it as unfiltered.
       this.filtered = Object.keys(this.filter).length !== 2
-      await this.fullPull()
+      await this.pull()
     },
     clearFilter(): void {
       const now = moment()
