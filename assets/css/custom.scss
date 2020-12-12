@@ -74,6 +74,12 @@
   .rounded-none {
     border-radius: 0;
   }
+
+  ul {
+    list-style-type: disc;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+  }
 }
 
 @layer utilities {
@@ -215,6 +221,10 @@
 
     &.enhancement {
       @apply bg-blue-800;
+    }
+
+    &.announcement {
+      @apply bg-orange-500;
     }
 
     &.fix {

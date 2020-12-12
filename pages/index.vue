@@ -1,5 +1,56 @@
 <template>
   <div class="grid grid-cols-12 gap-2">
+    <div
+      class="col-span-12 lg:col-span-8 lg:col-start-3 bg-tint card editorial relative mt-4"
+    >
+      <div class="tag announcement">
+        <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>
+        Announcement
+      </div>
+      <div class="p-6 text-center items-center justify-items-center">
+        <img
+          id="splash-icon"
+          src="../assets/img/alert-icon.png"
+          alt="PS2Alerts Icon"
+          class="inline-block"
+        />
+      </div>
+      <h1 class="text-subtitle text-center">PS2Alerts now in Alpha!</h1>
+      <p>
+        PS2Alerts is now in Alpha stage! The basic minimum viable product of the
+        tracker is now a reality, featuring the following:
+      </p>
+      <ul>
+        <li>
+          Real time alert tracking, with an active alert log to the left (or top
+          on mobile) allowing you see at a glance all the alerts going on in PS2
+          (for PC only right now).
+        </li>
+        <li>
+          Historical Alert search, enabling you to go back in time and revisit
+          or share an alert to your fellow planetmans. It is also filterable,
+          allowing you to see alerts on Indar during Primetime for example.
+        </li>
+        <li>
+          Real time updating of per-alert statistics. It shows a plethora of
+          information, including but won't be limited to:
+          <ul>
+            <li>
+              Alert details e.g. continent, time bracket, server, which faction
+              triggered it, etc.
+            </li>
+            <li>
+              Filterable and sortable per player, weapon, outfit and vehicle
+              combat statistics.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <p class="text-center">
+        Please note - <b>all data is going to be wiped Jan 1st 2021!</b> This is
+        when PS2Alerts will launch.
+      </p>
+    </div>
     <div class="col-span-12">
       <div class="text-center">
         <h1 class="text-title">Alert Statistics</h1>
