@@ -6,9 +6,9 @@ module "website_production" {
   urls             = ["www.ps2alerts.com", "ps2alerts.com"]
   multi_urls       = true
   checksum_version = var.checksum_version
-  cpu_request      = "25m"
+  cpu_request      = "50m"
   mem_request      = "128Mi"
-  cpu_limit        = "50m"
+  cpu_limit        = "150m"
   mem_limit        = "128Mi"
   replicas         = 1
 }
