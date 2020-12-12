@@ -194,17 +194,22 @@ export default Vue.extend({
       clearInterval(this.interval)
       clearInterval(this.updateCountdownInterval)
     },
-    created() {
-      this.init()
-    },
-    async init(): Promise<void> {
-      await this.pull()
+    setTimers() {
       this.updateCountdownInterval = window.setInterval(() => {
         return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
       }, 1000)
       this.interval = window.setInterval(() => {
         this.pull()
       }, this.updateRate)
+    },
+    created() {
+      this.init()
+      this.setTimers()
+    },
+    async init(): Promise<void> {
+      console.log('init')
+      this.setTimers()
+      await this.pull()
     },
     async pull(): Promise<void> {
       console.log('AlertHistory.pull')
@@ -255,6 +260,8 @@ export default Vue.extend({
     async filterResults(): Promise<void> {
       // If filter keys length is 2, it hasn't changed therefore mark it as unfiltered.
       this.filtered = Object.keys(this.filter).length !== 2
+      this.clearTimers()
+      this.setTimers()
       await this.pull()
     },
     clearFilter(): void {
