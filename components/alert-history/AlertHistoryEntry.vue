@@ -45,7 +45,21 @@
       >
         <div class="mb-1">
           <span v-show="alert.state === 1">TBD</span>
-          <span v-show="alert.state === 2 && draw">Draw</span>
+          <span v-show="alert.state === 2 && draw"
+            >Draw
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <font-awesome-icon
+                  :icon="['fas', 'info-circle']"
+                  v-bind="attrs"
+                  v-on="on"
+                ></font-awesome-icon>
+              </template>
+              When alert reaches a draw, the game does a coin flip between the
+              drawing factions to gain the continent lock bonus. In terms of the
+              metagame, this is a draw.
+            </v-tooltip>
+          </span>
           <span v-show="alert.state === 2 && !draw">
             {{ victor | factionName }}
           </span>

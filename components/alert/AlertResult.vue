@@ -6,6 +6,18 @@
     <div v-if="alert.state === 2" class="mb-2 text-center">
       <h2 class="text-2xl">
         {{ victorText }}
+        <v-tooltip v-if="alert.result.draw === true" bottom>
+          <template #activator="{ on, attrs }">
+            <font-awesome-icon
+              :icon="['fas', 'info-circle']"
+              v-bind="attrs"
+              v-on="on"
+            ></font-awesome-icon>
+          </template>
+          When alert reaches a draw, the game does a coin flip between the
+          drawing factions to gain the continent lock bonus. In terms of the
+          metagame, this is a draw.
+        </v-tooltip>
       </h2>
     </div>
     <div v-if="alert.state === 1" class="mb-2 text-center text-2xl">
