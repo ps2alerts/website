@@ -19,7 +19,7 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded" class="grid grid-cols-12">
-      <div class="col-span-12 mb-4 flex">
+      <div class="col-span-12 mb-4 flex justify-center">
         <div class="pr-2 py-2">Player Counts:</div>
         <div
           v-for="(count, index) in counts"
@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="col-span-12">
-        <div class="my-2">
+        <div class="mb-2">
           <input
             v-model="filter"
             class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"

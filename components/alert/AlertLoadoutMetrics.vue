@@ -20,7 +20,7 @@
     </div>
     <div v-if="loaded" class="grid grid-cols-12">
       <div class="col-span-12">
-        <div class="my-2">
+        <div class="mb-2">
           <input
             v-model="filter"
             class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
@@ -55,11 +55,7 @@ import Vue from 'vue'
 import ApiRequest from '@/api-request'
 import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
-import { Faction } from '@/constants/Faction'
-import {
-  FactionBgClass,
-  FactionBgClassString,
-} from '@/constants/FactionBgClass'
+import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { AlertLoadoutTableDataInterface } from '~/interfaces/AlertLoadoutTableDataInterface'
 import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
@@ -206,9 +202,6 @@ export default Vue.extend({
         .catch((e) => {
           this.error = e.message
         })
-    },
-    factionClass(faction: Faction): object {
-      return FactionBgClass(faction)
     },
     tableItemClass(item: AlertLoadoutTableDataInterface): string {
       return FactionBgClassString(LoadoutFaction(item.loadout)) + ' text-center'

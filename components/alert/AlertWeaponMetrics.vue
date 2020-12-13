@@ -20,7 +20,7 @@
     </div>
     <div v-if="loaded" class="grid grid-cols-12">
       <div class="col-span-12">
-        <div class="my-2">
+        <div class="mb-2">
           <input
             v-model="filter"
             class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
