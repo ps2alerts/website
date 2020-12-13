@@ -177,11 +177,6 @@ export default Vue.extend({
     updateMeta() {
       if (this.alert.instanceId) {
         this.pageTitle = `Alert #${this.alert.instanceId}`
-        if (this.alert.state === Ps2alertsEventState.ENDED) {
-          this.pageTitle = `Alert #${this.alert.instanceId} - ${factionName(
-            this.alert.result.victor
-          )} victory!`
-        }
       }
     },
     async init(instanceId: string): Promise<void> {
