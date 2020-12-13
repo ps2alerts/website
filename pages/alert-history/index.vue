@@ -3,7 +3,7 @@
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
     <div class="col-span-12">
       <h1 class="text-title">Alert History</h1>
-      <div class="absolute top-0 right-0 mr-2">
+      <div class="absolute top-0 right-0 mr-2 mt-2">
         <v-tooltip left>
           <template #activator="{ on, attrs }">
             <v-progress-circular

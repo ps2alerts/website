@@ -147,7 +147,7 @@ export default {
 
   'google-gtag': {
     id: process.env.GOOGLE_PROPERTY,
-    debug: process.env.NODE_ENV !== 'production', // enable to track in dev mode
+    debug: process.env.NODE_ENV !== 'production', // enable to track in dev / staging mode
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
