@@ -1,3 +1,5 @@
+import { Faction } from '~/constants/Faction'
+
 export enum Loadout {
   UNKNOWN = 0,
   NC_INFILTRATOR = 1,
@@ -32,30 +34,78 @@ export enum Loadout {
   NSO_MAX = 45,
 }
 
-export const loadoutArray = [
-  0,
-  1,
-  3,
-  4,
-  5,
-  6,
-  7,
-  8,
-  10,
-  11,
-  12,
-  13,
-  14,
-  15,
-  17,
-  18,
-  19,
-  20,
-  21,
-  28,
-  29,
-  30,
-  31,
-  32,
-  45,
-]
+export const LoadoutFaction = (loadout: Loadout | undefined): Faction => {
+  if (!loadout) {
+    return Faction.NONE
+  }
+
+  switch (loadout) {
+    case Loadout.NC_INFILTRATOR:
+    case Loadout.NC_LIGHT_ASSAULT:
+    case Loadout.NC_MEDIC:
+    case Loadout.NC_ENGINEER:
+    case Loadout.NC_HEAVY_ASSAULT:
+    case Loadout.NC_MAX:
+      return Faction.NEW_CONGLOMERATE
+    case Loadout.TR_INFILTRATOR:
+    case Loadout.TR_LIGHT_ASSAULT:
+    case Loadout.TR_MEDIC:
+    case Loadout.TR_ENGINEER:
+    case Loadout.TR_HEAVY_ASSAULT:
+    case Loadout.TR_MAX:
+      return Faction.TERRAN_REPUBLIC
+    case Loadout.VS_INFILTRATOR:
+    case Loadout.VS_LIGHT_ASSAULT:
+    case Loadout.VS_MEDIC:
+    case Loadout.VS_ENGINEER:
+    case Loadout.VS_HEAVY_ASSAULT:
+    case Loadout.VS_MAX:
+      return Faction.VANU_SOVEREIGNTY
+    case Loadout.NSO_INFILTRATOR:
+    case Loadout.NSO_LIGHT_ASSAULT:
+    case Loadout.NSO_MEDIC:
+    case Loadout.NSO_ENGINEER:
+    case Loadout.NSO_HEAVY_ASSAULT:
+    case Loadout.NSO_MAX:
+      return Faction.NS_OPERATIVES
+  }
+}
+
+export const LoadoutName = (loadout: Loadout | undefined): string => {
+  if (!loadout) {
+    return 'UNKNOWN'
+  }
+
+  switch (loadout) {
+    case Loadout.NC_INFILTRATOR:
+    case Loadout.TR_INFILTRATOR:
+    case Loadout.VS_INFILTRATOR:
+    case Loadout.NSO_INFILTRATOR:
+      return 'Infiltrator'
+    case Loadout.NC_LIGHT_ASSAULT:
+    case Loadout.TR_LIGHT_ASSAULT:
+    case Loadout.VS_LIGHT_ASSAULT:
+    case Loadout.NSO_LIGHT_ASSAULT:
+      return 'Light Assault'
+    case Loadout.NC_MEDIC:
+    case Loadout.TR_MEDIC:
+    case Loadout.VS_MEDIC:
+    case Loadout.NSO_MEDIC:
+      return 'Medic'
+    case Loadout.NC_ENGINEER:
+    case Loadout.TR_ENGINEER:
+    case Loadout.VS_ENGINEER:
+    case Loadout.NSO_ENGINEER:
+      return 'Engineer'
+    case Loadout.NC_HEAVY_ASSAULT:
+    case Loadout.TR_HEAVY_ASSAULT:
+    case Loadout.VS_HEAVY_ASSAULT:
+    case Loadout.NSO_HEAVY_ASSAULT:
+      return 'Heavy Assault'
+    case Loadout.TR_MAX:
+    case Loadout.NC_MAX:
+    case Loadout.VS_MAX:
+    case Loadout.NSO_MAX:
+      return 'MAX'
+  }
+}

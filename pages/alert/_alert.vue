@@ -41,6 +41,13 @@
         >
           <font-awesome-icon :icon="['fas', 'fighter-jet']" /> Vehicles
         </button>
+        <button
+          class="btn"
+          :class="{ 'btn-active': showClasses }"
+          @click="toggleClasses()"
+        >
+          <font-awesome-icon :icon="['fas', 'user-tag']" /> Classes
+        </button>
       </div>
       <div v-show="showPlayers === true" class="col-span-12 card relative">
         <AlertCharacterMetrics
@@ -66,6 +73,9 @@
         <AlertVehicleMetrics :alert="alert" />
         <AlertVehicleMatrix :alert="alert" />
       </div>
+      <div v-show="showClasses === true" class="col-span-12 card relative">
+        <AlertClassMetrics :alert="alert" />
+      </div>
     </div>
   </div>
 </template>
@@ -85,6 +95,7 @@ import AlertVehicleMetrics from '@/components/alert/AlertVehicleMetrics.vue'
 import AlertVehicleMatrix from '@/components/alert/AlertVehicleMatrix.vue'
 import AlertResult from '@/components/alert/AlertResult.vue'
 import AlertPopulations from '@/components/alert/AlertPopulations.vue'
+import AlertClassMetrics from '~/components/alert/AlertLoadoutMetrics.vue'
 
 export default Vue.extend({
   name: 'Alert',
@@ -98,6 +109,7 @@ export default Vue.extend({
     AlertWeaponMetrics,
     AlertVehicleMetrics,
     AlertVehicleMatrix,
+    AlertClassMetrics,
   },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   beforeRouteUpdate(to, from, next) {
@@ -125,6 +137,7 @@ export default Vue.extend({
       showOutfits: false,
       showWeapons: false,
       showVehicles: false,
+      showClasses: false,
       outfitParticipants: {} as { [k: string]: string[] },
       playersLoaded: false,
     }
@@ -221,6 +234,7 @@ export default Vue.extend({
       this.showOutfits = false
       this.showWeapons = false
       this.showVehicles = false
+      this.showClasses = false
     },
     togglePlayers() {
       this.hideAll()
@@ -237,6 +251,10 @@ export default Vue.extend({
     toggleVehicles() {
       this.hideAll()
       this.showVehicles = !this.showVehicles
+    },
+    toggleClasses() {
+      this.hideAll()
+      this.showClasses = !this.showClasses
     },
     // Used by AlertOutfitMetrics.vue component
     outfitParticipantsChanged(participants: { [k: string]: string[] }) {
