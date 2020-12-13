@@ -190,6 +190,11 @@ export default Vue.extend({
           name: 'description',
           content: this.pageDesc,
         },
+        {
+          hid: 'og:url',
+          property: 'og:url',
+          content: `${this.$config.baseUrl}/change-log`,
+        },
       ],
       link: [
         {
