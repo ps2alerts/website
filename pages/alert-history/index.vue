@@ -1,5 +1,6 @@
 <template>
   <div class="grid grid-cols-12 gap-2 text-center relative">
+    <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
     <div class="col-span-12">
       <h1 class="text-title">Alert History</h1>
       <div class="absolute top-0 right-0 mr-2">
@@ -119,10 +120,12 @@ import FilterZone from '~/components/alert-history/FilterZone.vue'
 import FilterBracket from '~/components/alert-history/FilterBracket.vue'
 import FilterVictor from '~/components/alert-history/FilterVictor.vue'
 import FilterDate from '~/components/alert-history/FilterDate.vue'
+import MetaHead from '~/components/MetaHead.vue'
 
 export default Vue.extend({
   name: 'AlertHistory',
   components: {
+    MetaHead,
     AlertHistoryEntry,
     FilterWorld,
     FilterZone,
@@ -133,6 +136,9 @@ export default Vue.extend({
   data() {
     const now = moment()
     return {
+      pageTitle: 'Alert History',
+      pageDesc:
+        'Filterable Alert History showing all past and current alerts going on in Planetside 2.',
       loaded: false,
       filtered: false,
       error: { message: '' },
@@ -150,6 +156,25 @@ export default Vue.extend({
       selectedDateFrom: now,
       selectedDateTo: now,
       dateNow: now,
+    }
+  },
+  head(): object {
+    return {
+      title: this.pageTitle,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.pageDesc,
+        },
+      ],
+      link: [
+        {
+          hid: 'canonical',
+          rel: 'canonical',
+          href: `${this.$config.baseUrl}/alert-history`,
+        },
+      ],
     }
   },
   computed: {
@@ -207,7 +232,6 @@ export default Vue.extend({
       this.setTimers()
     },
     async init(): Promise<void> {
-      console.log('init')
       this.setTimers()
       await this.pull()
     },

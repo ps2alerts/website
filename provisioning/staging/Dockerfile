@@ -8,6 +8,7 @@ ARG BUILD_SHA="abc12345"
 ENV NODE_ENV="staging"
 ENV VERSION="v3.0.0-alpha"
 ENV BUILD=$BUILD_SHA
+ENV BASE_URL="https://staging.ps2alerts.com"
 ENV API_HOST="https://staging.api.ps2alerts.com"
 ENV GOOGLE_PROPERTY="G-FJDCBTJV5D"
 

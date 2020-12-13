@@ -1,5 +1,9 @@
 import join from 'memory-fs/lib/join'
 
+const metaTitle = 'Planetside 2 Alert Tracker'
+const metaDesc = "PS2Alerts - Building Planetside 2's Alert metagame"
+const metaImg = '/social-share.png'
+
 export default {
   // We're forced to use env injection for this otherwise we can't build it into class constructors.
   env: {
@@ -9,6 +13,7 @@ export default {
     environment: process.env.NODE_ENV ?? 'UNKNOWN ENVIRONMENT',
     build: process.env.BUILD ?? 'UNKNOWN BUILD',
     version: process.env.VERSION ?? 'UNKNOWN VERSION',
+    baseUrl: process.env.BASE_URL ?? 'http://dev.ps2alerts.com',
   },
   server: {
     port: 3000,
@@ -23,10 +28,56 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'title', content: metaTitle },
       {
         hid: 'description',
         name: 'description',
-        content: "PS2Alerts - Building Planetside 2's Alert metagame",
+        content: metaDesc,
+      },
+      {
+        hid: 'og:description',
+        name: 'og:description',
+        content: metaDesc,
+      },
+      {
+        hid: 'og:title',
+        name: 'og:title',
+        content: metaTitle,
+      },
+      {
+        hid: 'og:image',
+        name: 'og:image',
+        content: metaImg,
+      },
+      {
+        hid: 'og:type',
+        name: 'og:type',
+        content: 'website',
+      },
+      {
+        hid: 'og:link',
+        name: 'og:link',
+        content: process.env.BASE_URL,
+      },
+      {
+        hid: 'twitter:title',
+        name: 'twitter:title',
+        content: metaTitle,
+      },
+      {
+        hid: 'twitter:description',
+        name: 'twitter:description',
+        content: metaTitle,
+      },
+      {
+        hid: 'twitter:image',
+        name: 'twitter:image',
+        content: metaImg,
+      },
+      {
+        hid: 'twitter:image:alt',
+        name: 'twitter:image:alt',
+        content: metaTitle,
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],

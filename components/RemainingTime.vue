@@ -1,7 +1,7 @@
 <template>
   <div :remaining="remaining" class="inline">
     {{ remainingTimeText }}
-    <span v-if="showRemaining && remaining > 0">remaining</span>
+    <span v-if="showRemaining === 'true' && remaining > 0">remaining</span>
   </div>
 </template>
 
@@ -22,9 +22,9 @@ export default Vue.extend({
       required: true,
     },
     showRemaining: {
-      type: Boolean,
+      type: String,
       required: false,
-      default: false,
+      default: 'false',
     },
   },
   data() {

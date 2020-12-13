@@ -34,6 +34,7 @@
           BUILD: "abc12345"
           API_HOST: "http://dev.api.ps2alerts.com"
           GOOGLE_PROPERTY: "G-620HJF2H4L"
+          BASE_URL: "http://dev.ps2alerts.com"
         labels:
           traefik.enable: "true"
           traefik.http.routers.ps2alerts_website.rule: "Host(`dev.ps2alerts.com`)"

@@ -1,5 +1,6 @@
 <template>
   <div class="grid grid-cols-12 gap-2">
+    <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
     <div class="col-span-12">
       <div class="text-center h-full">
         <h1 class="text-title">Change Log</h1>
@@ -98,7 +99,10 @@
       </div>
     </div>
     <div class="col-span-12 lg:col-span-6 bg-tint card editorial relative">
-      <div class="tag feature">New feature</div>
+      <div class="tag feature">
+        <font-awesome-icon :icon="['fas', 'certificate']"></font-awesome-icon>
+        New feature
+      </div>
       <div class="h-full">
         <h1 class="text-subtitle text-center">Filterable Alert History</h1>
         <p class="content-spacing text-center">Added: 21st Nov 2020</p>
@@ -133,7 +137,10 @@
       </div>
     </div>
     <div class="col-span-12 lg:col-span-6 bg-tint card editorial relative">
-      <div class="tag feature">New feature</div>
+      <div class="tag feature">
+        <font-awesome-icon :icon="['fas', 'certificate']"></font-awesome-icon>
+        New feature
+      </div>
       <div class="h-full">
         <h1 class="text-subtitle text-center">Real Time Monitor</h1>
         <p class="content-spacing text-center">Added: 8th Nov 2020</p>
@@ -168,5 +175,30 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'Changelog',
+  data() {
+    return {
+      pageTitle: 'Change Log',
+      pageDesc: "See what's recently been released for PS2Alerts!",
+    }
+  },
+  head(): object {
+    return {
+      title: this.pageTitle,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.pageDesc,
+        },
+      ],
+      link: [
+        {
+          hid: 'canonical',
+          rel: 'canonical',
+          href: `${this.$config.baseUrl}/change-log`,
+        },
+      ],
+    }
+  },
 })
 </script>
