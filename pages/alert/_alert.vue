@@ -12,7 +12,8 @@
       <AlertDetails :alert="alert" />
       <AlertFactionCombatMetrics :alert="alert" />
       <AlertPopulations :alert="alert" />
-      <div class="col-span-12 justify-center btn-group">
+      <AlertCombatHistory :alert="alert" />
+      <div class="col-span-12 justify-center btn-group mt-4">
         <button
           class="btn"
           :class="{ 'btn-active': showPlayers }"
@@ -96,6 +97,7 @@ import AlertVehicleMatrix from '@/components/alert/AlertVehicleMatrix.vue'
 import AlertResult from '@/components/alert/AlertResult.vue'
 import AlertPopulations from '@/components/alert/AlertPopulations.vue'
 import AlertClassMetrics from '~/components/alert/AlertLoadoutMetrics.vue'
+import AlertCombatHistory from '~/components/alert/AlertCombatHistory.vue'
 
 export default Vue.extend({
   name: 'Alert',
@@ -104,6 +106,7 @@ export default Vue.extend({
     AlertDetails,
     AlertFactionCombatMetrics,
     AlertPopulations,
+    AlertCombatHistory,
     AlertCharacterMetrics,
     AlertOutfitMetrics,
     AlertWeaponMetrics,
