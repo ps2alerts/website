@@ -8,6 +8,11 @@
         class="inline-block"
       />
       <h1 class="text-title">PS2Alerts 3.0 Launches</h1>
+      <no-ssr>
+        <div class="my-4">
+          <flip-countdown deadline="2021-01-01 00:00:00"></flip-countdown>
+        </div>
+      </no-ssr>
       <h2 class="text-3xl mb-2">1st January 2021</h2>
       <a href="https://staging.ps2alerts.com" class="btn"
         >Visit the Alpha version</a
@@ -18,9 +23,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
+// @ts-ignore
+import FlipCountdown from 'vue2-flip-countdown'
 
 export default Vue.extend({
   name: 'IntroSplash',
+  components: {
+    FlipCountdown,
+  },
 })
 </script>
 
