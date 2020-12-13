@@ -23,17 +23,18 @@
         </p>
         <ul>
           <li>
-            Real time alert tracking, with an active alert log to the left (or
-            top on mobile) allowing you see at a glance all the alerts going on
-            in PS2 (for PC only right now).
+            <b>Real time alert tracking</b>, with an active alert log to the
+            left (or top on mobile) allowing you see at a glance all the alerts
+            going on in PS2 (for PC only right now).
           </li>
           <li>
-            Historical Alert search, enabling you to go back in time and revisit
-            or share an alert to your fellow planetmans. It is also filterable,
-            allowing you to see alerts on Indar during Primetime for example.
+            <b>Historical Alert search</b>, enabling you to go back in time and
+            revisit or share an alert to your fellow planetmans. It is also
+            filterable, allowing you to see alerts on Indar during Primetime for
+            example.
           </li>
           <li>
-            Real time updating of per-alert statistics. It shows a plethora of
+            <b>Real time per-alert statistics</b>. It shows a plethora of
             information, including but won't be limited to:
             <ul>
               <li>
