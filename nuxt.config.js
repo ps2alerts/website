@@ -55,6 +55,11 @@ export default {
         content: 'website',
       },
       {
+        hid: 'og:site_name',
+        property: 'og:site_name',
+        content: 'PS2Alerts',
+      },
+      {
         hid: 'twitter:title',
         property: 'twitter:title',
         content: metaTitle,
@@ -73,6 +78,11 @@ export default {
         hid: 'twitter:image:alt',
         property: 'twitter:image:alt',
         content: metaTitle,
+      },
+      {
+        hid: 'twitter:card',
+        property: 'twitter:card',
+        content: 'summary_large_image',
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
