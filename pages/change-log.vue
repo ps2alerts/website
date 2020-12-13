@@ -39,9 +39,10 @@
                 Alert details e.g. continent, time bracket, server, which
                 faction triggered it, etc.
               </li>
+              <li>Population history graph</li>
               <li>
-                Filterable and sortable per player, weapon, outfit and vehicle
-                combat statistics
+                Filterable and sortable per player, weapon, outfit, vehicle and
+                class combat statistics
               </li>
             </ul>
           </li>

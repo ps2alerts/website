@@ -2,7 +2,7 @@
   <div
     class="col-span-12 lg:col-span-6 ss:col-span-4 card relative items-center"
   >
-    <div class="tag section">Combat Metrics</div>
+    <div class="tag section">Faction Combat Metrics</div>
     <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
       <v-tooltip left>
         <template #activator="{ on, attrs }">

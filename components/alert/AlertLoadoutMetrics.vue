@@ -25,7 +25,7 @@
             v-model="filter"
             class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
             type="text"
-            placeholder="e.g. Light Assault"
+            placeholder='e.g. "Light Assault" or "VS"'
             aria-label="Class name"
             @keydown="$event.stopImmediatePropagation()"
           />

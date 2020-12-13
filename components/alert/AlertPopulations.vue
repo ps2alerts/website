@@ -1,7 +1,7 @@
 <template>
   <div class="col-span-12 lg:col-span-6 card relative">
     <div class="tag section">
-      Population Metrics
+      Population History
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <font-awesome-icon

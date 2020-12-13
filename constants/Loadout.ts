@@ -78,34 +78,52 @@ export const LoadoutName = (loadout: Loadout | undefined): string => {
 
   switch (loadout) {
     case Loadout.NC_INFILTRATOR:
+      return 'NC Infiltrator'
     case Loadout.TR_INFILTRATOR:
+      return 'TR Infiltrator'
     case Loadout.VS_INFILTRATOR:
+      return 'VS Infiltrator'
     case Loadout.NSO_INFILTRATOR:
-      return 'Infiltrator'
+      return 'NSO Infiltrator'
     case Loadout.NC_LIGHT_ASSAULT:
+      return 'NC Light Assault'
     case Loadout.TR_LIGHT_ASSAULT:
+      return 'TR Light Assault'
     case Loadout.VS_LIGHT_ASSAULT:
+      return 'VS Light Assault'
     case Loadout.NSO_LIGHT_ASSAULT:
-      return 'Light Assault'
+      return 'NSO Light Assault'
     case Loadout.NC_MEDIC:
+      return 'NC Medic'
     case Loadout.TR_MEDIC:
+      return 'TR Medic'
     case Loadout.VS_MEDIC:
+      return 'VS Medic'
     case Loadout.NSO_MEDIC:
-      return 'Medic'
+      return 'NSO Medic'
     case Loadout.NC_ENGINEER:
+      return 'NC Engineer'
     case Loadout.TR_ENGINEER:
+      return 'TR Engineer'
     case Loadout.VS_ENGINEER:
+      return 'VS Engineer'
     case Loadout.NSO_ENGINEER:
-      return 'Engineer'
+      return 'NSO Engineer'
     case Loadout.NC_HEAVY_ASSAULT:
+      return 'NC Heavy Assault'
     case Loadout.TR_HEAVY_ASSAULT:
+      return 'TR Heavy Assault'
     case Loadout.VS_HEAVY_ASSAULT:
+      return 'VS Heavy Assault'
     case Loadout.NSO_HEAVY_ASSAULT:
-      return 'Heavy Assault'
-    case Loadout.TR_MAX:
+      return 'NSO Heavy Assault'
     case Loadout.NC_MAX:
+      return 'NC MAX'
+    case Loadout.TR_MAX:
+      return 'TR MAX'
     case Loadout.VS_MAX:
+      return 'VS MAX'
     case Loadout.NSO_MAX:
-      return 'MAX'
+      return 'NSO MAX'
   }
 }
