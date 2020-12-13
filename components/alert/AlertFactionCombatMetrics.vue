@@ -1,5 +1,7 @@
 <template>
-  <div class="col-span-12 lg:col-span-6 ss:col-span-8 card relative">
+  <div
+    class="col-span-12 lg:col-span-6 ss:col-span-4 card relative items-center"
+  >
     <div class="tag section">Combat Metrics</div>
     <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
       <v-tooltip left>
@@ -189,14 +191,14 @@
           </tr>
         </tbody>
       </table>
-    </div>
-    <div class="col-span-12 text-xs text-gray-500 text-left">
-      <p>*1 does not include NSO vs NSO kills.</p>
-      <p>
-        *2 NSO Teamkills represent NSO vs NSO. It is currently not possible to
-        track what faction NSO's are on via the API without some
-        <b>major</b> hacking.
-      </p>
+      <div class="col-span-12 text-xs text-gray-500 text-left">
+        <p>*1 does not include NSO vs NSO kills.</p>
+        <p>
+          *2 NSO Teamkills represent NSO vs NSO. It is currently not possible to
+          track what faction NSO's are on via the API without some
+          <b>major</b> hacking.
+        </p>
+      </div>
     </div>
   </div>
 </template>

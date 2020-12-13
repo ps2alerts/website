@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-12 lg:col-span-6 ss:col-span-4 card">
+  <div class="col-span-12 lg:col-span-6 ss:col-span-3 card">
     <div class="tag section">General Info</div>
     <table class="min-w-full divide-y divide-gray-500">
       <tbody class="divide-y divide-gray-200">

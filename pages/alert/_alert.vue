@@ -11,6 +11,7 @@
       />
       <AlertDetails :alert="alert" />
       <AlertFactionCombatMetrics :alert="alert" />
+      <AlertPopulations :alert="alert" />
       <div class="col-span-12 justify-center btn-group">
         <button
           class="btn"
@@ -82,7 +83,8 @@ import AlertOutfitMetrics from '@/components/alert/AlertOutfitMetrics.vue'
 import AlertWeaponMetrics from '@/components/alert/AlertWeaponMetrics.vue'
 import AlertVehicleMetrics from '@/components/alert/AlertVehicleMetrics.vue'
 import AlertVehicleMatrix from '@/components/alert/AlertVehicleMatrix.vue'
-import AlertResult from '~/components/alert/AlertResult.vue'
+import AlertResult from '@/components/alert/AlertResult.vue'
+import AlertPopulations from '@/components/alert/AlertPopulations.vue'
 
 export default Vue.extend({
   name: 'Alert',
@@ -90,6 +92,7 @@ export default Vue.extend({
     AlertResult,
     AlertDetails,
     AlertFactionCombatMetrics,
+    AlertPopulations,
     AlertCharacterMetrics,
     AlertOutfitMetrics,
     AlertWeaponMetrics,
