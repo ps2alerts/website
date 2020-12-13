@@ -52,6 +52,7 @@
           is when PS2Alerts will launch.
         </p>
         <div class="text-center">
+          <nuxt-link to="/alert-history" class="btn">Latest Alerts</nuxt-link>
           <nuxt-link to="/change-log" class="btn"
             >View the change log</nuxt-link
           >
