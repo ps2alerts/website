@@ -55,8 +55,8 @@ export default {
         content: 'website',
       },
       {
-        hid: 'og:link',
-        name: 'og:link',
+        hid: 'og:url',
+        name: 'og:url',
         content: process.env.BASE_URL,
       },
       {
