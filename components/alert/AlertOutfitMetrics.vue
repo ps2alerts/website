@@ -109,7 +109,7 @@ export default Vue.extend({
       error: null,
       loaded: false,
       updateRate: 10000,
-      updateCountdown: 10,
+      updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       data: {} as AlertOutfitTableDataInterface[],

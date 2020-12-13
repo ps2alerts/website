@@ -164,7 +164,7 @@ export default Vue.extend({
       loaded: false,
       mode: 'kills',
       updateRate: 30000,
-      updateCountdown: 30,
+      updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       data: {} as InstanceVehicleAggregateResponseInterface[],

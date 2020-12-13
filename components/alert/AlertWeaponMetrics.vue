@@ -74,7 +74,7 @@ export default Vue.extend({
       error: null,
       loaded: false,
       updateRate: 30000,
-      updateCountdown: 30,
+      updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       data: {} as InstanceWeaponAggregateResponseInterface[],
