@@ -55,11 +55,6 @@ export default {
         content: 'website',
       },
       {
-        hid: 'og:url',
-        property: 'og:url',
-        content: process.env.BASE_URL,
-      },
-      {
         hid: 'twitter:title',
         property: 'twitter:title',
         content: metaTitle,
