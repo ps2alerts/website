@@ -16,3 +16,11 @@ export const AlertVehicleLeaderboardConfig = {
   ...AlertLeaderboardConfig,
   'sort-by': ['totals.kills'],
 }
+
+export const AlertLoadoutLeaderboardConfig = {
+  ...AlertLeaderboardConfig,
+  'items-per-page': 24,
+  'footer-props': {
+    itemsPerPageOptions: [24],
+  },
+}

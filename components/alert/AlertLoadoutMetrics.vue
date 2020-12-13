@@ -33,6 +33,7 @@
         <v-data-table
           class="datatable"
           dense
+          hide-default-footer
           item-key="character.id"
           :headers="headers"
           :items="data"
@@ -58,7 +59,7 @@ import { Endpoints } from '@/constants/Endpoints'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { AlertLoadoutTableDataInterface } from '~/interfaces/AlertLoadoutTableDataInterface'
-import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
+import { AlertLoadoutLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
 import { InstanceLoadoutResponseInterface } from '~/interfaces/aggregates/instance/InstanceLoadoutResponseInterface'
 import { LoadoutFaction, LoadoutName } from '~/constants/Loadout'
 
@@ -81,7 +82,7 @@ export default Vue.extend({
       interval: undefined as undefined | number,
       data: {} as AlertLoadoutTableDataInterface[],
       filter: '',
-      leaderboardConfig: AlertLeaderboardConfig,
+      leaderboardConfig: AlertLoadoutLeaderboardConfig,
       expanded: [],
       headers: [
         {

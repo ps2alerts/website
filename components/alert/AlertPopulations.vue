@@ -165,7 +165,7 @@ export default Vue.extend({
         return
       }
 
-      console.log('AlertFactionCombatMetrics.pull', this.alert.instanceId)
+      console.log('AlertPopulations.pull', this.alert.instanceId)
 
       await new ApiRequest()
         .get<InstancePopulationAggregateResponseInterface[]>(
@@ -178,7 +178,6 @@ export default Vue.extend({
         )
         .then((result) => {
           this.data = result
-          console.log(this.data)
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
           this.fillData()
