@@ -83,7 +83,6 @@ import AlertWeaponMetrics from '@/components/alert/AlertWeaponMetrics.vue'
 import AlertVehicleMetrics from '@/components/alert/AlertVehicleMetrics.vue'
 import AlertVehicleMatrix from '@/components/alert/AlertVehicleMatrix.vue'
 import AlertResult from '~/components/alert/AlertResult.vue'
-import factionName from '~/filters/FactionName'
 
 export default Vue.extend({
   name: 'Alert',
