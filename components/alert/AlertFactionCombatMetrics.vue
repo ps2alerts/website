@@ -224,7 +224,7 @@ export default Vue.extend({
     return {
       error: null,
       loaded: false,
-      updateRate: 5000,
+      updateRate: 10000,
       updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
