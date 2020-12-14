@@ -81,7 +81,7 @@ export default Vue.extend({
               },
               scaleLabel: {
                 display: true,
-                labelString: 'Players',
+                labelString: 'Kills',
                 fontColor: '#fff',
               },
             },
