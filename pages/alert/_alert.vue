@@ -131,7 +131,7 @@ export default Vue.extend({
         'Per alert results of each Alert ever triggered in Planetside 2.',
       error: null,
       loaded: false,
-      updateRate: 10000,
+      updateRate: 5000,
       updateCountdown: 10,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
