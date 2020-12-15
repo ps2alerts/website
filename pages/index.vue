@@ -8,7 +8,7 @@
         Announcement
       </div>
 
-      <div class="grid grid-cols-12">
+      <div class="grid grid-cols-12 place-items-center">
         <div class="col-span-12 ss:col-span-4">
           <div class="p-6 text-center items-center justify-items-center">
             <img
