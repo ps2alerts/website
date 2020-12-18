@@ -25,7 +25,7 @@
         </NuxtLink>
       </div>
     </div>
-    <div v-show="mode === 'territory'">
+    <div v-show="mode === 'territory'" class="pt-1">
       <FactionSegmentBar
         :vs="result.vs"
         :nc="result.nc"
@@ -34,7 +34,7 @@
         :out-of-play="result.outOfPlay"
       />
     </div>
-    <div v-show="mode === 'pops'">
+    <div v-show="mode === 'pops'" class="pt-1">
       <FactionSegmentBar
         :vs="pops.vs"
         :nc="pops.nc"
@@ -42,6 +42,7 @@
         :other="pops.nso"
         :show-as-calculated-percentage="isPercentage"
         :is-percentage="isPercentage"
+        other-segment-text="NSO"
       />
     </div>
   </div>

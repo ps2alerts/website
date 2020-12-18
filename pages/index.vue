@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-12 gap-2">
+  <div class="grid grid-cols-12">
     <div
       class="col-span-12 ss:col-span-8 ss:col-start-3 bg-tint card editorial relative my-4"
     >
@@ -64,7 +64,7 @@
         <nuxt-link to="/change-log" class="btn">View the change log</nuxt-link>
       </div>
     </div>
-    <div class="col-span-12 border-t">
+    <div class="col-span-12 border-t-2 border-red-700">
       <div class="text-center">
         <h1 class="text-title">Alert Statistics</h1>
         <p>All data is currently subject to wipe!</p>

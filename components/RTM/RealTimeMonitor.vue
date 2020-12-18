@@ -1,82 +1,111 @@
 <template>
-  <div
-    id="rtm-active-alerts"
-    class="px-4 lg:px-0 pb-4 border-b-2 border-red-700 text-sm text-center"
+  <section
+    class="px-4 pb-4 lg:px-0 lg:pb-0 border-b-2 border-red-700 lg:border-b-0"
   >
-    <div class="rtm-top">
-      <p v-if="loading">Loading...</p>
-      <p v-if="error">ERROR: {{ error }}</p>
-      <p v-show="actives.length === 0 && !error">
-        There are no alerts currently running!
-      </p>
-    </div>
-    <div v-show="actives.length > 0">
-      <div class="flex justify-center">
-        <div class="btn-group mr-2">
-          <button
-            class="btn btn-sm rtm-btn"
-            :class="{ 'btn-active': mode === 'territory' }"
-            @click="updateMode('territory')"
+    <div
+      class="pt-4 pb-1 lg:mt-2 bg-tint rounded lg:rounded-bl-none text-sm text-center relative overflow-hidden"
+    >
+      <div class="tag section">Active Alerts</div>
+      <div v-if="mode === 'territory'" class="absolute top-0 right-0 mr-2">
+        <v-tooltip left>
+          <template #activator="{ on, attrs }">
+            <v-progress-circular
+              :value="updateTerritoryCountdownPercentage"
+              :rotate="-90"
+              :size="14"
+              v-bind="attrs"
+              v-on="on"
+            ></v-progress-circular>
+          </template>
+          <span
+            >Territory updated every {{ updateTerritoryRate / 1000 }} secs</span
           >
-            <font-awesome-icon fixed-width :icon="['fas', 'flag']" />
-            Territory
+        </v-tooltip>
+      </div>
+      <div v-if="mode === 'pops'" class="absolute top-0 right-0 mr-2">
+        <v-tooltip left>
+          <template #activator="{ on, attrs }">
+            <v-progress-circular
+              :value="updatePopsCountdownPercentage"
+              :rotate="-90"
+              :size="14"
+              v-bind="attrs"
+              v-on="on"
+            ></v-progress-circular>
+          </template>
+          <span
+            >Populations updated every {{ updatePopsRate / 1000 }} secs</span
+          >
+        </v-tooltip>
+      </div>
+      <div class="rtm-top">
+        <p v-if="loading">Loading...</p>
+        <p v-if="error">ERROR: {{ error }}</p>
+        <p v-show="actives.length === 0 && !error">
+          There are no alerts currently running!
+        </p>
+      </div>
+      <div v-show="actives.length > 0">
+        <div class="flex justify-center">
+          <div class="btn-group mr-2">
+            <button
+              class="btn btn-sm"
+              :class="{ 'btn-active': mode === 'territory' }"
+              @click="updateMode('territory')"
+            >
+              <font-awesome-icon fixed-width :icon="['fas', 'flag']" />
+              Territory
+            </button>
+            <button
+              class="btn btn-sm"
+              :class="{ 'btn-active': mode === 'pops' }"
+              @click="updateMode('pops')"
+            >
+              <font-awesome-icon fixed-width :icon="['fas', 'user']" />
+              Population
+            </button>
+          </div>
+
+          <button
+            v-show="mode === 'pops' && showPopPercent"
+            class="btn btn-sm"
+            @click="toggleShowPopPercent()"
+          >
+            <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
           </button>
           <button
-            class="btn btn-sm rtm-btn"
-            :class="{ 'btn-active': mode === 'pops' }"
-            @click="updateMode('pops')"
+            v-show="mode === 'pops' && !showPopPercent"
+            class="btn btn-sm"
+            @click="toggleShowPopPercent()"
           >
-            <font-awesome-icon fixed-width :icon="['fas', 'user']" /> Population
+            ##
           </button>
         </div>
 
-        <button
-          v-show="mode === 'pops' && showPopPercent"
-          class="btn btn-sm rtm-btn"
-          @click="toggleShowPopPercent()"
+        <div
+          v-for="alert in actives"
+          :key="alert.instanceId"
+          class="py-1 px-2 border-b border-gray-600 border-no-bottom"
         >
-          <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
-        </button>
-        <button
-          v-show="mode === 'pops' && !showPopPercent"
-          class="btn btn-sm rtm-btn"
-          @click="toggleShowPopPercent()"
-        >
-          ##
-        </button>
+          <RealTimeAlert
+            :world="alert.world"
+            :zone="alert.zone"
+            :time-started="alert.timeStarted"
+            :duration="alert.duration"
+            :result="alert.result"
+            :instance-id="alert.instanceId"
+            :mode="mode"
+            :pops="getPops(alert.instanceId)"
+            :is-percentage="showPopPercent"
+          />
+        </div>
       </div>
-
-      <div
-        v-for="alert in actives"
-        :key="alert.instanceId"
-        class="bg-tint my-2 rounded-md lg:rounded-r-md lg:rounded-l-none"
-      >
-        <RealTimeAlert
-          :world="alert.world"
-          :zone="alert.zone"
-          :time-started="alert.timeStarted"
-          :duration="alert.duration"
-          :result="alert.result"
-          :instance-id="alert.instanceId"
-          :mode="mode"
-          :pops="getPops(alert.instanceId)"
-          :is-percentage="showPopPercent"
-        />
-      </div>
+      <p
+        v-show="actives.length > 0"
+        class="text-center text-gray-600 text-xs pt-1"
+      ></p>
     </div>
-    <p
-      v-show="actives.length > 0"
-      class="text-center text-gray-600 text-xs pt-1"
-    >
-      <span v-show="mode === 'territory'"
-        >Gray = cutoff territory<br />Updated: {{ lastUpdated }}</span
-      >
-      <span v-show="mode === 'pops'"
-        >Gray = NSO<br />
-        Updated: {{ popsLastUpdated }} | Pop data generated every 60 secs</span
-      >
-    </p>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
@@ -100,6 +129,12 @@ export default Vue.extend({
       error: null,
       lastUpdated: 'fetching...',
       popsLastUpdated: 'fetching...',
+      updateTerritoryRate: 5000,
+      updateTerritoryCountdown: 0,
+      updateTerritoryCountdownInterval: undefined as undefined | number,
+      updatePopsRate: 60000,
+      updatePopsCountdown: 0,
+      updatePopsCountdownInterval: undefined as undefined | number,
       actives: [] as InstanceTerritoryControlResponseInterface[],
       populations: new Map<
         string,
@@ -110,6 +145,17 @@ export default Vue.extend({
       showPopPercent: true,
     }
   },
+  computed: {
+    updateTerritoryCountdownPercentage(): number {
+      return (
+        (100 / (this.updateTerritoryRate / 1000)) *
+        this.updateTerritoryCountdown
+      )
+    },
+    updatePopsCountdownPercentage(): number {
+      return (100 / (this.updatePopsRate / 1000)) * this.updatePopsCountdown
+    },
+  },
   watch: {
     $route: 'activeAlerts',
   },
@@ -118,6 +164,15 @@ export default Vue.extend({
     // TEMP polling until real time websocket is implemented
     await this.activeAlerts()
     await this.alertPops()
+
+    this.updateTerritoryCountdownInterval = window.setInterval(() => {
+      return this.updateTerritoryCountdown >= 0
+        ? this.updateTerritoryCountdown--
+        : 0
+    }, 1000)
+    this.updatePopsCountdownInterval = window.setInterval(() => {
+      return this.updatePopsCountdown >= 0 ? this.updatePopsCountdown-- : 0
+    }, 1000)
 
     // After initial data is gathered, now continue to poll for data
     setInterval(() => {
@@ -139,7 +194,7 @@ export default Vue.extend({
           this.loading = false
           this.error = null
           this.actives = result
-          this.lastUpdated = moment().format(TIME_FORMAT)
+          this.updateTerritoryCountdown = this.updateTerritoryRate / 1000
         })
         .catch((e) => {
           this.loading = false
@@ -166,6 +221,7 @@ export default Vue.extend({
               if (result[0] && result[0].total > 0) {
                 this.populations.set(instance.instanceId, result[0])
               }
+              this.updatePopsCountdown = this.updatePopsRate / 1000
             })
             .catch((e) => {
               this.loading = false

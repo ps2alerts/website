@@ -1,5 +1,5 @@
 <template>
-  <header class="items-center justify-center bg-tint p-4 mb-4">
+  <header class="items-center justify-center bg-tint p-4">
     <div class="flex text-white px-6 justify-center items-center mb-4">
       <img
         class="ps2alerts-logo mr-2 w-16"
@@ -8,17 +8,11 @@
       />
       <h1 class="font-semibold text-4xl">PS2Alerts</h1>
     </div>
-    <div class="flex w-auto block justify-center mb-4">
-      <p class="text-center" v-html="motto" />
-    </div>
     <div class="flex w-auto block justify-center px-6 mb-4">
       <div class="btn">ALPHA</div>
     </div>
-    <div class="w-full block text-center">
-      <p class="text-xs">
-        This is <b>not</b> representative of the final product and is subject to
-        vast changes and data wipes!
-      </p>
+    <div class="flex w-auto block justify-center">
+      <p class="text-center" v-html="motto" />
     </div>
   </header>
 </template>
@@ -33,7 +27,7 @@ export default Vue.extend({
       motto: '',
       mottos: [
         'The metagame <b>everyone</b> plays!',
-        'Powered via continent locks!',
+        'Powered by continent locks!',
         'Powered by ISO',
         'The ultimate proof that "X is OP"!',
         'Miller server best server?',
