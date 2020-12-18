@@ -11,8 +11,8 @@
               v-on="on"
             ></font-awesome-icon>
           </template>
-          The below metrics were being collected as of 18th Dec, so for the
-          alpha / beta they will look a bit strange. Upon launch they will be
+          The below metrics were being collected as of 18th Dec, so for
+          pre-launch they will look a bit strange. Upon launch they will be
           correct as the data will be wiped.
         </v-tooltip>
       </sup>
