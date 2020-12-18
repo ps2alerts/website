@@ -178,10 +178,10 @@ export default Vue.extend({
     setInterval(() => {
       this.error = null
       this.activeAlerts()
-    }, 5000)
+    }, this.updateTerritoryRate)
     setInterval(() => {
       this.alertPops()
-    }, 30000)
+    }, this.updatePopsRate)
   },
   methods: {
     async activeAlerts(): Promise<void> {
