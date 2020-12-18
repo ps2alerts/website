@@ -17,6 +17,7 @@ export const Endpoints = {
     '/aggregates/global/vehicle/character/{character}',
   AGGREGATES_GLOBAL_VEHICLE_CHARACTER_SINGLE_VEHICLE:
     '/aggregates/global/vehicle/character/{character}/{vehicle}',
+  AGGREGATES_GLOBAL_VICTORIES: '/aggregates/global/victories',
   AGGREGATES_GLOBAL_WEAPON: '/aggregates/global/weapon',
   AGGREGATES_GLOBAL_WEAPON_SINGLE: '/aggregates/global/weapon/{weapon}',
 
