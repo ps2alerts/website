@@ -2,6 +2,20 @@
   <div>
     <h1 class="text-3xl text-center mb-4">
       <b>{{ totalInstances }}</b> alerts recorded since Jan 1st 2021
+      <sup>
+        <v-tooltip bottom>
+          <template #activator="{ on, attrs }">
+            <font-awesome-icon
+              :icon="['fas', 'exclamation-triangle']"
+              v-bind="attrs"
+              v-on="on"
+            ></font-awesome-icon>
+          </template>
+          The below metrics were being collected as of 18th Dec, so for the
+          alpha / beta they will look a bit strange. Upon launch they will be
+          correct as the data will be wiped.
+        </v-tooltip>
+      </sup>
     </h1>
     <div class="flex justify-center mb-2">
       <div class="btn-group mr-2">
