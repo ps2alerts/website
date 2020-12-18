@@ -70,7 +70,7 @@
             {{ otherString() }}
           </div>
         </template>
-        <span>Cutoff: {{ otherString(true) }}</span>
+        <span>{{ otherSegmentText }}: {{ otherString(true) }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -116,6 +116,11 @@ export default Vue.extend({
       type: Number,
       default: 0,
       required: true,
+    },
+    otherSegmentText: {
+      type: String,
+      default: 'Cutoff',
+      required: false,
     },
     outOfPlay: {
       type: Number,

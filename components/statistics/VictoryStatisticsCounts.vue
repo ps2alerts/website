@@ -24,6 +24,7 @@
           :other="totalCounts.draws"
           :is-percentage="mode === 'percent'"
           :show-as-calculated-percentage="mode === 'percent'"
+          other-segment-text="Draws"
         />
       </div>
     </div>
@@ -60,9 +61,11 @@
               :other="data.world.draws"
               :is-percentage="mode === 'percent'"
               :show-as-calculated-percentage="mode === 'percent'"
+              other-segment-text="Draws"
             />
           </div>
         </div>
+        <div class="col-span-12 text-center">PS4 servers coming soon!</div>
       </div>
     </div>
     <div class="col-span-12 lg:col-span-4 card relative mb-2">
@@ -98,6 +101,7 @@
               :other="data.draws"
               :is-percentage="mode === 'percent'"
               :show-as-calculated-percentage="mode === 'percent'"
+              other-segment-text="Draws"
             />
           </div>
         </div>
@@ -136,6 +140,7 @@
               :other="data.draws"
               :is-percentage="mode === 'percent'"
               :show-as-calculated-percentage="mode === 'percent'"
+              other-segment-text="Draws"
             />
           </div>
         </div>

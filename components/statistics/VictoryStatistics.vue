@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="text-3xl text-center mb-4">
-      <b>{{ totalInstances }}</b> alerts recorded since Jan 1st 2021
+      <b>{{ totalInstances }}</b> alerts recorded since Dec 18th 2020
       <sup>
         <v-tooltip bottom>
           <template #activator="{ on, attrs }">
@@ -11,9 +11,8 @@
               v-on="on"
             ></font-awesome-icon>
           </template>
-          The below metrics were being collected as of 18th Dec, so for
-          pre-launch they will look a bit strange. Upon launch they will be
-          correct as the data will be wiped.
+          The below metrics will get wiped come the site's launch on Jan 1st
+          2021.
         </v-tooltip>
       </sup>
     </h1>
