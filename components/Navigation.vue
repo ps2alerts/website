@@ -1,5 +1,5 @@
 <template>
-  <nav class="pb-2 pt-4 lg:pt-2 text-center lg:border-b-2 border-red-700">
+  <nav class="pb-2 pt-4 text-center lg:border-b-2 border-red-700">
     <NuxtLink to="/" class="btn mb-2">
       <font-awesome-icon :icon="['fas', 'chart-area']" /> Stats
     </NuxtLink>
