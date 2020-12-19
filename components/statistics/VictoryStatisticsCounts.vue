@@ -175,7 +175,7 @@
         <table class="w-full table-auto border-row text-center">
           <thead class="font-bold">
             <tr>
-              <td style="width: 70px" class="text-left">Server</td>
+              <td class="text-left pr-1">Server</td>
               <td>Morning bracket</td>
               <td>Afternoon bracket</td>
               <td>Prime bracket</td>
@@ -183,7 +183,9 @@
           </thead>
           <tbody>
             <tr v-for="(data, world) in worldCounts" :key="world">
-              <td class="text-left">{{ parseInt(world, 10) | worldName }}</td>
+              <td class="text-left pr-1">
+                {{ parseInt(world, 10) | worldName }}
+              </td>
               <td class="p-1 w-1/3">
                 <FactionSegmentBar
                   v-if="data.brackets[1]"
@@ -263,7 +265,7 @@
         <table class="w-full table-auto border-row text-center">
           <thead class="font-bold">
             <tr>
-              <td style="width: 70px" class="text-left">Server</td>
+              <td class="text-left pr-1">Server</td>
               <td>Indar</td>
               <td>Hossin</td>
               <td>Amerish</td>
@@ -272,7 +274,9 @@
           </thead>
           <tbody>
             <tr v-for="(data, world) in worldCounts" :key="world">
-              <td class="text-left">{{ parseInt(world, 10) | worldName }}</td>
+              <td class="text-left pr-1">
+                {{ parseInt(world, 10) | worldName }}
+              </td>
               <td class="p-1 w-1/4">
                 <FactionSegmentBar
                   v-if="data.zones[2]"
