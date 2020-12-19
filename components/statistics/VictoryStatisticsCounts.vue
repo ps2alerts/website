@@ -105,6 +105,7 @@
           <thead class="font-bold">
             <tr>
               <td class="text-left pr-1">Continent</td>
+              <td>Count</td>
               <td>Victory Rate</td>
             </tr>
           </thead>
@@ -112,6 +113,9 @@
             <tr v-for="(data, zone) in zoneCounts" :key="zone">
               <td class="text-left" style="width: 80px">
                 {{ parseInt(zone, 10) | zoneName }}
+              </td>
+              <td class="px-1" style="width: 50px">
+                {{ data.vs + data.nc + data.tr + data.draws }}
               </td>
               <td class="p-1">
                 <FactionSegmentBar
@@ -148,6 +152,7 @@
           <thead class="font-bold">
             <tr>
               <td class="text-left pr-1">Bracket</td>
+              <td>Count</td>
               <td>Victory Rate</td>
             </tr>
           </thead>
@@ -155,6 +160,9 @@
             <tr v-for="(data, bracket) in bracketCounts" :key="bracket">
               <td class="text-left" style="width: 80px">
                 {{ parseInt(bracket, 10) | bracketName }}
+              </td>
+              <td class="px-1" style="width: 50px">
+                {{ data.vs + data.nc + data.tr + data.draws }}
               </td>
               <td class="p-1">
                 <FactionSegmentBar
