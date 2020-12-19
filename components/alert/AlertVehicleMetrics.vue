@@ -172,6 +172,12 @@ export default Vue.extend({
           filterable: false,
           value: 'infantry.teamkilled',
         },
+        {
+          text: 'Roadkills',
+          align: 'middle',
+          filterable: false,
+          value: 'roadkills',
+        },
       ],
     }
   },
@@ -284,6 +290,7 @@ export default Vue.extend({
         })
 
         vehicle.suicides = vehicle.suicides ?? 0
+        vehicle.roadkills = vehicle.roadkills ?? 0
 
         // Ensure all values display
         vehicle.vehicles = {
