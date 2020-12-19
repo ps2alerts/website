@@ -7,38 +7,16 @@
       class="pt-4 lg:mt-2 bg-tint rounded lg:rounded-bl-none text-sm text-center relative overflow-hidden"
     >
       <div class="tag section">Active Alerts</div>
-      <div v-if="mode === 'territory'" class="absolute top-0 right-0 mr-2">
-        <v-tooltip left>
-          <template #activator="{ on, attrs }">
-            <v-progress-circular
-              :value="updateTerritoryCountdownPercentage"
-              :rotate="-90"
-              :size="14"
-              v-bind="attrs"
-              v-on="on"
-            ></v-progress-circular>
-          </template>
-          <span
-            >Territory updated every {{ updateTerritoryRate / 1000 }} secs</span
-          >
-        </v-tooltip>
-      </div>
-      <div v-if="mode === 'pops'" class="absolute top-0 right-0 mr-2">
-        <v-tooltip left>
-          <template #activator="{ on, attrs }">
-            <v-progress-circular
-              :value="updatePopsCountdownPercentage"
-              :rotate="-90"
-              :size="14"
-              v-bind="attrs"
-              v-on="on"
-            ></v-progress-circular>
-          </template>
-          <span
-            >Populations updated every {{ updatePopsRate / 1000 }} secs</span
-          >
-        </v-tooltip>
-      </div>
+      <CountdownSpinner
+        v-if="mode === 'territory'"
+        :percent="updateTerritoryCountdownPercentage"
+        :update-rate="updateTerritoryRate"
+      />
+      <CountdownSpinner
+        v-if="mode === 'pops'"
+        :percent="updatePopsCountdownPercentage"
+        :update-rate="updatePopsRate"
+      />
       <div class="py-2">
         <p v-if="loading">Loading...</p>
         <p v-if="error">ERROR: {{ error }}</p>

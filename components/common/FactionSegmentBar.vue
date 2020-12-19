@@ -138,8 +138,8 @@ export default Vue.extend({
       required: false,
     },
     dropoffPercent: {
-      type: Number,
-      default: 5,
+      type: String,
+      default: '5',
       required: false,
     },
   },
@@ -172,7 +172,9 @@ export default Vue.extend({
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentVS > this.dropoffPercent ? `${value}${suffix}` : ''
+      return this.percentVS > parseInt(this.dropoffPercent)
+        ? `${value}${suffix}`
+        : ''
     },
     ncString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
@@ -182,7 +184,9 @@ export default Vue.extend({
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentNC > this.dropoffPercent ? `${value}${suffix}` : ''
+      return this.percentNC > parseInt(this.dropoffPercent)
+        ? `${value}${suffix}`
+        : ''
     },
     trString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
@@ -192,7 +196,9 @@ export default Vue.extend({
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentTR > this.dropoffPercent ? `${value}${suffix}` : ''
+      return this.percentTR > parseInt(this.dropoffPercent)
+        ? `${value}${suffix}`
+        : ''
     },
     otherString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
@@ -202,7 +208,9 @@ export default Vue.extend({
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentOther > this.dropoffPercent ? `${value}${suffix}` : ''
+      return this.percentOther > parseInt(this.dropoffPercent)
+        ? `${value}${suffix}`
+        : ''
     },
     outOfPlayString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
@@ -212,7 +220,9 @@ export default Vue.extend({
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.outOfPlay > this.dropoffPercent ? `${value}${suffix}` : ''
+      return this.outOfPlay > parseInt(this.dropoffPercent)
+        ? `${value}${suffix}`
+        : ''
     },
   },
 })

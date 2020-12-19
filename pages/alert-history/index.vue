@@ -3,20 +3,10 @@
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
     <div class="col-span-12">
       <h1 class="text-title">Alert History</h1>
-      <div class="absolute top-0 right-0 mr-2 mt-2">
-        <v-tooltip left>
-          <template #activator="{ on, attrs }">
-            <v-progress-circular
-              :value="updateCountdownPercent"
-              :rotate="-90"
-              :size="20"
-              v-bind="attrs"
-              v-on="on"
-            ></v-progress-circular>
-          </template>
-          <span>Updates every {{ updateRate / 1000 }} secs</span>
-        </v-tooltip>
-      </div>
+      <CountdownSpinner
+        :percent="updateCountdownPercent"
+        :update-rate="updateRate"
+      />
     </div>
     <div class="col-span-6 lg:col-span-2 lg:col-start-3">
       <FilterWorld :world-filter="selectedWorld" @world-changed="updateWorld" />

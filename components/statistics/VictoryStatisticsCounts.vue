@@ -3,20 +3,7 @@
     <h1 class="text-3xl text-center mb-2">Victory Statistics</h1>
     <div class="card mb-2 relative">
       <div class="tag section">Faction Victories</div>
-      <div class="absolute top-0 right-0 mr-2">
-        <v-tooltip left>
-          <template #activator="{ on, attrs }">
-            <v-progress-circular
-              :value="updateCountdownPercent"
-              :rotate="-90"
-              :size="14"
-              v-bind="attrs"
-              v-on="on"
-            ></v-progress-circular>
-          </template>
-          <span>Updates every 60 secs</span>
-        </v-tooltip>
-      </div>
+      <CountdownSpinner :percent="updateCountdownPercent" update-rate="60000" />
       <div v-if="loaded">
         <FactionSegmentBar
           :vs="totalCounts.vs"
@@ -32,20 +19,10 @@
     <div v-if="loaded" class="grid grid-cols-12 gap-2">
       <div class="col-span-12 lg:col-span-6 ss:col-span-4 card relative">
         <div class="tag section">Server Victories</div>
-        <div class="absolute top-0 right-0 mr-2">
-          <v-tooltip left>
-            <template #activator="{ on, attrs }">
-              <v-progress-circular
-                :value="updateCountdownPercent"
-                :rotate="-90"
-                :size="14"
-                v-bind="attrs"
-                v-on="on"
-              ></v-progress-circular>
-            </template>
-            <span>Updates every 60 secs</span>
-          </v-tooltip>
-        </div>
+        <CountdownSpinner
+          :percent="updateCountdownPercent"
+          update-rate="60000"
+        />
         <table class="w-full table-auto border-row text-center">
           <thead class="font-bold">
             <tr>
@@ -88,20 +65,10 @@
       </div>
       <div class="col-span-12 lg:col-span-6 ss:col-span-4 card relative">
         <div class="tag section">Global Continent Victories</div>
-        <div class="absolute top-0 right-0 mr-2">
-          <v-tooltip left>
-            <template #activator="{ on, attrs }">
-              <v-progress-circular
-                :value="updateCountdownPercent"
-                :rotate="-90"
-                :size="14"
-                v-bind="attrs"
-                v-on="on"
-              ></v-progress-circular>
-            </template>
-            <span>Updates every 60 secs</span>
-          </v-tooltip>
-        </div>
+        <CountdownSpinner
+          :percent="updateCountdownPercent"
+          update-rate="60000"
+        />
         <table class="w-full table-auto border-row text-center">
           <thead class="font-bold">
             <tr>
@@ -136,20 +103,10 @@
       </div>
       <div class="col-span-12 lg:col-span-6 ss:col-span-4 card relative">
         <div class="tag section">Global Bracket Victories</div>
-        <div class="absolute top-0 right-0 mr-2">
-          <v-tooltip left>
-            <template #activator="{ on, attrs }">
-              <v-progress-circular
-                :value="updateCountdownPercent"
-                :rotate="-90"
-                :size="14"
-                v-bind="attrs"
-                v-on="on"
-              ></v-progress-circular>
-            </template>
-            <span>Updates every 60 secs</span>
-          </v-tooltip>
-        </div>
+        <CountdownSpinner
+          :percent="updateCountdownPercent"
+          update-rate="60000"
+        />
         <table class="w-full table-auto border-row text-center">
           <thead class="font-bold">
             <tr>
@@ -184,34 +141,10 @@
       </div>
       <div class="col-span-12 ss:col-span-6 card relative">
         <div class="tag section">Server Bracket Breakdowns</div>
-        <div class="absolute top-0 right-0 mr-2">
-          <v-tooltip left>
-            <template #activator="{ on, attrs }">
-              <v-progress-circular
-                :value="updateCountdownPercent"
-                :rotate="-90"
-                :size="14"
-                v-bind="attrs"
-                v-on="on"
-              ></v-progress-circular>
-            </template>
-            <span>Updates every 60 secs</span>
-          </v-tooltip>
-        </div>
-        <div class="absolute top-0 right-0 mr-2">
-          <v-tooltip left>
-            <template #activator="{ on, attrs }">
-              <v-progress-circular
-                :value="updateCountdownPercent"
-                :rotate="-90"
-                :size="14"
-                v-bind="attrs"
-                v-on="on"
-              ></v-progress-circular>
-            </template>
-            <span>Updates every 60 secs</span>
-          </v-tooltip>
-        </div>
+        <CountdownSpinner
+          :percent="updateCountdownPercent"
+          update-rate="60000"
+        />
         <table class="w-full table-auto border-row text-center">
           <thead class="font-bold">
             <tr>
@@ -274,34 +207,10 @@
       </div>
       <div class="col-span-12 ss:col-span-6 card relative">
         <div class="tag section">Server Continent Breakdowns</div>
-        <div class="absolute top-0 right-0 mr-2">
-          <v-tooltip left>
-            <template #activator="{ on, attrs }">
-              <v-progress-circular
-                :value="updateCountdownPercent"
-                :rotate="-90"
-                :size="14"
-                v-bind="attrs"
-                v-on="on"
-              ></v-progress-circular>
-            </template>
-            <span>Updates every 60 secs</span>
-          </v-tooltip>
-        </div>
-        <div class="absolute top-0 right-0 mr-2">
-          <v-tooltip left>
-            <template #activator="{ on, attrs }">
-              <v-progress-circular
-                :value="updateCountdownPercent"
-                :rotate="-90"
-                :size="14"
-                v-bind="attrs"
-                v-on="on"
-              ></v-progress-circular>
-            </template>
-            <span>Updates every 60 secs</span>
-          </v-tooltip>
-        </div>
+        <CountdownSpinner
+          :percent="updateCountdownPercent"
+          update-rate="60000"
+        />
         <table class="w-full table-auto border-row text-center">
           <thead class="font-bold">
             <tr>
