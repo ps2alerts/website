@@ -34,9 +34,7 @@
         </button>
       </div>
       <div class="btn-group">
-        <button class="btn btn-sm" disabled>
-          Bracket filtering coming soon!
-        </button>
+        <button class="btn btn-sm" disabled>Date filtering coming soon!</button>
       </div>
     </div>
     <VictoryStatisticsCounts
