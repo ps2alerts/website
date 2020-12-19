@@ -1,7 +1,8 @@
 <template>
-  <div class="grid grid-cols-12 gap-2">
-    <div class="col-span-12 card relative">
-      <div class="tag section">Global Faction Victories</div>
+  <section>
+    <h1 class="text-3xl text-center mb-2">Victory Statistics</h1>
+    <div class="card mb-2">
+      <div class="tag section">Faction Victories</div>
       <div class="absolute top-0 right-0 mr-2">
         <v-tooltip left>
           <template #activator="{ on, attrs }">
@@ -28,32 +29,32 @@
         />
       </div>
     </div>
-    <div class="col-span-12 lg:col-span-4 card relative mb-2">
-      <div class="tag section">Server Victories</div>
-      <div class="absolute top-0 right-0 mr-2">
-        <v-tooltip left>
-          <template #activator="{ on, attrs }">
-            <v-progress-circular
-              :value="updateCountdownPercent"
-              :rotate="-90"
-              :size="14"
-              v-bind="attrs"
-              v-on="on"
-            ></v-progress-circular>
-          </template>
-          <span>Updates every 60 secs</span>
-        </v-tooltip>
-      </div>
-      <div v-if="loaded">
+    <div v-if="loaded" class="grid grid-cols-12 gap-2">
+      <div class="col-span-12 lg:col-span-6 ss:col-span-4 card relative">
+        <div class="tag section">Server Victories</div>
+        <div class="absolute top-0 right-0 mr-2">
+          <v-tooltip left>
+            <template #activator="{ on, attrs }">
+              <v-progress-circular
+                :value="updateCountdownPercent"
+                :rotate="-90"
+                :size="14"
+                v-bind="attrs"
+                v-on="on"
+              ></v-progress-circular>
+            </template>
+            <span>Updates every 60 secs</span>
+          </v-tooltip>
+        </div>
         <div
           v-for="(data, world) in worldCounts"
           :key="world"
           class="grid grid-cols-12 mb-1 pb-1 border-b border-gray-600 border-no-bottom"
         >
-          <div v-if="data" class="col-span-4 lg:col-span-2">
+          <div v-if="data" class="col-span-4 ss:col-span-2">
             {{ parseInt(world, 10) | worldName }}
           </div>
-          <div v-if="data" class="col-span-8 lg:col-span-10">
+          <div v-if="data" class="col-span-8 ss:col-span-10">
             <FactionSegmentBar
               :vs="data.world.vs"
               :nc="data.world.nc"
@@ -67,33 +68,31 @@
         </div>
         <div class="col-span-12 text-center">PS4 servers coming soon!</div>
       </div>
-    </div>
-    <div class="col-span-12 lg:col-span-4 card relative mb-2">
-      <div class="tag section">Continent Victories</div>
-      <div class="absolute top-0 right-0 mr-2">
-        <v-tooltip left>
-          <template #activator="{ on, attrs }">
-            <v-progress-circular
-              :value="updateCountdownPercent"
-              :rotate="-90"
-              :size="14"
-              v-bind="attrs"
-              v-on="on"
-            ></v-progress-circular>
-          </template>
-          <span>Updates every 60 secs</span>
-        </v-tooltip>
-      </div>
-      <div v-if="loaded">
+      <div class="col-span-12 lg:col-span-6 ss:col-span-4 card relative">
+        <div class="tag section">Continent Victories</div>
+        <div class="absolute top-0 right-0 mr-2">
+          <v-tooltip left>
+            <template #activator="{ on, attrs }">
+              <v-progress-circular
+                :value="updateCountdownPercent"
+                :rotate="-90"
+                :size="14"
+                v-bind="attrs"
+                v-on="on"
+              ></v-progress-circular>
+            </template>
+            <span>Updates every 60 secs</span>
+          </v-tooltip>
+        </div>
         <div
           v-for="(data, zone) in zoneCounts"
           :key="zone"
           class="grid grid-cols-12 mb-1 pb-1 border-b border-gray-600 border-no-bottom"
         >
-          <div class="col-span-4 lg:col-span-2">
+          <div class="col-span-4 ss:col-span-2">
             {{ parseInt(zone, 10) | zoneName }}
           </div>
-          <div class="col-span-8 lg:col-span-10">
+          <div class="col-span-8 ss:col-span-10">
             <FactionSegmentBar
               :vs="data.vs"
               :nc="data.nc"
@@ -106,33 +105,31 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-span-12 lg:col-span-4 card relative mb-2">
-      <div class="tag section">Bracket Victories</div>
-      <div class="absolute top-0 right-0 mr-2">
-        <v-tooltip left>
-          <template #activator="{ on, attrs }">
-            <v-progress-circular
-              :value="updateCountdownPercent"
-              :rotate="-90"
-              :size="14"
-              v-bind="attrs"
-              v-on="on"
-            ></v-progress-circular>
-          </template>
-          <span>Updates every 60 secs</span>
-        </v-tooltip>
-      </div>
-      <div v-if="loaded">
+      <div class="col-span-12 lg:col-span-6 ss:col-span-4 card relative">
+        <div class="tag section">Bracket Victories</div>
+        <div class="absolute top-0 right-0 mr-2">
+          <v-tooltip left>
+            <template #activator="{ on, attrs }">
+              <v-progress-circular
+                :value="updateCountdownPercent"
+                :rotate="-90"
+                :size="14"
+                v-bind="attrs"
+                v-on="on"
+              ></v-progress-circular>
+            </template>
+            <span>Updates every 60 secs</span>
+          </v-tooltip>
+        </div>
         <div
           v-for="(data, bracket) in bracketCounts"
           :key="bracket"
           class="grid grid-cols-12 mb-1 pb-1 border-b border-gray-600 border-no-bottom"
         >
-          <div class="col-span-4 lg:col-span-2">
+          <div class="col-span-4 ss:col-span-2">
             {{ parseInt(bracket, 10) | bracketName }}
           </div>
-          <div class="col-span-8 lg:col-span-10">
+          <div class="col-span-8 ss:col-span-10">
             <FactionSegmentBar
               :vs="data.vs"
               :nc="data.nc"
@@ -145,8 +142,191 @@
           </div>
         </div>
       </div>
+      <div class="col-span-12 ss:col-span-6 card relative">
+        <div class="tag section">Server Bracket Breakdowns</div>
+        <div class="absolute top-0 right-0 mr-2">
+          <v-tooltip left>
+            <template #activator="{ on, attrs }">
+              <v-progress-circular
+                :value="updateCountdownPercent"
+                :rotate="-90"
+                :size="14"
+                v-bind="attrs"
+                v-on="on"
+              ></v-progress-circular>
+            </template>
+            <span>Updates every 60 secs</span>
+          </v-tooltip>
+        </div>
+        <div class="absolute top-0 right-0 mr-2">
+          <v-tooltip left>
+            <template #activator="{ on, attrs }">
+              <v-progress-circular
+                :value="updateCountdownPercent"
+                :rotate="-90"
+                :size="14"
+                v-bind="attrs"
+                v-on="on"
+              ></v-progress-circular>
+            </template>
+            <span>Updates every 60 secs</span>
+          </v-tooltip>
+        </div>
+        <table class="w-full table-auto border-row text-center">
+          <thead class="font-bold">
+            <tr>
+              <td style="width: 70px" class="text-left">Server</td>
+              <td>Morning bracket</td>
+              <td>Afternoon bracket</td>
+              <td>Prime bracket</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(data, world) in worldCounts" :key="world">
+              <td class="text-left">{{ parseInt(world, 10) | worldName }}</td>
+              <td class="p-1">
+                <FactionSegmentBar
+                  v-if="data.brackets[1]"
+                  :vs="data.brackets[1].vs"
+                  :nc="data.brackets[1].nc"
+                  :tr="data.brackets[1].tr"
+                  :other="data.brackets[1].draws"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                  other-segment-text="Draws"
+                />
+              </td>
+              <td class="p-1">
+                <FactionSegmentBar
+                  v-if="data.brackets[2]"
+                  :vs="data.brackets[2].vs"
+                  :nc="data.brackets[2].nc"
+                  :tr="data.brackets[2].tr"
+                  :other="data.brackets[2].draws"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                  other-segment-text="Draws"
+                />
+              </td>
+              <td class="p-1">
+                <FactionSegmentBar
+                  v-if="data.brackets[3]"
+                  :vs="data.brackets[3].vs"
+                  :nc="data.brackets[3].nc"
+                  :tr="data.brackets[3].tr"
+                  :other="data.brackets[3].draws"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                  other-segment-text="Draws"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="p-1">PS4 servers coming soon!</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-span-12 ss:col-span-6 card relative">
+        <div class="tag section">Server Continent Breakdowns</div>
+        <div class="absolute top-0 right-0 mr-2">
+          <v-tooltip left>
+            <template #activator="{ on, attrs }">
+              <v-progress-circular
+                :value="updateCountdownPercent"
+                :rotate="-90"
+                :size="14"
+                v-bind="attrs"
+                v-on="on"
+              ></v-progress-circular>
+            </template>
+            <span>Updates every 60 secs</span>
+          </v-tooltip>
+        </div>
+        <div class="absolute top-0 right-0 mr-2">
+          <v-tooltip left>
+            <template #activator="{ on, attrs }">
+              <v-progress-circular
+                :value="updateCountdownPercent"
+                :rotate="-90"
+                :size="14"
+                v-bind="attrs"
+                v-on="on"
+              ></v-progress-circular>
+            </template>
+            <span>Updates every 60 secs</span>
+          </v-tooltip>
+        </div>
+        <table class="w-full table-auto border-row text-center">
+          <thead class="font-bold">
+            <tr>
+              <td style="width: 70px" class="text-left">Server</td>
+              <td>Indar</td>
+              <td>Hossin</td>
+              <td>Amerish</td>
+              <td>Esamir</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(data, world) in worldCounts" :key="world">
+              <td class="text-left">{{ parseInt(world, 10) | worldName }}</td>
+              <td class="p-1">
+                <FactionSegmentBar
+                  v-if="data.zones[2]"
+                  :vs="data.zones[2].vs"
+                  :nc="data.zones[2].nc"
+                  :tr="data.zones[2].tr"
+                  :other="data.zones[2].draws"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                  other-segment-text="Draws"
+                />
+              </td>
+              <td class="p-1">
+                <FactionSegmentBar
+                  v-if="data.zones[4]"
+                  :vs="data.zones[4].vs"
+                  :nc="data.zones[4].nc"
+                  :tr="data.zones[4].tr"
+                  :other="data.zones[4].draws"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                  other-segment-text="Draws"
+                />
+              </td>
+              <td class="p-1">
+                <FactionSegmentBar
+                  v-if="data.zones[6]"
+                  :vs="data.zones[6].vs"
+                  :nc="data.zones[6].nc"
+                  :tr="data.zones[6].tr"
+                  :other="data.zones[6].draws"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                  other-segment-text="Draws"
+                />
+              </td>
+              <td class="p-1">
+                <FactionSegmentBar
+                  v-if="data.zones[8]"
+                  :vs="data.zones[8].vs"
+                  :nc="data.zones[8].nc"
+                  :tr="data.zones[8].tr"
+                  :other="data.zones[8].draws"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                  other-segment-text="Draws"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="5" class="p-1">PS4 servers coming soon!</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
@@ -224,7 +404,7 @@ export default Vue.extend({
             [row.zone]: this.calculateWorldZoneTotals(row),
           },
           brackets: {
-            [row.bracket]: this.calculateWorldZoneTotals(row),
+            [row.bracket]: this.calculateWorldBracketTotals(row),
           },
         }
         this.zoneCounts[row.zone] = this.calculateZoneTotals(row)
@@ -237,6 +417,7 @@ export default Vue.extend({
 
       this.loaded = true
       this.$forceUpdate()
+      console.log('worldCounts', this.worldCounts)
     },
     calculateWorldTotals(
       row: GlobalVictoriesAggregateResponseInterface
