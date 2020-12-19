@@ -1,7 +1,7 @@
 <template>
   <section>
     <h1 class="text-3xl text-center mb-2">Victory Statistics</h1>
-    <div class="card mb-2">
+    <div class="card mb-2 relative">
       <div class="tag section">Faction Victories</div>
       <div class="absolute top-0 right-0 mr-2">
         <v-tooltip left>
