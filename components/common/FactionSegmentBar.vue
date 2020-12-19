@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div v-show="total > 0" class="faction-bar">
+    <div v-show="total > 0" class="faction-bar text-sm text-center text-white">
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
-            class="faction-bar-segment vs text-center text-white rounded-l"
+            class="faction-bar-segment vs rounded-l"
             :style="{ width: percentVS + '%' }"
             :class="{
               'rounded-r':
@@ -22,7 +22,7 @@
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
-            class="faction-bar-segment tr text-center text-white"
+            class="faction-bar-segment tr"
             :style="{ width: percentTR + '%' }"
             :class="{
               'rounded-l': vs === 0,
@@ -40,7 +40,7 @@
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
-            class="faction-bar-segment nc text-center text-white"
+            class="faction-bar-segment nc"
             :style="{ width: percentNC + '%' }"
             :class="{
               'rounded-l': vs === 0 && tr === 0,
@@ -58,7 +58,7 @@
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
-            class="faction-bar-segment nso text-center text-white"
+            class="faction-bar-segment nso"
             :style="{ width: percentOther + '%' }"
             :class="{
               'rounded-l': vs === 0 && nc === 0 && tr === 0,
@@ -76,7 +76,7 @@
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
-            class="faction-bar-segment outofplay text-center text-white"
+            class="faction-bar-segment outofplay"
             :style="{ width: percentOutOfPlay + '%' }"
             :class="{ 'rounded-r': outOfPlay > 0 }"
             v-bind="attrs"
@@ -221,15 +221,15 @@ export default Vue.extend({
 <style scoped lang="scss">
 .faction-bar {
   width: 100%;
-  height: 30px;
+  height: 25px;
   white-space: nowrap;
-}
 
-.faction-bar-segment {
-  width: 33%;
-  height: 100%;
-  display: inline-block;
-  float: left;
-  line-height: 30px;
+  .faction-bar-segment {
+    width: 33%;
+    height: 100%;
+    display: inline-block;
+    float: left;
+    line-height: 25px;
+  }
 }
 </style>
