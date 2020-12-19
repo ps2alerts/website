@@ -216,9 +216,9 @@
           <thead class="font-bold">
             <tr>
               <td class="text-left pr-1">Server</td>
-              <td>Morning bracket</td>
-              <td>Afternoon bracket</td>
-              <td>Prime bracket</td>
+              <td>Morning</td>
+              <td>Afternoon</td>
+              <td>Prime</td>
             </tr>
           </thead>
           <tbody>
