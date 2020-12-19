@@ -184,7 +184,7 @@
           <tbody>
             <tr v-for="(data, world) in worldCounts" :key="world">
               <td class="text-left">{{ parseInt(world, 10) | worldName }}</td>
-              <td class="p-1">
+              <td class="p-1 w-1/3">
                 <FactionSegmentBar
                   v-if="data.brackets[1]"
                   :vs="data.brackets[1].vs"
@@ -196,7 +196,7 @@
                   other-segment-text="Draws"
                 />
               </td>
-              <td class="p-1">
+              <td class="p-1 w-1/3">
                 <FactionSegmentBar
                   v-if="data.brackets[2]"
                   :vs="data.brackets[2].vs"
@@ -208,7 +208,7 @@
                   other-segment-text="Draws"
                 />
               </td>
-              <td class="p-1">
+              <td class="p-1 w-1/3">
                 <FactionSegmentBar
                   v-if="data.brackets[3]"
                   :vs="data.brackets[3].vs"
@@ -270,7 +270,7 @@
           <tbody>
             <tr v-for="(data, world) in worldCounts" :key="world">
               <td class="text-left">{{ parseInt(world, 10) | worldName }}</td>
-              <td class="p-1">
+              <td class="p-1 w-1/4">
                 <FactionSegmentBar
                   v-if="data.zones[2]"
                   :vs="data.zones[2].vs"
@@ -282,7 +282,7 @@
                   other-segment-text="Draws"
                 />
               </td>
-              <td class="p-1">
+              <td class="p-1 w-1/4">
                 <FactionSegmentBar
                   v-if="data.zones[4]"
                   :vs="data.zones[4].vs"
@@ -294,7 +294,7 @@
                   other-segment-text="Draws"
                 />
               </td>
-              <td class="p-1">
+              <td class="p-1 w-1/4">
                 <FactionSegmentBar
                   v-if="data.zones[6]"
                   :vs="data.zones[6].vs"
@@ -306,7 +306,7 @@
                   other-segment-text="Draws"
                 />
               </td>
-              <td class="p-1">
+              <td class="p-1 w-1/4">
                 <FactionSegmentBar
                   v-if="data.zones[8]"
                   :vs="data.zones[8].vs"
