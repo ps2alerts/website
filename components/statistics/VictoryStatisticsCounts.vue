@@ -441,6 +441,8 @@ export default Vue.extend({
     transformData() {
       // Zero the values so they're not added to every time
       this.worldCounts = {}
+      this.zoneCounts = {}
+      this.bracketCounts = {}
       this.totalCounts = {
         vs: 0,
         nc: 0,
