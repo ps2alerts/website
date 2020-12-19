@@ -196,7 +196,7 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   other-segment-text="Draws"
-                  dropoff-percent="15"
+                  dropoff-percent="20"
                 />
               </td>
               <td class="p-1 w-1/3">
@@ -209,7 +209,7 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   other-segment-text="Draws"
-                  dropoff-percent="15"
+                  dropoff-percent="20"
                 />
               </td>
               <td class="p-1 w-1/3">
@@ -222,7 +222,7 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   other-segment-text="Draws"
-                  dropoff-percent="15"
+                  dropoff-percent="20"
                 />
               </td>
             </tr>
@@ -287,7 +287,7 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   other-segment-text="Draws"
-                  dropoff-percent="15"
+                  dropoff-percent="20"
                 />
               </td>
               <td class="p-1 w-1/4">
@@ -300,7 +300,7 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   other-segment-text="Draws"
-                  dropoff-percent="15"
+                  dropoff-percent="20"
                 />
               </td>
               <td class="p-1 w-1/4">
@@ -313,7 +313,7 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   other-segment-text="Draws"
-                  dropoff-percent="15"
+                  dropoff-percent="20"
                 />
               </td>
               <td class="p-1 w-1/4">
@@ -326,7 +326,7 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   other-segment-text="Draws"
-                  dropoff-percent="15"
+                  dropoff-percent="20"
                 />
               </td>
             </tr>
