@@ -76,6 +76,7 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   other-segment-text="Draws"
+                  dropoff-percent="10"
                 />
               </td>
             </tr>
@@ -126,6 +127,7 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   other-segment-text="Draws"
+                  dropoff-percent="10"
                 />
               </td>
             </tr>
@@ -173,6 +175,7 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   other-segment-text="Draws"
+                  dropoff-percent="10"
                 />
               </td>
             </tr>
