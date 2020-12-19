@@ -398,26 +398,37 @@ export default Vue.extend({
       }
 
       this.rawData.forEach((row: GlobalVictoriesAggregateResponseInterface) => {
-        this.worldCounts[row.world] = {
-          world: this.calculateWorldTotals(row),
-          zones: {
-            [row.zone]: this.calculateWorldZoneTotals(row),
-          },
-          brackets: {
-            [row.bracket]: this.calculateWorldBracketTotals(row),
-          },
+        if (!this.worldCounts[row.world]) {
+          this.worldCounts[row.world] = {
+            world: {
+              vs: 0,
+              nc: 0,
+              tr: 0,
+              draws: 0,
+            },
+            zones: {},
+            brackets: {},
+          }
         }
+        this.worldCounts[row.world].world = this.calculateWorldTotals(row)
+        this.worldCounts[row.world].zones[
+          row.zone
+        ] = this.calculateWorldZoneTotals(row)
+        this.worldCounts[row.world].brackets[
+          row.bracket
+        ] = this.calculateWorldBracketTotals(row)
+
         this.zoneCounts[row.zone] = this.calculateZoneTotals(row)
         this.bracketCounts[row.bracket] = this.calculateBracketTotals(row)
         this.totalCounts.vs += row.vs ?? 0
         this.totalCounts.nc += row.nc ?? 0
         this.totalCounts.tr += row.tr ?? 0
         this.totalCounts.draws += row.draws ?? 0
+
+        this.$forceUpdate()
       })
 
       this.loaded = true
-      this.$forceUpdate()
-      console.log('worldCounts', this.worldCounts)
     },
     calculateWorldTotals(
       row: GlobalVictoriesAggregateResponseInterface
@@ -440,8 +451,7 @@ export default Vue.extend({
       row: GlobalVictoriesAggregateResponseInterface
     ): DataFacetInterface {
       const zone = this.worldCounts[row.world]?.zones[row.zone]
-
-      const zoneTotals = zone || {
+      const zoneTotals = zone ?? {
         vs: 0,
         nc: 0,
         tr: 0,
@@ -459,7 +469,6 @@ export default Vue.extend({
       row: GlobalVictoriesAggregateResponseInterface
     ): DataFacetInterface {
       const bracket = this.worldCounts[row.world]?.brackets[row.bracket]
-
       const bracketTotals = bracket ?? {
         vs: 0,
         nc: 0,

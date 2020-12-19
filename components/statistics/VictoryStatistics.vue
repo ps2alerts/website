@@ -129,10 +129,14 @@ export default Vue.extend({
 
       await new ApiRequest()
         .get<GlobalVictoriesAggregateResponseInterface[]>(
-          Endpoints.AGGREGATES_GLOBAL_VICTORIES
+          Endpoints.AGGREGATES_GLOBAL_VICTORIES,
+          {
+            world: 10,
+          }
         )
         .then((result) => {
           this.data = result
+          console.log('victory stats data', result)
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
         })
