@@ -37,12 +37,12 @@
         <button class="btn btn-sm" disabled>Date filtering coming soon!</button>
       </div>
     </div>
-    <VictoryStatisticsCounts
+    <InstanceVictoriesCounts
       :raw-data="data"
       :update-countdown-percent="updateCountdownPercent"
       :mode="mode"
     />
-    <!--    <VictoryStatisticsTimeline-->
+    <!--    <InstanceVictoriesTimeline-->
     <!--      :raw-data="data"-->
     <!--      :update-countdown-percent="updateCountdownPercent"-->
     <!--    />-->
@@ -54,14 +54,14 @@ import Vue from 'vue'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
-// import VictoryStatisticsTimeline from '~/components/statistics/VictoryStatisticsTimeline.vue'
-import VictoryStatisticsCounts from '~/components/statistics/VictoryStatisticsCounts.vue'
+// import InstanceVictoriesTimeline from '~/components/statistics/InstanceVictoriesTimeline.vue'
+import InstanceVictoriesCounts from '~/components/statistics/InstanceVictoriesCounts.vue'
 
 export default Vue.extend({
-  name: 'VictoryStatistics',
+  name: 'InstanceVictories',
   components: {
-    // VictoryStatisticsTimeline,
-    VictoryStatisticsCounts,
+    // InstanceVictoriesTimeline,
+    InstanceVictoriesCounts,
   },
   data() {
     return {

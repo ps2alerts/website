@@ -72,13 +72,14 @@
     </div>
     <div class="col-span-12">
       <VictoryStatistics></VictoryStatistics>
+      <CombatStatistics></CombatStatistics>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import VictoryStatistics from '~/components/statistics/VictoryStatistics.vue'
+import VictoryStatistics from '~/components/statistics/InstanceVictories.vue'
 
 export default Vue.extend({
   name: 'Home',
