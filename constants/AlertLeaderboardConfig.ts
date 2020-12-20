@@ -24,3 +24,11 @@ export const AlertLoadoutLeaderboardConfig = {
     itemsPerPageOptions: [24],
   },
 }
+
+export const StatisticsFactionCombatLeaderboardConfig = {
+  ...AlertLeaderboardConfig,
+  'items-per-page': 28,
+  'footer-props': {
+    itemsPerPageOptions: [28],
+  },
+}

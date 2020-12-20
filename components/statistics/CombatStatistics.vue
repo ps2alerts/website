@@ -1,9 +1,10 @@
 <template>
-  <div>
-    <h1 class="text-3xl text-center mb-4">Combat Statistics</h1>
+  <section class="mb-2">
+    <h1 class="text-3xl text-center m-4">Combat Statistics</h1>
+    <CombatFactions />
     <CombatWeapons />
     <CombatVehicles />
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
@@ -11,14 +12,16 @@ import Vue from 'vue'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
-import CombatVehicles from '~/components/statistics/CombatVehicles.vue'
+// import CombatVehicles from '~/components/statistics/CombatVehicles.vue'
 import CombatWeapons from '~/components/statistics/CombatWeapons.vue'
+import CombatFactions from '~/components/statistics/CombatFactions.vue'
 
 export default Vue.extend({
   name: 'CombatStatistics',
   components: {
+    CombatFactions,
     CombatWeapons,
-    CombatVehicles,
+    // CombatVehicles,
   },
   data() {
     return {

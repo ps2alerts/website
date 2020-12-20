@@ -42,7 +42,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { InstanceWeaponAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceWeaponAggregateResponseInterface'
 import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
@@ -57,7 +56,8 @@ export default Vue.extend({
   data() {
     return {
       loaded: false,
-      data: {} as InstanceWeaponAggregateResponseInterface[],
+      data: {} as StatisticsWeaponTableDataInterface[],
+      error: '',
       updateRate: 60000,
       updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
