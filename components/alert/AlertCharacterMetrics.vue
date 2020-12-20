@@ -35,7 +35,6 @@
         </div>
         <v-data-table
           class="datatable"
-          dense
           show-expand
           item-key="character.id"
           :headers="headers"

@@ -23,7 +23,6 @@
         </div>
         <v-data-table
           class="datatable"
-          dense
           hide-default-footer
           item-key="character.id"
           :headers="headers"

@@ -1,5 +1,6 @@
 export const AlertLeaderboardConfig = {
   dark: true,
+  dense: true,
   'sort-by': ['kills'],
   'sort-desc': [true],
   'single-expand': true,
@@ -28,6 +29,8 @@ export const AlertLoadoutLeaderboardConfig = {
 export const StatisticsFactionCombatLeaderboardConfig = {
   ...AlertLeaderboardConfig,
   'items-per-page': 28,
+  'must-sort': false,
+  'multi-sort': true,
   'footer-props': {
     itemsPerPageOptions: [28],
   },

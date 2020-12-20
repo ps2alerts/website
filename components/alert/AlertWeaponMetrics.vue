@@ -23,7 +23,6 @@
         </div>
         <v-data-table
           class="datatable"
-          dense
           item-key="weapon.id"
           :headers="headers"
           :items="data"

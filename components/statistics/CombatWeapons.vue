@@ -23,7 +23,6 @@
         </div>
         <v-data-table
           class="datatable"
-          dense
           item-key="uuid"
           :headers="headers"
           :items="data"
