@@ -20,7 +20,6 @@
         <v-data-table
           class="datatable"
           dense
-          hide-default-footer
           item-key="uuid"
           :headers="headers"
           :items="data"
@@ -50,7 +49,6 @@ import worldNameFilter from '~/filters/WorldName'
 import { StatisticsFactionCombatTableDataInterface } from '~/interfaces/StatisticsFactionCombatTableDataInterface'
 import { World } from '~/constants/World'
 import factionName from '~/filters/FactionName'
-import { Faction } from '~/constants/Faction'
 import factionId from '~/filters/FactionId'
 
 export default Vue.extend({
@@ -164,7 +162,6 @@ export default Vue.extend({
           this.data = this.transformData(result)
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
-          console.log('combatFactions', this.data)
         })
         .catch((e) => {
           this.error = e.message
@@ -184,21 +181,23 @@ export default Vue.extend({
           return
         }
         const factionData = {
-          vs: this.transformFactionCounts(world.vs, Faction.VANU_SOVEREIGNTY),
-          nc: this.transformFactionCounts(world.nc, Faction.NEW_CONGLOMERATE),
-          tr: this.transformFactionCounts(world.tr, Faction.TERRAN_REPUBLIC),
-          nso: this.transformFactionCounts(world.nso, Faction.NS_OPERATIVES),
+          vs: this.transformFactionCounts(world.vs),
+          nc: this.transformFactionCounts(world.nc),
+          tr: this.transformFactionCounts(world.tr),
+          nso: this.transformFactionCounts(world.nso),
         }
 
         const keys = ['vs', 'nc', 'tr', 'nso']
 
         keys.forEach((key) => {
+          const fId = factionId(key)
           const tableRow: StatisticsFactionCombatTableDataInterface = Object.assign(
             // @ts-ignore
             factionData[key],
             {
-              factionName: factionName(factionId(key)),
-              uuid: `${world.world}-${factionId(key)}`,
+              factionId: fId,
+              factionName: factionName(fId),
+              uuid: `${world.world}-${fId}`,
               worldName: worldNameFilter(world.world),
             }
           )
@@ -210,8 +209,7 @@ export default Vue.extend({
       return newData
     },
     transformFactionCounts(
-      faction: GlobalCombatMetricsInterface,
-      factionId: Faction
+      faction: GlobalCombatMetricsInterface
     ): GlobalCombatMetricsInterface {
       // Ensure table displays all data even if zero
       faction.kills = faction.kills ?? 0
@@ -221,8 +219,6 @@ export default Vue.extend({
       faction.headshots = faction.headshots ?? 0
 
       return Object.assign(faction, {
-        factionId,
-
         kd:
           faction.kills && faction.deaths
             ? (faction.kills / faction.deaths).toFixed(2)
