@@ -1,6 +1,5 @@
 <template>
   <section>
-    <h1 class="text-3xl text-center mb-2">Victory Statistics</h1>
     <div class="card mb-2 relative">
       <div class="tag section">Faction Victories</div>
       <CountdownSpinner :percent="updateCountdownPercent" update-rate="60000" />
@@ -292,6 +291,7 @@
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
+import { World } from '~/constants/World'
 
 interface DataCollectionRowInterface {
   world: DataFacetInterface
@@ -360,6 +360,9 @@ export default Vue.extend({
       }
 
       this.rawData.forEach((row: GlobalVictoriesAggregateResponseInterface) => {
+        if (row.world === World.JAEGER) {
+          return
+        }
         if (!this.worldCounts[row.world]) {
           this.worldCounts[row.world] = {
             world: {

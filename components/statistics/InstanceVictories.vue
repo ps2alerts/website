@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1 class="text-3xl text-center mb-4">
+    <h1 class="text-3xl text-center mb-2">Victory Statistics</h1>
+    <h1 class="text-2xl text-center mb-4">
       <b>{{ totalInstances }}</b> alerts recorded since Dec 18th 2020
       <sup>
         <v-tooltip bottom>
@@ -16,27 +17,6 @@
         </v-tooltip>
       </sup>
     </h1>
-    <div class="flex justify-center mb-2">
-      <div class="btn-group mr-2">
-        <button
-          class="btn btn-sm"
-          :class="{ 'btn-active': mode === 'percent' }"
-          @click="toggleMode('percent')"
-        >
-          <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
-        </button>
-        <button
-          class="btn btn-sm"
-          :class="{ 'btn-active': mode === 'numbers' }"
-          @click="toggleMode('numbers')"
-        >
-          ##
-        </button>
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-sm" disabled>Date filtering coming soon!</button>
-      </div>
-    </div>
     <InstanceVictoriesCounts
       :raw-data="data"
       :update-countdown-percent="updateCountdownPercent"
@@ -60,8 +40,15 @@ import InstanceVictoriesCounts from '~/components/statistics/InstanceVictoriesCo
 export default Vue.extend({
   name: 'InstanceVictories',
   components: {
-    // InstanceVictoriesTimeline,
     InstanceVictoriesCounts,
+    // InstanceVictoriesTimeline,
+  },
+  props: {
+    mode: {
+      type: String,
+      default: 'percent',
+      required: true,
+    },
   },
   data() {
     return {
@@ -71,7 +58,6 @@ export default Vue.extend({
       updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
-      mode: 'percent',
       data: [] as GlobalVictoriesAggregateResponseInterface[],
     }
   },
@@ -109,9 +95,7 @@ export default Vue.extend({
       clearInterval(this.interval)
       clearInterval(this.updateCountdownInterval)
     },
-    toggleMode(mode: string) {
-      this.mode = mode
-    },
+
     init(): void {
       this.pull()
       this.updateCountdownInterval = window.setInterval(() => {

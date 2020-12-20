@@ -71,20 +71,53 @@
       </div>
     </div>
     <div class="col-span-12">
-      <VictoryStatistics></VictoryStatistics>
-      <CombatStatistics></CombatStatistics>
+      <div class="flex justify-center mb-2">
+        <div class="btn-group mr-2">
+          <button
+            class="btn btn-sm"
+            :class="{ 'btn-active': mode === 'percent' }"
+            @click="toggleMode('percent')"
+          >
+            <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
+          </button>
+          <button
+            class="btn btn-sm"
+            :class="{ 'btn-active': mode === 'numbers' }"
+            @click="toggleMode('numbers')"
+          >
+            ##
+          </button>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-sm" disabled>
+            Date filtering coming soon!
+          </button>
+        </div>
+      </div>
+      <InstanceVictories :mode="mode"></InstanceVictories>
+      <CombatStatistics :mode="mode"></CombatStatistics>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import VictoryStatistics from '~/components/statistics/InstanceVictories.vue'
+import InstanceVictories from '~/components/statistics/InstanceVictories.vue'
 
 export default Vue.extend({
   name: 'Home',
   components: {
-    VictoryStatistics,
+    InstanceVictories,
+  },
+  data() {
+    return {
+      mode: 'percent',
+    }
+  },
+  methods: {
+    toggleMode(mode: string) {
+      this.mode = mode
+    },
   },
 })
 </script>

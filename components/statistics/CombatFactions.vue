@@ -1,34 +1,151 @@
 <template>
-  <div class="col-span-12 card relative mb-2">
-    <div class="tag section">Global Faction Combat Metrics</div>
-    <CountdownSpinner
-      v-if="loaded"
-      :percent="updateCountdownPercent"
-      :update-rate="updateRate"
-    />
-    <div v-if="!loaded" class="text-center">
-      <h1>Loading...</h1>
+  <div class="grid grid-cols-12 gap-2">
+    <div class="col-span-12 lg:col-span-6 lg:col-start-4 card relative mb-2">
+      <div class="tag section">Global Faction Metrics</div>
+      <CountdownSpinner
+        v-if="loaded"
+        :percent="updateCountdownPercent"
+        :update-rate="updateRate"
+      />
+      <div v-if="!loaded" class="text-center">
+        <h1>Loading...</h1>
+      </div>
+      <div v-if="loaded">
+        <table class="w-full table-fixed text-center">
+          <thead class="font-bold">
+            <tr>
+              <td style="width: 100px" class="text-left">Metric</td>
+              <td>Global Faction Score</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="py-1 text-left">Kills</td>
+              <td class="py-1">
+                <FactionSegmentBar
+                  :vs="totalsData.vs.kills"
+                  :nc="totalsData.nc.kills"
+                  :tr="totalsData.tr.kills"
+                  :other="totalsData.nso.kills"
+                  other-segment-text="NSO"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="py-1 text-left">Deaths</td>
+              <td class="py-1">
+                <FactionSegmentBar
+                  :vs="totalsData.vs.deaths"
+                  :nc="totalsData.nc.deaths"
+                  :tr="totalsData.tr.deaths"
+                  :other="totalsData.nso.deaths"
+                  other-segment-text="NSO"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="py-1 text-left">KD</td>
+              <td class="py-1">
+                <FactionSegmentBar
+                  :vs="totalsData.vs.kd"
+                  :nc="totalsData.nc.kd"
+                  :tr="totalsData.tr.kd"
+                  :other="totalsData.nso.kd"
+                  other-segment-text="NSO"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="py-1 text-left">Teamkills</td>
+              <td class="py-1">
+                <FactionSegmentBar
+                  :vs="totalsData.vs.teamKills"
+                  :nc="totalsData.nc.teamKills"
+                  :tr="totalsData.tr.teamKills"
+                  :other="totalsData.nso.teamKills"
+                  other-segment-text="NSO"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="py-1 text-left">Suicides</td>
+              <td class="py-1">
+                <FactionSegmentBar
+                  :vs="totalsData.vs.suicides"
+                  :nc="totalsData.nc.suicides"
+                  :tr="totalsData.tr.suicides"
+                  :other="totalsData.nso.suicides"
+                  other-segment-text="NSO"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="py-1 text-left">HSR</td>
+              <td class="py-1">
+                <FactionSegmentBar
+                  :vs="totalsData.vs.headshots"
+                  :nc="totalsData.nc.headshots"
+                  :tr="totalsData.tr.headshots"
+                  :other="totalsData.nso.headshots"
+                  other-segment-text="NSO"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="py-1 text-left">Headshots</td>
+              <td class="py-1">
+                <FactionSegmentBar
+                  :vs="totalsData.vs.hsr"
+                  :nc="totalsData.nc.hsr"
+                  :tr="totalsData.tr.hsr"
+                  :other="totalsData.nso.hsr"
+                  other-segment-text="NSO"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div v-if="loaded" class="grid grid-cols-12">
-      <div class="col-span-12">
-        <p class="text-center mb-2">
-          <font-awesome-icon :icon="['fas', 'exclamation-triangle']" /> NSO data
-          is malformed due to a previous bug. This will be corrected upon data
-          wipe on Jan 1st
-          <font-awesome-icon :icon="['fas', 'exclamation-triangle']" />
-        </p>
-        <v-data-table
-          class="datatable"
-          item-key="uuid"
-          :headers="headers"
-          :items="data"
-          :item-class="tableItemClass"
-          v-bind="leaderboardConfig"
-        >
-          <template #no-results>
-            <div class="text-2xl text-white font-bold my-6">No results!</div>
-          </template>
-        </v-data-table>
+    <div class="col-span-12 card relative mb-2">
+      <div class="tag section">Server Faction Combat Metrics</div>
+      <CountdownSpinner
+        v-if="loaded"
+        :percent="updateCountdownPercent"
+        :update-rate="updateRate"
+      />
+      <div v-if="!loaded" class="text-center">
+        <h1>Loading...</h1>
+      </div>
+      <div v-if="loaded" class="grid grid-cols-12">
+        <div class="col-span-12">
+          <v-data-table
+            class="datatable"
+            item-key="uuid"
+            :headers="headers"
+            :items="data"
+            :item-class="tableItemClass"
+            v-bind="leaderboardConfig"
+          >
+            <template #no-results>
+              <div class="text-2xl text-white font-bold my-6">No results!</div>
+            </template>
+          </v-data-table>
+        </div>
       </div>
     </div>
   </div>
@@ -50,13 +167,28 @@ import { World } from '~/constants/World'
 import factionName from '~/filters/FactionName'
 import factionId from '~/filters/FactionId'
 
+interface TotalFactionInterface {
+  vs?: GlobalCombatMetricsInterface
+  nc?: GlobalCombatMetricsInterface
+  tr?: GlobalCombatMetricsInterface
+  nso?: GlobalCombatMetricsInterface
+}
+
 export default Vue.extend({
   name: 'CombatFactions',
+  props: {
+    mode: {
+      type: String,
+      default: 'percent',
+      required: true,
+    },
+  },
   data() {
     return {
       loaded: false,
       error: '',
       data: {} as StatisticsFactionCombatTableDataInterface[],
+      totalsData: {} as TotalFactionInterface,
       updateRate: 60000,
       updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
@@ -159,6 +291,7 @@ export default Vue.extend({
         )
         .then((result) => {
           this.data = this.transformData(result)
+          this.totalsData = this.transformTotalsData(result)
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
         })
@@ -172,10 +305,9 @@ export default Vue.extend({
     transformData(
       data: GlobalFactionCombatAggregateResponseInterface[]
     ): StatisticsFactionCombatTableDataInterface[] {
-      const newData: StatisticsFactionCombatTableDataInterface[] = []
+      const factionMetrics: StatisticsFactionCombatTableDataInterface[] = []
 
       data.forEach((world: GlobalFactionCombatAggregateResponseInterface) => {
-        console.log('factionWorld', world)
         if (world.world === World.JAEGER) {
           return
         }
@@ -201,11 +333,26 @@ export default Vue.extend({
             }
           )
 
-          newData.push(tableRow)
+          factionMetrics.push(tableRow)
         })
       })
 
-      return newData
+      return factionMetrics
+    },
+    transformTotalsData(data: GlobalFactionCombatAggregateResponseInterface[]) {
+      const totalMetrics: TotalFactionInterface = {}
+      data.forEach((world: GlobalFactionCombatAggregateResponseInterface) => {
+        if (world.world === World.JAEGER) {
+          return
+        }
+
+        totalMetrics.vs = this.addTotals(world.vs, totalMetrics.vs)
+        totalMetrics.nc = this.addTotals(world.nc, totalMetrics.nc)
+        totalMetrics.tr = this.addTotals(world.tr, totalMetrics.tr)
+        totalMetrics.nso = this.addTotals(world.nso, totalMetrics.nso)
+      })
+
+      return totalMetrics
     },
     transformFactionCounts(
       faction: GlobalCombatMetricsInterface
@@ -227,6 +374,36 @@ export default Vue.extend({
             ? ((faction.headshots / faction.kills) * 100).toFixed(2)
             : 0,
       })
+    },
+    addTotals(
+      worldFaction: GlobalCombatMetricsInterface,
+      totals: GlobalCombatMetricsInterface | undefined
+    ): GlobalCombatMetricsInterface {
+      const newData = totals ?? {
+        kills: 0,
+        deaths: 0,
+        teamKills: 0,
+        suicides: 0,
+        headshots: 0,
+        kd: 0,
+        hsr: 0,
+      }
+      newData.kills += worldFaction.kills ?? 0
+      newData.deaths += worldFaction.deaths ?? 0
+      newData.teamKills += worldFaction.teamKills ?? 0
+      newData.suicides += worldFaction.suicides ?? 0
+      newData.headshots += worldFaction.headshots ?? 0
+
+      newData.kd = parseFloat(
+        ((newData.kills ?? 0) / (newData.deaths ?? 0)).toFixed(2)
+      )
+      newData.hsr = parseFloat(
+        newData.headshots && newData.kills
+          ? ((newData.headshots / newData.kills) * 100).toFixed(2)
+          : '0'
+      )
+
+      return newData
     },
   },
 })

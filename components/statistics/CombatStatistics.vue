@@ -1,7 +1,13 @@
 <template>
   <section class="mb-2">
-    <h1 class="text-3xl text-center m-4">Combat Statistics</h1>
-    <CombatFactions />
+    <h1 class="text-3xl text-center mt-4 mb-2">Combat Statistics</h1>
+    <p class="text-center mb-2">
+      <font-awesome-icon :icon="['fas', 'exclamation-triangle']" /> NSO data is
+      malformed due to a previous bug. This will be corrected upon data wipe on
+      Jan 1st
+      <font-awesome-icon :icon="['fas', 'exclamation-triangle']" />
+    </p>
+    <CombatFactions :mode="mode" />
     <CombatWeapons />
     <CombatVehicles />
   </section>
@@ -23,6 +29,13 @@ export default Vue.extend({
     CombatWeapons,
     // CombatVehicles,
   },
+  props: {
+    mode: {
+      type: String,
+      default: 'percent',
+      required: true,
+    },
+  },
   data() {
     return {
       error: null,
@@ -31,7 +44,6 @@ export default Vue.extend({
       updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
-      mode: 'percent',
       data: [] as GlobalVictoriesAggregateResponseInterface[],
     }
   },
@@ -68,9 +80,6 @@ export default Vue.extend({
     clearTimers() {
       clearInterval(this.interval)
       clearInterval(this.updateCountdownInterval)
-    },
-    toggleMode(mode: string) {
-      this.mode = mode
     },
     init(): void {
       this.pull()
