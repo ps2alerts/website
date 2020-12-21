@@ -69,30 +69,31 @@
         <h1 class="text-title">Statistics</h1>
       </div>
     </div>
-    <div class="col-span-12">
-      <div class="flex justify-center mb-2">
-        <div class="btn-group mr-2">
-          <button
-            class="btn btn-sm"
-            :class="{ 'btn-active': mode === 'percent' }"
-            @click="toggleMode('percent')"
-          >
-            <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
-          </button>
-          <button
-            class="btn btn-sm"
-            :class="{ 'btn-active': mode === 'numbers' }"
-            @click="toggleMode('numbers')"
-          >
-            ##
-          </button>
-        </div>
-        <div class="btn-group">
-          <button class="btn btn-sm" disabled>
-            Date filtering coming soon!
-          </button>
-        </div>
+    <div
+      id="stats-sticky"
+      class="col-span-12 lg:col-span-4 lg:col-start-5 flex justify-center mb-2 sticky"
+    >
+      <div class="btn-group mr-2">
+        <button
+          class="btn btn-sm"
+          :class="{ 'btn-active': mode === 'percent' }"
+          @click="toggleMode('percent')"
+        >
+          <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
+        </button>
+        <button
+          class="btn btn-sm"
+          :class="{ 'btn-active': mode === 'numbers' }"
+          @click="toggleMode('numbers')"
+        >
+          ##
+        </button>
       </div>
+      <div class="btn-group">
+        <button class="btn btn-sm" disabled>Date filtering coming soon!</button>
+      </div>
+    </div>
+    <div class="col-span-12">
       <InstanceVictories :mode="mode"></InstanceVictories>
       <CombatStatistics :mode="mode"></CombatStatistics>
     </div>
@@ -120,3 +121,10 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style lang="scss">
+#stats-sticky {
+  top: 1rem;
+  z-index: 1000;
+}
+</style>
