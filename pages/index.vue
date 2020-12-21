@@ -66,8 +66,7 @@
     </div>
     <div class="col-span-12 border-t-2 border-red-700">
       <div class="text-center">
-        <h1 class="text-title">Alert Statistics</h1>
-        <p>All data is currently subject to wipe!</p>
+        <h1 class="text-title">Statistics</h1>
       </div>
     </div>
     <div class="col-span-12">

@@ -11,7 +11,7 @@
         <h1>Loading...</h1>
       </div>
       <div v-if="loaded">
-        <table class="w-full table-fixed text-center">
+        <table class="w-full table-fixed text-center border-row">
           <thead class="font-bold">
             <tr>
               <td style="width: 100px" class="text-left">Metric</td>
@@ -56,8 +56,8 @@
                   :tr="totalsData.tr.kd"
                   :other="totalsData.nso.kd"
                   other-segment-text="NSO"
-                  :is-percentage="mode === 'percent'"
-                  :show-as-calculated-percentage="mode === 'percent'"
+                  :is-percentage="false"
+                  :show-as-calculated-percentage="false"
                 />
               </td>
             </tr>
@@ -90,7 +90,7 @@
               </td>
             </tr>
             <tr>
-              <td class="py-1 text-left">HSR</td>
+              <td class="py-1 text-left">Headshots</td>
               <td class="py-1">
                 <FactionSegmentBar
                   :vs="totalsData.vs.headshots"
@@ -104,7 +104,7 @@
               </td>
             </tr>
             <tr>
-              <td class="py-1 text-left">Headshots</td>
+              <td class="py-1 text-left">HSR %</td>
               <td class="py-1">
                 <FactionSegmentBar
                   :vs="totalsData.vs.hsr"
@@ -112,8 +112,8 @@
                   :tr="totalsData.tr.hsr"
                   :other="totalsData.nso.hsr"
                   other-segment-text="NSO"
-                  :is-percentage="mode === 'percent'"
-                  :show-as-calculated-percentage="mode === 'percent'"
+                  :is-percentage="false"
+                  :show-as-calculated-percentage="false"
                 />
               </td>
             </tr>
