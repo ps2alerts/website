@@ -56,9 +56,6 @@
                 />
               </td>
             </tr>
-            <tr>
-              <td colspan="5" class="p-1">PS4 servers coming soon!</td>
-            </tr>
           </tbody>
         </table>
       </div>
@@ -198,9 +195,6 @@
                 />
               </td>
             </tr>
-            <tr>
-              <td colspan="4" class="p-1">PS4 servers coming soon!</td>
-            </tr>
           </tbody>
         </table>
       </div>
@@ -277,9 +271,6 @@
                   dropoff-percent="20"
                 />
               </td>
-            </tr>
-            <tr>
-              <td colspan="5" class="p-1">PS4 servers coming soon!</td>
             </tr>
           </tbody>
         </table>
