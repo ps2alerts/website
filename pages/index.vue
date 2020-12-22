@@ -13,45 +13,25 @@
           <div class="p-6 text-center items-center justify-items-center">
             <img
               id="splash-icon"
-              src="../assets/img/alert-icon.png"
+              src="../assets/img/ps4.jpg"
               alt="PS2Alerts Icon"
-              class="inline-block"
+              class="inline-block rounded-md"
             />
           </div>
-          <h1 class="text-subtitle text-center">PS2Alerts now in Alpha!</h1>
+          <h1 class="text-subtitle text-center">PS4 Support has arrived!</h1>
         </div>
         <div class="col-span-12 ss:col-span-8">
           <p>
-            PS2Alerts is now in Alpha stage! The basic minimum viable product of
-            the tracker is now a reality, featuring the following:
+            PS2Alerts now supports the PS4! While all the metrics are collecting
+            now, the PS4 servers will be under represented in the global metrics
+            until the wipe on <b>Jan 1st 2021</b>.
           </p>
-          <ul>
-            <li>
-              <b>Real time alert tracking</b>, with an active alert log to the
-              left (or top on mobile) allowing you see at a glance all the
-              alerts going on in PS2 (for PC only right now).
-            </li>
-            <li>
-              <b>Historical Alert search</b>, enabling you to go back in time
-              and revisit or share an alert to your fellow planetmans. It is
-              also filterable, allowing you to see alerts on Indar during
-              Primetime for example.
-            </li>
-            <li>
-              <b>Real time per-alert statistics</b>. It shows a plethora of
-              information, including but won't be limited to:
-              <ul>
-                <li>
-                  Alert details e.g. continent, time bracket, server, which
-                  faction triggered it, etc.
-                </li>
-                <li>
-                  Filterable and sortable per player, weapon, outfit and vehicle
-                  combat statistics.
-                </li>
-              </ul>
-            </li>
-          </ul>
+          <p>
+            We're currently considering creating different brackets / metrics
+            between PC and PS4 servers, simply because the bracketing system
+            won't work overly well for PS4. Further information about this
+            coming soon.
+          </p>
           <p class="text-center">
             Please note -
             <b>all data is going to be wiped Jan 1st 2021!</b> This is when
@@ -123,6 +103,9 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
+#splash-icon {
+  max-height: 15vh;
+}
 #stats-sticky {
   top: 1rem;
   z-index: 1000;
