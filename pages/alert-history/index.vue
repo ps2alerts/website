@@ -172,6 +172,7 @@ export default Vue.extend({
       const filter: InstanceParamsInterface = {
         sortBy: 'timeStarted',
         order: 'desc',
+        pageSize: this.filteredByDate() ? 250 : 50,
       }
       if (this.selectedWorld > 0) filter.world = this.selectedWorld
       if (this.selectedZone > 0) filter.zone = this.selectedZone
@@ -227,11 +228,11 @@ export default Vue.extend({
     },
     async pull(): Promise<void> {
       console.log('AlertHistory.pull')
-      const queryParams = this.setUpRequest()
+      this.error = { message: '' }
 
       try {
         this.alerts = await this.ApiRequest.get(
-          Endpoints.INSTANCES_TERRITORY_CONTROL + queryParams,
+          Endpoints.INSTANCES_TERRITORY_CONTROL,
           this.filter
         )
         this.loaded = true
@@ -240,17 +241,6 @@ export default Vue.extend({
       } catch (e) {
         this.error = e
       }
-    },
-
-    setUpRequest(): string {
-      this.error = { message: '' }
-      let queryParams = '?pageSize=50'
-
-      if (this.filteredByDate()) {
-        queryParams = '?pageSize=250'
-      }
-
-      return queryParams
     },
     updateWorld(world: World): void {
       this.selectedWorld = world

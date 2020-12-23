@@ -63,7 +63,7 @@
         </div>
       </div>
       <div class="col-span-12 lg:col-span-6 card relative">
-        <div class="tag section">Global Continent Victories</div>
+        <div class="tag section">Global Bracket Victories</div>
         <CountdownSpinner
           :percent="updateCountdownPercent"
           update-rate="60000"
@@ -71,15 +71,15 @@
         <table class="w-full table-auto border-row text-center">
           <thead class="font-bold">
             <tr>
-              <td class="text-left pr-1">Continent</td>
+              <td class="text-left pr-1">Bracket</td>
               <td>Count</td>
               <td>Victory Rate</td>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(data, zone) in zoneCounts" :key="zone">
+            <tr v-for="(data, bracket) in bracketCounts" :key="bracket">
               <td class="text-left" style="width: 80px">
-                {{ parseInt(zone, 10) | zoneName }}
+                {{ parseInt(bracket, 10) | bracketName }}
               </td>
               <td class="px-1" style="width: 50px">
                 {{ data.vs + data.nc + data.tr + data.draws }}
@@ -101,7 +101,7 @@
         </table>
       </div>
       <div class="col-span-12 lg:col-span-6 card relative">
-        <div class="tag section">Global Bracket Victories</div>
+        <div class="tag section">Global Continent Victories</div>
         <CountdownSpinner
           :percent="updateCountdownPercent"
           update-rate="60000"
@@ -109,15 +109,15 @@
         <table class="w-full table-auto border-row text-center">
           <thead class="font-bold">
             <tr>
-              <td class="text-left pr-1">Bracket</td>
+              <td class="text-left pr-1">Continent</td>
               <td>Count</td>
               <td>Victory Rate</td>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(data, bracket) in bracketCounts" :key="bracket">
+            <tr v-for="(data, zone) in zoneCounts" :key="zone">
               <td class="text-left" style="width: 80px">
-                {{ parseInt(bracket, 10) | bracketName }}
+                {{ parseInt(zone, 10) | zoneName }}
               </td>
               <td class="px-1" style="width: 50px">
                 {{ data.vs + data.nc + data.tr + data.draws }}
