@@ -30,6 +30,7 @@
                   other-segment-text="NSO"
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
+                  numeral="0.2a"
                 />
               </td>
             </tr>
@@ -44,6 +45,7 @@
                   other-segment-text="NSO"
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
+                  numeral="0.0a"
                 />
               </td>
             </tr>
@@ -72,6 +74,7 @@
                   other-segment-text="NSO"
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
+                  numeral="0.0a"
                 />
               </td>
             </tr>
@@ -86,6 +89,7 @@
                   other-segment-text="NSO"
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
+                  numeral="0.0a"
                 />
               </td>
             </tr>
@@ -100,6 +104,7 @@
                   other-segment-text="NSO"
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
+                  numeral="0.0a"
                 />
               </td>
             </tr>

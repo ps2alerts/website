@@ -13,7 +13,10 @@
             v-bind="attrs"
             v-on="on"
           >
-            {{ vsString() }}
+            <span v-if="!isPercentage && numeral">{{
+              vsString() | numeral(numeral)
+            }}</span>
+            <span v-else>{{ vsString() }}</span>
           </div>
         </template>
         <span>VS: {{ vsString(true) }}</span>
@@ -31,7 +34,10 @@
             v-bind="attrs"
             v-on="on"
           >
-            {{ trString() }}
+            <span v-if="!isPercentage && numeral">{{
+              trString() | numeral(numeral)
+            }}</span>
+            <span v-else>{{ trString() }}</span>
           </div>
         </template>
         <span>TR: {{ trString(true) }}</span>
@@ -49,7 +55,10 @@
             v-bind="attrs"
             v-on="on"
           >
-            {{ ncString() }}
+            <span v-if="!isPercentage && numeral">{{
+              ncString() | numeral(numeral)
+            }}</span>
+            <span v-else>{{ ncString() }}</span>
           </div>
         </template>
         <span>NC: {{ ncString(true) }}</span>
@@ -140,6 +149,11 @@ export default Vue.extend({
     dropoffPercent: {
       type: String,
       default: '5',
+      required: false,
+    },
+    numeral: {
+      type: String,
+      default: '',
       required: false,
     },
   },
