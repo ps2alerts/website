@@ -207,27 +207,25 @@ export default Vue.extend({
             calcData[worldVehicle.vehicle] ?? {}
 
           vehicle.vehicles = this.addVehicleMetrics(
-            worldVehicle.vehicles ?? undefined,
-            vehicle.vehicles
+            worldVehicle.vehicles,
+            vehicle.vehicles ?? undefined
           )
           vehicle.infantry = this.addVehicleMetrics(
-            worldVehicle.infantry ?? undefined,
-            vehicle.infantry
+            worldVehicle.infantry,
+            vehicle.infantry ?? undefined
           )
           vehicle.totals = this.addVehicleMetrics(
-            worldVehicle.totals ?? undefined,
+            worldVehicle.totals,
             vehicle.totals ?? undefined
           )
 
-          vehicle.suicides =
-            (vehicle.suicides
-              ? vehicle.suicides + worldVehicle.suicides
-              : worldVehicle.suicides) ?? 0
+          vehicle.suicides = vehicle.suicides = vehicle.suicides
+            ? vehicle.suicides + (worldVehicle?.suicides ?? 0)
+            : 0
 
-          vehicle.roadkills =
-            (vehicle.roadkills
-              ? vehicle.roadkills + worldVehicle.roadkills
-              : worldVehicle.roadkills) ?? 0
+          vehicle.roadkills = vehicle.roadkills = vehicle.roadkills
+            ? vehicle.roadkills + (worldVehicle?.roadkills ?? 0)
+            : 0
 
           vehicle.vehicleName = worldVehicle.vehicleName
           vehicle.vehicleFaction = worldVehicle.vehicleFaction
@@ -235,7 +233,7 @@ export default Vue.extend({
           vehicle.kd =
             vehicle.totals.kills && vehicle.totals.deaths
               ? (vehicle.totals.kills / vehicle.totals.deaths).toFixed(2)
-              : vehicle.totals.kills || 0
+              : vehicle.totals.kills?.toString() || '0'
 
           calcData[worldVehicle.vehicle] = vehicle
         }
@@ -260,10 +258,15 @@ export default Vue.extend({
         teamkilled: 0,
       }
 
+      // @ts-ignore
       newData.kills += worldVehicle?.kills ?? 0
+      // @ts-ignore
       newData.deaths += worldVehicle?.deaths ?? 0
+      // @ts-ignore
       newData.teamkills += worldVehicle?.teamkills ?? 0
+      // @ts-ignore
       newData.teamkilled += worldVehicle?.teamkilled ?? 0
+      // @ts-ignore
       newData.kd = ((newData.kills ?? 0) / (newData.deaths ?? 0)).toFixed(2)
 
       return newData
