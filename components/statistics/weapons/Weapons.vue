@@ -50,7 +50,7 @@ import { Endpoints } from '~/constants/Endpoints'
 import { FactionBgClassString } from '~/constants/FactionBgClass'
 import { GlobalWeaponAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalWeaponAggregateResponseInterface'
 import worldNameFilter from '~/filters/WorldName'
-import { StatisticsWeaponTableDataInterface } from '~/interfaces/StatisticsWeaponTableDataInterface'
+import { StatisticsWeaponTableDataInterface } from '~/interfaces/statistics/StatisticsWeaponTableDataInterface'
 import { World } from '~/constants/World'
 
 export default Vue.extend({

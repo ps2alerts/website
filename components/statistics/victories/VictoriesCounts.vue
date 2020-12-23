@@ -386,7 +386,6 @@ export default Vue.extend({
       })
 
       this.$forceUpdate()
-      console.log(this.worldCounts)
       this.loaded = true
     },
     calculateWorldTotals(

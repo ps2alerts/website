@@ -71,7 +71,7 @@ import {
   FactionBgClassString,
 } from '@/constants/FactionBgClass'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
-import { AlertCharacterTableDataInterface } from '~/interfaces/AlertCharacterTableDataInterface'
+import { AlertCharacterTableDataInterface } from '~/interfaces/alert/AlertCharacterTableDataInterface'
 import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
 
 export default Vue.extend({

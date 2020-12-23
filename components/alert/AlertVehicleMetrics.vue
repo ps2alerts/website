@@ -55,10 +55,8 @@ import {
 } from '@/constants/FactionBgClass'
 import vehicleFaction from '@/filters/VehicleFaction'
 import { AlertVehicleLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
-import {
-  AlertVehicleMetricsDataTableInterface,
-  VehicleStatsWithKd,
-} from '~/interfaces/AlertVehicleMetricsDataTableInterface'
+import { AlertVehicleMetricsDataTableInterface } from '~/interfaces/alert/AlertVehicleMetricsDataTableInterface'
+import { VehicleStatsWithKd } from '~/interfaces/VehicleStatisticsInterface'
 
 export default Vue.extend({
   name: 'AlertVehicleMetrics',

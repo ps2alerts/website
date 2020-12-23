@@ -1,11 +1,5 @@
 import { Faction } from '@/constants/Faction'
-
-export interface VehicleStatsInterface {
-  kills?: number
-  deaths?: number
-  teamkills?: number
-  teamkilled?: number
-}
+import { VehicleStatsInterface } from '~/interfaces/VehicleStatisticsInterface'
 
 export interface InstanceVehicleAggregateResponseInterface {
   instanceId: string

@@ -43,3 +43,8 @@ export const StatisticsFactionLeaderboardConfig = {
     itemsPerPageOptions: [28],
   },
 }
+
+export const StatisticsVehicleLeaderboardConfig = {
+  ...AlertLeaderboardConfig,
+  'sort-by': ['totals.kd'],
+}

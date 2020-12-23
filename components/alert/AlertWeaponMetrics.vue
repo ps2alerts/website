@@ -47,7 +47,7 @@ import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceWeaponAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceWeaponAggregateResponseInterface'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
-import { AlertWeaponTableDataInterface } from '~/interfaces/AlertWeaponTableDataInterface'
+import { AlertWeaponTableDataInterface } from '~/interfaces/alert/AlertWeaponTableDataInterface'
 import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
 
 export default Vue.extend({

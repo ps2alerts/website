@@ -387,9 +387,9 @@ export default Vue.extend({
         )
         .then((result) => {
           this.worldData = result
+          this.totalsData = this.transformTotalsData(result)
           this.serverTotalData = this.transformServerTotalData(result)
           this.serverFactionData = this.transformServerFactionData(result)
-          this.totalsData = this.transformTotalsData(result)
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
         })
@@ -399,6 +399,21 @@ export default Vue.extend({
     },
     tableItemClass(faction: StatisticsFactionCombatTableDataInterface): string {
       return FactionBgClassString(faction.factionId) + ' text-center'
+    },
+    transformTotalsData(data: GlobalFactionCombatAggregateResponseInterface[]) {
+      const totalMetrics: TotalFactionInterface = {}
+      data.forEach((world: GlobalFactionCombatAggregateResponseInterface) => {
+        if (world.world === World.JAEGER) {
+          return
+        }
+
+        totalMetrics.vs = this.addVehicleMetrics(world.vs, totalMetrics.vs)
+        totalMetrics.nc = this.addVehicleMetrics(world.nc, totalMetrics.nc)
+        totalMetrics.tr = this.addVehicleMetrics(world.tr, totalMetrics.tr)
+        totalMetrics.nso = this.addVehicleMetrics(world.nso, totalMetrics.nso)
+      })
+
+      return totalMetrics
     },
     transformServerTotalData(
       data: GlobalFactionCombatAggregateResponseInterface[]
@@ -454,21 +469,6 @@ export default Vue.extend({
 
       return factionMetrics
     },
-    transformTotalsData(data: GlobalFactionCombatAggregateResponseInterface[]) {
-      const totalMetrics: TotalFactionInterface = {}
-      data.forEach((world: GlobalFactionCombatAggregateResponseInterface) => {
-        if (world.world === World.JAEGER) {
-          return
-        }
-
-        totalMetrics.vs = this.addTotals(world.vs, totalMetrics.vs)
-        totalMetrics.nc = this.addTotals(world.nc, totalMetrics.nc)
-        totalMetrics.tr = this.addTotals(world.tr, totalMetrics.tr)
-        totalMetrics.nso = this.addTotals(world.nso, totalMetrics.nso)
-      })
-
-      return totalMetrics
-    },
     transformMetricCounts(
       metrics: GlobalCombatMetricsInterface
     ): GlobalCombatMetricsInterface {
@@ -490,7 +490,7 @@ export default Vue.extend({
             : 0,
       })
     },
-    addTotals(
+    addVehicleMetrics(
       worldFaction: GlobalCombatMetricsInterface,
       totals: GlobalCombatMetricsInterface | undefined
     ): GlobalCombatMetricsInterface {

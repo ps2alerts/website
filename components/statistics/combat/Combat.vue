@@ -8,8 +8,6 @@
       <font-awesome-icon :icon="['fas', 'exclamation-triangle']" />
     </p>
     <CombatFactions :mode="mode" />
-
-    <CombatVehicles />
   </section>
 </template>
 

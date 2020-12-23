@@ -73,7 +73,7 @@ import {
   FactionBgClassString,
 } from '@/constants/FactionBgClass'
 import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
-import { AlertOutfitTableDataInterface } from '~/interfaces/AlertOutfitTableDataInterface'
+import { AlertOutfitTableDataInterface } from '~/interfaces/alert/AlertOutfitTableDataInterface'
 
 export default Vue.extend({
   name: 'AlertOutfitMetrics',
