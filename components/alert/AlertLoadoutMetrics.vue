@@ -72,7 +72,7 @@ export default Vue.extend({
       interval: undefined as undefined | number,
       data: {} as AlertLoadoutTableDataInterface[],
       filter: '',
-      serverFactionLeaderboardConfig: AlertLoadoutLeaderboardConfig,
+      leaderboardConfig: AlertLoadoutLeaderboardConfig,
       expanded: [],
       headers: [
         {

@@ -20,7 +20,7 @@
           </div>
           <h1 class="text-subtitle text-center">PS4 Support has arrived!</h1>
         </div>
-        <div class="col-span-12 ss:col-span-8">
+        <div class="col-span-12 ss:col-span-8 text-center">
           <p>
             PS2Alerts now supports the PS4! While all the metrics are collecting
             now, the PS4 servers will be under represented in the global metrics
@@ -47,6 +47,10 @@
     <div class="col-span-12 border-t-2 border-red-700">
       <div class="text-center">
         <h1 class="text-title">Statistics</h1>
+        <p class="mb-2">
+          <font-awesome-icon :icon="['fas', 'hammer']" /> This section is a work
+          in progress! <font-awesome-icon :icon="['fas', 'hammer']" />
+        </p>
       </div>
     </div>
     <div

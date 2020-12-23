@@ -80,7 +80,7 @@ export default Vue.extend({
       data: {} as AlertVehicleMetricsDataTableInterface[],
       vehicleData: [] as VehicleDataInterface[],
       filter: '',
-      serverFactionLeaderboardConfig: AlertVehicleLeaderboardConfig,
+      leaderboardConfig: AlertVehicleLeaderboardConfig,
       headers: [
         {
           text: 'Vehicle',

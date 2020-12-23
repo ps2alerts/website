@@ -50,15 +50,21 @@
           <font-awesome-icon :icon="['fas', 'user-tag']" /> Classes
         </button>
       </div>
-      <div v-show="showPlayers === true" class="col-span-12 card relative">
+      <section
+        v-show="showPlayers === true"
+        class="col-span-12 card relative mb-2"
+      >
         <AlertCharacterMetrics
           ref="character"
           :alert="alert"
           @players-loaded="playersLoadedEvent"
           @outfit-participants-changed="outfitParticipantsChanged"
         />
-      </div>
-      <div v-show="showOutfits === true" class="col-span-12 card relative">
+      </section>
+      <section
+        v-show="showOutfits === true"
+        class="col-span-12 card relative mb-2"
+      >
         <AlertOutfitMetrics
           ref="outfit"
           :alert="alert"
@@ -66,17 +72,23 @@
           :players-loaded="playersLoaded"
           @request-outfit-participants="requestOutfitParticipants"
         />
-      </div>
-      <div v-show="showWeapons === true" class="col-span-12 card relative">
+      </section>
+      <section
+        v-show="showWeapons === true"
+        class="col-span-12 card relative mb-2"
+      >
         <AlertWeaponMetrics :alert="alert" />
-      </div>
-      <div v-show="showVehicles === true" class="col-span-12">
+      </section>
+      <section v-show="showVehicles === true" class="col-span-12">
         <AlertVehicleMetrics :alert="alert" />
         <AlertVehicleMatrix :alert="alert" />
-      </div>
-      <div v-show="showClasses === true" class="col-span-12 card relative">
+      </section>
+      <section
+        v-show="showClasses === true"
+        class="col-span-12 card relative mb-2"
+      >
         <AlertClassMetrics :alert="alert" />
-      </div>
+      </section>
     </div>
   </div>
 </template>
