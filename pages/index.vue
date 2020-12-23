@@ -121,7 +121,7 @@
         </v-tab>
 
         <v-tab href="#facilities">
-          Facilities (WIP)
+          Map (WIP)
           <font-awesome-icon :icon="['fas', 'map']"></font-awesome-icon>
         </v-tab>
       </v-tabs>

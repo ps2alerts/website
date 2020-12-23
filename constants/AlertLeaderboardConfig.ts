@@ -26,8 +26,16 @@ export const AlertLoadoutLeaderboardConfig = {
   },
 }
 
-export const StatisticsFactionCombatLeaderboardConfig = {
+export const StatisticsServerLeaderboardConfig = {
   ...AlertLeaderboardConfig,
+  'sort-by': ['totals.kd'],
+  'hide-default-footer': true,
+  'must-sort': true,
+}
+
+export const StatisticsFactionLeaderboardConfig = {
+  ...AlertLeaderboardConfig,
+  'sort-by': ['kd'],
   'items-per-page': 28,
   'must-sort': false,
   'multi-sort': true,

@@ -69,7 +69,7 @@ export default Vue.extend({
       interval: undefined as undefined | number,
       data: {} as InstanceWeaponAggregateResponseInterface[],
       filter: '',
-      leaderboardConfig: AlertLeaderboardConfig,
+      serverFactionLeaderboardConfig: AlertLeaderboardConfig,
       headers: [
         {
           text: 'Weapon',

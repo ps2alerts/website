@@ -65,7 +65,7 @@ export default Vue.extend({
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       filter: '',
-      leaderboardConfig: AlertLeaderboardConfig,
+      serverFactionLeaderboardConfig: AlertLeaderboardConfig,
       headers: [
         {
           text: 'Weapon',

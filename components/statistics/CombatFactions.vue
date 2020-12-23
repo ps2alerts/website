@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-12 lg:col-span-6 lg:col-start-4 card relative mb-2">
-      <div class="tag section">Faction Combat</div>
+      <div class="tag section">Global Faction Combat</div>
       <CountdownSpinner
         v-if="loaded"
         :percent="updateCountdownPercent"
@@ -121,8 +121,34 @@
         </table>
       </div>
     </div>
+
     <div class="col-span-12 card relative mb-2">
-      <div class="tag section">Server Faction Combat Metrics</div>
+      <div class="tag section">Server Combat</div>
+      <CountdownSpinner
+        v-if="loaded"
+        :percent="updateCountdownPercent"
+        :update-rate="updateRate"
+      />
+      <div v-if="!loaded" class="text-center">
+        <h1>Loading...</h1>
+      </div>
+      <div v-if="loaded" class="grid grid-cols-12">
+        <div class="col-span-12">
+          <v-data-table
+            class="datatable"
+            item-key="world"
+            :headers="serverTotalTableHeaders"
+            :items="serverTotalData"
+            :item-class="tableItemClass"
+            v-bind="serverTotalLeaderboardConfig"
+          >
+          </v-data-table>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-span-12 card relative mb-2">
+      <div class="tag section">Server Combat by Faction</div>
       <CountdownSpinner
         v-if="loaded"
         :percent="updateCountdownPercent"
@@ -136,14 +162,11 @@
           <v-data-table
             class="datatable"
             item-key="uuid"
-            :headers="headers"
-            :items="data"
+            :headers="serverFactionTableHeaders"
+            :items="serverFactionData"
             :item-class="tableItemClass"
-            v-bind="leaderboardConfig"
+            v-bind="serverFactionLeaderboardConfig"
           >
-            <template #no-results>
-              <div class="text-2xl text-white font-bold my-6">No results!</div>
-            </template>
           </v-data-table>
         </div>
       </div>
@@ -153,7 +176,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { StatisticsFactionCombatLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
+import {
+  StatisticsFactionLeaderboardConfig,
+  StatisticsServerLeaderboardConfig,
+} from '~/constants/AlertLeaderboardConfig'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
 import { FactionBgClassString } from '~/constants/FactionBgClass'
@@ -162,16 +188,29 @@ import {
   GlobalFactionCombatAggregateResponseInterface,
 } from '~/interfaces/aggregates/global/GlobalFactionCombatAggregateResponseInterface'
 import worldNameFilter from '~/filters/WorldName'
-import { StatisticsFactionCombatTableDataInterface } from '~/interfaces/StatisticsFactionCombatTableDataInterface'
 import { World } from '~/constants/World'
 import factionName from '~/filters/FactionName'
 import factionId from '~/filters/FactionId'
+import { Faction } from '~/constants/Faction'
 
 interface TotalFactionInterface {
   vs?: GlobalCombatMetricsInterface
   nc?: GlobalCombatMetricsInterface
   tr?: GlobalCombatMetricsInterface
   nso?: GlobalCombatMetricsInterface
+}
+
+interface StatisticsServerCombatTableDataInterface {
+  worldName: string
+  totals: GlobalCombatMetricsInterface
+}
+
+interface StatisticsFactionCombatTableDataInterface
+  extends GlobalCombatMetricsInterface {
+  uuid: string
+  worldName: string
+  factionId: Faction
+  factionName: string
 }
 
 export default Vue.extend({
@@ -187,15 +226,67 @@ export default Vue.extend({
     return {
       loaded: false,
       error: '',
-      data: {} as StatisticsFactionCombatTableDataInterface[],
+      worldData: {} as GlobalFactionCombatAggregateResponseInterface[],
+      serverTotalData: {} as StatisticsServerCombatTableDataInterface[],
+      serverFactionData: {} as StatisticsFactionCombatTableDataInterface[],
       totalsData: {} as TotalFactionInterface,
       updateRate: 60000,
       updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       filter: '',
-      leaderboardConfig: StatisticsFactionCombatLeaderboardConfig,
-      headers: [
+      serverTotalLeaderboardConfig: StatisticsServerLeaderboardConfig,
+      serverFactionLeaderboardConfig: StatisticsFactionLeaderboardConfig,
+      serverTotalTableHeaders: [
+        {
+          text: 'Server',
+          align: 'left',
+          value: 'worldName',
+        },
+        {
+          text: 'Kills',
+          align: 'middle',
+          filterable: false,
+          value: 'totals.kills',
+        },
+        {
+          text: 'Deaths',
+          align: 'middle',
+          filterable: false,
+          value: 'totals.deaths',
+        },
+        {
+          text: 'KD',
+          align: 'middle',
+          filterable: false,
+          value: 'totals.kd',
+        },
+        {
+          text: 'TKs',
+          align: 'middle',
+          filterable: false,
+          value: 'totals.teamKills',
+        },
+        {
+          text: 'Suicides',
+          align: 'middle',
+          filterable: false,
+          value: 'totals.suicides',
+        },
+        {
+          text: 'Headshots',
+          align: 'middle',
+          filterable: false,
+          value: 'totals.headshots',
+        },
+        {
+          text: 'HSR %',
+          align: 'middle',
+          filterable: false,
+          value: 'totals.hsr',
+        },
+      ],
+      serverFactionTableHeaders: [
         {
           text: 'Server',
           align: 'left',
@@ -290,7 +381,9 @@ export default Vue.extend({
           Endpoints.AGGREGATES_GLOBAL_FACTION
         )
         .then((result) => {
-          this.data = this.transformData(result)
+          this.worldData = result
+          this.serverTotalData = this.transformServerTotalData(result)
+          this.serverFactionData = this.transformServerFactionData(result)
           this.totalsData = this.transformTotalsData(result)
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
@@ -302,7 +395,24 @@ export default Vue.extend({
     tableItemClass(faction: StatisticsFactionCombatTableDataInterface): string {
       return FactionBgClassString(faction.factionId) + ' text-center'
     },
-    transformData(
+    transformServerTotalData(
+      data: GlobalFactionCombatAggregateResponseInterface[]
+    ): StatisticsServerCombatTableDataInterface[] {
+      const serverTotalMetrics: StatisticsServerCombatTableDataInterface[] = []
+
+      data.forEach((world: GlobalFactionCombatAggregateResponseInterface) => {
+        if (world.world === World.JAEGER) {
+          return
+        }
+        serverTotalMetrics[world.world] = {
+          worldName: worldNameFilter(world.world),
+          totals: this.transformMetricCounts(world.totals),
+        }
+      })
+
+      return serverTotalMetrics
+    },
+    transformServerFactionData(
       data: GlobalFactionCombatAggregateResponseInterface[]
     ): StatisticsFactionCombatTableDataInterface[] {
       const factionMetrics: StatisticsFactionCombatTableDataInterface[] = []
@@ -312,10 +422,10 @@ export default Vue.extend({
           return
         }
         const factionData = {
-          vs: this.transformFactionCounts(world.vs),
-          nc: this.transformFactionCounts(world.nc),
-          tr: this.transformFactionCounts(world.tr),
-          nso: this.transformFactionCounts(world.nso),
+          vs: this.transformMetricCounts(world.vs),
+          nc: this.transformMetricCounts(world.nc),
+          tr: this.transformMetricCounts(world.tr),
+          nso: this.transformMetricCounts(world.nso),
         }
 
         const keys = ['vs', 'nc', 'tr', 'nso']
@@ -354,24 +464,24 @@ export default Vue.extend({
 
       return totalMetrics
     },
-    transformFactionCounts(
-      faction: GlobalCombatMetricsInterface
+    transformMetricCounts(
+      metrics: GlobalCombatMetricsInterface
     ): GlobalCombatMetricsInterface {
       // Ensure table displays all data even if zero
-      faction.kills = faction.kills ?? 0
-      faction.deaths = faction.deaths ?? 0
-      faction.teamKills = faction.teamKills ?? 0
-      faction.suicides = faction.suicides ?? 0
-      faction.headshots = faction.headshots ?? 0
+      metrics.kills = metrics.kills ?? 0
+      metrics.deaths = metrics.deaths ?? 0
+      metrics.teamKills = metrics.teamKills ?? 0
+      metrics.suicides = metrics.suicides ?? 0
+      metrics.headshots = metrics.headshots ?? 0
 
-      return Object.assign(faction, {
+      return Object.assign(metrics, {
         kd:
-          faction.kills && faction.deaths
-            ? (faction.kills / faction.deaths).toFixed(2)
-            : faction.kills || 0,
+          metrics.kills && metrics.deaths
+            ? (metrics.kills / metrics.deaths).toFixed(2)
+            : metrics.kills || 0,
         hsr:
-          faction.headshots && faction.kills
-            ? ((faction.headshots / faction.kills) * 100).toFixed(2)
+          metrics.headshots && metrics.kills
+            ? ((metrics.headshots / metrics.kills) * 100).toFixed(2)
             : 0,
       })
     },

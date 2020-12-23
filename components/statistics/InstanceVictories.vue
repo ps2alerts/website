@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section class="mb-2">
     <h1 class="text-3xl text-center mb-2">Victory Statistics</h1>
     <h1 class="text-2xl text-center mb-4">
       <b>{{ totalInstances }}</b> alerts recorded since Dec 18th 2020
@@ -26,7 +26,7 @@
     <!--      :raw-data="data"-->
     <!--      :update-countdown-percent="updateCountdownPercent"-->
     <!--    />-->
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
