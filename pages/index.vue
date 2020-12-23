@@ -100,13 +100,13 @@
           <font-awesome-icon :icon="['fas', 'users']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#combat">
-          Combat
-          <font-awesome-icon :icon="['fas', 'bomb']"></font-awesome-icon>
-        </v-tab>
-
         <v-tab href="#weapons">
           Weapons
+          <font-awesome-icon :icon="['fab', 'sith']"></font-awesome-icon>
+        </v-tab>
+
+        <v-tab href="#combat">
+          Combat
           <font-awesome-icon :icon="['fas', 'bomb']"></font-awesome-icon>
         </v-tab>
 
@@ -122,7 +122,7 @@
 
         <v-tab href="#facilities">
           Map (WIP)
-          <font-awesome-icon :icon="['fas', 'map']"></font-awesome-icon>
+          <font-awesome-icon :icon="['fas', 'flag']"></font-awesome-icon>
         </v-tab>
       </v-tabs>
 
