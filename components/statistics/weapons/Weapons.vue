@@ -54,7 +54,7 @@ import { StatisticsWeaponTableDataInterface } from '~/interfaces/StatisticsWeapo
 import { World } from '~/constants/World'
 
 export default Vue.extend({
-  name: 'CombatWeapons',
+  name: 'Weapons',
   data() {
     return {
       loaded: false,

@@ -132,7 +132,7 @@
 
       <v-tabs-items v-model="tab">
         <v-tab-item value="victories">
-          <InstanceVictories :mode="mode"></InstanceVictories>
+          <Victories :mode="mode"></Victories>
         </v-tab-item>
         <v-tab-item value="players">
           <h1 class="text-3xl text-center">Coming soon!</h1>
@@ -141,14 +141,13 @@
           <h1 class="text-3xl text-center">Coming soon!</h1>
         </v-tab-item>
         <v-tab-item value="combat">
-          <CombatStatistics :mode="mode"></CombatStatistics>
+          <Combat :mode="mode"></Combat>
         </v-tab-item>
         <v-tab-item value="weapons">
-          <CombatWeapons :mode="mode"></CombatWeapons>
+          <Weapons :mode="mode"></Weapons>
         </v-tab-item>
         <v-tab-item value="vehicles">
-          <h1 class="text-3xl text-center">Coming soon!</h1>
-          <!--          <CombatVehicles :mode="mode"></CombatVehicles>-->
+          <Vehicles :mode="mode"></Vehicles>
         </v-tab-item>
         <v-tab-item value="loadouts">
           <h1 class="text-3xl text-center">Coming soon!</h1>
@@ -163,18 +162,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import InstanceVictories from '~/components/statistics/InstanceVictories.vue'
-import CombatStatistics from '~/components/statistics/CombatStatistics.vue'
-import CombatWeapons from '~/components/statistics/CombatWeapons.vue'
 
 export default Vue.extend({
   name: 'Home',
-  components: {
-    InstanceVictories,
-    CombatStatistics,
-    CombatWeapons,
-    // CombatVehicles,
-  },
   data() {
     return {
       mode: 'percent',

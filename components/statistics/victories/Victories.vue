@@ -1,15 +1,27 @@
 <template>
   <section class="mb-2">
-    <h1 class="text-3xl text-center mb-2">Combat Statistics</h1>
-    <p class="text-center mb-2">
-      <font-awesome-icon :icon="['fas', 'exclamation-triangle']" /> NSO data is
-      malformed due to a previous bug. This will be corrected upon data wipe on
-      Jan 1st
-      <font-awesome-icon :icon="['fas', 'exclamation-triangle']" />
-    </p>
-    <CombatFactions :mode="mode" />
-
-    <CombatVehicles />
+    <h1 class="text-3xl text-center mb-2">Victory Statistics</h1>
+    <h1 class="text-2xl text-center mb-4">
+      <b>{{ totalInstances }}</b> alerts recorded since Dec 18th 2020
+      <sup>
+        <v-tooltip bottom>
+          <template #activator="{ on, attrs }">
+            <font-awesome-icon
+              :icon="['fas', 'exclamation-triangle']"
+              v-bind="attrs"
+              v-on="on"
+            ></font-awesome-icon>
+          </template>
+          The below metrics will get wiped come the site's launch on Jan 1st
+          2021.
+        </v-tooltip>
+      </sup>
+    </h1>
+    <VictoriesCounts
+      :raw-data="data"
+      :update-countdown-percent="updateCountdownPercent"
+      :mode="mode"
+    />
   </section>
 </template>
 
@@ -18,12 +30,12 @@ import Vue from 'vue'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
-import CombatFactions from '~/components/statistics/CombatFactions.vue'
+import VictoriesCounts from '~/components/statistics/victories/VictoriesCounts.vue'
 
 export default Vue.extend({
-  name: 'CombatStatistics',
+  name: 'Victories',
   components: {
-    CombatFactions,
+    VictoriesCounts,
   },
   props: {
     mode: {
@@ -77,6 +89,7 @@ export default Vue.extend({
       clearInterval(this.interval)
       clearInterval(this.updateCountdownInterval)
     },
+
     init(): void {
       this.pull()
       this.updateCountdownInterval = window.setInterval(() => {
@@ -88,7 +101,7 @@ export default Vue.extend({
       }, this.updateRate)
     },
     async pull(): Promise<void> {
-      console.log('CombatStatistics.pull')
+      console.log('VictoryStatistics.pull')
 
       await new ApiRequest()
         .get<GlobalVictoriesAggregateResponseInterface[]>(

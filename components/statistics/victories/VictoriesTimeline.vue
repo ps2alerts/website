@@ -10,7 +10,7 @@ import Vue from 'vue'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 
 export default Vue.extend({
-  name: 'InstanceVictoriesTimeline',
+  name: 'VictoriesTimeline',
   props: {
     rawData: {
       type: Object as () => GlobalVictoriesAggregateResponseInterface,

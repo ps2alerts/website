@@ -305,7 +305,7 @@ interface DataFacetInterface {
 }
 
 export default Vue.extend({
-  name: 'InstanceVictoriesCounts',
+  name: 'VictoriesCounts',
   props: {
     rawData: {
       type: Array,
