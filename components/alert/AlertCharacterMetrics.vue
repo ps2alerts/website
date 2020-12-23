@@ -94,7 +94,7 @@ export default Vue.extend({
       data: {} as AlertCharacterTableDataInterface[],
       outfitParticipants: {} as { [k: string]: string[] },
       filter: '',
-      serverFactionLeaderboardConfig: AlertLeaderboardConfig,
+      leaderboardConfig: AlertLeaderboardConfig,
       expanded: [],
       headers: [
         {

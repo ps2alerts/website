@@ -104,7 +104,7 @@ export default Vue.extend({
       interval: undefined as undefined | number,
       data: {} as AlertOutfitTableDataInterface[],
       filter: '',
-      serverFactionLeaderboardConfig: AlertLeaderboardConfig,
+      leaderboardConfig: AlertLeaderboardConfig,
       expanded: [],
       headers: [
         {
