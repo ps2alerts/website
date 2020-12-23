@@ -1,6 +1,6 @@
 <template>
   <section class="mb-2">
-    <h1 class="text-3xl text-center mt-4 mb-2">Combat Statistics</h1>
+    <h1 class="text-3xl text-center mb-2">Combat Statistics</h1>
     <p class="text-center mb-2">
       <font-awesome-icon :icon="['fas', 'exclamation-triangle']" /> NSO data is
       malformed due to a previous bug. This will be corrected upon data wipe on
@@ -8,7 +8,7 @@
       <font-awesome-icon :icon="['fas', 'exclamation-triangle']" />
     </p>
     <CombatFactions :mode="mode" />
-    <CombatWeapons />
+
     <CombatVehicles />
   </section>
 </template>
@@ -18,16 +18,12 @@ import Vue from 'vue'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
-// import CombatVehicles from '~/components/statistics/CombatVehicles.vue'
-import CombatWeapons from '~/components/statistics/CombatWeapons.vue'
 import CombatFactions from '~/components/statistics/CombatFactions.vue'
 
 export default Vue.extend({
   name: 'CombatStatistics',
   components: {
     CombatFactions,
-    CombatWeapons,
-    // CombatVehicles,
   },
   props: {
     mode: {

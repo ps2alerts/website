@@ -74,8 +74,85 @@
       </div>
     </div>
     <div class="col-span-12">
-      <InstanceVictories :mode="mode"></InstanceVictories>
-      <CombatStatistics :mode="mode"></CombatStatistics>
+      <v-tabs
+        v-model="tab"
+        center-active
+        icons-and-text
+        fixed-tabs
+        dark
+        show-arrows
+        class="my-4"
+      >
+        <v-tabs-slider></v-tabs-slider>
+
+        <v-tab href="#victories">
+          Victories
+          <font-awesome-icon :icon="['fas', 'trophy']"></font-awesome-icon>
+        </v-tab>
+
+        <v-tab href="#players">
+          Players (WIP)
+          <font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon>
+        </v-tab>
+
+        <v-tab href="#outfits">
+          Outfits (WIP)
+          <font-awesome-icon :icon="['fas', 'users']"></font-awesome-icon>
+        </v-tab>
+
+        <v-tab href="#combat">
+          Combat
+          <font-awesome-icon :icon="['fas', 'bomb']"></font-awesome-icon>
+        </v-tab>
+
+        <v-tab href="#weapons">
+          Weapons
+          <font-awesome-icon :icon="['fas', 'bomb']"></font-awesome-icon>
+        </v-tab>
+
+        <v-tab href="#vehicles">
+          Vehicles (WIP)
+          <font-awesome-icon :icon="['fas', 'fighter-jet']"></font-awesome-icon>
+        </v-tab>
+
+        <v-tab href="#loadouts">
+          Classes (WIP)
+          <font-awesome-icon :icon="['fas', 'user-tag']"></font-awesome-icon>
+        </v-tab>
+
+        <v-tab href="#facilities">
+          Facilities (WIP)
+          <font-awesome-icon :icon="['fas', 'map']"></font-awesome-icon>
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items v-model="tab">
+        <v-tab-item value="victories">
+          <InstanceVictories :mode="mode"></InstanceVictories>
+        </v-tab-item>
+        <v-tab-item value="players">
+          <h1 class="text-3xl text-center">Coming soon!</h1>
+        </v-tab-item>
+        <v-tab-item value="outfits">
+          <h1 class="text-3xl text-center">Coming soon!</h1>
+        </v-tab-item>
+        <v-tab-item value="combat">
+          <CombatStatistics :mode="mode"></CombatStatistics>
+        </v-tab-item>
+        <v-tab-item value="weapons">
+          <CombatWeapons :mode="mode"></CombatWeapons>
+        </v-tab-item>
+        <v-tab-item value="vehicles">
+          <h1 class="text-3xl text-center">Coming soon!</h1>
+          <!--          <CombatVehicles :mode="mode"></CombatVehicles>-->
+        </v-tab-item>
+        <v-tab-item value="loadouts">
+          <h1 class="text-3xl text-center">Coming soon!</h1>
+        </v-tab-item>
+        <v-tab-item value="facilities">
+          <h1 class="text-3xl text-center">Coming soon!</h1>
+        </v-tab-item>
+      </v-tabs-items>
     </div>
   </div>
 </template>
@@ -83,15 +160,21 @@
 <script lang="ts">
 import Vue from 'vue'
 import InstanceVictories from '~/components/statistics/InstanceVictories.vue'
+import CombatStatistics from '~/components/statistics/CombatStatistics.vue'
+import CombatWeapons from '~/components/statistics/CombatWeapons.vue'
 
 export default Vue.extend({
   name: 'Home',
   components: {
     InstanceVictories,
+    CombatStatistics,
+    CombatWeapons,
+    // CombatVehicles,
   },
   data() {
     return {
       mode: 'percent',
+      tab: '',
     }
   },
   methods: {
@@ -109,5 +192,14 @@ export default Vue.extend({
 #stats-sticky {
   top: 1rem;
   z-index: 1000;
+}
+
+.theme--dark {
+  &.v-tabs-bar {
+    background-color: #9b2c2c !important;
+  }
+  &.v-tabs-items {
+    background-color: rgba(0, 0, 0, 0) !important;
+  }
 }
 </style>

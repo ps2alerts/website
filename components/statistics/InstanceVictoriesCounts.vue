@@ -1,23 +1,8 @@
 <template>
   <section>
-    <div class="card mb-2 relative">
-      <div class="tag section">Faction Victories</div>
-      <CountdownSpinner :percent="updateCountdownPercent" update-rate="60000" />
-      <div v-if="loaded">
-        <FactionSegmentBar
-          :vs="totalCounts.vs"
-          :nc="totalCounts.nc"
-          :tr="totalCounts.tr"
-          :other="totalCounts.draws"
-          :is-percentage="mode === 'percent'"
-          :show-as-calculated-percentage="mode === 'percent'"
-          other-segment-text="Draws"
-        />
-      </div>
-    </div>
     <div v-if="loaded" class="grid grid-cols-12 gap-2">
-      <div class="col-span-12 lg:col-span-6 ss:col-span-4 card relative">
-        <div class="tag section">Server Victories</div>
+      <div class="col-span-12 card relative">
+        <div class="tag section">Faction Victory Server Breakdown</div>
         <CountdownSpinner
           :percent="updateCountdownPercent"
           update-rate="60000"
@@ -59,7 +44,25 @@
           </tbody>
         </table>
       </div>
-      <div class="col-span-12 lg:col-span-6 ss:col-span-4 card relative">
+      <div class="col-span-12 card relative">
+        <div class="tag section">Global faction victories (all brackets)</div>
+        <CountdownSpinner
+          :percent="updateCountdownPercent"
+          update-rate="60000"
+        />
+        <div v-if="loaded">
+          <FactionSegmentBar
+            :vs="totalCounts.vs"
+            :nc="totalCounts.nc"
+            :tr="totalCounts.tr"
+            :other="totalCounts.draws"
+            :is-percentage="mode === 'percent'"
+            :show-as-calculated-percentage="mode === 'percent'"
+            other-segment-text="Draws"
+          />
+        </div>
+      </div>
+      <div class="col-span-12 lg:col-span-6 card relative">
         <div class="tag section">Global Continent Victories</div>
         <CountdownSpinner
           :percent="updateCountdownPercent"
@@ -97,7 +100,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-span-12 lg:col-span-6 ss:col-span-4 card relative">
+      <div class="col-span-12 lg:col-span-6 card relative">
         <div class="tag section">Global Bracket Victories</div>
         <CountdownSpinner
           :percent="updateCountdownPercent"

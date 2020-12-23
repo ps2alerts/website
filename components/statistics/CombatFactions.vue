@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-12 lg:col-span-6 lg:col-start-4 card relative mb-2">
-      <div class="tag section">Global Faction Metrics</div>
+      <div class="tag section">Faction Combat</div>
       <CountdownSpinner
         v-if="loaded"
         :percent="updateCountdownPercent"

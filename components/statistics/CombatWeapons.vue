@@ -1,42 +1,45 @@
 <template>
-  <div class="col-span-12 card relative">
-    <div class="tag section">Global Weapon Metrics</div>
-    <CountdownSpinner
-      v-if="loaded"
-      :percent="updateCountdownPercent"
-      :update-rate="updateRate"
-    />
-    <div v-if="!loaded" class="text-center">
-      <h1>Loading...</h1>
-    </div>
-    <div v-if="loaded" class="grid grid-cols-12">
-      <div class="col-span-12">
-        <div class="mb-2">
-          <input
-            v-model="filter"
-            class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
-            type="text"
-            placeholder="Weapon name / Server name"
-            aria-label="Weapon name / Server name"
-            @keydown="$event.stopImmediatePropagation()"
-          />
+  <section class="mb-2">
+    <h1 class="text-3xl text-center mb-2">Weapon Statistics</h1>
+    <div class="col-span-12 card relative">
+      <div class="tag section">Server Weapon Breakdown</div>
+      <CountdownSpinner
+        v-if="loaded"
+        :percent="updateCountdownPercent"
+        :update-rate="updateRate"
+      />
+      <div v-if="!loaded" class="text-center">
+        <h1>Loading...</h1>
+      </div>
+      <div v-if="loaded" class="grid grid-cols-12">
+        <div class="col-span-12">
+          <div class="mb-2">
+            <input
+              v-model="filter"
+              class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
+              type="text"
+              placeholder="Weapon name / Server name"
+              aria-label="Weapon name / Server name"
+              @keydown="$event.stopImmediatePropagation()"
+            />
+          </div>
+          <v-data-table
+            class="datatable"
+            item-key="uuid"
+            :headers="headers"
+            :items="data"
+            :search="filter"
+            :item-class="tableItemClass"
+            v-bind="leaderboardConfig"
+          >
+            <template #no-results>
+              <div class="text-2xl text-white font-bold my-6">No results!</div>
+            </template>
+          </v-data-table>
         </div>
-        <v-data-table
-          class="datatable"
-          item-key="uuid"
-          :headers="headers"
-          :items="data"
-          :search="filter"
-          :item-class="tableItemClass"
-          v-bind="leaderboardConfig"
-        >
-          <template #no-results>
-            <div class="text-2xl text-white font-bold my-6">No results!</div>
-          </template>
-        </v-data-table>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
