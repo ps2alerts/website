@@ -38,7 +38,7 @@
     "@nuxtjs/eslint-config-typescript": "^3.0.0",
     "@nuxtjs/eslint-module": "^3.0.1",
     "@nuxtjs/google-analytics": "^2.4.0",
-    "@nuxtjs/tailwindcss": "^3.3.4",
+    "@nuxtjs/tailwindcss": "^3.4.2",
     "@nuxtjs/vuetify": "^1.11.2",
     "@tailwindcss/typography": "^0.2.0",
     "@tailwindcss/ui": "^0.7.2",
