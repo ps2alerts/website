@@ -9,39 +9,33 @@
       </div>
 
       <div class="grid grid-cols-12 place-items-center">
-        <div class="col-span-12 ss:col-span-4">
+        <div class="col-span-12">
           <div class="p-6 text-center items-center justify-items-center">
             <img
               id="splash-icon"
-              src="../assets/img/ps4.jpg"
+              src="../assets/img/alert-icon.png"
               alt="PS2Alerts Icon"
               class="inline-block rounded-md"
             />
           </div>
-          <h1 class="text-subtitle text-center">PS4 Support has arrived!</h1>
         </div>
-        <div class="col-span-12 ss:col-span-8 text-center">
+        <div class="col-span-12 text-center">
+          <h1 class="text-subtitle text-center">PS2Alerts launches in...</h1>
+          <no-ssr>
+            <div class="my-4">
+              <flip-countdown deadline="2021-01-01 00:00:00"></flip-countdown>
+            </div>
+          </no-ssr>
           <p>
-            PS2Alerts now supports the PS4! While all the metrics are collecting
-            now, the PS4 servers will be under represented in the global metrics
-            until the wipe on <b>Jan 1st 2021</b>.
-          </p>
-          <p>
-            We're currently considering creating different brackets / metrics
-            between PC and PS4 servers, simply because the bracketing system
-            won't work overly well for PS4. Further information about this
-            coming soon.
-          </p>
-          <p class="text-center">
-            Please note -
-            <b>all data is going to be wiped Jan 1st 2021!</b> This is when
-            PS2Alerts will launch.
+            All stats will be reset on 1st January and the site will officially
+            launch! (It'll continued to be worked on thereafter). This staging
+            copy will cease collecting data, and the official link
+            <a href="https://ps2alerts.com" class="text-blue-600"
+              >ps2alerts.com</a
+            >
+            will be where the new statistics will be.
           </p>
         </div>
-      </div>
-      <div class="col-span-12 text-center">
-        <nuxt-link to="/alert-history" class="btn">Latest Alerts</nuxt-link>
-        <nuxt-link to="/change-log" class="btn">View the change log</nuxt-link>
       </div>
     </div>
     <div class="col-span-12 border-t-2 border-red-700">
@@ -162,9 +156,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
+// @ts-ignore
+import FlipCountdown from 'vue2-flip-countdown'
 
 export default Vue.extend({
   name: 'Home',
+  components: {
+    FlipCountdown,
+  },
   data() {
     return {
       mode: 'percent',
