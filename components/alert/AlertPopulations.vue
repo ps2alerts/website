@@ -23,11 +23,39 @@
     <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
-    <div v-if="loaded" class="text-center">
-      <line-chart
-        :chart-data="datacollection"
-        :options="chartOptions"
-      ></line-chart>
+    <div class="text-center">
+      <div class="btn-group mr-2">
+        <button
+          class="btn btn-sm"
+          :class="{ 'btn-active': mode === 'number' }"
+          @click="updateMode('number')"
+        >
+          <font-awesome-icon fixed-width :icon="['fas', 'equals']" />
+          Numbers
+        </button>
+        <button
+          class="btn btn-sm"
+          :class="{ 'btn-active': mode === 'average' }"
+          @click="updateMode('average')"
+        >
+          <font-awesome-icon fixed-width :icon="['fas', 'exchange-alt']" />
+          Rolling Average
+        </button>
+      </div>
+      <div v-show="mode === 'number'">
+        <line-chart
+          :chart-data="dataCollection"
+          :options="chartOptions"
+          style="width: 100%; height: 400px"
+        ></line-chart>
+      </div>
+      <div v-show="mode === 'average'">
+        <line-chart
+          :chart-data="dataAvgCollection"
+          :options="chartOptions"
+          style="width: 100%; height: 400px"
+        ></line-chart>
+      </div>
     </div>
   </div>
 </template>
@@ -56,7 +84,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      datacollection: {},
+      dataCollection: {},
+      dataAvgCollection: {},
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
@@ -105,6 +134,8 @@ export default Vue.extend({
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       data: [] as InstancePopulationAggregateResponseInterface[],
+      avgData: [] as InstancePopulationAggregateResponseInterface[],
+      mode: 'number',
     }
   },
   computed: {
@@ -129,6 +160,7 @@ export default Vue.extend({
   },
   mounted() {
     this.fillData()
+    this.fillData(true)
   },
   methods: {
     reset() {
@@ -158,8 +190,10 @@ export default Vue.extend({
 
       console.log('AlertPopulations.pull', this.alert.instanceId)
 
-      await new ApiRequest()
-        .get<InstancePopulationAggregateResponseInterface[]>(
+      const promises = []
+
+      promises.push(
+        new ApiRequest().get<InstancePopulationAggregateResponseInterface[]>(
           Endpoints.AGGREGATES_INSTANCE_POPULATION.replace(
             '{instance}',
             this.alert.instanceId
@@ -167,24 +201,47 @@ export default Vue.extend({
               : 'whatever'
           )
         )
-        .then((result) => {
-          this.data = result
-          this.loaded = true
+      )
+      promises.push(
+        new ApiRequest().get<InstancePopulationAggregateResponseInterface[]>(
+          Endpoints.AGGREGATES_INSTANCE_POPULATION_AVERAGES.replace(
+            '{instance}',
+            this.alert.instanceId
+              ? this.alert.instanceId.toString()
+              : 'whatever'
+          )
+        )
+      )
+
+      await Promise.all(promises)
+        .then(([popData, avgPopData]) => {
+          this.data = popData
+          this.avgData = avgPopData
           this.updateCountdown = this.updateRate / 1000
-          this.fillData()
+          this.fillData(false)
+          this.fillData(true)
+          console.log('numbers', this.dataCollection)
+          console.log('average', this.dataAvgCollection)
+          this.loaded = true
         })
         .catch((e) => {
           this.error = e.message
         })
     },
-    fillData() {
+    fillData(avg = false) {
       const times: string[] = []
       const vsData: number[] = []
       const ncData: number[] = []
       const trData: number[] = []
       const nsoData: number[] = []
 
-      this.data.forEach((row) => {
+      let data = this.data
+
+      if (avg) {
+        data = this.avgData
+      }
+
+      data.forEach((row) => {
         times.push(moment(row.timestamp).format('HH:mm'))
         vsData.push(row.vs)
         ncData.push(row.nc)
@@ -192,31 +249,51 @@ export default Vue.extend({
         nsoData.push(row.nso)
       })
 
-      this.datacollection = {
+      const collection = {
         labels: times,
         datasets: [
           {
             label: 'VS',
-            backgroundColor: '#553c9a',
+            borderColor: '#6B46C1',
             data: vsData,
+            pointStyle: 'circle',
+            pointBorderWidth: 2,
+            pointHoverBorderWidth: 4,
           },
           {
             label: 'TR',
-            backgroundColor: '#9b2c2c',
+            borderColor: '#9b2c2c',
             data: trData,
+            pointStyle: 'rect',
+            pointBorderWidth: 2,
+            pointHoverBorderWidth: 4,
           },
           {
             label: 'NC',
-            backgroundColor: '#2b6cb0',
+            borderColor: '#2b6cb0',
             data: ncData,
+            pointStyle: 'triangle',
+            pointBorderWidth: 2,
+            pointHoverBorderWidth: 4,
           },
           {
             label: 'NSO',
-            backgroundColor: '#4a5568',
+            borderColor: '#4a5568',
             data: nsoData,
+            pointBorderWidth: 2,
+            pointHoverBorderWidth: 4,
           },
         ],
       }
+
+      if (avg) {
+        this.dataAvgCollection = collection
+      } else {
+        this.dataCollection = collection
+      }
+    },
+    updateMode(mode: string) {
+      this.mode = mode
     },
   },
 })

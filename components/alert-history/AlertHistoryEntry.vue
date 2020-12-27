@@ -72,7 +72,7 @@
         <div class="mb-1">
           {{ alert.bracket | bracketName }}
         </div>
-        <div class="text-xs text-gray-500">Bracket</div>
+        <div class="text-xs text-gray-500">Activity</div>
       </div>
       <div
         class="col-span-2 lg:col-span-1 lg:col-start-6 text-sm lg:text-xl ss:text-2xl mb-2 lg:mb-0"
