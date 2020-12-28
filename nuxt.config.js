@@ -14,7 +14,7 @@ export default {
     build: process.env.BUILD ?? 'UNKNOWN BUILD',
     version: process.env.VERSION ?? 'UNKNOWN VERSION',
     baseUrl: process.env.BASE_URL ?? 'http://dev.ps2alerts.com',
-    maintenance: true,
+    maintenance: false,
   },
   server: {
     port: 3000,
