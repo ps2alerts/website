@@ -39,20 +39,33 @@
           @click="updateMode('average')"
         >
           <font-awesome-icon fixed-width :icon="['fas', 'exchange-alt']" />
-          Rolling Average
+          Activity Level
+          <v-tooltip bottom>
+            <template #activator="{ on, attrs }">
+              <font-awesome-icon
+                :icon="['fas', 'info-circle']"
+                v-bind="attrs"
+                v-on="on"
+              ></font-awesome-icon>
+            </template>
+            Shows the calculation for the Activity bracket. All non-NSO factions
+            must be above the level indicated to achieve that level (based on
+            last entry).
+          </v-tooltip>
         </button>
       </div>
+
       <div v-show="mode === 'number'">
         <line-chart
           :chart-data="dataCollection"
-          :options="chartOptions"
+          :options="popNumberChartOptions"
           style="width: 100%; height: 400px"
         ></line-chart>
       </div>
-      <div v-show="mode === 'average'">
+      <div v-show="mode === 'average'" class="text-center">
         <line-chart
           :chart-data="dataAvgCollection"
-          :options="chartOptions"
+          :options="activityChartOptions"
           style="width: 100%; height: 400px"
         ></line-chart>
       </div>
@@ -70,6 +83,62 @@ import { Endpoints } from '~/constants/Endpoints'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { InstancePopulationAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstancePopulationAggregateResponseInterface'
 
+const commonChartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    xAxes: [
+      {
+        ticks: {
+          fontColor: '#fff',
+        },
+        gridLines: {
+          display: false,
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Time',
+          fontColor: '#fff',
+        },
+      },
+    ],
+    yAxes: [
+      {
+        ticks: {
+          fontColor: '#fff',
+        },
+        gridLines: {
+          color: '#718096',
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Players',
+          fontColor: '#fff',
+        },
+      },
+    ],
+  },
+  legend: {
+    labels: {
+      fontColor: '#fff',
+    },
+  },
+}
+
+const annotationCommon = {
+  type: 'line',
+  mode: 'horizontal',
+  scaleID: 'y-axis-0',
+  borderColor: 'rgba(255, 0, 0, 0.25)',
+  borderWidth: 2,
+}
+
+const labelCommon = {
+  backgroundColor: 'rgba(255,0,0,0.5)',
+  enabled: true,
+  position: 'left',
+}
+
 export default Vue.extend({
   name: 'AlertPopulations',
   components: {
@@ -86,45 +155,58 @@ export default Vue.extend({
     return {
       dataCollection: {},
       dataAvgCollection: {},
-      chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          xAxes: [
+      popNumberChartOptions: commonChartOptions,
+      activityChartOptions: {
+        ...commonChartOptions,
+        annotation: {
+          annotations: [
             {
-              ticks: {
-                fontColor: '#fff',
+              ...annotationCommon,
+              id: 'activityDead',
+              value: 1,
+              label: {
+                ...labelCommon,
+                content: 'Dead (>48)',
+                yAdjust: -13,
               },
-              gridLines: {
-                display: false,
+            },
+            {
+              ...annotationCommon,
+              id: 'activityLow',
+              value: 48,
+              label: {
+                ...labelCommon,
+                content: 'Low (48)',
               },
-              scaleLabel: {
-                display: true,
-                labelString: 'Time',
-                fontColor: '#fff',
+            },
+            {
+              ...annotationCommon,
+              id: 'activityMed',
+              value: 96,
+              label: {
+                ...labelCommon,
+                content: 'Med (96)',
+              },
+            },
+            {
+              ...annotationCommon,
+              id: 'activityHigh',
+              value: 144,
+              label: {
+                ...labelCommon,
+                content: 'High (144)',
+              },
+            },
+            {
+              ...annotationCommon,
+              id: 'activityPrime',
+              value: 192,
+              label: {
+                ...labelCommon,
+                content: 'Prime (192)',
               },
             },
           ],
-          yAxes: [
-            {
-              ticks: {
-                fontColor: '#fff',
-              },
-              gridLines: {
-                color: '#718096',
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Players',
-                fontColor: '#fff',
-              },
-            },
-          ],
-        },
-        legend: {
-          labels: {
-            fontColor: '#fff',
-          },
         },
       },
       error: null,
@@ -136,6 +218,7 @@ export default Vue.extend({
       data: [] as InstancePopulationAggregateResponseInterface[],
       avgData: [] as InstancePopulationAggregateResponseInterface[],
       mode: 'number',
+      showBrackets: 'false',
     }
   },
   computed: {
@@ -220,8 +303,6 @@ export default Vue.extend({
           this.updateCountdown = this.updateRate / 1000
           this.fillData(false)
           this.fillData(true)
-          console.log('numbers', this.dataCollection)
-          console.log('average', this.dataAvgCollection)
           this.loaded = true
         })
         .catch((e) => {
@@ -292,7 +373,7 @@ export default Vue.extend({
         this.dataCollection = collection
       }
     },
-    updateMode(mode: string) {
+    updateMode(mode: string): void {
       this.mode = mode
     },
   },

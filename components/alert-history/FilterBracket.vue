@@ -7,8 +7,8 @@
       @change="changeBracket()"
     >
       <option :value="NONE">Any</option>
-      <option :value="PRIME">Prime (5+ platoons)</option>
-      <option :value="HIGH">High (3-5 platoons)</option>
+      <option :value="PRIME">Prime (4+ platoons)</option>
+      <option :value="HIGH">High (3-4 platoons)</option>
       <option :value="MEDIUM">Medium (2-3 platoons)</option>
       <option :value="LOW">Low (1-2 platoons)</option>
       <option :value="DEAD">Dead (&lt;1 platoon)</option>
