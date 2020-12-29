@@ -1,6 +1,6 @@
 <template>
   <div
-    class="col-span-12 lg:col-span-6 ss:col-span-4 card relative items-center"
+    class="col-span-12 lg:col-span-6 ss:col-span-3 card relative items-center"
   >
     <div class="tag section">Faction Combat Metrics</div>
     <CountdownSpinner

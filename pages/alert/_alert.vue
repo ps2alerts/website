@@ -11,8 +11,11 @@
       />
       <AlertDetails :alert="alert" />
       <AlertFactionCombatMetrics :alert="alert" />
+      <AlertFactionVsFaction :alert="alert" />
       <AlertPopulations :alert="alert" />
       <AlertCombatHistory :alert="alert" />
+      <AlertMap :alert="alert" />
+      <AlertCaptureHistory :alert="alert" />
       <div class="col-span-12 justify-center btn-group mt-4">
         <button
           class="btn"
@@ -99,17 +102,20 @@ import { InstanceTerritoryControlResponseInterface } from '@/interfaces/Instance
 import ApiRequest from '@/api-request'
 import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
+import AlertResult from '@/components/alert/AlertResult.vue'
 import AlertDetails from '@/components/alert/AlertDetails.vue'
 import AlertFactionCombatMetrics from '@/components/alert/AlertFactionCombatMetrics.vue'
+import AlertFactionVsFaction from '@/components/alert/AlertFactionVsFaction.vue'
+import AlertMap from '@/components/alert/AlertMap.vue'
+import AlertCaptureHistory from '@/components/alert/AlertCaptureHistory.vue'
 import AlertCharacterMetrics from '@/components/alert/AlertCharacterMetrics.vue'
 import AlertOutfitMetrics from '@/components/alert/AlertOutfitMetrics.vue'
 import AlertWeaponMetrics from '@/components/alert/AlertWeaponMetrics.vue'
 import AlertVehicleMetrics from '@/components/alert/AlertVehicleMetrics.vue'
 import AlertVehicleMatrix from '@/components/alert/AlertVehicleMatrix.vue'
-import AlertResult from '@/components/alert/AlertResult.vue'
 import AlertPopulations from '@/components/alert/AlertPopulations.vue'
-import AlertClassMetrics from '~/components/alert/AlertLoadoutMetrics.vue'
-import AlertCombatHistory from '~/components/alert/AlertCombatHistory.vue'
+import AlertClassMetrics from '@/components/alert/AlertLoadoutMetrics.vue'
+import AlertCombatHistory from '@/components/alert/AlertCombatHistory.vue'
 
 export default Vue.extend({
   name: 'Alert',
@@ -117,8 +123,11 @@ export default Vue.extend({
     AlertResult,
     AlertDetails,
     AlertFactionCombatMetrics,
+    AlertFactionVsFaction,
     AlertPopulations,
     AlertCombatHistory,
+    AlertMap,
+    AlertCaptureHistory,
     AlertCharacterMetrics,
     AlertOutfitMetrics,
     AlertWeaponMetrics,

@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-12 lg:col-span-6 card relative">
+  <div class="col-span-12 ss:col-span-6 card relative">
     <div class="tag section">
       Population History
       <v-tooltip bottom>
