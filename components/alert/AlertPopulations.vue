@@ -48,9 +48,8 @@
                 v-on="on"
               ></font-awesome-icon>
             </template>
-            Shows the calculation for the Activity bracket. All non-NSO factions
-            must be above the level indicated to achieve that level (based on
-            last entry).
+            Shows the calculation for the Activity bracket. All factions must be
+            above the indicated level to achieve it (based on last entry).
           </v-tooltip>
         </button>
       </div>
@@ -327,7 +326,9 @@ export default Vue.extend({
         vsData.push(row.vs)
         ncData.push(row.nc)
         trData.push(row.tr)
-        nsoData.push(row.nso)
+        if (!avg) {
+          nsoData.push(row.nso)
+        }
       })
 
       const collection = {
@@ -357,19 +358,20 @@ export default Vue.extend({
             pointBorderWidth: 2,
             pointHoverBorderWidth: 4,
           },
-          {
-            label: 'NSO',
-            borderColor: '#4a5568',
-            data: nsoData,
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
-          },
         ],
       }
 
       if (avg) {
         this.dataAvgCollection = collection
       } else {
+        collection.datasets.push({
+          label: 'NSO',
+          borderColor: '#4a5568',
+          data: nsoData,
+          pointStyle: 'circle',
+          pointBorderWidth: 2,
+          pointHoverBorderWidth: 4,
+        })
         this.dataCollection = collection
       }
     },
