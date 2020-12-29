@@ -72,7 +72,22 @@
         <div class="mb-1">
           {{ alert.bracket | bracketName }}
         </div>
-        <div class="text-xs text-gray-500">Activity</div>
+        <div class="text-xs text-gray-500">
+          Activity
+          <span v-if="alert.state === 1">
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <font-awesome-icon
+                  :icon="['fas', 'info-circle']"
+                  v-bind="attrs"
+                  v-on="on"
+                ></font-awesome-icon>
+              </template>
+              This may change until the alert ends as it is based on population
+              levels, which naturally fluctuate.
+            </v-tooltip>
+          </span>
+        </div>
       </div>
       <div
         class="col-span-2 lg:col-span-1 lg:col-start-6 text-sm lg:text-xl ss:text-2xl mb-2 lg:mb-0"
