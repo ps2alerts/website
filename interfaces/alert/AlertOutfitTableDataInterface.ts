@@ -4,5 +4,4 @@ export interface AlertOutfitTableDataInterface
   extends InstanceOutfitAggregateResponseInterface {
   kd: string | number
   hsr: string | number
-  participants: number
 }

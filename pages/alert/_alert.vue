@@ -57,24 +57,13 @@
         v-show="showPlayers === true"
         class="col-span-12 card relative mb-2"
       >
-        <AlertCharacterMetrics
-          ref="character"
-          :alert="alert"
-          @players-loaded="playersLoadedEvent"
-          @outfit-participants-changed="outfitParticipantsChanged"
-        />
+        <AlertCharacterMetrics :alert="alert" />
       </section>
       <section
         v-show="showOutfits === true"
         class="col-span-12 card relative mb-2"
       >
-        <AlertOutfitMetrics
-          ref="outfit"
-          :alert="alert"
-          :outfit-participants="outfitParticipants"
-          :players-loaded="playersLoaded"
-          @request-outfit-participants="requestOutfitParticipants"
-        />
+        <AlertOutfitMetrics :alert="alert" />
       </section>
       <section
         v-show="showWeapons === true"
@@ -162,7 +151,6 @@ export default Vue.extend({
       showWeapons: false,
       showVehicles: false,
       showClasses: false,
-      outfitParticipants: {} as { [k: string]: string[] },
       playersLoaded: false,
     }
   },
@@ -279,19 +267,6 @@ export default Vue.extend({
     toggleClasses() {
       this.hideAll()
       this.showClasses = !this.showClasses
-    },
-    // Used by AlertOutfitMetrics.vue component
-    outfitParticipantsChanged(participants: { [k: string]: string[] }) {
-      this.outfitParticipants = participants
-    },
-    requestOutfitParticipants() {
-      if (this.$refs.character) {
-        // @ts-ignore
-        this.$refs.character.calculateOutfitParticipants()
-      }
-    },
-    playersLoadedEvent() {
-      this.playersLoaded = true
     },
   },
 })

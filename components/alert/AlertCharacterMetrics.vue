@@ -92,7 +92,6 @@ export default Vue.extend({
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       data: {} as AlertCharacterTableDataInterface[],
-      outfitParticipants: {} as { [k: string]: string[] },
       filter: '',
       leaderboardConfig: AlertLeaderboardConfig,
       expanded: [],
@@ -243,37 +242,6 @@ export default Vue.extend({
         .catch((e) => {
           this.error = e.message
         })
-    },
-    // This bubbles up to the _alert.vue component, then back down via a prop bind to AlertOutfitMetrics.vue, which enables
-    // us to render the outfit participants.
-    calculateOutfitParticipants(): void {
-      if (!this.data) {
-        return
-      }
-
-      this.data.forEach(
-        (character: InstanceCharacterAggregateResponseInterface) => {
-          let outfitId = `-${character.character.faction.toString()}`
-
-          if (character.character.outfit) {
-            outfitId = character.character.outfit?.id
-          }
-
-          const characterId = character.character.id
-
-          if (!this.outfitParticipants[outfitId]) {
-            this.outfitParticipants[outfitId] = []
-          }
-
-          if (!this.outfitParticipants[outfitId].includes(characterId)) {
-            this.outfitParticipants[outfitId].push(characterId)
-          }
-        }
-      )
-
-      if (Object.keys(this.outfitParticipants).length > 0) {
-        this.$emit('outfit-participants-changed', this.outfitParticipants)
-      }
     },
     factionClass(faction: Faction): object {
       return FactionBgClass(faction)
