@@ -219,13 +219,13 @@ export default Vue.extend({
             vehicle.totals ?? undefined
           )
 
-          vehicle.suicides = vehicle.suicides = vehicle.suicides
+          vehicle.suicides = vehicle.suicides
             ? vehicle.suicides + (worldVehicle?.suicides ?? 0)
-            : 0
+            : worldVehicle.suicides ?? 0
 
-          vehicle.roadkills = vehicle.roadkills = vehicle.roadkills
+          vehicle.roadkills = vehicle.roadkills
             ? vehicle.roadkills + (worldVehicle?.roadkills ?? 0)
-            : 0
+            : worldVehicle.roadkills ?? 0
 
           vehicle.vehicleName = worldVehicle.vehicleName
           vehicle.vehicleFaction = worldVehicle.vehicleFaction
@@ -236,6 +236,8 @@ export default Vue.extend({
               : vehicle.totals.kills?.toString() || '0'
 
           calcData[worldVehicle.vehicle] = vehicle
+
+          console.log(worldVehicle)
         }
       )
 
