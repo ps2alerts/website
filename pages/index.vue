@@ -49,7 +49,7 @@
     </div>
     <div
       id="stats-sticky"
-      class="col-span-12 lg:col-span-4 lg:col-start-5 flex justify-center mb-2 sticky"
+      class="col-span-12 lg:col-span-8 ss:col-span-4 lg:col-start-3 ss:col-start-5 flex justify-center mb-2 sticky"
     >
       <div class="btn-group mr-2">
         <button
@@ -68,7 +68,9 @@
         </button>
       </div>
       <div class="btn-group">
-        <button class="btn btn-sm" disabled>Date filtering coming soon!</button>
+        <button class="btn btn-sm" disabled>
+          Date & Activity Level filtering coming soon!
+        </button>
       </div>
     </div>
     <div class="col-span-12">

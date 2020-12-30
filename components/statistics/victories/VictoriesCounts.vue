@@ -1,8 +1,55 @@
 <template>
-  <section>
+  <section class="mb-2">
     <div v-if="loaded" class="grid grid-cols-12 gap-2">
+      <div class="col-span-12">
+        <h1 class="text-xl text-center">
+          Note: Brackets have recently been changed into Activity Levels so the
+          activity level numbers below are complete bollocks. This will be
+          corrected upon data wipe Jan 1st.
+        </h1>
+      </div>
       <div class="col-span-12 card relative">
-        <div class="tag section">Faction Victory Server Breakdown</div>
+        <div class="tag section">Global Faction Victories</div>
+        <CountdownSpinner
+          :percent="updateCountdownPercent"
+          update-rate="60000"
+        />
+        <div v-if="loaded">
+          <FactionSegmentBar
+            :vs="totalCounts.vs"
+            :nc="totalCounts.nc"
+            :tr="totalCounts.tr"
+            :other="totalCounts.draws"
+            :is-percentage="mode === 'percent'"
+            :show-as-calculated-percentage="mode === 'percent'"
+            other-segment-text="Draws"
+            dropoff-percent="3"
+          />
+        </div>
+      </div>
+      <div class="col-span-12 card relative">
+        <div class="tag section">
+          Global Faction Victories (Prime activity level)
+        </div>
+        <CountdownSpinner
+          :percent="updateCountdownPercent"
+          update-rate="60000"
+        />
+        <div v-if="loaded">
+          <FactionSegmentBar
+            :vs="bracketCounts[5].vs"
+            :nc="bracketCounts[5].nc"
+            :tr="bracketCounts[5].tr"
+            :other="bracketCounts[5].draws"
+            :is-percentage="mode === 'percent'"
+            :show-as-calculated-percentage="mode === 'percent'"
+            other-segment-text="Draws"
+            dropoff-percent="3"
+          />
+        </div>
+      </div>
+      <div class="col-span-12 lg:col-span-6 card relative">
+        <div class="tag section">Faction Server Victories</div>
         <CountdownSpinner
           :percent="updateCountdownPercent"
           update-rate="60000"
@@ -44,26 +91,9 @@
           </tbody>
         </table>
       </div>
-      <div class="col-span-12 card relative">
-        <div class="tag section">Global faction victories (all brackets)</div>
-        <CountdownSpinner
-          :percent="updateCountdownPercent"
-          update-rate="60000"
-        />
-        <div v-if="loaded">
-          <FactionSegmentBar
-            :vs="totalCounts.vs"
-            :nc="totalCounts.nc"
-            :tr="totalCounts.tr"
-            :other="totalCounts.draws"
-            :is-percentage="mode === 'percent'"
-            :show-as-calculated-percentage="mode === 'percent'"
-            other-segment-text="Draws"
-          />
-        </div>
-      </div>
+
       <div class="col-span-12 lg:col-span-6 card relative">
-        <div class="tag section">Global Bracket Victories</div>
+        <div class="tag section">Global Activity Level Victories</div>
         <CountdownSpinner
           :percent="updateCountdownPercent"
           update-rate="60000"
@@ -71,7 +101,7 @@
         <table class="w-full table-auto border-row text-center">
           <thead class="font-bold">
             <tr>
-              <td class="text-left pr-1">Bracket</td>
+              <td class="text-left pr-1">Level</td>
               <td>Count</td>
               <td>Victory Rate</td>
             </tr>
@@ -100,46 +130,11 @@
           </tbody>
         </table>
       </div>
-      <div class="col-span-12 lg:col-span-6 card relative">
-        <div class="tag section">Global Continent Victories</div>
-        <CountdownSpinner
-          :percent="updateCountdownPercent"
-          update-rate="60000"
-        />
-        <table class="w-full table-auto border-row text-center">
-          <thead class="font-bold">
-            <tr>
-              <td class="text-left pr-1">Continent</td>
-              <td>Count</td>
-              <td>Victory Rate</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(data, zone) in zoneCounts" :key="zone">
-              <td class="text-left" style="width: 80px">
-                {{ parseInt(zone, 10) | zoneName }}
-              </td>
-              <td class="px-1" style="width: 50px">
-                {{ data.vs + data.nc + data.tr + data.draws }}
-              </td>
-              <td class="p-1">
-                <FactionSegmentBar
-                  :vs="data.vs"
-                  :nc="data.nc"
-                  :tr="data.tr"
-                  :other="data.draws"
-                  :is-percentage="mode === 'percent'"
-                  :show-as-calculated-percentage="mode === 'percent'"
-                  other-segment-text="Draws"
-                  dropoff-percent="10"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+
       <div class="col-span-12 ss:col-span-6 card relative">
-        <div class="tag section">Server Bracket Breakdowns</div>
+        <div class="tag section">
+          Server Activity Level Victories (High & Prime)
+        </div>
         <CountdownSpinner
           :percent="updateCountdownPercent"
           update-rate="60000"
@@ -148,9 +143,118 @@
           <thead class="font-bold">
             <tr>
               <td class="text-left pr-1">Server</td>
-              <td>Morning</td>
-              <td>Afternoon</td>
-              <td>Prime</td>
+              <td>
+                High
+                <v-tooltip bottom>
+                  <template #activator="{ on, attrs }">
+                    <font-awesome-icon
+                      :icon="['fas', 'info-circle']"
+                      v-bind="attrs"
+                      v-on="on"
+                    ></font-awesome-icon>
+                  </template>
+                  3-4 platoons per faction on average in an alert
+                </v-tooltip>
+              </td>
+              <td>
+                Prime
+                <v-tooltip bottom>
+                  <template #activator="{ on, attrs }">
+                    <font-awesome-icon
+                      :icon="['fas', 'info-circle']"
+                      v-bind="attrs"
+                      v-on="on"
+                    ></font-awesome-icon>
+                  </template>
+                  4+ platoons per faction on average in an alert
+                </v-tooltip>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(data, world) in worldCounts" :key="world">
+              <td class="text-left pr-1">
+                {{ parseInt(world, 10) | worldName }}
+              </td>
+              <td class="p-1 w-1/2">
+                <FactionSegmentBar
+                  v-if="data.brackets[4]"
+                  :vs="data.brackets[4].vs"
+                  :nc="data.brackets[4].nc"
+                  :tr="data.brackets[4].tr"
+                  :other="data.brackets[4].draws"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                  other-segment-text="Draws"
+                  dropoff-percent="20"
+                />
+              </td>
+              <td class="p-1 w-1/2">
+                <FactionSegmentBar
+                  v-if="data.brackets[5]"
+                  :vs="data.brackets[5].vs"
+                  :nc="data.brackets[5].nc"
+                  :tr="data.brackets[5].tr"
+                  :other="data.brackets[5].draws"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                  other-segment-text="Draws"
+                  dropoff-percent="20"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-span-12 ss:col-span-6 card relative">
+        <div class="tag section">Server Activity Level Victories (other)</div>
+        <CountdownSpinner
+          :percent="updateCountdownPercent"
+          update-rate="60000"
+        />
+        <table class="w-full table-auto border-row text-center">
+          <thead class="font-bold">
+            <tr>
+              <td class="text-left pr-1">Server</td>
+              <td>
+                Dead
+                <v-tooltip bottom>
+                  <template #activator="{ on, attrs }">
+                    <font-awesome-icon
+                      :icon="['fas', 'info-circle']"
+                      v-bind="attrs"
+                      v-on="on"
+                    ></font-awesome-icon>
+                  </template>
+                  &lt;1 platoon per faction on average in an alert
+                </v-tooltip>
+              </td>
+              <td>
+                Low
+                <v-tooltip bottom>
+                  <template #activator="{ on, attrs }">
+                    <font-awesome-icon
+                      :icon="['fas', 'info-circle']"
+                      v-bind="attrs"
+                      v-on="on"
+                    ></font-awesome-icon>
+                  </template>
+                  1-2 platoons per faction on average in an alert
+                </v-tooltip>
+              </td>
+              <td>
+                Medium
+                <v-tooltip bottom>
+                  <template #activator="{ on, attrs }">
+                    <font-awesome-icon
+                      :icon="['fas', 'info-circle']"
+                      v-bind="attrs"
+                      v-on="on"
+                    ></font-awesome-icon>
+                  </template>
+                  2-3 platoons per faction on average in an alert
+                </v-tooltip>
+              </td>
             </tr>
           </thead>
           <tbody>
@@ -202,7 +306,45 @@
         </table>
       </div>
       <div class="col-span-12 ss:col-span-6 card relative">
-        <div class="tag section">Server Continent Breakdowns</div>
+        <div class="tag section">Global Continent Victories</div>
+        <CountdownSpinner
+          :percent="updateCountdownPercent"
+          update-rate="60000"
+        />
+        <table class="w-full table-auto border-row text-center">
+          <thead class="font-bold">
+            <tr>
+              <td class="text-left pr-1">Continent</td>
+              <td>Count</td>
+              <td>Victory Rate</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(data, zone) in zoneCounts" :key="zone">
+              <td class="text-left" style="width: 80px">
+                {{ parseInt(zone, 10) | zoneName }}
+              </td>
+              <td class="px-1" style="width: 50px">
+                {{ data.vs + data.nc + data.tr + data.draws }}
+              </td>
+              <td class="p-1">
+                <FactionSegmentBar
+                  :vs="data.vs"
+                  :nc="data.nc"
+                  :tr="data.tr"
+                  :other="data.draws"
+                  :is-percentage="mode === 'percent'"
+                  :show-as-calculated-percentage="mode === 'percent'"
+                  other-segment-text="Draws"
+                  dropoff-percent="10"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-span-12 ss:col-span-6 card relative">
+        <div class="tag section">Server Continent Victories</div>
         <CountdownSpinner
           :percent="updateCountdownPercent"
           update-rate="60000"
@@ -286,6 +428,7 @@
 import Vue, { PropOptions } from 'vue'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import { World } from '~/constants/World'
+import { Bracket } from '~/constants/Bracket'
 
 interface DataCollectionRowInterface {
   world: DataFacetInterface
@@ -345,7 +488,14 @@ export default Vue.extend({
       // Zero the values so they're not added to every time
       this.worldCounts = {}
       this.zoneCounts = {}
-      this.bracketCounts = {}
+      this.bracketCounts = {
+        5: {
+          vs: 0,
+          nc: 0,
+          tr: 0,
+          draws: 0,
+        },
+      }
       this.totalCounts = {
         vs: 0,
         nc: 0,
@@ -354,7 +504,7 @@ export default Vue.extend({
       }
 
       this.rawData.forEach((row: GlobalVictoriesAggregateResponseInterface) => {
-        if (row.world === World.JAEGER) {
+        if (row.world === World.JAEGER || row.bracket === Bracket.NONE) {
           return
         }
         if (!this.worldCounts[row.world]) {

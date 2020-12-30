@@ -22,6 +22,11 @@
       :update-countdown-percent="updateCountdownPercent"
       :mode="mode"
     />
+    <VictoriesTimeline
+      :raw-data="data"
+      :update-countdown-percent="updateCountdownPercent"
+      :mode="mode"
+    />
   </section>
 </template>
 
