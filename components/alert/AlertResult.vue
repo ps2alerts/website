@@ -34,7 +34,12 @@
         :percent="updateCountdownPercent"
         update-rate="5000"
       />
+      <div v-if="!alert.result" class="text-center">
+        Result not available - likely due to Census (the game's API) sending an
+        invalid response. This should correct itself next capture.
+      </div>
       <FactionSegmentBar
+        v-else
         :vs="alert.result.vs"
         :nc="alert.result.nc"
         :tr="alert.result.tr"

@@ -4,7 +4,7 @@
     <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
-    <div v-if="loaded && alert.result" class="grid grid-cols-12 gap-2">
+    <div v-if="loaded" class="grid grid-cols-12 gap-2">
       <AlertResult
         :alert="alert"
         :update-countdown-percent="updateCountdownPercent"
@@ -235,6 +235,7 @@ export default Vue.extend({
         )
         .then((alert) => {
           this.alert = alert
+          console.log('alert', alert)
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
         })
