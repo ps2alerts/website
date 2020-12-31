@@ -18,6 +18,14 @@
         :update-rate="updateRate"
         :mode="mode"
       ></VehicleServerMetrics>
+      <VehicleMatrix
+        :v-if="data.length > 0"
+        :raw-data="data"
+        :vehicle-data="vehicleData"
+        :update-countdown-percent="updateCountdownPercent"
+        :update-rate="updateRate"
+        :mode="mode"
+      ></VehicleMatrix>
     </div>
     <div v-else>
       <h1 class="text-center">Loading...</h1>
