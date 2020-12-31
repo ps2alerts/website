@@ -16,71 +16,76 @@
       <AlertCombatHistory :alert="alert" />
       <AlertMap :alert="alert" />
       <AlertCaptureHistory :alert="alert" />
-      <div class="col-span-12 justify-center btn-group mt-4">
-        <button
-          class="btn"
-          :class="{ 'btn-active': showPlayers }"
-          @click="togglePlayers()"
+
+      <div class="col-span-12">
+        <v-tabs
+          v-model="metricsTab"
+          center-active
+          icons-and-text
+          fixed-tabs
+          dark
+          show-arrows
+          class="my-4"
         >
-          <font-awesome-icon :icon="['fas', 'user']" /> Players
-        </button>
-        <button
-          class="btn"
-          :class="{ 'btn-active': showOutfits }"
-          @click="toggleOutfits()"
-        >
-          <font-awesome-icon :icon="['fas', 'users']" /> Outfits
-        </button>
-        <button
-          class="btn"
-          :class="{ 'btn-active': showWeapons }"
-          @click="toggleWeapons()"
-        >
-          <font-awesome-icon :icon="['fas', 'bomb']" /> Weapons
-        </button>
-        <button
-          class="btn"
-          :class="{ 'btn-active': showVehicles }"
-          @click="toggleVehicles()"
-        >
-          <font-awesome-icon :icon="['fas', 'fighter-jet']" /> Vehicles
-        </button>
-        <button
-          class="btn"
-          :class="{ 'btn-active': showClasses }"
-          @click="toggleClasses()"
-        >
-          <font-awesome-icon :icon="['fas', 'user-tag']" /> Classes
-        </button>
+          <v-tabs-slider></v-tabs-slider>
+
+          <v-tab href="#players">
+            Players
+            <font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon>
+          </v-tab>
+
+          <v-tab href="#outfits">
+            Outfits
+            <font-awesome-icon :icon="['fas', 'users']"></font-awesome-icon>
+          </v-tab>
+
+          <v-tab href="#weapons">
+            Weapons
+            <font-awesome-icon :icon="['fas', 'bomb']"></font-awesome-icon>
+          </v-tab>
+
+          <v-tab href="#vehicles">
+            Vehicles
+            <font-awesome-icon
+              :icon="['fas', 'fighter-jet']"
+            ></font-awesome-icon>
+          </v-tab>
+
+          <v-tab href="#classes">
+            Classes
+            <font-awesome-icon :icon="['fas', 'user-tag']"></font-awesome-icon>
+          </v-tab>
+        </v-tabs>
+
+        <v-tabs-items v-model="metricsTab">
+          <v-tab-item :eager="eager" value="players">
+            <section class="col-span-12 card relative mb-4">
+              <AlertCharacterMetrics :alert="alert" />
+            </section>
+          </v-tab-item>
+          <v-tab-item :eager="eager" value="outfits">
+            <section class="col-span-12 card relative mb-4">
+              <AlertOutfitMetrics :alert="alert" />
+            </section>
+          </v-tab-item>
+          <v-tab-item :eager="eager" value="weapons">
+            <section class="col-span-12 card relative mb-4">
+              <AlertWeaponMetrics :alert="alert" />
+            </section>
+          </v-tab-item>
+          <v-tab-item :eager="eager" value="vehicles">
+            <section class="col-span-12">
+              <AlertVehicleMetrics :alert="alert" />
+              <AlertVehicleMatrix :alert="alert" />
+            </section>
+          </v-tab-item>
+          <v-tab-item :eager="eager" value="classes">
+            <section class="col-span-12 card relative mb-4">
+              <AlertClassMetrics :alert="alert" />
+            </section>
+          </v-tab-item>
+        </v-tabs-items>
       </div>
-      <section
-        v-show="showPlayers === true"
-        class="col-span-12 card relative mb-2"
-      >
-        <AlertCharacterMetrics :alert="alert" />
-      </section>
-      <section
-        v-show="showOutfits === true"
-        class="col-span-12 card relative mb-2"
-      >
-        <AlertOutfitMetrics :alert="alert" />
-      </section>
-      <section
-        v-show="showWeapons === true"
-        class="col-span-12 card relative mb-2"
-      >
-        <AlertWeaponMetrics :alert="alert" />
-      </section>
-      <section v-show="showVehicles === true" class="col-span-12">
-        <AlertVehicleMetrics :alert="alert" />
-        <AlertVehicleMatrix :alert="alert" />
-      </section>
-      <section
-        v-show="showClasses === true"
-        class="col-span-12 card relative mb-2"
-      >
-        <AlertClassMetrics :alert="alert" />
-      </section>
     </div>
   </div>
 </template>
@@ -146,12 +151,8 @@ export default Vue.extend({
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       alert: {} as InstanceTerritoryControlResponseInterface,
-      showPlayers: true,
-      showOutfits: false,
-      showWeapons: false,
-      showVehicles: false,
-      showClasses: false,
-      playersLoaded: false,
+      metricsTab: 'players',
+      eager: true,
     }
   },
   head(): object {
@@ -240,33 +241,6 @@ export default Vue.extend({
         .catch((e) => {
           this.error = e.message
         })
-    },
-    hideAll() {
-      this.showPlayers = false
-      this.showOutfits = false
-      this.showWeapons = false
-      this.showVehicles = false
-      this.showClasses = false
-    },
-    togglePlayers() {
-      this.hideAll()
-      this.showPlayers = !this.showPlayers
-    },
-    toggleOutfits() {
-      this.hideAll()
-      this.showOutfits = !this.showOutfits
-    },
-    toggleWeapons() {
-      this.hideAll()
-      this.showWeapons = !this.showWeapons
-    },
-    toggleVehicles() {
-      this.hideAll()
-      this.showVehicles = !this.showVehicles
-    },
-    toggleClasses() {
-      this.hideAll()
-      this.showClasses = !this.showClasses
     },
   },
 })
