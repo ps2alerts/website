@@ -121,7 +121,7 @@ export default Vue.extend({
   },
   methods: {
     tableItemClass(item: StatisticsWeaponTableDataInterface): string {
-      return FactionBgClassString(item.weapon.faction) + ' text-center'
+      return FactionBgClassString(item.weapon.faction)
     },
   },
 })

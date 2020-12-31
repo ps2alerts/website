@@ -195,7 +195,7 @@ export default Vue.extend({
         })
     },
     tableItemClass(item: AlertLoadoutTableDataInterface): string {
-      return FactionBgClassString(LoadoutFaction(item.loadout)) + ' text-center'
+      return FactionBgClassString(LoadoutFaction(item.loadout))
     },
     transformData(
       data: InstanceLoadoutResponseInterface[]

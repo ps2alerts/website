@@ -246,7 +246,7 @@ export default Vue.extend({
       return FactionBgClass(faction)
     },
     tableItemClass(item: AlertOutfitTableDataInterface): string {
-      return FactionBgClassString(item.outfit.faction) + ' text-center'
+      return FactionBgClassString(item.outfit.faction)
     },
     transformData(
       data: InstanceOutfitAggregateResponseInterface[]

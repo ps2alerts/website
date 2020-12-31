@@ -272,7 +272,7 @@ export default Vue.extend({
       return FactionBgClass(faction)
     },
     tableItemClass(item: AlertVehicleMetricsDataTableInterface): string {
-      return FactionBgClassString(item.vehicleFaction) + ' text-center'
+      return FactionBgClassString(item.vehicleFaction)
     },
     transformData(
       data: InstanceVehicleAggregateResponseInterface[]

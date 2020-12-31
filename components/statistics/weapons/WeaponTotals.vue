@@ -124,7 +124,7 @@ export default Vue.extend({
   },
   methods: {
     tableItemClass(item: TotalWeaponInterface): string {
-      return FactionBgClassString(item.weapon.faction) + ' text-center'
+      return FactionBgClassString(item.weapon.faction)
     },
     transformTotalsData(): TotalWeaponInterface[] {
       const calcData: { [k: string]: TotalWeaponInterface } = {}

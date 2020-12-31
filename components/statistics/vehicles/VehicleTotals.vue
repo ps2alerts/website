@@ -197,7 +197,7 @@ export default Vue.extend({
   },
   methods: {
     tableItemClass(item: StatisticsVehicleMetricsTableDataInterface): string {
-      return FactionBgClassString(item.vehicleFaction) + ' text-center'
+      return FactionBgClassString(item.vehicleFaction)
     },
     transformTotalsData(): TotalVehicleInterface[] {
       const calcData: { [k: string]: TotalVehicleInterface } = {}

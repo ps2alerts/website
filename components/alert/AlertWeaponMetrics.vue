@@ -176,7 +176,7 @@ export default Vue.extend({
         })
     },
     tableItemClass(item: AlertWeaponTableDataInterface): string {
-      return FactionBgClassString(item.weapon.faction) + ' text-center'
+      return FactionBgClassString(item.weapon.faction)
     },
     transformData(
       data: InstanceWeaponAggregateResponseInterface[]
