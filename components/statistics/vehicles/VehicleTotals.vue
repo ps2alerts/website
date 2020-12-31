@@ -12,8 +12,8 @@
             v-model="filter"
             class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
             type="text"
-            placeholder="Vehicle / Server"
-            aria-label="Vehicle / Server"
+            placeholder="Vehicle"
+            aria-label="Vehicle"
             @keydown="$event.stopImmediatePropagation()"
           />
         </div>
@@ -236,8 +236,6 @@ export default Vue.extend({
               : vehicle.totals.kills?.toString() || '0'
 
           calcData[worldVehicle.vehicle] = vehicle
-
-          console.log(worldVehicle)
         }
       )
 
