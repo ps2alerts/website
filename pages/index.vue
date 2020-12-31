@@ -21,11 +21,11 @@
         </div>
         <div class="col-span-12 text-center">
           <h1 class="text-subtitle text-center">PS2Alerts launches in...</h1>
-          <no-ssr>
+          <client-only>
             <div class="my-4">
               <flip-countdown deadline="2021-01-01 00:00:00"></flip-countdown>
             </div>
-          </no-ssr>
+          </client-only>
           <p>
             All stats will be reset on 1st January and the site will officially
             launch! (It'll continued to be worked on thereafter). This staging
