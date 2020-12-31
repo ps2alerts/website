@@ -90,12 +90,12 @@
           <font-awesome-icon :icon="['fas', 'trophy']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#players">
+        <v-tab href="#players" disabled>
           Players (WIP)
           <font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#outfits">
+        <v-tab href="#outfits" disabled>
           Outfits (WIP)
           <font-awesome-icon :icon="['fas', 'users']"></font-awesome-icon>
         </v-tab>
@@ -111,16 +111,16 @@
         </v-tab>
 
         <v-tab href="#vehicles">
-          Vehicles (WIP)
+          Vehicles
           <font-awesome-icon :icon="['fas', 'fighter-jet']"></font-awesome-icon>
         </v-tab>
 
         <v-tab href="#loadouts">
-          Classes (WIP)
+          Classes
           <font-awesome-icon :icon="['fas', 'user-tag']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#facilities">
+        <v-tab href="#facilities" disabled>
           Map (WIP)
           <font-awesome-icon :icon="['fas', 'flag']"></font-awesome-icon>
         </v-tab>
