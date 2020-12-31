@@ -222,7 +222,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 #rtm {
   .tag {
     margin-bottom: 0;

@@ -1,43 +1,6 @@
 <template>
   <div class="grid grid-cols-12">
-    <div
-      class="col-span-12 ss:col-span-8 ss:col-start-3 bg-tint card editorial relative my-4"
-    >
-      <div class="tag announcement">
-        <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>
-        Announcement
-      </div>
-
-      <div class="grid grid-cols-12 place-items-center">
-        <div class="col-span-12">
-          <div class="p-6 text-center items-center justify-items-center">
-            <img
-              id="splash-icon"
-              src="../assets/img/alert-icon.png"
-              alt="PS2Alerts Icon"
-              class="inline-block rounded-md"
-            />
-          </div>
-        </div>
-        <div class="col-span-12 text-center">
-          <h1 class="text-subtitle text-center">PS2Alerts launches in...</h1>
-          <client-only>
-            <div class="my-4">
-              <flip-countdown deadline="2021-01-01 00:00:00"></flip-countdown>
-            </div>
-          </client-only>
-          <p>
-            All stats will be reset on 1st January and the site will officially
-            launch! (It'll continued to be worked on thereafter). This staging
-            copy will cease collecting data, and the official link
-            <a href="https://ps2alerts.com" class="text-blue-600"
-              >ps2alerts.com</a
-            >
-            will be where the new statistics will be.
-          </p>
-        </div>
-      </div>
-    </div>
+    <Announcement></Announcement>
     <div class="col-span-12 border-t-2 border-red-700">
       <div class="text-center">
         <h1 class="text-title">Statistics</h1>
@@ -166,14 +129,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-// @ts-ignore
-import FlipCountdown from 'vue2-flip-countdown'
 
 export default Vue.extend({
   name: 'Home',
-  components: {
-    FlipCountdown,
-  },
   data() {
     return {
       mode: 'percent',
@@ -188,21 +146,13 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 #splash-icon {
   max-height: 15vh;
 }
+
 #stats-sticky {
   top: 1rem;
   z-index: 1000;
-}
-
-.theme--dark {
-  &.v-tabs-bar {
-    background-color: #9b2c2c !important;
-  }
-  &.v-tabs-items {
-    background-color: rgba(0, 0, 0, 0) !important;
-  }
 }
 </style>

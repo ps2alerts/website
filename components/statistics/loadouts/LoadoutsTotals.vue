@@ -44,7 +44,7 @@ interface TotalLoadoutInterface
   extends GlobalLoadoutAggregateResponseInterface {
   loadoutName: string
   hsr: string | 0
-  kd: string | 0
+  kd: string | number
 }
 
 export default Vue.extend({

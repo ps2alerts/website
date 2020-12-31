@@ -284,7 +284,7 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 tr .same-class {
   background-color: #693f3f !important;
 }

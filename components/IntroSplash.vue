@@ -33,9 +33,3 @@ export default Vue.extend({
   },
 })
 </script>
-
-<style lang="scss">
-#splash-icon {
-  max-height: 25vh;
-}
-</style>
