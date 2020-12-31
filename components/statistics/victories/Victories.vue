@@ -1,5 +1,5 @@
 <template>
-  <section class="mb-2">
+  <section class="mb-4">
     <h1 class="text-3xl text-center mb-2">Victory Statistics</h1>
     <h1 class="text-2xl text-center mb-4">
       <b>{{ totalInstances }}</b> alerts recorded since 1st Jan 2021

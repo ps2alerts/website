@@ -1,5 +1,5 @@
 <template>
-  <section class="mb-2">
+  <section class="mb-4">
     <h1 class="text-3xl text-center mb-2">Vehicle Statistics</h1>
     <div v-if="loaded">
       <VehicleTotals
