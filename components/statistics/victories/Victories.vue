@@ -2,20 +2,7 @@
   <section class="mb-2">
     <h1 class="text-3xl text-center mb-2">Victory Statistics</h1>
     <h1 class="text-2xl text-center mb-4">
-      <b>{{ totalInstances }}</b> alerts recorded since Dec 18th 2020
-      <sup>
-        <v-tooltip bottom>
-          <template #activator="{ on, attrs }">
-            <font-awesome-icon
-              :icon="['fas', 'exclamation-triangle']"
-              v-bind="attrs"
-              v-on="on"
-            ></font-awesome-icon>
-          </template>
-          The below metrics will get wiped come the site's launch on Jan 1st
-          2021.
-        </v-tooltip>
-      </sup>
+      <b>{{ totalInstances }}</b> alerts recorded since 1st Jan 2021
     </h1>
     <VictoriesCounts
       :raw-data="data"

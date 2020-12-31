@@ -1,13 +1,6 @@
 <template>
   <section class="mb-2">
     <div v-if="loaded" class="grid grid-cols-12 gap-2">
-      <div class="col-span-12">
-        <h1 class="text-xl text-center">
-          Note: Brackets have recently been changed into Activity Levels so the
-          activity level numbers below are complete bollocks. This will be
-          corrected upon data wipe Jan 1st.
-        </h1>
-      </div>
       <div class="col-span-12 card relative">
         <div class="tag section">Global Faction Victories</div>
         <CountdownSpinner
@@ -16,6 +9,7 @@
         />
         <div v-if="loaded">
           <FactionSegmentBar
+            v-if="totalCounts"
             :vs="totalCounts.vs"
             :nc="totalCounts.nc"
             :tr="totalCounts.tr"
@@ -25,6 +19,7 @@
             other-segment-text="Draws"
             dropoff-percent="3"
           />
+          <div v-else class="text-center">No data yet!</div>
         </div>
       </div>
       <div class="col-span-12 card relative">
@@ -37,6 +32,7 @@
         />
         <div v-if="loaded">
           <FactionSegmentBar
+            v-if="bracketCounts[5]"
             :vs="bracketCounts[5].vs"
             :nc="bracketCounts[5].nc"
             :tr="bracketCounts[5].tr"
@@ -46,6 +42,7 @@
             other-segment-text="Draws"
             dropoff-percent="3"
           />
+          <div v-else class="text-center">No data yet!</div>
         </div>
       </div>
       <div class="col-span-12 lg:col-span-6 card relative">
@@ -77,6 +74,7 @@
               </td>
               <td class="p-1">
                 <FactionSegmentBar
+                  v-if="data.world"
                   :vs="data.world.vs"
                   :nc="data.world.nc"
                   :tr="data.world.tr"
@@ -86,6 +84,7 @@
                   other-segment-text="Draws"
                   dropoff-percent="10"
                 />
+                <div v-else class="text-center">No data yet!</div>
               </td>
             </tr>
           </tbody>
@@ -116,6 +115,7 @@
               </td>
               <td class="p-1">
                 <FactionSegmentBar
+                  v-if="data"
                   :vs="data.vs"
                   :nc="data.nc"
                   :tr="data.tr"
@@ -125,6 +125,7 @@
                   other-segment-text="Draws"
                   dropoff-percent="10"
                 />
+                <div v-else class="text-center">No data yet!</div>
               </td>
             </tr>
           </tbody>
@@ -188,6 +189,7 @@
                   other-segment-text="Draws"
                   dropoff-percent="20"
                 />
+                <div v-else class="text-center">No data yet!</div>
               </td>
               <td class="p-1 w-1/2">
                 <FactionSegmentBar
@@ -201,6 +203,7 @@
                   other-segment-text="Draws"
                   dropoff-percent="20"
                 />
+                <div v-else class="text-center">No data yet!</div>
               </td>
             </tr>
           </tbody>
@@ -274,6 +277,7 @@
                   other-segment-text="Draws"
                   dropoff-percent="20"
                 />
+                <div v-else class="text-center">No data yet!</div>
               </td>
               <td class="p-1 w-1/3">
                 <FactionSegmentBar
@@ -287,6 +291,7 @@
                   other-segment-text="Draws"
                   dropoff-percent="20"
                 />
+                <div v-else class="text-center">No data yet!</div>
               </td>
               <td class="p-1 w-1/3">
                 <FactionSegmentBar
@@ -300,6 +305,7 @@
                   other-segment-text="Draws"
                   dropoff-percent="20"
                 />
+                <div v-else class="text-center">No data yet!</div>
               </td>
             </tr>
           </tbody>
@@ -329,6 +335,7 @@
               </td>
               <td class="p-1">
                 <FactionSegmentBar
+                  v-if="data"
                   :vs="data.vs"
                   :nc="data.nc"
                   :tr="data.tr"
@@ -338,6 +345,7 @@
                   other-segment-text="Draws"
                   dropoff-percent="10"
                 />
+                <div v-else class="text-center">No data yet!</div>
               </td>
             </tr>
           </tbody>
@@ -376,6 +384,7 @@
                   other-segment-text="Draws"
                   dropoff-percent="20"
                 />
+                <div v-else class="text-center">No data yet!</div>
               </td>
               <td class="p-1 w-1/4">
                 <FactionSegmentBar
@@ -389,6 +398,7 @@
                   other-segment-text="Draws"
                   dropoff-percent="20"
                 />
+                <div v-else class="text-center">No data yet!</div>
               </td>
               <td class="p-1 w-1/4">
                 <FactionSegmentBar
@@ -402,6 +412,7 @@
                   other-segment-text="Draws"
                   dropoff-percent="20"
                 />
+                <div v-else class="text-center">No data yet!</div>
               </td>
               <td class="p-1 w-1/4">
                 <FactionSegmentBar
@@ -415,6 +426,7 @@
                   other-segment-text="Draws"
                   dropoff-percent="20"
                 />
+                <div v-else class="text-center">No data yet!</div>
               </td>
             </tr>
           </tbody>
