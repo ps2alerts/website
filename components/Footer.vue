@@ -1,7 +1,12 @@
 <template>
   <footer class="text-center text-xs py-4 px-2">
     <div class="text-gray-600">
-      Copyright &copy; 2014 - {{ year }} Matt Cavanagh (Maelstrome26) &
+      Copyright &copy; 2014 - {{ year }}
+      <a class="text-gray-500" href="https://mattcavanagh.me">Matt Cavanagh</a>
+      (aka
+      <a class="text-gray-500" href="https://twitter.com/maelstromeous"
+        >Maelstrome26</a
+      >) &amp;
       <a class="text-gray-500" href="https://github.com/orgs/ps2alerts/people"
         >associated contributors</a
       >. All associated rights reserved.

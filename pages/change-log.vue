@@ -13,8 +13,48 @@
         Announcement
       </div>
       <div class="h-full">
+        <div class="text-center">
+          <img
+            src="../assets/img/ps4.jpg"
+            alt="PS2Alerts Icon"
+            class="inline-block"
+          />
+        </div>
+
+        <h1 class="text-subtitle text-center">
+          PS2Alerts now supports the PS4!
+        </h1>
+        <p class="content-spacing text-center">Added: 23rd Dec 2020</p>
+        <p>
+          The PS4 servers are now supported! The PS2Alerts team want to support
+          every player of planetside in the great metagame that is the Alerts,
+          so we welcome our PS4 brothers and sisters in battle!
+        </p>
+        <p>
+          The PS4 statistics for now will be coupled in the same metagame as the
+          PC version. Certain things however such as seasons or other events as
+          part of the metagame may be split out between PC and PS4, however the
+          statistics for now will remain the same.
+        </p>
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-6 bg-tint card editorial relative">
+      <div class="tag announcement">
+        <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>
+        Announcement
+      </div>
+      <div class="h-full">
+        <div class="text-center">
+          <img
+            style="max-width: 300px"
+            src="../assets/img/alert-icon.png"
+            alt="PS2Alerts Icon"
+            class="inline-block"
+          />
+        </div>
+
         <h1 class="text-subtitle text-center">PS2Alerts now in Alpha!</h1>
-        <p class="content-spacing text-center">Added: 12th Dev 2020</p>
+        <p class="content-spacing text-center">Added: 12th Dec 2020</p>
         <p>
           PS2Alerts is now in Alpha stage! The basic minimum viable product of
           the tracker is now a reality, featuring the following:

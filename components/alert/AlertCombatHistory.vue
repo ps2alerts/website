@@ -1,28 +1,64 @@
 <template>
-  <div class="col-span-12 lg:col-span-6 card relative">
+  <div class="col-span-12 ss:col-span-6 card relative">
     <div class="tag section">Combat History</div>
-    <!--    <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">-->
-    <!--      <v-tooltip left>-->
-    <!--        <template #activator="{ on, attrs }">-->
-    <!--          <v-progress-circular-->
-    <!--            :value="updateCountdownPercent"-->
-    <!--            :rotate="-90"-->
-    <!--            :size="14"-->
-    <!--            v-bind="attrs"-->
-    <!--            v-on="on"-->
-    <!--          ></v-progress-circular>-->
-    <!--        </template>-->
-    <!--        <span>Updates every {{ updateRate / 1000 }} secs</span>-->
-    <!--      </v-tooltip>-->
-    <!--    </div>-->
+    <CountdownSpinner
+      v-if="alert.state === 1"
+      :percent="updateCountdownPercent"
+      :update-rate="updateRate"
+    />
     <div v-if="!loaded" class="flex justify-center place-items-center h-full">
-      <h1 class="mb-4">Coming soon!</h1>
+      <h1 class="mb-4">Loading...</h1>
     </div>
     <div v-if="loaded" class="text-center">
-      <!--      <line-chart-->
-      <!--        :chart-data="datacollection"-->
-      <!--        :options="chartOptions"-->
-      <!--      ></line-chart>-->
+      <div class="btn-group mr-2">
+        <button
+          class="btn btn-sm"
+          :class="{ 'btn-active': mode === 'kills' }"
+          @click="updateMode('kills')"
+        >
+          Kills
+        </button>
+        <button
+          class="btn btn-sm"
+          :class="{ 'btn-active': mode === 'deaths' }"
+          @click="updateMode('deaths')"
+        >
+          Deaths
+        </button>
+        <button
+          class="btn btn-sm"
+          :class="{ 'btn-active': mode === 'kd' }"
+          @click="updateMode('kd')"
+        >
+          KD
+        </button>
+        <button
+          class="btn btn-sm"
+          :class="{ 'btn-active': mode === 'teamKills' }"
+          @click="updateMode('teamKills')"
+        >
+          Teamkills
+        </button>
+        <button
+          class="btn btn-sm"
+          :class="{ 'btn-active': mode === 'suicides' }"
+          @click="updateMode('suicides')"
+        >
+          Suicides
+        </button>
+        <button
+          class="btn btn-sm"
+          :class="{ 'btn-active': mode === 'headshots' }"
+          @click="updateMode('headshots')"
+        >
+          Headshots
+        </button>
+      </div>
+      <line-chart
+        :chart-data="dataCollection"
+        :options="chartOptions"
+        style="width: 100%; height: 400px"
+      ></line-chart>
     </div>
   </div>
 </template>
@@ -30,17 +66,17 @@
 <script lang="ts">
 import Vue from 'vue'
 import moment from 'moment-timezone'
-// import LineChart from '../LineChart.js'
+import LineChart from '../LineChart.js'
 import { Ps2alertsEventState } from '~/constants/Ps2alertsEventState'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
-import { InstancePopulationAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstancePopulationAggregateResponseInterface'
+import { InstanceCombatHistoryAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceCombatHistoryAggregateResponseInterface'
 
 export default Vue.extend({
   name: 'AlertPopulations',
   components: {
-    // LineChart,
+    LineChart,
   },
   props: {
     alert: {
@@ -51,7 +87,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      datacollection: {},
+      dataCollection: {},
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
@@ -81,7 +117,7 @@ export default Vue.extend({
               },
               scaleLabel: {
                 display: true,
-                labelString: 'Players',
+                labelString: 'Count',
                 fontColor: '#fff',
               },
             },
@@ -95,11 +131,12 @@ export default Vue.extend({
       },
       error: null,
       loaded: false,
-      updateRate: 30000,
+      updateRate: 60000,
       updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
-      data: [] as InstancePopulationAggregateResponseInterface[],
+      data: [] as InstanceCombatHistoryAggregateResponseInterface[],
+      mode: 'kills',
     }
   },
   computed: {
@@ -114,13 +151,16 @@ export default Vue.extend({
         this.pull()
       }
     },
+    mode() {
+      this.fillData()
+    },
   },
   beforeDestroy() {
     this.reset()
   },
   created() {
     this.reset()
-    // this.init()
+    this.init()
   },
   mounted() {
     this.fillData()
@@ -151,20 +191,20 @@ export default Vue.extend({
         return
       }
 
-      console.log('AlertFactionCombatMetrics.pull', this.alert.instanceId)
+      console.log('AlertCombatHistory.pull', this.alert.instanceId)
 
       await new ApiRequest()
-        .get<InstancePopulationAggregateResponseInterface[]>(
-          Endpoints.AGGREGATES_INSTANCE_POPULATION.replace(
+        .get<InstanceCombatHistoryAggregateResponseInterface[]>(
+          Endpoints.AGGREGATES_INSTANCE_COMBAT_HISTORY.replace(
             '{instance}',
             this.alert.instanceId
               ? this.alert.instanceId.toString()
               : 'whatever'
-          )
+          ),
+          { sortBy: 'timestamp', order: 'asc' }
         )
         .then((result) => {
           this.data = result
-          console.log(this.data)
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
           this.fillData()
@@ -180,39 +220,86 @@ export default Vue.extend({
       const trData: number[] = []
       const nsoData: number[] = []
 
-      this.data.forEach((row) => {
-        times.push(moment(row.timestamp).format('HH:mm'))
-        vsData.push(row.vs)
-        ncData.push(row.nc)
-        trData.push(row.tr)
-        nsoData.push(row.nso)
-      })
+      if (this.mode === 'kd') {
+        this.data.forEach(
+          (row: InstanceCombatHistoryAggregateResponseInterface) => {
+            times.push(moment(row.timestamp).format('HH:mm'))
+            vsData.push(
+              /* @ts-ignore */
+              row.vs ? (row.vs.kills / row.vs.deaths).toPrecision(2) ?? 0 : 0
+            )
+            ncData.push(
+              /* @ts-ignore */
+              row.nc ? (row.nc.kills / row.nc.deaths).toPrecision(2) ?? 0 : 0
+            )
+            trData.push(
+              /* @ts-ignore */
+              row.tr ? (row.tr.kills / row.tr.deaths).toPrecision(2) ?? 0 : 0
+            )
+            nsoData.push(
+              /* @ts-ignore */
+              row.nso ? (row.nso.kills / row.nso.deaths).toPrecision(2) ?? 0 : 0
+            )
+          }
+        )
+      } else {
+        this.data.forEach(
+          (row: InstanceCombatHistoryAggregateResponseInterface) => {
+            times.push(moment(row.timestamp).format('HH:mm'))
+            /* @ts-ignore */
+            vsData.push(row.vs ? row.vs[this.mode] ?? 0 : 0)
+            /* @ts-ignore */
+            ncData.push(row.nc ? row.nc[this.mode] ?? 0 : 0)
+            /* @ts-ignore */
+            trData.push(row.tr ? row.tr[this.mode] ?? 0 : 0)
+            /* @ts-ignore */
+            nsoData.push(row.nso ? row.nso[this.mode] ?? 0 : 0)
+          }
+        )
+      }
 
-      this.datacollection = {
+      this.dataCollection = {
         labels: times,
         datasets: [
           {
             label: 'VS',
-            backgroundColor: '#553c9a',
+            borderColor: '#6B46C1',
             data: vsData,
+            pointStyle: 'circle',
+            pointBorderWidth: 2,
+            pointHoverBorderWidth: 4,
           },
           {
             label: 'TR',
-            backgroundColor: '#9b2c2c',
+            borderColor: '#9b2c2c',
             data: trData,
+            pointStyle: 'rect',
+            pointBorderWidth: 2,
+            pointHoverBorderWidth: 4,
           },
           {
             label: 'NC',
-            backgroundColor: '#2b6cb0',
+            borderColor: '#2b6cb0',
             data: ncData,
+            pointStyle: 'triangle',
+            pointBorderWidth: 2,
+            pointHoverBorderWidth: 4,
           },
           {
             label: 'NSO',
-            backgroundColor: '#4a5568',
+            borderColor: '#4a5568',
             data: nsoData,
+            pointBorderWidth: 2,
+            pointHoverBorderWidth: 4,
           },
         ],
       }
+    },
+    updateMode(mode: string) {
+      this.mode = mode
+      const options = this.chartOptions
+      options.scales.yAxes[0].scaleLabel.labelString = mode.toUpperCase()
+      this.chartOptions = options
     },
   },
 })

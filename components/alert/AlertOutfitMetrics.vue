@@ -1,20 +1,11 @@
 <template>
   <div>
     <div class="tag section">Outfit Metrics</div>
-    <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
-      <v-tooltip left>
-        <template #activator="{ on, attrs }">
-          <v-progress-circular
-            :value="updateCountdownPercent"
-            :rotate="-90"
-            :size="14"
-            v-bind="attrs"
-            v-on="on"
-          ></v-progress-circular>
-        </template>
-        <span>Updates every {{ updateRate / 1000 }} secs</span>
-      </v-tooltip>
-    </div>
+    <CountdownSpinner
+      v-if="alert.state === 1"
+      :percent="updateCountdownPercent"
+      :update-rate="updateRate"
+    />
     <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
@@ -44,7 +35,6 @@
         </div>
         <v-data-table
           class="datatable"
-          dense
           show-expand
           item-key="outfit.id"
           :headers="headers"
@@ -82,8 +72,8 @@ import {
   FactionBgClass,
   FactionBgClassString,
 } from '@/constants/FactionBgClass'
-import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
-import { AlertOutfitTableDataInterface } from '~/interfaces/AlertOutfitTableDataInterface'
+import { DataTableConfig } from '~/constants/DataTableConfig'
+import { AlertOutfitTableDataInterface } from '~/interfaces/alert/AlertOutfitTableDataInterface'
 
 export default Vue.extend({
   name: 'AlertOutfitMetrics',
@@ -91,16 +81,6 @@ export default Vue.extend({
     alert: {
       type: Object as () => InstanceTerritoryControlResponseInterface,
       default: {},
-      required: true,
-    },
-    outfitParticipants: {
-      type: Object as () => { [k: string]: string[] },
-      default: {},
-      required: true,
-    },
-    playersLoaded: {
-      type: Boolean,
-      default: false,
       required: true,
     },
   },
@@ -114,7 +94,7 @@ export default Vue.extend({
       interval: undefined as undefined | number,
       data: {} as AlertOutfitTableDataInterface[],
       filter: '',
-      leaderboardConfig: AlertLeaderboardConfig,
+      leaderboardConfig: DataTableConfig,
       expanded: [],
       headers: [
         {
@@ -202,21 +182,6 @@ export default Vue.extend({
     },
   },
   watch: {
-    // If the players component completes before this one, we store the data and apply it after load. If loaded late, apply it at load.
-    // outfitParticipants() also updates live when player data changes.
-    outfitParticipants() {
-      this.applyOutfitParticipants()
-    },
-    playersLoaded() {
-      if (this.loaded) {
-        this.$emit('request-outfit-participants')
-      }
-    },
-    loaded() {
-      if (this.playersLoaded) {
-        this.$emit('request-outfit-participants')
-      }
-    },
     'alert.state'() {
       if (this.alert.state === Ps2alertsEventState.ENDED) {
         this.clearTimers()
@@ -281,7 +246,7 @@ export default Vue.extend({
       return FactionBgClass(faction)
     },
     tableItemClass(item: AlertOutfitTableDataInterface): string {
-      return FactionBgClassString(item.outfit.faction) + ' text-center'
+      return FactionBgClassString(item.outfit.faction)
     },
     transformData(
       data: InstanceOutfitAggregateResponseInterface[]
@@ -295,6 +260,7 @@ export default Vue.extend({
         outfit.teamKills = outfit.teamKills ?? 0
         outfit.suicides = outfit.suicides ?? 0
         outfit.headshots = outfit.headshots ?? 0
+        outfit.participants = outfit.participants ?? 0
 
         // Outfit name formatting
         if (parseInt(outfit.outfit.id, 10) > 4) {
@@ -314,28 +280,11 @@ export default Vue.extend({
             outfit.headshots && outfit.kills
               ? ((outfit.headshots / outfit.kills) * 100).toFixed(2)
               : 0,
-          participants: 0,
         })
         newData.push(tempData)
       })
 
-      this.applyOutfitParticipants()
-
       return newData
-    },
-    applyOutfitParticipants() {
-      for (const [partOutfit] of Object.entries(this.outfitParticipants)) {
-        for (const [dataKey, dataOutfit] of Object.entries(this.data)) {
-          if (dataOutfit.outfit.id === partOutfit) {
-            const iKey = parseInt(dataKey, 10)
-            const newData = this.data[iKey]
-            newData.participants =
-              this.outfitParticipants[partOutfit].length ?? 0
-            this.$set(this.data, iKey, newData)
-            break
-          }
-        }
-      }
     },
   },
 })

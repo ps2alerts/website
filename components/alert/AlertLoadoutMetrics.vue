@@ -1,20 +1,11 @@
 <template>
   <div>
     <div class="tag section">Class Metrics</div>
-    <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
-      <v-tooltip left>
-        <template #activator="{ on, attrs }">
-          <v-progress-circular
-            :value="updateCountdownPercent"
-            :rotate="-90"
-            :size="14"
-            v-bind="attrs"
-            v-on="on"
-          ></v-progress-circular>
-        </template>
-        <span>Updates every {{ updateRate / 1000 }} secs</span>
-      </v-tooltip>
-    </div>
+    <CountdownSpinner
+      v-if="alert.state === 1"
+      :percent="updateCountdownPercent"
+      :update-rate="updateRate"
+    />
     <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
@@ -32,7 +23,6 @@
         </div>
         <v-data-table
           class="datatable"
-          dense
           hide-default-footer
           item-key="character.id"
           :headers="headers"
@@ -58,8 +48,8 @@ import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
-import { AlertLoadoutTableDataInterface } from '~/interfaces/AlertLoadoutTableDataInterface'
-import { AlertLoadoutLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
+import { AlertLoadoutTableDataInterface } from '~/interfaces/alert/AlertLoadoutTableDataInterface'
+import { AlertLoadoutLeaderboardConfig } from '~/constants/DataTableConfig'
 import { InstanceLoadoutResponseInterface } from '~/interfaces/aggregates/instance/InstanceLoadoutResponseInterface'
 import { LoadoutFaction, LoadoutName } from '~/constants/Loadout'
 
@@ -76,7 +66,7 @@ export default Vue.extend({
     return {
       error: null,
       loaded: false,
-      updateRate: 10000,
+      updateRate: 30000,
       updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
@@ -205,7 +195,7 @@ export default Vue.extend({
         })
     },
     tableItemClass(item: AlertLoadoutTableDataInterface): string {
-      return FactionBgClassString(LoadoutFaction(item.loadout)) + ' text-center'
+      return FactionBgClassString(LoadoutFaction(item.loadout))
     },
     transformData(
       data: InstanceLoadoutResponseInterface[]

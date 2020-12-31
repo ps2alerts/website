@@ -47,9 +47,28 @@
         <tr>
           <td class="px-2 py-1 md:py-2 whitespace-nowrap">
             <div class="flex justify-between">
-              <div class="mr-4 font-bold">Bracket</div>
-              <div>
+              <div class="mr-4 font-bold">Activity</div>
+              <div v-if="alert.bracket === 0">
+                <font-awesome-icon
+                  :icon="['fa', 'sync']"
+                  class="animate-spin"
+                ></font-awesome-icon>
+              </div>
+              <div v-else>
                 {{ alert.bracket | bracketName }}
+                <span v-if="alert.state === 1">
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <font-awesome-icon
+                        :icon="['fas', 'info-circle']"
+                        v-bind="attrs"
+                        v-on="on"
+                      ></font-awesome-icon>
+                    </template>
+                    This may change until the alert ends as it is based on
+                    population levels, which naturally fluctuate.
+                  </v-tooltip>
+                </span>
               </div>
             </div>
           </td>

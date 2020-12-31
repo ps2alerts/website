@@ -1,85 +1,90 @@
 <template>
-  <div
-    id="rtm-active-alerts"
-    class="px-4 lg:px-0 pb-4 border-b-2 border-red-700 text-sm text-center"
+  <section
+    id="rtm"
+    class="px-4 pb-4 lg:px-0 lg:pb-0 border-b-2 border-red-700 lg:border-b-0"
   >
-    <div class="rtm-top">
-      <p v-if="loading">Loading...</p>
-      <p v-if="error">ERROR: {{ error }}</p>
-      <p v-show="actives.length === 0 && !error">
-        There are no alerts currently running!
-      </p>
-    </div>
-    <div v-show="actives.length > 0">
-      <div class="flex justify-center">
-        <div class="btn-group mr-2">
-          <button
-            class="btn btn-sm rtm-btn"
-            :class="{ 'btn-active': mode === 'territory' }"
-            @click="updateMode('territory')"
-          >
-            <font-awesome-icon fixed-width :icon="['fas', 'flag']" />
-            Territory
-          </button>
-          <button
-            class="btn btn-sm rtm-btn"
-            :class="{ 'btn-active': mode === 'pops' }"
-            @click="updateMode('pops')"
-          >
-            <font-awesome-icon fixed-width :icon="['fas', 'user']" /> Population
-          </button>
-        </div>
-
-        <button
-          v-show="mode === 'pops' && showPopPercent"
-          class="btn btn-sm rtm-btn"
-          @click="toggleShowPopPercent()"
-        >
-          <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
-        </button>
-        <button
-          v-show="mode === 'pops' && !showPopPercent"
-          class="btn btn-sm rtm-btn"
-          @click="toggleShowPopPercent()"
-        >
-          ##
-        </button>
-      </div>
-
-      <div
-        v-for="alert in actives"
-        :key="alert.instanceId"
-        class="bg-tint my-2 rounded-md lg:rounded-r-md lg:rounded-l-none"
-      >
-        <RealTimeAlert
-          :world="alert.world"
-          :zone="alert.zone"
-          :time-started="alert.timeStarted"
-          :duration="alert.duration"
-          :result="alert.result"
-          :instance-id="alert.instanceId"
-          :mode="mode"
-          :pops="getPops(alert.instanceId)"
-          :is-percentage="showPopPercent"
-        />
-      </div>
-    </div>
-    <p
-      v-show="actives.length > 0"
-      class="text-center text-gray-600 text-xs pt-1"
+    <div
+      class="pt-4 lg:mt-2 bg-tint rounded lg:rounded-bl-none text-sm text-center relative overflow-hidden"
     >
-      <span v-show="mode === 'territory'"
-        >Gray = cutoff territory<br />Updated: {{ lastUpdated }}</span
-      >
-      <span v-show="mode === 'pops'"
-        >Gray = NSO<br />
-        Updated: {{ popsLastUpdated }} | Pop data generated every 60 secs</span
-      >
-    </p>
-  </div>
+      <div class="tag section">Active Alerts</div>
+      <CountdownSpinner
+        v-if="mode === 'territory'"
+        :percent="updateTerritoryCountdownPercentage"
+        :update-rate="updateTerritoryRate"
+      />
+      <CountdownSpinner
+        v-if="mode === 'pops'"
+        :percent="updatePopsCountdownPercentage"
+        :update-rate="updatePopsRate"
+      />
+      <div class="py-2">
+        <p v-if="loading">Loading...</p>
+        <p v-if="error">ERROR: {{ error }}</p>
+        <p v-show="actives.length === 0 && !error">
+          There are no alerts currently running!
+        </p>
+        <div v-show="actives.length > 0">
+          <div class="flex justify-center">
+            <div class="btn-group mr-2">
+              <button
+                class="btn btn-sm"
+                :class="{ 'btn-active': mode === 'territory' }"
+                @click="updateMode('territory')"
+              >
+                <font-awesome-icon fixed-width :icon="['fas', 'flag']" />
+                Territory
+              </button>
+              <button
+                class="btn btn-sm"
+                :class="{ 'btn-active': mode === 'pops' }"
+                @click="updateMode('pops')"
+              >
+                <font-awesome-icon fixed-width :icon="['fas', 'user']" />
+                Population
+              </button>
+            </div>
+
+            <button
+              v-show="mode === 'pops' && showPopPercent"
+              class="btn btn-sm"
+              @click="toggleShowPopPercent()"
+            >
+              <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
+            </button>
+            <button
+              v-show="mode === 'pops' && !showPopPercent"
+              class="btn btn-sm"
+              @click="toggleShowPopPercent()"
+            >
+              ##
+            </button>
+          </div>
+
+          <div
+            v-for="alert in actives"
+            :key="alert.instanceId"
+            class="py-1 px-2 border-b border-gray-600 border-no-bottom"
+          >
+            <RealTimeAlert
+              :world="alert.world"
+              :zone="alert.zone"
+              :time-started="alert.timeStarted"
+              :duration="alert.duration"
+              :result="alert.result"
+              :instance-id="alert.instanceId"
+              :mode="mode"
+              :pops="getPops(alert.instanceId)"
+              :is-percentage="showPopPercent"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script lang="ts">
+/* eslint-disable nuxt/no-globals-in-created */
 import Vue from 'vue'
 import ApiRequest from '@/api-request'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
@@ -100,6 +105,12 @@ export default Vue.extend({
       error: null,
       lastUpdated: 'fetching...',
       popsLastUpdated: 'fetching...',
+      updateTerritoryRate: 5000,
+      updateTerritoryCountdown: 0,
+      updateTerritoryCountdownInterval: undefined as undefined | number,
+      updatePopsRate: 60000,
+      updatePopsCountdown: 0,
+      updatePopsCountdownInterval: undefined as undefined | number,
       actives: [] as InstanceTerritoryControlResponseInterface[],
       populations: new Map<
         string,
@@ -110,6 +121,17 @@ export default Vue.extend({
       showPopPercent: true,
     }
   },
+  computed: {
+    updateTerritoryCountdownPercentage(): number {
+      return (
+        (100 / (this.updateTerritoryRate / 1000)) *
+        this.updateTerritoryCountdown
+      )
+    },
+    updatePopsCountdownPercentage(): number {
+      return (100 / (this.updatePopsRate / 1000)) * this.updatePopsCountdown
+    },
+  },
   watch: {
     $route: 'activeAlerts',
   },
@@ -119,14 +141,23 @@ export default Vue.extend({
     await this.activeAlerts()
     await this.alertPops()
 
+    this.updateTerritoryCountdownInterval = window.setInterval(() => {
+      return this.updateTerritoryCountdown >= 0
+        ? this.updateTerritoryCountdown--
+        : 0
+    }, 1000)
+    this.updatePopsCountdownInterval = window.setInterval(() => {
+      return this.updatePopsCountdown >= 0 ? this.updatePopsCountdown-- : 0
+    }, 1000)
+
     // After initial data is gathered, now continue to poll for data
     setInterval(() => {
       this.error = null
       this.activeAlerts()
-    }, 5000)
+    }, this.updateTerritoryRate)
     setInterval(() => {
       this.alertPops()
-    }, 30000)
+    }, this.updatePopsRate)
   },
   methods: {
     async activeAlerts(): Promise<void> {
@@ -139,7 +170,7 @@ export default Vue.extend({
           this.loading = false
           this.error = null
           this.actives = result
-          this.lastUpdated = moment().format(TIME_FORMAT)
+          this.updateTerritoryCountdown = this.updateTerritoryRate / 1000
         })
         .catch((e) => {
           this.loading = false
@@ -166,6 +197,7 @@ export default Vue.extend({
               if (result[0] && result[0].total > 0) {
                 this.populations.set(instance.instanceId, result[0])
               }
+              this.updatePopsCountdown = this.updatePopsRate / 1000
             })
             .catch((e) => {
               this.loading = false
@@ -190,14 +222,10 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-.rtm-btn {
-  margin-top: 0;
-}
-.faction-bar {
-  height: 25px !important;
-}
-.faction-bar-segment {
-  line-height: 25px !important;
+<style scoped lang="scss">
+#rtm {
+  .tag {
+    margin-bottom: 0;
+  }
 }
 </style>

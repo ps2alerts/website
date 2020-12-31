@@ -1,0 +1,12 @@
+td.text-middle {
+  text-align: center;
+}
+
+.theme--dark {
+  &.v-tabs-bar {
+    background-color: #9b2c2c !important;
+  }
+  &.v-tabs-items {
+    background-color: rgba(0, 0, 0, 0) !important;
+  }
+}

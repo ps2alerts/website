@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div v-show="total > 0" class="faction-bar">
+    <div v-show="total > 0" class="faction-bar text-sm text-center text-white">
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
-            class="faction-bar-segment vs text-center text-white rounded-l"
+            class="faction-bar-segment vs rounded-l"
             :style="{ width: percentVS + '%' }"
             :class="{
               'rounded-r':
@@ -13,7 +13,10 @@
             v-bind="attrs"
             v-on="on"
           >
-            {{ vsString() }}
+            <span v-if="!isPercentage && numeral">{{
+              vsString() | numeral(numeral)
+            }}</span>
+            <span v-else>{{ vsString() }}</span>
           </div>
         </template>
         <span>VS: {{ vsString(true) }}</span>
@@ -22,7 +25,7 @@
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
-            class="faction-bar-segment tr text-center text-white"
+            class="faction-bar-segment tr"
             :style="{ width: percentTR + '%' }"
             :class="{
               'rounded-l': vs === 0,
@@ -31,7 +34,10 @@
             v-bind="attrs"
             v-on="on"
           >
-            {{ trString() }}
+            <span v-if="!isPercentage && numeral">{{
+              trString() | numeral(numeral)
+            }}</span>
+            <span v-else>{{ trString() }}</span>
           </div>
         </template>
         <span>TR: {{ trString(true) }}</span>
@@ -40,7 +46,7 @@
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
-            class="faction-bar-segment nc text-center text-white"
+            class="faction-bar-segment nc"
             :style="{ width: percentNC + '%' }"
             :class="{
               'rounded-l': vs === 0 && tr === 0,
@@ -49,7 +55,10 @@
             v-bind="attrs"
             v-on="on"
           >
-            {{ ncString() }}
+            <span v-if="!isPercentage && numeral">{{
+              ncString() | numeral(numeral)
+            }}</span>
+            <span v-else>{{ ncString() }}</span>
           </div>
         </template>
         <span>NC: {{ ncString(true) }}</span>
@@ -58,7 +67,7 @@
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
-            class="faction-bar-segment nso text-center text-white"
+            class="faction-bar-segment nso"
             :style="{ width: percentOther + '%' }"
             :class="{
               'rounded-l': vs === 0 && nc === 0 && tr === 0,
@@ -70,13 +79,13 @@
             {{ otherString() }}
           </div>
         </template>
-        <span>Cutoff: {{ otherString(true) }}</span>
+        <span>{{ otherSegmentText }}: {{ otherString(true) }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
-            class="faction-bar-segment outofplay text-center text-white"
+            class="faction-bar-segment outofplay"
             :style="{ width: percentOutOfPlay + '%' }"
             :class="{ 'rounded-r': outOfPlay > 0 }"
             v-bind="attrs"
@@ -117,6 +126,11 @@ export default Vue.extend({
       default: 0,
       required: true,
     },
+    otherSegmentText: {
+      type: String,
+      default: 'Cutoff',
+      required: false,
+    },
     outOfPlay: {
       type: Number,
       default: 0,
@@ -133,8 +147,13 @@ export default Vue.extend({
       required: false,
     },
     dropoffPercent: {
-      type: Number,
-      default: 5,
+      type: String,
+      default: '5',
+      required: false,
+    },
+    numeral: {
+      type: String,
+      default: '',
       required: false,
     },
   },
@@ -167,7 +186,9 @@ export default Vue.extend({
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentVS > this.dropoffPercent ? `${value}${suffix}` : ''
+      return this.percentVS > parseInt(this.dropoffPercent)
+        ? `${value}${suffix}`
+        : ''
     },
     ncString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
@@ -177,7 +198,9 @@ export default Vue.extend({
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentNC > this.dropoffPercent ? `${value}${suffix}` : ''
+      return this.percentNC > parseInt(this.dropoffPercent)
+        ? `${value}${suffix}`
+        : ''
     },
     trString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
@@ -187,7 +210,9 @@ export default Vue.extend({
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentTR > this.dropoffPercent ? `${value}${suffix}` : ''
+      return this.percentTR > parseInt(this.dropoffPercent)
+        ? `${value}${suffix}`
+        : ''
     },
     otherString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
@@ -197,7 +222,9 @@ export default Vue.extend({
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentOther > this.dropoffPercent ? `${value}${suffix}` : ''
+      return this.percentOther > parseInt(this.dropoffPercent)
+        ? `${value}${suffix}`
+        : ''
     },
     outOfPlayString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
@@ -207,7 +234,9 @@ export default Vue.extend({
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.outOfPlay > this.dropoffPercent ? `${value}${suffix}` : ''
+      return this.outOfPlay > parseInt(this.dropoffPercent)
+        ? `${value}${suffix}`
+        : ''
     },
   },
 })
@@ -216,15 +245,15 @@ export default Vue.extend({
 <style scoped lang="scss">
 .faction-bar {
   width: 100%;
-  height: 30px;
+  height: 25px;
   white-space: nowrap;
-}
 
-.faction-bar-segment {
-  width: 33%;
-  height: 100%;
-  display: inline-block;
-  float: left;
-  line-height: 30px;
+  .faction-bar-segment {
+    width: 33%;
+    height: 100%;
+    display: inline-block;
+    float: left;
+    line-height: 25px;
+  }
 }
 </style>

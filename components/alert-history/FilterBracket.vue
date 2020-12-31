@@ -7,14 +7,16 @@
       @change="changeBracket()"
     >
       <option :value="NONE">Any</option>
-      <option :value="MORNING">Morning (23:00 - 11:59)</option>
-      <option :value="AFTERNOON">Afternoon (12:00 - 15:59)</option>
-      <option :value="PRIME">Prime (16:00 - 22:59)</option>
+      <option :value="PRIME">Prime (4+ platoons)</option>
+      <option :value="HIGH">High (3-4 platoons)</option>
+      <option :value="MEDIUM">Medium (2-3 platoons)</option>
+      <option :value="LOW">Low (1-2 platoons)</option>
+      <option :value="DEAD">Dead (&lt;1 platoon)</option>
     </select>
     <v-tooltip bottom>
       <template #activator="{ on, attrs }">
         <label class="text-center text-sm" for="bracket"
-          >Time Bracket
+          >Activity Level
           <font-awesome-icon
             :icon="['fas', 'info-circle']"
             v-bind="attrs"
@@ -22,7 +24,7 @@
           ></font-awesome-icon
         ></label>
       </template>
-      Determined from Alert start time
+      Determined from average population counts
     </v-tooltip>
   </div>
 </template>
@@ -43,8 +45,10 @@ export default Vue.extend({
     return {
       bracket: Bracket.NONE,
       NONE: Bracket.NONE,
-      MORNING: Bracket.MORNING,
-      AFTERNOON: Bracket.AFTERNOON,
+      DEAD: Bracket.DEAD,
+      LOW: Bracket.LOW,
+      MEDIUM: Bracket.MEDIUM,
+      HIGH: Bracket.HIGH,
       PRIME: Bracket.PRIME,
     }
   },

@@ -29,21 +29,17 @@
     </div>
     <div class="rounded px-4 py-4 bg-tint relative" :class="victorClass">
       <div class="tag section">Result</div>
-      <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
-        <v-tooltip left>
-          <template #activator="{ on, attrs }">
-            <v-progress-circular
-              :value="updateCountdownPercent"
-              :rotate="-90"
-              :size="14"
-              v-bind="attrs"
-              v-on="on"
-            ></v-progress-circular>
-          </template>
-          <span>Updates every {{ 10000 / 1000 }} secs</span>
-        </v-tooltip>
+      <CountdownSpinner
+        v-if="alert.state === 1"
+        :percent="updateCountdownPercent"
+        update-rate="5000"
+      />
+      <div v-if="!alert.result" class="text-center">
+        Result not available - likely due to Census (the game's API) sending an
+        invalid response. This should correct itself next capture.
       </div>
       <FactionSegmentBar
+        v-else
         :vs="alert.result.vs"
         :nc="alert.result.nc"
         :tr="alert.result.tr"

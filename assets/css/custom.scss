@@ -75,6 +75,12 @@
     border-radius: 0;
   }
 
+  .border-no-bottom {
+    &:last-child {
+      @apply border-transparent mb-0 pb-0
+    }
+  }
+
   ul {
     list-style-type: disc;
     margin-left: 1rem;

@@ -1,20 +1,11 @@
 <template>
   <div class="card mb-2 relative">
     <div class="tag section">Vehicle Metrics</div>
-    <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
-      <v-tooltip left>
-        <template #activator="{ on, attrs }">
-          <v-progress-circular
-            :value="updateCountdownPercent"
-            :rotate="-90"
-            :size="14"
-            v-bind="attrs"
-            v-on="on"
-          ></v-progress-circular>
-        </template>
-        <span>Updates every {{ updateRate / 1000 }} secs</span>
-      </v-tooltip>
-    </div>
+    <CountdownSpinner
+      v-if="alert.state === 1"
+      :percent="updateCountdownPercent"
+      :update-rate="updateRate"
+    />
     <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
@@ -32,7 +23,6 @@
         </div>
         <v-data-table
           class="datatable"
-          dense
           item-key="vehicle.id"
           :headers="headers"
           :items="data"
@@ -64,11 +54,9 @@ import {
   FactionBgClassString,
 } from '@/constants/FactionBgClass'
 import vehicleFaction from '@/filters/VehicleFaction'
-import { AlertVehicleLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
-import {
-  AlertVehicleMetricsDataTableInterface,
-  VehicleStatsWithKd,
-} from '~/interfaces/AlertVehicleMetricsDataTableInterface'
+import { AlertVehicleLeaderboardConfig } from '~/constants/DataTableConfig'
+import { AlertVehicleMetricsDataTableInterface } from '~/interfaces/alert/AlertVehicleMetricsDataTableInterface'
+import { VehicleStatsWithKd } from '~/interfaces/VehicleStatisticsInterface'
 
 export default Vue.extend({
   name: 'AlertVehicleMetrics',
@@ -181,6 +169,12 @@ export default Vue.extend({
           filterable: false,
           value: 'infantry.teamkilled',
         },
+        {
+          text: 'Roadkills',
+          align: 'middle',
+          filterable: false,
+          value: 'roadkills',
+        },
       ],
     }
   },
@@ -278,7 +272,7 @@ export default Vue.extend({
       return FactionBgClass(faction)
     },
     tableItemClass(item: AlertVehicleMetricsDataTableInterface): string {
-      return FactionBgClassString(item.vehicleFaction) + ' text-center'
+      return FactionBgClassString(item.vehicleFaction)
     },
     transformData(
       data: InstanceVehicleAggregateResponseInterface[]
@@ -293,6 +287,7 @@ export default Vue.extend({
         })
 
         vehicle.suicides = vehicle.suicides ?? 0
+        vehicle.roadkills = vehicle.roadkills ?? 0
 
         // Ensure all values display
         vehicle.vehicles = {

@@ -14,6 +14,7 @@ export default {
     build: process.env.BUILD ?? 'UNKNOWN BUILD',
     version: process.env.VERSION ?? 'UNKNOWN VERSION',
     baseUrl: process.env.BASE_URL ?? 'http://dev.ps2alerts.com',
+    maintenance: false,
   },
   server: {
     port: 3000,
@@ -96,11 +97,13 @@ export default {
     { src: '@/filters/AlertEndTime', mode: 'client' },
     { src: '@/filters/BracketName', mode: 'client' },
     { src: '@/filters/DateTimeFormat', mode: 'client' },
+    { src: '@/filters/FactionId', mode: 'client' },
     { src: '@/filters/FactionName', mode: 'client' },
     { src: '@/filters/ItemShortName', mode: 'client' },
     { src: '@/filters/VehicleFaction', mode: 'client' },
     { src: '@/filters/WorldName', mode: 'client' },
     { src: '@/filters/ZoneName', mode: 'client' },
+    { src: '@/plugins/NumeralFilter', mode: 'client' },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)

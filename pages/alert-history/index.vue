@@ -3,20 +3,10 @@
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
     <div class="col-span-12">
       <h1 class="text-title">Alert History</h1>
-      <div class="absolute top-0 right-0 mr-2 mt-2">
-        <v-tooltip left>
-          <template #activator="{ on, attrs }">
-            <v-progress-circular
-              :value="updateCountdownPercent"
-              :rotate="-90"
-              :size="20"
-              v-bind="attrs"
-              v-on="on"
-            ></v-progress-circular>
-          </template>
-          <span>Updates every {{ updateRate / 1000 }} secs</span>
-        </v-tooltip>
-      </div>
+      <CountdownSpinner
+        :percent="updateCountdownPercent"
+        :update-rate="updateRate"
+      />
     </div>
     <div class="col-span-6 lg:col-span-2 lg:col-start-3">
       <FilterWorld :world-filter="selectedWorld" @world-changed="updateWorld" />
@@ -182,6 +172,7 @@ export default Vue.extend({
       const filter: InstanceParamsInterface = {
         sortBy: 'timeStarted',
         order: 'desc',
+        pageSize: this.filteredByDate() ? 250 : 50,
       }
       if (this.selectedWorld > 0) filter.world = this.selectedWorld
       if (this.selectedZone > 0) filter.zone = this.selectedZone
@@ -237,11 +228,11 @@ export default Vue.extend({
     },
     async pull(): Promise<void> {
       console.log('AlertHistory.pull')
-      const queryParams = this.setUpRequest()
+      this.error = { message: '' }
 
       try {
         this.alerts = await this.ApiRequest.get(
-          Endpoints.INSTANCES_TERRITORY_CONTROL + queryParams,
+          Endpoints.INSTANCES_TERRITORY_CONTROL,
           this.filter
         )
         this.loaded = true
@@ -250,17 +241,6 @@ export default Vue.extend({
       } catch (e) {
         this.error = e
       }
-    },
-
-    setUpRequest(): string {
-      this.error = { message: '' }
-      let queryParams = '?pageSize=50'
-
-      if (this.filteredByDate()) {
-        queryParams = '?pageSize=250'
-      }
-
-      return queryParams
     },
     updateWorld(world: World): void {
       this.selectedWorld = world

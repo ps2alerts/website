@@ -16,6 +16,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'vue/no-useless-v-bind': 'error',
     'vue/require-name-property': 'error',
+    'vue/no-template-shadow': 'off',
   },
   plugins: ['prettier'],
 }

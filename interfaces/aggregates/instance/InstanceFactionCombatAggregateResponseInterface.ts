@@ -1,4 +1,4 @@
-import {CombatMetricsInterface} from "@/interfaces/CombatMetricsInterface";
+import { CombatMetricsInterface } from '@/interfaces/CombatMetricsInterface'
 
 export interface InstanceFactionCombatAggregateResponseInterface {
   vs: CombatMetricsInterface

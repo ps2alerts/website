@@ -1,22 +1,13 @@
 <template>
   <div
-    class="col-span-12 lg:col-span-6 ss:col-span-4 card relative items-center"
+    class="col-span-12 lg:col-span-6 ss:col-span-3 card relative items-center"
   >
     <div class="tag section">Faction Combat Metrics</div>
-    <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
-      <v-tooltip left>
-        <template #activator="{ on, attrs }">
-          <v-progress-circular
-            :value="updateCountdownPercent"
-            :rotate="-90"
-            :size="14"
-            v-bind="attrs"
-            v-on="on"
-          ></v-progress-circular>
-        </template>
-        <span>Updates every {{ updateRate / 1000 }} secs</span>
-      </v-tooltip>
-    </div>
+    <CountdownSpinner
+      v-if="alert.state === 1"
+      :percent="updateCountdownPercent"
+      :update-rate="updateRate"
+    />
     <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
@@ -208,7 +199,7 @@ import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
 import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
-import { InstanceFactionCombatAggregateResponseInterface } from '@/interfaces/InstanceFactionCombatAggregateResponseInterface'
+import { InstanceFactionCombatAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceFactionCombatAggregateResponseInterface'
 import { Endpoints } from '@/constants/Endpoints'
 
 export default Vue.extend({
@@ -224,7 +215,7 @@ export default Vue.extend({
     return {
       error: null,
       loaded: false,
-      updateRate: 5000,
+      updateRate: 10000,
       updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,

@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-12 lg:col-span-6 card relative">
+  <div class="col-span-12 ss:col-span-6 card relative">
     <div class="tag section">
       Population History
       <v-tooltip bottom>
@@ -15,28 +15,59 @@
         as active. This may mean the pops fluctuate between redeploys.
       </v-tooltip>
     </div>
-    <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
-      <v-tooltip left>
-        <template #activator="{ on, attrs }">
-          <v-progress-circular
-            :value="updateCountdownPercent"
-            :rotate="-90"
-            :size="14"
-            v-bind="attrs"
-            v-on="on"
-          ></v-progress-circular>
-        </template>
-        <span>Updates every {{ updateRate / 1000 }} secs</span>
-      </v-tooltip>
-    </div>
+    <CountdownSpinner
+      v-if="alert.state === 1"
+      :percent="updateCountdownPercent"
+      :update-rate="updateRate"
+    />
     <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
-    <div v-if="loaded" class="text-center">
-      <line-chart
-        :chart-data="datacollection"
-        :options="chartOptions"
-      ></line-chart>
+    <div class="text-center">
+      <div class="btn-group mr-2">
+        <button
+          class="btn btn-sm"
+          :class="{ 'btn-active': mode === 'number' }"
+          @click="updateMode('number')"
+        >
+          <font-awesome-icon fixed-width :icon="['fas', 'equals']" />
+          Numbers
+        </button>
+        <button
+          class="btn btn-sm"
+          :class="{ 'btn-active': mode === 'average' }"
+          @click="updateMode('average')"
+        >
+          <font-awesome-icon fixed-width :icon="['fas', 'exchange-alt']" />
+          Activity Level
+          <v-tooltip bottom>
+            <template #activator="{ on, attrs }">
+              <font-awesome-icon
+                :icon="['fas', 'info-circle']"
+                v-bind="attrs"
+                v-on="on"
+              ></font-awesome-icon>
+            </template>
+            Shows the calculation for the Activity bracket. All factions must be
+            above the indicated level to achieve it (based on last entry).
+          </v-tooltip>
+        </button>
+      </div>
+
+      <div v-show="mode === 'number'">
+        <line-chart
+          :chart-data="dataCollection"
+          :options="popNumberChartOptions"
+          style="width: 100%; height: 400px"
+        ></line-chart>
+      </div>
+      <div v-show="mode === 'average'" class="text-center">
+        <line-chart
+          :chart-data="dataAvgCollection"
+          :options="activityChartOptions"
+          style="width: 100%; height: 400px"
+        ></line-chart>
+      </div>
     </div>
   </div>
 </template>
@@ -50,6 +81,62 @@ import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { InstancePopulationAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstancePopulationAggregateResponseInterface'
+
+const commonChartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    xAxes: [
+      {
+        ticks: {
+          fontColor: '#fff',
+        },
+        gridLines: {
+          display: false,
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Time',
+          fontColor: '#fff',
+        },
+      },
+    ],
+    yAxes: [
+      {
+        ticks: {
+          fontColor: '#fff',
+        },
+        gridLines: {
+          color: '#718096',
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Players',
+          fontColor: '#fff',
+        },
+      },
+    ],
+  },
+  legend: {
+    labels: {
+      fontColor: '#fff',
+    },
+  },
+}
+
+const annotationCommon = {
+  type: 'line',
+  mode: 'horizontal',
+  scaleID: 'y-axis-0',
+  borderColor: 'rgba(255, 0, 0, 0.25)',
+  borderWidth: 2,
+}
+
+const labelCommon = {
+  backgroundColor: 'rgba(255,0,0,0.5)',
+  enabled: true,
+  position: 'left',
+}
 
 export default Vue.extend({
   name: 'AlertPopulations',
@@ -65,46 +152,60 @@ export default Vue.extend({
   },
   data() {
     return {
-      datacollection: {},
-      chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          xAxes: [
+      dataCollection: {},
+      dataAvgCollection: {},
+      popNumberChartOptions: commonChartOptions,
+      activityChartOptions: {
+        ...commonChartOptions,
+        annotation: {
+          annotations: [
             {
-              ticks: {
-                fontColor: '#fff',
+              ...annotationCommon,
+              id: 'activityDead',
+              value: 1,
+              label: {
+                ...labelCommon,
+                content: 'Dead (>48)',
+                yAdjust: -13,
               },
-              gridLines: {
-                display: false,
+            },
+            {
+              ...annotationCommon,
+              id: 'activityLow',
+              value: 48,
+              label: {
+                ...labelCommon,
+                content: 'Low (48)',
               },
-              scaleLabel: {
-                display: true,
-                labelString: 'Time',
-                fontColor: '#fff',
+            },
+            {
+              ...annotationCommon,
+              id: 'activityMed',
+              value: 96,
+              label: {
+                ...labelCommon,
+                content: 'Med (96)',
+              },
+            },
+            {
+              ...annotationCommon,
+              id: 'activityHigh',
+              value: 144,
+              label: {
+                ...labelCommon,
+                content: 'High (144)',
+              },
+            },
+            {
+              ...annotationCommon,
+              id: 'activityPrime',
+              value: 192,
+              label: {
+                ...labelCommon,
+                content: 'Prime (192)',
               },
             },
           ],
-          yAxes: [
-            {
-              ticks: {
-                fontColor: '#fff',
-              },
-              gridLines: {
-                color: '#718096',
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Players',
-                fontColor: '#fff',
-              },
-            },
-          ],
-        },
-        legend: {
-          labels: {
-            fontColor: '#fff',
-          },
         },
       },
       error: null,
@@ -114,6 +215,9 @@ export default Vue.extend({
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       data: [] as InstancePopulationAggregateResponseInterface[],
+      avgData: [] as InstancePopulationAggregateResponseInterface[],
+      mode: 'number',
+      showBrackets: 'false',
     }
   },
   computed: {
@@ -138,6 +242,7 @@ export default Vue.extend({
   },
   mounted() {
     this.fillData()
+    this.fillData(true)
   },
   methods: {
     reset() {
@@ -167,8 +272,10 @@ export default Vue.extend({
 
       console.log('AlertPopulations.pull', this.alert.instanceId)
 
-      await new ApiRequest()
-        .get<InstancePopulationAggregateResponseInterface[]>(
+      const promises = []
+
+      promises.push(
+        new ApiRequest().get<InstancePopulationAggregateResponseInterface[]>(
           Endpoints.AGGREGATES_INSTANCE_POPULATION.replace(
             '{instance}',
             this.alert.instanceId
@@ -176,56 +283,100 @@ export default Vue.extend({
               : 'whatever'
           )
         )
-        .then((result) => {
-          this.data = result
-          this.loaded = true
+      )
+      promises.push(
+        new ApiRequest().get<InstancePopulationAggregateResponseInterface[]>(
+          Endpoints.AGGREGATES_INSTANCE_POPULATION_AVERAGES.replace(
+            '{instance}',
+            this.alert.instanceId
+              ? this.alert.instanceId.toString()
+              : 'whatever'
+          )
+        )
+      )
+
+      await Promise.all(promises)
+        .then(([popData, avgPopData]) => {
+          this.data = popData
+          this.avgData = avgPopData
           this.updateCountdown = this.updateRate / 1000
-          this.fillData()
+          this.fillData(false)
+          this.fillData(true)
+          this.loaded = true
         })
         .catch((e) => {
           this.error = e.message
         })
     },
-    fillData() {
+    fillData(avg = false) {
       const times: string[] = []
       const vsData: number[] = []
       const ncData: number[] = []
       const trData: number[] = []
       const nsoData: number[] = []
 
-      this.data.forEach((row) => {
+      let data = this.data
+
+      if (avg) {
+        data = this.avgData
+      }
+
+      data.forEach((row) => {
         times.push(moment(row.timestamp).format('HH:mm'))
         vsData.push(row.vs)
         ncData.push(row.nc)
         trData.push(row.tr)
-        nsoData.push(row.nso)
+        if (!avg) {
+          nsoData.push(row.nso)
+        }
       })
 
-      this.datacollection = {
+      const collection = {
         labels: times,
         datasets: [
           {
             label: 'VS',
-            backgroundColor: '#553c9a',
+            borderColor: '#6B46C1',
             data: vsData,
+            pointStyle: 'circle',
+            pointBorderWidth: 2,
+            pointHoverBorderWidth: 4,
           },
           {
             label: 'TR',
-            backgroundColor: '#9b2c2c',
+            borderColor: '#9b2c2c',
             data: trData,
+            pointStyle: 'rect',
+            pointBorderWidth: 2,
+            pointHoverBorderWidth: 4,
           },
           {
             label: 'NC',
-            backgroundColor: '#2b6cb0',
+            borderColor: '#2b6cb0',
             data: ncData,
-          },
-          {
-            label: 'NSO',
-            backgroundColor: '#4a5568',
-            data: nsoData,
+            pointStyle: 'triangle',
+            pointBorderWidth: 2,
+            pointHoverBorderWidth: 4,
           },
         ],
       }
+
+      if (avg) {
+        this.dataAvgCollection = collection
+      } else {
+        collection.datasets.push({
+          label: 'NSO',
+          borderColor: '#4a5568',
+          data: nsoData,
+          pointStyle: 'circle',
+          pointBorderWidth: 2,
+          pointHoverBorderWidth: 4,
+        })
+        this.dataCollection = collection
+      }
+    },
+    updateMode(mode: string): void {
+      this.mode = mode
     },
   },
 })

@@ -1,20 +1,11 @@
 <template>
   <div>
     <div class="tag section">Player Metrics</div>
-    <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
-      <v-tooltip left>
-        <template #activator="{ on, attrs }">
-          <v-progress-circular
-            :value="updateCountdownPercent"
-            :rotate="-90"
-            :size="14"
-            v-bind="attrs"
-            v-on="on"
-          ></v-progress-circular>
-        </template>
-        <span>Updates every {{ updateRate / 1000 }} secs</span>
-      </v-tooltip>
-    </div>
+    <CountdownSpinner
+      v-if="alert.state === 1"
+      :percent="updateCountdownPercent"
+      :update-rate="updateRate"
+    />
     <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
@@ -44,7 +35,6 @@
         </div>
         <v-data-table
           class="datatable"
-          dense
           show-expand
           item-key="character.id"
           :headers="headers"
@@ -81,8 +71,8 @@ import {
   FactionBgClassString,
 } from '@/constants/FactionBgClass'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
-import { AlertCharacterTableDataInterface } from '~/interfaces/AlertCharacterTableDataInterface'
-import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
+import { AlertCharacterTableDataInterface } from '~/interfaces/alert/AlertCharacterTableDataInterface'
+import { DataTableConfig } from '~/constants/DataTableConfig'
 
 export default Vue.extend({
   name: 'AlertCharacterMetrics',
@@ -102,9 +92,8 @@ export default Vue.extend({
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       data: {} as AlertCharacterTableDataInterface[],
-      outfitParticipants: {} as { [k: string]: string[] },
       filter: '',
-      leaderboardConfig: AlertLeaderboardConfig,
+      leaderboardConfig: DataTableConfig,
       expanded: [],
       headers: [
         {
@@ -254,42 +243,11 @@ export default Vue.extend({
           this.error = e.message
         })
     },
-    // This bubbles up to the _alert.vue component, then back down via a prop bind to AlertOutfitMetrics.vue, which enables
-    // us to render the outfit participants.
-    calculateOutfitParticipants(): void {
-      if (!this.data) {
-        return
-      }
-
-      this.data.forEach(
-        (character: InstanceCharacterAggregateResponseInterface) => {
-          let outfitId = `-${character.character.faction.toString()}`
-
-          if (character.character.outfit) {
-            outfitId = character.character.outfit?.id
-          }
-
-          const characterId = character.character.id
-
-          if (!this.outfitParticipants[outfitId]) {
-            this.outfitParticipants[outfitId] = []
-          }
-
-          if (!this.outfitParticipants[outfitId].includes(characterId)) {
-            this.outfitParticipants[outfitId].push(characterId)
-          }
-        }
-      )
-
-      if (Object.keys(this.outfitParticipants).length > 0) {
-        this.$emit('outfit-participants-changed', this.outfitParticipants)
-      }
-    },
     factionClass(faction: Faction): object {
       return FactionBgClass(faction)
     },
     tableItemClass(item: AlertCharacterTableDataInterface): string {
-      return FactionBgClassString(item.character.faction) + ' text-center'
+      return FactionBgClassString(item.character.faction)
     },
     transformData(
       data: InstanceCharacterAggregateResponseInterface[]

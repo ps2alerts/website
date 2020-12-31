@@ -1,20 +1,11 @@
 <template>
   <div>
     <div class="tag section">Weapon Metrics</div>
-    <div v-if="alert.state === 1" class="absolute top-0 right-0 mr-2">
-      <v-tooltip left>
-        <template #activator="{ on, attrs }">
-          <v-progress-circular
-            :value="updateCountdownPercent"
-            :rotate="-90"
-            :size="14"
-            v-bind="attrs"
-            v-on="on"
-          ></v-progress-circular>
-        </template>
-        <span>Updates every {{ updateRate / 1000 }} secs</span>
-      </v-tooltip>
-    </div>
+    <CountdownSpinner
+      v-if="alert.state === 1"
+      :percent="updateCountdownPercent"
+      :update-rate="updateRate"
+    />
     <div v-if="!loaded" class="text-center">
       <h1>Loading...</h1>
     </div>
@@ -32,7 +23,6 @@
         </div>
         <v-data-table
           class="datatable"
-          dense
           item-key="weapon.id"
           :headers="headers"
           :items="data"
@@ -57,8 +47,8 @@ import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceWeaponAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceWeaponAggregateResponseInterface'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
-import { AlertWeaponTableDataInterface } from '~/interfaces/AlertWeaponTableDataInterface'
-import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
+import { AlertWeaponTableDataInterface } from '~/interfaces/alert/AlertWeaponTableDataInterface'
+import { DataTableConfig } from '~/constants/DataTableConfig'
 
 export default Vue.extend({
   name: 'AlertWeaponMetrics',
@@ -79,7 +69,7 @@ export default Vue.extend({
       interval: undefined as undefined | number,
       data: {} as InstanceWeaponAggregateResponseInterface[],
       filter: '',
-      leaderboardConfig: AlertLeaderboardConfig,
+      leaderboardConfig: DataTableConfig,
       headers: [
         {
           text: 'Weapon',
@@ -186,7 +176,7 @@ export default Vue.extend({
         })
     },
     tableItemClass(item: AlertWeaponTableDataInterface): string {
-      return FactionBgClassString(item.weapon.faction) + ' text-center'
+      return FactionBgClassString(item.weapon.faction)
     },
     transformData(
       data: InstanceWeaponAggregateResponseInterface[]
