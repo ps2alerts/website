@@ -48,7 +48,7 @@ import { Endpoints } from '@/constants/Endpoints'
 import { InstanceWeaponAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceWeaponAggregateResponseInterface'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { AlertWeaponTableDataInterface } from '~/interfaces/alert/AlertWeaponTableDataInterface'
-import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
+import { DataTableConfig } from '~/constants/DataTableConfig'
 
 export default Vue.extend({
   name: 'AlertWeaponMetrics',
@@ -69,7 +69,7 @@ export default Vue.extend({
       interval: undefined as undefined | number,
       data: {} as InstanceWeaponAggregateResponseInterface[],
       filter: '',
-      leaderboardConfig: AlertLeaderboardConfig,
+      leaderboardConfig: DataTableConfig,
       headers: [
         {
           text: 'Weapon',

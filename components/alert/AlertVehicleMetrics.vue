@@ -54,7 +54,7 @@ import {
   FactionBgClassString,
 } from '@/constants/FactionBgClass'
 import vehicleFaction from '@/filters/VehicleFaction'
-import { AlertVehicleLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
+import { AlertVehicleLeaderboardConfig } from '~/constants/DataTableConfig'
 import { AlertVehicleMetricsDataTableInterface } from '~/interfaces/alert/AlertVehicleMetricsDataTableInterface'
 import { VehicleStatsWithKd } from '~/interfaces/VehicleStatisticsInterface'
 

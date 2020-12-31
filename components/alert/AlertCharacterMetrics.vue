@@ -72,7 +72,7 @@ import {
 } from '@/constants/FactionBgClass'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { AlertCharacterTableDataInterface } from '~/interfaces/alert/AlertCharacterTableDataInterface'
-import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
+import { DataTableConfig } from '~/constants/DataTableConfig'
 
 export default Vue.extend({
   name: 'AlertCharacterMetrics',
@@ -93,7 +93,7 @@ export default Vue.extend({
       interval: undefined as undefined | number,
       data: {} as AlertCharacterTableDataInterface[],
       filter: '',
-      leaderboardConfig: AlertLeaderboardConfig,
+      leaderboardConfig: DataTableConfig,
       expanded: [],
       headers: [
         {

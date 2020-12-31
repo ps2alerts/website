@@ -72,7 +72,7 @@ import {
   FactionBgClass,
   FactionBgClassString,
 } from '@/constants/FactionBgClass'
-import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
+import { DataTableConfig } from '~/constants/DataTableConfig'
 import { AlertOutfitTableDataInterface } from '~/interfaces/alert/AlertOutfitTableDataInterface'
 
 export default Vue.extend({
@@ -94,7 +94,7 @@ export default Vue.extend({
       interval: undefined as undefined | number,
       data: {} as AlertOutfitTableDataInterface[],
       filter: '',
-      leaderboardConfig: AlertLeaderboardConfig,
+      leaderboardConfig: DataTableConfig,
       expanded: [],
       headers: [
         {

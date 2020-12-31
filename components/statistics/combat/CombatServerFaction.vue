@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { StatisticsFactionLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
+import { StatisticsFactionLeaderboardConfig } from '~/constants/DataTableConfig'
 import {
   GlobalCombatMetricsInterface,
   GlobalFactionCombatAggregateResponseInterface,

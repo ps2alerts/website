@@ -49,7 +49,7 @@ import { Endpoints } from '@/constants/Endpoints'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { AlertLoadoutTableDataInterface } from '~/interfaces/alert/AlertLoadoutTableDataInterface'
-import { AlertLoadoutLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
+import { AlertLoadoutLeaderboardConfig } from '~/constants/DataTableConfig'
 import { InstanceLoadoutResponseInterface } from '~/interfaces/aggregates/instance/InstanceLoadoutResponseInterface'
 import { LoadoutFaction, LoadoutName } from '~/constants/Loadout'
 

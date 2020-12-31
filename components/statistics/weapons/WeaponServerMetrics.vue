@@ -34,7 +34,7 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
+import { DataTableConfig } from '~/constants/DataTableConfig'
 import { FactionBgClassString } from '~/constants/FactionBgClass'
 import { StatisticsWeaponTableDataInterface } from '~/interfaces/statistics/StatisticsWeaponTableDataInterface'
 
@@ -66,7 +66,7 @@ export default Vue.extend({
     return {
       data: {} as StatisticsWeaponTableDataInterface[],
       filter: '',
-      leaderboardConfig: AlertLeaderboardConfig,
+      leaderboardConfig: DataTableConfig,
       headers: [
         {
           text: 'Weapon',
