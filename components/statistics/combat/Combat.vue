@@ -1,13 +1,32 @@
 <template>
   <section class="mb-2">
     <h1 class="text-3xl text-center mb-2">Combat Statistics</h1>
-    <p class="text-center mb-2">
-      <font-awesome-icon :icon="['fas', 'exclamation-triangle']" /> NSO data is
-      malformed due to a previous bug. This will be corrected upon data wipe on
-      Jan 1st
-      <font-awesome-icon :icon="['fas', 'exclamation-triangle']" />
-    </p>
-    <CombatFactions :mode="mode" />
+    <div v-if="loaded">
+      <CombatFactionTotals
+        :v-if="data.length > 0"
+        :raw-data="data"
+        :update-countdown-percent="updateCountdownPercent"
+        :update-rate="updateRate"
+        :mode="mode"
+      ></CombatFactionTotals>
+      <CombatServerTotals
+        :v-if="data.length > 0"
+        :raw-data="data"
+        :update-countdown-percent="updateCountdownPercent"
+        :update-rate="updateRate"
+        :mode="mode"
+      ></CombatServerTotals>
+      <CombatServerFaction
+        :v-if="data.length > 0"
+        :raw-data="data"
+        :update-countdown-percent="updateCountdownPercent"
+        :update-rate="updateRate"
+        :mode="mode"
+      ></CombatServerFaction>
+    </div>
+    <div v-else>
+      <h1 class="text-center">Loading...</h1>
+    </div>
   </section>
 </template>
 
@@ -15,13 +34,17 @@
 import Vue from 'vue'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
-import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
-import CombatFactions from '~/components/statistics/combat/CombatFactions.vue'
+import CombatFactionTotals from '~/components/statistics/combat/CombatFactionTotals.vue'
+import { GlobalFactionCombatAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalFactionCombatAggregateResponseInterface'
+import CombatServerTotals from '~/components/statistics/combat/CombatServerTotals.vue'
+import CombatServerFaction from '~/components/statistics/combat/CombatServerFaction.vue'
 
 export default Vue.extend({
   name: 'Combat',
   components: {
-    CombatFactions,
+    CombatFactionTotals,
+    CombatServerTotals,
+    CombatServerFaction,
   },
   props: {
     mode: {
@@ -38,25 +61,12 @@ export default Vue.extend({
       updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
-      data: [] as GlobalVictoriesAggregateResponseInterface[],
+      data: [] as GlobalFactionCombatAggregateResponseInterface[],
     }
   },
   computed: {
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
-    },
-    totalInstances(): number {
-      if (!this.loaded) {
-        return 0
-      }
-      let count = 0
-      this.data.forEach((row) => {
-        count += row.vs ?? 0
-        count += row.nc ?? 0
-        count += row.tr ?? 0
-        count += row.draws ?? 0
-      })
-      return count
     },
   },
   beforeDestroy() {
@@ -89,8 +99,8 @@ export default Vue.extend({
       console.log('CombatStatistics.pull')
 
       await new ApiRequest()
-        .get<GlobalVictoriesAggregateResponseInterface[]>(
-          Endpoints.AGGREGATES_GLOBAL_VICTORIES
+        .get<GlobalFactionCombatAggregateResponseInterface[]>(
+          Endpoints.AGGREGATES_GLOBAL_FACTION
         )
         .then((result) => {
           this.data = result
