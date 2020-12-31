@@ -131,10 +131,14 @@
           <Victories :mode="mode"></Victories>
         </v-tab-item>
         <v-tab-item value="players">
-          <h1 class="text-3xl text-center">Coming soon!</h1>
+          <div class="mb-4">
+            <h1 class="text-3xl text-center">Coming soon!</h1>
+          </div>
         </v-tab-item>
         <v-tab-item value="outfits">
-          <h1 class="text-3xl text-center">Coming soon!</h1>
+          <div class="mb-4">
+            <h1 class="text-3xl text-center">Coming soon!</h1>
+          </div>
         </v-tab-item>
         <v-tab-item value="combat">
           <Combat :mode="mode"></Combat>
@@ -146,10 +150,14 @@
           <Vehicles :mode="mode"></Vehicles>
         </v-tab-item>
         <v-tab-item value="loadouts">
-          <h1 class="text-3xl text-center">Coming soon!</h1>
+          <div class="mb-4">
+            <h1 class="text-3xl text-center">Coming soon!</h1>
+          </div>
         </v-tab-item>
         <v-tab-item value="facilities">
-          <h1 class="text-3xl text-center">Coming soon!</h1>
+          <div class="mb-4">
+            <h1 class="text-3xl text-center">Coming soon!</h1>
+          </div>
         </v-tab-item>
       </v-tabs-items>
     </div>
