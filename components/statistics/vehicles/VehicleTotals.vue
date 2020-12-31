@@ -206,15 +206,15 @@ export default Vue.extend({
           const vehicle: TotalVehicleInterface =
             calcData[worldVehicle.vehicle] ?? {}
 
-          vehicle.vehicles = this.addVehicleMetrics(
+          vehicle.vehicles = this.addMetrics(
             worldVehicle.vehicles,
             vehicle.vehicles ?? undefined
           )
-          vehicle.infantry = this.addVehicleMetrics(
+          vehicle.infantry = this.addMetrics(
             worldVehicle.infantry,
             vehicle.infantry ?? undefined
           )
-          vehicle.totals = this.addVehicleMetrics(
+          vehicle.totals = this.addMetrics(
             worldVehicle.totals,
             vehicle.totals ?? undefined
           )
@@ -247,7 +247,7 @@ export default Vue.extend({
       return returnData
     },
 
-    addVehicleMetrics(
+    addMetrics(
       worldVehicle: VehicleStatsInterface | undefined,
       totals: VehicleStatsWithKd | undefined
     ): VehicleStatsWithKd {

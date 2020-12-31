@@ -407,10 +407,18 @@ export default Vue.extend({
           return
         }
 
-        totalMetrics.vs = this.addVehicleMetrics(world.vs, totalMetrics.vs)
-        totalMetrics.nc = this.addVehicleMetrics(world.nc, totalMetrics.nc)
-        totalMetrics.tr = this.addVehicleMetrics(world.tr, totalMetrics.tr)
-        totalMetrics.nso = this.addVehicleMetrics(world.nso, totalMetrics.nso)
+        totalMetrics.vs = world.vs
+          ? this.addMetrics(world.vs, totalMetrics.vs)
+          : undefined
+        totalMetrics.nc = world.nc
+          ? this.addMetrics(world.nc, totalMetrics.nc)
+          : undefined
+        totalMetrics.tr = world.tr
+          ? this.addMetrics(world.tr, totalMetrics.tr)
+          : undefined
+        totalMetrics.nso = world.nso
+          ? this.addMetrics(world.nso, totalMetrics.nso)
+          : undefined
       })
 
       return totalMetrics
@@ -441,16 +449,21 @@ export default Vue.extend({
         if (world.world === World.JAEGER) {
           return
         }
+
         const factionData = {
-          vs: this.transformMetricCounts(world.vs),
-          nc: this.transformMetricCounts(world.nc),
-          tr: this.transformMetricCounts(world.tr),
-          nso: this.transformMetricCounts(world.nso),
+          vs: world.vs ? this.transformMetricCounts(world.vs) : undefined,
+          nc: world.nc ? this.transformMetricCounts(world.nc) : undefined,
+          tr: world.tr ? this.transformMetricCounts(world.tr) : undefined,
+          nso: world.nso ? this.transformMetricCounts(world.nso) : undefined,
         }
 
         const keys = ['vs', 'nc', 'tr', 'nso']
 
         keys.forEach((key) => {
+          // @ts-ignore
+          if (!factionData[key]) {
+            return
+          }
           const fId = factionId(key)
           const tableRow: StatisticsFactionCombatTableDataInterface = Object.assign(
             // @ts-ignore
@@ -490,7 +503,7 @@ export default Vue.extend({
             : 0,
       })
     },
-    addVehicleMetrics(
+    addMetrics(
       worldFaction: GlobalCombatMetricsInterface,
       totals: GlobalCombatMetricsInterface | undefined
     ): GlobalCombatMetricsInterface {
