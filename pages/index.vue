@@ -151,7 +151,7 @@
         </v-tab-item>
         <v-tab-item value="loadouts">
           <div class="mb-4">
-            <h1 class="text-3xl text-center">Coming soon!</h1>
+            <Loadouts :mode="mode"></Loadouts>
           </div>
         </v-tab-item>
         <v-tab-item value="facilities">

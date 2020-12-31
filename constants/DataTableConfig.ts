@@ -37,6 +37,7 @@ export const StatisticsFactionLeaderboardConfig = {
   'sort-by': ['kd'],
   'items-per-page': 28,
   'multi-sort': true,
+  'must-sort': false,
   'footer-props': {
     itemsPerPageOptions: [28],
   },
@@ -50,5 +51,15 @@ export const StatisticsVehicleLeaderboardConfig = {
 export const StatisticsLoadoutLeaderboardConfig = {
   ...DataTableConfig,
   'sort-by': ['kd'],
+  'items-per-page': 24,
+  'footer-props': {
+    itemsPerPageOptions: [24],
+  },
+}
+
+export const StatisticsLoadoutServerMetricsLeaderboardConfig = {
+  ...DataTableConfig,
+  'sort-by': ['kd'],
   'multi-sort': true,
+  'must-sort': false,
 }
