@@ -1,19 +1,26 @@
 <template>
   <section class="mb-4">
     <h1 class="text-3xl text-center mb-4">Victory Statistics</h1>
-    <h1 class="text-2xl text-center mb-4">
-      <b>{{ totalInstances }}</b> alerts recorded since 1st Jan 2021
-    </h1>
-    <VictoriesCounts
-      :raw-data="data"
-      :update-countdown-percent="updateCountdownPercent"
-      :mode="mode"
-    />
-    <VictoriesTimeline
-      :raw-data="data"
-      :update-countdown-percent="updateCountdownPercent"
-      :mode="mode"
-    />
+    <div v-if="totalInstances === 0">
+      <h1 class="text-2xl text-center mb-4">
+        No alerts have yet been recorded! Check back soon!
+      </h1>
+    </div>
+    <div v-else>
+      <h1 class="text-2xl text-center mb-4">
+        <b>{{ totalInstances }}</b> alerts recorded since 1st Jan 2021
+      </h1>
+      <VictoriesCounts
+        :raw-data="data"
+        :update-countdown-percent="updateCountdownPercent"
+        :mode="mode"
+      />
+      <VictoriesTimeline
+        :raw-data="data"
+        :update-countdown-percent="updateCountdownPercent"
+        :mode="mode"
+      />
+    </div>
   </section>
 </template>
 

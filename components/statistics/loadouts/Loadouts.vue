@@ -2,20 +2,25 @@
   <section class="mb-4">
     <h1 class="text-3xl text-center mb-4">Class Statistics</h1>
     <div v-if="loaded">
-      <LoadoutsTotals
-        :v-if="data.length > 0"
-        :raw-data="data"
-        :update-countdown-percent="updateCountdownPercent"
-        :update-rate="updateRate"
-        :mode="mode"
-      ></LoadoutsTotals>
-      <LoadoutsServerMetrics
-        :v-if="data.length > 0"
-        :raw-data="data"
-        :update-countdown-percent="updateCountdownPercent"
-        :update-rate="updateRate"
-        :mode="mode"
-      ></LoadoutsServerMetrics>
+      <div v-if="data.length === 0">
+        <h1 class="text-2xl text-center mb-4">No data! Check back soon!</h1>
+      </div>
+      <div v-else>
+        <LoadoutsTotals
+          :v-if="data.length > 0"
+          :raw-data="data"
+          :update-countdown-percent="updateCountdownPercent"
+          :update-rate="updateRate"
+          :mode="mode"
+        ></LoadoutsTotals>
+        <LoadoutsServerMetrics
+          :v-if="data.length > 0"
+          :raw-data="data"
+          :update-countdown-percent="updateCountdownPercent"
+          :update-rate="updateRate"
+          :mode="mode"
+        ></LoadoutsServerMetrics>
+      </div>
     </div>
     <div v-else>
       <h1 class="text-center">Loading...</h1>

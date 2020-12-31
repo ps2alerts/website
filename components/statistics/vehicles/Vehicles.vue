@@ -2,30 +2,35 @@
   <section class="mb-4">
     <h1 class="text-3xl text-center mb-4">Vehicle Statistics</h1>
     <div v-if="loaded">
-      <VehicleTotals
-        :v-if="data.length > 0"
-        :raw-data="data"
-        :vehicle-data="vehicleData"
-        :update-countdown-percent="updateCountdownPercent"
-        :update-rate="updateRate"
-        :mode="mode"
-      ></VehicleTotals>
-      <VehicleServerMetrics
-        :v-if="data.length > 0"
-        :raw-data="data"
-        :vehicle-data="vehicleData"
-        :update-countdown-percent="updateCountdownPercent"
-        :update-rate="updateRate"
-        :mode="mode"
-      ></VehicleServerMetrics>
-      <VehicleMatrix
-        :v-if="data.length > 0"
-        :raw-data="data"
-        :vehicle-data="vehicleData"
-        :update-countdown-percent="updateCountdownPercent"
-        :update-rate="updateRate"
-        :mode="mode"
-      ></VehicleMatrix>
+      <div v-if="data.length === 0">
+        <h1 class="text-2xl text-center mb-4">No data! Check back soon!</h1>
+      </div>
+      <div v-else>
+        <VehicleTotals
+          :v-if="data.length > 0"
+          :raw-data="data"
+          :vehicle-data="vehicleData"
+          :update-countdown-percent="updateCountdownPercent"
+          :update-rate="updateRate"
+          :mode="mode"
+        ></VehicleTotals>
+        <VehicleServerMetrics
+          :v-if="data.length > 0"
+          :raw-data="data"
+          :vehicle-data="vehicleData"
+          :update-countdown-percent="updateCountdownPercent"
+          :update-rate="updateRate"
+          :mode="mode"
+        ></VehicleServerMetrics>
+        <VehicleMatrix
+          :v-if="data.length > 0"
+          :raw-data="data"
+          :vehicle-data="vehicleData"
+          :update-countdown-percent="updateCountdownPercent"
+          :update-rate="updateRate"
+          :mode="mode"
+        ></VehicleMatrix>
+      </div>
     </div>
     <div v-else>
       <h1 class="text-center">Loading...</h1>

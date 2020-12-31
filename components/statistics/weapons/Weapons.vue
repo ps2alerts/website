@@ -2,20 +2,25 @@
   <section class="mb-4">
     <h1 class="text-3xl text-center mb-4">Weapon Statistics</h1>
     <div v-if="loaded">
-      <WeaponTotals
-        :v-if="data.length > 0"
-        :raw-data="data"
-        :update-countdown-percent="updateCountdownPercent"
-        :update-rate="updateRate"
-        :mode="mode"
-      ></WeaponTotals>
-      <WeaponServerMetrics
-        :v-if="data.length > 0"
-        :raw-data="data"
-        :update-countdown-percent="updateCountdownPercent"
-        :update-rate="updateRate"
-        :mode="mode"
-      ></WeaponServerMetrics>
+      <div v-if="data.length === 0">
+        <h1 class="text-2xl text-center mb-4">No data! Check back soon!</h1>
+      </div>
+      <div v-else>
+        <WeaponTotals
+          :v-if="data.length > 0"
+          :raw-data="data"
+          :update-countdown-percent="updateCountdownPercent"
+          :update-rate="updateRate"
+          :mode="mode"
+        ></WeaponTotals>
+        <WeaponServerMetrics
+          :v-if="data.length > 0"
+          :raw-data="data"
+          :update-countdown-percent="updateCountdownPercent"
+          :update-rate="updateRate"
+          :mode="mode"
+        ></WeaponServerMetrics>
+      </div>
     </div>
     <div v-else>
       <h1 class="text-center">Loading...</h1>
@@ -51,7 +56,6 @@ export default Vue.extend({
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       data: [] as GlobalWeaponAggregateResponseInterface[],
-      vehicleData: [] as VehicleDataInterface[],
     }
   },
   computed: {

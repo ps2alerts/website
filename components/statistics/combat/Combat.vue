@@ -2,27 +2,32 @@
   <section class="mb-4">
     <h1 class="text-3xl text-center mb-4">Combat Statistics</h1>
     <div v-if="loaded">
-      <CombatFactionTotals
-        :v-if="data.length > 0"
-        :raw-data="data"
-        :update-countdown-percent="updateCountdownPercent"
-        :update-rate="updateRate"
-        :mode="mode"
-      ></CombatFactionTotals>
-      <CombatServerTotals
-        :v-if="data.length > 0"
-        :raw-data="data"
-        :update-countdown-percent="updateCountdownPercent"
-        :update-rate="updateRate"
-        :mode="mode"
-      ></CombatServerTotals>
-      <CombatServerFaction
-        :v-if="data.length > 0"
-        :raw-data="data"
-        :update-countdown-percent="updateCountdownPercent"
-        :update-rate="updateRate"
-        :mode="mode"
-      ></CombatServerFaction>
+      <div v-if="data.length === 0">
+        <h1 class="text-2xl text-center mb-4">No data! Check back soon!</h1>
+      </div>
+      <div v-else>
+        <CombatFactionTotals
+          :v-if="data.length > 0"
+          :raw-data="data"
+          :update-countdown-percent="updateCountdownPercent"
+          :update-rate="updateRate"
+          :mode="mode"
+        ></CombatFactionTotals>
+        <CombatServerTotals
+          :v-if="data.length > 0"
+          :raw-data="data"
+          :update-countdown-percent="updateCountdownPercent"
+          :update-rate="updateRate"
+          :mode="mode"
+        ></CombatServerTotals>
+        <CombatServerFaction
+          :v-if="data.length > 0"
+          :raw-data="data"
+          :update-countdown-percent="updateCountdownPercent"
+          :update-rate="updateRate"
+          :mode="mode"
+        ></CombatServerFaction>
+      </div>
     </div>
     <div v-else>
       <h1 class="text-center">Loading...</h1>
