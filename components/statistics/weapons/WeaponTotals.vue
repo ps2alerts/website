@@ -43,6 +43,7 @@ import { WeaponInterface } from '~/interfaces/WeaponInterface'
 
 interface TotalWeaponInterface extends GlobalWeaponAggregateResponseInterface {
   weapon: WeaponInterface
+  hsr: string | 0
 }
 
 export default Vue.extend({

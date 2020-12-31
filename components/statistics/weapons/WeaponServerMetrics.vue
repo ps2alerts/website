@@ -37,7 +37,6 @@ import Vue, { PropOptions } from 'vue'
 import { AlertLeaderboardConfig } from '~/constants/AlertLeaderboardConfig'
 import { FactionBgClassString } from '~/constants/FactionBgClass'
 import { StatisticsWeaponTableDataInterface } from '~/interfaces/statistics/StatisticsWeaponTableDataInterface'
-import { StatisticsVehicleMetricsTableDataInterface } from '~/interfaces/statistics/StatisticsVehicleMetricsTableDataInterface'
 
 export default Vue.extend({
   name: 'WeaponServerMetrics',
@@ -46,7 +45,7 @@ export default Vue.extend({
       type: Array,
       default: () => [],
       required: true,
-    } as PropOptions<StatisticsVehicleMetricsTableDataInterface[]>,
+    } as PropOptions<StatisticsWeaponTableDataInterface[]>,
     updateCountdownPercent: {
       type: Number,
       default: 100,
