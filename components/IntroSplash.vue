@@ -8,11 +8,11 @@
         class="inline-block"
       />
       <h1 class="text-title">PS2Alerts 3.0 Launches</h1>
-      <no-ssr>
+      <client-only>
         <div class="my-4">
           <flip-countdown deadline="2021-01-01 00:00:00"></flip-countdown>
         </div>
-      </no-ssr>
+      </client-only>
       <h2 class="text-3xl mb-2">1st January 2021</h2>
       <a href="https://staging.ps2alerts.com" class="btn"
         >Visit the Alpha version</a
