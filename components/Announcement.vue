@@ -29,11 +29,12 @@
         <p>
           It has taken 9 months for the website to finally come back to life, it
           has been a long road but we're finally here! The site will continue to
-          have new features added to it (lots of things planned - check the
-          <NuxtLink class="text-blue-600" :to="{ name: 'changelog' }">
-            Change Log
-          </NuxtLink>
-          for more info) in the coming weeks and months.
+          have new features added to it in the coming weeks and months. Check
+          out the
+          <a href="https://github.com/ps2alerts/website/issues" target="_blank"
+            >GitHub project</a
+          >
+          for an idea of what's coming up!
         </p>
         <p>
           I'd like to thank everyone in the community who have shown their
