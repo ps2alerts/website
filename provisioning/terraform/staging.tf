@@ -11,4 +11,6 @@ module "website_staging" {
   cpu_limit        = "500m"
   mem_limit        = "128Mi"
   replicas         = 1
+  dd_api_key       = var.dd_api_key
+  dd_app_key       = var.dd_app_key
 }
