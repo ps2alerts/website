@@ -31,7 +31,10 @@
           has been a long road but we're finally here! The site will continue to
           have new features added to it in the coming weeks and months. Check
           out the
-          <a href="https://github.com/ps2alerts/website/issues" target="_blank"
+          <a
+            href="https://github.com/ps2alerts/website/issues"
+            target="_blank"
+            class="text-blue-600"
             >GitHub project</a
           >
           for an idea of what's coming up!
