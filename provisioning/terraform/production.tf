@@ -10,5 +10,5 @@ module "website_production" {
   mem_request      = "128Mi"
   cpu_limit        = "150m"
   mem_limit        = "128Mi"
-  replicas         = 1
+  replicas         = 2
 }
