@@ -40,11 +40,9 @@ import Vue, { PropOptions } from 'vue'
 import { DataTableConfig } from '~/constants/DataTableConfig'
 import { FactionBgClassString } from '~/constants/FactionBgClass'
 import { StatisticsWeaponTableDataInterface } from '~/interfaces/statistics/StatisticsWeaponTableDataInterface'
-import { GlobalCombatMetricsInterface } from '~/interfaces/aggregates/global/GlobalFactionCombatAggregateResponseInterface'
 import { World } from '~/constants/World'
 import worldNameFilter from '~/filters/WorldName'
 import { GlobalWeaponAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalWeaponAggregateResponseInterface'
-import { WeaponInterface } from '~/interfaces/WeaponInterface'
 
 export default Vue.extend({
   name: 'WeaponServerMetrics',
@@ -143,23 +141,23 @@ export default Vue.extend({
         }
 
         if (!worldWeaponTotals[world.world]) {
+          // @ts-ignore
           worldWeaponTotals[world.world] = {}
         }
 
-        worldWeaponTotals[world.world][world.weapon.id] = {
-          worldName: worldNameFilter(world.world),
-          weapon: world.weapon,
-          ...this.addMetrics(
-            world,
-            worldWeaponTotals[world.world][world.weapon.id]
-          ),
-        }
+        // @ts-ignore
+        worldWeaponTotals[world.world][world.weapon.id] = this.addMetrics(
+          world,
+          // @ts-ignore
+          worldWeaponTotals[world.world][world.weapon.id]
+        )
       })
 
       // Now format into an array which the table understands
       worldWeaponTotals.forEach((world) => {
-        for (const weapon in world) {
-          totals.push(world[weapon])
+        for (const key in world) {
+          // @ts-ignore
+          totals.push(world[key])
         }
       })
 
@@ -167,27 +165,25 @@ export default Vue.extend({
     },
 
     addMetrics(
-      world: GlobalCombatMetricsInterface,
+      world: GlobalWeaponAggregateResponseInterface,
       totals: StatisticsWeaponTableDataInterface | undefined
-    ): GlobalCombatMetricsInterface {
+    ): StatisticsWeaponTableDataInterface {
       const newData = totals ?? {
         kills: 0,
-        deaths: 0,
         teamKills: 0,
         suicides: 0,
         headshots: 0,
-        kd: 0,
         hsr: 0,
+        world: world.world,
+        worldName: worldNameFilter(world.world),
+        weapon: world.weapon,
+        uuid: `${world.world}-${world.weapon.id}`,
       }
       newData.kills += world.kills ?? 0
-      newData.deaths += world.deaths ?? 0
       newData.teamKills += world.teamKills ?? 0
       newData.suicides += world.suicides ?? 0
       newData.headshots += world.headshots ?? 0
 
-      newData.kd = parseFloat(
-        ((newData.kills ?? 0) / (newData.deaths ?? 0)).toFixed(2)
-      )
       newData.hsr = parseFloat(
         newData.headshots && newData.kills
           ? ((newData.headshots / newData.kills) * 100).toFixed(2)
