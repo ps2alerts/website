@@ -10,6 +10,23 @@
         </p>
       </div>
     </div>
+    <div class="col-span-12 text-center mb-2">
+      <p>
+        All statistics except victories are delayed up to a maximum of 3 hours
+        from alert start.
+        <v-tooltip bottom z-index="1001">
+          <template #activator="{ on, attrs }">
+            <span class="text-blue-600" v-bind="attrs" v-on="on">Why?</span>
+          </template>
+          We delay server level data by the length of the alert due to the
+          Activity Levels not being finalized until the alert ends (they can
+          change at any point due to pops). Therefore, a kill that comes in at
+          the very end of the alert still will have a delay of 90 minutes, hence
+          the 3 hour maximum time (2x90min) or 1:30 hours for underpowered
+          alerts (2x45min).
+        </v-tooltip>
+      </p>
+    </div>
     <div
       id="stats-sticky"
       class="col-span-12 lg:col-span-8 ss:col-span-4 lg:col-start-3 ss:col-start-5 flex justify-center mb-2 sticky"
