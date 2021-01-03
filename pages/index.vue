@@ -18,12 +18,23 @@
           <template #activator="{ on, attrs }">
             <span class="text-blue-600" v-bind="attrs" v-on="on">Why?</span>
           </template>
-          We delay server level data by the length of the alert due to the
-          Activity Levels not being finalized until the alert ends (they can
-          change at any point due to pops). Therefore, a kill that comes in at
-          the very end of the alert still will have a delay of 90 minutes, hence
-          the 3 hour maximum time (2x90min) or 1:30 hours for underpowered
-          alerts (2x45min).
+          PS2Alerts delays server level data by the length of the alert due to
+          the Activity Levels not being finalized until the alert ends (they can
+          change at any point due to pops).
+          <br /><br />
+          <b>Technical reason:</b> RabbitMQ (message queue broker) is used to
+          store the messages until the alert ends, but unfortunately we are
+          forced to trickle the data in using a timeout based on message
+          creation time (hence 45/90 minutes - alert length) rather than a
+          specific point in time. Doing so would overwhelm the system with
+          potentially 100-300k messages per alert (each kill generates 7
+          statistics that need to be processed). Additionally message timeouts
+          are not processed in chronological order, which in testing caused
+          massive crashes and RAM spikes. Therefore a delayed trickled data
+          stream was implemented.<br /><br />
+          In summary, a kill that comes in at the very end of the alert still
+          will have a delay of 90 minutes, hence the 3 hour maximum time
+          (2x90min) or 1:30 hours for underpowered alerts (2x45min).
         </v-tooltip>
       </p>
     </div>
