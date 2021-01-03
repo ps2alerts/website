@@ -91,8 +91,8 @@
           <font-awesome-icon :icon="['fas', 'users']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#weapons" disabled>
-          Weapons (BUGGED)
+        <v-tab href="#weapons">
+          Weapons
           <font-awesome-icon :icon="['fab', 'sith']"></font-awesome-icon>
         </v-tab>
 

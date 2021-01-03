@@ -6,7 +6,7 @@
         :percent="updateCountdownPercent"
         :update-rate="updateRate"
       />
-      <div class="col-span-12">
+      <div v-if="loaded" class="col-span-12">
         <div class="mb-2">
           <input
             v-model="filter"
@@ -28,6 +28,9 @@
         >
         </v-data-table>
       </div>
+      <div v-else>
+        <h1 class="text-center">Loading...</h1>
+      </div>
     </div>
   </section>
 </template>
@@ -37,6 +40,11 @@ import Vue, { PropOptions } from 'vue'
 import { DataTableConfig } from '~/constants/DataTableConfig'
 import { FactionBgClassString } from '~/constants/FactionBgClass'
 import { StatisticsWeaponTableDataInterface } from '~/interfaces/statistics/StatisticsWeaponTableDataInterface'
+import { GlobalCombatMetricsInterface } from '~/interfaces/aggregates/global/GlobalFactionCombatAggregateResponseInterface'
+import { World } from '~/constants/World'
+import worldNameFilter from '~/filters/WorldName'
+import { GlobalWeaponAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalWeaponAggregateResponseInterface'
+import { WeaponInterface } from '~/interfaces/WeaponInterface'
 
 export default Vue.extend({
   name: 'WeaponServerMetrics',
@@ -66,6 +74,7 @@ export default Vue.extend({
     return {
       data: {} as StatisticsWeaponTableDataInterface[],
       filter: '',
+      loaded: false,
       leaderboardConfig: DataTableConfig,
       headers: [
         {
@@ -113,13 +122,80 @@ export default Vue.extend({
   },
   watch: {
     rawData(): void {
-      this.data = this.rawData
+      this.data = this.transform(this.rawData)
+      this.loaded = true
     },
   },
   created() {
-    this.data = this.rawData
+    this.data = this.transform(this.rawData)
+    this.loaded = true
   },
   methods: {
+    transform(
+      data: GlobalWeaponAggregateResponseInterface[]
+    ): StatisticsWeaponTableDataInterface[] {
+      const totals: StatisticsWeaponTableDataInterface[] = []
+      const worldWeaponTotals: StatisticsWeaponTableDataInterface[] = []
+
+      data.forEach((world: GlobalWeaponAggregateResponseInterface) => {
+        if (world.world === World.JAEGER) {
+          return
+        }
+
+        if (!worldWeaponTotals[world.world]) {
+          worldWeaponTotals[world.world] = {}
+        }
+
+        worldWeaponTotals[world.world][world.weapon.id] = {
+          worldName: worldNameFilter(world.world),
+          weapon: world.weapon,
+          ...this.addMetrics(
+            world,
+            worldWeaponTotals[world.world][world.weapon.id]
+          ),
+        }
+      })
+
+      // Now format into an array which the table understands
+      worldWeaponTotals.forEach((world) => {
+        for (const weapon in world) {
+          totals.push(world[weapon])
+        }
+      })
+
+      return totals
+    },
+
+    addMetrics(
+      world: GlobalCombatMetricsInterface,
+      totals: StatisticsWeaponTableDataInterface | undefined
+    ): GlobalCombatMetricsInterface {
+      const newData = totals ?? {
+        kills: 0,
+        deaths: 0,
+        teamKills: 0,
+        suicides: 0,
+        headshots: 0,
+        kd: 0,
+        hsr: 0,
+      }
+      newData.kills += world.kills ?? 0
+      newData.deaths += world.deaths ?? 0
+      newData.teamKills += world.teamKills ?? 0
+      newData.suicides += world.suicides ?? 0
+      newData.headshots += world.headshots ?? 0
+
+      newData.kd = parseFloat(
+        ((newData.kills ?? 0) / (newData.deaths ?? 0)).toFixed(2)
+      )
+      newData.hsr = parseFloat(
+        newData.headshots && newData.kills
+          ? ((newData.headshots / newData.kills) * 100).toFixed(2)
+          : '0'
+      )
+
+      return newData
+    },
     tableItemClass(item: StatisticsWeaponTableDataInterface): string {
       return FactionBgClassString(item.weapon.faction)
     },
