@@ -91,8 +91,8 @@
           <font-awesome-icon :icon="['fas', 'users']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#weapons">
-          Weapons
+        <v-tab href="#weapons" disabled>
+          Weapons (BUGGED)
           <font-awesome-icon :icon="['fab', 'sith']"></font-awesome-icon>
         </v-tab>
 
@@ -101,13 +101,13 @@
           <font-awesome-icon :icon="['fas', 'bomb']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#vehicles">
-          Vehicles
+        <v-tab href="#vehicles" disabled>
+          Vehicles (BUGGED)
           <font-awesome-icon :icon="['fas', 'fighter-jet']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#loadouts">
-          Classes
+        <v-tab href="#loadouts" disabled>
+          Classes (BUGGED)
           <font-awesome-icon :icon="['fas', 'user-tag']"></font-awesome-icon>
         </v-tab>
 
