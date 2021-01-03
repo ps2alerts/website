@@ -35,10 +35,13 @@ import {
 } from '~/interfaces/aggregates/global/GlobalFactionCombatAggregateResponseInterface'
 import worldNameFilter from '~/filters/WorldName'
 import { World } from '~/constants/World'
+import { CombatMetricsInterface } from '~/interfaces/CombatMetricsInterface'
 
-interface StatisticsServerCombatTableDataInterface {
+interface StatisticsServerCombatTableDataInterface
+  extends CombatMetricsInterface {
   worldName: string
-  totals: GlobalCombatMetricsInterface
+  kd: string | number
+  hsr: string | number
 }
 
 export default Vue.extend({
@@ -80,43 +83,43 @@ export default Vue.extend({
           text: 'Kills',
           align: 'middle',
           filterable: false,
-          value: 'totals.kills',
+          value: 'kills',
         },
         {
           text: 'Deaths',
           align: 'middle',
           filterable: false,
-          value: 'totals.deaths',
+          value: 'deaths',
         },
         {
           text: 'KD',
           align: 'middle',
           filterable: false,
-          value: 'totals.kd',
+          value: 'kd',
         },
         {
           text: 'TKs',
           align: 'middle',
           filterable: false,
-          value: 'totals.teamKills',
+          value: 'teamKills',
         },
         {
           text: 'Suicides',
           align: 'middle',
           filterable: false,
-          value: 'totals.suicides',
+          value: 'suicides',
         },
         {
           text: 'Headshots',
           align: 'middle',
           filterable: false,
-          value: 'totals.headshots',
+          value: 'headshots',
         },
         {
           text: 'HSR %',
           align: 'middle',
           filterable: false,
-          value: 'totals.hsr',
+          value: 'hsr',
         },
       ],
     }
@@ -143,33 +146,42 @@ export default Vue.extend({
         }
         serverTotalMetrics[world.world] = {
           worldName: worldNameFilter(world.world),
-          totals: this.transformMetricCounts(world.totals),
+          ...this.addMetrics(world.totals, serverTotalMetrics[world.world]),
         }
       })
 
       return serverTotalMetrics
     },
 
-    transformMetricCounts(
-      metrics: GlobalCombatMetricsInterface
+    addMetrics(
+      world: GlobalCombatMetricsInterface,
+      totals: StatisticsServerCombatTableDataInterface | undefined
     ): GlobalCombatMetricsInterface {
-      // Ensure table displays all data even if zero
-      metrics.kills = metrics.kills ?? 0
-      metrics.deaths = metrics.deaths ?? 0
-      metrics.teamKills = metrics.teamKills ?? 0
-      metrics.suicides = metrics.suicides ?? 0
-      metrics.headshots = metrics.headshots ?? 0
+      const newData = totals ?? {
+        kills: 0,
+        deaths: 0,
+        teamKills: 0,
+        suicides: 0,
+        headshots: 0,
+        kd: 0,
+        hsr: 0,
+      }
+      newData.kills += world.kills ?? 0
+      newData.deaths += world.deaths ?? 0
+      newData.teamKills += world.teamKills ?? 0
+      newData.suicides += world.suicides ?? 0
+      newData.headshots += world.headshots ?? 0
 
-      return Object.assign(metrics, {
-        kd:
-          metrics.kills && metrics.deaths
-            ? (metrics.kills / metrics.deaths).toFixed(2)
-            : metrics.kills || 0,
-        hsr:
-          metrics.headshots && metrics.kills
-            ? ((metrics.headshots / metrics.kills) * 100).toFixed(2)
-            : 0,
-      })
+      newData.kd = parseFloat(
+        ((newData.kills ?? 0) / (newData.deaths ?? 0)).toFixed(2)
+      )
+      newData.hsr = parseFloat(
+        newData.headshots && newData.kills
+          ? ((newData.headshots / newData.kills) * 100).toFixed(2)
+          : '0'
+      )
+
+      return newData
     },
   },
 })

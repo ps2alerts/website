@@ -50,6 +50,14 @@ import factionId from '~/filters/FactionId'
 import { Faction } from '~/constants/Faction'
 import { FactionBgClassString } from '~/constants/FactionBgClass'
 
+interface WorldFactionInterface {
+  world: World
+  vs: GlobalCombatMetricsInterface
+  nc: GlobalCombatMetricsInterface
+  tr: GlobalCombatMetricsInterface
+  nso: GlobalCombatMetricsInterface
+}
+
 interface StatisticsCombatServerFactionInterface
   extends GlobalCombatMetricsInterface {
   uuid: string
@@ -159,30 +167,47 @@ export default Vue.extend({
       data: GlobalFactionCombatAggregateResponseInterface[]
     ): StatisticsCombatServerFactionInterface[] {
       const factionMetrics: StatisticsCombatServerFactionInterface[] = []
+      const factionWorldMetrics: WorldFactionInterface[] = []
 
       data.forEach((world: GlobalFactionCombatAggregateResponseInterface) => {
         if (world.world === World.JAEGER) {
           return
         }
 
-        const factionData = {
-          vs: world.vs ? this.transformMetricCounts(world.vs) : undefined,
-          nc: world.nc ? this.transformMetricCounts(world.nc) : undefined,
-          tr: world.tr ? this.transformMetricCounts(world.tr) : undefined,
-          nso: world.nso ? this.transformMetricCounts(world.nso) : undefined,
+        factionWorldMetrics[world.world] = {
+          world: world.world,
+          vs: this.addMetrics(
+            world?.vs ?? undefined,
+            factionWorldMetrics[world.world]?.vs ?? undefined
+          ),
+          nc: this.addMetrics(
+            world?.nc ?? undefined,
+            factionWorldMetrics[world.world]?.nc ?? undefined
+          ),
+          tr: this.addMetrics(
+            world?.tr ?? undefined,
+            factionWorldMetrics[world.world]?.tr ?? undefined
+          ),
+          nso: this.addMetrics(
+            world?.nso ?? undefined,
+            factionWorldMetrics[world.world]?.nso ?? undefined
+          ),
         }
+      })
 
-        const keys = ['vs', 'nc', 'tr', 'nso']
+      // Push the calculated objects
+      factionWorldMetrics.forEach((world) => {
+        const factions = ['vs', 'nc', 'tr', 'nso']
 
-        keys.forEach((key) => {
+        factions.forEach((faction) => {
           // @ts-ignore
-          if (!factionData[key]) {
+          if (!world[faction]) {
             return
           }
-          const fId = factionId(key)
+          const fId = factionId(faction)
           const tableRow: StatisticsCombatServerFactionInterface = Object.assign(
             // @ts-ignore
-            factionData[key],
+            world[faction],
             {
               factionId: fId,
               factionName: factionName(fId),
@@ -190,33 +215,41 @@ export default Vue.extend({
               worldName: worldNameFilter(world.world),
             }
           )
-
           factionMetrics.push(tableRow)
         })
       })
 
       return factionMetrics
     },
-    transformMetricCounts(
-      metrics: GlobalCombatMetricsInterface
+    addMetrics(
+      world: GlobalCombatMetricsInterface | undefined,
+      totals: GlobalCombatMetricsInterface | undefined
     ): GlobalCombatMetricsInterface {
-      // Ensure table displays all data even if zero
-      metrics.kills = metrics.kills ?? 0
-      metrics.deaths = metrics.deaths ?? 0
-      metrics.teamKills = metrics.teamKills ?? 0
-      metrics.suicides = metrics.suicides ?? 0
-      metrics.headshots = metrics.headshots ?? 0
+      const newData = totals ?? {
+        kills: 0,
+        deaths: 0,
+        teamKills: 0,
+        suicides: 0,
+        headshots: 0,
+        kd: 0,
+        hsr: 0,
+      }
+      newData.kills += world?.kills ?? 0
+      newData.deaths += world?.deaths ?? 0
+      newData.teamKills += world?.teamKills ?? 0
+      newData.suicides += world?.suicides ?? 0
+      newData.headshots += world?.headshots ?? 0
 
-      return Object.assign(metrics, {
-        kd:
-          metrics.kills && metrics.deaths
-            ? (metrics.kills / metrics.deaths).toFixed(2)
-            : metrics.kills || 0,
-        hsr:
-          metrics.headshots && metrics.kills
-            ? ((metrics.headshots / metrics.kills) * 100).toFixed(2)
-            : 0,
-      })
+      newData.kd = parseFloat(
+        ((newData.kills ?? 0) / (newData.deaths ?? 0)).toFixed(2)
+      )
+      newData.hsr = parseFloat(
+        newData.headshots && newData.kills
+          ? ((newData.headshots / newData.kills) * 100).toFixed(2)
+          : '0'
+      )
+
+      return newData
     },
     tableItemClass(faction: StatisticsCombatServerFactionInterface): string {
       return FactionBgClassString(faction.factionId)
