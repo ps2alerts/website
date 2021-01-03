@@ -28,7 +28,7 @@ export const AlertLoadoutLeaderboardConfig = {
 
 export const StatisticsServerLeaderboardConfig = {
   ...DataTableConfig,
-  'sort-by': ['totals.kd'],
+  'sort-by': ['kd'],
   'hide-default-footer': true,
 }
 
