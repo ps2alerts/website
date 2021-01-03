@@ -57,14 +57,14 @@ jobs:
 #          no-cache: true
 #          tags: maelstromeous/applications:ps2alerts-website-base
 
-      - name: Build and push staging image
+      - name: Build and push production image
         uses: docker/build-push-action@v2
         with:
-          file: provisioning/staging/Dockerfile
+          file: provisioning/production/Dockerfile
           platforms: linux/amd64
           push: true
           no-cache: true
-          tags: maelstromeous/applications:ps2alerts-website-staging-${{ steps.sha.outputs.sha_short }}
+          tags: maelstromeous/applications:ps2alerts-website-production-${{ steps.sha.outputs.sha_short }}
           build-args: |
             BUILD_SHA=${{ steps.sha.outputs.sha_short }}
 
