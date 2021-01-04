@@ -1,5 +1,6 @@
 import { World } from '~/constants/World'
 import { Zone } from '~/constants/Zone'
+import { Bracket } from '~/constants/Bracket'
 
 export interface CommonApiParamsInterface {
   world?: World
@@ -7,4 +8,5 @@ export interface CommonApiParamsInterface {
   sortBy?: string
   order?: string
   pageSize?: number
+  bracket?: Bracket
 }

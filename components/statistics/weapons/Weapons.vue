@@ -36,6 +36,7 @@ import { GlobalWeaponAggregateResponseInterface } from '~/interfaces/aggregates/
 import { World } from '~/constants/World'
 import worldNameFilter from '~/filters/WorldName'
 import { StatisticsWeaponTableDataInterface } from '~/interfaces/statistics/StatisticsWeaponTableDataInterface'
+import { Bracket } from '~/constants/Bracket'
 
 export default Vue.extend({
   name: 'Weapons',
@@ -95,7 +96,8 @@ export default Vue.extend({
 
       await new ApiRequest()
         .get<GlobalWeaponAggregateResponseInterface[]>(
-          Endpoints.AGGREGATES_GLOBAL_WEAPON
+          Endpoints.AGGREGATES_GLOBAL_WEAPON,
+          { bracket: Bracket.TOTAL }
         )
         .then((result) => {
           this.data = this.transformData(result)
