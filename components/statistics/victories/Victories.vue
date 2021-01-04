@@ -8,7 +8,7 @@
     </div>
     <div v-else>
       <h1 class="text-2xl text-center mb-4">
-        <b>{{ totalInstances }}</b> alerts recorded since 1st Jan 2021
+        <b>{{ totalInstances }}</b> alerts recorded since 4th Jan 2021
       </h1>
       <VictoriesCounts
         :raw-data="data"
