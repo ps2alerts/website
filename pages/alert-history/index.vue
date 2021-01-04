@@ -141,7 +141,7 @@ export default Vue.extend({
       interval: undefined as undefined | number,
       selectedWorld: 0,
       selectedZone: 0,
-      selectedBracket: Bracket.NONE,
+      selectedBracket: Bracket.UNKNOWN,
       selectedVictor: Faction.NONE,
       selectedDateFrom: now,
       selectedDateTo: now,
@@ -176,7 +176,7 @@ export default Vue.extend({
       }
       if (this.selectedWorld > 0) filter.world = this.selectedWorld
       if (this.selectedZone > 0) filter.zone = this.selectedZone
-      if (this.selectedBracket !== Bracket.NONE)
+      if (this.selectedBracket !== Bracket.UNKNOWN)
         filter.bracket = this.selectedBracket
       if (this.selectedVictor !== Faction.NONE)
         filter.victor = this.selectedVictor
@@ -272,7 +272,7 @@ export default Vue.extend({
       const now = moment()
       this.selectedWorld = 0
       this.selectedZone = 0
-      this.selectedBracket = Bracket.NONE
+      this.selectedBracket = Bracket.UNKNOWN
       this.selectedVictor = Faction.NONE
       this.selectedDateFrom = now
       this.selectedDateTo = now

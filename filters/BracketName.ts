@@ -3,7 +3,7 @@ import Vue from 'vue'
 
 const bracketName = Vue.filter('bracketName', (value: Bracket) => {
   switch (value) {
-    case Bracket.NONE:
+    case Bracket.UNKNOWN:
       return 'N/A'
     case Bracket.DEAD:
       return 'Dead'
@@ -15,6 +15,8 @@ const bracketName = Vue.filter('bracketName', (value: Bracket) => {
       return 'High'
     case Bracket.PRIME:
       return 'Prime'
+    case Bracket.TOTAL:
+      return 'Totalled (UNUSED)'
     default:
       return 'UNKNOWN!'
   }

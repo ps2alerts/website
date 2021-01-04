@@ -439,7 +439,6 @@
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
-import { World } from '~/constants/World'
 import { Bracket } from '~/constants/Bracket'
 
 interface DataCollectionRowInterface {
@@ -516,9 +515,6 @@ export default Vue.extend({
       }
 
       this.rawData.forEach((row: GlobalVictoriesAggregateResponseInterface) => {
-        if (row.world === World.JAEGER || row.bracket === Bracket.NONE) {
-          return
-        }
         if (!this.worldCounts[row.world]) {
           this.worldCounts[row.world] = {
             world: {
@@ -531,20 +527,23 @@ export default Vue.extend({
             brackets: {},
           }
         }
-        this.worldCounts[row.world].world = this.calculateWorldTotals(row)
-        this.worldCounts[row.world].zones[
-          row.zone
-        ] = this.calculateWorldZoneTotals(row)
-        this.worldCounts[row.world].brackets[
-          row.bracket
-        ] = this.calculateWorldBracketTotals(row)
 
-        this.zoneCounts[row.zone] = this.calculateZoneTotals(row)
-        this.bracketCounts[row.bracket] = this.calculateBracketTotals(row)
-        this.totalCounts.vs += row.vs ?? 0
-        this.totalCounts.nc += row.nc ?? 0
-        this.totalCounts.tr += row.tr ?? 0
-        this.totalCounts.draws += row.draws ?? 0
+        if (row.bracket === Bracket.TOTAL) {
+          this.worldCounts[row.world].world = this.calculateWorldTotals(row)
+          this.worldCounts[row.world].zones[
+            row.zone
+          ] = this.calculateWorldZoneTotals(row)
+          this.zoneCounts[row.zone] = this.calculateZoneTotals(row)
+          this.totalCounts.vs += row.vs ?? 0
+          this.totalCounts.nc += row.nc ?? 0
+          this.totalCounts.tr += row.tr ?? 0
+          this.totalCounts.draws += row.draws ?? 0
+        } else {
+          this.worldCounts[row.world].brackets[
+            row.bracket
+          ] = this.calculateWorldBracketTotals(row)
+          this.bracketCounts[row.bracket] = this.calculateBracketTotals(row)
+        }
       })
 
       this.$forceUpdate()
@@ -560,10 +559,12 @@ export default Vue.extend({
         draws: 0,
       }
 
-      worldTotals.vs += row.vs ?? 0
-      worldTotals.nc += row.nc ?? 0
-      worldTotals.tr += row.tr ?? 0
-      worldTotals.draws += row.draws ?? 0
+      if (row.bracket === Bracket.TOTAL) {
+        worldTotals.vs += row.vs ?? 0
+        worldTotals.nc += row.nc ?? 0
+        worldTotals.tr += row.tr ?? 0
+        worldTotals.draws += row.draws ?? 0
+      }
 
       return worldTotals
     },

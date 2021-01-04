@@ -30,6 +30,7 @@ import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import VictoriesCounts from '~/components/statistics/victories/VictoriesCounts.vue'
+import { Bracket } from '~/constants/Bracket'
 
 export default Vue.extend({
   name: 'Victories',
@@ -64,6 +65,9 @@ export default Vue.extend({
       }
       let count = 0
       this.data.forEach((row) => {
+        if (row.bracket !== Bracket.TOTAL) {
+          return
+        }
         count += row.vs ?? 0
         count += row.nc ?? 0
         count += row.tr ?? 0

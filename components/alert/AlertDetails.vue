@@ -48,7 +48,7 @@
           <td class="px-2 py-1 md:py-2 whitespace-nowrap">
             <div class="flex justify-between">
               <div class="mr-4 font-bold">Activity</div>
-              <div v-if="alert.bracket === 0">
+              <div v-if="alert.bracket === -1">
                 <font-awesome-icon
                   :icon="['fa', 'sync']"
                   class="animate-spin"

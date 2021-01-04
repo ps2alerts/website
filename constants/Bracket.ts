@@ -1,5 +1,6 @@
 export enum Bracket {
-  NONE = 0,
+  UNKNOWN = -1,
+  TOTAL = 0,
   DEAD = 1,
   LOW = 2,
   MEDIUM = 3,

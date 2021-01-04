@@ -43,8 +43,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      bracket: Bracket.NONE,
-      NONE: Bracket.NONE,
+      bracket: Bracket.UNKNOWN,
+      NONE: Bracket.UNKNOWN,
       DEAD: Bracket.DEAD,
       LOW: Bracket.LOW,
       MEDIUM: Bracket.MEDIUM,
