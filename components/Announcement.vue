@@ -4,51 +4,32 @@
   >
     <div class="tag announcement">
       <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>
-      Announcement
+      Announcement - 4th Jan 2021
     </div>
 
     <div class="grid grid-cols-12 place-items-center">
       <div class="col-span-12">
-        <div class="p-6 text-center items-center justify-items-center">
-          <img
-            id="splash-icon"
-            src="../assets/img/alert-icon.png"
-            alt="PS2Alerts Icon"
-            class="inline-block rounded-md"
-          />
-        </div>
-      </div>
-      <div class="col-span-12">
         <h1 class="text-subtitle text-center">
-          PS2Alerts has launched into Beta!
+          Stats have unfortunately been reset :(
         </h1>
-        <h2 class="text-center text-2xl mb-4">
-          All statistics have been reset and are now being permanently
-          collected!
-        </h2>
         <p>
-          It has taken 9 months for the website to finally come back to life, it
-          has been a long road but we're finally here! The site will continue to
-          have new features added to it in the coming weeks and months. Check
-          out the
-          <a
-            href="https://github.com/ps2alerts/website/issues"
-            target="_blank"
-            class="text-blue-600"
-            >GitHub project</a
-          >
-          for an idea of what's coming up!
+          Due to an issue with how the victories were being stored (and also the
+          fact the combat data was corrupted and has already been reset) I've
+          chosen to wipe the entire dataset and start from scratch. There was a
+          recent change to apply activity level brackets for victories on a
+          daily basis, and I made the mistake of not testing it thoroughly
+          enough resulting in it storing in a malformed way where alert
+          victories weren't being counted correctly. In the interest of ensuring
+          data integrity, the dataset has been wiped in it's entirety and we're
+          starting again.
         </p>
         <p>
-          I'd like to thank everyone in the community who have shown their
-          support for the project, either via words of encouragement or
-          <a
-            href="https://www.patreon.com/PS2Alerts"
-            target="_blank"
-            class="text-blue-600"
-            >financially</a
-          >
-          - it means a lot!
+          My humblest apologies to everyone for this, for those who have been
+          playing the Alert Metagame and have fought hard for your victories, I
+          am truly sorry. This shouldn't happen again, but as with every major
+          undertaking like this there are going to be bumps in the road. There
+          is also a reason why the website is in a Beta stage, it's not fully
+          complete.
         </p>
         <p>- [DIG] Maelstrome26 (PS2Alerts Lead Developer - Miller VS)</p>
       </div>
