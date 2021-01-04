@@ -43,6 +43,7 @@ import CombatFactionTotals from '~/components/statistics/combat/CombatFactionTot
 import { GlobalFactionCombatAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalFactionCombatAggregateResponseInterface'
 import CombatServerTotals from '~/components/statistics/combat/CombatServerTotals.vue'
 import CombatServerFaction from '~/components/statistics/combat/CombatServerFaction.vue'
+import { Bracket } from '~/constants/Bracket'
 
 export default Vue.extend({
   name: 'Combat',
@@ -105,7 +106,8 @@ export default Vue.extend({
 
       await new ApiRequest()
         .get<GlobalFactionCombatAggregateResponseInterface[]>(
-          Endpoints.AGGREGATES_GLOBAL_FACTION
+          Endpoints.AGGREGATES_GLOBAL_FACTION,
+          { bracket: Bracket.TOTAL }
         )
         .then((result) => {
           this.data = result
