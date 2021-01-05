@@ -1,6 +1,5 @@
 <template>
   <div class="grid grid-cols-12">
-    <Announcement></Announcement>
     <div class="col-span-12 border-t-2 border-red-700">
       <div class="text-center">
         <h1 class="text-title">Statistics</h1>
