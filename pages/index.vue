@@ -1,5 +1,6 @@
 <template>
   <div class="grid grid-cols-12">
+    <Announcement></Announcement>
     <div class="col-span-12 border-t-2 border-red-700">
       <div class="text-center">
         <h1 class="text-title">Statistics</h1>
@@ -9,7 +10,7 @@
         </p>
       </div>
     </div>
-    <div class="col-span-12 text-center mb-2">
+    <div v-if="bracket" class="col-span-12 text-center mb-2">
       <p>
         All statistics except victories are delayed up to a maximum of 3 hours
         from alert start.
@@ -80,8 +81,8 @@
           <font-awesome-icon :icon="['fas', 'trophy']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#players" disabled>
-          Players (WIP)
+        <v-tab href="#players">
+          Players
           <font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon>
         </v-tab>
 
@@ -163,6 +164,7 @@ export default Vue.extend({
     return {
       mode: 'percent',
       tab: '',
+      bracket: false,
     }
   },
   methods: {
