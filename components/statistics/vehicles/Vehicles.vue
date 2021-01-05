@@ -1,6 +1,10 @@
 <template>
   <section class="mb-4">
-    <h1 class="text-3xl text-center mb-4">Vehicle Statistics</h1>
+    <h1 class="text-3xl text-center mb-2">Vehicle Statistics</h1>
+    <p class="text-sm text-center mb-4 text-gray-600">
+      Bastions will always have 0 deaths as the API gives us no "bastion was
+      killed" data.
+    </p>
     <div v-if="loaded">
       <div v-if="data.length === 0">
         <h1 class="text-2xl text-center mb-4">No data! Check back soon!</h1>
@@ -196,7 +200,10 @@ export default Vue.extend({
             (vehicle.vehicles?.teamkilled ?? 0) +
             (vehicle.infantry?.teamkilled ?? 0),
         }
-        totals.kd = ((totals.kills ?? 0) / (totals.deaths ?? 0)).toFixed(2)
+        totals.kd =
+          totals.kills > 0 && totals.deaths > 0
+            ? ((totals.kills ?? 0) / (totals.deaths ?? 0)).toFixed(2)
+            : 0
 
         const tempData: StatisticsVehicleMetricsTableDataInterface = Object.assign(
           vehicle,
