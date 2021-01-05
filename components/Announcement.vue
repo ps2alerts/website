@@ -13,11 +13,11 @@
           Genudine tracking has been disabled temporarily
         </h1>
         <p>
-          Genudine is currently experiencing multiple DDOS attacks. As a result,
-          alert tracking has been disabled for Genudine as it is malforming the
-          alert statistics as alerts are finishing in a bugged state. The
-          tracking will be reinstated once the attacks have stopped and server
-          stability restored.
+          Genudine is currently experiencing multiple DDOS attacks. As a
+          precaution, alert tracking has been disabled for Genudine as it is
+          malforming the alert statistics as alerts are finishing in a bugged
+          state. The tracking will be reinstated once the attacks have stopped
+          and server stability restored.
         </p>
       </div>
     </div>
