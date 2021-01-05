@@ -101,8 +101,8 @@
           <font-awesome-icon :icon="['fas', 'bomb']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#vehicles" disabled>
-          Vehicles (BUGGED)
+        <v-tab href="#vehicles">
+          Vehicles
           <font-awesome-icon :icon="['fas', 'fighter-jet']"></font-awesome-icon>
         </v-tab>
 

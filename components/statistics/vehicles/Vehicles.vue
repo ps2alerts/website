@@ -51,6 +51,7 @@ import { World } from '~/constants/World'
 import { VehicleStatsWithKd } from '~/interfaces/VehicleStatisticsInterface'
 import { Faction } from '~/constants/Faction'
 import worldNameFilter from '~/filters/WorldName'
+import { Bracket } from '~/constants/Bracket'
 
 export default Vue.extend({
   name: 'Vehicles',
@@ -115,6 +116,7 @@ export default Vue.extend({
           Endpoints.AGGREGATES_GLOBAL_VEHICLE,
           {
             pageSize: 1000,
+            bracket: Bracket.TOTAL,
           }
         )
         .then((result) => {
