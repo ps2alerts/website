@@ -256,6 +256,7 @@ export default Vue.extend({
         deaths: 0,
         teamkills: 0,
         teamkilled: 0,
+        kd: 0,
       }
 
       // @ts-ignore
