@@ -37,6 +37,7 @@ import worldNameFilter from '~/filters/WorldName'
 import { GlobalLoadoutAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalLoadoutAggregateResponseInterface'
 import { StatisticsLoadoutTableDataInterface } from '~/interfaces/statistics/StatisticsLoadoutTableDataInterface'
 import { LoadoutName } from '~/constants/Loadout'
+import { Bracket } from '~/constants/Bracket'
 
 export default Vue.extend({
   name: 'Loadouts',
@@ -96,7 +97,8 @@ export default Vue.extend({
 
       await new ApiRequest()
         .get<GlobalLoadoutAggregateResponseInterface[]>(
-          Endpoints.AGGREGATES_GLOBAL_LOADOUT
+          Endpoints.AGGREGATES_GLOBAL_LOADOUT,
+          { bracket: Bracket.TOTAL }
         )
         .then((result) => {
           this.data = this.transformData(result)

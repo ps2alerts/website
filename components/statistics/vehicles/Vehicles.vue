@@ -201,7 +201,7 @@ export default Vue.extend({
             (vehicle.infantry?.teamkilled ?? 0),
         }
         totals.kd =
-          totals.kills > 0 && totals.deaths > 0
+          totals.kills && totals.kills > 0 && totals.deaths && totals.deaths > 0
             ? ((totals.kills ?? 0) / (totals.deaths ?? 0)).toFixed(2)
             : 0
 

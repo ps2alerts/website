@@ -6,5 +6,5 @@ export interface VehicleStatsInterface {
 }
 
 export interface VehicleStatsWithKd extends VehicleStatsInterface {
-  kd?: string
+  kd: string | number
 }

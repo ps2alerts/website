@@ -106,8 +106,8 @@
           <font-awesome-icon :icon="['fas', 'fighter-jet']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#loadouts" disabled>
-          Classes (BUGGED)
+        <v-tab href="#loadouts">
+          Classes
           <font-awesome-icon :icon="['fas', 'user-tag']"></font-awesome-icon>
         </v-tab>
 
