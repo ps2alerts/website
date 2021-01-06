@@ -10,7 +10,7 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded" class="grid grid-cols-12">
-      <div class="col-span-12 mb-4 flex justify-center">
+      <div class="col-span-12 mb-2 flex justify-center">
         <div class="pr-2 py-2">Player Counts:</div>
         <div
           v-for="(count, index) in counts"
@@ -21,6 +21,13 @@
           <span v-if="index === 'total'">= </span>
           {{ count || 0 }}
         </div>
+      </div>
+      <div class="col-span-12 mb-2 text-center">
+        <p class="text-gray-600 text-sm">
+          BR, ASP and Outfit Membership info is cached for up to 24 hours (if
+          you've not played in the last 24 hours it'll be current). Any players
+          above BR 120 have ASPed (220 max).
+        </p>
       </div>
       <div class="col-span-12">
         <div class="mb-2">
@@ -105,6 +112,12 @@ export default Vue.extend({
           text: 'Outfit',
           align: 'left',
           value: 'character.outfit.name',
+        },
+        {
+          text: 'BR',
+          align: 'middle',
+          filterable: false,
+          value: 'br',
         },
         {
           text: 'Kills',
@@ -237,7 +250,6 @@ export default Vue.extend({
 
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
-          this.$emit('players-loaded')
         })
         .catch((e) => {
           this.error = e.message
@@ -280,6 +292,9 @@ export default Vue.extend({
         const tempData: AlertCharacterTableDataInterface = Object.assign(
           character,
           {
+            br: character.character.asp
+              ? `${character.character.battleRank + 120}`
+              : character.character.battleRank,
             kd:
               character.kills && character.deaths
                 ? (character.kills / character.deaths).toFixed(2)
