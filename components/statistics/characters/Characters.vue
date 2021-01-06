@@ -211,7 +211,6 @@ export default Vue.extend({
         )
         .then((result) => {
           this.data = this.transformData(result)
-          console.log('data', this.data)
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
         })

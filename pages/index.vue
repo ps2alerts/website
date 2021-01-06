@@ -45,22 +45,21 @@
       <div class="btn-group mr-2">
         <button
           class="btn btn-sm"
-          :class="{ 'btn-active': mode === 'percent' }"
+          :class="{
+            'btn-active': mode === 'percent' && !disabledControls,
+          }"
+          :disabled="disabledControls"
           @click="toggleMode('percent')"
         >
           <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
         </button>
         <button
           class="btn btn-sm"
-          :class="{ 'btn-active': mode === 'numbers' }"
+          :class="{ 'btn-active': mode === 'numbers' && !disabledControls }"
+          :disabled="disabledControls"
           @click="toggleMode('numbers')"
         >
           ##
-        </button>
-      </div>
-      <div class="btn-group">
-        <button class="btn btn-sm" disabled>
-          Date & Activity Level filtering coming soon!
         </button>
       </div>
     </div>
@@ -164,6 +163,18 @@ export default Vue.extend({
       tab: '',
       bracket: false,
     }
+  },
+  computed: {
+    disabledControls(): boolean {
+      return [
+        'players',
+        'outfits',
+        'weapons',
+        'vehicles',
+        'loadouts',
+        'facilitites',
+      ].includes(this.tab)
+    },
   },
   methods: {
     toggleMode(mode: string) {
