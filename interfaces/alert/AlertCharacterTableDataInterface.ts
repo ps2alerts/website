@@ -4,5 +4,5 @@ export interface AlertCharacterTableDataInterface
   extends InstanceCharacterAggregateResponseInterface {
   kd: string | number
   hsr: string | number
-  br: string
+  br: number
 }
