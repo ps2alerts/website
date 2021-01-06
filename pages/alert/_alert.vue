@@ -16,6 +16,7 @@
       <AlertCombatHistory :alert="alert" />
       <AlertMap :alert="alert" />
       <AlertCaptureHistory :alert="alert" />
+      <AlertBattleranks :alert="alert" />
 
       <div class="col-span-12">
         <v-tabs
@@ -110,6 +111,7 @@ import AlertVehicleMatrix from '@/components/alert/AlertVehicleMatrix.vue'
 import AlertPopulations from '@/components/alert/AlertPopulations.vue'
 import AlertClassMetrics from '@/components/alert/AlertLoadoutMetrics.vue'
 import AlertCombatHistory from '@/components/alert/AlertCombatHistory.vue'
+import AlertBattleranks from '~/components/alert/AlertBattleranks.vue'
 
 export default Vue.extend({
   name: 'Alert',
@@ -122,6 +124,7 @@ export default Vue.extend({
     AlertCombatHistory,
     AlertMap,
     AlertCaptureHistory,
+    AlertBattleranks,
     AlertCharacterMetrics,
     AlertOutfitMetrics,
     AlertWeaponMetrics,
