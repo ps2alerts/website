@@ -30,13 +30,13 @@
         v-show="mode === 'all'"
         :chart-data="dataCollection"
         :options="chartOptions"
-        style="width: 100%; height: 400px"
+        style="width: 100%; height: 300px"
       ></bar-chart>
       <bar-chart
         v-show="mode === 'faction'"
         :chart-data="dataCollectionFactions"
         :options="chartOptions"
-        style="width: 100%; height: 400px"
+        style="width: 100%; height: 300px"
       ></bar-chart>
     </div>
   </div>
