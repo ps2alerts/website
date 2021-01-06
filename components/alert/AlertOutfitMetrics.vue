@@ -109,6 +109,12 @@ export default Vue.extend({
           value: 'participants',
         },
         {
+          text: 'Captures',
+          align: 'center',
+          filterable: false,
+          value: 'captures',
+        },
+        {
           text: 'Kills',
           align: 'middle',
           filterable: false,
@@ -261,6 +267,7 @@ export default Vue.extend({
         outfit.suicides = outfit.suicides ?? 0
         outfit.headshots = outfit.headshots ?? 0
         outfit.participants = outfit.participants ?? 0
+        outfit.captures = outfit.captures ?? 0
 
         // Outfit name formatting
         if (parseInt(outfit.outfit.id, 10) > 4) {
