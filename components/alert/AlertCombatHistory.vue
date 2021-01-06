@@ -226,19 +226,19 @@ export default Vue.extend({
             times.push(moment(row.timestamp).format('HH:mm'))
             vsData.push(
               /* @ts-ignore */
-              row.vs ? (row.vs.kills / row.vs.deaths).toPrecision(2) ?? 0 : 0
+              row.vs ? (row.vs.kills / row.vs.deaths).toFixed(2) ?? 0 : 0
             )
             ncData.push(
               /* @ts-ignore */
-              row.nc ? (row.nc.kills / row.nc.deaths).toPrecision(2) ?? 0 : 0
+              row.nc ? (row.nc.kills / row.nc.deaths).toFixed(2) ?? 0 : 0
             )
             trData.push(
               /* @ts-ignore */
-              row.tr ? (row.tr.kills / row.tr.deaths).toPrecision(2) ?? 0 : 0
+              row.tr ? (row.tr.kills / row.tr.deaths).toFixed(2) ?? 0 : 0
             )
             nsoData.push(
               /* @ts-ignore */
-              row.nso ? (row.nso.kills / row.nso.deaths).toPrecision(2) ?? 0 : 0
+              row.nso ? (row.nso.kills / row.nso.deaths).toFixed(2) ?? 0 : 0
             )
           }
         )
