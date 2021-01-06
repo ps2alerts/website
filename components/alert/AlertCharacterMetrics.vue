@@ -293,7 +293,7 @@ export default Vue.extend({
           character,
           {
             br: character.character.asp
-              ? `${character.character.battleRank + 120}`
+              ? character.character.battleRank + 120
               : character.character.battleRank,
             kd:
               character.kills && character.deaths
