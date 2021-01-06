@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-12 card relative mb-2">
-      <div class="tag section">Server Combat</div>
+      <div class="tag section">Players Leaderboard</div>
       <CountdownSpinner
         v-if="loaded"
         :percent="updateCountdownPercent"
@@ -12,12 +12,25 @@
       </div>
       <div v-if="loaded" class="grid grid-cols-12">
         <div class="col-span-12">
+          <div class="mb-2">
+            <input
+              v-model="filter"
+              class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
+              type="text"
+              placeholder="Name / Outfit / Server"
+              aria-label="Name / Outfit / Server"
+              @keydown="$event.stopImmediatePropagation()"
+            />
+          </div>
+
           <v-data-table
             class="datatable"
-            item-key="worldName"
-            :headers="serverTotalTableHeaders"
-            :items="serverTotalData"
-            v-bind="serverTotalLeaderboardConfig"
+            item-key="character.name"
+            :headers="tableHeaders"
+            :items="items"
+            :item-class="tableItemClass"
+            :search="filter"
+            v-bind="tableConfig"
           >
           </v-data-table>
         </div>
@@ -28,30 +41,28 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { StatisticsCombatServerTotalsLeaderboardConfig } from '~/constants/DataTableConfig'
-import {
-  GlobalCombatMetricsInterface,
-  GlobalFactionCombatAggregateResponseInterface,
-} from '~/interfaces/aggregates/global/GlobalFactionCombatAggregateResponseInterface'
-import worldNameFilter from '~/filters/WorldName'
-import { World } from '~/constants/World'
+import { StatisticsCharactersLeaderboardConfig } from '~/constants/DataTableConfig'
 import { CombatMetricsInterface } from '~/interfaces/CombatMetricsInterface'
+import { StatisticsCharacterTableDataInterface } from '~/interfaces/statistics/StatisticsCharacterTableDataInterface'
+import { CharacterInterface } from '~/interfaces/CharacterInterface'
+import { FactionBgClassString } from '~/constants/FactionBgClass'
 
-interface StatisticsServerCombatTableDataInterface
+interface StatisticsCharacterLeaderboardInterface
   extends CombatMetricsInterface {
+  character: CharacterInterface
   worldName: string
   kd: string | number
   hsr: string | number
 }
 
 export default Vue.extend({
-  name: 'CombatServerTotals',
+  name: 'CharactersLeaderboard',
   props: {
     rawData: {
       type: Array,
       default: () => [],
       required: true,
-    } as PropOptions<GlobalFactionCombatAggregateResponseInterface[]>,
+    } as PropOptions<StatisticsCharacterTableDataInterface[]>,
     updateCountdownPercent: {
       type: Number,
       default: 100,
@@ -67,13 +78,29 @@ export default Vue.extend({
       default: 'percent',
       required: true,
     },
+    sorting: {
+      type: String,
+      default: 'kills',
+      required: true,
+    },
   },
   data() {
     return {
       loaded: false,
-      serverTotalData: {} as StatisticsServerCombatTableDataInterface[],
-      tableConfig: StatisticsCombatServerTotalsLeaderboardConfig,
+      items: {} as StatisticsCharacterTableDataInterface[],
+      tableConfig: StatisticsCharactersLeaderboardConfig,
+      filter: '',
       tableHeaders: [
+        {
+          text: 'Player',
+          align: 'left',
+          value: 'character.name',
+        },
+        {
+          text: 'Outfit',
+          align: 'left',
+          value: 'character.outfit.name',
+        },
         {
           text: 'Server',
           align: 'left',
@@ -126,62 +153,23 @@ export default Vue.extend({
   },
   watch: {
     rawData(): void {
-      this.serverTotalData = this.transform(this.rawData)
+      this.items = this.rawData
       this.loaded = true
+    },
+    sorting(): void {
+      this.changeSorting(this.sorting)
     },
   },
   created() {
-    this.serverTotalData = this.transform(this.rawData)
+    this.items = this.rawData
     this.loaded = true
   },
   methods: {
-    transform(
-      data: GlobalFactionCombatAggregateResponseInterface[]
-    ): StatisticsServerCombatTableDataInterface[] {
-      const serverTotalMetrics: StatisticsServerCombatTableDataInterface[] = []
-
-      data.forEach((world: GlobalFactionCombatAggregateResponseInterface) => {
-        if (world.world === World.JAEGER) {
-          return
-        }
-        serverTotalMetrics[world.world] = {
-          worldName: worldNameFilter(world.world),
-          ...this.addMetrics(world.totals, serverTotalMetrics[world.world]),
-        }
-      })
-
-      return serverTotalMetrics
+    tableItemClass(item: StatisticsCharacterTableDataInterface): string {
+      return FactionBgClassString(item.character.faction)
     },
-
-    addMetrics(
-      world: GlobalCombatMetricsInterface,
-      totals: StatisticsServerCombatTableDataInterface | undefined
-    ): GlobalCombatMetricsInterface {
-      const newData = totals ?? {
-        kills: 0,
-        deaths: 0,
-        teamKills: 0,
-        suicides: 0,
-        headshots: 0,
-        kd: 0,
-        hsr: 0,
-      }
-      newData.kills += world.kills ?? 0
-      newData.deaths += world.deaths ?? 0
-      newData.teamKills += world.teamKills ?? 0
-      newData.suicides += world.suicides ?? 0
-      newData.headshots += world.headshots ?? 0
-
-      newData.kd = parseFloat(
-        ((newData.kills ?? 0) / (newData.deaths ?? 0)).toFixed(2)
-      )
-      newData.hsr = parseFloat(
-        newData.headshots && newData.kills
-          ? ((newData.headshots / newData.kills) * 100).toFixed(2)
-          : '0'
-      )
-
-      return newData
+    changeSorting(sorting: string): void {
+      this.tableConfig['sort-by'] = [sorting]
     },
   },
 })

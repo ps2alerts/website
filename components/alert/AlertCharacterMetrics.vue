@@ -104,7 +104,7 @@ export default Vue.extend({
       expanded: [],
       headers: [
         {
-          text: 'Character',
+          text: 'Player',
           align: 'left',
           value: 'character.name',
         },

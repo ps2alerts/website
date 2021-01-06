@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { StatisticsFactionLeaderboardConfig } from '~/constants/DataTableConfig'
+import { StatisticsCombatServerFactionLeaderboardConfig } from '~/constants/DataTableConfig'
 import {
   GlobalCombatMetricsInterface,
   GlobalFactionCombatAggregateResponseInterface,
@@ -95,7 +95,7 @@ export default Vue.extend({
       loaded: false,
       serverFactionData: {} as StatisticsCombatServerFactionInterface[],
       filter: '',
-      serverFactionLeaderboardConfig: StatisticsFactionLeaderboardConfig,
+      serverFactionLeaderboardConfig: StatisticsCombatServerFactionLeaderboardConfig,
       serverFactionTableHeaders: [
         {
           text: 'Server',

@@ -220,7 +220,6 @@ export default Vue.extend({
     },
     created() {
       this.init()
-      this.setTimers()
     },
     async init(): Promise<void> {
       this.setTimers()

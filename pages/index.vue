@@ -81,8 +81,8 @@
           <font-awesome-icon :icon="['fas', 'trophy']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#players" disabled>
-          Players (WIP)
+        <v-tab href="#players">
+          Players
           <font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon>
         </v-tab>
 
@@ -122,9 +122,7 @@
           <Victories :mode="mode"></Victories>
         </v-tab-item>
         <v-tab-item value="players">
-          <div class="mb-4">
-            <h1 class="text-3xl text-center">Coming soon!</h1>
-          </div>
+          <Characters :mode="mode"></Characters>
         </v-tab-item>
         <v-tab-item value="outfits">
           <div class="mb-4">

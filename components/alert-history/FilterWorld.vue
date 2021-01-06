@@ -7,14 +7,14 @@
       @change="changeWorld()"
     >
       <option value="0">Any</option>
-      <option :value="CERES">Ceres (PS4)</option>
-      <option :value="COBALT">Cobalt</option>
-      <option :value="CONNERY">Connery</option>
-      <option :value="EMERALD">Emerald</option>
-      <option :value="GENUDINE">Genudine (PS4)</option>
-      <option :value="JAEGER">Jaeger (PC Events)</option>
-      <option :value="MILLER">Miller</option>
-      <option :value="SOLTECH">Soltech</option>
+      <option :value="CERES">{{ CERES | worldName }} (PS4 EU)</option>
+      <option :value="COBALT">{{ COBALT | worldName }}</option>
+      <option :value="CONNERY">{{ CONNERY | worldName }}</option>
+      <option :value="EMERALD">{{ EMERALD | worldName }}</option>
+      <option :value="GENUDINE">{{ GENUDINE | worldName }} (PS4 US)</option>
+      <option :value="JAEGER">{{ JAEGER | worldName }} (PC Events)</option>
+      <option :value="MILLER">{{ MILLER | worldName }}</option>
+      <option :value="SOLTECH">{{ SOLTECH | worldName }}</option>
     </select>
     <label class="text-center text-sm" for="server">Server</label>
   </div>

@@ -26,13 +26,18 @@ export const AlertLoadoutLeaderboardConfig = {
   },
 }
 
-export const StatisticsServerLeaderboardConfig = {
+export const StatisticsCharactersLeaderboardConfig = {
+  ...DataTableConfig,
+  'sort-by': ['kills'],
+}
+
+export const StatisticsCombatServerTotalsLeaderboardConfig = {
   ...DataTableConfig,
   'sort-by': ['kd'],
   'hide-default-footer': true,
 }
 
-export const StatisticsFactionLeaderboardConfig = {
+export const StatisticsCombatServerFactionLeaderboardConfig = {
   ...DataTableConfig,
   'sort-by': ['kd'],
   'items-per-page': 28,

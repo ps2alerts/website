@@ -6,7 +6,8 @@
       class="block w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
       @change="changeBracket()"
     >
-      <option :value="NONE">Any</option>
+      <option v-if="!totalMode" :value="NONE">Any</option>
+      <option v-if="totalMode" :value="TOTAL">All</option>
       <option :value="PRIME">Prime (4+ platoons)</option>
       <option :value="HIGH">High (3-4 platoons)</option>
       <option :value="MEDIUM">Medium (2-3 platoons)</option>
@@ -40,11 +41,16 @@ export default Vue.extend({
       type: Number,
       default: 0,
     },
+    totalMode: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       bracket: Bracket.UNKNOWN,
       NONE: Bracket.UNKNOWN,
+      TOTAL: Bracket.TOTAL,
       DEAD: Bracket.DEAD,
       LOW: Bracket.LOW,
       MEDIUM: Bracket.MEDIUM,
@@ -56,6 +62,9 @@ export default Vue.extend({
     bracketFilter(bracket: Bracket): void {
       this.bracket = bracket
     },
+  },
+  created() {
+    this.bracket = this.totalMode ? Bracket.TOTAL : Bracket.UNKNOWN
   },
   methods: {
     changeBracket(): void {
