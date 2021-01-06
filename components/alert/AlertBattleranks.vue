@@ -274,6 +274,7 @@ export default Vue.extend({
             backgroundColor: '#4a5568',
             data: factionBattlerankData[4],
             borderWidth: 4,
+            hidden: true,
           },
         ],
       }
