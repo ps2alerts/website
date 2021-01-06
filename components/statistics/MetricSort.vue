@@ -43,7 +43,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      metric: this,
+      metric: '',
     }
   },
   watch: {
