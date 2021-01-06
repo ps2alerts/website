@@ -81,8 +81,8 @@
           <font-awesome-icon :icon="['fas', 'trophy']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#players">
-          Players
+        <v-tab href="#players" disabled>
+          Players (WIP)
           <font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon>
         </v-tab>
 
