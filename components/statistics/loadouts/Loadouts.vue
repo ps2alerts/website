@@ -6,13 +6,15 @@
         <h1 class="text-2xl text-center mb-4">No data! Check back soon!</h1>
       </div>
       <div v-else>
-        <LoadoutsTotals
-          :v-if="data.length > 0"
-          :raw-data="data"
-          :update-countdown-percent="updateCountdownPercent"
-          :update-rate="updateRate"
-          :mode="mode"
-        ></LoadoutsTotals>
+        <div v-show="!apiFilter.world">
+          <LoadoutsTotals
+            :v-if="data.length > 0"
+            :raw-data="data"
+            :update-countdown-percent="updateCountdownPercent"
+            :update-rate="updateRate"
+            :mode="mode"
+          ></LoadoutsTotals>
+        </div>
         <LoadoutsServerMetrics
           :v-if="data.length > 0"
           :raw-data="data"
@@ -38,6 +40,7 @@ import { GlobalLoadoutAggregateResponseInterface } from '~/interfaces/aggregates
 import { StatisticsLoadoutTableDataInterface } from '~/interfaces/statistics/StatisticsLoadoutTableDataInterface'
 import { LoadoutName } from '~/constants/Loadout'
 import { Bracket } from '~/constants/Bracket'
+import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
 
 export default Vue.extend({
   name: 'Loadouts',
@@ -45,6 +48,11 @@ export default Vue.extend({
     mode: {
       type: String,
       default: 'percent',
+      required: true,
+    },
+    filter: {
+      type: Object,
+      default: () => {},
       required: true,
     },
   },
@@ -60,8 +68,21 @@ export default Vue.extend({
     }
   },
   computed: {
+    apiFilter() {
+      const filter: GlobalAggregateParamsInterface = {}
+      if (this.filter.world > 0) filter.world = this.filter.world
+      if (this.filter.bracket !== Bracket.UNKNOWN)
+        filter.bracket = this.filter.bracket
+
+      return filter
+    },
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
+    },
+  },
+  watch: {
+    async filter() {
+      await this.filterResults()
     },
   },
   beforeDestroy() {
@@ -80,25 +101,25 @@ export default Vue.extend({
       clearInterval(this.interval)
       clearInterval(this.updateCountdownInterval)
     },
-
-    async init(): Promise<void> {
-      await this.pull()
-
+    setTimers() {
       this.updateCountdownInterval = window.setInterval(() => {
         return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
       }, 1000)
-
       this.interval = window.setInterval(() => {
         this.pull()
       }, this.updateRate)
     },
+    async init(): Promise<void> {
+      await this.pull()
+      this.setTimers()
+    },
     async pull(): Promise<void> {
-      console.log('LoadoutStatistics.pull')
+      console.log('LoadoutStatistics.pull', this.apiFilter)
 
       await new ApiRequest()
         .get<GlobalLoadoutAggregateResponseInterface[]>(
           Endpoints.AGGREGATES_GLOBAL_LOADOUT,
-          { bracket: Bracket.TOTAL }
+          this.apiFilter
         )
         .then((result) => {
           this.data = this.transformData(result)
@@ -144,6 +165,11 @@ export default Vue.extend({
       })
 
       return newData
+    },
+    async filterResults(): Promise<void> {
+      this.clearTimers()
+      await this.pull()
+      this.setTimers()
     },
   },
 })
