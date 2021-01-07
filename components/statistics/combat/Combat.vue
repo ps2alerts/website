@@ -44,6 +44,7 @@ import { GlobalFactionCombatAggregateResponseInterface } from '~/interfaces/aggr
 import CombatServerTotals from '~/components/statistics/combat/CombatServerTotals.vue'
 import CombatServerFaction from '~/components/statistics/combat/CombatServerFaction.vue'
 import { Bracket } from '~/constants/Bracket'
+import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
 
 export default Vue.extend({
   name: 'Combat',
@@ -56,6 +57,11 @@ export default Vue.extend({
     mode: {
       type: String,
       default: 'percent',
+      required: true,
+    },
+    filter: {
+      type: Object,
+      default: () => {},
       required: true,
     },
   },
@@ -71,8 +77,24 @@ export default Vue.extend({
     }
   },
   computed: {
+    apiFilter() {
+      const filter: GlobalAggregateParamsInterface = {
+        sortBy: this.filter.metric !== '' ? this.filter.metric : 'kills',
+        order: 'desc',
+      }
+      if (this.filter.world > 0) filter.world = this.filter.world
+      if (this.filter.bracket !== Bracket.UNKNOWN)
+        filter.bracket = this.filter.bracket
+
+      return filter
+    },
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
+    },
+  },
+  watch: {
+    async filter() {
+      await this.filterResults()
     },
   },
   beforeDestroy() {
@@ -91,8 +113,7 @@ export default Vue.extend({
       clearInterval(this.interval)
       clearInterval(this.updateCountdownInterval)
     },
-    init(): void {
-      this.pull()
+    setTimers() {
       this.updateCountdownInterval = window.setInterval(() => {
         return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
       }, 1000)
@@ -101,13 +122,17 @@ export default Vue.extend({
         this.pull()
       }, this.updateRate)
     },
+    init(): void {
+      this.pull()
+      this.setTimers()
+    },
     async pull(): Promise<void> {
-      console.log('CombatStatistics.pull')
+      console.log('CombatStatistics.pull', this.apiFilter)
 
       await new ApiRequest()
         .get<GlobalFactionCombatAggregateResponseInterface[]>(
           Endpoints.AGGREGATES_GLOBAL_FACTION,
-          { bracket: Bracket.TOTAL }
+          this.apiFilter
         )
         .then((result) => {
           this.data = result
@@ -117,6 +142,11 @@ export default Vue.extend({
         .catch((e) => {
           this.error = e.message
         })
+    },
+    async filterResults(): Promise<void> {
+      this.clearTimers()
+      await this.pull()
+      this.setTimers()
     },
   },
 })

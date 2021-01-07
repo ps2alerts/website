@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-12 gap-2">
-    <div class="col-span-12 lg:col-span-6 lg:col-start-4 card relative mb-2">
+    <div class="col-span-12 ss:col-span-6 ss:col-start-4 card relative mb-2">
       <div class="tag section">Global Faction Combat</div>
       <CountdownSpinner
         :percent="updateCountdownPercent"

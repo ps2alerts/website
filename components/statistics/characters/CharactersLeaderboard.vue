@@ -12,6 +12,11 @@
       </div>
       <div v-if="loaded" class="grid grid-cols-12">
         <div class="col-span-12">
+          <p class="text-gray-600 text-sm mb-4 text-center">
+            BR, ASP and Outfit Membership info is cached for up to 24 hours (if
+            you've not played in the last 24 hours it'll be current). Any
+            players above BR 120 have ASPed (220 max).
+          </p>
           <div class="mb-2">
             <input
               v-model="filter"
@@ -22,7 +27,6 @@
               @keydown="$event.stopImmediatePropagation()"
             />
           </div>
-
           <v-data-table
             class="datatable"
             item-key="character.name"
@@ -105,6 +109,12 @@ export default Vue.extend({
           text: 'Server',
           align: 'left',
           value: 'worldName',
+        },
+        {
+          text: 'BR',
+          align: 'middle',
+          filterable: false,
+          value: 'br',
         },
         {
           text: 'Kills',

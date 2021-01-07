@@ -22,14 +22,12 @@
           {{ count || 0 }}
         </div>
       </div>
-      <div class="col-span-12 mb-2 text-center">
-        <p class="text-gray-600 text-sm">
+      <div class="col-span-12">
+        <p class="text-gray-600 text-sm mb-2 text-center">
           BR, ASP and Outfit Membership info is cached for up to 24 hours (if
           you've not played in the last 24 hours it'll be current). Any players
           above BR 120 have ASPed (220 max).
         </p>
-      </div>
-      <div class="col-span-12">
         <div class="mb-2">
           <input
             v-model="filter"
