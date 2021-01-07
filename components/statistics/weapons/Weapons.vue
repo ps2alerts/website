@@ -71,10 +71,9 @@ export default Vue.extend({
       const filter: GlobalAggregateParamsInterface = {
         sortBy: this.filter.metric !== '' ? this.filter.metric : 'kills',
         order: 'desc',
-        pageSize: 1000,
       }
       if (this.filter.world > 0) filter.world = this.filter.world
-      if (this.filter.bracket !== Bracket.UNKNOWN)
+      if (this.filter.bracket !== Bracket.TOTAL)
         filter.bracket = this.filter.bracket
 
       return filter

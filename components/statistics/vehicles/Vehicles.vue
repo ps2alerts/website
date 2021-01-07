@@ -10,14 +10,16 @@
         <h1 class="text-2xl text-center mb-4">No data! Check back soon!</h1>
       </div>
       <div v-else>
-        <VehicleTotals
-          :v-if="data.length > 0"
-          :raw-data="data"
-          :vehicle-data="vehicleData"
-          :update-countdown-percent="updateCountdownPercent"
-          :update-rate="updateRate"
-          :mode="mode"
-        ></VehicleTotals>
+        <div v-show="!apiFilter.world">
+          <VehicleTotals
+            :v-if="data.length > 0"
+            :raw-data="data"
+            :vehicle-data="vehicleData"
+            :update-countdown-percent="updateCountdownPercent"
+            :update-rate="updateRate"
+            :mode="mode"
+          ></VehicleTotals>
+        </div>
         <VehicleServerMetrics
           :v-if="data.length > 0"
           :raw-data="data"
@@ -56,6 +58,7 @@ import { VehicleStatsWithKd } from '~/interfaces/VehicleStatisticsInterface'
 import { Faction } from '~/constants/Faction'
 import worldNameFilter from '~/filters/WorldName'
 import { Bracket } from '~/constants/Bracket'
+import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
 
 export default Vue.extend({
   name: 'Vehicles',
@@ -63,6 +66,11 @@ export default Vue.extend({
     mode: {
       type: String,
       default: 'percent',
+      required: true,
+    },
+    filter: {
+      type: Object,
+      default: () => {},
       required: true,
     },
   },
@@ -79,8 +87,21 @@ export default Vue.extend({
     }
   },
   computed: {
+    apiFilter() {
+      const filter: GlobalAggregateParamsInterface = {}
+      if (this.filter.world > 0) filter.world = this.filter.world
+      if (this.filter.bracket !== Bracket.TOTAL)
+        filter.bracket = this.filter.bracket
+
+      return filter
+    },
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
+    },
+  },
+  watch: {
+    async filter() {
+      await this.filterResults()
     },
   },
   beforeDestroy() {
@@ -99,29 +120,26 @@ export default Vue.extend({
       clearInterval(this.interval)
       clearInterval(this.updateCountdownInterval)
     },
-
-    async init(): Promise<void> {
-      await this.pullVehicleData()
-      await this.pull()
-
+    setTimers() {
       this.updateCountdownInterval = window.setInterval(() => {
         return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
       }, 1000)
-
       this.interval = window.setInterval(() => {
         this.pull()
       }, this.updateRate)
     },
+    async init(): Promise<void> {
+      await this.pullVehicleData()
+      await this.pull()
+      this.setTimers()
+    },
     async pull(): Promise<void> {
-      console.log('VehicleStatistics.pull')
+      console.log('VehicleStatistics.pull', this.apiFilter)
 
       await new ApiRequest()
         .get<GlobalVehicleAggregateResponseInterface[]>(
           Endpoints.AGGREGATES_GLOBAL_VEHICLE,
-          {
-            pageSize: 1000,
-            bracket: Bracket.TOTAL,
-          }
+          this.apiFilter
         )
         .then((result) => {
           this.data = this.transformData(result)
@@ -188,6 +206,11 @@ export default Vue.extend({
           teamkilled: vehicle.infantry?.teamkilled ?? 0,
         }
 
+        const totalKills =
+          (vehicle.vehicles?.kills ?? 0) + (vehicle.infantry?.kills ?? 0)
+        const totalDeaths =
+          (vehicle.vehicles?.deaths ?? 0) + (vehicle.infantry?.deaths ?? 0)
+
         const totals: VehicleStatsWithKd = {
           kills:
             (vehicle.vehicles?.kills ?? 0) + (vehicle.infantry?.kills ?? 0),
@@ -199,11 +222,7 @@ export default Vue.extend({
           teamkilled:
             (vehicle.vehicles?.teamkilled ?? 0) +
             (vehicle.infantry?.teamkilled ?? 0),
-          kd: (
-            (vehicle.vehicles?.kills ?? 0) +
-            (vehicle.infantry?.kills ?? 0) / (vehicle.vehicles?.deaths ?? 0) +
-            (vehicle.infantry?.deaths ?? 0)
-          ).toFixed(2),
+          kd: (totalKills / totalDeaths).toFixed(2),
         }
 
         const tempData: StatisticsVehicleMetricsTableDataInterface = Object.assign(
@@ -222,6 +241,11 @@ export default Vue.extend({
       })
 
       return newData
+    },
+    async filterResults(): Promise<void> {
+      this.clearTimers()
+      await this.pull()
+      this.setTimers()
     },
   },
 })
