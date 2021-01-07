@@ -15,9 +15,9 @@
           <v-data-table
             class="datatable"
             item-key="worldName"
-            :headers="serverTotalTableHeaders"
+            :headers="tableHeaders"
             :items="serverTotalData"
-            v-bind="serverTotalLeaderboardConfig"
+            v-bind="tableConfig"
           >
           </v-data-table>
         </div>
