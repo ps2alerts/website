@@ -4,9 +4,9 @@
       id="server"
       v-model="world"
       class="block w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
-      @change="changeWorld()"
+      :disabled="disabled"
     >
-      <option value="0">Any</option>
+      <option :value="ANY">Any</option>
       <option :value="CERES">{{ CERES | worldName }} (PS4 EU)</option>
       <option :value="COBALT">{{ COBALT | worldName }}</option>
       <option :value="CONNERY">{{ CONNERY | worldName }}</option>
@@ -16,7 +16,12 @@
       <option :value="MILLER">{{ MILLER | worldName }}</option>
       <option :value="SOLTECH">{{ SOLTECH | worldName }}</option>
     </select>
-    <label class="text-center text-sm" for="server">Server</label>
+    <label
+      class="text-center text-sm"
+      for="server"
+      :class="{ 'text-gray-600': disabled }"
+      >Server</label
+    >
   </div>
 </template>
 
@@ -31,10 +36,16 @@ export default Vue.extend({
       type: Number,
       default: 0,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   data() {
     return {
       world: 0,
+      ANY: 0,
       CERES: World.CERES,
       COBALT: World.COBALT,
       CONNERY: World.CONNERY,
@@ -46,12 +57,10 @@ export default Vue.extend({
     }
   },
   watch: {
-    worldFilter(world: World | 0): void {
-      this.world = world
+    worldFilter(world: World | '0'): void {
+      this.world = world === '0' ? 0 : world
     },
-  },
-  methods: {
-    changeWorld(): void {
+    world(): void {
       this.$emit('world-changed', this.world)
     },
   },

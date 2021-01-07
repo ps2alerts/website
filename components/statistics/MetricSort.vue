@@ -4,6 +4,7 @@
       id="metric"
       v-model="metric"
       class="block w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
+      :disabled="disabled"
       @change="changeMetric()"
     >
       <option
@@ -14,19 +15,18 @@
         {{ metric.name }}
       </option>
     </select>
-    <label class="text-center text-sm" for="metric">Sort by</label>
+    <label
+      class="text-center text-sm"
+      :class="{ 'text-gray-600': disabled }"
+      for="metric"
+      >Sort by</label
+    >
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-
-interface MetricSortInterface {
-  [k: string]: {
-    value: any
-    name: string
-  }
-}
+import { MetricSortInterface } from '~/interfaces/MetricSortInterface'
 
 export default Vue.extend({
   name: 'MetricSort',
@@ -40,6 +40,11 @@ export default Vue.extend({
       default: () => [],
       required: true,
     } as PropOptions<MetricSortInterface[]>,
+    disabled: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   data() {
     return {

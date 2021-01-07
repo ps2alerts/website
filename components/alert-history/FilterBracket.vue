@@ -4,6 +4,7 @@
       id="bracket"
       v-model="bracket"
       class="block w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
+      :disabled="disabled"
       @change="changeBracket()"
     >
       <option v-if="!totalMode" :value="NONE">Any</option>
@@ -16,7 +17,10 @@
     </select>
     <v-tooltip bottom>
       <template #activator="{ on, attrs }">
-        <label class="text-center text-sm" for="bracket"
+        <label
+          class="text-center text-sm"
+          for="bracket"
+          :class="{ 'text-gray-600': disabled }"
           >Activity Level
           <font-awesome-icon
             :icon="['fas', 'info-circle']"
@@ -44,6 +48,11 @@ export default Vue.extend({
     totalMode: {
       type: Boolean,
       default: false,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      required: false,
     },
   },
   data() {

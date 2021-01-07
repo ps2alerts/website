@@ -40,28 +40,40 @@
     </div>
     <div
       id="stats-sticky"
-      class="col-span-12 lg:col-span-8 ss:col-span-4 lg:col-start-3 ss:col-start-5 flex justify-center mb-2 sticky"
+      class="col-span-12 lg:col-span-8 ss:col-span-4 lg:col-start-3 ss:col-start-5 flex justify-center mb-2"
+      :class="{ sticky: !disabledPercentToggle }"
     >
       <div class="btn-group mr-2">
         <button
           class="btn btn-sm"
           :class="{
-            'btn-active': mode === 'percent' && !disabledControls,
+            'btn-active': mode === 'percent' && !disabledPercentToggle,
           }"
-          :disabled="disabledControls"
+          :disabled="disabledPercentToggle"
           @click="toggleMode('percent')"
         >
           <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
         </button>
         <button
           class="btn btn-sm"
-          :class="{ 'btn-active': mode === 'numbers' && !disabledControls }"
-          :disabled="disabledControls"
+          :class="{
+            'btn-active': mode === 'numbers' && !disabledPercentToggle,
+          }"
+          :disabled="disabledPercentToggle"
           @click="toggleMode('numbers')"
         >
           ##
         </button>
       </div>
+    </div>
+    <div class="col-span-12">
+      <StatisticsFiltering
+        :metrics="availableMetrics"
+        :disabled="disabledFilters"
+        @metric-changed="metricChanged"
+        @world-changed="worldChanged"
+        @bracket-changed="bracketChanged"
+      ></StatisticsFiltering>
     </div>
     <div class="col-span-12">
       <v-tabs
@@ -71,7 +83,7 @@
         fixed-tabs
         dark
         show-arrows
-        class="my-4"
+        class="mb-4"
       >
         <v-tabs-slider></v-tabs-slider>
 
@@ -116,30 +128,30 @@
         </v-tab>
       </v-tabs>
 
-      <v-tabs-items v-model="tab">
+      <v-tabs-items v-model="tab" touchless>
         <v-tab-item value="victories">
           <Victories :mode="mode"></Victories>
         </v-tab-item>
         <v-tab-item value="players">
-          <Characters :mode="mode"></Characters>
+          <Characters :mode="mode" :filter="filter"></Characters>
         </v-tab-item>
         <v-tab-item value="outfits">
           <div class="mb-4">
             <h1 class="text-3xl text-center">Coming soon!</h1>
           </div>
         </v-tab-item>
-        <v-tab-item value="combat">
-          <Combat :mode="mode"></Combat>
-        </v-tab-item>
         <v-tab-item value="weapons">
-          <Weapons :mode="mode"></Weapons>
+          <Weapons :mode="mode" :filter="filter"></Weapons>
+        </v-tab-item>
+        <v-tab-item value="combat">
+          <Combat :mode="mode" :filter="filter"></Combat>
         </v-tab-item>
         <v-tab-item value="vehicles">
-          <Vehicles :mode="mode"></Vehicles>
+          <Vehicles :mode="mode" :filter="filter"></Vehicles>
         </v-tab-item>
         <v-tab-item value="loadouts">
           <div class="mb-4">
-            <Loadouts :mode="mode"></Loadouts>
+            <Loadouts :mode="mode" :filter="filter"></Loadouts>
           </div>
         </v-tab-item>
         <v-tab-item value="facilities">
@@ -154,31 +166,83 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import StatisticsFiltering from '~/components/statistics/StatisticsFiltering.vue'
+import { MetricSortInterface } from '~/interfaces/MetricSortInterface'
+import { World } from '~/constants/World'
+import { Bracket } from '~/constants/Bracket'
 
 export default Vue.extend({
   name: 'Home',
+  components: { StatisticsFiltering },
   data() {
     return {
       mode: 'percent',
       tab: '',
-      bracket: false,
+      metric: '',
+      world: 0,
+      bracket: Bracket.TOTAL,
     }
   },
   computed: {
-    disabledControls(): boolean {
-      return [
-        'players',
-        'outfits',
-        'weapons',
-        'vehicles',
-        'loadouts',
-        'facilitites',
-      ].includes(this.tab)
+    filter(): object {
+      console.log('upper filter changed')
+      return {
+        metric: this.metric,
+        world: this.world,
+        bracket: this.bracket,
+      }
+    },
+    disabledFilters(): boolean {
+      return ['victories', 'facilitites'].includes(this.tab)
+    },
+    disabledPercentToggle(): boolean {
+      return !['victories', 'combat'].includes(this.tab)
+    },
+    availableMetrics(): MetricSortInterface[] {
+      switch (this.tab) {
+        case 'players':
+          return [
+            { name: 'Kills', value: 'kills' },
+            { name: 'Deaths', value: 'deaths' },
+            { name: 'Teamkills', value: 'teamKills' },
+            { name: 'Suicides', value: 'suicides' },
+            { name: 'Headshots', value: 'headshots' },
+          ]
+        case 'outfits':
+          return [
+            { name: 'Kills', value: 'kills' },
+            { name: 'Deaths', value: 'deaths' },
+            { name: 'Teamkills', value: 'teamKills' },
+            { name: 'Suicides', value: 'suicides' },
+            { name: 'Headshots', value: 'headshots' },
+          ]
+        case 'victories':
+        case 'combat':
+        case 'vehicles':
+        case 'classes':
+        case 'weapons':
+        case 'map':
+          return []
+        default:
+          return []
+      }
     },
   },
   methods: {
     toggleMode(mode: string) {
       this.mode = mode
+    },
+    metricChanged(metric: string) {
+      console.log('metric changed')
+      this.metric = metric
+    },
+    worldChanged(world: World) {
+      console.log('world changed')
+      this.world = world
+    },
+    bracketChanged(bracket: Bracket) {
+      console.log('bracket changed')
+      this.bracket = bracket
     },
   },
 })
