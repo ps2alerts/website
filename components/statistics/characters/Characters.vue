@@ -115,7 +115,6 @@ export default Vue.extend({
   },
   watch: {
     async filter() {
-      console.log('filter changed')
       await this.filterResults()
     },
   },

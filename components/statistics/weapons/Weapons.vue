@@ -6,13 +6,15 @@
         <h1 class="text-2xl text-center mb-4">No data! Check back soon!</h1>
       </div>
       <div v-else>
-        <WeaponTotals
-          :v-if="data.length > 0"
-          :raw-data="data"
-          :update-countdown-percent="updateCountdownPercent"
-          :update-rate="updateRate"
-          :mode="mode"
-        ></WeaponTotals>
+        <div v-show="!apiFilter.world">
+          <WeaponTotals
+            :v-if="data.length > 0"
+            :raw-data="data"
+            :update-countdown-percent="updateCountdownPercent"
+            :update-rate="updateRate"
+            :mode="mode"
+          ></WeaponTotals>
+        </div>
         <WeaponServerMetrics
           :v-if="data.length > 0"
           :raw-data="data"
@@ -37,6 +39,7 @@ import { World } from '~/constants/World'
 import worldNameFilter from '~/filters/WorldName'
 import { StatisticsWeaponTableDataInterface } from '~/interfaces/statistics/StatisticsWeaponTableDataInterface'
 import { Bracket } from '~/constants/Bracket'
+import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
 
 export default Vue.extend({
   name: 'Weapons',
@@ -44,6 +47,11 @@ export default Vue.extend({
     mode: {
       type: String,
       default: 'percent',
+      required: true,
+    },
+    filter: {
+      type: Object,
+      default: () => {},
       required: true,
     },
   },
@@ -59,8 +67,25 @@ export default Vue.extend({
     }
   },
   computed: {
+    apiFilter() {
+      const filter: GlobalAggregateParamsInterface = {
+        sortBy: this.filter.metric !== '' ? this.filter.metric : 'kills',
+        order: 'desc',
+        pageSize: 1000,
+      }
+      if (this.filter.world > 0) filter.world = this.filter.world
+      if (this.filter.bracket !== Bracket.UNKNOWN)
+        filter.bracket = this.filter.bracket
+
+      return filter
+    },
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
+    },
+  },
+  watch: {
+    async filter() {
+      await this.filterResults()
     },
   },
   beforeDestroy() {
@@ -79,25 +104,25 @@ export default Vue.extend({
       clearInterval(this.interval)
       clearInterval(this.updateCountdownInterval)
     },
-
-    async init(): Promise<void> {
-      await this.pull()
-
+    setTimers() {
       this.updateCountdownInterval = window.setInterval(() => {
         return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
       }, 1000)
-
       this.interval = window.setInterval(() => {
         this.pull()
       }, this.updateRate)
     },
+    async init(): Promise<void> {
+      await this.pull()
+      this.setTimers()
+    },
     async pull(): Promise<void> {
-      console.log('WeaponStatistics.pull')
+      console.log('WeaponStatistics.pull', this.apiFilter)
 
       await new ApiRequest()
         .get<GlobalWeaponAggregateResponseInterface[]>(
           Endpoints.AGGREGATES_GLOBAL_WEAPON,
-          { bracket: Bracket.TOTAL }
+          this.apiFilter
         )
         .then((result) => {
           this.data = this.transformData(result)
@@ -138,6 +163,11 @@ export default Vue.extend({
       })
 
       return newData
+    },
+    async filterResults(): Promise<void> {
+      this.clearTimers()
+      await this.pull()
+      this.setTimers()
     },
   },
 })
