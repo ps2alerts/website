@@ -141,6 +141,12 @@ export default Vue.extend({
           value: 'teamKills',
         },
         {
+          text: 'TKed',
+          align: 'middle',
+          filterable: false,
+          value: 'teamKilled',
+        },
+        {
           text: 'Suicides',
           align: 'middle',
           filterable: false,

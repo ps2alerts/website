@@ -112,6 +112,30 @@
             </td>
           </tr>
           <tr>
+            <td class="text-left">TK %</td>
+            <td class="bg-vs">
+              <span v-if="data.vs">{{
+                (data.vs.teamKills || 0) / (data.vs.deaths || 0)
+              }}</span>
+            </td>
+            <td class="bg-tr">
+              <span v-if="data.tr">{{
+                (data.tr.teamKills || 0) / (data.tr.deaths || 0)
+              }}</span>
+            </td>
+            <td class="bg-nc">
+              <span v-if="data.nc">{{
+                (data.nc.teamKills || 0) / (data.nc.deaths || 0)
+              }}</span>
+            </td>
+            <td class="bg-nso">
+              <span v-if="data.nso"
+                >{{ (data.nso.teamKills || 0) / (data.nso.deaths || 0)
+                }}<sup>*2</sup>
+              </span>
+            </td>
+          </tr>
+          <tr>
             <td class="text-left">Suicides</td>
             <td class="bg-vs">
               <span v-if="data.vs">{{ data.vs.suicides || 0 }}</span>

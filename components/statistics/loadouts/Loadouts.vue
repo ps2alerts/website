@@ -142,6 +142,7 @@ export default Vue.extend({
         // Ensure table displays all data even if zero
         loadout.kills = loadout.kills ?? 0
         loadout.teamKills = loadout.teamKills ?? 0
+        loadout.teamKilled = loadout.teamKilled ?? 0
         loadout.suicides = loadout.suicides ?? 0
         loadout.headshots = loadout.headshots ?? 0
 

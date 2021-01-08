@@ -19,7 +19,10 @@
             <span v-else>{{ vsString() }}</span>
           </div>
         </template>
-        <span>VS: {{ vsString(true) }}</span>
+        <span v-if="!isPercentage && numeral">
+          VS: {{ vsString(true) | numeral(numeral) }}
+        </span>
+        <span v-else>VS: {{ vsString(true) }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -40,7 +43,10 @@
             <span v-else>{{ trString() }}</span>
           </div>
         </template>
-        <span>TR: {{ trString(true) }}</span>
+        <span v-if="!isPercentage && numeral">
+          TR: {{ trString(true) | numeral(numeral) }}
+        </span>
+        <span v-else>TR: {{ trString(true) }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -61,7 +67,10 @@
             <span v-else>{{ ncString() }}</span>
           </div>
         </template>
-        <span>NC: {{ ncString(true) }}</span>
+        <span v-if="!isPercentage && numeral">
+          NC: {{ ncString(true) | numeral(numeral) }}
+        </span>
+        <span v-else>NC: {{ ncString(true) }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -76,10 +85,16 @@
             v-bind="attrs"
             v-on="on"
           >
-            {{ otherString() }}
+            <span v-if="!isPercentage && numeral">{{
+              otherString() | numeral(numeral)
+            }}</span>
+            <span v-else>{{ otherString() }}</span>
           </div>
         </template>
-        <span>{{ otherSegmentText }}: {{ otherString(true) }}</span>
+        <span v-if="!isPercentage && numeral">
+          {{ otherSegmentText }}: {{ otherString(true) | numeral(numeral) }}
+        </span>
+        <span v-else>{{ otherSegmentText }}: {{ otherString(true) }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -156,6 +171,11 @@ export default Vue.extend({
       default: '',
       required: false,
     },
+    fractionDigits: {
+      type: String,
+      default: '0',
+      required: false,
+    },
   },
   computed: {
     total(): number {
@@ -180,7 +200,7 @@ export default Vue.extend({
   methods: {
     vsString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
-        ? this.percentVS.toFixed(0)
+        ? this.percentVS.toFixed(parseInt(this.fractionDigits, 10))
         : this.vs
       const suffix = this.isPercentage ? '%' : ''
       if (bypassDropoff) {
@@ -192,7 +212,7 @@ export default Vue.extend({
     },
     ncString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
-        ? this.percentNC.toFixed(0)
+        ? this.percentNC.toFixed(parseInt(this.fractionDigits, 10))
         : this.nc
       const suffix = this.isPercentage ? '%' : ''
       if (bypassDropoff) {
@@ -204,7 +224,7 @@ export default Vue.extend({
     },
     trString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
-        ? this.percentTR.toFixed(0)
+        ? this.percentTR.toFixed(parseInt(this.fractionDigits, 10))
         : this.tr
       const suffix = this.isPercentage ? '%' : ''
       if (bypassDropoff) {
@@ -216,7 +236,7 @@ export default Vue.extend({
     },
     otherString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
-        ? this.percentOther.toFixed(0)
+        ? this.percentOther.toFixed(parseInt(this.fractionDigits, 10))
         : this.other
       const suffix = this.isPercentage ? '%' : ''
       if (bypassDropoff) {
@@ -228,7 +248,7 @@ export default Vue.extend({
     },
     outOfPlayString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
-        ? this.percentOutOfPlay.toFixed(0)
+        ? this.percentOutOfPlay.toFixed(parseInt(this.fractionDigits, 10))
         : this.outOfPlay
       const suffix = this.isPercentage ? '%' : ''
       if (bypassDropoff) {

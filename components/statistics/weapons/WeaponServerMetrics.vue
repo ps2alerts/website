@@ -186,7 +186,7 @@ export default Vue.extend({
 
       newData.hsr = parseFloat(
         newData.headshots && newData.kills
-          ? ((newData.headshots / newData.kills) * 100).toFixed(2)
+          ? ((newData.headshots / newData.kills) * 100).toFixed(1)
           : '0'
       )
 

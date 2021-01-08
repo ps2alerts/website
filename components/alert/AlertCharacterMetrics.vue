@@ -142,6 +142,12 @@ export default Vue.extend({
           value: 'teamKills',
         },
         {
+          text: 'TKed',
+          align: 'middle',
+          filterable: false,
+          value: 'teamKilled',
+        },
+        {
           text: 'Suicides',
           align: 'middle',
           filterable: false,
@@ -269,6 +275,7 @@ export default Vue.extend({
         character.kills = character.kills ?? 0
         character.deaths = character.deaths ?? 0
         character.teamKills = character.teamKills ?? 0
+        character.teamKilled = character.teamKilled ?? 0
         character.suicides = character.suicides ?? 0
         character.headshots = character.headshots ?? 0
 

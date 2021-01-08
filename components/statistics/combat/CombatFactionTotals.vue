@@ -30,6 +30,7 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   numeral="0.2a"
+                  fraction-digits="1"
                 />
               </td>
             </tr>
@@ -45,6 +46,7 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   numeral="0.0a"
+                  fraction-digits="1"
                 />
               </td>
             </tr>
@@ -74,6 +76,22 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   numeral="0.0a"
+                  fraction-digits="1"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="py-1 text-left">Teamkill %</td>
+              <td class="py-1">
+                <FactionSegmentBar
+                  :vs="totalsData.vs.teamKills / totalsData.vs.deaths"
+                  :nc="totalsData.nc.teamKills / totalsData.nc.deaths"
+                  :tr="totalsData.tr.teamKills / totalsData.tr.deaths"
+                  :other="totalsData.nso.teamKills / totalsData.nso.deaths"
+                  other-segment-text="NSO"
+                  :is-percentage="false"
+                  :show-as-calculated-percentage="false"
+                  numeral="0.[0]%"
                 />
               </td>
             </tr>
@@ -89,6 +107,7 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   numeral="0.0a"
+                  fraction-digits="1"
                 />
               </td>
             </tr>
@@ -104,11 +123,12 @@
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   numeral="0.0a"
+                  fraction-digits="1"
                 />
               </td>
             </tr>
             <tr>
-              <td class="py-1 text-left">HSR %</td>
+              <td class="py-1 text-left">HSR</td>
               <td class="py-1">
                 <FactionSegmentBar
                   :vs="totalsData.vs.hsr"
@@ -116,7 +136,7 @@
                   :tr="totalsData.tr.hsr"
                   :other="totalsData.nso.hsr"
                   other-segment-text="NSO"
-                  :is-percentage="false"
+                  :is-percentage="true"
                   :show-as-calculated-percentage="false"
                 />
               </td>
@@ -231,7 +251,7 @@ export default Vue.extend({
       )
       newData.hsr = parseFloat(
         newData.headshots && newData.kills
-          ? ((newData.headshots / newData.kills) * 100).toFixed(2)
+          ? ((newData.headshots / newData.kills) * 100).toFixed(1)
           : '0'
       )
 

@@ -84,6 +84,10 @@ export default Vue.extend({
           name: 'Teamkills',
         },
         {
+          value: 'teamKilled',
+          name: 'Teamkilled',
+        },
+        {
           value: 'suicides',
           name: 'Suicides',
         },
@@ -176,6 +180,7 @@ export default Vue.extend({
         character.kills = character.kills ?? 0
         character.deaths = character.deaths ?? 0
         character.teamKills = character.teamKills ?? 0
+        character.teamKilled = character.teamKilled ?? 0
         character.suicides = character.suicides ?? 0
         character.headshots = character.headshots ?? 0
 

@@ -107,6 +107,12 @@ export default Vue.extend({
           value: 'teamKills',
         },
         {
+          text: 'TKed',
+          align: 'middle',
+          filterable: false,
+          value: 'teamKilled',
+        },
+        {
           text: 'Suicides',
           align: 'middle',
           filterable: false,
@@ -160,6 +166,10 @@ export default Vue.extend({
           loadout.teamKills = loadout.teamKills
             ? loadout.teamKills + (worldLoadout?.teamKills ?? 0)
             : worldLoadout.teamKills ?? 0
+
+          loadout.teamKilled = loadout.teamKilled
+            ? loadout.teamKilled + (worldLoadout?.teamKilled ?? 0)
+            : worldLoadout.teamKilled ?? 0
 
           loadout.suicides = loadout.suicides
             ? loadout.suicides + (worldLoadout?.suicides ?? 0)
