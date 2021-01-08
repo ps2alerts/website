@@ -114,25 +114,40 @@
           <tr>
             <td class="text-left">TK %</td>
             <td class="bg-vs">
-              <span v-if="data.vs">{{
-                (data.vs.teamKills || 0) / (data.vs.deaths || 0)
-              }}</span>
+              <span v-if="data.vs"
+                >{{
+                  data.vs.teamKills && data.vs.deaths
+                    ? (data.vs.teamKills / data.vs.deaths).toFixed(2) * 100
+                    : data.vs.teamKills || 0
+                }}%</span
+              >
             </td>
             <td class="bg-tr">
-              <span v-if="data.tr">{{
-                (data.tr.teamKills || 0) / (data.tr.deaths || 0)
-              }}</span>
+              <span v-if="data.tr"
+                >{{
+                  data.tr.teamKills && data.tr.deaths
+                    ? (data.tr.teamKills / data.tr.deaths).toFixed(2) * 100
+                    : data.tr.teamKills || 0
+                }}%</span
+              >
             </td>
             <td class="bg-nc">
-              <span v-if="data.nc">{{
-                (data.nc.teamKills || 0) / (data.nc.deaths || 0)
-              }}</span>
+              <span v-if="data.nc"
+                >{{
+                  data.nc.teamKills && data.nc.deaths
+                    ? (data.nc.teamKills / data.nc.deaths).toFixed(2) * 100
+                    : data.nc.teamKills || 0
+                }}%</span
+              >
             </td>
             <td class="bg-nso">
               <span v-if="data.nso"
-                >{{ (data.nso.teamKills || 0) / (data.nso.deaths || 0)
-                }}<sup>*2</sup>
-              </span>
+                >{{
+                  data.nso.teamKills && data.nso.deaths
+                    ? (data.nso.teamKills / data.nso.deaths).toFixed(2) * 100
+                    : data.nso.teamKills || 0
+                }}%</span
+              ><sup>*2</sup>
             </td>
           </tr>
           <tr>
