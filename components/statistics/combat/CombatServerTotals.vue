@@ -42,6 +42,7 @@ interface StatisticsServerCombatTableDataInterface
   worldName: string
   kd: string | number
   hsr: string | number
+  teamkillPercent: string | number
 }
 
 export default Vue.extend({
@@ -104,6 +105,12 @@ export default Vue.extend({
           value: 'teamKills',
         },
         {
+          text: 'TK %',
+          align: 'middle',
+          filterable: false,
+          value: 'teamkillPercent',
+        },
+        {
           text: 'Suicides',
           align: 'middle',
           filterable: false,
@@ -161,6 +168,7 @@ export default Vue.extend({
         kills: 0,
         deaths: 0,
         teamKills: 0,
+        teamkillPercent: 0,
         suicides: 0,
         headshots: 0,
         kd: 0,
@@ -178,6 +186,12 @@ export default Vue.extend({
       newData.hsr = parseFloat(
         newData.headshots && newData.kills
           ? ((newData.headshots / newData.kills) * 100).toFixed(1)
+          : '0'
+      )
+
+      newData.teamkillPercent = parseFloat(
+        newData.teamKills && newData.deaths
+          ? ((newData.teamKills / newData.deaths) * 100).toFixed(1)
           : '0'
       )
 
