@@ -5,6 +5,5 @@ export interface StatisticsOutfitTableDataInterface
   uuid: string
   kd: string | number
   hsr: string | number
-  br: number
   worldName: string
 }
