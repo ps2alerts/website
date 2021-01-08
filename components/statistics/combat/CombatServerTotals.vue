@@ -42,7 +42,7 @@ interface StatisticsServerCombatTableDataInterface
   worldName: string
   kd: string | number
   hsr: string | number
-  teamkillPercent: string | number
+  teamkillPercent?: string | number
 }
 
 export default Vue.extend({
