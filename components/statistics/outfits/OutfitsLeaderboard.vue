@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-12 card relative mb-2">
-      <div class="tag section">Players Leaderboard</div>
+      <div class="tag section">Outfits Leaderboard</div>
       <CountdownSpinner
         v-if="loaded"
         :percent="updateCountdownPercent"
@@ -13,17 +13,15 @@
       <div v-if="loaded" class="grid grid-cols-12">
         <div class="col-span-12">
           <p class="text-gray-600 text-sm mb-4 text-center">
-            BR, ASP and Outfit Membership info is cached for up to 24 hours (if
-            you've not played in the last 24 hours it'll be current). Any
-            players above BR 120 have ASPed (220 max).
+            Outfit Tag and outfit membership changes are updated every 24 hours
           </p>
           <div class="mb-2">
             <input
               v-model="filter"
               class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
               type="text"
-              placeholder="Name / Outfit / Server"
-              aria-label="Name / Outfit / Server"
+              placeholder="Outfit name / Server"
+              aria-label="Outfit name / Server"
               @keydown="$event.stopImmediatePropagation()"
             />
           </div>
@@ -45,18 +43,18 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { StatisticsCharactersLeaderboardConfig } from '~/constants/DataTableConfig'
-import { StatisticsCharacterTableDataInterface } from '~/interfaces/statistics/StatisticsCharacterTableDataInterface'
+import { StatisticsOutfitLeaderboardConfig } from '~/constants/DataTableConfig'
+import { StatisticsOutfitTableDataInterface } from '~/interfaces/statistics/StatisticsOutfitTableDataInterface'
 import { FactionBgClassString } from '~/constants/FactionBgClass'
 
 export default Vue.extend({
-  name: 'CharactersLeaderboard',
+  name: 'OutfitLeaderboard',
   props: {
     rawData: {
       type: Array,
       default: () => [],
       required: true,
-    } as PropOptions<StatisticsCharacterTableDataInterface[]>,
+    } as PropOptions<StatisticsOutfitTableDataInterface[]>,
     updateCountdownPercent: {
       type: Number,
       default: 100,
@@ -81,30 +79,19 @@ export default Vue.extend({
   data() {
     return {
       loaded: false,
-      items: {} as StatisticsCharacterTableDataInterface[],
-      tableConfig: StatisticsCharactersLeaderboardConfig,
+      items: {} as StatisticsOutfitTableDataInterface[],
+      tableConfig: StatisticsOutfitLeaderboardConfig,
       filter: '',
       tableHeaders: [
         {
-          text: 'Player',
-          align: 'left',
-          value: 'character.name',
-        },
-        {
           text: 'Outfit',
           align: 'left',
-          value: 'character.outfit.name',
+          value: 'outfit.name',
         },
         {
           text: 'Server',
           align: 'left',
           value: 'worldName',
-        },
-        {
-          text: 'BR',
-          align: 'middle',
-          filterable: false,
-          value: 'br',
         },
         {
           text: 'Kills',
@@ -123,6 +110,12 @@ export default Vue.extend({
           align: 'middle',
           filterable: false,
           value: 'kd',
+        },
+        {
+          text: 'Caps',
+          align: 'middle',
+          filterable: false,
+          value: 'captures',
         },
         {
           text: 'TKs',
@@ -171,8 +164,8 @@ export default Vue.extend({
     this.loaded = true
   },
   methods: {
-    tableItemClass(item: StatisticsCharacterTableDataInterface): string {
-      return FactionBgClassString(item.character.faction)
+    tableItemClass(item: StatisticsOutfitTableDataInterface): string {
+      return FactionBgClassString(item.outfit.faction)
     },
     changeSorting(sorting: string): void {
       this.tableConfig['sort-by'] = [sorting]

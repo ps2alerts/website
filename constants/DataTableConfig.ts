@@ -31,6 +31,11 @@ export const StatisticsCharactersLeaderboardConfig = {
   'sort-by': ['kills'],
 }
 
+export const StatisticsOutfitLeaderboardConfig = {
+  ...DataTableConfig,
+  'sort-by': ['kills'],
+}
+
 export const StatisticsCombatServerTotalsLeaderboardConfig = {
   ...DataTableConfig,
   'sort-by': ['kd'],

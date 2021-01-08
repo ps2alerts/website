@@ -97,8 +97,8 @@
           <font-awesome-icon :icon="['fas', 'user']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#outfits" disabled>
-          Outfits (WIP)
+        <v-tab href="#outfits">
+          Outfits
           <font-awesome-icon :icon="['fas', 'users']"></font-awesome-icon>
         </v-tab>
 
@@ -136,9 +136,7 @@
           <Characters :mode="mode" :filter="filter"></Characters>
         </v-tab-item>
         <v-tab-item value="outfits">
-          <div class="mb-4">
-            <h1 class="text-3xl text-center">Coming soon!</h1>
-          </div>
+          <Outfits :mode="mode" :filter="filter"></Outfits>
         </v-tab-item>
         <v-tab-item value="weapons">
           <Weapons :mode="mode" :filter="filter"></Weapons>
@@ -205,6 +203,7 @@ export default Vue.extend({
             { name: 'Kills', value: 'kills' },
             { name: 'Deaths', value: 'deaths' },
             { name: 'Teamkills', value: 'teamKills' },
+            { name: 'Teamkilled', value: 'teamKilled' },
             { name: 'Suicides', value: 'suicides' },
             { name: 'Headshots', value: 'headshots' },
           ]
@@ -212,7 +211,9 @@ export default Vue.extend({
           return [
             { name: 'Kills', value: 'kills' },
             { name: 'Deaths', value: 'deaths' },
+            { name: 'Captures', value: 'captures' },
             { name: 'Teamkills', value: 'teamKills' },
+            { name: 'Teamkilled', value: 'teamKilled' },
             { name: 'Suicides', value: 'suicides' },
             { name: 'Headshots', value: 'headshots' },
           ]
@@ -233,28 +234,14 @@ export default Vue.extend({
       this.mode = mode
     },
     metricChanged(metric: string) {
-      console.log('metric changed')
       this.metric = metric
     },
     worldChanged(world: World) {
-      console.log('world changed')
       this.world = world
     },
     bracketChanged(bracket: Bracket) {
-      console.log('bracket changed')
       this.bracket = bracket
     },
   },
 })
 </script>
-
-<style scoped lang="scss">
-#splash-icon {
-  max-height: 15vh;
-}
-
-#stats-sticky {
-  top: 1rem;
-  z-index: 1000;
-}
-</style>

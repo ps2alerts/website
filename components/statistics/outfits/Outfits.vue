@@ -1,9 +1,9 @@
 <template>
   <section class="mb-4">
-    <h1 class="text-3xl text-center mb-2">Player Statistics</h1>
+    <h1 class="text-3xl text-center mb-2">Outfit Statistics</h1>
     <p class="text-center mb-4">
-      Shows the top 1000 Players for the selected criteria. You'll be able to
-      search for yourself in a future update.
+      Shows the top 1000 Outfits for the selected criteria. You'll be able to
+      search for your outfit in a future update.
     </p>
     <div v-if="loaded">
       <p v-if="filter.bracket !== 0" class="text-center mb-4">
@@ -16,14 +16,14 @@
         <h1 class="text-2xl text-center mb-4">No data! Check back soon!</h1>
       </div>
       <div v-else>
-        <CharactersLeaderboard
+        <OutfitsLeaderboard
           :v-if="data.length > 0"
           :raw-data="data"
           :update-countdown-percent="updateCountdownPercent"
           :update-rate="updateRate"
           :mode="mode"
           :sorting="filter.metric"
-        ></CharactersLeaderboard>
+        ></OutfitsLeaderboard>
       </div>
     </div>
     <div v-else>
@@ -34,20 +34,20 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import OutfitsLeaderboard from '@/components/statistics/outfits/OutfitsLeaderboard.vue'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
 import { World } from '~/constants/World'
 import worldNameFilter from '~/filters/WorldName'
-import { GlobalCharacterAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalCharacterAggregateResponseInterface'
+import { GlobalOutfitAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalOutfitAggregateResponseInterface'
 import { Bracket } from '~/constants/Bracket'
-import { StatisticsCharacterTableDataInterface } from '~/interfaces/statistics/StatisticsCharacterTableDataInterface'
+import { StatisticsOutfitTableDataInterface } from '~/interfaces/statistics/StatisticsOutfitTableDataInterface'
 import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
-import CharactersLeaderboard from '~/components/statistics/characters/CharactersLeaderboard.vue'
 
 export default Vue.extend({
-  name: 'Characters',
+  name: 'Outfits',
   components: {
-    CharactersLeaderboard,
+    OutfitsLeaderboard,
   },
   props: {
     mode: {
@@ -69,7 +69,7 @@ export default Vue.extend({
       updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
-      data: [] as GlobalCharacterAggregateResponseInterface[],
+      data: [] as GlobalOutfitAggregateResponseInterface[],
       totalMode: true,
       filtered: false,
     }
@@ -125,11 +125,11 @@ export default Vue.extend({
       this.setTimers()
     },
     async pull(): Promise<void> {
-      console.log('CharacterStatistics.pull', this.apiFilter)
+      console.log('OutfitStatistics.pull', this.apiFilter)
 
       await new ApiRequest()
-        .get<GlobalCharacterAggregateResponseInterface[]>(
-          Endpoints.AGGREGATES_GLOBAL_CHARACTER,
+        .get<GlobalOutfitAggregateResponseInterface[]>(
+          Endpoints.AGGREGATES_GLOBAL_OUTFIT,
           this.apiFilter
         )
         .then((result) => {
@@ -142,53 +142,42 @@ export default Vue.extend({
         })
     },
     transformData(
-      result: GlobalCharacterAggregateResponseInterface[]
-    ): StatisticsCharacterTableDataInterface[] {
-      const newData: StatisticsCharacterTableDataInterface[] = []
+      result: GlobalOutfitAggregateResponseInterface[]
+    ): StatisticsOutfitTableDataInterface[] {
+      const newData: StatisticsOutfitTableDataInterface[] = []
 
-      result.forEach((character: GlobalCharacterAggregateResponseInterface) => {
-        if (character.world === World.JAEGER) {
+      result.forEach((outfit: GlobalOutfitAggregateResponseInterface) => {
+        if (outfit.world === World.JAEGER || outfit.outfit?.tag === 'SERVER') {
           return
         }
+
         // Ensure table displays all data even if zero
-        character.kills = character.kills ?? 0
-        character.deaths = character.deaths ?? 0
-        character.teamKills = character.teamKills ?? 0
-        character.teamKilled = character.teamKilled ?? 0
-        character.suicides = character.suicides ?? 0
-        character.headshots = character.headshots ?? 0
+        outfit.kills = outfit.kills ?? 0
+        outfit.deaths = outfit.deaths ?? 0
+        outfit.teamKills = outfit.teamKills ?? 0
+        outfit.teamKilled = outfit.teamKilled ?? 0
+        outfit.suicides = outfit.suicides ?? 0
+        outfit.headshots = outfit.headshots ?? 0
+        outfit.captures = outfit.captures ?? 0
 
         // Outfit name formatting
-        if (character.character.outfit) {
-          character.character.outfit.name = character.character.outfit?.tag
-            ? `[${character.character.outfit.tag}] ${character.character.outfit.name}`
-            : character.character.outfit?.name
-        } else {
-          character.character.outfit = {
-            name: '-- NO OUTFIT --',
-            id: '0',
-            faction: character.character.faction,
-            world: character.character.world,
-            leader: 'foo',
-          }
-        }
+        outfit.outfit.name = outfit.outfit?.tag
+          ? `[${outfit.outfit.tag}] ${outfit.outfit.name}`
+          : outfit.outfit?.name
 
-        const tempData: StatisticsCharacterTableDataInterface = Object.assign(
-          character,
+        const tempData: StatisticsOutfitTableDataInterface = Object.assign(
+          outfit,
           {
-            uuid: character.character.id,
+            uuid: `${outfit.world}-${outfit.outfit.id}`,
             kd:
-              character.kills && character.deaths
-                ? (character.kills / character.deaths).toFixed(2)
-                : character.kills || 0,
+              outfit.kills && outfit.deaths
+                ? (outfit.kills / outfit.deaths).toFixed(2)
+                : outfit.kills || 0,
             hsr:
-              character.headshots && character.kills
-                ? ((character.headshots / character.kills) * 100).toFixed(2)
+              outfit.headshots && outfit.kills
+                ? ((outfit.headshots / outfit.kills) * 100).toFixed(2)
                 : 0,
-            br: character.character.asp
-              ? character.character.battleRank + 120
-              : character.character.battleRank,
-            worldName: worldNameFilter(character.world),
+            worldName: worldNameFilter(outfit.world),
           }
         )
         newData.push(tempData)
