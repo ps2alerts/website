@@ -116,7 +116,7 @@
             <td class="bg-vs">
               <span v-if="data.vs"
                 >{{
-                  data.vs.teamKilFls && data.vs.deaths
+                  data.vs.teamKills && data.vs.deaths
                     ? ((data.vs.teamKills / data.vs.deaths) * 100).toFixed(1)
                     : data.vs.teamKills || 0
                 }}%</span
