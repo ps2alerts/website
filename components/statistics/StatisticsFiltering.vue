@@ -1,20 +1,20 @@
 <template>
   <div class="grid grid-cols-12 gap-2 text-center">
-    <div class="col-span-6 lg:col-span-2 lg:col-start-4">
+    <div v-show="!dateShow" class="col-span-6 lg:col-span-2 lg:col-start-4">
       <MetricSort
         :metrics="metrics"
         :disabled="sortByDisabled"
         @metric-changed="updateMetric"
       ></MetricSort>
     </div>
-    <div class="col-span-6 lg:col-span-2">
+    <div v-show="!dateShow" class="col-span-6 lg:col-span-2">
       <FilterWorld
         :world-filter="world"
         :disabled="disabled"
         @world-changed="updateWorld"
       ></FilterWorld>
     </div>
-    <div class="col-span-6 lg:col-span-2">
+    <div v-show="!dateShow" class="col-span-6 lg:col-span-2">
       <FilterBracket
         :bracket-filter="bracket"
         :total-mode="totalMode"
@@ -22,7 +22,17 @@
         @bracket-changed="updateBracket"
       />
     </div>
-    <div class="col-span-12">
+    <div v-if="dateShow" class="col-span-12 lg:col-span-8 lg:col-start-3 mb-4">
+      <FilterDate
+        :is-filtered="false"
+        date-only="true"
+        @date-changed="updateDate"
+      />
+      <!--      <button class="btn" :disabled="filtered === false" @click="clearFilter()">-->
+      <!--        <font-awesome-icon :icon="['fas', 'undo']" /> Clear-->
+      <!--      </button>-->
+    </div>
+    <div v-else class="col-span-12">
       <p class="text-center mb-4">
         Date range filtering is not possible.
         <v-tooltip bottom z-index="1001">
@@ -50,6 +60,7 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
+import moment from 'moment/moment'
 import { World } from '~/constants/World'
 import { Bracket } from '~/constants/Bracket'
 import { MetricSortInterface } from '~/interfaces/MetricSortInterface'
@@ -66,13 +77,20 @@ export default Vue.extend({
       type: Boolean,
       default: true,
     },
+    dateShow: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
+    const now = moment()
     return {
       metric: '',
       world: 0,
       bracket: Bracket.TOTAL,
       totalMode: true,
+      dateFrom: now,
+      dateTo: now,
     }
   },
   computed: {
@@ -92,6 +110,14 @@ export default Vue.extend({
     updateBracket(bracket: Bracket) {
       this.bracket = bracket === Bracket.UNKNOWN ? Bracket.TOTAL : bracket
       this.$emit('bracket-changed', this.bracket)
+    },
+    updateDate(dates: {
+      dateFrom: moment.Moment
+      dateTo: moment.Moment
+    }): void {
+      this.dateFrom = dates.dateFrom.utc() // This converts the user's time back into UTC
+      this.dateTo = dates.dateTo.utc()
+      this.$emit('dates-changed', { from: this.dateFrom, to: this.dateTo })
     },
   },
 })

@@ -31,6 +31,7 @@ import { Endpoints } from '~/constants/Endpoints'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import VictoriesCounts from '~/components/statistics/victories/VictoriesCounts.vue'
 import { Bracket } from '~/constants/Bracket'
+import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
 
 export default Vue.extend({
   name: 'Victories',
@@ -41,6 +42,11 @@ export default Vue.extend({
     mode: {
       type: String,
       default: 'percent',
+      required: true,
+    },
+    filter: {
+      type: Object,
+      default: () => {},
       required: true,
     },
   },
@@ -56,6 +62,16 @@ export default Vue.extend({
     }
   },
   computed: {
+    apiFilter() {
+      const filter: GlobalAggregateParamsInterface = {}
+
+      if (this.filter.dateFrom && this.filter.dateTo) {
+        filter.dateFrom = this.filter.dateFrom.startOf('day').format('x')
+        filter.dateTo = this.filter.dateTo.startOf('day').format('x')
+      }
+
+      return filter
+    },
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
     },
@@ -76,6 +92,11 @@ export default Vue.extend({
       return count
     },
   },
+  watch: {
+    async filter() {
+      await this.filterResults()
+    },
+  },
   beforeDestroy() {
     this.reset()
   },
@@ -92,23 +113,25 @@ export default Vue.extend({
       clearInterval(this.interval)
       clearInterval(this.updateCountdownInterval)
     },
-
-    init(): void {
-      this.pull()
+    setTimers() {
       this.updateCountdownInterval = window.setInterval(() => {
         return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
       }, 1000)
-
       this.interval = window.setInterval(() => {
         this.pull()
       }, this.updateRate)
     },
+    async init(): Promise<void> {
+      await this.pull()
+      this.setTimers()
+    },
     async pull(): Promise<void> {
-      console.log('VictoryStatistics.pull')
+      console.log('VictoryStatistics.pull', this.apiFilter)
 
       await new ApiRequest()
         .get<GlobalVictoriesAggregateResponseInterface[]>(
-          Endpoints.AGGREGATES_GLOBAL_VICTORIES
+          Endpoints.AGGREGATES_GLOBAL_VICTORIES,
+          this.apiFilter
         )
         .then((result) => {
           this.data = result
@@ -118,6 +141,11 @@ export default Vue.extend({
         .catch((e) => {
           this.error = e.message
         })
+    },
+    async filterResults(): Promise<void> {
+      this.clearTimers()
+      await this.pull()
+      this.setTimers()
     },
   },
 })

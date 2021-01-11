@@ -39,7 +39,6 @@
       </p>
     </div>
     <div
-      id="stats-sticky"
       class="col-span-12 lg:col-span-8 ss:col-span-4 lg:col-start-3 ss:col-start-5 flex justify-center mb-2"
       :class="{ sticky: !disabledPercentToggle }"
     >
@@ -70,9 +69,11 @@
       <StatisticsFiltering
         :metrics="availableMetrics"
         :disabled="disabledFilters"
+        :date-show="dateFiltering"
         @metric-changed="metricChanged"
         @world-changed="worldChanged"
         @bracket-changed="bracketChanged"
+        @dates-changed="datesChanged"
       ></StatisticsFiltering>
     </div>
     <div class="col-span-12">
@@ -130,7 +131,7 @@
 
       <v-tabs-items v-model="tab" touchless>
         <v-tab-item value="victories">
-          <Victories :mode="mode"></Victories>
+          <Victories :mode="mode" :filter="filter"></Victories>
         </v-tab-item>
         <v-tab-item value="players">
           <Characters :mode="mode" :filter="filter"></Characters>
@@ -164,34 +165,54 @@
 
 <script lang="ts">
 import Vue from 'vue'
+// eslint-disable-next-line import/named
+import { Moment } from 'moment'
+import moment from 'moment/moment'
 import StatisticsFiltering from '~/components/statistics/StatisticsFiltering.vue'
 import { MetricSortInterface } from '~/interfaces/MetricSortInterface'
 import { World } from '~/constants/World'
 import { Bracket } from '~/constants/Bracket'
 
+interface FilterInterface {
+  metric: string
+  world: World
+  bracket: Bracket
+  dateFrom?: Moment
+  dateTo?: Moment
+}
+
 export default Vue.extend({
   name: 'Home',
   components: { StatisticsFiltering },
   data() {
+    const now = moment()
     return {
       mode: 'percent',
       tab: '',
       metric: '',
       world: 0,
       bracket: Bracket.TOTAL,
+      dateNow: now,
+      dateFrom: now,
+      dateTo: now,
     }
   },
   computed: {
     filter(): object {
-      console.log('upper filter changed')
-      return {
+      const filter: FilterInterface = {
         metric: this.metric,
         world: this.world,
         bracket: this.bracket,
       }
+
+      if (this.dateFrom !== this.dateNow && this.dateTo !== this.dateNow) {
+        filter.dateFrom = this.dateFrom
+        filter.dateTo = this.dateTo
+      }
+      return filter
     },
     disabledFilters(): boolean {
-      return ['victories', 'facilitites'].includes(this.tab)
+      return ['victories', 'facilities'].includes(this.tab)
     },
     disabledPercentToggle(): boolean {
       return !['victories', 'combat'].includes(this.tab)
@@ -228,6 +249,9 @@ export default Vue.extend({
           return []
       }
     },
+    dateFiltering(): boolean {
+      return ['victories'].includes(this.tab)
+    },
   },
   methods: {
     toggleMode(mode: string) {
@@ -241,6 +265,11 @@ export default Vue.extend({
     },
     bracketChanged(bracket: Bracket) {
       this.bracket = bracket
+    },
+    datesChanged(dates: { from: Moment; to: Moment }) {
+      // These are converted into UTC from StatisticsFiltering
+      this.dateFrom = dates.from
+      this.dateTo = dates.to
     },
   },
 })
