@@ -17,7 +17,7 @@
     "@fortawesome/vue-fontawesome": "^2.0.2",
     "@nuxt/content": "^1.9.0",
     "@nuxt/typescript-runtime": "^2.0.0",
-    "@nuxtjs/axios": "^5.12.4",
+    "@nuxtjs/axios": "^5.12.5",
     "@nuxtjs/google-gtag": "^1.0.4",
     "chart.js": "2.9.4",
     "chartjs-plugin-annotation": "^0.5.7",
