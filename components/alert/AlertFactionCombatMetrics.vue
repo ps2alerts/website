@@ -117,7 +117,7 @@
               <span v-if="data.vs"
                 >{{
                   data.vs.teamKills && data.vs.deaths
-                    ? (data.vs.teamKills / data.vs.deaths).toFixed(2) * 100
+                    ? ((data.vs.teamKills / data.vs.deaths) * 100).toFixed(1)
                     : data.vs.teamKills || 0
                 }}%</span
               >
@@ -126,7 +126,7 @@
               <span v-if="data.tr"
                 >{{
                   data.tr.teamKills && data.tr.deaths
-                    ? (data.tr.teamKills / data.tr.deaths).toFixed(2) * 100
+                    ? ((data.tr.teamKills / data.tr.deaths) * 100).toFixed(1)
                     : data.tr.teamKills || 0
                 }}%</span
               >
@@ -135,7 +135,7 @@
               <span v-if="data.nc"
                 >{{
                   data.nc.teamKills && data.nc.deaths
-                    ? (data.nc.teamKills / data.nc.deaths).toFixed(2) * 100
+                    ? ((data.nc.teamKills / data.nc.deaths) * 100).toFixed(1)
                     : data.nc.teamKills || 0
                 }}%</span
               >
@@ -144,7 +144,7 @@
               <span v-if="data.nso"
                 >{{
                   data.nso.teamKills && data.nso.deaths
-                    ? (data.nso.teamKills / data.nso.deaths).toFixed(2) * 100
+                    ? ((data.nso.teamKills / data.nso.deaths) * 100).toFixed(1)
                     : data.nso.teamKills || 0
                 }}%</span
               ><sup>*2</sup>
