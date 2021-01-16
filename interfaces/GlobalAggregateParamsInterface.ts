@@ -4,6 +4,6 @@ import { CommonApiParamsInterface } from '~/interfaces/CommonApiParmsInterface'
 export interface GlobalAggregateParamsInterface
   extends CommonApiParamsInterface {
   bracket?: Bracket
-  timeStartedFrom?: string
-  timeStartedTo?: string
+  dateFrom?: string
+  dateTo?: string
 }
