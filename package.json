@@ -19,7 +19,7 @@
     "@nuxt/typescript-runtime": "^2.0.1",
     "@nuxtjs/axios": "^5.12.5",
     "@nuxtjs/google-gtag": "^1.0.4",
-    "chart.js": "2.9.3",
+    "chart.js": "2.9.4",
     "chartjs-plugin-annotation": "^0.5.7",
     "core-js": "^3.8.2",
     "moment": "^2.29.1",
