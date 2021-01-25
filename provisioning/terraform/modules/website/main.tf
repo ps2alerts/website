@@ -84,11 +84,11 @@ resource "kubernetes_deployment" "ps2alerts_website_deployment" {
             timeout_seconds       = 5
           }
           resources {
-            limits {
+            limits = {
               cpu = var.cpu_limit
               memory = var.mem_limit
             }
-            requests {
+            requests = {
               cpu = var.cpu_request
               memory = var.mem_request
             }
