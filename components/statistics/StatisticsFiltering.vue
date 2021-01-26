@@ -88,7 +88,7 @@ export default Vue.extend({
       type: Object,
       default: () => {},
       required: true,
-    } as PropOptions<MetricSortInterface[]>,
+    } as PropOptions<AvailableMetricsInterface>,
     filterContainerSize: {
       type: String,
       default: 'col-span-6 lg:col-start-4',
