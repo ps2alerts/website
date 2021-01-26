@@ -136,9 +136,9 @@ import { CensusEndpoints, Endpoints } from '@/constants/Endpoints'
 import { InstanceVehicleAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceVehicleAggregateResponseInterface'
 import { VehicleDataInterface } from '@/interfaces/VehicleDataInterface'
 import { Faction } from '@/constants/Faction'
-import { CensusVehicleResponseInterface } from '@/interfaces/CensusVehicleResponseInterface'
 import { FactionBgClass } from '@/constants/FactionBgClass'
 import vehicleFaction from '@/filters/VehicleFaction'
+import { CensusVehicleResponseInterface } from '~/interfaces/census/CensusVehicleResponseInterface'
 
 export default Vue.extend({
   name: 'AlertVehicleMatrix',

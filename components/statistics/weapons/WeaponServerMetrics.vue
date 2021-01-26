@@ -20,12 +20,15 @@
         <v-data-table
           class="datatable"
           item-key="uuid"
-          :headers="headers"
-          :items="data"
+          :headers="tableHeaders"
+          :items="items"
           :search="filter"
           :item-class="tableItemClass"
-          v-bind="leaderboardConfig"
+          v-bind="tableConfig"
         >
+          <template slot="item.rank" slot-scope="props">
+            {{ items.indexOf(props.item) + 1 }}
+          </template>
         </v-data-table>
       </div>
       <div v-else>
@@ -37,7 +40,7 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { DataTableConfig } from '~/constants/DataTableConfig'
+import { StatisticsWeaponsLeaderboardConfig } from '~/constants/DataTableConfig'
 import { FactionBgClassString } from '~/constants/FactionBgClass'
 import { StatisticsWeaponTableDataInterface } from '~/interfaces/statistics/StatisticsWeaponTableDataInterface'
 import { World } from '~/constants/World'
@@ -67,14 +70,26 @@ export default Vue.extend({
       default: 'percent',
       required: true,
     },
+    sorting: {
+      type: String,
+      default: 'kills',
+      required: true,
+    },
   },
   data() {
     return {
-      data: {} as StatisticsWeaponTableDataInterface[],
+      items: {} as StatisticsWeaponTableDataInterface[],
       filter: '',
       loaded: false,
-      leaderboardConfig: DataTableConfig,
-      headers: [
+      tableConfig: StatisticsWeaponsLeaderboardConfig,
+      tableHeaders: [
+        {
+          text: '#',
+          align: 'middle',
+          value: 'rank',
+          sortable: false,
+          width: 25,
+        },
         {
           text: 'Weapon',
           align: 'left',
@@ -120,12 +135,12 @@ export default Vue.extend({
   },
   watch: {
     rawData(): void {
-      this.data = this.transform(this.rawData)
+      this.items = this.transform(this.rawData)
       this.loaded = true
     },
   },
   created() {
-    this.data = this.transform(this.rawData)
+    this.items = this.transform(this.rawData)
     this.loaded = true
   },
   methods: {
@@ -161,7 +176,13 @@ export default Vue.extend({
         }
       })
 
-      return totals
+      const sortMetric = this.sorting !== '' ? this.sorting : 'kills'
+
+      // Sort by metric
+      return totals.sort((a, b) => {
+        // @ts-ignore
+        return b[sortMetric] - a[sortMetric]
+      })
     },
 
     addMetrics(
@@ -194,6 +215,9 @@ export default Vue.extend({
     },
     tableItemClass(item: StatisticsWeaponTableDataInterface): string {
       return FactionBgClassString(item.weapon.faction)
+    },
+    changeSorting(sorting: string): void {
+      this.tableConfig['sort-by'] = [sorting]
     },
   },
 })

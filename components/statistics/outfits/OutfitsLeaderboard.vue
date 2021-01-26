@@ -34,6 +34,9 @@
             :search="filter"
             v-bind="tableConfig"
           >
+            <template slot="item.rank" slot-scope="props">
+              {{ items.indexOf(props.item) + 1 }}
+            </template>
           </v-data-table>
         </div>
       </div>
@@ -83,6 +86,13 @@ export default Vue.extend({
       tableConfig: StatisticsOutfitLeaderboardConfig,
       filter: '',
       tableHeaders: [
+        {
+          text: '#',
+          align: 'middle',
+          value: 'rank',
+          sortable: false,
+          width: 25,
+        },
         {
           text: 'Outfit',
           align: 'left',

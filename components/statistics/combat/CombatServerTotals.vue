@@ -16,7 +16,7 @@
             class="datatable"
             item-key="worldName"
             :headers="tableHeaders"
-            :items="serverTotalData"
+            :items="items"
             v-bind="tableConfig"
           >
           </v-data-table>
@@ -72,7 +72,7 @@ export default Vue.extend({
   data() {
     return {
       loaded: false,
-      serverTotalData: {} as StatisticsServerCombatTableDataInterface[],
+      items: {} as StatisticsServerCombatTableDataInterface[],
       tableConfig: StatisticsCombatServerTotalsLeaderboardConfig,
       tableHeaders: [
         {
@@ -133,12 +133,12 @@ export default Vue.extend({
   },
   watch: {
     rawData(): void {
-      this.serverTotalData = this.transform(this.rawData)
+      this.items = this.transform(this.rawData)
       this.loaded = true
     },
   },
   created() {
-    this.serverTotalData = this.transform(this.rawData)
+    this.items = this.transform(this.rawData)
     this.loaded = true
   },
   methods: {

@@ -20,12 +20,15 @@
         <v-data-table
           class="datatable"
           item-key="uuid"
-          :headers="headers"
-          :items="data"
+          :headers="tableHeaders"
+          :items="items"
           :search="filter"
           :item-class="tableItemClass"
-          v-bind="leaderboardConfig"
+          v-bind="tableConfig"
         >
+          <template slot="item.rank" slot-scope="props">
+            {{ items.indexOf(props.item) + 1 }}
+          </template>
         </v-data-table>
       </div>
     </div>
@@ -70,13 +73,25 @@ export default Vue.extend({
       default: 'percent',
       required: true,
     },
+    sorting: {
+      type: String,
+      default: 'kills',
+      required: true,
+    },
   },
   data() {
     return {
       filter: '',
-      leaderboardConfig: StatisticsLoadoutLeaderboardConfig,
-      data: [] as TotalLoadoutInterface[],
-      headers: [
+      tableConfig: StatisticsLoadoutLeaderboardConfig,
+      items: [] as TotalLoadoutInterface[],
+      tableHeaders: [
+        {
+          text: '#',
+          align: 'middle',
+          value: 'rank',
+          sortable: false,
+          width: 25,
+        },
         {
           text: 'Class',
           align: 'left',
@@ -135,11 +150,11 @@ export default Vue.extend({
   },
   watch: {
     rawData(): void {
-      this.data = this.transformTotalsData()
+      this.items = this.transformTotalsData()
     },
   },
   created() {
-    this.data = this.transformTotalsData()
+    this.items = this.transformTotalsData()
   },
   methods: {
     tableItemClass(item: TotalLoadoutInterface): string {
@@ -198,7 +213,13 @@ export default Vue.extend({
         returnData.push(calcData[key])
       }
 
-      return returnData
+      const sortMetric = this.sorting !== '' ? this.sorting : 'kills'
+
+      // Sort by metric
+      return returnData.sort((a, b) => {
+        // @ts-ignore
+        return b[sortMetric] - a[sortMetric]
+      })
     },
   },
 })

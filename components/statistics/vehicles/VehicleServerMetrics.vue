@@ -20,11 +20,11 @@
         <v-data-table
           class="datatable"
           item-key="uuid"
-          :headers="headers"
-          :items="data"
+          :headers="tableHeaders"
+          :items="items"
           :search="filter"
           :item-class="tableItemClass"
-          v-bind="leaderboardConfig"
+          v-bind="tableConfig"
         >
         </v-data-table>
       </div>
@@ -71,9 +71,9 @@ export default Vue.extend({
   data() {
     return {
       filter: '',
-      leaderboardConfig: StatisticsVehicleLeaderboardConfig,
-      data: {} as StatisticsVehicleMetricsTableDataInterface[],
-      headers: [
+      tableConfig: StatisticsVehicleLeaderboardConfig,
+      items: {} as StatisticsVehicleMetricsTableDataInterface[],
+      tableHeaders: [
         {
           text: 'Vehicle',
           align: 'left',
@@ -179,11 +179,11 @@ export default Vue.extend({
   },
   watch: {
     rawData(): void {
-      this.data = this.rawData
+      this.items = this.rawData
     },
   },
   created() {
-    this.data = this.rawData
+    this.items = this.rawData
   },
   methods: {
     tableItemClass(item: StatisticsVehicleMetricsTableDataInterface): string {

@@ -13,6 +13,7 @@
             :update-countdown-percent="updateCountdownPercent"
             :update-rate="updateRate"
             :mode="mode"
+            :sorting="filter.metric"
           ></WeaponTotals>
         </div>
         <WeaponServerMetrics
@@ -21,11 +22,13 @@
           :update-countdown-percent="updateCountdownPercent"
           :update-rate="updateRate"
           :mode="mode"
+          :sorting="filter.metric"
         ></WeaponServerMetrics>
       </div>
     </div>
-    <div v-else>
-      <h1 class="text-center">Loading...</h1>
+    <div v-else class="text-center">
+      <h1>Loading...</h1>
+      <p>Grab a snickers...</p>
     </div>
   </section>
 </template>

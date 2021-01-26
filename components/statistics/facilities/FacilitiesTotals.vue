@@ -23,7 +23,6 @@
           :headers="tableHeaders"
           :items="items"
           :search="filter"
-          :item-class="tableItemClass"
           v-bind="tableConfig"
         >
           <template slot="item.rank" slot-scope="props">
@@ -37,19 +36,17 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { LoadoutFaction } from '~/constants/Loadout'
-import { StatisticsLoadoutServerMetricsLeaderboardConfig } from '~/constants/DataTableConfig'
-import { FactionBgClassString } from '~/constants/FactionBgClass'
-import { StatisticsLoadoutTableDataInterface } from '~/interfaces/statistics/StatisticsLoadoutTableDataInterface'
+import { StatisticsFacilityServerMetricsLeaderboardConfig } from '~/constants/DataTableConfig'
+import { StatisticsFacilityTableDataInterface } from '~/interfaces/statistics/StatisticsFacilityTableDataInterface'
 
 export default Vue.extend({
-  name: 'LoadoutsServerMetrics',
+  name: 'FacilitiesTotals',
   props: {
     rawData: {
       type: Array,
       default: () => [],
       required: true,
-    } as PropOptions<StatisticsLoadoutTableDataInterface[]>,
+    } as PropOptions<StatisticsFacilityTableDataInterface[]>,
     updateCountdownPercent: {
       type: Number,
       default: 100,
@@ -65,17 +62,12 @@ export default Vue.extend({
       default: 'percent',
       required: true,
     },
-    sorting: {
-      type: String,
-      default: 'kills',
-      required: true,
-    },
   },
   data() {
     return {
-      items: {} as StatisticsLoadoutTableDataInterface[],
+      items: {} as StatisticsFacilityTableDataInterface[],
       filter: '',
-      tableConfig: StatisticsLoadoutServerMetricsLeaderboardConfig,
+      tableConfig: StatisticsFacilityServerMetricsLeaderboardConfig,
       tableHeaders: [
         {
           text: '#',
@@ -85,9 +77,14 @@ export default Vue.extend({
           width: 25,
         },
         {
-          text: 'Class',
+          text: 'Facility',
           align: 'left',
-          value: 'loadoutName',
+          value: 'facilityName',
+        },
+        {
+          text: 'Continent',
+          align: 'left',
+          value: 'zoneName',
         },
         {
           text: 'Server',
@@ -95,52 +92,34 @@ export default Vue.extend({
           value: 'worldName',
         },
         {
-          text: 'Kills',
+          text: 'Captures',
           align: 'middle',
           filterable: false,
-          value: 'kills',
+          value: 'captures',
         },
         {
-          text: 'Deaths',
+          text: 'VS Caps',
           align: 'middle',
           filterable: false,
-          value: 'deaths',
+          value: 'vsCaps',
         },
         {
-          text: 'K/D',
+          text: 'TR Caps',
           align: 'middle',
           filterable: false,
-          value: 'kd',
+          value: 'trCaps',
         },
         {
-          text: 'TKs',
+          text: 'NC Caps',
           align: 'middle',
           filterable: false,
-          value: 'teamKills',
+          value: 'ncCaps',
         },
         {
-          text: 'TKed',
+          text: 'Defences',
           align: 'middle',
           filterable: false,
-          value: 'teamKilled',
-        },
-        {
-          text: 'Suicides',
-          align: 'middle',
-          filterable: false,
-          value: 'suicides',
-        },
-        {
-          text: 'Headshots',
-          align: 'middle',
-          filterable: false,
-          value: 'headshots',
-        },
-        {
-          text: 'HSR %',
-          align: 'middle',
-          filterable: false,
-          value: 'hsr',
+          value: 'defences',
         },
       ],
     }
@@ -152,11 +131,6 @@ export default Vue.extend({
   },
   created() {
     this.items = this.rawData
-  },
-  methods: {
-    tableItemClass(item: StatisticsLoadoutTableDataInterface): string {
-      return FactionBgClassString(LoadoutFaction(item.loadout))
-    },
   },
 })
 </script>

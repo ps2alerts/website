@@ -38,8 +38,9 @@
         ></VehicleMatrix>
       </div>
     </div>
-    <div v-else>
-      <h1 class="text-center">Loading...</h1>
+    <div v-else class="text-center">
+      <h1>Loading...</h1>
+      <p>Grab a snickers...</p>
     </div>
   </section>
 </template>
@@ -49,7 +50,7 @@ import Vue from 'vue'
 import ApiRequest from '~/api-request'
 import { CensusEndpoints, Endpoints } from '~/constants/Endpoints'
 import { GlobalVehicleAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVehicleAggregateResponseInterface'
-import { CensusVehicleResponseInterface } from '~/interfaces/CensusVehicleResponseInterface'
+import { CensusVehicleResponseInterface } from '~/interfaces/census/CensusVehicleResponseInterface'
 import { VehicleDataInterface } from '~/interfaces/VehicleDataInterface'
 import vehicleFaction from '~/filters/VehicleFaction'
 import { StatisticsVehicleMetricsTableDataInterface } from '~/interfaces/statistics/StatisticsVehicleMetricsTableDataInterface'

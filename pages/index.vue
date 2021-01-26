@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-12">
     <!--    <Announcement></Announcement>-->
-    <div class="col-span-12 border-t-2 border-red-700">
+    <div class="col-span-12 border-t-1 border-red-700">
       <div class="text-center">
         <h1 class="text-title">Statistics</h1>
         <p class="mb-2">
@@ -66,17 +66,6 @@
       </div>
     </div>
     <div class="col-span-12">
-      <StatisticsFiltering
-        :metrics="availableMetrics"
-        :disabled="disabledFilters"
-        :date-show="dateFiltering"
-        @metric-changed="metricChanged"
-        @world-changed="worldChanged"
-        @bracket-changed="bracketChanged"
-        @dates-changed="datesChanged"
-      ></StatisticsFiltering>
-    </div>
-    <div class="col-span-12">
       <v-tabs
         v-model="tab"
         center-active
@@ -118,16 +107,28 @@
           <font-awesome-icon :icon="['fas', 'fighter-jet']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#loadouts">
+        <v-tab href="#classes">
           Classes
           <font-awesome-icon :icon="['fas', 'user-tag']"></font-awesome-icon>
         </v-tab>
 
-        <v-tab href="#facilities" disabled>
-          Map (WIP)
+        <v-tab href="#facilities">
+          Facilities
           <font-awesome-icon :icon="['fas', 'flag']"></font-awesome-icon>
         </v-tab>
       </v-tabs>
+
+      <div class="col-span-12">
+        <StatisticsFiltering
+          :metrics="availableMetrics"
+          :filter-container-size="filterContainerSize"
+          @metric-changed="metricChanged"
+          @world-changed="worldChanged"
+          @zone-changed="zoneChanged"
+          @bracket-changed="bracketChanged"
+          @dates-changed="datesChanged"
+        ></StatisticsFiltering>
+      </div>
 
       <v-tabs-items v-model="tab" touchless>
         <v-tab-item value="victories">
@@ -148,15 +149,11 @@
         <v-tab-item value="vehicles">
           <Vehicles :mode="mode" :filter="filter"></Vehicles>
         </v-tab-item>
-        <v-tab-item value="loadouts">
-          <div class="mb-4">
-            <Loadouts :mode="mode" :filter="filter"></Loadouts>
-          </div>
+        <v-tab-item value="classes">
+          <Loadouts :mode="mode" :filter="filter"></Loadouts>
         </v-tab-item>
         <v-tab-item value="facilities">
-          <div class="mb-4">
-            <h1 class="text-3xl text-center">Coming soon!</h1>
-          </div>
+          <Facilities :mode="mode" :filter="filter"></Facilities>
         </v-tab-item>
       </v-tabs-items>
     </div>
@@ -168,14 +165,17 @@ import Vue from 'vue'
 // eslint-disable-next-line import/named
 import { Moment } from 'moment'
 import moment from 'moment/moment'
-import StatisticsFiltering from '~/components/statistics/StatisticsFiltering.vue'
-import { MetricSortInterface } from '~/interfaces/MetricSortInterface'
+import StatisticsFiltering, {
+  AvailableMetricsInterface,
+} from '~/components/statistics/StatisticsFiltering.vue'
 import { World } from '~/constants/World'
 import { Bracket } from '~/constants/Bracket'
+import { Zone } from '~/constants/Zone'
 
 interface FilterInterface {
   metric: string
   world: World
+  zone: Zone
   bracket: Bracket
   dateFrom?: Moment
   dateTo?: Moment
@@ -191,6 +191,7 @@ export default Vue.extend({
       tab: '',
       metric: '',
       world: 0,
+      zone: 0,
       bracket: Bracket.TOTAL,
       dateNow: now,
       dateFrom: now,
@@ -202,6 +203,7 @@ export default Vue.extend({
       const filter: FilterInterface = {
         metric: this.metric,
         world: this.world,
+        zone: this.zone,
         bracket: this.bracket,
       }
 
@@ -211,42 +213,81 @@ export default Vue.extend({
       }
       return filter
     },
-    disabledFilters(): boolean {
-      return ['victories', 'facilities'].includes(this.tab)
-    },
     disabledPercentToggle(): boolean {
       return !['victories', 'combat'].includes(this.tab)
     },
-    availableMetrics(): MetricSortInterface[] {
+    filterContainerSize(): string {
+      switch (this.tab) {
+        case 'victories':
+        case 'vehicles':
+        case 'classes':
+        case 'combat':
+          return 'col-span-4 lg:col-start-5'
+        default:
+          return 'col-span-6 lg:col-start-4'
+      }
+    },
+    availableMetrics(): AvailableMetricsInterface {
+      const defaults = {
+        world: true,
+        brackets: true,
+      }
+
       switch (this.tab) {
         case 'players':
-          return [
-            { name: 'Kills', value: 'kills' },
-            { name: 'Deaths', value: 'deaths' },
-            { name: 'Teamkills', value: 'teamKills' },
-            { name: 'Teamkilled', value: 'teamKilled' },
-            { name: 'Suicides', value: 'suicides' },
-            { name: 'Headshots', value: 'headshots' },
-          ]
+          return {
+            ...defaults,
+            sortBy: [
+              { name: 'Kills', value: 'kills' },
+              { name: 'Deaths', value: 'deaths' },
+              { name: 'Teamkills', value: 'teamKills' },
+              { name: 'Teamkilled', value: 'teamKilled' },
+              { name: 'Suicides', value: 'suicides' },
+              { name: 'Headshots', value: 'headshots' },
+            ],
+          }
         case 'outfits':
-          return [
-            { name: 'Kills', value: 'kills' },
-            { name: 'Deaths', value: 'deaths' },
-            { name: 'Captures', value: 'captures' },
-            { name: 'Teamkills', value: 'teamKills' },
-            { name: 'Teamkilled', value: 'teamKilled' },
-            { name: 'Suicides', value: 'suicides' },
-            { name: 'Headshots', value: 'headshots' },
-          ]
+          return {
+            ...defaults,
+            sortBy: [
+              { name: 'Kills', value: 'kills' },
+              { name: 'Deaths', value: 'deaths' },
+              { name: 'Captures', value: 'captures' },
+              { name: 'Teamkills', value: 'teamKills' },
+              { name: 'Teamkilled', value: 'teamKilled' },
+              { name: 'Suicides', value: 'suicides' },
+              { name: 'Headshots', value: 'headshots' },
+            ],
+          }
+        case 'weapons':
+          return {
+            ...defaults,
+            sortBy: [
+              { name: 'Kills', value: 'kills' },
+              { name: 'Teamkills', value: 'teamKills' },
+              { name: 'Suicides', value: 'suicides' },
+              { name: 'Headshots', value: 'headshots' },
+            ],
+          }
+        case 'facilities':
+          return {
+            ...defaults,
+            zones: [
+              { name: 'Amerish', value: '6' },
+              { name: 'Esamir', value: '8' },
+              { name: 'Hossin', value: '4' },
+              { name: 'Indar', value: '2' },
+            ],
+          }
         case 'victories':
+          return {
+            dates: true,
+          }
         case 'combat':
         case 'vehicles':
         case 'classes':
-        case 'weapons':
-        case 'map':
-          return []
         default:
-          return []
+          return defaults
       }
     },
     dateFiltering(): boolean {
@@ -262,6 +303,9 @@ export default Vue.extend({
     },
     worldChanged(world: World) {
       this.world = world
+    },
+    zoneChanged(zone: Zone) {
+      this.zone = zone
     },
     bracketChanged(bracket: Bracket) {
       this.bracket = bracket

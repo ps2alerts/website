@@ -23,11 +23,11 @@
           <v-data-table
             class="datatable"
             item-key="uuid"
-            :headers="serverFactionTableHeaders"
-            :items="serverFactionData"
+            :headers="tableHeaders"
+            :items="items"
             :item-class="tableItemClass"
             :search="filter"
-            v-bind="serverFactionLeaderboardConfig"
+            v-bind="tableConfig"
           >
           </v-data-table>
         </div>
@@ -93,10 +93,10 @@ export default Vue.extend({
   data() {
     return {
       loaded: false,
-      serverFactionData: {} as StatisticsCombatServerFactionInterface[],
+      items: {} as StatisticsCombatServerFactionInterface[],
       filter: '',
-      serverFactionLeaderboardConfig: StatisticsCombatServerFactionLeaderboardConfig,
-      serverFactionTableHeaders: [
+      tableConfig: StatisticsCombatServerFactionLeaderboardConfig,
+      tableHeaders: [
         {
           text: 'Server',
           align: 'left',
@@ -160,12 +160,12 @@ export default Vue.extend({
   },
   watch: {
     rawData(): void {
-      this.serverFactionData = this.transformServerFactionData(this.rawData)
+      this.items = this.transformServerFactionData(this.rawData)
       this.loaded = true
     },
   },
   created() {
-    this.serverFactionData = this.transformServerFactionData(this.rawData)
+    this.items = this.transformServerFactionData(this.rawData)
     this.loaded = true
   },
   methods: {

@@ -1,57 +1,62 @@
 <template>
-  <div class="grid grid-cols-12 gap-2 text-center">
-    <div v-show="!dateShow" class="col-span-6 lg:col-span-2 lg:col-start-4">
-      <MetricSort
-        :metrics="metrics"
-        :disabled="sortByDisabled"
-        @metric-changed="updateMetric"
-      ></MetricSort>
+  <div class="text-center grid grid-cols-12">
+    <div class="flex text-center" :class="filterContainerSize">
+      <div v-show="metrics.sortBy" class="flex-1 px-1">
+        <MetricSort
+          :metrics="metrics.sortBy"
+          @metric-changed="updateMetric"
+        ></MetricSort>
+      </div>
+      <div v-show="metrics.world" class="flex-1 px-1">
+        <FilterWorld
+          :world-filter="world"
+          @world-changed="updateWorld"
+        ></FilterWorld>
+      </div>
+      <div v-show="metrics.zones" class="flex-1 px-1">
+        <FilterZone :zone-filter="zone" @zone-changed="updateZone"></FilterZone>
+      </div>
+      <div v-show="metrics.brackets" class="flex-1 px-1">
+        <FilterBracket
+          :bracket-filter="bracket"
+          :total-mode="totalMode"
+          @bracket-changed="updateBracket"
+        />
+      </div>
+      <div v-if="metrics.dates" class="flex-1 mb-3">
+        <FilterDate
+          :is-filtered="false"
+          date-only="true"
+          @date-changed="updateDate"
+        />
+        <!--      <button class="btn" :disabled="filtered === false" @click="clearFilter()">-->
+        <!--        <font-awesome-icon :icon="['fas', 'undo']" /> Clear-->
+        <!--      </button>-->
+      </div>
     </div>
-    <div v-show="!dateShow" class="col-span-6 lg:col-span-2">
-      <FilterWorld
-        :world-filter="world"
-        :disabled="disabled"
-        @world-changed="updateWorld"
-      ></FilterWorld>
-    </div>
-    <div v-show="!dateShow" class="col-span-6 lg:col-span-2">
-      <FilterBracket
-        :bracket-filter="bracket"
-        :total-mode="totalMode"
-        :disabled="disabled"
-        @bracket-changed="updateBracket"
-      />
-    </div>
-    <div v-if="dateShow" class="col-span-12 lg:col-span-8 lg:col-start-3 mb-4">
-      <FilterDate
-        :is-filtered="false"
-        date-only="true"
-        @date-changed="updateDate"
-      />
-      <!--      <button class="btn" :disabled="filtered === false" @click="clearFilter()">-->
-      <!--        <font-awesome-icon :icon="['fas', 'undo']" /> Clear-->
-      <!--      </button>-->
-    </div>
-    <div v-else class="col-span-12">
-      <p class="text-center mb-4">
+    <div v-if="!metrics.dates" class="col-span-12">
+      <p class="text-center mb-4 text-sm text-grey-600">
         Date range filtering is not possible.
         <v-tooltip bottom z-index="1001">
           <template #activator="{ on, attrs }">
             <span class="text-blue-600" v-bind="attrs" v-on="on">Why?</span>
           </template>
-          Simply put, it would be a massive amount of data. Each Character
-          generates a maximum of 6 entries per character (one for each Activity
-          Level and your total stats). If this was split out by date, it would
-          result in a n+6*day problem, which means as the days go on, the
-          dataset would get uncontrollably huge.<br /><br />
+          Simply put, it would be a massive amount of data. Each data set /
+          facet generates potentially up to 6 database records (one for each
+          Activity Level (5) and your total stats if applicable). If this was
+          split out by date, it would result in a n*6*day problem, which means
+          as the days go on, the dataset would get uncontrollably huge.<br /><br />
           You could suggest why not limiting it to the last 30 days, even that
-          is a bonkers number of records (5x30 = 180 records) for
-          <b>every</b> character, a month.<br />
+          is a bonkers number of records (6x30 = 180 records) for
+          <b>every</b> data facet (of which there are about 8), a month. Some
+          may also be on a per-character basis making this proposition
+          completely nuts.<br />
           <br />
-          Before the Alpha data wipe in the new year, there was approx 100,000
-          players discovered in PS2Alerts in about a 2 week period, so we'd be
-          looking at a maximum of <b>8.4 MILLION</b> records (6x14x100000) just
-          two weeks worth of data. Hopefully this explains the reasoning.
+          In example, before the Alpha data wipe in the new year, there was
+          approx 100,000 players discovered in PS2Alerts in about a 2 week
+          period, so we'd be looking at a maximum of
+          <b>8.4 MILLION</b> records (6x14x100000) just two weeks worth of data.
+          Hopefully this explains the reasoning.
         </v-tooltip>
       </p>
     </div>
@@ -64,22 +69,28 @@ import moment from 'moment/moment'
 import { World } from '~/constants/World'
 import { Bracket } from '~/constants/Bracket'
 import { MetricSortInterface } from '~/interfaces/MetricSortInterface'
+import { Zone } from '~/constants/Zone'
+
+export interface AvailableMetricsInterface {
+  dates?: boolean
+  sortBy?: MetricSortInterface[]
+  world?: boolean
+  brackets?: boolean
+  zones?: MetricSortInterface[]
+}
 
 export default Vue.extend({
   name: 'StatisticsFiltering',
   props: {
     metrics: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
       required: true,
     } as PropOptions<MetricSortInterface[]>,
-    disabled: {
-      type: Boolean,
-      default: true,
-    },
-    dateShow: {
-      type: Boolean,
-      default: false,
+    filterContainerSize: {
+      type: String,
+      default: 'col-span-6 lg:col-start-4',
+      required: false,
     },
   },
   data() {
@@ -87,16 +98,12 @@ export default Vue.extend({
     return {
       metric: '',
       world: 0,
+      zone: 0,
       bracket: Bracket.TOTAL,
       totalMode: true,
       dateFrom: now,
       dateTo: now,
     }
-  },
-  computed: {
-    sortByDisabled() {
-      return this.disabled || this.metrics.length === 0
-    },
   },
   methods: {
     updateMetric(metric: string) {
@@ -106,6 +113,10 @@ export default Vue.extend({
     updateWorld(world: World) {
       this.world = world
       this.$emit('world-changed', this.world)
+    },
+    updateZone(zone: Zone) {
+      this.zone = zone
+      this.$emit('zone-changed', this.zone)
     },
     updateBracket(bracket: Bracket) {
       this.bracket = bracket === Bracket.UNKNOWN ? Bracket.TOTAL : bracket

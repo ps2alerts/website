@@ -13,6 +13,7 @@
             :update-countdown-percent="updateCountdownPercent"
             :update-rate="updateRate"
             :mode="mode"
+            :sorting="filter.metric"
           ></LoadoutsTotals>
         </div>
         <LoadoutsServerMetrics
@@ -21,6 +22,7 @@
           :update-countdown-percent="updateCountdownPercent"
           :update-rate="updateRate"
           :mode="mode"
+          :sorting="filter.metric"
         ></LoadoutsServerMetrics>
       </div>
     </div>
@@ -165,7 +167,14 @@ export default Vue.extend({
         newData.push(tempData)
       })
 
-      return newData
+      const sortMetric =
+        this.filter.metric !== '' ? this.filter.metric : 'kills'
+
+      // Sort by metric
+      return newData.sort((a, b) => {
+        // @ts-ignore
+        return b[sortMetric] - a[sortMetric]
+      })
     },
     async filterResults(): Promise<void> {
       this.clearTimers()

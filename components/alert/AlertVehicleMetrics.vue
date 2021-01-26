@@ -48,12 +48,12 @@ import { CensusEndpoints, Endpoints } from '@/constants/Endpoints'
 import { InstanceVehicleAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceVehicleAggregateResponseInterface'
 import { VehicleDataInterface } from '@/interfaces/VehicleDataInterface'
 import { Faction } from '@/constants/Faction'
-import { CensusVehicleResponseInterface } from '@/interfaces/CensusVehicleResponseInterface'
 import {
   FactionBgClass,
   FactionBgClassString,
 } from '@/constants/FactionBgClass'
 import vehicleFaction from '@/filters/VehicleFaction'
+import { CensusVehicleResponseInterface } from '~/interfaces/census/CensusVehicleResponseInterface'
 import { AlertVehicleLeaderboardConfig } from '~/constants/DataTableConfig'
 import { AlertVehicleMetricsDataTableInterface } from '~/interfaces/alert/AlertVehicleMetricsDataTableInterface'
 import { VehicleStatsWithKd } from '~/interfaces/VehicleStatisticsInterface'

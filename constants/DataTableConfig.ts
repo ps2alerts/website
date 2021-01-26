@@ -53,6 +53,11 @@ export const StatisticsCombatServerFactionLeaderboardConfig = {
   },
 }
 
+export const StatisticsWeaponsLeaderboardConfig = {
+  ...DataTableConfig,
+  sortable: false,
+}
+
 export const StatisticsVehicleLeaderboardConfig = {
   ...DataTableConfig,
   'sort-by': ['totals.kd'],
@@ -60,7 +65,7 @@ export const StatisticsVehicleLeaderboardConfig = {
 
 export const StatisticsLoadoutLeaderboardConfig = {
   ...DataTableConfig,
-  'sort-by': ['kd'],
+  'sort-by': ['kills'],
   'items-per-page': 24,
   'footer-props': {
     itemsPerPageOptions: [24],
@@ -69,7 +74,14 @@ export const StatisticsLoadoutLeaderboardConfig = {
 
 export const StatisticsLoadoutServerMetricsLeaderboardConfig = {
   ...DataTableConfig,
-  'sort-by': ['kd'],
+  'sort-by': ['kills'],
+  'multi-sort': true,
+  'must-sort': false,
+}
+
+export const StatisticsFacilityServerMetricsLeaderboardConfig = {
+  ...DataTableConfig,
+  'sort-by': ['captures'],
   'multi-sort': true,
   'must-sort': false,
 }
