@@ -1,6 +1,6 @@
 <template>
-  <div class="text-center grid grid-cols-12">
-    <div class="flex text-center" :class="filterContainerSize">
+  <div class="text-center grid grid-cols-12 border-b-2 border-red-600 mb-4">
+    <div class="flex text-center col-span-12" :class="filterContainerSize">
       <div v-show="metrics.sortBy" class="flex-1 px-1">
         <MetricSort
           :metrics="metrics.sortBy"
@@ -35,7 +35,9 @@
       </div>
     </div>
     <div v-if="!metrics.dates" class="col-span-12">
-      <p class="text-center mb-4 text-sm text-grey-600">
+      <!-- Needed as date filter component is 2px higher :-/ -->
+      <div style="height: 2px">&nbsp;</div>
+      <p class="text-center mb-3 text-sm text-gray-600">
         Date range filtering is not possible.
         <v-tooltip bottom z-index="1001">
           <template #activator="{ on, attrs }">

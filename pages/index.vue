@@ -73,7 +73,7 @@
         fixed-tabs
         dark
         show-arrows
-        class="mb-4"
+        class="mb-2"
       >
         <v-tabs-slider></v-tabs-slider>
 
@@ -222,9 +222,9 @@ export default Vue.extend({
         case 'vehicles':
         case 'classes':
         case 'combat':
-          return 'col-span-4 lg:col-start-5'
+          return 'lg:col-span-4 lg:col-start-5'
         default:
-          return 'col-span-6 lg:col-start-4'
+          return 'lg:col-span-6 lg:col-start-4'
       }
     },
     availableMetrics(): AvailableMetricsInterface {
