@@ -26,13 +26,15 @@
           :mode="mode"
           :sorting="filter.metric"
         ></FacilitiesTotals>
-        <FacilitiesServerMetrics
-          :v-if="data.length > 0"
-          :raw-data="data"
-          :update-countdown-percent="updateCountdownPercent"
-          :update-rate="updateRate"
-          :mode="mode"
-        ></FacilitiesServerMetrics>
+        <div v-show="!apiFilter.world">
+          <FacilitiesServerMetrics
+            :v-if="data.length > 0"
+            :raw-data="data"
+            :update-countdown-percent="updateCountdownPercent"
+            :update-rate="updateRate"
+            :mode="mode"
+          ></FacilitiesServerMetrics>
+        </div>
       </div>
     </div>
     <div v-else>

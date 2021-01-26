@@ -6,24 +6,24 @@
         <h1 class="text-2xl text-center mb-4">No data! Check back soon!</h1>
       </div>
       <div v-else>
-        <div v-show="!apiFilter.world">
-          <LoadoutsTotals
-            :v-if="data.length > 0"
-            :raw-data="data"
-            :update-countdown-percent="updateCountdownPercent"
-            :update-rate="updateRate"
-            :mode="mode"
-            :sorting="filter.metric"
-          ></LoadoutsTotals>
-        </div>
-        <LoadoutsServerMetrics
+        <LoadoutsTotals
           :v-if="data.length > 0"
           :raw-data="data"
           :update-countdown-percent="updateCountdownPercent"
           :update-rate="updateRate"
           :mode="mode"
           :sorting="filter.metric"
-        ></LoadoutsServerMetrics>
+        ></LoadoutsTotals>
+        <div v-show="!apiFilter.world">
+          <LoadoutsServerMetrics
+            :v-if="data.length > 0"
+            :raw-data="data"
+            :update-countdown-percent="updateCountdownPercent"
+            :update-rate="updateRate"
+            :mode="mode"
+            :sorting="filter.metric"
+          ></LoadoutsServerMetrics>
+        </div>
       </div>
     </div>
     <div v-else>

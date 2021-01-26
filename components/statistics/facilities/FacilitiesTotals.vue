@@ -1,7 +1,7 @@
 <template>
   <section class="mb-2">
     <div class="col-span-12 card relative">
-      <div class="tag section">Facility Breakdown</div>
+      <div class="tag section">Facility Leaderboard</div>
       <CountdownSpinner
         :percent="updateCountdownPercent"
         :update-rate="updateRate"

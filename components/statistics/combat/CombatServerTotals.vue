@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-12 gap-2">
     <div class="col-span-12 card relative mb-2">
-      <div class="tag section">Server Combat</div>
+      <div class="tag section">Server Combat Totals</div>
       <CountdownSpinner
         v-if="loaded"
         :percent="updateCountdownPercent"

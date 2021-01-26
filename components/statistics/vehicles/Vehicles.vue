@@ -10,24 +10,24 @@
         <h1 class="text-2xl text-center mb-4">No data! Check back soon!</h1>
       </div>
       <div v-else>
-        <div v-show="!apiFilter.world">
-          <VehicleTotals
-            :v-if="data.length > 0"
-            :raw-data="data"
-            :vehicle-data="vehicleData"
-            :update-countdown-percent="updateCountdownPercent"
-            :update-rate="updateRate"
-            :mode="mode"
-          ></VehicleTotals>
-        </div>
-        <VehicleServerMetrics
+        <VehicleTotals
           :v-if="data.length > 0"
           :raw-data="data"
           :vehicle-data="vehicleData"
           :update-countdown-percent="updateCountdownPercent"
           :update-rate="updateRate"
           :mode="mode"
-        ></VehicleServerMetrics>
+        ></VehicleTotals>
+        <div v-show="!apiFilter.world">
+          <VehicleServerMetrics
+            :v-if="data.length > 0"
+            :raw-data="data"
+            :vehicle-data="vehicleData"
+            :update-countdown-percent="updateCountdownPercent"
+            :update-rate="updateRate"
+            :mode="mode"
+          ></VehicleServerMetrics>
+        </div>
         <VehicleMatrix
           :v-if="data.length > 0"
           :raw-data="data"
