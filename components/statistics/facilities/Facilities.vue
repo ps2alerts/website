@@ -18,6 +18,14 @@
         <h1 class="text-2xl text-center mb-4">No data! Check back soon!</h1>
       </div>
       <div v-else>
+        <FacilitiesTotals
+          :v-if="data.length > 0"
+          :raw-data="data"
+          :update-countdown-percent="updateCountdownPercent"
+          :update-rate="updateRate"
+          :mode="mode"
+          :sorting="filter.metric"
+        ></FacilitiesTotals>
         <FacilitiesServerMetrics
           :v-if="data.length > 0"
           :raw-data="data"
@@ -45,6 +53,7 @@ import worldNameFilter from '~/filters/WorldName'
 import { StatisticsFacilityTableDataInterface } from '~/interfaces/statistics/StatisticsFacilityTableDataInterface'
 import { World } from '~/constants/World'
 import zoneNameFilter from '~/filters/ZoneName'
+import facilityTypeName from '~/filters/FacilityTypeName'
 
 export default Vue.extend({
   name: 'Facilities',
@@ -135,8 +144,6 @@ export default Vue.extend({
         )
         .then((result) => {
           this.data = this.transformData(result)
-          console.log('transformedData', this.data)
-
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
         })
@@ -144,47 +151,6 @@ export default Vue.extend({
           this.error = e.message
         })
     },
-    // async pullFacilityData(): Promise<void> {
-    //   if (this.loaded) {
-    //     return
-    //   }
-    //
-    //   const promises: Promise<void>[] = []
-    //
-    //   zoneArray.forEach((zone) => {
-    //     promises.push(
-    //       new ApiRequest('https://census.daybreakgames.com')
-    //         .get<CensusMapRegionResponseInterface>(
-    //           CensusEndpoints.FACILITY_DATA.replace(
-    //             '{serviceId}',
-    //             'ps2alertsdotcom'
-    //           ).replace('{zone}', String(zone))
-    //         )
-    //         .then((result) => {
-    //           const zoneFacilities: FacilityDataInterface[] = []
-    //
-    //           result.map_region_list.forEach((facility) => {
-    //             const facilityData: FacilityDataInterface = {
-    //               id: parseInt(facility.facility_id, 10),
-    //               name: facility.facility_name,
-    //               zone: parseInt(facility.zone_id),
-    //             }
-    //
-    //             zoneFacilities.push(facilityData)
-    //           })
-    //           this.facilityData.set(zone, zoneFacilities)
-    //         })
-    //         .catch((e) => {
-    //           this.error = e.message
-    //         })
-    //     )
-    //   })
-    //
-    //   Promise.all(promises).then(() => {
-    //     console.log(this.facilityData)
-    //   })
-    // },
-
     transformData(
       result: GlobalFacilityControlAggregateResponseInterface[]
     ): StatisticsFacilityTableDataInterface[] {
@@ -199,12 +165,13 @@ export default Vue.extend({
           // Ensure table displays all data even if zero
           facility.totals.captures = facility.totals.captures ?? 0
           facility.totals.defences = facility.totals.defences ?? 0
+          facility.facility.typeName = facilityTypeName(facility.facility.type)
 
           const tempData: StatisticsFacilityTableDataInterface = Object.assign(
             facility,
             {
               uuid: `${facility.world}-${facility.facility.id}`,
-              facilityName: facility.facility.name,
+              facility: facility.facility,
               worldName: worldNameFilter(facility.world),
               zoneName: zoneNameFilter(facility.facility.zone),
               captures: facility.totals.captures,

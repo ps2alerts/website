@@ -1,7 +1,7 @@
 <template>
   <section class="mb-2">
     <div class="col-span-12 card relative">
-      <div class="tag section">Server Class Breakdown</div>
+      <div class="tag section">Facility Breakdown</div>
       <CountdownSpinner
         :percent="updateCountdownPercent"
         :update-rate="updateRate"
@@ -12,8 +12,8 @@
             v-model="filter"
             class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
             type="text"
-            placeholder="Class / Faction / Server"
-            aria-label="Class / Faction / Server"
+            placeholder="Facility / Type / Continent"
+            aria-label="Facility / Type / Continent"
             @keydown="$event.stopImmediatePropagation()"
           />
         </div>
@@ -23,6 +23,7 @@
           :headers="tableHeaders"
           :items="items"
           :search="filter"
+          :item-class="tableItemClass"
           v-bind="tableConfig"
         >
           <template slot="item.rank" slot-scope="props">
@@ -38,6 +39,7 @@
 import Vue, { PropOptions } from 'vue'
 import { StatisticsFacilityServerMetricsLeaderboardConfig } from '~/constants/DataTableConfig'
 import { StatisticsFacilityTableDataInterface } from '~/interfaces/statistics/StatisticsFacilityTableDataInterface'
+import { ZoneBgClassString } from '~/constants/Zone'
 
 export default Vue.extend({
   name: 'FacilitiesTotals',
@@ -62,10 +64,15 @@ export default Vue.extend({
       default: 'percent',
       required: true,
     },
+    sorting: {
+      type: String,
+      default: 'kills',
+      required: true,
+    },
   },
   data() {
     return {
-      items: {} as StatisticsFacilityTableDataInterface[],
+      items: [] as StatisticsFacilityTableDataInterface[],
       filter: '',
       tableConfig: StatisticsFacilityServerMetricsLeaderboardConfig,
       tableHeaders: [
@@ -79,17 +86,17 @@ export default Vue.extend({
         {
           text: 'Facility',
           align: 'left',
-          value: 'facilityName',
+          value: 'facility.name',
+        },
+        {
+          text: 'Type',
+          align: 'left',
+          value: 'facility.typeName',
         },
         {
           text: 'Continent',
           align: 'left',
           value: 'zoneName',
-        },
-        {
-          text: 'Server',
-          align: 'left',
-          value: 'worldName',
         },
         {
           text: 'Captures',
@@ -126,11 +133,63 @@ export default Vue.extend({
   },
   watch: {
     rawData(): void {
-      this.items = this.rawData
+      this.items = this.transformTotalsData()
     },
   },
   created() {
-    this.items = this.rawData
+    this.items = this.transformTotalsData()
+  },
+  methods: {
+    transformTotalsData(): StatisticsFacilityTableDataInterface[] {
+      const calcData: { [k: string]: StatisticsFacilityTableDataInterface } = {}
+      this.rawData.forEach(
+        (worldFacility: StatisticsFacilityTableDataInterface) => {
+          const facility: StatisticsFacilityTableDataInterface =
+            calcData[worldFacility.facility.id] ?? {}
+
+          facility.facility = worldFacility.facility
+          facility.zoneName = worldFacility.zoneName
+
+          facility.captures = facility.captures
+            ? facility.captures + (worldFacility?.captures ?? 0)
+            : worldFacility.captures ?? 0
+
+          facility.defences = facility.defences
+            ? facility.defences + (worldFacility?.defences ?? 0)
+            : worldFacility.defences ?? 0
+
+          facility.vsCaps = facility.vsCaps
+            ? facility.vsCaps + (worldFacility?.vsCaps ?? 0)
+            : worldFacility.vsCaps ?? 0
+
+          facility.ncCaps = facility.ncCaps
+            ? facility.ncCaps + (worldFacility?.ncCaps ?? 0)
+            : worldFacility.ncCaps ?? 0
+
+          facility.trCaps = facility.trCaps
+            ? facility.trCaps + (worldFacility?.trCaps ?? 0)
+            : worldFacility.trCaps ?? 0
+
+          calcData[worldFacility.facility.id] = facility
+        }
+      )
+
+      const returnData: StatisticsFacilityTableDataInterface[] = []
+      for (const key in calcData) {
+        returnData.push(calcData[key])
+      }
+
+      const sortMetric = this.sorting !== '' ? this.sorting : 'captures'
+
+      // Sort by metric
+      return returnData.sort((a, b) => {
+        // @ts-ignore
+        return b[sortMetric] - a[sortMetric]
+      })
+    },
+    tableItemClass(facility: StatisticsFacilityTableDataInterface): string {
+      return ZoneBgClassString(facility.facility.zone)
+    },
   },
 })
 </script>

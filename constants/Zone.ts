@@ -9,3 +9,20 @@ export enum Zone {
 }
 
 export const zoneArray = [2, 4, 6, 8]
+
+export const ZoneBgClassString = (zone: Zone | undefined): string => {
+  if (!zone) {
+    return ''
+  }
+
+  switch (zone) {
+    case Zone.INDAR:
+      return 'bg-indar'
+    case Zone.HOSSIN:
+      return 'bg-hossin'
+    case Zone.AMERISH:
+      return 'bg-amerish'
+    case Zone.ESAMIR:
+      return 'bg-esamir'
+  }
+}

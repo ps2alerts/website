@@ -14,11 +14,11 @@ const facilityTypeName = Vue.filter(
       case FacilityType.BIO_LAB:
         return 'Biolab'
       case FacilityType.CONSTRUCTION_OUTPOST:
-        return 'Construction Outpost'
+        return 'Construction / 1 min'
       case FacilityType.LARGE_OUTPOST:
-        return 'Large Outpost'
+        return 'Large Facility'
       case FacilityType.SMALL_OUTPOST:
-        return 'Small Outpost'
+        return 'Small Facility'
       // Unused
       case FacilityType.WARPGATE:
         return 'Warpgate (unused)'

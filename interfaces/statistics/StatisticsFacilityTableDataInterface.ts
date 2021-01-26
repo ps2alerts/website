@@ -1,9 +1,10 @@
 import { Zone } from '~/constants/Zone'
+import { FacilityDataInterface } from '~/interfaces/FacilityDataInterface'
 
 export interface StatisticsFacilityTableDataInterface {
   uuid: string
   worldName: string
-  facilityName: string
+  facility: FacilityDataInterface
   zone: Zone
   zoneName: string
   captures: number

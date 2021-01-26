@@ -6,5 +6,6 @@ export interface FacilityDataInterface {
   name: string
   zone: Zone
   type: FacilityType
+  typeName?: string
   region: number
 }

@@ -1,7 +1,7 @@
 <template>
   <section class="mb-2">
     <div class="col-span-12 card relative">
-      <div class="tag section">Server Class Breakdown</div>
+      <div class="tag section">Facility Server Breakdown</div>
       <CountdownSpinner
         :percent="updateCountdownPercent"
         :update-rate="updateRate"
@@ -12,8 +12,8 @@
             v-model="filter"
             class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
             type="text"
-            placeholder="Class / Faction / Server"
-            aria-label="Class / Faction / Server"
+            placeholder="Facility / Type / Server / Continent"
+            aria-label="Facility / Type / Server / Continent"
             @keydown="$event.stopImmediatePropagation()"
           />
         </div>
@@ -23,6 +23,7 @@
           :headers="tableHeaders"
           :items="items"
           :search="filter"
+          :item-class="tableItemClass"
           v-bind="tableConfig"
         >
           <template slot="item.rank" slot-scope="props">
@@ -38,6 +39,7 @@
 import Vue, { PropOptions } from 'vue'
 import { StatisticsFacilityServerMetricsLeaderboardConfig } from '~/constants/DataTableConfig'
 import { StatisticsFacilityTableDataInterface } from '~/interfaces/statistics/StatisticsFacilityTableDataInterface'
+import { ZoneBgClassString } from '~/constants/Zone'
 
 export default Vue.extend({
   name: 'FacilitiesServerMetrics',
@@ -79,7 +81,12 @@ export default Vue.extend({
         {
           text: 'Facility',
           align: 'left',
-          value: 'facilityName',
+          value: 'facility.name',
+        },
+        {
+          text: 'Type',
+          align: 'left',
+          value: 'facility.typeName',
         },
         {
           text: 'Continent',
@@ -131,6 +138,11 @@ export default Vue.extend({
   },
   created() {
     this.items = this.rawData
+  },
+  methods: {
+    tableItemClass(facility: StatisticsFacilityTableDataInterface): string {
+      return ZoneBgClassString(facility.facility.zone)
+    },
   },
 })
 </script>
