@@ -38,33 +38,6 @@
         </v-tooltip>
       </p>
     </div>
-    <div
-      class="col-span-12 lg:col-span-8 ss:col-span-4 lg:col-start-3 ss:col-start-5 flex justify-center mb-2"
-      :class="{ sticky: !disabledPercentToggle }"
-    >
-      <div class="btn-group mr-2">
-        <button
-          class="btn btn-sm"
-          :class="{
-            'btn-active': mode === 'percent' && !disabledPercentToggle,
-          }"
-          :disabled="disabledPercentToggle"
-          @click="toggleMode('percent')"
-        >
-          <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
-        </button>
-        <button
-          class="btn btn-sm"
-          :class="{
-            'btn-active': mode === 'numbers' && !disabledPercentToggle,
-          }"
-          :disabled="disabledPercentToggle"
-          @click="toggleMode('numbers')"
-        >
-          ##
-        </button>
-      </div>
-    </div>
     <div class="col-span-12">
       <v-tabs
         v-model="tab"
@@ -117,6 +90,34 @@
           <font-awesome-icon :icon="['fas', 'flag']"></font-awesome-icon>
         </v-tab>
       </v-tabs>
+
+      <div
+        class="col-span-12 lg:col-span-8 ss:col-span-4 lg:col-start-3 ss:col-start-5 flex justify-center mb-2"
+        :class="{ sticky: !disabledPercentToggle }"
+      >
+        <div class="btn-group mr-2">
+          <button
+            class="btn btn-sm"
+            :class="{
+              'btn-active': mode === 'percent' && !disabledPercentToggle,
+            }"
+            :disabled="disabledPercentToggle"
+            @click="toggleMode('percent')"
+          >
+            <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
+          </button>
+          <button
+            class="btn btn-sm"
+            :class="{
+              'btn-active': mode === 'numbers' && !disabledPercentToggle,
+            }"
+            :disabled="disabledPercentToggle"
+            @click="toggleMode('numbers')"
+          >
+            ##
+          </button>
+        </div>
+      </div>
 
       <div class="col-span-12">
         <StatisticsFiltering
