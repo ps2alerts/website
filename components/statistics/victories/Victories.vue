@@ -10,12 +10,11 @@
       <h1 class="text-2xl text-center mb-4">
         <b>{{ totalInstances }}</b> alerts recorded since 4th Jan 2021
       </h1>
-      <VictoriesCounts
+      <VictoriesTimeline
         :raw-data="data"
         :update-countdown-percent="updateCountdownPercent"
-        :mode="mode"
       />
-      <VictoriesTimeline
+      <VictoriesCounts
         :raw-data="data"
         :update-countdown-percent="updateCountdownPercent"
         :mode="mode"

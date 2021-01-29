@@ -440,22 +440,16 @@
 import Vue, { PropOptions } from 'vue'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import { Bracket } from '~/constants/Bracket'
+import { FactionMetricsInterface } from '~/interfaces/FactionMetricsInterface'
 
 interface DataCollectionRowInterface {
-  world: DataFacetInterface
+  world: FactionMetricsInterface
   zones: {
-    [x: number]: DataFacetInterface
+    [x: number]: FactionMetricsInterface
   }
   brackets: {
-    [x: number]: DataFacetInterface
+    [x: number]: FactionMetricsInterface
   }
-}
-
-interface DataFacetInterface {
-  vs: number
-  nc: number
-  tr: number
-  draws: number
 }
 
 export default Vue.extend({
@@ -481,9 +475,9 @@ export default Vue.extend({
     return {
       loaded: false,
       worldCounts: {} as { [k: string]: DataCollectionRowInterface },
-      zoneCounts: {} as { [k: string]: DataFacetInterface },
-      bracketCounts: {} as { [k: string]: DataFacetInterface },
-      totalCounts: {} as DataFacetInterface,
+      zoneCounts: {} as { [k: string]: FactionMetricsInterface },
+      bracketCounts: {} as { [k: string]: FactionMetricsInterface },
+      totalCounts: {} as FactionMetricsInterface,
     }
   },
   watch: {
@@ -551,7 +545,7 @@ export default Vue.extend({
     },
     calculateWorldTotals(
       row: GlobalVictoriesAggregateResponseInterface
-    ): DataFacetInterface {
+    ): FactionMetricsInterface {
       const worldTotals = this.worldCounts[row.world]?.world ?? {
         vs: 0,
         nc: 0,
@@ -570,7 +564,7 @@ export default Vue.extend({
     },
     calculateWorldZoneTotals(
       row: GlobalVictoriesAggregateResponseInterface
-    ): DataFacetInterface {
+    ): FactionMetricsInterface {
       const zone = this.worldCounts[row.world]?.zones[row.zone]
       const zoneTotals = zone ?? {
         vs: 0,
@@ -588,7 +582,7 @@ export default Vue.extend({
     },
     calculateWorldBracketTotals(
       row: GlobalVictoriesAggregateResponseInterface
-    ): DataFacetInterface {
+    ): FactionMetricsInterface {
       const bracket = this.worldCounts[row.world]?.brackets[row.bracket]
       const bracketTotals = bracket ?? {
         vs: 0,
@@ -606,7 +600,7 @@ export default Vue.extend({
     },
     calculateZoneTotals(
       row: GlobalVictoriesAggregateResponseInterface
-    ): DataFacetInterface {
+    ): FactionMetricsInterface {
       const zoneTotals = this.zoneCounts[row.zone] ?? {
         vs: 0,
         nc: 0,
@@ -623,7 +617,7 @@ export default Vue.extend({
     },
     calculateBracketTotals(
       row: GlobalVictoriesAggregateResponseInterface
-    ): DataFacetInterface {
+    ): FactionMetricsInterface {
       const bracketTotals = this.bracketCounts[row.bracket] ?? {
         vs: 0,
         nc: 0,

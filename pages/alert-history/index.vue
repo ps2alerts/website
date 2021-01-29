@@ -96,6 +96,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import moment from 'moment'
+import MetaHead from '~/components/MetaHead.vue'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { Endpoints } from '~/constants/Endpoints'
 import { Bracket } from '~/constants/Bracket'
@@ -105,12 +106,11 @@ import ApiRequest from '~/api-request'
 import { World } from '~/constants/World'
 import { Faction } from '~/constants/Faction'
 import AlertHistoryEntry from '~/components/alert-history/AlertHistoryEntry.vue'
-import FilterWorld from '~/components/alert-history/FilterWorld.vue'
-import FilterZone from '~/components/alert-history/FilterZone.vue'
-import FilterBracket from '~/components/alert-history/FilterBracket.vue'
-import FilterVictor from '~/components/alert-history/FilterVictor.vue'
-import FilterDate from '~/components/alert-history/FilterDate.vue'
-import MetaHead from '~/components/MetaHead.vue'
+import FilterWorld from '~/components/common/FilterWorld.vue'
+import FilterZone from '~/components/common/FilterZone.vue'
+import FilterBracket from '~/components/common/FilterBracket.vue'
+import FilterVictor from '~/components/common/FilterVictor.vue'
+import FilterDate from '~/components/common/FilterDate.vue'
 
 export default Vue.extend({
   name: 'AlertHistory',

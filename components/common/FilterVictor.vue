@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Faction } from '@/constants/Faction'
+import { Faction } from '~/constants/Faction'
 
 export default Vue.extend({
   name: 'FilterVictor',

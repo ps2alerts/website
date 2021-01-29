@@ -204,13 +204,13 @@ export default Vue.extend({
           this.data = result
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
-          this.fillData()
+          this.buildCollection()
         })
         .catch((e) => {
           this.error = e.message
         })
     },
-    fillData() {
+    buildCollection() {
       const battleranks: number[] = [...Array(221).keys()]
 
       const battlerankData: { [k: number]: number } = []

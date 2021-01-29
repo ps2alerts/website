@@ -241,8 +241,8 @@ export default Vue.extend({
     this.init()
   },
   mounted() {
-    this.fillData()
-    this.fillData(true)
+    this.buildCollection()
+    this.buildCollection(true)
   },
   methods: {
     reset() {
@@ -300,15 +300,15 @@ export default Vue.extend({
           this.data = popData
           this.avgData = avgPopData
           this.updateCountdown = this.updateRate / 1000
-          this.fillData(false)
-          this.fillData(true)
+          this.buildCollection(false)
+          this.buildCollection(true)
           this.loaded = true
         })
         .catch((e) => {
           this.error = e.message
         })
     },
-    fillData(avg = false) {
+    buildCollection(avg = false) {
       const times: string[] = []
       const vsData: number[] = []
       const ncData: number[] = []

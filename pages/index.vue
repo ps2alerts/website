@@ -222,9 +222,9 @@ export default Vue.extend({
         case 'vehicles':
         case 'classes':
         case 'combat':
-          return 'lg:col-span-4 lg:col-start-5'
+          return 'lg:col-span-8 lg:col-start-3 ss:col-span-4 ss:col-start-5'
         default:
-          return 'lg:col-span-6 lg:col-start-4'
+          return 'ss:col-span-6 ss:col-start-4'
       }
     },
     availableMetrics(): AvailableMetricsInterface {

@@ -152,7 +152,7 @@ export default Vue.extend({
       }
     },
     mode() {
-      this.fillData()
+      this.buildCollection()
     },
   },
   beforeDestroy() {
@@ -163,7 +163,7 @@ export default Vue.extend({
     this.init()
   },
   mounted() {
-    this.fillData()
+    this.buildCollection()
   },
   methods: {
     reset() {
@@ -207,13 +207,13 @@ export default Vue.extend({
           this.data = result
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
-          this.fillData()
+          this.buildCollection()
         })
         .catch((e) => {
           this.error = e.message
         })
     },
-    fillData() {
+    buildCollection() {
       const times: string[] = []
       const vsData: number[] = []
       const ncData: number[] = []
