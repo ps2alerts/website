@@ -17,7 +17,7 @@
       }"
     >
       <div v-if="loaded">
-        <div id="stats">
+        <div id="stats card">
           <FactionSegmentBar
             v-if="alert.result"
             :vs="alert.result.vs"
@@ -127,6 +127,9 @@
             <a href="#" class="p-1">
               <font-awesome-icon :icon="['fa', 'user-tag']"></font-awesome-icon>
             </a>
+          </div>
+          <div class="p-1 text-xs text-center border-t">
+            More stats at ps2alerts.com/alert/{{ alert.instanceId }}
           </div>
         </div>
       </div>
