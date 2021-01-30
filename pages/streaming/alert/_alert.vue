@@ -180,7 +180,7 @@ import { InstanceTerritoryControlResponseInterface } from '~/interfaces/Instance
 import { CensusEndpoints, Endpoints } from '~/constants/Endpoints'
 import { InstanceCharacterAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceCharacterAggregateResponseInterface'
 import { AlertCharacterTableDataInterface } from '~/interfaces/alert/AlertCharacterTableDataInterface'
-import { CensusMapRegionResponseInterface } from '~/interfaces/census/CensusMapRegionResponseInterface'
+import { CensusCharacterResponseInterface } from '~/interfaces/census/CensusCharacterResponseInterface'
 
 export default Vue.extend({
   name: 'StreamingAlert',
@@ -207,7 +207,7 @@ export default Vue.extend({
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       alert: {} as InstanceTerritoryControlResponseInterface,
-      characterId: '',
+      characterId: '' as string | null | void,
       characterStats: {} as AlertCharacterTableDataInterface,
       metricsTab: 'players',
       eager: true,
@@ -341,7 +341,7 @@ export default Vue.extend({
           this.error = e.message
         })
 
-      if (this.characterId !== '') {
+      if (this.characterId && this.characterId !== '') {
         await new ApiRequest()
           .get<InstanceCharacterAggregateResponseInterface>(
             Endpoints.AGGREGATES_INSTANCE_CHARACTER_SINGLE.replace(
@@ -363,11 +363,9 @@ export default Vue.extend({
     },
 
     // Makes a request to census to resolve the character ID
-    async pullCharacterId(name: string): string | null {
-      let charId: string
-
-      await new ApiRequest('https://census.daybreakgames.com')
-        .get<CensusMapRegionResponseInterface>(
+    async pullCharacterId(name: string): Promise<string | null | void> {
+      return await new ApiRequest('https://census.daybreakgames.com')
+        .get<CensusCharacterResponseInterface>(
           CensusEndpoints.CHARACTER_NAME_SEARCH.replace(
             '{serviceId}',
             'ps2alertsdotcom'
@@ -377,17 +375,17 @@ export default Vue.extend({
           if (result.character_list.length === 0) {
             return null
           }
-          charId = result.character_list[0].character_id
+          return result.character_list[0].character_id
         })
         .catch((e) => {
           this.error = e.message
         })
-
-      return charId
     },
+
+    // Updates the characters data so it is rendered on page
     updateCharacter(
-      character: InstanceCharacterAggregateResponseInterfaceItem
-    ): AlertCharacterTableDataInterface[] {
+      character: InstanceCharacterAggregateResponseInterface
+    ): AlertCharacterTableDataInterface {
       // Ensure table displays all data even if zero
       character.kills = character.kills ?? 0
       character.deaths = character.deaths ?? 0
