@@ -1,9 +1,9 @@
 @layer base {
-  #streaming {
+  html#streaming {
     overflow: hidden;
     background-color: rgba(0,0,0,0);
-    //background-image: url('/game.jpg');
-    background-size: cover
+    background-image: none;
+    background-size: cover;
   }
   main.streaming {
     @apply text-gray-300;
