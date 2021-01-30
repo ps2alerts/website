@@ -20,7 +20,7 @@ export default class ApiRequest {
         params,
       })
       .then((response) => {
-        // console.log('Api Client Request', {endpoint, params, response});
+        console.log('Api Client Request', { endpoint, params, response })
         return response.data
       })
   }
