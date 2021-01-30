@@ -34,8 +34,11 @@ export default Vue.extend({
         'V26 Maelstrom Turbo Laser needs a buff!',
         'Tracking all your _alert kills, and C4 suicides...',
         'Making Alerts great again!',
-        'How many revives did <b>YOU</b> get last _alert?',
+        'How many revives did <b>YOU</b> get last alert?',
         'Measuring E-Peens since 2014',
+        'Feeding the TR victim complex',
+        'Proving VS is OP',
+        'NC Millah stronk matey',
       ],
     }
   },
