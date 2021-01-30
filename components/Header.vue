@@ -32,9 +32,9 @@ export default Vue.extend({
         'The ultimate proof that "X is OP"!',
         'Miller server best server?',
         'V26 Maelstrom Turbo Laser needs a buff!',
-        'Tracking all your alert kills, and C4 suicides...',
+        'Tracking all your _alert kills, and C4 suicides...',
         'Making Alerts great again!',
-        'How many revives did <b>YOU</b> get last alert?',
+        'How many revives did <b>YOU</b> get last _alert?',
         'Measuring E-Peens since 2014',
       ],
     }

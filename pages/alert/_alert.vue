@@ -146,7 +146,7 @@ export default Vue.extend({
     return {
       pageTitle: 'Alert Result',
       pageDesc:
-        'Per alert results of each Alert ever triggered in Planetside 2.',
+        'Per _alert results of each Alert ever triggered in Planetside 2.',
       error: null,
       loaded: false,
       updateRate: 5000,

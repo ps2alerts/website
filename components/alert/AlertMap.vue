@@ -41,8 +41,8 @@ export default Vue.extend({
     // },
   },
   watch: {
-    // 'alert.state'() {
-    //   if (this.alert.state === Ps2alertsEventState.ENDED) {
+    // '_alert.state'() {
+    //   if (this._alert.state === Ps2alertsEventState.ENDED) {
     //     this.clearTimers()
     //     this.pull()
     //   }
@@ -66,7 +66,7 @@ export default Vue.extend({
     },
     init(): void {
       // this.pull()
-      // if (this.alert.state === Ps2alertsEventState.STARTED) {
+      // if (this._alert.state === Ps2alertsEventState.STARTED) {
       //   this.updateCountdownInterval = window.setInterval(() => {
       //     return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
       //   }, 1000)
@@ -77,18 +77,18 @@ export default Vue.extend({
       // }
     },
     async pull(): Promise<void> {
-      //   if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
+      //   if (this.loaded && this._alert.state === Ps2alertsEventState.ENDED) {
       //     return
       //   }
       //
-      //   console.log('AlertFactionCombatMetrics.pull', this.alert.instanceId)
+      //   console.log('AlertFactionCombatMetrics.pull', this._alert.instanceId)
       //
       //   await new ApiRequest()
       //     .get<InstanceFactionCombatAggregateResponseInterface>(
       //       Endpoints.AGGREGATES_INSTANCE_FACTION.replace(
       //         '{instance}',
-      //         this.alert.instanceId
-      //           ? this.alert.instanceId.toString()
+      //         this._alert.instanceId
+      //           ? this._alert.instanceId.toString()
       //           : 'whatever'
       //       )
       //     )

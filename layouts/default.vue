@@ -1,5 +1,5 @@
 <template>
-  <main data-app="true">
+  <main data-app="true" class="default">
     <Maintenance v-if="$config.maintenance === true"></Maintenance>
     <div v-if="$config.maintenance === false" class="font-sans lg:flex">
       <div id="panel-left" class="w-full">

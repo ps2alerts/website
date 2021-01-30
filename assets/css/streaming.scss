@@ -1,0 +1,14 @@
+@layer base {
+  #streaming {
+    overflow: hidden;
+    background-color: rgba(0,0,0,0);
+    //background-image: url('/game.jpg');
+    background-size: cover
+  }
+  main.streaming {
+    @apply text-gray-300;
+    height: 100%;
+    background-repeat: repeat;
+    margin: 0;
+  }
+}
