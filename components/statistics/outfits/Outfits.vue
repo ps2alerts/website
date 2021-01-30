@@ -26,8 +26,9 @@
         ></OutfitsLeaderboard>
       </div>
     </div>
-    <div v-else>
-      <h1 class="text-center">Loading...</h1>
+    <div v-else class="text-center">
+      <h2>Loading...</h2>
+      <p>Grab a snickers...</p>
     </div>
   </section>
 </template>

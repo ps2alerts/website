@@ -29,8 +29,8 @@
         ></CombatServerFaction>
       </div>
     </div>
-    <div v-else>
-      <h1 class="text-center">Loading...</h1>
+    <div v-else class="text-center">
+      <h2>Loading...</h2>
     </div>
   </section>
 </template>

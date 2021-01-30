@@ -39,7 +39,7 @@
       </div>
     </div>
     <div v-else class="text-center">
-      <h1>Loading...</h1>
+      <h2>Loading...</h2>
       <p>Grab a snickers...</p>
     </div>
   </section>
