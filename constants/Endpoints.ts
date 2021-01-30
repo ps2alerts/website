@@ -62,6 +62,8 @@ export const Endpoints = {
 }
 
 export const CensusEndpoints = {
+  CHARACTER_NAME_SEARCH:
+    's:{serviceId}/get/ps2:v2/character?name.first_lower={characterName}',
   FACILITY_DATA:
     's:{serviceId}/get/ps2:v2/map_region?zone_id={zone}&c:limit=1000',
   VEHICLE_DATA: 's:{serviceId}/get/ps2:v2/vehicle?c:limit=1000',

@@ -41,46 +41,71 @@
               <div v-show="alert.state === 2">Ended!</div>
             </div>
           </div>
-          <div
-            v-if="config.characterName !== '' && config.characterName !== null"
-            class="character p-2 border-t border-gray-100"
-          >
+          <div class="character p-2 border-t border-gray-100">
             <div class="text-center text-xl font-bold">
-              <span v-if="characterOutfit">[{{ characterOutfit }}]</span>
-              {{ config.characterName }}
-            </div>
-            <div class="text-center text-lg grid grid-cols-8 gap-1 mt-3">
-              <div class="col-span-1">
-                <div class="leading-4 font-bold">123</div>
-                <div class="text-xs">Kills</div>
+              <div v-if="characterStats.character">
+                <div>
+                  <span v-if="characterStats.character.outfit.tag"
+                    >[{{ characterStats.character.outfit.tag }}]</span
+                  >
+                  {{ characterStats.character.name }}
+                </div>
+                <div class="text-center text-lg grid grid-cols-8 gap-1 mt-3">
+                  <div class="col-span-1">
+                    <div class="leading-4 font-bold">
+                      {{ characterStats.kills }}
+                    </div>
+                    <div class="text-xs">Kills</div>
+                  </div>
+                  <div class="col-span-1">
+                    <div class="leading-4 font-bold">
+                      {{ characterStats.deaths }}
+                    </div>
+                    <div class="text-xs">Deaths</div>
+                  </div>
+                  <div class="col-span-1">
+                    <div class="leading-4 font-bold">
+                      {{ characterStats.kd }}
+                    </div>
+                    <div class="text-xs">KD</div>
+                  </div>
+                  <div class="col-span-1">
+                    <div class="leading-4 font-bold">
+                      {{ characterStats.teamKills }}
+                    </div>
+                    <div class="text-xs">TKs</div>
+                  </div>
+                  <div class="col-span-1">
+                    <div class="leading-4 font-bold">
+                      {{ characterStats.teamKilled }}
+                    </div>
+                    <div class="text-xs">TKed</div>
+                  </div>
+                  <div class="col-span-1">
+                    <div class="leading-4 font-bold">
+                      {{ characterStats.suicides }}
+                    </div>
+                    <div class="text-xs">Sui</div>
+                  </div>
+                  <div class="col-span-1">
+                    <div class="leading-4 font-bold">
+                      {{ characterStats.headshots }}
+                    </div>
+                    <div class="text-xs">HS</div>
+                  </div>
+                  <div class="col-span-1">
+                    <div class="leading-4 font-bold">
+                      {{ characterStats.hsr }}
+                    </div>
+                    <div class="text-xs">HSR</div>
+                  </div>
+                </div>
               </div>
-              <div class="col-span-1">
-                <div class="leading-4 font-bold">123</div>
-                <div class="text-xs">Deaths</div>
-              </div>
-              <div class="col-span-1">
-                <div class="leading-4 font-bold">0.12</div>
-                <div class="text-xs">KDR</div>
-              </div>
-              <div class="col-span-1">
-                <div class="leading-4 font-bold">124</div>
-                <div class="text-xs">TKs</div>
-              </div>
-              <div class="col-span-1">
-                <div class="leading-4 font-bold">12</div>
-                <div class="text-xs">TKed</div>
-              </div>
-              <div class="col-span-1">
-                <div class="leading-4 font-bold">2</div>
-                <div class="text-xs">Sui</div>
-              </div>
-              <div class="col-span-1">
-                <div class="leading-4 font-bold">12</div>
-                <div class="text-xs">HS</div>
-              </div>
-              <div class="col-span-1">
-                <div class="leading-4 font-bold">0.12%</div>
-                <div class="text-xs">HSR</div>
+              <div v-else>
+                {{ config.characterName }}<br />
+                <span class="font-normal text-base"
+                  >No character stats found yet!</span
+                >
               </div>
             </div>
           </div>
@@ -152,7 +177,10 @@ import Vue from 'vue'
 import { Ps2alertsEventState } from '~/constants/Ps2alertsEventState'
 import ApiRequest from '~/api-request'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
-import { Endpoints } from '~/constants/Endpoints'
+import { CensusEndpoints, Endpoints } from '~/constants/Endpoints'
+import { InstanceCharacterAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceCharacterAggregateResponseInterface'
+import { AlertCharacterTableDataInterface } from '~/interfaces/alert/AlertCharacterTableDataInterface'
+import { CensusMapRegionResponseInterface } from '~/interfaces/census/CensusMapRegionResponseInterface'
 
 export default Vue.extend({
   name: 'StreamingAlert',
@@ -172,14 +200,15 @@ export default Vue.extend({
       pageTitle: 'Alert Result',
       pageDesc:
         'Per Alert results of each Alert ever triggered in Planetside 2.',
-      error: null,
+      error: '',
       loaded: false,
-      updateRate: 5000,
+      updateRate: 1000,
       updateCountdown: 10,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       alert: {} as InstanceTerritoryControlResponseInterface,
-      characterOutfit: '',
+      characterId: '',
+      characterStats: {} as AlertCharacterTableDataInterface,
       metricsTab: 'players',
       eager: true,
       config: {
@@ -230,24 +259,7 @@ export default Vue.extend({
     this.init(this.$route.params.alert.toString())
   },
   mounted() {
-    const params = this.$route.query
-    console.log('params', params)
-
     document.documentElement.id = 'streaming'
-
-    this.config = {
-      show: false,
-      characterName:
-        this.$route.query.characterName?.toString() ??
-        this.config.characterName,
-      widgetColor:
-        this.$route.query.widgetColor?.toString() ?? this.config.widgetColor,
-      shadowColor:
-        this.$route.query.shadowColor?.toString() ?? this.config.shadowColor,
-      showToggles:
-        this.$route.query.showToggles?.toString() === 'true' ??
-        this.config.showToggles,
-    }
   },
   methods: {
     saveConfig() {
@@ -271,10 +283,24 @@ export default Vue.extend({
     },
     updateMeta() {
       if (this.alert.instanceId) {
-        this.pageTitle = `Alert #${this.alert.instanceId}`
+        this.pageTitle = `STREAM Alert #${this.alert.instanceId}`
       }
     },
     async init(instanceId: string): Promise<void> {
+      this.config = {
+        show: false,
+        characterName:
+          this.$route.query.characterName?.toString() ??
+          this.config.characterName,
+        widgetColor:
+          this.$route.query.widgetColor?.toString() ?? this.config.widgetColor,
+        shadowColor:
+          this.$route.query.shadowColor?.toString() ?? this.config.shadowColor,
+        showToggles:
+          this.$route.query.showToggles?.toString() === 'true' ??
+          this.config.showToggles,
+      }
+
       console.log(instanceId)
 
       await this.pull(instanceId)
@@ -292,11 +318,16 @@ export default Vue.extend({
       this.updateMeta()
     },
     async pull(instanceId: string): Promise<void> {
+      console.log('pull')
       if (this.alert && this.alert.state === Ps2alertsEventState.ENDED) {
         return
       }
 
-      console.log('Alert details pull', instanceId)
+      this.error = ''
+
+      if (this.config.characterName && this.characterId === '') {
+        this.characterId = await this.pullCharacterId(this.config.characterName)
+      }
 
       await new ApiRequest()
         .get<InstanceTerritoryControlResponseInterface>(
@@ -304,13 +335,95 @@ export default Vue.extend({
         )
         .then((alert) => {
           this.alert = alert
-          console.log('alert', alert)
-          this.loaded = true
           this.updateCountdown = this.updateRate / 1000
         })
         .catch((e) => {
           this.error = e.message
         })
+
+      if (this.characterId !== '') {
+        await new ApiRequest()
+          .get<InstanceCharacterAggregateResponseInterface>(
+            Endpoints.AGGREGATES_INSTANCE_CHARACTER_SINGLE.replace(
+              '{instance}',
+              this.alert.instanceId
+                ? this.alert.instanceId.toString()
+                : 'whatever'
+            ).replace('{character}', this.characterId)
+          )
+          .then((result) => {
+            this.characterStats = this.updateCharacter(result)
+          })
+          .catch(() => {
+            this.error = 'Character not found in stats yet!'
+          })
+      }
+
+      this.loaded = true
+    },
+
+    // Makes a request to census to resolve the character ID
+    async pullCharacterId(name: string): string | null {
+      let charId: string
+
+      await new ApiRequest('https://census.daybreakgames.com')
+        .get<CensusMapRegionResponseInterface>(
+          CensusEndpoints.CHARACTER_NAME_SEARCH.replace(
+            '{serviceId}',
+            'ps2alertsdotcom'
+          ).replace('{characterName}', name.toLowerCase())
+        )
+        .then((result) => {
+          if (result.character_list.length === 0) {
+            return null
+          }
+          charId = result.character_list[0].character_id
+        })
+        .catch((e) => {
+          this.error = e.message
+        })
+
+      return charId
+    },
+    updateCharacter(
+      character: InstanceCharacterAggregateResponseInterfaceItem
+    ): AlertCharacterTableDataInterface[] {
+      // Ensure table displays all data even if zero
+      character.kills = character.kills ?? 0
+      character.deaths = character.deaths ?? 0
+      character.teamKills = character.teamKills ?? 0
+      character.teamKilled = character.teamKilled ?? 0
+      character.suicides = character.suicides ?? 0
+      character.headshots = character.headshots ?? 0
+
+      // Outfit name formatting
+      if (character.character.outfit) {
+        character.character.outfit.name = character.character.outfit?.tag
+          ? `[${character.character.outfit.tag}] ${character.character.outfit.name}`
+          : character.character.outfit?.name
+      } else {
+        character.character.outfit = {
+          name: '',
+          id: '0',
+          faction: character.character.faction,
+          world: character.character.world,
+          leader: 'foo',
+        }
+      }
+
+      return Object.assign(character, {
+        br: character.character.asp
+          ? character.character.battleRank + 120
+          : character.character.battleRank,
+        kd:
+          character.kills && character.deaths
+            ? (character.kills / character.deaths).toFixed(2)
+            : character.kills || 0,
+        hsr:
+          character.headshots && character.kills
+            ? ((character.headshots / character.kills) * 100).toFixed(2)
+            : 0,
+      })
     },
     toggleConfig(val: boolean) {
       this.config.show = val
