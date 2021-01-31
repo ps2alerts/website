@@ -304,22 +304,21 @@ export default Vue.extend({
           teamkilled: vehicle.infantry?.teamkilled ?? 0,
         }
 
+        const totalKills =
+          (vehicle.vehicles?.kills ?? 0) + (vehicle.infantry?.kills ?? 0)
+        const totalDeaths =
+          (vehicle.vehicles?.deaths ?? 0) + (vehicle.infantry?.deaths ?? 0)
+
         const totals: VehicleStatsWithKd = {
-          kills:
-            (vehicle.vehicles?.kills ?? 0) + (vehicle.infantry?.kills ?? 0),
-          deaths:
-            (vehicle.vehicles?.deaths ?? 0) + (vehicle.infantry?.deaths ?? 0),
+          kills: totalKills,
+          deaths: totalDeaths,
           teamkills:
             (vehicle.vehicles?.teamkills ?? 0) +
             (vehicle.infantry?.teamkills ?? 0),
           teamkilled:
             (vehicle.vehicles?.teamkilled ?? 0) +
             (vehicle.infantry?.teamkilled ?? 0),
-          kd: (
-            (vehicle.vehicles?.kills ?? 0) +
-            (vehicle.infantry?.kills ?? 0) / (vehicle.vehicles?.deaths ?? 0) +
-            (vehicle.infantry?.deaths ?? 0)
-          ).toFixed(2),
+          kd: (totalKills / totalDeaths).toFixed(2),
         }
 
         const tempData: AlertVehicleMetricsDataTableInterface = Object.assign(
