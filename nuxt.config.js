@@ -99,6 +99,7 @@ export default {
     { src: '@/filters/DateTimeFormat', mode: 'client' },
     { src: '@/filters/FactionId', mode: 'client' },
     { src: '@/filters/FactionName', mode: 'client' },
+    { src: '@/filters/FactionShortName', mode: 'client' },
     { src: '@/filters/ItemShortName', mode: 'client' },
     { src: '@/filters/VehicleFaction', mode: 'client' },
     { src: '@/filters/WorldName', mode: 'client' },

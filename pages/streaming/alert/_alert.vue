@@ -40,7 +40,7 @@
               </div>
               <div v-show="alert.state === 2">
                 <span v-if="!alert.result.draw"
-                  >{{ alert.result.victor | factionName }} victory!</span
+                  >{{ alert.result.victor | factionShortName }} victory!</span
                 >
                 <span v-else>Draw!</span>
               </div>
