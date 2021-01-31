@@ -310,7 +310,6 @@ export default Vue.extend({
         showToggles:
           this.$route.query.showToggles?.toString() === 'true' ??
           this.config.showToggles,
-        tutorialSeen: localStorage.getItem('tutorialSeen'),
       }
 
       console.log(instanceId)
