@@ -38,10 +38,18 @@
                   :duration="alert.duration"
                 ></remaining-time>
               </div>
-              <div v-show="alert.state === 2">Ended!</div>
+              <div v-show="alert.state === 2">
+                <span v-if="!alert.result.draw"
+                  >{{ alert.result.victor | factionName }} victory!</span
+                >
+                <span v-else>Draw!</span>
+              </div>
             </div>
           </div>
-          <div class="character p-2 border-t border-gray-100">
+          <div
+            v-if="config.characterName"
+            class="character p-2 border-t border-gray-100"
+          >
             <div class="text-center text-xl font-bold">
               <div v-if="characterStats.character">
                 <div>
@@ -302,6 +310,7 @@ export default Vue.extend({
         showToggles:
           this.$route.query.showToggles?.toString() === 'true' ??
           this.config.showToggles,
+        tutorialSeen: localStorage.getItem('tutorialSeen'),
       }
 
       console.log(instanceId)
