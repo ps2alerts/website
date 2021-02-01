@@ -1,3 +1,5 @@
+import { FactionMetricsInterface } from '~/interfaces/FactionMetricsInterface'
+
 export interface CombatMetricsInterface {
   kills: number
   deaths: number
@@ -5,4 +7,5 @@ export interface CombatMetricsInterface {
   teamKilled?: number
   suicides: number
   headshots: number
+  factionKills?: FactionMetricsInterface
 }

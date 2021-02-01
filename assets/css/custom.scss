@@ -109,7 +109,6 @@
     &:focus, &:active {
       @apply border-transparent outline-none;
     }
-
     &:hover {
       @apply bg-red-600;
     }
@@ -120,6 +119,12 @@
     &.no-hover {
       &:hover {
         @apply bg-red-600;
+      }
+    }
+    &.twitch {
+      background-color: #6441a5;
+      &:hover {
+        @apply bg-purple-600;
       }
     }
   }
@@ -145,7 +150,6 @@
       &:first-of-type {
         @apply rounded-l;
       }
-
       &:last-of-type {
         @apply rounded-r;
       }

@@ -531,7 +531,7 @@ export default Vue.extend({
           this.totalCounts.vs += row.vs ?? 0
           this.totalCounts.nc += row.nc ?? 0
           this.totalCounts.tr += row.tr ?? 0
-          this.totalCounts.draws += row.draws ?? 0
+          this.totalCounts.draws += row?.draws ?? 0
         } else {
           this.worldCounts[row.world].brackets[
             row.bracket

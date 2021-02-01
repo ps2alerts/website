@@ -3,4 +3,5 @@ export interface FactionMetricsInterface {
   nc: number
   tr: number
   draws: number
+  nso?: number
 }

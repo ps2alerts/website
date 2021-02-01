@@ -1,23 +1,34 @@
 <template>
   <section class="relative">
+    <div v-if="showTutorial" id="tutorial" class="text-red-700 font-bold pt-4">
+      Click on the cog top right to configure!
+    </div>
     <div class="config">
       <a v-show="!config.show" href="#" @click="toggleConfig(true)">
-        <font-awesome-icon :icon="['fa', 'cog']"></font-awesome-icon>
+        <font-awesome-icon
+          :icon="['fa', 'cog']"
+          :class="{ 'text-red-700': showTutorial === true }"
+        ></font-awesome-icon>
       </a>
       <a v-show="config.show" href="#" @click="toggleConfig(false)">
-        <font-awesome-icon :icon="['fa', 'check']"></font-awesome-icon>
+        <font-awesome-icon
+          :icon="['fa', 'check']"
+          class="text-red-700"
+        ></font-awesome-icon>
       </a>
     </div>
     <div
       id="alert-info"
       class="rounded-lg"
       :style="{
-        backgroundColor: config.widgetColor,
-        boxShadow: `0 0 20px ${config.shadowColor}`,
+        backgroundColor: tempConfig.widgetColor,
+        boxShadow: `0 0 20px ${tempConfig.shadowColor}`,
+        color: tempConfig.textColor,
       }"
     >
-      <div v-if="loaded">
-        <div id="stats card">
+      <div v-if="error !== ''" class="text-center p-2">{{ error }}</div>
+      <div v-if="loaded && !error">
+        <div id="stats">
           <FactionSegmentBar
             v-if="alert.result"
             :vs="alert.result.vs"
@@ -47,7 +58,7 @@
             </div>
           </div>
           <div
-            v-if="config.characterName"
+            v-if="config.characterName && !error"
             class="character p-2 border-t border-gray-100"
           >
             <div class="text-center text-xl font-bold">
@@ -101,23 +112,24 @@
                     </div>
                     <div class="text-xs">HS</div>
                   </div>
+
                   <div class="col-span-1">
                     <div class="leading-4 font-bold">
                       {{ characterStats.hsr }}
                     </div>
-                    <div class="text-xs">HSR</div>
+                    <div class="text-xs">HS %</div>
                   </div>
                 </div>
               </div>
-              <div v-else>
+              <div v-if="minorError !== ''">
                 {{ config.characterName }}<br />
-                <span class="font-normal text-base"
-                  >No character stats found yet!</span
-                >
+                <p class="font-normal text-base leading-5">
+                  {{ minorError }}
+                </p>
               </div>
             </div>
           </div>
-          <div v-show="config.showToggles" class="toggles p-2">
+          <div v-show="config.showToggles" class="toggles p-2 text-center">
             <a href="#" class="p-1">
               <font-awesome-icon :icon="['fa', 'user']"></font-awesome-icon>
             </a>
@@ -138,10 +150,14 @@
           </div>
           <div class="p-1 text-xs text-center border-t">
             More stats at ps2alerts.com/alert/{{ alert.instanceId }}
+
+            <!--            <div>TEMP: {{ tempConfig }}</div>
+            <div>CONF: {{ config }}</div>
+            <div>CHAR: {{ characterStats }}</div>-->
           </div>
         </div>
       </div>
-      <div v-else class="text-center"><h2>Loading...</h2></div>
+      <div v-if="!loaded" class="text-center p-2"><h2>Loading...</h2></div>
     </div>
 
     <div
@@ -149,30 +165,69 @@
       id="config-panel"
       class="p-2 text-center rounded-lg"
     >
-      <h1 class="text-xl">Config</h1>
+      <h1 class="text-2xl">Config</h1>
+      <div class="text-center p-2">
+        To configure OBS with the same settings, save then copy the URL into the
+        Browser Source. Make sure the alert ID matches the alert you're playing.
+        (Autodetection coming in the future)
+      </div>
+      <a href="#" class="btn btn-sm mb-2" @click="saveConfig()">
+        <font-awesome-icon :icon="['fas', 'save']"></font-awesome-icon> Save
+      </a>
       <div class="grid grid-cols-3 gap-2">
         <div class="col-span-1">
           Background Color
+          <a
+            v-show="!same.widgetColor"
+            href="#"
+            class="text-blue-600"
+            @click="resetConfig('widgetColor')"
+            >Reset</a
+          >
           <v-color-picker
-            v-model="config.widgetColor"
+            v-model="tempConfig.widgetColor"
             class="ma-2"
           ></v-color-picker>
         </div>
         <div class="col-span-1">
           Shadow Color
+          <a
+            v-show="!same.shadowColor"
+            href="#"
+            class="text-blue-600"
+            @click="resetConfig('shadowColor')"
+            >Reset</a
+          >
           <v-color-picker
-            v-model="config.shadowColor"
+            v-model="tempConfig.shadowColor"
             class="ma-2"
           ></v-color-picker>
         </div>
         <div class="col-span-1">
-          Settings
-          <v-checkbox
-            v-model="config.showToggles"
-            label="Show Toggles?"
-          ></v-checkbox>
+          Text Color
+          <a
+            v-show="!same.textColor"
+            href="#"
+            class="text-blue-600"
+            @click="resetConfig('textColor')"
+            >Reset</a
+          >
+          <v-color-picker
+            v-model="tempConfig.textColor"
+            class="ma-2"
+          ></v-color-picker>
+        </div>
+        <div class="col-span-1">
+          Character
+          <a
+            v-show="!same.characterName"
+            href="#"
+            class="text-blue-600"
+            @click="resetConfig('characterName')"
+            >Reset</a
+          >
           <v-text-field
-            v-model="config.characterName"
+            v-model="tempConfig.characterName"
             label="Character"
             solo
             clearable
@@ -193,6 +248,15 @@ import { InstanceCharacterAggregateResponseInterface } from '~/interfaces/aggreg
 import { AlertCharacterTableDataInterface } from '~/interfaces/alert/AlertCharacterTableDataInterface'
 import { CensusCharacterResponseInterface } from '~/interfaces/census/CensusCharacterResponseInterface'
 
+const defaultSettings = {
+  alert: {} as InstanceTerritoryControlResponseInterface,
+  characterId: '' as string | null | void,
+  characterStats: {} as AlertCharacterTableDataInterface,
+  error: '',
+  minorError: '',
+  loaded: false,
+}
+
 export default Vue.extend({
   name: 'StreamingAlert',
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -208,84 +272,105 @@ export default Vue.extend({
   layout: 'streaming',
   data() {
     return {
+      ...defaultSettings,
       pageTitle: 'Alert Result',
       pageDesc:
         'Per Alert results of each Alert ever triggered in Planetside 2.',
-      error: '',
-      loaded: false,
       updateRate: 1000,
       updateCountdown: 10,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
-      alert: {} as InstanceTerritoryControlResponseInterface,
-      characterId: '' as string | null | void,
-      characterStats: {} as AlertCharacterTableDataInterface,
-      metricsTab: 'players',
       eager: true,
+      showTutorial: true,
+      defaultConfig: {
+        show: false,
+        widgetColor: '#383838FF',
+        shadowColor: '#000000FF',
+        textColor: '#E2E8F0FF',
+        characterName: '',
+        showToggles: false,
+      },
       config: {
         show: false,
         widgetColor: '#383838FF',
         shadowColor: '#000000FF',
+        textColor: '#E2E8F0FF',
+        characterName: '',
+        showToggles: false,
+      },
+      tempConfig: {
+        show: false,
+        widgetColor: '#383838FF',
+        shadowColor: '#000000FF',
+        textColor: '#E2E8F0FF',
         characterName: '',
         showToggles: false,
       },
     }
   },
+  computed: {
+    same(): object {
+      return {
+        characterName:
+          this.tempConfig.characterName === this.defaultConfig.characterName,
+        widgetColor:
+          this.tempConfig.widgetColor === this.defaultConfig.widgetColor,
+        shadowColor:
+          this.tempConfig.shadowColor === this.defaultConfig.shadowColor,
+        textColor: this.tempConfig.textColor === this.defaultConfig.textColor,
+      }
+    },
+  },
   watch: {
+    $route() {
+      this.init(this.$route.params.alert.toString())
+    },
     'alert.state'() {
       if (this.alert.state === Ps2alertsEventState.ENDED) {
         this.clearTimers()
       }
     },
-    'config.widgetColor'() {
-      this.config.widgetColor
-        ? (localStorage.widgetColor = this.config.widgetColor)
-        : localStorage.removeItem('widgetColor')
-      this.saveConfig()
-    },
-    'config.shadowColor'() {
-      this.config.shadowColor
-        ? (localStorage.shadowColor = this.config.shadowColor)
-        : localStorage.removeItem('shadowColor')
-      this.saveConfig()
-    },
-    'config.characterName'() {
-      this.config.characterName
-        ? (localStorage.characterName = this.config.characterName)
-        : localStorage.removeItem('characterName')
-      this.saveConfig()
-    },
-    'config.showToggles'() {
-      this.config.showToggles
-        ? (localStorage.showToggles = this.config.showToggles)
-        : localStorage.removeItem('showToggles')
-      this.saveConfig()
-    },
   },
   beforeDestroy() {
     this.reset()
   },
-  created() {
+  async created() {
     this.reset()
-    this.init(this.$route.params.alert.toString())
+    await this.init(this.$route.params.alert.toString())
   },
   mounted() {
     document.documentElement.id = 'streaming'
   },
   methods: {
     saveConfig() {
-      this.$router.replace({
-        path: `/streaming/alert/${this.$route.params.alert.toString()}`,
-        query: {
-          characterName: this.config.characterName.toString() ?? undefined,
-          widgetColor: this.config.widgetColor.toString() ?? undefined,
-          shadowColor: this.config.shadowColor.toString() ?? undefined,
-          showToggles: this.config.showToggles.toString() ?? undefined,
-        },
-      })
+      const queries = {
+        characterName:
+          this.tempConfig.characterName !== this.defaultConfig.characterName
+            ? this.tempConfig.characterName.toString()
+            : undefined,
+        widgetColor:
+          this.tempConfig.widgetColor !== this.defaultConfig.widgetColor
+            ? this.tempConfig.widgetColor.toString()
+            : undefined,
+        shadowColor:
+          this.tempConfig.shadowColor !== this.defaultConfig.shadowColor
+            ? this.tempConfig.shadowColor.toString()
+            : undefined,
+        textColor:
+          this.tempConfig.textColor !== this.defaultConfig.textColor
+            ? this.tempConfig.textColor.toString()
+            : undefined,
+        // showToggles: this.tempConfig.showToggles ?? undefined,
+      }
+
+      this.$router.replace({ query: queries })
     },
     reset() {
       this.loaded = false
+      this.characterId = ''
+      this.characterStats = {}
+      this.alert = {}
+      this.error = ''
       this.clearTimers()
     },
     clearTimers() {
@@ -298,21 +383,27 @@ export default Vue.extend({
       }
     },
     async init(instanceId: string): Promise<void> {
+      setTimeout(() => {
+        this.showTutorial = false
+      }, 2500)
       this.config = {
         show: false,
         characterName:
-          this.$route.query.characterName?.toString() ??
-          this.config.characterName,
-        widgetColor:
-          this.$route.query.widgetColor?.toString() ?? this.config.widgetColor,
-        shadowColor:
-          this.$route.query.shadowColor?.toString() ?? this.config.shadowColor,
-        showToggles:
-          this.$route.query.showToggles?.toString() === 'true' ??
-          this.config.showToggles,
+          this.$route.query?.characterName ?? this.config.characterName,
+        widgetColor: this.$route.query?.widgetColor ?? this.config.widgetColor,
+        shadowColor: this.$route.query?.shadowColor ?? this.config.shadowColor,
+        textColor: this.$route.query?.textColor ?? this.config.textColor,
       }
 
-      console.log(instanceId)
+      // Eww... but have to do it as you can't just copy values
+      this.tempConfig = {
+        show: false,
+        characterName:
+          this.$route.query?.characterName ?? this.config.characterName,
+        widgetColor: this.$route.query?.widgetColor ?? this.config.widgetColor,
+        shadowColor: this.$route.query?.shadowColor ?? this.config.shadowColor,
+        textColor: this.$route.query?.textColor ?? this.config.textColor,
+      }
 
       await this.pull(instanceId)
 
@@ -329,12 +420,12 @@ export default Vue.extend({
       this.updateMeta()
     },
     async pull(instanceId: string): Promise<void> {
-      console.log('pull')
       if (this.alert && this.alert.state === Ps2alertsEventState.ENDED) {
         return
       }
 
       this.error = ''
+      this.minorError = ''
 
       if (this.config.characterName && this.characterId === '') {
         this.characterId = await this.pullCharacterId(this.config.characterName)
@@ -348,8 +439,8 @@ export default Vue.extend({
           this.alert = alert
           this.updateCountdown = this.updateRate / 1000
         })
-        .catch((e) => {
-          this.error = e.message
+        .catch(() => {
+          this.error = `Unable to find Alert ${this.$route.params.alert.toString()}`
         })
 
       if (this.characterId && this.characterId !== '') {
@@ -366,7 +457,8 @@ export default Vue.extend({
             this.characterStats = this.updateCharacter(result)
           })
           .catch(() => {
-            this.error = 'Character not found in stats yet!'
+            this.minorError =
+              'Character not found in alert stats yet! Make a kill / death for this to show.'
           })
       }
 
@@ -384,6 +476,7 @@ export default Vue.extend({
         )
         .then((result) => {
           if (result.character_list.length === 0) {
+            this.minorError = 'Character does not exist. PS4 is not supported.'
             return null
           }
           return result.character_list[0].character_id
@@ -430,12 +523,29 @@ export default Vue.extend({
             : character.kills || 0,
         hsr:
           character.headshots && character.kills
-            ? ((character.headshots / character.kills) * 100).toFixed(2)
+            ? ((character.headshots / character.kills) * 100).toFixed(1)
             : 0,
       })
     },
     toggleConfig(val: boolean) {
       this.config.show = val
+      this.showTutorial = false
+    },
+    resetConfig(config: string): void {
+      switch (config) {
+        case 'characterName':
+          this.tempConfig.characterName = this.defaultConfig.characterName
+          break
+        case 'widgetColor':
+          this.tempConfig.widgetColor = this.defaultConfig.widgetColor
+          break
+        case 'shadowColor':
+          this.tempConfig.shadowColor = this.defaultConfig.shadowColor
+          break
+        case 'textColor':
+          this.tempConfig.textColor = this.defaultConfig.textColor
+          break
+      }
     },
   },
 })
@@ -449,7 +559,6 @@ section {
     position: absolute;
     top: 20px;
     width: 800px;
-    height: 500px;
     right: 20px;
     @apply bg-gray-800;
   }
@@ -460,6 +569,10 @@ section {
     left: 15px;
     width: 450px;
     box-shadow: 0 0 10px #881a1a;
+  }
+
+  #tutorial {
+    text-align: center;
   }
 
   .config {

@@ -83,6 +83,30 @@
             </div>
           </td>
         </tr>
+        <tr v-if="alert.world < 1000">
+          <td class="px-2 pt-1 md:pt-2 whitespace-no-wrap text-center">
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <div v-bind="attrs" v-on="on">
+                  <NuxtLink
+                    :to="{
+                      name: 'streaming-alert-alert',
+                      params: { alert: alert.instanceId },
+                    }"
+                    class="btn btn-sm twitch"
+                  >
+                    <font-awesome-icon :icon="['fab', 'twitch']" /> Streaming
+                    Overlay
+                  </NuxtLink>
+                </div>
+              </template>
+              PC only. Semi WIP - To use the overlay, put this link within a
+              Browser Capture source within OBS / StreamLabs. There is a cog top
+              right to configure the overlay, which will generate a URL in your
+              browser. Copy this to the source to use your generated settings.
+            </v-tooltip>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
