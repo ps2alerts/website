@@ -150,10 +150,6 @@
           </div>
           <div class="p-1 text-xs text-center border-t">
             More stats at ps2alerts.com/alert/{{ alert.instanceId }}
-
-            <!--            <div>TEMP: {{ tempConfig }}</div>
-            <div>CONF: {{ config }}</div>
-            <div>CHAR: {{ characterStats }}</div>-->
           </div>
         </div>
       </div>
@@ -251,6 +247,7 @@ import { CensusCharacterResponseInterface } from '~/interfaces/census/CensusChar
 const defaultSettings = {
   alert: {} as InstanceTerritoryControlResponseInterface,
   characterId: '' as string | null | void,
+  // @ts-ignore
   characterStats: {} as AlertCharacterTableDataInterface,
   error: '',
   minorError: '',
@@ -368,8 +365,10 @@ export default Vue.extend({
     reset() {
       this.loaded = false
       this.characterId = ''
-      this.characterStats = {}
-      this.alert = {}
+      // @ts-ignore
+      this.characterStats = null
+      // @ts-ignore
+      this.alert = null
       this.error = ''
       this.clearTimers()
     },
@@ -388,20 +387,28 @@ export default Vue.extend({
       }, 2500)
       this.config = {
         show: false,
+        // @ts-ignore
         characterName:
           this.$route.query?.characterName ?? this.config.characterName,
+        // @ts-ignore
         widgetColor: this.$route.query?.widgetColor ?? this.config.widgetColor,
+        // @ts-ignore
         shadowColor: this.$route.query?.shadowColor ?? this.config.shadowColor,
+        // @ts-ignore
         textColor: this.$route.query?.textColor ?? this.config.textColor,
       }
 
       // Eww... but have to do it as you can't just copy values
       this.tempConfig = {
         show: false,
+        // @ts-ignore
         characterName:
           this.$route.query?.characterName ?? this.config.characterName,
+        // @ts-ignore
         widgetColor: this.$route.query?.widgetColor ?? this.config.widgetColor,
+        // @ts-ignore
         shadowColor: this.$route.query?.shadowColor ?? this.config.shadowColor,
+        // @ts-ignore
         textColor: this.$route.query?.textColor ?? this.config.textColor,
       }
 
