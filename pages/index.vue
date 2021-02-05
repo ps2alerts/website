@@ -92,7 +92,7 @@
       </v-tabs>
 
       <div
-        class="col-span-12 lg:col-span-8 ss:col-span-4 lg:col-start-3 ss:col-start-5 flex justify-center mb-2"
+        class="col-span-12 lg:col-span-8 ss:col-span-4 lg:col-start-3 ss:col-start-5 flex justify-center mb-2 top-1 z-50"
         :class="{ sticky: !disabledPercentToggle }"
       >
         <div class="btn-group mr-2">
