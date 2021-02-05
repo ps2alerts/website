@@ -279,6 +279,10 @@ export default Vue.extend({
       interval: undefined as undefined | number,
       eager: true,
       showTutorial: true,
+      alert: undefined as undefined | InstanceTerritoryControlResponseInterface,
+      characterStats: undefined as
+        | undefined
+        | InstanceCharacterAggregateResponseInterface,
       defaultConfig: {
         show: false,
         widgetColor: '#383838FF',
@@ -323,7 +327,7 @@ export default Vue.extend({
       this.init(this.$route.params.alert.toString())
     },
     'alert.state'() {
-      if (this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.alert && this.alert.state === Ps2alertsEventState.ENDED) {
         this.clearTimers()
       }
     },
@@ -365,10 +369,8 @@ export default Vue.extend({
     reset() {
       this.loaded = false
       this.characterId = ''
-      // @ts-ignore
-      this.characterStats = null
-      // @ts-ignore
-      this.alert = null
+      this.characterStats = undefined
+      this.alert = undefined
       this.error = ''
       this.clearTimers()
     },
@@ -377,7 +379,7 @@ export default Vue.extend({
       clearInterval(this.updateCountdownInterval)
     },
     updateMeta() {
-      if (this.alert.instanceId) {
+      if (this.alert && this.alert.instanceId) {
         this.pageTitle = `STREAM Alert #${this.alert.instanceId}`
       }
     },
@@ -413,6 +415,11 @@ export default Vue.extend({
       }
 
       await this.pull(instanceId)
+
+      if (!this.alert) {
+        this.error = "Alert doesn't exist!"
+        return
+      }
 
       if (this.alert.state === Ps2alertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
@@ -450,6 +457,11 @@ export default Vue.extend({
           this.error = `Unable to find Alert ${this.$route.params.alert.toString()}`
         })
 
+      if (!this.alert) {
+        this.error = "Alert doesn't exist!"
+        return
+      }
+
       if (this.characterId && this.characterId !== '') {
         await new ApiRequest()
           .get<InstanceCharacterAggregateResponseInterface>(
@@ -461,6 +473,10 @@ export default Vue.extend({
             ).replace('{character}', this.characterId)
           )
           .then((result) => {
+            if (!result || !result.character) {
+              this.minorError =
+                'Character not found in alert stats yet! Make a kill / death for this to show.'
+            }
             this.characterStats = this.updateCharacter(result)
           })
           .catch(() => {
