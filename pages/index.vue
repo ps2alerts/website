@@ -104,7 +104,7 @@
             :disabled="disabledPercentToggle"
             @click="toggleMode('percent')"
           >
-            Percentages
+            Percentages %
           </button>
           <button
             class="btn btn-sm"
@@ -114,7 +114,7 @@
             :disabled="disabledPercentToggle"
             @click="toggleMode('numbers')"
           >
-            Numerical
+            Numerical ##
           </button>
         </div>
       </div>

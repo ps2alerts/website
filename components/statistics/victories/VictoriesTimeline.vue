@@ -4,14 +4,14 @@
       <div class="tag section">Victory Timeline</div>
       <CountdownSpinner :percent="updateCountdownPercent" update-rate="60000" />
       <div v-if="loaded" class="text-center">
-        <div class="grid grid-cols-4 gap-2">
+        <div class="grid grid-cols-12 gap-2">
           <FilterWorld
-            class="ss:col-span-1 ss:col-start-2"
+            class="col-span-6 lg:col-start-3 lg:col-span-4 ss:col-span-2 ss:col-start-5"
             :world-filter="selectedWorld"
             @world-changed="updateWorld"
           />
           <FilterBracket
-            class="ss:col-span-1"
+            class="col-span-6 lg:col-span-4 ss:col-span-2"
             :bracket-filter="selectedBracket"
             @bracket-changed="updateBracket"
           />
