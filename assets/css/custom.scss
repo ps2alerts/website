@@ -186,12 +186,17 @@
   /* Typography */
   .editorial p {
     @apply content-spacing;
+
+    &:last-child {
+      @apply mb-0
+    }
   }
 
   .editorial .text-title,
   .editorial .text-subtitle {
     @apply content-spacing;
   }
+
 
   /* Components */
   .alert-status {

@@ -8,13 +8,13 @@
     <!--    </div>-->
 
     <div class="grid grid-cols-12 place-items-center">
-      <div class="col-span-12">
+      <div class="col-span-12 p-2">
         <h1 class="text-subtitle text-center">
           Welcome to PS2Alerts - Planetside 2's Alert Tracker
         </h1>
         <p class="text-center text-xl font-semibold">
-          Hello everyone coming in from the PS2 launcher! If you're new here,
-          below is a rundown of what this site does:
+          Hello everyone coming in from the PS2 launcher! Below is a rundown of
+          what this site does:
         </p>
         <p>
           The PS2Alerts stats system collects and presents player, outfit,
@@ -76,6 +76,10 @@
             <font-awesome-icon :icon="['fab', 'patreon']" /> Patreon </a
           >.
         </p>
+        <div class="text-center">
+          <p>See you on the battlefield soldiers!</p>
+          <p>- <b>Maelstrome26</b> (Lead PS2Alerts Developer - Miller)</p>
+        </div>
       </div>
     </div>
   </div>

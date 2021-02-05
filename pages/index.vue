@@ -4,9 +4,9 @@
     <div class="col-span-12 border-t-1 border-red-700">
       <div class="text-center">
         <h1 class="text-title">Statistics</h1>
-        <p class="mb-2">
-          <font-awesome-icon :icon="['fas', 'hammer']" /> This section is a work
-          in progress! <font-awesome-icon :icon="['fas', 'hammer']" />
+        <p class="mb-4 text-lg">
+          Statistics start as of 4th January 2021 02:00 UTC unless otherwise
+          stated
         </p>
       </div>
     </div>
@@ -104,7 +104,7 @@
             :disabled="disabledPercentToggle"
             @click="toggleMode('percent')"
           >
-            <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
+            Percentages
           </button>
           <button
             class="btn btn-sm"
@@ -114,7 +114,7 @@
             :disabled="disabledPercentToggle"
             @click="toggleMode('numbers')"
           >
-            ##
+            Numerical
           </button>
         </div>
       </div>
