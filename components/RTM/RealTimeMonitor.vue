@@ -20,7 +20,7 @@
       <div class="py-2">
         <p v-if="loading">Loading...</p>
         <p v-if="error">ERROR: {{ error }}</p>
-        <p v-show="actives.length === 0 && !error">
+        <p v-show="!loading && actives.length === 0 && !error">
           There are no alerts currently running!
         </p>
         <div v-show="actives.length > 0">
