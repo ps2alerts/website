@@ -6,14 +6,57 @@
     @apply bg-blue-700;
   }
   .tr {
-    @apply bg-red-600;
+    @apply bg-red-800;
   }
-  .nso {
+  .other {
     @apply bg-gray-600;
+  }
+  .border-vs {
+    @apply border border-purple-500;
+  }
+  .border-nc {
+    @apply border border-blue-500;
+  }
+  .border-tr {
+    @apply border border-red-500;
+  }
+  .border-other {
+    @apply border border-gray-500;
   }
   .outofplay {
     @apply bg-gray-800;
     background: repeating-linear-gradient(45deg, #801a1a, #631c1c 10px, #881a1a 10px, #b94b4b 20px);
+  }
+
+  .bg-tint {
+    @apply bg-primary bg-opacity-80;
+  }
+  .bg-tint-light {
+    @apply bg-gray-600 bg-opacity-50;
+  }
+  .bg-vs {
+    @apply bg-purple-800 bg-opacity-50;
+  }
+  .bg-nc {
+    @apply bg-blue-700 bg-opacity-50;
+  }
+  .bg-tr {
+    @apply bg-red-700 bg-opacity-50;
+  }
+  .bg-nso {
+    @apply bg-gray-700;
+  }
+  .bg-indar {
+    @apply bg-orange-500 bg-opacity-25;
+  }
+  .bg-hossin {
+    @apply bg-teal-900 bg-opacity-25;
+  }
+  .bg-amerish {
+    @apply bg-green-600 bg-opacity-25;
+  }
+  .bg-esamir {
+    @apply bg-blue-700 bg-opacity-25;
   }
 
   .text-vs {

@@ -4,19 +4,24 @@
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
-            class="faction-bar-segment vs rounded-l"
+            class="faction-bar-segment"
             :style="{ width: percentVS + '%' }"
-            :class="{
-              'rounded-r':
-                nc === 0 && tr === 0 && other === 0 && outOfPlay === 0,
-            }"
             v-bind="attrs"
             v-on="on"
           >
-            <span v-if="!isPercentage && numeral">{{
-              vsString() | numeral(numeral)
-            }}</span>
-            <span v-else>{{ vsString() }}</span>
+            <div
+              class="rounded-l vs"
+              :class="{
+                'rounded-r':
+                  nc === 0 && tr === 0 && other === 0 && outOfPlay === 0,
+                'border-vs': vs > 0,
+              }"
+            >
+              <span v-if="!isPercentage && numeral">{{
+                vsString() | numeral(numeral)
+              }}</span>
+              <span v-else>{{ vsString() }}</span>
+            </div>
           </div>
         </template>
         <span v-if="!isPercentage && numeral">
@@ -28,19 +33,24 @@
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
-            class="faction-bar-segment tr"
+            class="faction-bar-segment"
             :style="{ width: percentTR + '%' }"
-            :class="{
-              'rounded-l': vs === 0,
-              'rounded-r': nc === 0 && other === 0 && outOfPlay === 0,
-            }"
             v-bind="attrs"
             v-on="on"
           >
-            <span v-if="!isPercentage && numeral">{{
-              trString() | numeral(numeral)
-            }}</span>
-            <span v-else>{{ trString() }}</span>
+            <div
+              class="tr"
+              :class="{
+                'rounded-l': vs === 0,
+                'rounded-r': nc === 0 && other === 0 && outOfPlay === 0,
+                'border-tr': tr > 0,
+              }"
+            >
+              <span v-if="!isPercentage && numeral">{{
+                trString() | numeral(numeral)
+              }}</span>
+              <span v-else>{{ trString() }}</span>
+            </div>
           </div>
         </template>
         <span v-if="!isPercentage && numeral">
@@ -52,19 +62,24 @@
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
-            class="faction-bar-segment nc"
+            class="faction-bar-segment"
             :style="{ width: percentNC + '%' }"
-            :class="{
-              'rounded-l': vs === 0 && tr === 0,
-              'rounded-r': other === 0 && outOfPlay === 0,
-            }"
             v-bind="attrs"
             v-on="on"
           >
-            <span v-if="!isPercentage && numeral">{{
-              ncString() | numeral(numeral)
-            }}</span>
-            <span v-else>{{ ncString() }}</span>
+            <div
+              class="nc"
+              :class="{
+                'rounded-l': vs === 0 && tr === 0,
+                'rounded-r': other === 0 && outOfPlay === 0,
+                'border-nc': nc > 0,
+              }"
+            >
+              <span v-if="!isPercentage && numeral">{{
+                ncString() | numeral(numeral)
+              }}</span>
+              <span v-else>{{ ncString() }}</span>
+            </div>
           </div>
         </template>
         <span v-if="!isPercentage && numeral">
@@ -76,19 +91,24 @@
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
-            class="faction-bar-segment nso"
+            class="faction-bar-segment"
             :style="{ width: percentOther + '%' }"
-            :class="{
-              'rounded-l': vs === 0 && nc === 0 && tr === 0,
-              'rounded-r': other > 0 && outOfPlay === 0,
-            }"
             v-bind="attrs"
             v-on="on"
           >
-            <span v-if="!isPercentage && numeral">{{
-              otherString() | numeral(numeral)
-            }}</span>
-            <span v-else>{{ otherString() }}</span>
+            <div
+              class="other"
+              :class="{
+                'rounded-l': vs === 0 && nc === 0 && tr === 0,
+                'rounded-r': other > 0 && outOfPlay === 0,
+                'border-other': other > 0,
+              }"
+            >
+              <span v-if="!isPercentage && numeral">{{
+                otherString() | numeral(numeral)
+              }}</span>
+              <span v-else>{{ otherString() }}</span>
+            </div>
           </div>
         </template>
         <span v-if="!isPercentage && numeral">
@@ -274,6 +294,11 @@ export default Vue.extend({
     display: inline-block;
     float: left;
     line-height: 25px;
+
+    div {
+      line-height: 23px;
+      height: 100%;
+    }
   }
 }
 </style>

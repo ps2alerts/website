@@ -36,37 +36,6 @@
     }
   }
 
-  .bg-tint {
-    @apply bg-primary bg-opacity-80;
-  }
-  .bg-tint-light {
-    @apply bg-gray-600 bg-opacity-50;
-  }
-  .bg-vs {
-    @apply bg-purple-800 bg-opacity-50;
-  }
-  .bg-nc {
-    @apply bg-blue-700 bg-opacity-50;
-  }
-  .bg-tr {
-    @apply bg-red-800 bg-opacity-50;
-  }
-  .bg-nso {
-    @apply bg-gray-700;
-  }
-  .bg-indar {
-    @apply bg-orange-500 bg-opacity-25;
-  }
-  .bg-hossin {
-    @apply bg-teal-900 bg-opacity-25;
-  }
-  .bg-amerish {
-    @apply bg-green-600 bg-opacity-25;
-  }
-  .bg-esamir {
-    @apply bg-blue-700 bg-opacity-25;
-  }
-
   h1 {
     @apply text-3xl;
   }
