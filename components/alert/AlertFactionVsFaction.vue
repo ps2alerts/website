@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-12 ss:col-span-5 card relative text-center">
+  <div class="col-span-12 ss:col-span-6 card relative text-center">
     <div class="tag section">Faction vs Faction</div>
     <CountdownSpinner
       v-if="alert.state === 1"
@@ -26,8 +26,8 @@
               <FactionSegmentMultiBar
                 :keys="['Kills', 'Captures']"
                 :vs="[0]"
-                :nc="[scores.kills.vs.nc, scores.captures.vs.nc * captureWorth]"
-                :tr="[scores.kills.vs.tr, scores.captures.vs.tr * captureWorth]"
+                :nc="[scores.kills.vs.nc, scores.captures.vs.nc]"
+                :tr="[scores.kills.vs.tr, scores.captures.vs.tr]"
                 other="0"
                 dropoff-percent="10"
                 :is-percentage="isPercentage"
@@ -59,8 +59,8 @@
             <td class="py-2 px-1 whitespace-nowrap">
               <FactionSegmentMultiBar
                 :keys="['Kills', 'Captures']"
-                :vs="[scores.kills.tr.vs, scores.captures.tr.vs * captureWorth]"
-                :nc="[scores.kills.tr.nc, scores.captures.tr.nc * captureWorth]"
+                :vs="[scores.kills.tr.vs, scores.captures.tr.vs]"
+                :nc="[scores.kills.tr.nc, scores.captures.tr.nc]"
                 :tr="[0]"
                 other="0"
                 dropoff-percent="5"
@@ -92,9 +92,9 @@
             <td class="py-2 px-1 whitespace-nowrap">
               <FactionSegmentMultiBar
                 :keys="['Kills', 'Captures']"
-                :vs="[scores.kills.nc.vs, scores.captures.nc.vs * captureWorth]"
+                :vs="[scores.kills.nc.vs, scores.captures.nc.vs]"
                 :nc="[0]"
-                :tr="[scores.kills.nc.tr, scores.captures.nc.tr * captureWorth]"
+                :tr="[scores.kills.nc.tr, scores.captures.nc.tr]"
                 other="0"
                 dropoff-percent="10"
                 :is-percentage="isPercentage"
@@ -122,15 +122,24 @@
           </tr>
         </tbody>
       </table>
-      <p class="mb-2 text-sm text-gray-500">
-        Balance is calculated via a points system. Each kill made by a faction
-        is worth 1 point, each capture 100 points.
-      </p>
-      <p class="text-sm text-gray-500">
-        The <span class="text-yellow-500">dashed bar</span> indicates an even
-        50/50 balance between the faction and it's opponents. If all bars are
-        evenly distributed across all factions, the alert was an even fight.
-      </p>
+      <div class="text-sm text-gray-500 text-left">
+        <p class="mb-2">
+          Balance is calculated via a points system, using the following counts:
+        </p>
+        <ul>
+          <li>Kills = 1 point</li>
+          <li>Major facilities (Tech / Bio / Amp) = 150 points</li>
+          <li>
+            Large facilities (Tower bases, multi point bases) = 100 points
+          </li>
+          <li>Small facilities / Construction (1 min, 4 min) = 50 points</li>
+        </ul>
+        <p>
+          The <span class="text-yellow-500">dashed bar</span> indicates an even
+          50/50 balance between the faction and it's opponents. If all bars are
+          evenly distributed across all factions, the alert was an even fight.
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -144,6 +153,7 @@ import { InstanceFactionCombatAggregateResponseInterface } from '@/interfaces/ag
 import { Endpoints } from '@/constants/Endpoints'
 import { FactionVsFactionDataInterface } from '~/interfaces/FactionVsFactionDataInterface'
 import { InstanceFacilityControlAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceFacilityControlAggregateResponseInterface'
+import { FacilityType } from '~/constants/FacilityType'
 
 export default Vue.extend({
   name: 'AlertFactionVsFaction',
@@ -282,17 +292,44 @@ export default Vue.extend({
       }
 
       result.forEach((facility) => {
+        let worth = 0
+
+        switch (facility.facility.type) {
+          case FacilityType.AMP_STATION:
+          case FacilityType.BIO_LAB:
+          case FacilityType.TECH_PLANT:
+            worth = 150
+            break
+          case FacilityType.DEFAULT:
+          case FacilityType.LARGE_OUTPOST:
+          case FacilityType.INTERLINK_FACILITY:
+          case FacilityType.WARPGATE:
+            worth = 100
+            break
+          case FacilityType.SMALL_OUTPOST:
+          case FacilityType.CONSTRUCTION_OUTPOST:
+          case FacilityType.RELIC_OUTPOST:
+            worth = 50
+            break
+        }
+
         if (facility.vs && facility.vs.takenFrom) {
-          scores.vs.nc += facility.vs.takenFrom.nc ?? 0
-          scores.vs.tr += facility.vs.takenFrom.tr ?? 0
+          if (facility.vs.takenFrom.nc)
+            scores.vs.nc += facility.vs.takenFrom.nc * worth ?? 0
+          if (facility.vs.takenFrom.tr)
+            scores.vs.tr += facility.vs.takenFrom.tr * worth ?? 0
         }
         if (facility.nc && facility.nc.takenFrom) {
-          scores.nc.vs += facility.nc.takenFrom.vs ?? 0
-          scores.nc.tr += facility.nc.takenFrom.tr ?? 0
+          if (facility.nc.takenFrom.vs)
+            scores.nc.vs += facility.nc.takenFrom.vs * worth ?? 0
+          if (facility.nc.takenFrom.tr)
+            scores.nc.tr += facility.nc.takenFrom.tr * worth ?? 0
         }
         if (facility.tr && facility.tr.takenFrom) {
-          scores.tr.vs += facility.tr.takenFrom.vs ?? 0
-          scores.tr.nc += facility.tr.takenFrom.nc ?? 0
+          if (facility.tr.takenFrom.vs)
+            scores.tr.vs += facility.tr.takenFrom.vs * worth ?? 0
+          if (facility.tr.takenFrom.nc)
+            scores.tr.nc += facility.tr.takenFrom.nc * worth ?? 0
         }
       })
 
