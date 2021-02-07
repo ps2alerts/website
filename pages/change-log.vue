@@ -4,7 +4,76 @@
     <div class="col-span-12">
       <div class="text-center h-full">
         <h1 class="text-title">Change Log</h1>
-        <p>Last updated: 12th Dec 2020</p>
+        <p>Last updated: 7th Feb 2021</p>
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-6 bg-tint card editorial relative">
+      <div class="tag feature">
+        <font-awesome-icon :icon="['fas', 'certificate']"></font-awesome-icon>
+        New feature
+      </div>
+      <div class="h-full">
+        <div class="text-center">
+          <img
+            class="object-contain mx-auto content-spacing rounded-lg"
+            src="/change-log/factionvsfaction.png"
+            alt="Picture showing faction vs faction example"
+          />
+        </div>
+
+        <h1 class="text-subtitle text-center">
+          Faction vs Faction Alert metrics
+        </h1>
+        <p class="content-spacing text-center">Added: 7th Feb 2021</p>
+        <p>
+          There is now a way to calculate how double teamed a faction is during
+          an alert!
+        </p>
+        <p>It is calculated in the following ways:</p>
+        <ul>
+          <li>Kills made against a particular faction, added as a 1 point</li>
+          <li>
+            Bases captured against a faction, and applying 100 points to that
+            (numbers may be adjusted)
+          </li>
+        </ul>
+        <p>
+          Combining the two will give a reasonable (not 100% accurate but close
+          enough) view of the balance between factions in the alert, and to give
+          an indicator on how balanced it was.
+        </p>
+        <p>
+          In the example above, you can see TR was heavily double teamed by both
+          VS and NC. It appears NC focused TR a bit more than VS, only due to
+          their captures.
+        </p>
+      </div>
+    </div>
+    <div class="col-span-12 lg:col-span-6 bg-tint card editorial relative">
+      <div class="tag feature">
+        <font-awesome-icon :icon="['fas', 'certificate']"></font-awesome-icon>
+        New feature
+      </div>
+      <div class="h-full">
+        <div class="text-center">
+          <img
+            class="object-contain mx-auto content-spacing rounded-lg"
+            src="/change-log/statistics.png"
+            alt="Picture showing faction vs faction example"
+          />
+        </div>
+
+        <h1 class="text-subtitle text-center">
+          Statistics section has been released!
+        </h1>
+        <p class="content-spacing text-center">Added: 28th Jan 2021</p>
+        <p>The first pass of the statistics section is now done!</p>
+        <p>
+          As you can see in the screenshot above, quite a lot of statistics
+          types are shown which is filterable by Activity Level, Server and in
+          some cases dates.
+        </p>
+        <p>This section will continue to get updates in the future!</p>
       </div>
     </div>
     <div class="col-span-12 lg:col-span-6 bg-tint card editorial relative">
