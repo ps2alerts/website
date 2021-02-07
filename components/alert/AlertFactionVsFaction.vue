@@ -10,23 +10,19 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded" class="text-center">
-      <p class="mb-2 text-sm text-gray-500">
-        Below is calculated into a points system. Each kill made by a faction is
-        worth 1 point, each capture 100 points.
-      </p>
-      <table class="w-full table-fixed border-row">
-        <thead>
+      <table class="w-full table-fixed border-row mb-2">
+        <thead class="font-bold">
           <tr>
             <td class="w-2/20">Faction</td>
-            <td class="w-8/20">Calculated Focus</td>
+            <td class="w-8/20">Balance</td>
             <td class="w-5/20">Kills Focus</td>
             <td class="w-5/20">Capture Focus</td>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
-          <tr>
+          <tr class="bg-vs">
             <td>VS</td>
-            <td class="p-1 whitespace-nowrap">
+            <td class="py-2 px-1 whitespace-nowrap">
               <FactionSegmentMultiBar
                 :keys="['Kills', 'Captures']"
                 :vs="[0]"
@@ -39,8 +35,7 @@
                 :vertical-points="[50]"
               />
             </td>
-
-            <td class="p-1 whitespace-nowrap">
+            <td class="py-2 px-1 whitespace-nowrap">
               <FactionSegmentBar
                 :vs="0"
                 :nc="scores.kills.vs.nc"
@@ -49,7 +44,7 @@
                 dropoff-percent="10"
               />
             </td>
-            <td class="p-1 whitespace-nowrap">
+            <td class="py-2 px-1 whitespace-nowrap">
               <FactionSegmentBar
                 :vs="0"
                 :nc="scores.captures.vs.nc"
@@ -59,9 +54,9 @@
               />
             </td>
           </tr>
-          <tr>
+          <tr class="bg-tr">
             <td>TR</td>
-            <td class="p-1 whitespace-nowrap">
+            <td class="py-2 px-1 whitespace-nowrap">
               <FactionSegmentMultiBar
                 :keys="['Kills', 'Captures']"
                 :vs="[scores.kills.tr.vs, scores.captures.tr.vs * captureWorth]"
@@ -73,7 +68,7 @@
                 :show-as-calculated-percentage="showAsCalclatedPercentage"
               />
             </td>
-            <td class="p-1 whitespace-nowrap">
+            <td class="py-2 px-1 whitespace-nowrap">
               <FactionSegmentBar
                 :vs="scores.kills.tr.vs"
                 :nc="scores.kills.tr.nc"
@@ -82,7 +77,7 @@
                 dropoff-percent="10"
               />
             </td>
-            <td class="p-1 whitespace-nowrap">
+            <td class="py-2 px-1 whitespace-nowrap">
               <FactionSegmentBar
                 :vs="scores.captures.tr.vs"
                 :nc="scores.captures.tr.nc"
@@ -92,9 +87,9 @@
               />
             </td>
           </tr>
-          <tr>
+          <tr class="bg-nc">
             <td>NC</td>
-            <td class="p-1 whitespace-nowrap">
+            <td class="py-2 px-1 whitespace-nowrap">
               <FactionSegmentMultiBar
                 :keys="['Kills', 'Captures']"
                 :vs="[scores.kills.nc.vs, scores.captures.nc.vs * captureWorth]"
@@ -106,7 +101,7 @@
                 :show-as-calculated-percentage="showAsCalclatedPercentage"
               />
             </td>
-            <td class="p-1 whitespace-nowrap">
+            <td class="py-2 px-1 whitespace-nowrap">
               <FactionSegmentBar
                 :vs="scores.kills.nc.vs"
                 :nc="0"
@@ -115,7 +110,7 @@
                 dropoff-percent="10"
               />
             </td>
-            <td class="p-1 whitespace-nowrap">
+            <td class="py-2 px-1 whitespace-nowrap">
               <FactionSegmentBar
                 :vs="scores.captures.nc.vs"
                 :nc="0"
@@ -127,6 +122,15 @@
           </tr>
         </tbody>
       </table>
+      <p class="mb-2 text-sm text-gray-500">
+        Balance is calculated via a points system. Each kill made by a faction
+        is worth 1 point, each capture 100 points.
+      </p>
+      <p class="text-sm text-gray-500">
+        The <span class="text-yellow-500">dashed bar</span> indicates an even
+        50/50 balance between the faction and it's opponents. If all bars are
+        evenly distributed across all factions, the alert was an even fight.
+      </p>
     </div>
   </div>
 </template>
