@@ -13,15 +13,35 @@
       <table class="w-full table-fixed border-row mb-2">
         <thead class="font-bold">
           <tr>
-            <td class="w-2/20">Faction</td>
-            <td class="w-8/20">Balance</td>
+            <td class="w-1/20">&nbsp;</td>
             <td class="w-5/20">Kills Focus</td>
             <td class="w-5/20">Capture Focus</td>
+            <td class="w-1/20">&nbsp;</td>
+            <td class="w-8/20">Faction Opponent Focus</td>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
           <tr class="bg-vs">
             <td>VS</td>
+            <td class="py-2 px-1 whitespace-nowrap">
+              <FactionSegmentBar
+                :vs="0"
+                :nc="scores.kills.vs.nc"
+                :tr="scores.kills.vs.tr"
+                :other="0"
+                dropoff-percent="15"
+              />
+            </td>
+            <td class="py-2 px-1 whitespace-nowrap">
+              <FactionSegmentBar
+                :vs="0"
+                :nc="scores.captures.vs.nc"
+                :tr="scores.captures.vs.tr"
+                :other="0"
+                dropoff-percent="15"
+              />
+            </td>
+            <td class="text-center">=</td>
             <td class="py-2 px-1 whitespace-nowrap">
               <FactionSegmentMultiBar
                 :keys="['Kills', 'Captures']"
@@ -35,46 +55,16 @@
                 :vertical-points="[50]"
               />
             </td>
-            <td class="py-2 px-1 whitespace-nowrap">
-              <FactionSegmentBar
-                :vs="0"
-                :nc="scores.kills.vs.nc"
-                :tr="scores.kills.vs.tr"
-                :other="0"
-                dropoff-percent="10"
-              />
-            </td>
-            <td class="py-2 px-1 whitespace-nowrap">
-              <FactionSegmentBar
-                :vs="0"
-                :nc="scores.captures.vs.nc"
-                :tr="scores.captures.vs.tr"
-                :other="0"
-                dropoff-percent="10"
-              />
-            </td>
           </tr>
           <tr class="bg-tr">
             <td>TR</td>
-            <td class="py-2 px-1 whitespace-nowrap">
-              <FactionSegmentMultiBar
-                :keys="['Kills', 'Captures']"
-                :vs="[scores.kills.tr.vs, scores.captures.tr.vs]"
-                :nc="[scores.kills.tr.nc, scores.captures.tr.nc]"
-                :tr="[0]"
-                other="0"
-                dropoff-percent="5"
-                :is-percentage="isPercentage"
-                :show-as-calculated-percentage="showAsCalclatedPercentage"
-              />
-            </td>
             <td class="py-2 px-1 whitespace-nowrap">
               <FactionSegmentBar
                 :vs="scores.kills.tr.vs"
                 :nc="scores.kills.tr.nc"
                 :tr="0"
                 :other="0"
-                dropoff-percent="10"
+                dropoff-percent="15"
               />
             </td>
             <td class="py-2 px-1 whitespace-nowrap">
@@ -83,12 +73,44 @@
                 :nc="scores.captures.tr.nc"
                 :tr="0"
                 :other="0"
+                dropoff-percent="15"
+              />
+            </td>
+            <td class="text-center">=</td>
+            <td class="py-2 px-1 whitespace-nowrap">
+              <FactionSegmentMultiBar
+                :keys="['Kills', 'Captures']"
+                :vs="[scores.kills.tr.vs, scores.captures.tr.vs]"
+                :nc="[scores.kills.tr.nc, scores.captures.tr.nc]"
+                :tr="[0]"
+                other="0"
                 dropoff-percent="10"
+                :is-percentage="isPercentage"
+                :show-as-calculated-percentage="showAsCalclatedPercentage"
               />
             </td>
           </tr>
           <tr class="bg-nc">
             <td>NC</td>
+            <td class="py-2 px-1 whitespace-nowrap">
+              <FactionSegmentBar
+                :vs="scores.kills.nc.vs"
+                :nc="0"
+                :tr="scores.kills.nc.tr"
+                :other="0"
+                dropoff-percent="15"
+              />
+            </td>
+            <td class="py-2 px-1 whitespace-nowrap">
+              <FactionSegmentBar
+                :vs="scores.captures.nc.vs"
+                :nc="0"
+                :tr="scores.captures.nc.tr"
+                :other="0"
+                dropoff-percent="15"
+              />
+            </td>
+            <td class="text-center">=</td>
             <td class="py-2 px-1 whitespace-nowrap">
               <FactionSegmentMultiBar
                 :keys="['Kills', 'Captures']"
@@ -99,24 +121,6 @@
                 dropoff-percent="10"
                 :is-percentage="isPercentage"
                 :show-as-calculated-percentage="showAsCalclatedPercentage"
-              />
-            </td>
-            <td class="py-2 px-1 whitespace-nowrap">
-              <FactionSegmentBar
-                :vs="scores.kills.nc.vs"
-                :nc="0"
-                :tr="scores.kills.nc.tr"
-                :other="0"
-                dropoff-percent="10"
-              />
-            </td>
-            <td class="py-2 px-1 whitespace-nowrap">
-              <FactionSegmentBar
-                :vs="scores.captures.nc.vs"
-                :nc="0"
-                :tr="scores.captures.nc.tr"
-                :other="0"
-                dropoff-percent="10"
               />
             </td>
           </tr>
