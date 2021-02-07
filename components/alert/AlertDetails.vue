@@ -1,7 +1,7 @@
 <template>
   <div class="col-span-12 lg:col-span-6 ss:col-span-3 card">
     <div class="tag section">General Info</div>
-    <table class="min-w-full divide-y divide-gray-500">
+    <table class="min-w-full">
       <tbody class="divide-y divide-gray-200">
         <tr>
           <td class="px-2 py-1 whitespace-nowrap">

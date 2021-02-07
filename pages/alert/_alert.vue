@@ -2,7 +2,7 @@
   <div>
     <MetaHead :title="pageTitle" :description="pageDesc"></MetaHead>
     <div v-if="!loaded" class="text-center">
-      <h1>Loading... `g</h1>
+      <h1>Loading...</h1>
     </div>
     <div v-if="loaded" class="grid grid-cols-12 gap-2">
       <AlertResult
