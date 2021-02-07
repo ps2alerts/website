@@ -254,8 +254,6 @@ export default Vue.extend({
 
           this.scores.kills = returned[0].factionKills
           this.scores.captures = this.transformFacilityData(returned[1])
-
-          console.log('scores', this.scores)
         })
         .catch((err) => {
           this.error = err
@@ -264,8 +262,6 @@ export default Vue.extend({
     transformFacilityData(
       result: InstanceFacilityControlAggregateResponseInterface[]
     ): FactionVsFactionDataInterface {
-      console.log(result)
-
       const scores = {
         vs: {
           nc: 0,
