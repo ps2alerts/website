@@ -128,7 +128,8 @@
       </table>
       <div class="text-sm text-gray-500 text-left">
         <p class="mb-2">
-          Balance is calculated via a points system, using the following counts:
+          Faction Opponent Focus is calculated via a points system, using the
+          following counts:
         </p>
         <ul>
           <li>Kills = 1 point</li>
