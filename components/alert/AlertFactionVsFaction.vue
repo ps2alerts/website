@@ -10,7 +10,7 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded" class="text-center">
-      <p class="mb-2 text-sm text-gray-600">
+      <p class="mb-2 text-sm text-gray-500">
         Below is calculated into a points system. Each kill made by a faction is
         worth 1 point, each capture 100 points.
       </p>
