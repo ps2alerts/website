@@ -13,7 +13,7 @@
           left: '50%',
         }"
       ></div>
-      <v-tooltip v-for="(value, key) in vs" :key="key" bottom>
+      <v-tooltip v-for="(value, key) in vs" :key="'vs' + key" bottom>
         <template #activator="{ on, attrs }">
           <div
             class="faction-bar-segment"
@@ -43,7 +43,7 @@
         <span v-else>VS {{ keys[key] }}: {{ vsString(key, true) }}</span>
       </v-tooltip>
 
-      <v-tooltip v-for="(value, key) in tr" :key="key" bottom>
+      <v-tooltip v-for="(value, key) in tr" :key="'tr' + key" bottom>
         <template #activator="{ on, attrs }">
           <div
             class="faction-bar-segment"
@@ -72,7 +72,7 @@
         <span v-else>TR {{ keys[key] }}: {{ trString(key, true) }}</span>
       </v-tooltip>
 
-      <v-tooltip v-for="(value, key) in nc" :key="key" bottom>
+      <v-tooltip v-for="(value, key) in nc" :key="'nc' + key" bottom>
         <template #activator="{ on, attrs }">
           <div
             class="faction-bar-segment"
