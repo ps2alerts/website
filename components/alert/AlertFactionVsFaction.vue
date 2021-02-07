@@ -132,7 +132,7 @@
           following counts:
         </p>
         <table
-          class="w-full table-fixed border-row mb-2 text-center text-base text-white"
+          class="w-full table-fixed border-row border-col mb-2 text-center text-base text-white"
         >
           <thead>
             <tr class="font-bold">
