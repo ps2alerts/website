@@ -5,8 +5,9 @@
       <div class="text-center">
         <h1 class="text-title">Statistics</h1>
         <p class="mb-4 text-lg">
-          Statistics start as of 4th January 2021 02:00 UTC unless otherwise
-          stated
+          Data collected since <b>4th January 2021 02:00 UTC</b> unless
+          otherwise stated.<br />Data is updated every 15 minutes except
+          victories (instant).
         </p>
       </div>
     </div>
