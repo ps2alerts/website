@@ -4,7 +4,7 @@
   >
     <div class="tag announcement">
       <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>
-      Notice - 12th Feb 22:27 UT
+      Notice - 12th Feb 22:27 UTC
     </div>
 
     <div class="grid grid-cols-12 place-items-center">
