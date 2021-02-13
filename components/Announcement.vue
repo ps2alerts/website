@@ -6,19 +6,6 @@
       <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>
       Notice - 12th Feb 22:27 UTC
     </div>
-
-    <div class="grid grid-cols-12 place-items-center">
-      <div class="col-span-12 p-2">
-        <h1 class="text-subtitle text-center">Census is currently offline</h1>
-        <p>
-          Census is currently having issues with their certificates. No new
-          alerts or kills will be logged into PS2Alerts until this has been
-          fixed. Apologies for the issues, but this is completely out of my
-          hands at this time.
-        </p>
-        <p>- Maelstrome26 (PS2Alerts Dev)</p>
-      </div>
-    </div>
   </div>
 </template>
 
