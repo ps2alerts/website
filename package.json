@@ -23,7 +23,7 @@
     "chartjs-plugin-annotation": "^0.5.7",
     "core-js": "^3.8.3",
     "moment": "^2.29.1",
-    "moment-timezone": "^0.5.32",
+    "moment-timezone": "^0.5.33",
     "nuxt": "^2.14.12",
     "nuxt-fontawesome": "^0.4.0",
     "postcss": "^8.2.6",
