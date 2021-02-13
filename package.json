@@ -26,7 +26,7 @@
     "moment-timezone": "^0.5.32",
     "nuxt": "^2.14.12",
     "nuxt-fontawesome": "^0.4.0",
-    "postcss": "^8.2.4",
+    "postcss": "^8.2.6",
     "vue-chartjs": "^3.5.1",
     "vue-numeral-filter": "^2.0.0",
     "vue2-flip-countdown": "^0.11.1",
