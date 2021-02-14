@@ -1,15 +1,49 @@
 @layer utilities {
+  @keyframes leaderVSPulse {
+    0% { box-shadow: none }
+    50% { box-shadow: 0 0 10px #8e6bdd; background-color: #784fd6; }
+    100% { box-shadow: none }
+  }
+
+  @keyframes leaderNCPulse {
+    0% { box-shadow: none }
+    50% { box-shadow: 0 0 10px #5aabff; background-color: #347dca; }
+    100% { box-shadow: none }
+  }
+
+  @keyframes leaderTRPulse {
+    0% { box-shadow: none }
+    50% { box-shadow: 0 0 10px #fb6060; background-color: #ef3d3d; }
+    100% { box-shadow: none }
+  }
+  @keyframes leaderOtherPulse {
+    0% { box-shadow: none }
+    50% { box-shadow: 0 0 10px #ccc; }
+    100% { box-shadow: none }
+  }
   .vs {
     @apply bg-purple-700;
+    &.bg-leader {
+      animation: leaderVSPulse 3s infinite;
+    }
   }
   .nc {
     @apply bg-blue-700;
+    &.bg-leader {
+      animation: leaderNCPulse 3s infinite;
+    }
   }
   .tr {
     @apply bg-red-700;
+    &.bg-leader {
+      animation: leaderTRPulse 3s infinite;
+    }
   }
   .other {
     @apply bg-gray-600;
+    &.bg-leader {
+      animation: leaderOtherPulse 3s infinite;
+    }
   }
   .border-vs {
     @apply border border-purple-500;

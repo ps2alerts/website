@@ -15,6 +15,7 @@
                 'rounded-r':
                   nc === 0 && tr === 0 && other === 0 && outOfPlay === 0,
                 'border-vs': vs > 0,
+                'bg-leader': leader === 1,
               }"
             >
               <span v-if="!isPercentage && numeral">{{
@@ -44,6 +45,7 @@
                 'rounded-l': vs === 0,
                 'rounded-r': nc === 0 && other === 0 && outOfPlay === 0,
                 'border-tr': tr > 0,
+                'bg-leader': leader === 3,
               }"
             >
               <span v-if="!isPercentage && numeral">{{
@@ -73,6 +75,7 @@
                 'rounded-l': vs === 0 && tr === 0,
                 'rounded-r': other === 0 && outOfPlay === 0,
                 'border-nc': nc > 0,
+                'bg-leader': leader === 2,
               }"
             >
               <span v-if="!isPercentage && numeral">{{
@@ -136,6 +139,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { Faction } from '~/constants/Faction'
 
 export default Vue.extend({
   name: 'FactionSegmentBar',
@@ -215,6 +219,18 @@ export default Vue.extend({
     },
     percentOutOfPlay(): number {
       return (this.outOfPlay / this.total) * 100
+    },
+    leader(): Faction {
+      if (this.percentVS > this.percentNC && this.percentVS > this.percentTR) {
+        return Faction.VANU_SOVEREIGNTY
+      }
+      if (this.percentNC > this.percentVS && this.percentNC > this.percentTR) {
+        return Faction.NEW_CONGLOMERATE
+      }
+      if (this.percentTR > this.percentVS && this.percentTR > this.percentNC) {
+        return Faction.TERRAN_REPUBLIC
+      }
+      return Faction.NONE
     },
   },
   methods: {
