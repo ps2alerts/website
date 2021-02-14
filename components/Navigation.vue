@@ -38,6 +38,7 @@
         href="https://www.patreon.com/PS2Alerts"
         class="btn btn-sm btn-alt mb-2"
         target="_blank"
+        style="box-shadow: 0 0 5px #ccc"
       >
         <font-awesome-icon :icon="['fab', 'patreon']" /> Support the project!
       </a>
