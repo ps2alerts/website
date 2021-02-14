@@ -1,5 +1,8 @@
 <template>
-  <div class="px-4 py-4 mb-2 bg-tint rounded relative" :class="victorClass">
+  <div
+    class="px-4 py-4 mb-2 bg-tint border-tint rounded relative"
+    :class="victorClass"
+  >
     <div v-show="alert.state === 1" class="alert-status in-progress">
       <span class="animate-ping rounded-max ping-circle" />
       Live

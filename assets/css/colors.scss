@@ -57,6 +57,9 @@
   .border-other {
     @apply border border-gray-500;
   }
+  .border-tint {
+    border: 1px solid #5d6265;
+  }
   .outofplay {
     @apply bg-gray-800;
     background: repeating-linear-gradient(45deg, #801a1a, #631c1c 10px, #881a1a 10px, #b94b4b 20px);
