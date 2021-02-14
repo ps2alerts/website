@@ -134,7 +134,7 @@
 
       <div class="col-span-12 ss:col-span-6 card relative">
         <div class="tag section">
-          Server Activity Level Victories (High & Prime)
+          Server Activity Level Victories (Prime & High)
         </div>
         <CountdownSpinner
           :percent="updateCountdownPercent"
@@ -144,19 +144,6 @@
           <thead class="font-bold">
             <tr>
               <td class="text-left pr-1">Server</td>
-              <td>
-                High
-                <v-tooltip bottom>
-                  <template #activator="{ on, attrs }">
-                    <font-awesome-icon
-                      :icon="['fas', 'info-circle']"
-                      v-bind="attrs"
-                      v-on="on"
-                    ></font-awesome-icon>
-                  </template>
-                  3-4 platoons per faction on average in an alert
-                </v-tooltip>
-              </td>
               <td>
                 Prime
                 <v-tooltip bottom>
@@ -170,6 +157,19 @@
                   4+ platoons per faction on average in an alert
                 </v-tooltip>
               </td>
+              <td>
+                High
+                <v-tooltip bottom>
+                  <template #activator="{ on, attrs }">
+                    <font-awesome-icon
+                      :icon="['fas', 'info-circle']"
+                      v-bind="attrs"
+                      v-on="on"
+                    ></font-awesome-icon>
+                  </template>
+                  3-4 platoons per faction on average in an alert
+                </v-tooltip>
+              </td>
             </tr>
           </thead>
           <tbody>
@@ -179,11 +179,11 @@
               </td>
               <td class="p-1 w-1/2">
                 <FactionSegmentBar
-                  v-if="data.brackets[4]"
-                  :vs="data.brackets[4].vs"
-                  :nc="data.brackets[4].nc"
-                  :tr="data.brackets[4].tr"
-                  :other="data.brackets[4].draws"
+                  v-if="data.brackets[5]"
+                  :vs="data.brackets[5].vs"
+                  :nc="data.brackets[5].nc"
+                  :tr="data.brackets[5].tr"
+                  :other="data.brackets[5].draws"
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   other-segment-text="Draws"
@@ -193,11 +193,11 @@
               </td>
               <td class="p-1 w-1/2">
                 <FactionSegmentBar
-                  v-if="data.brackets[5]"
-                  :vs="data.brackets[5].vs"
-                  :nc="data.brackets[5].nc"
-                  :tr="data.brackets[5].tr"
-                  :other="data.brackets[5].draws"
+                  v-if="data.brackets[4]"
+                  :vs="data.brackets[4].vs"
+                  :nc="data.brackets[4].nc"
+                  :tr="data.brackets[4].tr"
+                  :other="data.brackets[4].draws"
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   other-segment-text="Draws"
@@ -220,7 +220,7 @@
             <tr>
               <td class="text-left pr-1">Server</td>
               <td>
-                Dead
+                Medium
                 <v-tooltip bottom>
                   <template #activator="{ on, attrs }">
                     <font-awesome-icon
@@ -229,7 +229,7 @@
                       v-on="on"
                     ></font-awesome-icon>
                   </template>
-                  &lt;1 platoon per faction on average in an alert
+                  2-3 platoons per faction on average in an alert
                 </v-tooltip>
               </td>
               <td>
@@ -246,7 +246,7 @@
                 </v-tooltip>
               </td>
               <td>
-                Medium
+                Dead
                 <v-tooltip bottom>
                   <template #activator="{ on, attrs }">
                     <font-awesome-icon
@@ -255,7 +255,7 @@
                       v-on="on"
                     ></font-awesome-icon>
                   </template>
-                  2-3 platoons per faction on average in an alert
+                  &lt;1 platoon per faction on average in an alert
                 </v-tooltip>
               </td>
             </tr>
@@ -267,11 +267,11 @@
               </td>
               <td class="p-1 w-1/3">
                 <FactionSegmentBar
-                  v-if="data.brackets[1]"
-                  :vs="data.brackets[1].vs"
-                  :nc="data.brackets[1].nc"
-                  :tr="data.brackets[1].tr"
-                  :other="data.brackets[1].draws"
+                  v-if="data.brackets[3]"
+                  :vs="data.brackets[3].vs"
+                  :nc="data.brackets[3].nc"
+                  :tr="data.brackets[3].tr"
+                  :other="data.brackets[3].draws"
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   other-segment-text="Draws"
@@ -295,11 +295,11 @@
               </td>
               <td class="p-1 w-1/3">
                 <FactionSegmentBar
-                  v-if="data.brackets[3]"
-                  :vs="data.brackets[3].vs"
-                  :nc="data.brackets[3].nc"
-                  :tr="data.brackets[3].tr"
-                  :other="data.brackets[3].draws"
+                  v-if="data.brackets[1]"
+                  :vs="data.brackets[1].vs"
+                  :nc="data.brackets[1].nc"
+                  :tr="data.brackets[1].tr"
+                  :other="data.brackets[1].draws"
                   :is-percentage="mode === 'percent'"
                   :show-as-calculated-percentage="mode === 'percent'"
                   other-segment-text="Draws"
