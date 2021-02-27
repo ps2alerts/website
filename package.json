@@ -21,7 +21,7 @@
     "@nuxtjs/google-gtag": "^1.0.4",
     "chart.js": "2.9.3",
     "chartjs-plugin-annotation": "^0.5.7",
-    "core-js": "^3.8.3",
+    "core-js": "^3.9.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "nuxt": "^2.14.12",
