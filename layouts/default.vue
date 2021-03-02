@@ -35,7 +35,7 @@
               :icon="['fas', 'exclamation-triangle']"
             ></font-awesome-icon>
             Census is currently unstable for PC. Combat metrics for PC alerts
-            are not currently functional.
+            are not currently functional. PS4 alerts are functioning as normal.
             <font-awesome-icon
               :icon="['fas', 'exclamation-triangle']"
             ></font-awesome-icon>
