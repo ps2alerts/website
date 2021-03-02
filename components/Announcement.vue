@@ -4,7 +4,18 @@
   >
     <div class="tag announcement">
       <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>
-      Notice - 12th Feb 22:27 UTC
+      Notice - 1st March
+    </div>
+    <div>
+      <h1>Census is currently experiencing issues</h1>
+      <p>
+        Census, the game's API, is currently broken. We are receiving facility
+        control data (territory) so PS2Alerts will continue to operate, but all
+        combat related statistics are none functional at this time. Furthermore,
+        all alerts will be classified as Dead (as we have no means of knowing
+        who is shooting who to generate population metrics accurately).
+        Apologies for any annoyance this may cause.
+      </p>
     </div>
   </div>
 </template>
