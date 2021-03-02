@@ -30,6 +30,16 @@
               ></font-awesome-icon>
             </div>
           </div>
+          <div class="bg-orange-600 w-full p-4 mt-4 text-center rounded">
+            <font-awesome-icon
+              :icon="['fas', 'exclamation-triangle']"
+            ></font-awesome-icon>
+            Census is currently unstable for PC. Combat metrics for PC alerts
+            are not currently functional.
+            <font-awesome-icon
+              :icon="['fas', 'exclamation-triangle']"
+            ></font-awesome-icon>
+          </div>
           <Navigation class="hidden lg:block" />
         </client-only>
         <client-only>
