@@ -3,7 +3,7 @@
     <select
       id="server"
       v-model="world"
-      class="block w-full bg-tint border border-gray-600 py-3 px-4 pr-8 rounded"
+      class="block w-full bg-tint border-tint py-3 px-4 pr-8 rounded"
       :disabled="disabled"
     >
       <option :value="ANY">Any</option>

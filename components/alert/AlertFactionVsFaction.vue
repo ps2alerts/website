@@ -127,17 +127,30 @@
         </tbody>
       </table>
       <div class="text-sm text-gray-500 text-left">
-        <p class="mb-2">
-          Balance is calculated via a points system, using the following counts:
+        <p class="mb-2 text-center">
+          Faction Opponent Focus is calculated via a points system, using the
+          following counts:
         </p>
-        <ul>
-          <li>Kills = 1 point</li>
-          <li>Major facilities (Tech / Bio / Amp) = 150 points</li>
-          <li>
-            Large facilities (Tower bases, multi point bases) = 100 points
-          </li>
-          <li>Small facilities / Construction (1 min, 4 min) = 50 points</li>
-        </ul>
+        <table
+          class="w-full table-fixed border-row border-col mb-2 text-center text-base text-white"
+        >
+          <thead>
+            <tr class="font-bold">
+              <td class="w-2/20">Kills</td>
+              <td class="w-4/20">Bio / Amp / Tech</td>
+              <td class="w-8/20">Large bases (Towers / 3 pointers)</td>
+              <td class="w-6/20">Small bases (1 / 4 min)</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>150</td>
+              <td>100</td>
+              <td>50</td>
+            </tr>
+          </tbody>
+        </table>
         <p>
           The <span class="text-yellow-500">dashed bar</span> indicates an even
           50/50 balance between the faction and it's opponents. If all bars are

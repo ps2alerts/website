@@ -1,8 +1,0 @@
-db_pass = "TMh!Z4Qe5TmZ&WtanqbsGNZeWtbhtSR6M*@*yu22D53s^JgU5w"
-db_user = "ps2alerts"
-redis_pass = "N67HdGdooqU4fGL03Aaw"
-rabbitmq_pass = "BPlgYq7mxvsdv4ebkDhooqFf2sD3n8"
-census_service_id = "planetside2alertstats"
-checksum_version = "5516888"
-dd_api_key = "36af03553c46ba1e217f852fce2ca59b"
-dd_app_key = "eebfaf1eaf514828afec01e3f28ab1513d84ebf3"

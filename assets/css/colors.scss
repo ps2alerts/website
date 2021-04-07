@@ -1,15 +1,27 @@
 @layer utilities {
   .vs {
     @apply bg-purple-700;
+    &.bg-leader {
+      box-shadow: 0 0 10px #8e6bdd; background-color: #8055e5;
+    }
   }
   .nc {
     @apply bg-blue-700;
+    &.bg-leader {
+      box-shadow: 0 0 10px #5aabff; background-color: #347dca;
+    }
   }
   .tr {
     @apply bg-red-700;
+    &.bg-leader {
+      box-shadow: 0 0 10px #fb6060; background-color: #ef3d3d;
+    }
   }
   .other {
     @apply bg-gray-600;
+    &.bg-leader {
+      box-shadow: 0 0 10px #ccc;
+    }
   }
   .border-vs {
     @apply border border-purple-500;
@@ -22,6 +34,9 @@
   }
   .border-other {
     @apply border border-gray-500;
+  }
+  .border-tint {
+    border: 1px solid #5d6265;
   }
   .outofplay {
     @apply bg-gray-800;
