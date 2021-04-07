@@ -50,7 +50,7 @@
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-nuxt": "^1.0.0",
     "eslint-plugin-prettier": "^3.3.1",
-    "eslint-plugin-vue": "^7.6.0",
+    "eslint-plugin-vue": "^7.8.0",
     "fibers": "^5.0.0",
     "postcss-extend": "^1.0.5",
     "postcss-normalize": "^9.0.0",
