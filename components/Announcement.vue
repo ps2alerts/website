@@ -4,17 +4,18 @@
   >
     <div class="tag announcement">
       <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>
-      Notice - 1st March
+      Notice - 2nd July 2021
     </div>
     <div>
-      <h1>Census is currently experiencing issues</h1>
+      <h1>Prime Alerts are currently not recording correctly</h1>
       <p>
-        Census, the game's API, is currently broken. We are receiving facility
-        control data (territory) so PS2Alerts will continue to operate, but all
-        combat related statistics are none functional at this time. Furthermore,
-        all alerts will be classified as Dead (as we have no means of knowing
-        who is shooting who to generate population metrics accurately).
-        Apologies for any annoyance this may cause.
+        Due to a Census (PS2 API) issue, we are unable to accurately determine the faction NSO players are playing for. Since the launch of the NSO update, this has majorly borked the population acticity levels as we cannot identify factions for players. Pre-NSO update this wasn't an issue as there was maybe 20 players at a prime time alert, now there's around 300.
+      </p>
+      <p>
+        This will not be fixed until Census has been changed. I'm also not willing to "bodge" a fix using NSO pops by attempting to calculate who they are playing on as it is inherently inaccurate. When the NSO hype dies down, this issue will naturally dissipate.
+      </p>
+      <p>
+        - Maelstrome26, PS2Alerts Developer
       </p>
     </div>
   </div>
