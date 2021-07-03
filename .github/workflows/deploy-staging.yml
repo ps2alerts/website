@@ -110,6 +110,8 @@ jobs:
           terraform plan \
             -var='checksum_version=${{ steps.sha.outputs.sha_short }}' \
             -var='app_version=${{ steps.sha.outputs.sha_short }}' \
+            -var='dd_api_key=${{ secrets.DATADOG_API_KEY }}' \
+            -var='dd_app_key=${{ secrets.DATADOG_APP_KEY }}' \
             -target=module.website_staging -out='.tfout'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
