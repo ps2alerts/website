@@ -7,12 +7,13 @@
       Notice - 2nd July 2021
     </div>
     <div>
-      <h1 class="text-3xl mb-4 text-center">Prime Alerts are currently not recording correctly</h1>
+      <h1 class="text-3xl mb-4 text-center">Alert Brackets are being incorrectly calculated</h1>
       <p>
-        Due to an Census (PS2 API) issue, we are unable to accurately determine the faction NSO players are playing for. Since the launch of the NSO update, this has majorly borked the population activity levels as we cannot identify factions for players. Pre-NSO update this wasn't an issue as there was maybe 20 players at a prime time alert, now there's around 300.
+        Currently Census (the game's API) does not include the faction that the NSO players are currently fighting for. Therefore, we are unable to accurately calculate the population levels for each faction as the NSO players can bounce between factions, making this inherently inaccurate. This didn't used to be be an issue before, as there was maybe 2% of players on NSO per alert, but as a result of the NSO update that is now more 20-30%.
       </p>
+      <p>Alert Brackets use a fairness system where <b>all factions</b> need to field X amount of platoons in order to qualify for that bracket (to prevent factions from steamrolling alerts with high pop, or one faction being bullied due to low pop). Since we cannot reliability calculate NSO player's factions right now, the faction's pop cannot be fully accurately calculated.</p>
       <p>
-        This will not be fixed until Census has been changed. I'm also not willing to "bodge" a fix using NSO pops by attempting to calculate who they are playing on as it is inherently inaccurate. When the NSO hype dies down, this issue will naturally dissipate.
+        This will not be fixed until Census has been changed. I'm also not willing to "bodge" a fix using NSO pops by attempting to calculate who they are playing on as it is inherently inaccurate as Freelance NSO can bounce between factions at will, and it will consume a lot of my limited time even attempting it when the game should supply it. When the NSO hype dies down, this issue will naturally dissipate.
       </p>
       <p>
         - <b>Maelstrome26</b> - PS2Alerts Developer
