@@ -1,14 +1,15 @@
 <template>
   <section class="mb-2">
     <div class="col-span-12 card relative">
-      <div class="bg-orange-600 w-full p-4 mt-4 text-center rounded">
-        This graph is currently messed up due to a recent database re-creation.
-        The victory timeline records are out of order. This will be fixed soon.
-      </div>
       <div class="tag section">Victory Timeline</div>
       <CountdownSpinner :percent="updateCountdownPercent" update-rate="60000" />
       <div v-if="loaded" class="text-center">
         <div class="grid grid-cols-12 gap-2">
+          <div class="bg-orange-600 w-full p-4 mt-4 text-center rounded">
+            This graph is currently messed up due to a recent database
+            re-creation. The victory timeline records are out of order. This
+            will be fixed soon.
+          </div>
           <FilterWorld
             class="col-span-6 lg:col-start-3 lg:col-span-4 ss:col-span-2 ss:col-start-5"
             :world-filter="selectedWorld"
