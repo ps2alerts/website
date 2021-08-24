@@ -16,7 +16,8 @@
       </p>
       <p>I thank everyone for their patience and kind words during this time.</p>
       <p>
-        - <b>Maelstrome26</b> - PS2Alerts Developer
+        - <b>Maelstrome26</b>
+        <br>PS2Alerts Developer
       </p>
     </div>
   </div>
