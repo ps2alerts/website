@@ -9,7 +9,7 @@
     <div>
       <h1 class="text-3xl mb-4 text-center">PS2Alerts is currently unstable</h1>
       <p>
-        At this time PS2Alerts' database is having issues maintaining stability.
+        At this time PS2Alerts' database is having issues maintaining stability when adding new data.
         I'm investigating these issues with the upmost urgency and will endevour
         to get this fixed ASAP. Further updates can be found on our
         <a href="https://discord.io/ps2alerts">Discord server</a>.

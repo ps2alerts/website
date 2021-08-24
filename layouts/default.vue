@@ -35,7 +35,7 @@
               <font-awesome-icon
                 :icon="['fas', 'exclamation-triangle']"
               ></font-awesome-icon>
-              PS2Alerts is currently experiencing issues with it's database. The site will be inoperable for the time being.</b>
+              PS2Alerts is currently experiencing issues with it's database. No new data will be collected for the time being. <a href="/">More info</a></b>
               <font-awesome-icon
                 :icon="['fas', 'exclamation-triangle']"
               ></font-awesome-icon>
