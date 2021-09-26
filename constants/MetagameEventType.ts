@@ -36,6 +36,12 @@ export enum MetagameEventType {
   TR_HOSSIN_UNSTABLE_MELTDOWN = 191,
   TR_AMERISH_UNSTABLE_MELTDOWN = 192,
   TR_ESAMIR_UNSTABLE_MELTDOWN = 190,
+
+  // High pop alerts
+  AMERISH_HIGH_POP_CONQUEST = 211,
+  ESAMIR_HIGH_POP_CONQUEST = 212,
+  HOSSIN_HIGH_POP_CONQUEST = 213,
+  INDAR_HIGH_POP_CONQUEST = 214,
 }
 
 export const metagameEventTypeArray = [
@@ -63,9 +69,10 @@ export const metagameEventTypeArray = [
   191,
   192,
   193,
-  208,
-  209,
-  210,
+  211,
+  212,
+  213,
+  214,
 ]
 
 const longAlert = 90 * 60 * 1000
@@ -75,6 +82,7 @@ export const metagameEventTypeDetailsMap: Map<
   number,
   MetagameDetailsInterface
 > = new Map<number, MetagameDetailsInterface>([
+  // Indar
   [
     147,
     {
@@ -106,6 +114,7 @@ export const metagameEventTypeDetailsMap: Map<
     },
   ],
 
+  // Esamir
   [
     150,
     {
@@ -137,6 +146,7 @@ export const metagameEventTypeDetailsMap: Map<
     },
   ],
 
+  // Hossin
   [
     153,
     {
@@ -168,6 +178,7 @@ export const metagameEventTypeDetailsMap: Map<
     },
   ],
 
+  // Amerish
   [
     156,
     {
@@ -200,6 +211,7 @@ export const metagameEventTypeDetailsMap: Map<
   ],
 
   // Unstable Meltdowns
+  // NC
   [
     176,
     {
@@ -241,6 +253,7 @@ export const metagameEventTypeDetailsMap: Map<
     },
   ],
 
+  // VS
   [
     186,
     {
@@ -282,6 +295,7 @@ export const metagameEventTypeDetailsMap: Map<
     },
   ],
 
+  // TR
   [
     190,
     {
@@ -320,6 +334,48 @@ export const metagameEventTypeDetailsMap: Map<
       duration: shortAlert,
       triggeringFaction: Faction.TERRAN_REPUBLIC,
       unstable: true,
+    },
+  ],
+
+  // High pop triggered alerts
+  [
+    211,
+    {
+      title: 'Amerish Conquest (high pop)',
+      zone: Zone.AMERISH,
+      duration: longAlert,
+      triggeringFaction: Faction.NONE,
+      unstable: false,
+    },
+  ],
+  [
+    212,
+    {
+      title: 'Esamir Conquest (high pop)',
+      zone: Zone.ESAMIR,
+      duration: longAlert,
+      triggeringFaction: Faction.NONE,
+      unstable: false,
+    },
+  ],
+  [
+    213,
+    {
+      title: 'Hossin Conquest (high pop)',
+      zone: Zone.HOSSIN,
+      duration: longAlert,
+      triggeringFaction: Faction.NONE,
+      unstable: false,
+    },
+  ],
+  [
+    214,
+    {
+      title: 'Indar Conquest (high pop)',
+      zone: Zone.INDAR,
+      duration: longAlert,
+      triggeringFaction: Faction.NONE,
+      unstable: false,
     },
   ],
 ])
