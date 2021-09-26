@@ -3,6 +3,8 @@ import Vue from 'vue'
 
 const factionName = Vue.filter('factionName', (value: Faction) => {
   switch (value) {
+    case Faction.NONE:
+      return 'None / High Pops'
     case Faction.VANU_SOVEREIGNTY:
       return 'Vanu Sovereignty'
     case Faction.NEW_CONGLOMERATE:
