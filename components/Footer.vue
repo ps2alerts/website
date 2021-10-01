@@ -2,7 +2,9 @@
   <footer class="text-center text-xs py-4 px-2">
     <div class="text-gray-600">
       Copyright &copy; 2014 - {{ year }}
-      <a class="text-gray-500" href="https://mattcavanagh.me">Matt Cavanagh</a>
+      <a class="text-gray-500" href="https://mattcavanagh.me"
+        >Matt "Maelstromeous" Cavanagh</a
+      >
       (aka
       <a class="text-gray-500" href="https://twitter.com/maelstromeous"
         >Maelstrome26</a
