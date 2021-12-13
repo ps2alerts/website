@@ -12,7 +12,6 @@ module.exports = {
       'nuxt.config.ts',
     ],
   },
-  target: 'relaxed',
   prefix: '',
   important: false,
   separator: ':',
@@ -214,13 +213,13 @@ module.exports = {
     borderRadius: {
       none: '0',
       sm: '0.125rem',
-      default: '0.25rem',
+      DEFAULT: '0.25rem',
       md: '0.375rem',
       lg: '0.5rem',
       full: '9999px',
     },
     borderWidth: {
-      default: '1px',
+      DEFAULT: '1px',
       0: '0',
       2: '2px',
       4: '4px',

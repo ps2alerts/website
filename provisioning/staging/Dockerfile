@@ -13,4 +13,4 @@ ENV API_HOST="https://staging.api.ps2alerts.com"
 ENV GOOGLE_PROPERTY="G-FJDCBTJV5D"
 
 USER node
-RUN cd /app && npm ci --also=dev && npm run generate && npm prune --production
+RUN cd /app && yarn install --frozen-lockfile && yarn run generate
