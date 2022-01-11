@@ -24,16 +24,16 @@
     }
   }
   .border-vs {
-    @apply border border-purple-500;
+    @apply border-0 border-purple-500;
   }
   .border-nc {
-    @apply border border-blue-500;
+    @apply border-0 border-blue-500;
   }
   .border-tr {
-    @apply border border-red-400;
+    @apply border-0 border-red-400;
   }
   .border-other {
-    @apply border border-gray-500;
+    @apply border-0 border-gray-500;
   }
   .border-tint {
     border: 1px solid #5d6265;
