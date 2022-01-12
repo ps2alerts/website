@@ -7,8 +7,10 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "lint": "npm run lint:js"
+    "lint:js": "eslint --ext \".js,.ts,.vue\" --ignore-path .gitignore .",
+    "lint:prettier": "prettier --check .",
+    "lint": "yarn lint:js && yarn lint:prettier",
+    "lintfix": "prettier --write --list-different . && yarn lint:js --fix"
   },
   "resolutions": {
     "sanitize.css": "12.0.1"
@@ -39,7 +41,6 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
-    "@babel/preset-env": "^7.16.5",
     "@nuxt/types": "^2.15.8",
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/eslint-config-typescript": "^8.0.0",
@@ -49,23 +50,17 @@
     "@nuxtjs/vuetify": "^1.11.3",
     "@tailwindcss/typography": "^0.2.0",
     "@tailwindcss/ui": "^0.7.2",
-    "@vue/test-utils": "^1.3.0",
     "babel-core": "7.0.0-bridge.0",
-    "babel-eslint": "^10.1.0",
-    "babel-jest": "^27.4.4",
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-nuxt": "^3.1.0",
-    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.2.0",
-    "jest": "^27.4.4",
     "postcss": "^8.4.4",
     "postcss-extend-rule": "^3.0.0",
-    "postcss-normalize": "^9.0.0",
     "prettier": "^2.5.1",
     "sass": "^1.32.8",
-    "sass-loader": "^10.1.1",
-    "ts-jest": "^27.1.1",
-    "vue-jest": "^3.0.4"
+    "sass-loader": "^10.1.1"
   }
 }

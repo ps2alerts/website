@@ -185,7 +185,6 @@ export default {
         'postcss-extend-rule': {},
         'postcss-import': {},
         'postcss-nested': {},
-        'postcss-normalize': {},
         autoprefixer: {},
       },
       preset: {
