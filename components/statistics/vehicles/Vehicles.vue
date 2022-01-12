@@ -187,6 +187,8 @@ export default Vue.extend({
           if (val.id === vehicle.vehicle) {
             return this.vehicleData[key]
           }
+
+          return null
         })
 
         vehicle.suicides = vehicle.suicides ?? 0
@@ -226,17 +228,15 @@ export default Vue.extend({
           kd: (totalKills / totalDeaths).toFixed(2),
         }
 
-        const tempData: StatisticsVehicleMetricsTableDataInterface = Object.assign(
-          vehicle,
-          {
+        const tempData: StatisticsVehicleMetricsTableDataInterface =
+          Object.assign(vehicle, {
             vehicleName: vehicleData
               ? this.$options.filters?.itemShortName(vehicleData.name)
               : `UNKNOWN (ID: ${vehicle.vehicle})`,
             vehicleFaction: vehicleData ? vehicleData.faction : Faction.NONE,
             worldName: worldNameFilter(vehicle.world),
             totals,
-          }
-        )
+          })
 
         newData.push(tempData)
       })

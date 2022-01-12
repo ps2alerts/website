@@ -1,26 +1,23 @@
-import { Faction } from '@/constants/Faction'
 import Vue from 'vue'
+import { Faction } from '@/constants/Faction'
 
-const factionId = Vue.filter(
-  'factionId',
-  (value: string): Faction => {
-    switch (value) {
-      case 'vs':
-      case 'VS':
-        return Faction.VANU_SOVEREIGNTY
-      case 'nc':
-      case 'NC':
-        return Faction.NEW_CONGLOMERATE
-      case 'tr':
-      case 'TR':
-        return Faction.TERRAN_REPUBLIC
-      case 'nso':
-      case 'NSO':
-        return Faction.NS_OPERATIVES
-      default:
-        return Faction.NONE
-    }
+const factionId = Vue.filter('factionId', (value: string): Faction => {
+  switch (value) {
+    case 'vs':
+    case 'VS':
+      return Faction.VANU_SOVEREIGNTY
+    case 'nc':
+    case 'NC':
+      return Faction.NEW_CONGLOMERATE
+    case 'tr':
+    case 'TR':
+      return Faction.TERRAN_REPUBLIC
+    case 'nso':
+    case 'NSO':
+      return Faction.NS_OPERATIVES
+    default:
+      return Faction.NONE
   }
-)
+})
 
 export default factionId

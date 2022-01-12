@@ -211,16 +211,17 @@ export default Vue.extend({
             return
           }
           const fId = factionId(faction)
-          const tableRow: StatisticsCombatServerFactionInterface = Object.assign(
-            // @ts-ignore
-            world[faction],
-            {
-              factionId: fId,
-              factionName: factionName(fId),
-              uuid: `${world.world}-${fId}`,
-              worldName: worldNameFilter(world.world),
-            }
-          )
+          const tableRow: StatisticsCombatServerFactionInterface =
+            Object.assign(
+              // @ts-ignore
+              world[faction],
+              {
+                factionId: fId,
+                factionName: factionName(fId),
+                uuid: `${world.world}-${fId}`,
+                worldName: worldNameFilter(world.world),
+              }
+            )
           factionMetrics.push(tableRow)
         })
       })

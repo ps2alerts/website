@@ -40,12 +40,6 @@ import { DATE_FORMAT } from '~/constants/Time'
 import { World } from '~/constants/World'
 import { Bracket } from '~/constants/Bracket'
 
-interface DailyCountInterface {
-  [k: string]: {
-    [k: string]: FactionMetricsInterface
-  }
-}
-
 export default Vue.extend({
   name: 'VictoriesTimeline',
   components: {

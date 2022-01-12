@@ -1,5 +1,5 @@
-import { Faction } from '@/constants/Faction'
 import Vue from 'vue'
+import { Faction } from '@/constants/Faction'
 
 const factionName = Vue.filter('factionName', (value: Faction) => {
   switch (value) {

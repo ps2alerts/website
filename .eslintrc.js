@@ -16,6 +16,9 @@ module.exports = {
     'vue/no-useless-v-bind': 'error',
     'vue/require-name-property': 'error',
     'vue/no-template-shadow': 'off',
+    'vue/multi-word-component-names': 'off',
+    'vue/require-valid-default-prop': 'off',
+    'import/named': 'warn',
   },
   plugins: ['prettier'],
 }

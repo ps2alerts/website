@@ -2,19 +2,22 @@
   .vs {
     @apply bg-purple-700;
     &.bg-leader {
-      box-shadow: 0 0 10px #8e6bdd; background-color: #8055e5;
+      box-shadow: 0 0 10px #8e6bdd;
+      background-color: #8055e5;
     }
   }
   .nc {
     @apply bg-blue-700;
     &.bg-leader {
-      box-shadow: 0 0 10px #5aabff; background-color: #347dca;
+      box-shadow: 0 0 10px #5aabff;
+      background-color: #347dca;
     }
   }
   .tr {
     @apply bg-red-700;
     &.bg-leader {
-      box-shadow: 0 0 10px #fb6060; background-color: #ef3d3d;
+      box-shadow: 0 0 10px #fb6060;
+      background-color: #ef3d3d;
     }
   }
   .other {
@@ -40,7 +43,13 @@
   }
   .outofplay {
     @apply bg-gray-800;
-    background: repeating-linear-gradient(45deg, #801a1a, #631c1c 10px, #881a1a 10px, #b94b4b 20px);
+    background: repeating-linear-gradient(
+      45deg,
+      #801a1a,
+      #631c1c 10px,
+      #881a1a 10px,
+      #b94b4b 20px
+    );
   }
 
   .bg-tint {

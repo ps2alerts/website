@@ -20,7 +20,7 @@ export default Vue.extend({
   props: {
     alert: {
       type: Object as () => InstanceTerritoryControlResponseInterface,
-      default: {},
+      default: () => {},
       required: true,
     },
   },

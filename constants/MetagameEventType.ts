@@ -1,6 +1,6 @@
-import { MetagameDetailsInterface } from '@/interfaces/MetagameDetailsInterface'
 import { Zone } from './Zone'
 import { Faction } from './Faction'
+import { MetagameDetailsInterface } from '@/interfaces/MetagameDetailsInterface'
 
 export enum MetagameEventType {
   // VS Triggered
@@ -39,33 +39,8 @@ export enum MetagameEventType {
 }
 
 export const metagameEventTypeArray = [
-  147,
-  148,
-  149,
-  150,
-  151,
-  152,
-  153,
-  154,
-  155,
-  156,
-  157,
-  158,
-  176,
-  177,
-  178,
-  179,
-  186,
-  187,
-  188,
-  189,
-  190,
-  191,
-  192,
-  193,
-  208,
-  209,
-  210,
+  147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 176, 177, 178,
+  179, 186, 187, 188, 189, 190, 191, 192, 193, 208, 209, 210,
 ]
 
 const longAlert = 90 * 60 * 1000

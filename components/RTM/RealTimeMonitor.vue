@@ -86,11 +86,11 @@
 <script lang="ts">
 /* eslint-disable nuxt/no-globals-in-created */
 import Vue from 'vue'
+import moment from 'moment-timezone'
 import ApiRequest from '@/api-request'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import { InstancePopulationAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstancePopulationAggregateResponseInterface'
 import { TIME_FORMAT } from '@/constants/Time'
-import moment from 'moment-timezone'
 import { Endpoints } from '@/constants/Endpoints'
 import RealTimeAlert from '~/components/RTM/RealTimeAlert.vue'
 

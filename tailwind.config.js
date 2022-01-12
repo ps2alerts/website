@@ -17,8 +17,5 @@ module.exports = {
   separator: ':',
   theme: {},
   corePlugins: {},
-  plugins: [
-    require('@tailwindcss/typography'),
-    require('@tailwindcss/ui')
-  ],
+  plugins: [require('@tailwindcss/typography'), require('@tailwindcss/ui')],
 }

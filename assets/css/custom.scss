@@ -58,7 +58,7 @@
 
   .border-no-bottom {
     &:last-child {
-      @apply border-transparent mb-0 pb-0
+      @apply border-transparent mb-0 pb-0;
     }
   }
 
@@ -75,7 +75,8 @@
     @apply bg-red-800 font-bold rounded-md py-2 px-4 inline-block font-medium border-transparent;
     transition: background-color 0.25s ease-out;
 
-    &:focus, &:active {
+    &:focus,
+    &:active {
       @apply border-transparent outline-none;
     }
     &:hover {
@@ -165,7 +166,7 @@
       height: 30px;
       line-height: 30px;
       border: 1px gold dashed;
-      z-index: 2
+      z-index: 2;
     }
 
     .faction-bar-segment {
@@ -188,7 +189,7 @@
     @apply content-spacing;
 
     &:last-child {
-      @apply mb-0
+      @apply mb-0;
     }
   }
 
@@ -196,7 +197,6 @@
   .editorial .text-subtitle {
     @apply content-spacing;
   }
-
 
   /* Components */
   .alert-status {
@@ -229,8 +229,12 @@
     }
   }
   @keyframes blinker {
-    from { opacity: 1; }
-    to { opacity: 0; }
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
   }
 
   .tag {
@@ -282,18 +286,19 @@
       }
     }
     &.border-row {
-      thead, tr {
-        @apply border-b border-gray-600
+      thead,
+      tr {
+        @apply border-b border-gray-600;
       }
       tr:last-of-type {
-        @apply border-b-0
+        @apply border-b-0;
       }
     }
     &.border-col {
       td {
-        @apply border-r border-gray-600
+        @apply border-r border-gray-600;
       }
-      td:last-child{
+      td:last-child {
         @apply border-0;
       }
     }
@@ -303,15 +308,16 @@
       tr {
         transition: background-color 0.25s ease-out;
         &:hover {
-          background-color: #2C393F;
+          background-color: #2c393f;
         }
       }
-      td, th {
+      td,
+      th {
         position: relative;
       }
       td:hover::after,
       th:hover::after {
-        content: "";
+        content: '';
         position: absolute;
         background-color: rgb(0, 0, 0);
         left: 0;

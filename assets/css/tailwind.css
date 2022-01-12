@@ -14,7 +14,8 @@
 }
 
 @layer utilities {
-  .router-link-active, .btn-active {
+  .router-link-active,
+  .btn-active {
     @apply bg-red-600 !important;
   }
 }
@@ -24,19 +25,22 @@
   .vs {
     @apply bg-purple-700;
     &.bg-leader {
-      box-shadow: 0 0 10px #8e6bdd; background-color: #8055e5;
+      box-shadow: 0 0 10px #8e6bdd;
+      background-color: #8055e5;
     }
   }
   .nc {
     @apply bg-blue-700;
     &.bg-leader {
-      box-shadow: 0 0 10px #5aabff; background-color: #347dca;
+      box-shadow: 0 0 10px #5aabff;
+      background-color: #347dca;
     }
   }
   .tr {
     @apply bg-red-700;
     &.bg-leader {
-      box-shadow: 0 0 10px #fb6060; background-color: #ef3d3d;
+      box-shadow: 0 0 10px #fb6060;
+      background-color: #ef3d3d;
     }
   }
   .other {
@@ -62,11 +66,17 @@
   }
   .outofplay {
     @apply bg-gray-800;
-    background: repeating-linear-gradient(45deg, #801a1a, #631c1c 10px, #881a1a 10px, #b94b4b 20px);
+    background: repeating-linear-gradient(
+      45deg,
+      #801a1a,
+      #631c1c 10px,
+      #881a1a 10px,
+      #b94b4b 20px
+    );
   }
 
   .bg-tint {
-    background-color: #39444B;
+    background-color: #39444b;
   }
   .bg-tint-light {
     @apply bg-gray-600 bg-opacity-50;
@@ -172,7 +182,7 @@
 
   .border-no-bottom {
     &:last-child {
-      @apply border-transparent mb-0 pb-0
+      @apply border-transparent mb-0 pb-0;
     }
   }
 
@@ -189,7 +199,8 @@
     @apply bg-red-800 font-bold rounded-md py-2 px-4 inline-block font-medium border-transparent;
     transition: background-color 0.25s ease-out;
 
-    &:focus, &:active {
+    &:focus,
+    &:active {
       @apply border-transparent outline-none;
     }
     &:hover {
@@ -278,7 +289,7 @@
       height: 30px;
       line-height: 30px;
       border: 1px gold dashed;
-      z-index: 2
+      z-index: 2;
     }
 
     .faction-bar-segment {
@@ -301,7 +312,7 @@
     @apply content-spacing;
 
     &:last-child {
-      @apply mb-0
+      @apply mb-0;
     }
   }
 
@@ -309,7 +320,6 @@
   .editorial .text-subtitle {
     @apply content-spacing;
   }
-
 
   /* Components */
   .alert-status {
@@ -342,8 +352,12 @@
     }
   }
   @keyframes blinker {
-    from { opacity: 1; }
-    to { opacity: 0; }
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
   }
 
   .tag {
@@ -395,18 +409,19 @@
       }
     }
     &.border-row {
-      thead, tr {
-        @apply border-2 border-gray-600
+      thead,
+      tr {
+        @apply border-2 border-gray-600;
       }
       tr:last-of-type {
-        @apply border-b-0
+        @apply border-b-0;
       }
     }
     &.border-col {
       td {
-        @apply border-r-2 border-gray-600
+        @apply border-r-2 border-gray-600;
       }
-      td:last-child{
+      td:last-child {
         @apply border-0;
       }
     }
@@ -416,15 +431,16 @@
       tr {
         transition: background-color 0.25s ease-out;
         &:hover {
-          background-color: #2C393F;
+          background-color: #2c393f;
         }
       }
-      td, th {
+      td,
+      th {
         position: relative;
       }
       td:hover::after,
       th:hover::after {
-        content: "";
+        content: '';
         position: absolute;
         background-color: rgb(0, 0, 0);
         left: 0;

@@ -1,10 +1,10 @@
 ---
 - hosts: localhost
   vars:
-    root_dir: "{{ playbook_dir }}/../../"
+    root_dir: '{{ playbook_dir }}/../../'
   tasks:
     - debug:
-        msg: "========= 🕸️  Starting Website module 🕸️  ========="
+        msg: '========= 🕸️  Starting Website module 🕸️  ========='
     - name: Install docker
       pip:
         name: docker
@@ -24,7 +24,7 @@
         force_source: yes
         build:
           pull: no
-          path: "{{ root_dir | realpath }}/provisioning/base"
+          path: '{{ root_dir | realpath }}/provisioning/base'
 
     - name: Build Website Dev Container
       docker_image:
@@ -35,7 +35,7 @@
         force_source: yes
         build:
           pull: no
-          path: "{{ root_dir | realpath }}/provisioning/dev"
+          path: '{{ root_dir | realpath }}/provisioning/dev'
 
     - name: Get user's current UID
       command: "id -u {{ lookup('ENV', 'USER') }}"
@@ -49,8 +49,8 @@
         name: ps2alerts-website-npm
         image: node:16
         volumes:
-          - "{{ root_dir | realpath }}:/app:rw"
-        user: "{{ id.stdout }}:{{ id.stdout }}"
-        command: "yarn --cwd /app install"
+          - '{{ root_dir | realpath }}:/app:rw'
+        user: '{{ id.stdout }}:{{ id.stdout }}'
+        command: 'yarn --cwd /app install'
         labels:
-          traefik.enable: "false"
+          traefik.enable: 'false'
