@@ -57,7 +57,7 @@
     "postcss": "^8.4.4",
     "postcss-extend-rule": "^3.0.0",
     "prettier": "^2.5.1",
-    "sass": "^1.32.8",
+    "sass": "^1.48.0",
     "sass-loader": "^10.1.1"
   }
 }
