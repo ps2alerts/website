@@ -5,6 +5,7 @@
   tasks:
     - debug:
         msg: "========= 🕸️ Initializing Website module 🕸️  ========="
+
     - name: Install docker
       pip:
         name: docker

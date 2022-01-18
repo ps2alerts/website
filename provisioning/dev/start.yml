@@ -5,6 +5,7 @@
   tasks:
     - debug:
         msg: "========= 🕸️ Starting Website module 🕸️  ========="
+
     - name: Delete dist folder
       file:
         path: "{{ root_dir }}/dist"
