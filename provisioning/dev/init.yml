@@ -4,7 +4,7 @@
     root_dir: "{{ playbook_dir }}/../../"
   tasks:
     - debug:
-        msg: "========= 🕸️ Initializing Website module 🕸️  ========="
+        msg: "========= 🕸️  Initializing Website module 🕸️  ========="
 
     - name: Install docker
       pip:
