@@ -20,9 +20,9 @@
       docker_container:
         name: ps2alerts-website
         image: ps2alerts/website:dev
+        state: started
         restart: no
         recreate: yes
-        state: started
         interactive: yes
         tty: yes
         volumes:
