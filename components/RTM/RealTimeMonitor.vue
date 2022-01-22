@@ -1,10 +1,10 @@
 <template>
   <section
     id="rtm"
-    class="px-4 pb-4 lg:px-0 lg:pb-0 border-b-2 border-red-700 lg:border-b-0"
+    class="px-4 pb-4 lg:px-0 lg:pb-0 border-b-2 border-red-700 mx-auto lg:w-full sm:w-3/4 lg:border-b-0"
   >
     <div
-      class="pt-4 lg:mt-2 bg-tint rounded lg:rounded-bl-none text-sm text-center relative overflow-hidden"
+      class="pt-4 lg:mt-2 bg-tint rounded lg:rounded-bl-none text-base text-center relative overflow-hidden"
     >
       <div class="tag section">Active Alerts</div>
       <CountdownSpinner
@@ -63,7 +63,7 @@
           <div
             v-for="alert in actives"
             :key="alert.instanceId"
-            class="py-1 px-2 border-b border-gray-600 border-no-bottom"
+            class="py-2 px-4 sm:px-2 border-b border-gray-500 border-no-bottom"
           >
             <RealTimeAlert
               :world="alert.world"

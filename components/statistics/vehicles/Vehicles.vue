@@ -1,7 +1,7 @@
 <template>
   <section class="mb-4">
     <h1 class="text-3xl text-center mb-2">Vehicle Statistics</h1>
-    <p class="text-sm text-center mb-4 text-gray-600">
+    <p class="text-sm text-center mb-4 text-gray-400">
       Bastions will always have 0 deaths as the API gives us no "bastion was
       killed" data.
     </p>

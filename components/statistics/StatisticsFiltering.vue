@@ -37,7 +37,7 @@
     <div v-if="!metrics.dates" class="col-span-12">
       <!-- Needed as date filter component is 2px higher :-/ -->
       <div style="height: 2px">&nbsp;</div>
-      <p class="text-center mb-3 text-sm text-gray-600">
+      <p class="text-center mb-3 text-sm text-gray-400">
         Date range filtering is not possible.
         <v-tooltip bottom z-index="1001">
           <template #activator="{ on, attrs }">

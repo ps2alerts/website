@@ -13,14 +13,14 @@
       <table class="w-full table-fixed border-row mb-2">
         <thead class="font-bold">
           <tr>
-            <td class="w-1/20">&nbsp;</td>
-            <td class="w-5/20">Kills Focus</td>
-            <td class="w-5/20">Capture Focus</td>
-            <td class="w-1/20">&nbsp;</td>
-            <td class="w-8/20">Faction Opponent Focus</td>
+            <td class="w-10">&nbsp;</td>
+            <td class="w-3/12">Kills Focus</td>
+            <td class="w-3/12">Capture Focus</td>
+            <td class="w-5">&nbsp;</td>
+            <td class="w-5/12">Faction Opponent Focus</td>
           </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200">
+        <tbody class="divide-y">
           <tr class="bg-vs">
             <td>VS</td>
             <td class="py-2 px-1 whitespace-nowrap">
@@ -126,7 +126,7 @@
           </tr>
         </tbody>
       </table>
-      <div class="text-sm text-gray-500 text-left">
+      <div class="text-sm text-gray-400 text-left">
         <p class="mb-2 text-center">
           Faction Opponent Focus is calculated via a points system, using the
           following counts:
@@ -152,7 +152,7 @@
           </tbody>
         </table>
         <p>
-          The <span class="text-yellow-500">dashed bar</span> indicates an even
+          The <span class="text-yellow-300">dashed bar</span> indicates an even
           50/50 balance between the faction and it's opponents. If all bars are
           evenly distributed across all factions, the alert was an even fight.
         </p>
