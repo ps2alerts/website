@@ -36,6 +36,7 @@
           :tr="result.tr"
           :other="result.cutoff"
           :out-of-play="result.outOfPlay"
+          :dropoff-percent="8"
         />
       </div>
 
@@ -48,6 +49,7 @@
           :nc="pops.nc"
           :tr="pops.tr"
           :other="0"
+          :dropoff-percent="8"
           :show-as-calculated-percentage="true"
           :is-percentage="true"
           other-segment-text="NSO"

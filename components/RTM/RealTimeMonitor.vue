@@ -17,7 +17,7 @@
         :percent="updatePopsCountdownPercentage"
         :update-rate="updatePopsRate"
       />
-      <div class="py-2">
+      <div class="pb-2">
         <p v-if="loading">Loading...</p>
         <p v-if="error">ERROR: {{ error }}</p>
         <p v-show="!loading && actives.length === 0 && !error">
