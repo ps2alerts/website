@@ -27,7 +27,7 @@
     </div>
     <div class="grid grid-cols-12 place-items-center gap-y-1">
       <div class="col-span-1 justify-self-start text-center">
-        <font-awesome-icon :icon="['fas', 'globe']"></font-awesome-icon>
+        <font-awesome-icon :icon="['fas', 'flag']"></font-awesome-icon>
       </div>
       <div class="col-span-11 w-full">
         <FactionSegmentBar
