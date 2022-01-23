@@ -10,7 +10,7 @@ export default {
     apiHost: process.env.API_HOST ?? 'http://dev.api.ps2alerts.com',
   },
   publicRuntimeConfig: {
-    environment: process.env.NODE_ENV ?? 'UNKNOWN ENVIRONMENT',
+    environment: process.env.ENV ?? 'UNKNOWN ENVIRONMENT',
     build: process.env.BUILD ?? 'UNKNOWN BUILD',
     version: process.env.VERSION ?? 'UNKNOWN VERSION',
     baseUrl: process.env.BASE_URL ?? 'http://dev.ps2alerts.com',
@@ -161,7 +161,7 @@ export default {
 
   'google-gtag': {
     id: process.env.GOOGLE_PROPERTY,
-    debug: process.env.NODE_ENV !== 'production', // enable to track in dev / staging mode
+    debug: process.env.ENV !== 'production', // enable to track in dev / staging mode
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)

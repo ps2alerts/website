@@ -5,7 +5,7 @@ COPY --chown=node:node . /app
 
 ARG BUILD_SHA="abc12345"
 
-ENV NODE_ENV="staging"
+ENV ENV="staging"
 ENV VERSION="v3.0.0-beta"
 ENV BUILD=$BUILD_SHA
 ENV BASE_URL="https://staging.ps2alerts.com"
