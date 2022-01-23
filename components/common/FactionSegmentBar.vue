@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div v-show="total > 0" class="faction-bar text-sm text-center text-white">
+    <div
+      v-show="total > 0"
+      class="faction-bar text-sm text-center text-white"
+      :class="{ half: halfBar }"
+    >
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
@@ -133,7 +137,7 @@
         <span>Out of play: {{ outOfPlayString(true) }}</span>
       </v-tooltip>
     </div>
-    <p v-show="total === 0">Awaiting data...</p>
+    <span v-show="total === 0">Awaiting data...</span>
   </div>
 </template>
 
@@ -200,6 +204,16 @@ export default Vue.extend({
       default: '0',
       required: false,
     },
+    halfBar: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    noLeaderHighlight: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   computed: {
     total(): number {
@@ -221,6 +235,9 @@ export default Vue.extend({
       return (this.outOfPlay / this.total) * 100
     },
     leader(): Faction {
+      if (this.noLeaderHighlight) {
+        return Faction.NONE
+      }
       if (this.percentVS > this.percentNC && this.percentVS > this.percentTR) {
         return Faction.VANU_SOVEREIGNTY
       }

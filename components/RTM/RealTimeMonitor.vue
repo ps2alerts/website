@@ -24,42 +24,6 @@
           There are no alerts currently running!
         </p>
         <div v-show="actives.length > 0">
-          <div class="flex justify-center">
-            <div class="btn-group mr-2">
-              <button
-                class="btn btn-sm"
-                :class="{ 'btn-active': mode === 'territory' }"
-                @click="updateMode('territory')"
-              >
-                <font-awesome-icon fixed-width :icon="['fas', 'flag']" />
-                Territory
-              </button>
-              <button
-                class="btn btn-sm"
-                :class="{ 'btn-active': mode === 'pops' }"
-                @click="updateMode('pops')"
-              >
-                <font-awesome-icon fixed-width :icon="['fas', 'user']" />
-                Population
-              </button>
-            </div>
-
-            <button
-              v-show="mode === 'pops' && showPopPercent"
-              class="btn btn-sm"
-              @click="toggleShowPopPercent()"
-            >
-              <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
-            </button>
-            <button
-              v-show="mode === 'pops' && !showPopPercent"
-              class="btn btn-sm"
-              @click="toggleShowPopPercent()"
-            >
-              ##
-            </button>
-          </div>
-
           <div
             v-for="alert in actives"
             :key="alert.instanceId"
@@ -72,7 +36,6 @@
               :duration="alert.duration"
               :result="alert.result"
               :instance-id="alert.instanceId"
-              :mode="mode"
               :pops="getPops(alert.instanceId)"
               :is-percentage="showPopPercent"
             />
@@ -211,12 +174,6 @@ export default Vue.extend({
       instance: string
     ): InstancePopulationAggregateResponseInterface | undefined {
       return this.populations.get(instance)
-    },
-    updateMode(value: string): void {
-      this.mode = value
-    },
-    toggleShowPopPercent(): void {
-      this.showPopPercent = !this.showPopPercent
     },
   },
 })

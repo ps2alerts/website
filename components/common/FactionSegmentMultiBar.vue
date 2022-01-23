@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p v-show="total === 0">Awaiting data...</p>
+    <span v-show="total === 0">Awaiting data...</span>
     <div v-show="total > 0" class="faction-bar text-sm text-center text-white">
       <!--      <div v-if="verticalPoints && verticalPoints.length > 0">-->
       <!--        <div v-for="pos in verticalPoints">-->

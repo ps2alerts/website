@@ -285,6 +285,23 @@
         height: 100%;
       }
     }
+
+    &.half {
+      height: 17px;
+
+      .faction-bar-segment {
+        height: 17px;
+
+        div {
+          height: 17px;
+          line-height: 14px;
+
+          span {
+            font-size: 12px;
+          }
+        }
+      }
+    }
   }
 
   /* Typography */
