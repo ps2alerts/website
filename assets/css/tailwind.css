@@ -271,38 +271,33 @@
       border: 1px gold dashed;
       z-index: 2;
     }
+  }
 
-    .faction-bar-segment {
-      width: 33%;
-      height: 25px;
-      display: inline-block;
-      float: left;
-      line-height: 25px;
-      z-index: 1;
+  .faction-bar-segment {
+    width: 33%;
+    height: 25px;
+    display: inline-block;
+    float: left;
+    line-height: 25px;
+    z-index: 1;
 
-      div {
-        line-height: 23px;
-        height: 100%;
-      }
+    div {
+      line-height: 23px;
+      height: 100%;
     }
-  }
 
-  .faction-bar.half {
-    height: 17px;
-    line-height: 14px;
-  }
-
-  .faction-bar-segment.half {
-    height: 17px;
-    line-height: 14px;
-
-    .vs,.nc,.tr,.other {
+    &.half {
       height: 17px;
       line-height: 14px;
-    }
 
-    span {
-      font-size: 12px;
+      div {
+        height: 17px;
+        line-height: 14px;
+      }
+
+      span {
+        font-size: 12px;
+      }
     }
   }
 
