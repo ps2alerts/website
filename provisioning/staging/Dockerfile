@@ -9,8 +9,8 @@ ENV NODE_ENV="staging"
 ENV VERSION="v3.0.0-beta"
 ENV BUILD=$BUILD_SHA
 ENV BASE_URL="https://staging.ps2alerts.com"
-ENV API_HOST="https://staging.api.ps2alerts.com"
+ENV API_HOST="https://api.ps2alerts.com"
 ENV GOOGLE_PROPERTY="G-FJDCBTJV5D"
 
 USER node
-RUN cd /app && npm ci --also=dev && npm run generate && npm prune --production
+RUN cd /app && yarn install && yarn run generate

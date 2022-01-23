@@ -1,6 +1,6 @@
+import Vue from 'vue'
 import { Vehicle } from '@/constants/Vehicle'
 import { Faction } from '@/constants/Faction'
-import Vue from 'vue'
 
 const vehicleFaction = Vue.filter('vehicleFaction', (vehicle: Vehicle) => {
   switch (vehicle) {

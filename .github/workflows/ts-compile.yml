@@ -9,12 +9,12 @@ jobs:
     name: Typescript Compile
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: install node v14
+      - uses: actions/checkout@v2
+      - name: install node v16
         uses: actions/setup-node@v2.1.5
         with:
-          node-version: 14
+          node-version: 16
       - name: Install
-        run: npm install
+        run: yarn install
       - name: Build
-        run: npm run build
+        run: yarn run build

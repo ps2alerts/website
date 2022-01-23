@@ -13,4 +13,4 @@ jobs:
         with:
           targets: |
             provisioning/**/*.yml
-          args: ""
+          args: ''

@@ -3,19 +3,17 @@ import { Bracket } from '~/constants/Bracket'
 import { Zone } from '~/constants/Zone'
 import { FacilityDataInterface } from '~/interfaces/FacilityDataInterface'
 
+interface FacilityControlVersusInterface {
+  vs?: number
+  nc?: number
+  tr?: number
+}
 export interface FacilityControlAggregateMetricsInterface {
   captures?: number
   defences?: number
   takenFrom?: FacilityControlVersusInterface
   lostTo?: FacilityControlVersusInterface
 }
-
-interface FacilityControlVersusInterface {
-  vs?: number
-  nc?: number
-  tr?: number
-}
-
 export interface GlobalFacilityControlAggregateResponseInterface {
   world: World
   zone: Zone

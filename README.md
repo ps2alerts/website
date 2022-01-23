@@ -1,4 +1,5 @@
 # ps2alerts/website
+
 This module is the publicly facing section of the PS2Alerts project. Users are able to visit the site and read the statistics metrics on a per-alert or global basis and much more.
 
 If you wish to contribute, please join our Discord located at: https://discord.gg/7xF65ap
@@ -17,7 +18,7 @@ Run `ps2alerts-website-init` on first run. For any subsequent starts, run `ps2al
 
 The project currently uses the following projects:
 
-* Vue 2 via Nuxt (originally Vue 3 but it's not mature enough yet to use)
-* Typescript
-* SCSS
-* NPM
+- Vue 2 via Nuxt (originally Vue 3 but it's not mature enough yet to use)
+- Typescript
+- SCSS
+- NPM

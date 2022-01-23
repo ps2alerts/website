@@ -1,7 +1,7 @@
 @layer base {
   html#streaming {
     overflow: hidden;
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
     background-image: none;
     background-size: cover;
   }
@@ -14,7 +14,14 @@
 
   .v-input.v-color-picker__hue.v-input--hide-details.theme--light.v-input__slider.v-color-picker__track {
     background: linear-gradient(
-        90deg
-      ,red,#ff0 16.66%,#0f0 33.33%,#0ff 50%,#00f 66.66%,#f0f 83.33%,red);
+      90deg,
+      red,
+      #ff0 16.66%,
+      #0f0 33.33%,
+      #0ff 50%,
+      #00f 66.66%,
+      #f0f 83.33%,
+      red
+    );
   }
 }

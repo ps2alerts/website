@@ -18,13 +18,13 @@
           <div class="mb-1">
             {{ started }}
           </div>
-          <div class="text-xs text-gray-500">Started</div>
+          <div class="text-xs text-gray-400">Started</div>
         </div>
         <div v-show="alert.state === 2">
           <div class="mb-1">
             {{ ended }}
           </div>
-          <div class="text-xs text-gray-500">Ended</div>
+          <div class="text-xs text-gray-400">Ended</div>
         </div>
       </div>
       <div
@@ -33,7 +33,7 @@
         <div class="mb-1">
           {{ alert.world | worldName }}
         </div>
-        <div class="text-xs text-gray-500">Server</div>
+        <div class="text-xs text-gray-400">Server</div>
       </div>
       <div
         class="col-span-2 lg:col-span-1 text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0"
@@ -41,7 +41,7 @@
         <div class="mb-1">
           {{ alert.zone | zoneName }}
         </div>
-        <div class="text-xs text-gray-500">Continent</div>
+        <div class="text-xs text-gray-400">Continent</div>
       </div>
       <div
         class="col-span-2 lg:col-span-1 text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0"
@@ -67,7 +67,7 @@
             {{ victor | factionName }}
           </span>
         </div>
-        <div class="text-xs text-gray-500">Victor</div>
+        <div class="text-xs text-gray-400">Victor</div>
       </div>
       <div
         class="col-span-2 lg:col-span-1 text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0"
@@ -75,7 +75,7 @@
         <div class="mb-1">
           {{ alert.bracket | bracketName }}
         </div>
-        <div class="text-xs text-gray-500">
+        <div class="text-xs text-gray-400">
           Activity
           <span v-if="alert.state === 1">
             <v-tooltip bottom>

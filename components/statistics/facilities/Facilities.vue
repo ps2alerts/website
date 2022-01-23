@@ -5,7 +5,8 @@
       Shows the hottest bases split down by world and continent.<br />
       Defences are when a base has had an active timer and all capture points
       are fully secured. Take this with a pinch of salt, there will be a lot of
-      them.
+      them. <br />Unfortunately the API doesn't expose timers so we can't add a
+      threshold.
     </p>
     <div v-if="loaded">
       <p v-if="filter.bracket !== 0" class="text-center mb-4">

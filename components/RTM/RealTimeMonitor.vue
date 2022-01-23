@@ -1,10 +1,10 @@
 <template>
   <section
     id="rtm"
-    class="px-4 pb-4 lg:px-0 lg:pb-0 border-b-2 border-red-700 lg:border-b-0"
+    class="px-4 pb-4 lg:px-0 lg:pb-0 border-b-2 border-red-700 mx-auto lg:w-full sm:w-3/4 lg:border-b-0"
   >
     <div
-      class="pt-4 lg:mt-2 bg-tint rounded lg:rounded-bl-none text-sm text-center relative overflow-hidden"
+      class="pt-4 lg:mt-2 bg-tint rounded lg:rounded-bl-none text-base text-center relative overflow-hidden"
     >
       <div class="tag section">Active Alerts</div>
       <CountdownSpinner
@@ -17,53 +17,17 @@
         :percent="updatePopsCountdownPercentage"
         :update-rate="updatePopsRate"
       />
-      <div class="py-2">
+      <div class="pb-2">
         <p v-if="loading">Loading...</p>
         <p v-if="error">ERROR: {{ error }}</p>
         <p v-show="!loading && actives.length === 0 && !error">
           There are no alerts currently running!
         </p>
         <div v-show="actives.length > 0">
-          <div class="flex justify-center">
-            <div class="btn-group mr-2">
-              <button
-                class="btn btn-sm"
-                :class="{ 'btn-active': mode === 'territory' }"
-                @click="updateMode('territory')"
-              >
-                <font-awesome-icon fixed-width :icon="['fas', 'flag']" />
-                Territory
-              </button>
-              <button
-                class="btn btn-sm"
-                :class="{ 'btn-active': mode === 'pops' }"
-                @click="updateMode('pops')"
-              >
-                <font-awesome-icon fixed-width :icon="['fas', 'user']" />
-                Population
-              </button>
-            </div>
-
-            <button
-              v-show="mode === 'pops' && showPopPercent"
-              class="btn btn-sm"
-              @click="toggleShowPopPercent()"
-            >
-              <font-awesome-icon fixed-width :icon="['fas', 'percent']" />
-            </button>
-            <button
-              v-show="mode === 'pops' && !showPopPercent"
-              class="btn btn-sm"
-              @click="toggleShowPopPercent()"
-            >
-              ##
-            </button>
-          </div>
-
           <div
             v-for="alert in actives"
             :key="alert.instanceId"
-            class="py-1 px-2 border-b border-gray-600 border-no-bottom"
+            class="pt-2 pb-3 px-4 sm:px-2 border-b border-gray-500 border-no-bottom"
           >
             <RealTimeAlert
               :world="alert.world"
@@ -72,11 +36,13 @@
               :duration="alert.duration"
               :result="alert.result"
               :instance-id="alert.instanceId"
-              :mode="mode"
               :pops="getPops(alert.instanceId)"
               :is-percentage="showPopPercent"
             />
           </div>
+          <p class="text-xs text-gray-400 mt-2">
+            Hover over population bars to see player numbers
+          </p>
         </div>
       </div>
     </div>
@@ -86,11 +52,11 @@
 <script lang="ts">
 /* eslint-disable nuxt/no-globals-in-created */
 import Vue from 'vue'
+import moment from 'moment-timezone'
 import ApiRequest from '@/api-request'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import { InstancePopulationAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstancePopulationAggregateResponseInterface'
 import { TIME_FORMAT } from '@/constants/Time'
-import moment from 'moment-timezone'
 import { Endpoints } from '@/constants/Endpoints'
 import RealTimeAlert from '~/components/RTM/RealTimeAlert.vue'
 
@@ -211,12 +177,6 @@ export default Vue.extend({
       instance: string
     ): InstancePopulationAggregateResponseInterface | undefined {
       return this.populations.get(instance)
-    },
-    updateMode(value: string): void {
-      this.mode = value
-    },
-    toggleShowPopPercent(): void {
-      this.showPopPercent = !this.showPopPercent
     },
   },
 })

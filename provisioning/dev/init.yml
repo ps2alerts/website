@@ -4,7 +4,8 @@
     root_dir: "{{ playbook_dir }}/../../"
   tasks:
     - debug:
-        msg: "========= 🕸️  Starting Website module 🕸️  ========="
+        msg: "========= 🕸️  Initializing Website module 🕸️  ========="
+
     - name: Install docker
       pip:
         name: docker
@@ -47,10 +48,10 @@
     - name: Run npm install for Website deps
       docker_container:
         name: ps2alerts-website-npm
-        image: node:12
+        image: node:16
         volumes:
           - "{{ root_dir | realpath }}:/app:rw"
         user: "{{ id.stdout }}:{{ id.stdout }}"
-        command: "npm install --prefix /app"
+        command: "yarn --cwd /app install"
         labels:
           traefik.enable: "false"

@@ -221,12 +221,13 @@
           </tr>
         </tbody>
       </table>
-      <div class="col-span-12 text-xs text-gray-500 text-left">
+      <div class="col-span-12 text-xs text-gray-400 text-left">
         <p>*1 does not include NSO vs NSO kills.</p>
         <p>
           *2 NSO Teamkills represent NSO vs NSO. It is currently not possible to
           track what faction NSO's are on via the API without some
-          <b>major</b> hacking.
+          <b>major</b> hacking. Go pester Wrel about it, they're well aware we
+          API devs want it!
         </p>
       </div>
     </div>

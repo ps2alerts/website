@@ -1,49 +1,63 @@
 <template>
   <div :instanceId="instanceId">
-    <div class="grid grid-cols-12 place-items-center">
-      <div class="col-span-3 col-start-2 text-base">
+    <div class="grid grid-cols-12 place-items-center mb-0.5">
+      <div class="col-span-3 col-start-3 lg:col-start-2">
         {{ world | worldName }}
       </div>
 
-      <div class="col-span-3 text-base">
+      <div class="col-span-3">
         {{ zone | zoneName }}
       </div>
 
-      <div class="col-span-3 text-base font-bold">
+      <div class="col-span-4 justify-self-center font-bold">
         <remaining-time
           :started="timeStarted"
           :duration="duration"
         ></remaining-time>
       </div>
 
-      <div class="col-start-12">
+      <div class="col-span-1 col-start-12 justify-self-end">
         <NuxtLink
-          class="btn btn-sm rounded-r mr-1"
+          class="btn btn-xs rounded-r"
           :to="{ name: 'alert-alert', params: { alert: instanceId } }"
         >
-          <font-awesome-icon fixed-width :icon="['fas', 'link']" />
+          <font-awesome-icon fixed-width :icon="['fas', 'arrow-right']" />
         </NuxtLink>
       </div>
     </div>
-    <div v-show="mode === 'territory'" class="pt-1">
-      <FactionSegmentBar
-        :vs="result.vs"
-        :nc="result.nc"
-        :tr="result.tr"
-        :other="result.cutoff"
-        :out-of-play="result.outOfPlay"
-      />
-    </div>
-    <div v-show="mode === 'pops'" class="pt-1">
-      <FactionSegmentBar
-        :vs="pops.vs"
-        :nc="pops.nc"
-        :tr="pops.tr"
-        :other="pops.nso"
-        :show-as-calculated-percentage="isPercentage"
-        :is-percentage="isPercentage"
-        other-segment-text="NSO"
-      />
+    <div class="grid grid-cols-12 place-items-center gap-y-1">
+      <div class="col-span-1 justify-self-start text-center">
+        <font-awesome-icon :icon="['fas', 'flag']"></font-awesome-icon>
+      </div>
+      <div class="col-span-11 w-full">
+        <FactionSegmentBar
+          :vs="result.vs"
+          :nc="result.nc"
+          :tr="result.tr"
+          :other="result.cutoff"
+          :out-of-play="result.outOfPlay"
+          dropoff-percent="8"
+        />
+      </div>
+
+      <div class="col-span-1 justify-self-start text-center text-xs">
+        <font-awesome-icon :icon="['fas', 'users']"></font-awesome-icon>
+      </div>
+      <div class="col-span-11 w-full">
+        <FactionSegmentBar
+          :vs="pops.vs"
+          :nc="pops.nc"
+          :tr="pops.tr"
+          :other="0"
+          dropoff-percent="8"
+          :show-as-calculated-percentage="true"
+          :is-percentage="true"
+          other-segment-text="NSO"
+          :half-bar="true"
+          :no-leader-highlight="true"
+          :show-tooltip-as-number="true"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -82,11 +96,6 @@ export default Vue.extend({
     duration: {
       type: Number,
       default: 0,
-      required: true,
-    },
-    mode: {
-      type: String,
-      default: 'territory',
       required: true,
     },
     isPercentage: {

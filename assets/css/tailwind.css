@@ -1,15 +1,10 @@
-@import './colors.scss';
-@import './custom.scss';
-@import './streaming.scss';
-@import './vueify-overrides.scss';
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   html {
-    @apply bg-gray-800;
+    background-color: #374249;
   }
 
   /* Fix for background showing on top of image when content is quite short */
@@ -19,7 +14,445 @@
 }
 
 @layer utilities {
-  .router-link-active, .btn-active {
+  .router-link-active,
+  .btn-active {
     @apply bg-red-600 !important;
+  }
+}
+
+/* COLOURS */
+@layer utilities {
+  .vs {
+    background-color: rgba(107,70,193,1);
+    &.bg-leader {
+      box-shadow: 0 0 10px #8e6bdd;
+      background-color: #8055e5;
+    }
+  }
+  .nc {
+    background-color: rgba(43,108,176,1);
+    &.bg-leader {
+      box-shadow: 0 0 10px #5aabff;
+      background-color: #347dca;
+    }
+  }
+  .tr {
+    background-color: rgba(197,48,48,1);
+    &.bg-leader {
+      box-shadow: 0 0 10px #fb6060;
+      background-color: #ef3d3d;
+    }
+  }
+  .other {
+    @apply bg-gray-600;
+    &.bg-leader {
+      box-shadow: 0 0 10px #ccc;
+    }
+  }
+  .border-vs {
+    @apply border border-purple-500;
+  }
+  .border-nc {
+    @apply border border-blue-500;
+  }
+  .border-tr {
+    @apply border border-red-400;
+  }
+  .border-other {
+    @apply border border-gray-500;
+  }
+  .border-tint {
+    border: 1px solid #5d6265;
+  }
+  .outofplay {
+    @apply bg-gray-800;
+    background: repeating-linear-gradient(
+      45deg,
+      #801a1a,
+      #631c1c 10px,
+      #881a1a 10px,
+      #b94b4b 20px
+    );
+  }
+
+  .bg-tint {
+    background-color: rgba(55,71,79,0.8)
+  }
+  .bg-tint-light {
+    @apply bg-gray-600 bg-opacity-50;
+  }
+  .bg-vs {
+    background-color: rgba(85,60,154,0.5);
+  }
+  .bg-nc {
+    background-color: rgba(43,108,176,0.5);
+  }
+  .bg-tr {
+    background-color: rgba(155,44,44,0.5);
+  }
+  .bg-nso {
+    @apply bg-gray-600;
+  }
+  .bg-indar {
+    @apply bg-orange-500 bg-opacity-25;
+  }
+  .bg-hossin {
+    @apply bg-teal-900 bg-opacity-25;
+  }
+  .bg-amerish {
+    @apply bg-green-600 bg-opacity-25;
+  }
+  .bg-esamir {
+    @apply bg-gray-400 bg-opacity-25;
+  }
+
+  .text-vs {
+    @apply text-purple-500;
+  }
+  .text-nc {
+    @apply text-blue-500;
+  }
+  .text-tr {
+    @apply text-red-500;
+  }
+  .text-nso {
+    @apply text-gray-600;
+  }
+}
+
+/* CUSTOM OVERRIDES */
+
+@layer base {
+  html {
+    @apply text-white;
+    background-image: url('../img/bg-tile.jpg');
+    background-repeat: repeat;
+    margin: 0;
+  }
+
+  #app {
+    @media (max-width: 1023px) {
+      display: block;
+    }
+  }
+
+  #panel-left {
+    max-width: 325px;
+    @media (max-width: 1023px) {
+      max-width: inherit;
+    }
+    @media (min-width: 1024px) {
+      position: fixed;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  }
+
+  #panel-left::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+
+  #panel-right {
+    @media (min-width: 1024px) {
+      margin-left: 325px;
+    }
+  }
+
+  h1 {
+    @apply text-3xl;
+  }
+
+  .text-title {
+    @apply text-5xl;
+  }
+
+  .text-subtitle {
+    @apply text-3xl;
+  }
+
+  .content-spacing {
+    @apply mb-4;
+  }
+
+  .rounded-none {
+    border-radius: 0;
+  }
+
+  .border-no-bottom {
+    &:last-child {
+      @apply border-transparent mb-0 pb-0;
+    }
+  }
+
+  ul {
+    list-style-type: disc;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@layer utilities {
+  /* Buttons */
+  .btn {
+    @apply bg-red-800 rounded-md py-2 px-4 inline-block font-medium border-transparent;
+    transition: background-color 0.25s ease-out;
+
+    &:focus,
+    &:active {
+      @apply border-transparent outline-none;
+    }
+    &:hover {
+      @apply bg-red-600;
+    }
+    &:disabled {
+      @apply bg-gray-500;
+    }
+
+    &.no-hover {
+      &:hover {
+        @apply bg-red-600;
+      }
+    }
+    &.twitch {
+      background-color: #6441a5;
+      &:hover {
+        @apply bg-purple-600;
+      }
+    }
+  }
+  .btn-alt {
+    @apply bg-gray-600;
+
+    &:hover {
+      @apply bg-gray-500;
+    }
+  }
+  .btn-sm {
+    @apply text-sm py-1 px-2 rounded-sm;
+  }
+  .btn-xs {
+    @apply text-xs p-1 rounded-sm;
+  }
+  .btn-group {
+    @apply inline-flex;
+    .btn {
+      @apply rounded-none;
+
+      &:first-of-type {
+        @apply rounded-l-md;
+      }
+      &:last-of-type {
+        @apply rounded-r-md;
+      }
+    }
+  }
+
+  .card {
+    @apply bg-tint p-4 justify-center rounded;
+  }
+  .card-sm {
+    @apply rounded p-2;
+  }
+
+  .faction-bar {
+    width: 100%;
+    height: 25px;
+    white-space: nowrap;
+    position: relative;
+
+    .vertical-bar {
+      position: absolute;
+      top: -3px;
+      width: 1px;
+      height: 30px;
+      line-height: 30px;
+      border: 1px gold dashed;
+      z-index: 2;
+    }
+  }
+
+  .faction-bar-segment {
+    width: 33%;
+    height: 25px;
+    display: inline-block;
+    float: left;
+    line-height: 25px;
+    z-index: 1;
+
+    div {
+      line-height: 23px;
+      height: 100%;
+    }
+  }
+
+  .faction-bar-half-block {
+    height: 17px !important;
+    line-height: 14px !important;
+  }
+
+  .faction-bar-half-span {
+    font-size: 12px;
+  }
+
+  /* Typography */
+  .editorial p {
+    @apply content-spacing;
+
+    &:last-child {
+      @apply mb-0;
+    }
+  }
+
+  .editorial .text-title,
+  .editorial .text-subtitle {
+    @apply content-spacing;
+  }
+
+  /* Components */
+  .alert-status {
+    @extend .btn-sm;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .in-progress {
+    @extend .alert-status;
+    @apply rounded-tl-none rounded-br-none;
+
+    svg {
+      @apply text-red-600 ml-1;
+    }
+
+    .ping-circle {
+      @apply w-4 h-4 absolute bg-red-800 rounded-full opacity-100;
+      top: 0.4rem;
+      right: 0.45rem;
+    }
+
+    .animate-ping {
+      animation-duration: 2s;
+    }
+
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.3, 0, 0, 0.9) infinite;
+    }
+  }
+  @keyframes blinker {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  .tag {
+    @apply py-1 px-2 rounded-tl-sm rounded-tr-sm text-xs text-center font-bold;
+    margin: -1rem -1rem 1rem;
+
+    &.section {
+      background-color: rgba(48,58,64,1)
+    }
+
+    &.feature {
+      @apply bg-green-800;
+    }
+
+    &.enhancement {
+      @apply bg-blue-800;
+    }
+
+    &.announcement {
+      @apply bg-orange-500;
+    }
+
+    &.fix {
+      @apply bg-red-800;
+    }
+
+    &.known-issue {
+      @apply bg-yellow-800;
+    }
+  }
+
+  .datatable {
+    @apply bg-tint rounded-md !important;
+  }
+
+  table {
+    &.striped-row {
+      tbody > tr:nth-child(odd) {
+        background-color: rgb(68 85 95);
+      }
+      tbody > tr:nth-child(even) {
+        @apply bg-gray-800;
+      }
+    }
+    &.striped-col {
+      td:nth-of-type(even) {
+        @apply bg-gray-800;
+      }
+    }
+    &.border-row {
+      thead,
+      tr {
+        @apply border-b border-gray-500;
+      }
+      tr:last-of-type {
+        @apply border-b-0;
+      }
+    }
+    &.border-col {
+      td {
+        @apply border-r-2 border-gray-600;
+      }
+      td:last-child {
+        @apply border-0;
+      }
+    }
+    &.hover {
+      overflow: hidden;
+
+      tr {
+        transition: background-color 0.25s ease-out;
+        &:hover {
+          background-color: #2c393f;
+        }
+      }
+      td,
+      th {
+        position: relative;
+      }
+      td:hover::after,
+      th:hover::after {
+        content: '';
+        position: absolute;
+        background-color: rgb(0, 0, 0);
+        left: 0;
+        top: -5000px;
+        height: 10000px;
+        width: 100%;
+        z-index: -1;
+      }
+    }
+  }
+}
+
+/* VUETIFY OVERRIDES */
+@layer utilities {
+  td.text-middle {
+    text-align: center;
+  }
+
+  .theme--dark {
+    &.v-tabs-bar {
+      background-color: #9b2c2c !important;
+    }
+    &.v-tabs-items {
+      background-color: rgba(0, 0, 0, 0) !important;
+    }
   }
 }

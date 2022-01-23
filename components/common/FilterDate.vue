@@ -21,7 +21,7 @@
       <label class="text-center text-sm" for="dateTo"> To </label>
     </div>
     <div class="col-span-2">
-      <p class="text-sm text-gray-600">Both dates are required</p>
+      <p class="text-sm text-gray-400">Both dates are required</p>
     </div>
   </div>
 </template>

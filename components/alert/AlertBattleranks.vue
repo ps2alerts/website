@@ -44,11 +44,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import BarChart from '../BarChart.js'
 import ApiRequest from '@/api-request'
 import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceCharacterAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceCharacterAggregateResponseInterface'
-import BarChart from '../BarChart.js'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 
 interface BattlerankDistributionDataInterface {

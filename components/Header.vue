@@ -1,6 +1,6 @@
 <template>
   <header class="items-center justify-center bg-tint p-4">
-    <div class="flex text-white px-6 justify-center items-center mb-4">
+    <div class="flex text-white px-6 justify-center items-center mb-2">
       <img
         class="ps2alerts-logo mr-2 w-16"
         alt="PS2Alerts Logo"
@@ -8,7 +8,7 @@
       />
       <h1 class="font-semibold text-4xl">PS2Alerts</h1>
     </div>
-    <div class="flex w-auto block justify-center px-6 mb-4">
+    <div class="flex w-auto block justify-center px-6 mb-2">
       <div class="btn">BETA</div>
     </div>
     <div class="flex w-auto block justify-center">
@@ -29,7 +29,7 @@ export default Vue.extend({
         'The metagame <b>everyone</b> plays!',
         'Powered by continent locks!',
         'Powered by ISO',
-        'The ultimate proof that "X is OP"!',
+        'The ultimate proof that "<faction> is OP"!',
         'Miller server best server?',
         'V26 Maelstrom Turbo Laser needs a buff!',
         'Tracking all your alert kills, and C4 suicides...',

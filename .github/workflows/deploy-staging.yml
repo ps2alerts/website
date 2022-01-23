@@ -10,24 +10,24 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node: [14]
+        node: [16]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-#      - name: Setup node env 🏗
-#        uses: actions/setup-node@v2.1.2
-#        with:
-#          node-version: ${{ matrix.node }}
+      #      - name: Setup node env 🏗
+      #        uses: actions/setup-node@v2.1.2
+      #        with:
+      #          node-version: ${{ matrix.node }}
 
-#      - name: Cache node_modules 📦
-#        uses: actions/cache@v2
-#        with:
-#          path: ~/.npm
-#          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-#          restore-keys: |
-#            ${{ runner.os }}-node-
+      #      - name: Cache node_modules 📦
+      #        uses: actions/cache@v2
+      #        with:
+      #          path: ~/.npm
+      #          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      #          restore-keys: |
+      #            ${{ runner.os }}-node-
 
       - name: Get short SHA
         id: sha
@@ -47,7 +47,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-#       TODO: RE-ENABLE ONCE SITE IS PROPERLY LIVE
+      #       TODO: RE-ENABLE ONCE SITE IS PROPERLY LIVE
 #      - name: Build and push base image
 #        uses: docker/build-push-action@v2
 #        with:

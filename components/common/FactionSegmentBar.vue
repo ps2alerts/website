@@ -1,11 +1,19 @@
 <template>
   <div>
-    <div v-show="total > 0" class="faction-bar text-sm text-center text-white">
+    <div v-show="total === 0" :class="{ 'text-xs': halfBar }">
+      <span>Awaiting data...</span>
+    </div>
+    <div
+      v-show="total > 0"
+      class="faction-bar text-sm text-center text-white"
+      :class="{ 'faction-bar-half-block': halfBar }"
+    >
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
             class="faction-bar-segment"
             :style="{ width: percentVS + '%' }"
+            :class="{ 'faction-bar-half-block': halfBar }"
             v-bind="attrs"
             v-on="on"
           >
@@ -16,19 +24,24 @@
                   nc === 0 && tr === 0 && other === 0 && outOfPlay === 0,
                 'border-vs': vs > 0,
                 'bg-leader': leader === 1,
+                'faction-bar-half-block': halfBar,
               }"
             >
-              <span v-if="!isPercentage && numeral">{{
-                vsString() | numeral(numeral)
+              <span
+                v-if="!isPercentage && numeral"
+                :class="{ 'faction-bar-half-span': halfBar }"
+                >{{ vsString() | numeral(numeral) }}</span
+              >
+              <span v-else :class="{ 'faction-bar-half-span': halfBar }">{{
+                vsString()
               }}</span>
-              <span v-else>{{ vsString() }}</span>
             </div>
           </div>
         </template>
         <span v-if="!isPercentage && numeral">
-          VS: {{ vsString(true) | numeral(numeral) }}
+          VS: {{ vsString(true, true) | numeral(numeral) }}
         </span>
-        <span v-else>VS: {{ vsString(true) }}</span>
+        <span v-else>VS: {{ vsString(true, true) }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -36,6 +49,7 @@
           <div
             class="faction-bar-segment"
             :style="{ width: percentTR + '%' }"
+            :class="{ 'faction-bar-half-block': halfBar }"
             v-bind="attrs"
             v-on="on"
           >
@@ -46,19 +60,24 @@
                 'rounded-r': nc === 0 && other === 0 && outOfPlay === 0,
                 'border-tr': tr > 0,
                 'bg-leader': leader === 3,
+                'faction-bar-half-block': halfBar,
               }"
             >
-              <span v-if="!isPercentage && numeral">{{
-                trString() | numeral(numeral)
+              <span
+                v-if="!isPercentage && numeral"
+                :class="{ 'faction-bar-half-span': halfBar }"
+                >{{ trString() | numeral(numeral) }}</span
+              >
+              <span v-else :class="{ 'faction-bar-half-span': halfBar }">{{
+                trString()
               }}</span>
-              <span v-else>{{ trString() }}</span>
             </div>
           </div>
         </template>
         <span v-if="!isPercentage && numeral">
-          TR: {{ trString(true) | numeral(numeral) }}
+          TR: {{ trString(true, true) | numeral(numeral) }}
         </span>
-        <span v-else>TR: {{ trString(true) }}</span>
+        <span v-else>TR: {{ trString(true, true) }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -66,6 +85,7 @@
           <div
             class="faction-bar-segment"
             :style="{ width: percentNC + '%' }"
+            :class="{ 'faction-bar-half-block': halfBar }"
             v-bind="attrs"
             v-on="on"
           >
@@ -76,19 +96,24 @@
                 'rounded-r': other === 0 && outOfPlay === 0,
                 'border-nc': nc > 0,
                 'bg-leader': leader === 2,
+                'faction-bar-half-block': halfBar,
               }"
             >
-              <span v-if="!isPercentage && numeral">{{
-                ncString() | numeral(numeral)
+              <span
+                v-if="!isPercentage && numeral"
+                :class="{ 'faction-bar-half-span': halfBar }"
+                >{{ ncString() | numeral(numeral) }}</span
+              >
+              <span v-else :class="{ 'faction-bar-half-span': halfBar }">{{
+                ncString()
               }}</span>
-              <span v-else>{{ ncString() }}</span>
             </div>
           </div>
         </template>
         <span v-if="!isPercentage && numeral">
-          NC: {{ ncString(true) | numeral(numeral) }}
+          NC: !isPercentage {{ ncString(true, true) | numeral(numeral) }}
         </span>
-        <span v-else>NC: {{ ncString(true) }}</span>
+        <span v-else>NC: {{ ncString(true, true) }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -96,6 +121,7 @@
           <div
             class="faction-bar-segment"
             :style="{ width: percentOther + '%' }"
+            :class="{ 'faction-bar-half-block': halfBar }"
             v-bind="attrs"
             v-on="on"
           >
@@ -105,12 +131,17 @@
                 'rounded-l': vs === 0 && nc === 0 && tr === 0,
                 'rounded-r': other > 0 && outOfPlay === 0,
                 'border-other': other > 0,
+                'faction-bar-half-block': halfBar,
               }"
             >
-              <span v-if="!isPercentage && numeral">{{
-                otherString() | numeral(numeral)
+              <span
+                v-if="!isPercentage && numeral"
+                :class="{ 'faction-bar-half-span': halfBar }"
+                >{{ otherString() | numeral(numeral) }}</span
+              >
+              <span v-else :class="{ 'faction-bar-half-span': halfBar }">{{
+                otherString(false, true)
               }}</span>
-              <span v-else>{{ otherString() }}</span>
             </div>
           </div>
         </template>
@@ -125,7 +156,7 @@
           <div
             class="faction-bar-segment outofplay"
             :style="{ width: percentOutOfPlay + '%' }"
-            :class="{ 'rounded-r': outOfPlay > 0 }"
+            :class="{ 'rounded-r': outOfPlay > 0, half: halfBar }"
             v-bind="attrs"
             v-on="on"
           ></div>
@@ -133,7 +164,6 @@
         <span>Out of play: {{ outOfPlayString(true) }}</span>
       </v-tooltip>
     </div>
-    <p v-show="total === 0">Awaiting data...</p>
   </div>
 </template>
 
@@ -200,6 +230,21 @@ export default Vue.extend({
       default: '0',
       required: false,
     },
+    halfBar: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    noLeaderHighlight: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    showTooltipAsNumber: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   computed: {
     total(): number {
@@ -221,6 +266,9 @@ export default Vue.extend({
       return (this.outOfPlay / this.total) * 100
     },
     leader(): Faction {
+      if (this.noLeaderHighlight) {
+        return Faction.NONE
+      }
       if (this.percentVS > this.percentNC && this.percentVS > this.percentTR) {
         return Faction.VANU_SOVEREIGNTY
       }
@@ -234,65 +282,87 @@ export default Vue.extend({
     },
   },
   methods: {
-    vsString(bypassDropoff = false): string {
+    vsString(bypassDropoff = false, tooltip = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentVS.toFixed(parseInt(this.fractionDigits, 10))
         : this.vs
       const suffix = this.isPercentage ? '%' : ''
+      const withinDropoff = this.percentVS > parseInt(this.dropoffPercent)
+
+      if (this.showTooltipAsNumber && tooltip) {
+        return `${this.vs}`
+      }
+
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentVS > parseInt(this.dropoffPercent)
-        ? `${value}${suffix}`
-        : ''
+
+      return withinDropoff ? `${value}${suffix}` : ''
     },
-    ncString(bypassDropoff = false): string {
+    ncString(bypassDropoff = false, tooltip = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentNC.toFixed(parseInt(this.fractionDigits, 10))
         : this.nc
       const suffix = this.isPercentage ? '%' : ''
+      const withinDropoff = this.percentNC > parseInt(this.dropoffPercent)
+
+      if (this.showTooltipAsNumber && tooltip) {
+        return `${this.nc}`
+      }
+
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentNC > parseInt(this.dropoffPercent)
-        ? `${value}${suffix}`
-        : ''
+
+      return withinDropoff ? `${value}${suffix}` : ''
     },
-    trString(bypassDropoff = false): string {
+    trString(bypassDropoff = false, tooltip = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentTR.toFixed(parseInt(this.fractionDigits, 10))
         : this.tr
       const suffix = this.isPercentage ? '%' : ''
+      const withinDropoff = this.percentTR > parseInt(this.dropoffPercent)
+
+      if (this.showTooltipAsNumber && tooltip) {
+        return `${this.tr}`
+      }
+
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentTR > parseInt(this.dropoffPercent)
-        ? `${value}${suffix}`
-        : ''
+
+      return withinDropoff ? `${value}${suffix}` : ''
     },
-    otherString(bypassDropoff = false): string {
+    otherString(bypassDropoff = false, tooltip = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentOther.toFixed(parseInt(this.fractionDigits, 10))
         : this.other
       const suffix = this.isPercentage ? '%' : ''
+      const withinDropoff = this.percentOther > parseInt(this.dropoffPercent)
+
+      if (this.showTooltipAsNumber && tooltip && withinDropoff) {
+        return `${this.other}`
+      }
+
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentOther > parseInt(this.dropoffPercent)
-        ? `${value}${suffix}`
-        : ''
+
+      return withinDropoff ? `${value}${suffix}` : ''
     },
     outOfPlayString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentOutOfPlay.toFixed(parseInt(this.fractionDigits, 10))
         : this.outOfPlay
       const suffix = this.isPercentage ? '%' : ''
+      const withinDropoff =
+        this.percentOutOfPlay > parseInt(this.dropoffPercent)
+
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.outOfPlay > parseInt(this.dropoffPercent)
-        ? `${value}${suffix}`
-        : ''
+
+      return withinDropoff ? `${value}${suffix}` : ''
     },
   },
 })
