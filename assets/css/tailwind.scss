@@ -16,7 +16,7 @@
 @layer utilities {
   .router-link-active,
   .btn-active {
-    @apply bg-red-600 !important;
+    @apply bg-red-600;
   }
 }
 
@@ -67,11 +67,11 @@
   .outofplay {
     @apply bg-gray-800;
     background: repeating-linear-gradient(
-      45deg,
-      #801a1a,
-      #631c1c 10px,
-      #881a1a 10px,
-      #b94b4b 20px
+        45deg,
+        #801a1a,
+        #631c1c 10px,
+        #881a1a 10px,
+        #b94b4b 20px
     );
   }
 
@@ -119,6 +119,7 @@
     @apply text-gray-600;
   }
 }
+
 
 /* CUSTOM OVERRIDES */
 
@@ -271,6 +272,23 @@
       border: 1px gold dashed;
       z-index: 2;
     }
+
+    &.half {
+      height: 17px;
+      line-height: 14px;
+
+      .faction-bar-segment {
+        height: 17px;
+
+        div {
+          line-height: 14px;
+        }
+
+        span {
+          font-size: 12px;
+        }
+      }
+    }
   }
 
   .faction-bar-segment {
@@ -285,15 +303,6 @@
       line-height: 23px;
       height: 100%;
     }
-  }
-
-  .faction-bar-half-block {
-    height: 17px !important;
-    line-height: 14px !important;
-  }
-
-  .faction-bar-half-span {
-    font-size: 12px;
   }
 
   /* Typography */
@@ -379,7 +388,7 @@
   }
 
   .datatable {
-    @apply bg-tint rounded-md !important;
+    @apply bg-tint rounded-md
   }
 
   table {
@@ -399,7 +408,7 @@
     &.border-row {
       thead,
       tr {
-        @apply border-b border-gray-500;
+        @apply border-b border-gray-400;
       }
       tr:last-of-type {
         @apply border-b-0;
