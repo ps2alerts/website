@@ -5,9 +5,9 @@ COPY --chown=node:node . /app
 
 ARG BUILD_SHA="abc12345"
 
-ENV NODE_ENV="production"
+ENV ENV="production"
 ENV VERSION="v3.0.0-beta"
-ENV BUILD="abc12345"
+ENV BUILD="$BUILD_SHA"
 ENV BASE_URL="https://ps2alerts.com"
 ENV API_HOST="https://api.ps2alerts.com"
 ENV GOOGLE_PROPERTY="G-2X0XQFEBLT"

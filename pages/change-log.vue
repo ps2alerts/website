@@ -4,7 +4,36 @@
     <div class="col-span-12">
       <div class="text-center h-full">
         <h1 class="text-title">Change Log</h1>
-        <p>Last updated: 7th Feb 2021</p>
+        <p>Last updated: 23rd Jan 2022</p>
+      </div>
+    </div>
+    <div class="col-span-12 bg-tint card editorial relative">
+      <div class="tag">
+        <font-awesome-icon :icon="['fas', 'wrench']"></font-awesome-icon>
+        Fixes &amp; Improvements
+      </div>
+      <div class="h-full">
+        <h1 class="text-subtitle text-center">Fixes and improvements</h1>
+        <p class="content-spacing text-center">Added: 23rd Jan 2022</p>
+        <p>Long time no see!</p>
+        <p>It is calculated in the following ways:</p>
+        <ul>
+          <li>Kills made against a particular faction, added as a 1 point</li>
+          <li>
+            Bases captured against a faction, and applying 100 points to that
+            (numbers may be adjusted)
+          </li>
+        </ul>
+        <p>
+          Combining the two will give a reasonable (not 100% accurate but close
+          enough) view of the balance between factions in the alert, and to give
+          an indicator on how balanced it was.
+        </p>
+        <p>
+          In the example above, you can see TR was heavily double teamed by both
+          VS and NC. It appears NC focused TR a bit more than VS, only due to
+          their captures.
+        </p>
       </div>
     </div>
     <div class="col-span-12 lg:col-span-6 bg-tint card editorial relative">

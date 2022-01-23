@@ -11,8 +11,8 @@ module.exports = {
     'plugin:nuxt/recommended',
   ],
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-console': process.env.ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.ENV === 'production' ? 'warn' : 'off',
     'vue/no-useless-v-bind': 'error',
     'vue/require-name-property': 'error',
     'vue/no-template-shadow': 'off',
