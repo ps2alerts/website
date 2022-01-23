@@ -6,13 +6,14 @@
     <div
       v-show="total > 0"
       class="faction-bar text-sm text-center text-white"
-      :class="{ 'faction-bar-half': halfBar }"
+      :class="{ half: halfBar }"
     >
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
           <div
             class="faction-bar-segment"
             :style="{ width: percentVS + '%' }"
+            :class="{ half: halfBar }"
             v-bind="attrs"
             v-on="on"
           >
@@ -43,6 +44,7 @@
           <div
             class="faction-bar-segment"
             :style="{ width: percentTR + '%' }"
+            :class="{ half: halfBar }"
             v-bind="attrs"
             v-on="on"
           >
@@ -73,6 +75,7 @@
           <div
             class="faction-bar-segment"
             :style="{ width: percentNC + '%' }"
+            :class="{ half: halfBar }"
             v-bind="attrs"
             v-on="on"
           >
@@ -103,6 +106,7 @@
           <div
             class="faction-bar-segment"
             :style="{ width: percentOther + '%' }"
+            :class="{ half: halfBar }"
             v-bind="attrs"
             v-on="on"
           >
@@ -132,7 +136,7 @@
           <div
             class="faction-bar-segment outofplay"
             :style="{ width: percentOutOfPlay + '%' }"
-            :class="{ 'rounded-r': outOfPlay > 0 }"
+            :class="{ 'rounded-r': outOfPlay > 0, half: halfBar }"
             v-bind="attrs"
             v-on="on"
           ></div>
