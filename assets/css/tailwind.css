@@ -284,24 +284,25 @@
         line-height: 23px;
         height: 100%;
       }
-
-      &.half {
-        height: 17px;
-        line-height: 14px;
-
-        div {
-          height: 17px;
-          line-height: 14px;
-        }
-
-        span {
-          font-size: 12px;
-        }
-      }
     }
-    &.half {
+  }
+
+  .faction-bar.half {
+    height: 17px;
+    line-height: 14px;
+  }
+
+  .faction-bar-segment.half {
+    height: 17px;
+    line-height: 14px;
+
+    div {
       height: 17px;
       line-height: 14px;
+    }
+
+    span {
+      font-size: 12px;
     }
   }
 
