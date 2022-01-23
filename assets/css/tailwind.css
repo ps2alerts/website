@@ -285,20 +285,15 @@
       line-height: 23px;
       height: 100%;
     }
+  }
 
-    &.half {
-      height: 17px;
-      line-height: 14px;
+  .faction-bar-half-block {
+    height: 17px;
+    line-height: 14px !important;
+  }
 
-      div {
-        height: 17px;
-        line-height: 14px;
-      }
-
-      span {
-        font-size: 12px;
-      }
-    }
+  .faction-bar-half-span {
+    font-size: 12px;
   }
 
   /* Typography */
