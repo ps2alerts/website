@@ -297,7 +297,7 @@
       height: 14px;
     }
 
-    .faction-bar-segment {
+    > .faction-bar-segment {
       height: 17px;
 
       div {
