@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-show="total === 0" :class="{ 'faction-bar-half': halfBar }">
+    <div v-show="total === 0" :class="{ 'text-xs': halfBar }">
       <span>Awaiting data...</span>
     </div>
     <div
