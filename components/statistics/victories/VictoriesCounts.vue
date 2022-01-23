@@ -132,7 +132,7 @@
         </table>
       </div>
 
-      <div class="col-span-12 ss:col-span-6 card relative">
+      <div class="col-span-12 2xl:col-span-6 card relative">
         <div class="tag section">
           Server Activity Level Victories (Prime & High)
         </div>
@@ -209,7 +209,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-span-12 ss:col-span-6 card relative">
+      <div class="col-span-12 2xl:col-span-6 card relative">
         <div class="tag section">Server Activity Level Victories (other)</div>
         <CountdownSpinner
           :percent="updateCountdownPercent"
@@ -311,7 +311,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-span-12 ss:col-span-6 card relative">
+      <div class="col-span-12 2xl:col-span-6 card relative">
         <div class="tag section">Global Continent Victories</div>
         <CountdownSpinner
           :percent="updateCountdownPercent"
@@ -351,7 +351,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-span-12 ss:col-span-6 card relative">
+      <div class="col-span-12 2xl:col-span-6 card relative">
         <div class="tag section">Server Continent Victories</div>
         <CountdownSpinner
           :percent="updateCountdownPercent"
@@ -441,6 +441,7 @@ import Vue, { PropOptions } from 'vue'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import { Bracket } from '~/constants/Bracket'
 import { FactionMetricsInterface } from '~/interfaces/FactionMetricsInterface'
+import { World } from '~/constants/World'
 
 interface DataCollectionRowInterface {
   world: FactionMetricsInterface
@@ -509,6 +510,14 @@ export default Vue.extend({
       }
 
       this.rawData.forEach((row: GlobalVictoriesAggregateResponseInterface) => {
+        if (
+          [World.JAEGER].includes(row.world) ||
+          row.bracket === Bracket.UNKNOWN
+        ) {
+          console.log('Jaeger or unknown bracket detected, skipping!')
+          return
+        }
+
         if (!this.worldCounts[row.world]) {
           this.worldCounts[row.world] = {
             world: {
