@@ -40,6 +40,9 @@
               :is-percentage="showPopPercent"
             />
           </div>
+          <p class="text-xs text-gray-400 mt-2">
+            Hover over population bars to see player numbers
+          </p>
         </div>
       </div>
     </div>

@@ -33,9 +33,9 @@
           </div>
         </template>
         <span v-if="!isPercentage && numeral">
-          VS: {{ vsString(true) | numeral(numeral) }}
+          VS: {{ vsString(true, true) | numeral(numeral) }}
         </span>
-        <span v-else>VS: {{ vsString(true) }}</span>
+        <span v-else>VS: {{ vsString(true, true) }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -63,9 +63,9 @@
           </div>
         </template>
         <span v-if="!isPercentage && numeral">
-          TR: {{ trString(true) | numeral(numeral) }}
+          TR: {{ trString(true, true) | numeral(numeral) }}
         </span>
-        <span v-else>TR: {{ trString(true) }}</span>
+        <span v-else>TR: {{ trString(true, true) }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -93,9 +93,9 @@
           </div>
         </template>
         <span v-if="!isPercentage && numeral">
-          NC: {{ ncString(true) | numeral(numeral) }}
+          NC: !isPercentage {{ ncString(true, true) | numeral(numeral) }}
         </span>
-        <span v-else>NC: {{ ncString(true) }}</span>
+        <span v-else>NC: {{ ncString(true, true) }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -117,7 +117,7 @@
               <span v-if="!isPercentage && numeral">{{
                 otherString() | numeral(numeral)
               }}</span>
-              <span v-else>{{ otherString() }}</span>
+              <span v-else>{{ otherString(false, true) }}</span>
             </div>
           </div>
         </template>
@@ -216,6 +216,11 @@ export default Vue.extend({
       default: false,
       required: false,
     },
+    showTooltipAsNumber: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
   computed: {
     total(): number {
@@ -253,65 +258,87 @@ export default Vue.extend({
     },
   },
   methods: {
-    vsString(bypassDropoff = false): string {
+    vsString(bypassDropoff = false, tooltip = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentVS.toFixed(parseInt(this.fractionDigits, 10))
         : this.vs
       const suffix = this.isPercentage ? '%' : ''
+      const withinDropoff = this.percentVS > parseInt(this.dropoffPercent)
+
+      if (this.showTooltipAsNumber && tooltip) {
+        return `${this.vs}`
+      }
+
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentVS > parseInt(this.dropoffPercent)
-        ? `${value}${suffix}`
-        : ''
+
+      return withinDropoff ? `${value}${suffix}` : ''
     },
-    ncString(bypassDropoff = false): string {
+    ncString(bypassDropoff = false, tooltip = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentNC.toFixed(parseInt(this.fractionDigits, 10))
         : this.nc
       const suffix = this.isPercentage ? '%' : ''
+      const withinDropoff = this.percentNC > parseInt(this.dropoffPercent)
+
+      if (this.showTooltipAsNumber && tooltip) {
+        return `${this.nc}`
+      }
+
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentNC > parseInt(this.dropoffPercent)
-        ? `${value}${suffix}`
-        : ''
+
+      return withinDropoff ? `${value}${suffix}` : ''
     },
-    trString(bypassDropoff = false): string {
+    trString(bypassDropoff = false, tooltip = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentTR.toFixed(parseInt(this.fractionDigits, 10))
         : this.tr
       const suffix = this.isPercentage ? '%' : ''
+      const withinDropoff = this.percentTR > parseInt(this.dropoffPercent)
+
+      if (this.showTooltipAsNumber && tooltip) {
+        return `${this.tr}`
+      }
+
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentTR > parseInt(this.dropoffPercent)
-        ? `${value}${suffix}`
-        : ''
+
+      return withinDropoff ? `${value}${suffix}` : ''
     },
-    otherString(bypassDropoff = false): string {
+    otherString(bypassDropoff = false, tooltip = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentOther.toFixed(parseInt(this.fractionDigits, 10))
         : this.other
       const suffix = this.isPercentage ? '%' : ''
+      const withinDropoff = this.percentOther > parseInt(this.dropoffPercent)
+
+      if (this.showTooltipAsNumber && tooltip && withinDropoff) {
+        return `${this.other}`
+      }
+
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.percentOther > parseInt(this.dropoffPercent)
-        ? `${value}${suffix}`
-        : ''
+
+      return withinDropoff ? `${value}${suffix}` : ''
     },
     outOfPlayString(bypassDropoff = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentOutOfPlay.toFixed(parseInt(this.fractionDigits, 10))
         : this.outOfPlay
       const suffix = this.isPercentage ? '%' : ''
+      const withinDropoff =
+        this.percentOutOfPlay > parseInt(this.dropoffPercent)
+
       if (bypassDropoff) {
         return `${value}${suffix}`
       }
-      return this.outOfPlay > parseInt(this.dropoffPercent)
-        ? `${value}${suffix}`
-        : ''
+
+      return withinDropoff ? `${value}${suffix}` : ''
     },
   },
 })
