@@ -1,27 +1,27 @@
 <template>
   <div :instanceId="instanceId">
     <div class="grid grid-cols-12 place-items-center">
-      <div class="col-span-3 col-start-2 text-base">
+      <div class="col-span-3 col-start-3 lg:col-start-2">
         {{ world | worldName }}
       </div>
 
-      <div class="col-span-3 text-base">
+      <div class="col-span-3">
         {{ zone | zoneName }}
       </div>
 
-      <div class="col-span-3 text-base font-bold">
+      <div class="col-span-3 col font-bold">
         <remaining-time
           :started="timeStarted"
           :duration="duration"
         ></remaining-time>
       </div>
 
-      <div class="col-start-12">
+      <div class="col-span-1 col-start-12 justify-self-end">
         <NuxtLink
-          class="btn btn-sm rounded-r mr-1"
+          class="btn btn-xs rounded-r"
           :to="{ name: 'alert-alert', params: { alert: instanceId } }"
         >
-          <font-awesome-icon fixed-width :icon="['fas', 'link']" />
+          <font-awesome-icon fixed-width :icon="['fas', 'arrow-right']" />
         </NuxtLink>
       </div>
     </div>

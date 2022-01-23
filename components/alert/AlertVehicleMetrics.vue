@@ -284,6 +284,8 @@ export default Vue.extend({
           if (val.id === vehicle.vehicle) {
             return this.vehicleData[key]
           }
+
+          return null
         })
 
         vehicle.suicides = vehicle.suicides ?? 0

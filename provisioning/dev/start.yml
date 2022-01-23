@@ -3,6 +3,9 @@
   vars:
     root_dir: "{{ playbook_dir }}/../../"
   tasks:
+    - debug:
+        msg: "========= 🕸️  Starting Website module 🕸️  ========="
+
     - name: Delete dist folder
       file:
         path: "{{ root_dir }}/dist"
@@ -17,9 +20,9 @@
       docker_container:
         name: ps2alerts-website
         image: ps2alerts/website:dev
+        state: started
         restart: no
         recreate: yes
-        state: started
         interactive: yes
         tty: yes
         volumes:

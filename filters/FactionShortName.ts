@@ -3,6 +3,8 @@ import { Faction } from '~/constants/Faction'
 
 const factionShortName = Vue.filter('factionShortName', (value: Faction) => {
   switch (value) {
+    case Faction.NONE:
+      return 'N/A'
     case Faction.VANU_SOVEREIGNTY:
       return 'VS'
     case Faction.NEW_CONGLOMERATE:

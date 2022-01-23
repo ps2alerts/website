@@ -30,6 +30,17 @@
               ></font-awesome-icon>
             </div>
           </div>
+          <!--          <div>-->
+          <!--            <div class="bg-orange-600 w-full p-4 mt-4 text-center rounded">-->
+          <!--              <font-awesome-icon-->
+          <!--                :icon="['fas', 'exclamation-triangle']"-->
+          <!--              ></font-awesome-icon>-->
+          <!--              PS2Alerts is currently experiencing issues with it's database. No new data will be collected for the time being. <a href="/">More info</a></b>-->
+          <!--              <font-awesome-icon-->
+          <!--                :icon="['fas', 'exclamation-triangle']"-->
+          <!--              ></font-awesome-icon>-->
+          <!--            </div>-->
+          <!--          </div>-->
           <Navigation class="hidden lg:block" />
         </client-only>
         <client-only>

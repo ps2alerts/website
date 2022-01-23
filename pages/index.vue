@@ -1,10 +1,9 @@
 <template>
   <div class="grid grid-cols-12">
-    <Announcement></Announcement>
+    <!--    <Announcement></Announcement>-->
     <div class="col-span-12 border-t-1 border-red-700">
       <div class="text-center">
-        <h1 class="text-title">Statistics</h1>
-        <p class="mb-4 text-lg">
+        <p class="mb-2 text-lg">
           Data collected since <b>4th January 2021 02:00 UTC</b> unless
           otherwise stated.<br />Data is updated every 15 minutes except
           victories (instant).

@@ -108,7 +108,7 @@ export default {
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
-  components: true,
+  components: [{ path: '~/components', pathPrefix: false }],
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
@@ -166,15 +166,25 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
+    babel: {
+      presets({ isServer }) {
+        const targets = isServer ? { node: 'current' } : { ie: 11 }
+        return [[require.resolve('@babel/preset-env'), { targets }]]
+      },
+      plugins: [
+        '@babel/syntax-dynamic-import',
+        '@babel/transform-runtime',
+        '@babel/transform-async-to-generator',
+      ],
+    },
     postcss: {
       // Add plugin names as key and arguments as value
       // Install them before as dependencies with npm or yarn
       plugins: {
         tailwindcss: join(__dirname, 'tailwind.config.js'),
+        'postcss-extend-rule': {},
         'postcss-import': {},
         'postcss-nested': {},
-        'postcss-extend': {},
-        'postcss-normalize': {},
         autoprefixer: {},
       },
       preset: {

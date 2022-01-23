@@ -524,18 +524,16 @@ export default Vue.extend({
 
         if (row.bracket === Bracket.TOTAL) {
           this.worldCounts[row.world].world = this.calculateWorldTotals(row)
-          this.worldCounts[row.world].zones[
-            row.zone
-          ] = this.calculateWorldZoneTotals(row)
+          this.worldCounts[row.world].zones[row.zone] =
+            this.calculateWorldZoneTotals(row)
           this.zoneCounts[row.zone] = this.calculateZoneTotals(row)
           this.totalCounts.vs += row.vs ?? 0
           this.totalCounts.nc += row.nc ?? 0
           this.totalCounts.tr += row.tr ?? 0
           this.totalCounts.draws += row?.draws ?? 0
         } else {
-          this.worldCounts[row.world].brackets[
-            row.bracket
-          ] = this.calculateWorldBracketTotals(row)
+          this.worldCounts[row.world].brackets[row.bracket] =
+            this.calculateWorldBracketTotals(row)
           this.bracketCounts[row.bracket] = this.calculateBracketTotals(row)
         }
       })

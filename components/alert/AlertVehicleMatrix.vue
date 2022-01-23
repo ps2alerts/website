@@ -249,6 +249,8 @@ export default Vue.extend({
               if (val.id === vehicle.vehicle) {
                 return this.vehicleData[key]
               }
+
+              return null
             })
             result[key].vehicleName = vehicleData
               ? this.$options.filters?.itemShortName(vehicleData.name)

@@ -6,13 +6,15 @@ on:
   pull_request:
 jobs:
   eslint:
+    name: ESLint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2.1.5
+      - name: install node v16
+        uses: actions/setup-node@v2.1.5
         with:
-          node-version: '14.x'
+          node-version: 16
       - name: Install modules
-        run: npm install
+        run: yarn install
       - name: Run ESLint
-        run: npm run lint
+        run: yarn run lint

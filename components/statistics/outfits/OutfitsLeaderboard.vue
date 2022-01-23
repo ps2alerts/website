@@ -12,7 +12,7 @@
       </div>
       <div v-if="loaded" class="grid grid-cols-12">
         <div class="col-span-12">
-          <p class="text-gray-600 text-sm mb-4 text-center">
+          <p class="text-gray-400 text-sm mb-4 text-center">
             Outfit Tag and outfit membership changes are updated every 24 hours
           </p>
           <div class="mb-2">
