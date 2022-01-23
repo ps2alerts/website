@@ -274,7 +274,7 @@
 
     .faction-bar-segment {
       width: 33%;
-      height: 25px;
+      height: 100%;
       display: inline-block;
       float: left;
       line-height: 25px;
