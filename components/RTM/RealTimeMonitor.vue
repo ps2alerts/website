@@ -27,7 +27,7 @@
           <div
             v-for="alert in actives"
             :key="alert.instanceId"
-            class="py-2 px-4 sm:px-2 border-b border-gray-500 border-no-bottom"
+            class="pt-2 pb-3 px-4 sm:px-2 border-b border-gray-500 border-no-bottom"
           >
             <RealTimeAlert
               :world="alert.world"

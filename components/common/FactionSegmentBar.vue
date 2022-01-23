@@ -1,9 +1,12 @@
 <template>
   <div>
+    <div v-show="total === 0" :class="{ 'faction-bar-half': halfBar }">
+      <span>Awaiting data...</span>
+    </div>
     <div
       v-show="total > 0"
       class="faction-bar text-sm text-center text-white"
-      :class="{ half: halfBar }"
+      :class="{ 'faction-bar-half': halfBar }"
     >
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
@@ -137,7 +140,6 @@
         <span>Out of play: {{ outOfPlayString(true) }}</span>
       </v-tooltip>
     </div>
-    <span v-show="total === 0">Awaiting data...</span>
   </div>
 </template>
 

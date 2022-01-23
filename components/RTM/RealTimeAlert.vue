@@ -1,6 +1,6 @@
 <template>
   <div :instanceId="instanceId">
-    <div class="grid grid-cols-12 place-items-center">
+    <div class="grid grid-cols-12 place-items-center mb-0.5">
       <div class="col-span-3 col-start-3 lg:col-start-2">
         {{ world | worldName }}
       </div>
@@ -47,11 +47,11 @@
           :vs="pops.vs"
           :nc="pops.nc"
           :tr="pops.tr"
-          :other="pops.nso"
+          :other="0"
           :show-as-calculated-percentage="true"
           :is-percentage="true"
           other-segment-text="NSO"
-          :half-bar="1"
+          :half-bar="true"
           :no-leader-highlight="true"
         />
       </div>
