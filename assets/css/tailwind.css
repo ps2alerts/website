@@ -296,7 +296,7 @@
     height: 17px;
     line-height: 14px;
 
-    div {
+    .vs,.nc,.tr,.other {
       height: 17px;
       line-height: 14px;
     }
