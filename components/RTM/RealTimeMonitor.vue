@@ -12,11 +12,6 @@
         :percent="updateTerritoryCountdownPercentage"
         :update-rate="updateTerritoryRate"
       />
-      <CountdownSpinner
-        v-if="mode === 'pops'"
-        :percent="updatePopsCountdownPercentage"
-        :update-rate="updatePopsRate"
-      />
       <div class="pb-2">
         <p v-if="loading">Loading...</p>
         <p v-if="error">ERROR: {{ error }}</p>
@@ -41,7 +36,13 @@
             />
           </div>
           <p class="text-xs text-gray-400 mt-2">
-            Hover over population bars to see player numbers
+            Hover / tap over population bars to see player numbers.<br />
+            Pops updated: <b>{{ popsLastUpdated }}</b>
+            <CountdownSpinner
+              :percent="updatePopsCountdownPercentage"
+              :update-rate="updatePopsRate"
+              :inline="true"
+            />
           </p>
         </div>
       </div>
@@ -74,7 +75,7 @@ export default Vue.extend({
       updateTerritoryRate: 5000,
       updateTerritoryCountdown: 0,
       updateTerritoryCountdownInterval: undefined as undefined | number,
-      updatePopsRate: 60000,
+      updatePopsRate: 30000,
       updatePopsCountdown: 0,
       updatePopsCountdownInterval: undefined as undefined | number,
       actives: [] as InstanceTerritoryControlResponseInterface[],
