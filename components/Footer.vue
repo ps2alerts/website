@@ -38,7 +38,7 @@ export default Vue.extend({
   name: 'Footer',
   data() {
     return {
-      released: this.$config.released,
+      built: this.$config.built,
       version: this.$config.version,
       build: this.$config.build,
       env: this.$config.environment,

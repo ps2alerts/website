@@ -33,6 +33,10 @@ jobs:
         id: sha
         run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
 
+      - name: Get current datetime
+        id: datetime
+        run: echo "::set-output name=datetime::$(date +'%Y-%m-%d %H:%M')"
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
@@ -67,7 +71,7 @@ jobs:
           tags: maelstromeous/applications:ps2alerts-website-production-${{ steps.sha.outputs.sha_short }}
           build-args: |
             BUILD_SHA=${{ steps.sha.outputs.sha_short }}
-            BUILT="$(date +%Y-%m-%d\ %H:%M:%S)"
+            BUILT=${{ steps.datetime.outputs.datetime }}
 
   deploy-terraform:
     needs:
