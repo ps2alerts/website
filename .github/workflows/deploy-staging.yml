@@ -68,7 +68,7 @@ jobs:
           tags: maelstromeous/applications:ps2alerts-website-staging-${{ steps.sha.outputs.sha_short }}
           build-args: |
             BUILD_SHA=${{ steps.sha.outputs.sha_short }}
-            BUILT="$(date +%Y-%m-%d\ %H:%M:%S)"
+            BUILT="$(date +%Y-%m-%d\ %H:%M)"
 
   deploy-terraform:
     needs:
