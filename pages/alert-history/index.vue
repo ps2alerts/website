@@ -46,14 +46,14 @@
       class="col-span-12 text-center mb-4"
     >
       <p v-show="!filteredByDate()">
-        {{ length }} alert{{ length > 1 ? 's' : '' }} found (50 max when not
+        {{ length }} alert{{ length > 1 ? 's' : '' }} found (100 max when not
         filtered by date)
       </p>
       <p v-show="filteredByDate()">
         {{ length }} alert{{ length > 1 ? 's' : '' }} found
       </p>
-      <p v-show="length === 250">
-        Hard limit of 250 alerts reached. Please narrow your criteria.
+      <p v-show="length === 300">
+        Hard limit of 300 alerts reached. Please narrow your criteria.
       </p>
     </div>
     <div
@@ -172,7 +172,7 @@ export default Vue.extend({
       const filter: InstanceParamsInterface = {
         sortBy: 'timeStarted',
         order: 'desc',
-        pageSize: this.filteredByDate() ? 250 : 50,
+        pageSize: this.filteredByDate() ? 300 : 100,
       }
       if (this.selectedWorld > 0) filter.world = this.selectedWorld
       if (this.selectedZone > 0) filter.zone = this.selectedZone
