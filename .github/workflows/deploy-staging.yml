@@ -35,7 +35,7 @@ jobs:
 
       - name: Get current datetime
         id: datetime
-        run: echo "::set-output name=datetime::$(date +'%Y-%m-%d\ %H:%M')"
+        run: echo "::set-output name=datetime::$(date +'%Y-%m-%d %H:%M')"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
