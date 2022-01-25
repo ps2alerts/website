@@ -35,12 +35,15 @@ export enum Vehicle {
   BASTION = 2019, // API says it's a Light Aircraft... LUL
   GLAIVE_IPC_2 = 2021, // Wat, potentially unused
   JAVELIN = 2013,
+  JAVELIN_2 = 2033, // Again?
   PUMPKIN_PATCH = 2036, // Pumpkins are vehicles apparently
   DELIVERER_PROTOTYPE = 2039, // OwO
   WASP_PROTOTYPE = 2040, // oWo
   MOSQUITO_INTERCEPTOR = 2122, // Bastion Mosquito
   REAVER_INTERCEPTOR = 2123, // Bastion Reaver
   SCYTHE_INTERCEPTOR = 2124, // Bastion Scythe
-  JAVELIN_2 = 2125, // Wat
+  JAVELIN_3 = 2125, // Again... again?
   SPITFIRE_AUTO_TURRET_2 = 2128, // Duplicate or reworked version?
+  DERVISH = 2136,
+  CHIMERA = 2137,
 }

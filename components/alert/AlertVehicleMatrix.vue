@@ -221,6 +221,13 @@ export default Vue.extend({
               faction: vehicleFaction(parseInt(vehicle.vehicle_id, 10)),
             }
             this.vehicleData.push(vehicleData)
+
+            // Chimera hack cos DBG are crap
+            this.vehicleData.push({
+              id: 2137,
+              name: 'Chimera',
+              faction: Faction.NS_OPERATIVES,
+            })
           })
         })
         .catch((e) => {
@@ -231,8 +238,6 @@ export default Vue.extend({
       if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
         return
       }
-
-      console.log('AlertVehicleMatrix.pull', this.alert.instanceId)
 
       await new ApiRequest()
         .get<InstanceVehicleAggregateResponseInterface[]>(
