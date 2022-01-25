@@ -12,7 +12,7 @@
       class="grid grid-cols-4 lg:grid-cols-6 place-items-center mb-2 lg:mb-4 text-center"
     >
       <div
-        class="col-span-2 lg:col-span-1 text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0"
+        class="col-span-2 lg:col-span-1 text-base lg:text-xl 2xl:text-2xl mb-2 lg:mb-0"
       >
         <div v-show="alert.state === 1">
           <div class="mb-1">
@@ -28,7 +28,7 @@
         </div>
       </div>
       <div
-        class="col-span-2 lg:col-span-1 text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0"
+        class="col-span-2 lg:col-span-1 text-base lg:text-xl 2xl:text-2xl mb-2 lg:mb-0"
       >
         <div class="mb-1">
           {{ alert.world | worldName }}
@@ -36,7 +36,7 @@
         <div class="text-xs text-gray-400">Server</div>
       </div>
       <div
-        class="col-span-2 lg:col-span-1 text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0"
+        class="col-span-2 lg:col-span-1 text-base lg:text-xl 2xl:text-2xl mb-2 lg:mb-0"
       >
         <div class="mb-1">
           {{ alert.zone | zoneName }}
@@ -44,7 +44,7 @@
         <div class="text-xs text-gray-400">Continent</div>
       </div>
       <div
-        class="col-span-2 lg:col-span-1 text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0"
+        class="col-span-2 lg:col-span-1 text-base lg:text-xl 2xl:text-2xl mb-2 lg:mb-0"
       >
         <div class="mb-1">
           <span v-show="alert.state === 1">TBD</span>
@@ -70,7 +70,7 @@
         <div class="text-xs text-gray-400">Victor</div>
       </div>
       <div
-        class="col-span-2 lg:col-span-1 text-base lg:text-xl ss:text-2xl mb-2 lg:mb-0"
+        class="col-span-2 lg:col-span-1 text-base lg:text-xl 2xl:text-2xl mb-2 lg:mb-0"
       >
         <div class="mb-1">
           {{ alert.bracket | bracketName }}
@@ -93,7 +93,7 @@
         </div>
       </div>
       <div
-        class="col-span-2 lg:col-span-1 lg:col-start-6 text-sm lg:text-xl ss:text-2xl mb-2 lg:mb-0"
+        class="col-span-2 lg:col-span-1 lg:col-start-6 text-sm lg:text-xl 2xl:text-2xl mb-2 lg:mb-0"
       >
         <NuxtLink
           :to="{ name: 'alert-alert', params: { alert: alert.instanceId } }"

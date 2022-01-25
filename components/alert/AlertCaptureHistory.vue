@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-12 ss:col-span-6 card relative text-center">
+  <div class="col-span-12 2xl:col-span-6 card relative text-center">
     <div class="tag section">Capture History</div>
     <div class="h-full flex items-center place-content-center">
       <h1 class="mb-6">Coming soon!</h1>
