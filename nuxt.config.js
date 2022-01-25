@@ -10,6 +10,7 @@ export default {
     apiHost: process.env.API_HOST ?? 'http://dev.api.ps2alerts.com',
   },
   publicRuntimeConfig: {
+    built: process.env.BUILT ?? 'UNKNOWN BUILD TIME',
     environment: process.env.ENV ?? 'UNKNOWN ENVIRONMENT',
     build: process.env.BUILD ?? 'UNKNOWN BUILD',
     version: process.env.VERSION ?? 'UNKNOWN VERSION',

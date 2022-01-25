@@ -4,7 +4,9 @@ COPY ./provisioning/staging/files/nginx/staging.conf /etc/nginx/conf.d
 COPY --chown=node:node . /app
 
 ARG BUILD_SHA="abc12345"
+ARG BUILT="2022-01-01 00:00:00"
 
+ENV BUILT="$BUILT"
 ENV ENV="staging"
 ENV VERSION="v3.0.0-beta"
 ENV BUILD=$BUILD_SHA

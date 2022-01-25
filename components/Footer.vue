@@ -23,7 +23,8 @@
       <a href="https://census.daybreakgames.com" class="text-gray-400">Census</a
       >, provided by Daybreak Game Company LLC.
       <p class="mt-4">
-        Version: {{ version }} | Build: {{ build }} | Env: {{ env }}
+        Version: {{ version }} | Build: {{ build }} | Built: {{ built }} | Env:
+        {{ env }}
       </p>
     </div>
   </footer>
@@ -36,6 +37,7 @@ export default Vue.extend({
   name: 'Footer',
   data() {
     return {
+      released: this.$config.released,
       version: this.$config.version,
       build: this.$config.build,
       env: this.$config.environment,

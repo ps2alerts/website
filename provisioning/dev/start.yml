@@ -32,6 +32,7 @@
         networks:
           - name: "ps2alerts"
         env:
+          BUILT: "Now ;)"
           ENV: "development"
           VERSION: "v3.0.0-dev"
           BUILD: "abc12345"
