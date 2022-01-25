@@ -464,5 +464,13 @@
     &.v-tabs-items {
       background-color: rgba(0, 0, 0, 0) !important;
     }
+    &.v-data-table {
+      background-color: rgba(75, 85, 99, 0.5) !important;
+    }
+
+    .v-data-table-header,
+    .v-data-footer {
+      background-color: rgba(48,58,64,1) !important;
+    }
   }
 }
