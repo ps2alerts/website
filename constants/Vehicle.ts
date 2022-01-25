@@ -14,6 +14,7 @@ export enum Vehicle {
   DROP_POD = 13,
   VALKYRIE = 14,
   ANT = 15,
+  XIPHOS_AP_PHALANX_TURRET = 100,
   MANA_AP_TURRET = 101,
   MANA_AV_TURRET = 102,
   SPITFIRE_TURRET = 103, // Don't think is used
@@ -26,19 +27,21 @@ export enum Vehicle {
   XIPHOS_AP_TOWER = 162, // Player Base AI Turret
   GLAIVE_IPC = 163, // Player Base Artillery
   RECON_DRONE = 1013, // Never implemented
+  OBSERVER_CAMERA = 1337,
+  AUTO_TURRET = 2003, // Never implemented
   SPEAR_AV_PHALANX_TURRET_2 = 2006, // Player Base towerless AV turret
   COLOSSUS = 2007,
-  TRANSPORT_POD_2 = 2008, // Transport Pod Mrk 2? o.O
+  DROP_POD_2 = 2008, // Drop Pod Mrk 2? o.O
   XIPHOS_AP_TURRET = 2009, // Wat?
-  FLASH_MERIT = 2010, // Outfit Merit Flash
+  FLASH_XS_1 = 2010, // Outfit Merit Flash
   FORWARD_STATION = 2011, // Not used also... o.O
   BASTION = 2019, // API says it's a Light Aircraft... LUL
-  GLAIVE_IPC_2 = 2021, // Wat, potentially unused
+  FLAIL = 2021, // Flail player base
   JAVELIN = 2013,
   JAVELIN_2 = 2033, // Again?
   PUMPKIN_PATCH = 2036, // Pumpkins are vehicles apparently
-  DELIVERER_PROTOTYPE = 2039, // OwO
-  WASP_PROTOTYPE = 2040, // oWo
+  DELIVERER_PROTOTYPE = 2039, // Spawn ANT
+  WASP_PROTOTYPE = 2040, // Cortium Valkrie
   MOSQUITO_INTERCEPTOR = 2122, // Bastion Mosquito
   REAVER_INTERCEPTOR = 2123, // Bastion Reaver
   SCYTHE_INTERCEPTOR = 2124, // Bastion Scythe
@@ -46,4 +49,8 @@ export enum Vehicle {
   SPITFIRE_AUTO_TURRET_2 = 2128, // Duplicate or reworked version?
   DERVISH = 2136,
   CHIMERA = 2137,
+  DELIVERER_PROTOTYPE_2 = 2139, // Currently used (Spawn ANT)
+  LODESTAR_PROTOTYPE_2 = 2140, // Currently used (Spawn Galaxy)
+  WASP_PROTOTYPE_2 = 2141, // Currently used (Cortium Valkrie)
+  EXODUS_PPC = 2143, // Big Pew Pew on the Oshur carriers
 }
