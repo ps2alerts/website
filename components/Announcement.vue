@@ -1,6 +1,6 @@
 <template>
   <div
-    class="col-span-12 ss:col-span-8 ss:col-start-3 bg-tint card editorial relative my-4"
+    class="col-span-12 2xl:col-span-8 2xl:col-start-3 bg-tint card editorial relative my-4"
   >
     <div class="tag announcement">
       <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>

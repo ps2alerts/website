@@ -92,7 +92,7 @@
       </v-tabs>
 
       <div
-        class="col-span-12 lg:col-span-8 ss:col-span-4 lg:col-start-3 ss:col-start-5 flex justify-center mb-2 z-50"
+        class="col-span-12 lg:col-span-8 2xl:col-span-4 lg:col-start-3 2xl:col-start-5 flex justify-center mb-2 z-50"
         style="top: 0.5rem"
         :class="{ sticky: !disabledPercentToggle }"
       >
@@ -224,9 +224,9 @@ export default Vue.extend({
         case 'vehicles':
         case 'classes':
         case 'combat':
-          return 'lg:col-span-8 lg:col-start-3 ss:col-span-4 ss:col-start-5'
+          return 'lg:col-span-8 lg:col-start-3 2xl:col-span-4 2xl:col-start-5'
         default:
-          return 'ss:col-span-6 ss:col-start-4'
+          return '2xl:col-span-6 2xl:col-start-4'
       }
     },
     availableMetrics(): AvailableMetricsInterface {

@@ -6,12 +6,12 @@
       <div v-if="loaded" class="text-center">
         <div class="grid grid-cols-12 gap-2">
           <FilterWorld
-            class="col-span-6 lg:col-start-3 lg:col-span-4 ss:col-span-2 ss:col-start-5"
+            class="col-span-6 lg:col-start-3 lg:col-span-4 2xl:col-span-2 2xl:col-start-5"
             :world-filter="selectedWorld"
             @world-changed="updateWorld"
           />
           <FilterBracket
-            class="col-span-6 lg:col-span-4 ss:col-span-2"
+            class="col-span-6 lg:col-span-4 2xl:col-span-2"
             :bracket-filter="selectedBracket"
             @bracket-changed="updateBracket"
           />
