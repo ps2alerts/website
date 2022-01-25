@@ -1,23 +1,32 @@
 <template>
   <section
     id="rtm"
-    class="px-4 pb-4 lg:px-0 lg:pb-0 border-b-2 border-red-700 mx-auto lg:w-full sm:w-3/4 lg:border-b-0"
+    class="px-4 pb-4 lg:px-0 lg:pb-0 border-b-2 border-red-700 mx-auto mb-2 lg:w-full sm:w-3/4 lg:border-b-0"
   >
     <div
-      class="pt-4 lg:mt-2 bg-tint rounded lg:rounded-bl-none text-base text-center relative overflow-hidden"
+      class="lg:mt-2 bg-tint rounded lg:rounded-bl-none text-base text-center relative"
     >
-      <div class="tag section">Active Alerts</div>
+      <div class="tag section">{{ actives.length }} Active Alerts</div>
       <CountdownSpinner
-        v-if="mode === 'territory'"
         :percent="updateTerritoryCountdownPercentage"
         :update-rate="updateTerritoryRate"
       />
-      <CountdownSpinner
-        v-if="mode === 'pops'"
-        :percent="updatePopsCountdownPercentage"
-        :update-rate="updatePopsRate"
-      />
-      <div class="pb-2">
+      <div
+        class="rtm-drawer mt-2 pb-2 visible lg:invisible"
+        :class="{ absolute: drawerOpen }"
+      >
+        <btn class="btn btn-sm" @click="toggleDrawer()">
+          <span v-show="!drawerOpen"
+            >Show
+            <font-awesome-icon :icon="['fas', 'arrow-down']"></font-awesome-icon
+          ></span>
+          <span v-show="drawerOpen"
+            >Hide
+            <font-awesome-icon :icon="['fas', 'arrow-up']"></font-awesome-icon
+          ></span>
+        </btn>
+      </div>
+      <div v-show="drawerOpen" class="pb-2">
         <p v-if="loading">Loading...</p>
         <p v-if="error">ERROR: {{ error }}</p>
         <p v-show="!loading && actives.length === 0 && !error">
@@ -41,7 +50,13 @@
             />
           </div>
           <p class="text-xs text-gray-400 mt-2">
-            Hover over population bars to see player numbers
+            Hover / tap over population bars to see player numbers.<br />
+            Pops updated: <b>{{ popsLastUpdated }}</b>
+            <CountdownSpinner
+              :percent="updatePopsCountdownPercentage"
+              :update-rate="updatePopsRate"
+              :inline="true"
+            />
           </p>
         </div>
       </div>
@@ -74,7 +89,7 @@ export default Vue.extend({
       updateTerritoryRate: 5000,
       updateTerritoryCountdown: 0,
       updateTerritoryCountdownInterval: undefined as undefined | number,
-      updatePopsRate: 60000,
+      updatePopsRate: 30000,
       updatePopsCountdown: 0,
       updatePopsCountdownInterval: undefined as undefined | number,
       actives: [] as InstanceTerritoryControlResponseInterface[],
@@ -83,8 +98,8 @@ export default Vue.extend({
         InstancePopulationAggregateResponseInterface
       >(),
       ApiRequest: new ApiRequest(),
-      mode: 'territory',
       showPopPercent: true,
+      drawerOpen: true,
     }
   },
   computed: {
@@ -178,6 +193,9 @@ export default Vue.extend({
     ): InstancePopulationAggregateResponseInterface | undefined {
       return this.populations.get(instance)
     },
+    toggleDrawer() {
+      this.drawerOpen = !this.drawerOpen
+    },
   },
 })
 </script>
@@ -185,7 +203,12 @@ export default Vue.extend({
 <style scoped lang="scss">
 #rtm {
   .tag {
-    margin-bottom: 0;
+    margin: 0;
+  }
+
+  .rtm-drawer {
+    right: 0;
+    bottom: -15px;
   }
 }
 </style>

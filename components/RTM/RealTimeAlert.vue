@@ -1,7 +1,7 @@
 <template>
   <div :instanceId="instanceId">
     <div class="grid grid-cols-12 place-items-center mb-0.5">
-      <div class="col-span-3 col-start-3 lg:col-start-2">
+      <div class="col-span-3 col-start-2">
         {{ world | worldName }}
       </div>
 
@@ -9,7 +9,7 @@
         {{ zone | zoneName }}
       </div>
 
-      <div class="col-span-4 justify-self-center font-bold">
+      <div class="col-span-3 justify-self-center font-bold">
         <remaining-time
           :started="timeStarted"
           :duration="duration"

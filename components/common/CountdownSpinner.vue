@@ -1,5 +1,8 @@
 <template>
-  <div class="absolute top-0 right-0 mr-2">
+  <div
+    class="top-0 right-0 mr-2"
+    :class="{ absolute: isAbsolute(), inline: isInline() }"
+  >
     <v-tooltip left>
       <template #activator="{ on, attrs }">
         <v-progress-circular
@@ -30,6 +33,19 @@ export default Vue.extend({
       type: [Number, String],
       default: 10000,
       required: true,
+    },
+    inline: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+  },
+  methods: {
+    isAbsolute() {
+      return !this.inline
+    },
+    isInline() {
+      return this.inline
     },
   },
 })

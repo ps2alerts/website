@@ -13,13 +13,6 @@
   }
 }
 
-@layer utilities {
-  .router-link-active,
-  .btn-active {
-    @apply bg-red-600;
-  }
-}
-
 /* COLOURS */
 @layer utilities {
   .vs {
@@ -222,7 +215,15 @@
         @apply bg-purple-600;
       }
     }
+    &.btn-active {
+      @apply bg-red-600;
+    }
   }
+
+  .nuxt-link-exact-active {
+    @apply bg-red-600;
+  }
+
   .btn-alt {
     @apply bg-gray-600;
 
