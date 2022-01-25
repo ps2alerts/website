@@ -1,9 +1,6 @@
 <template>
   <NuxtLink :to="{ name: 'alert-alert', params: { alert: alert.instanceId } }">
-    <div
-      class="p-2 mb-2 bg-tint border-tint rounded relative"
-      :class="victorClass"
-    >
+    <div class="p-2 mb-2 bg-tint rounded relative" :class="victorClass">
       <div
         class="grid grid-cols-5 lg:grid-cols-12 place-items-center text-center"
       >
@@ -103,6 +100,7 @@ import { DATE_TIME_FORMAT_SHORT } from '@/constants/Time'
 import { Faction } from '@/constants/Faction'
 import { FactionBgClass } from '@/constants/FactionBgClass'
 import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
+import { FactionBorderClass } from '~/constants/FactionBorderClass'
 
 export default Vue.extend({
   name: 'AlertHistoryEntry',
@@ -124,14 +122,20 @@ export default Vue.extend({
     },
     victorClass(): object {
       if (this.alert.result.draw) {
-        return { 'bg-tint-light': this.alert.result.draw }
+        return {
+          'bg-tint-light': true,
+          'border-other-alt': true,
+        }
       }
 
       if (!this.alert.result || !this.alert.result.victor) {
         return {}
       }
 
-      return FactionBgClass(this.alert.result.victor)
+      return {
+        ...FactionBgClass(this.alert.result.victor),
+        ...FactionBorderClass(this.alert.result.victor, true),
+      }
     },
     draw(): boolean {
       return this.alert.result ? this.alert.result.draw : false
