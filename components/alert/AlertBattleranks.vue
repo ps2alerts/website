@@ -10,31 +10,8 @@
       <h1 class="mb-4">Loading...</h1>
     </div>
     <div v-if="loaded" class="text-center">
-      <div class="btn-group mr-2">
-        <button
-          class="btn btn-sm"
-          :class="{ 'btn-active': mode === 'all' }"
-          @click="updateMode('all')"
-        >
-          Overall BRs
-        </button>
-        <button
-          class="btn btn-sm"
-          :class="{ 'btn-active': mode === 'faction' }"
-          @click="updateMode('faction')"
-        >
-          Faction BRs
-        </button>
-      </div>
       <bar-chart
-        v-show="mode === 'all'"
         :chart-data="dataCollection"
-        :options="chartOptions"
-        style="width: 100%; height: 300px"
-      ></bar-chart>
-      <bar-chart
-        v-show="mode === 'faction'"
-        :chart-data="dataCollectionFactions"
         :options="chartOptions"
         style="width: 100%; height: 300px"
       ></bar-chart>
@@ -89,6 +66,7 @@ export default Vue.extend({
         annotation: {
           annotations: [
             {
+              drawTime: 'afterDatasetsDraw',
               type: 'line',
               mode: 'vertical',
               scaleID: 'x-axis-0',
@@ -105,6 +83,7 @@ export default Vue.extend({
         scales: {
           xAxes: [
             {
+              stacked: true,
               ticks: {
                 fontColor: '#fff',
               },
@@ -120,6 +99,7 @@ export default Vue.extend({
           ],
           yAxes: [
             {
+              stacked: true,
               ticks: {
                 fontColor: '#fff',
               },
@@ -240,18 +220,6 @@ export default Vue.extend({
         labels: battleranks,
         datasets: [
           {
-            label: 'All Factions',
-            backgroundColor: '#4BC0C0',
-            data: battlerankData,
-            borderWidth: 4,
-          },
-        ],
-      }
-
-      this.dataCollectionFactions = {
-        labels: battleranks,
-        datasets: [
-          {
             label: 'VS',
             backgroundColor: '#6B46C1',
             data: factionBattlerankData[1],
@@ -271,10 +239,9 @@ export default Vue.extend({
           },
           {
             label: 'NSO',
-            backgroundColor: '#4a5568',
+            backgroundColor: '#64748B',
             data: factionBattlerankData[4],
             borderWidth: 4,
-            hidden: true,
           },
         ],
       }

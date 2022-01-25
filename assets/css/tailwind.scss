@@ -11,10 +11,8 @@
   body {
     min-height: 100vh;
   }
-}
 
-/* COLOURS */
-@layer utilities {
+  /* COLOURS */
   .vs {
     background-color: rgba(107,70,193,1);
     &.bg-leader {
@@ -84,7 +82,7 @@
     background-color: rgba(155,44,44,0.5);
   }
   .bg-nso {
-    @apply bg-gray-600;
+    @apply bg-cool-gray-500;
   }
   .bg-indar {
     @apply bg-orange-500 bg-opacity-25;
@@ -111,12 +109,8 @@
   .text-nso {
     @apply text-gray-600;
   }
-}
-
 
 /* CUSTOM OVERRIDES */
-
-@layer base {
   html {
     @apply text-white;
     background-image: url('../img/bg-tile.jpg');
@@ -185,9 +179,7 @@
     margin-left: 1rem;
     margin-bottom: 1rem;
   }
-}
 
-@layer utilities {
   /* Buttons */
   .btn {
     @apply bg-red-800 rounded-md py-2 px-4 inline-block font-medium border-transparent;
@@ -449,28 +441,27 @@
       }
     }
   }
-}
 
-/* VUETIFY OVERRIDES */
-@layer utilities {
+  /* VUETIFY OVERRIDES */
   td.text-middle {
     text-align: center;
   }
 
   .theme--dark {
-    &.v-tabs-bar {
+    &.v-tabs > .v-tabs-bar {
       background-color: #9b2c2c !important;
     }
+
     &.v-tabs-items {
       background-color: rgba(0, 0, 0, 0) !important;
     }
     &.v-data-table {
       background-color: rgba(75, 85, 99, 0.5) !important;
-    }
 
-    .v-data-table-header,
-    .v-data-footer {
-      background-color: rgba(48,58,64,1) !important;
+      .v-data-table-header,
+      .v-data-footer {
+        background-color: rgba(48,58,64,1) !important;
+      }
     }
   }
 }
