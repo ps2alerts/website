@@ -1,6 +1,6 @@
 <template>
   <NuxtLink :to="{ name: 'alert-alert', params: { alert: alert.instanceId } }">
-    <div class="p-2 mb-2 bg-tint rounded relative" :class="victorClass">
+    <div class="p-2 mb-2 bg-tint rounded relative hover" :class="victorClass">
       <div
         class="grid grid-cols-5 lg:grid-cols-12 place-items-center text-center"
       >
