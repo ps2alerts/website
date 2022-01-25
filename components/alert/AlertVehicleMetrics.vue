@@ -52,11 +52,10 @@ import {
   FactionBgClass,
   FactionBgClassString,
 } from '@/constants/FactionBgClass'
-import vehicleFaction from '@/filters/VehicleFaction'
-import { CensusVehicleResponseInterface } from '~/interfaces/census/CensusVehicleResponseInterface'
 import { AlertVehicleLeaderboardConfig } from '~/constants/DataTableConfig'
 import { AlertVehicleMetricsDataTableInterface } from '~/interfaces/alert/AlertVehicleMetricsDataTableInterface'
 import { VehicleStatsWithKd } from '~/interfaces/VehicleStatisticsInterface'
+import VehicleDataRequest from '~/libraries/VehicleDataRequest'
 
 export default Vue.extend({
   name: 'AlertVehicleMetrics',
@@ -225,30 +224,7 @@ export default Vue.extend({
         return
       }
 
-      await new ApiRequest('https://census.daybreakgames.com')
-        .get<CensusVehicleResponseInterface>(
-          CensusEndpoints.VEHICLE_DATA.replace('{serviceId}', 'ps2alertsdotcom')
-        )
-        .then((result) => {
-          result.vehicle_list.forEach((vehicle) => {
-            const vehicleData: VehicleDataInterface = {
-              id: parseInt(vehicle.vehicle_id, 10),
-              name: vehicle.name.en,
-              faction: vehicleFaction(parseInt(vehicle.vehicle_id, 10)),
-            }
-            this.vehicleData.push(vehicleData)
-
-            // Chimera hack cos DBG are crap
-            this.vehicleData.push({
-              id: 2137,
-              name: 'Chimera',
-              faction: Faction.NS_OPERATIVES,
-            })
-          })
-        })
-        .catch((e) => {
-          this.error = e.message
-        })
+      this.vehicleData = await new VehicleDataRequest().pull()
     },
     async pull(): Promise<void> {
       if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {

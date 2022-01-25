@@ -60,6 +60,7 @@ import { Faction } from '~/constants/Faction'
 import worldNameFilter from '~/filters/WorldName'
 import { Bracket } from '~/constants/Bracket'
 import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
+import VehicleDataRequest from '~/libraries/VehicleDataRequest'
 
 export default Vue.extend({
   name: 'Vehicles',
@@ -156,23 +157,7 @@ export default Vue.extend({
         return
       }
 
-      await new ApiRequest('https://census.daybreakgames.com')
-        .get<CensusVehicleResponseInterface>(
-          CensusEndpoints.VEHICLE_DATA.replace('{serviceId}', 'ps2alertsdotcom')
-        )
-        .then((result) => {
-          result.vehicle_list.forEach((vehicle) => {
-            const vehicleData: VehicleDataInterface = {
-              id: parseInt(vehicle.vehicle_id, 10),
-              name: vehicle.name.en,
-              faction: vehicleFaction(parseInt(vehicle.vehicle_id, 10)),
-            }
-            this.vehicleData.push(vehicleData)
-          })
-        })
-        .catch((e) => {
-          this.error = e.message
-        })
+      this.vehicleData = await new VehicleDataRequest().pull()
     },
     transformData(
       result: GlobalVehicleAggregateResponseInterface[]

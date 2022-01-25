@@ -132,13 +132,12 @@ import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
 import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
-import { CensusEndpoints, Endpoints } from '@/constants/Endpoints'
+import { Endpoints } from '@/constants/Endpoints'
 import { InstanceVehicleAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceVehicleAggregateResponseInterface'
 import { VehicleDataInterface } from '@/interfaces/VehicleDataInterface'
 import { Faction } from '@/constants/Faction'
 import { FactionBgClass } from '@/constants/FactionBgClass'
-import vehicleFaction from '@/filters/VehicleFaction'
-import { CensusVehicleResponseInterface } from '~/interfaces/census/CensusVehicleResponseInterface'
+import VehicleDataRequest from '~/libraries/VehicleDataRequest'
 
 export default Vue.extend({
   name: 'AlertVehicleMatrix',
@@ -209,30 +208,7 @@ export default Vue.extend({
         return
       }
 
-      await new ApiRequest('https://census.daybreakgames.com')
-        .get<CensusVehicleResponseInterface>(
-          CensusEndpoints.VEHICLE_DATA.replace('{serviceId}', 'ps2alertsdotcom')
-        )
-        .then((result) => {
-          result.vehicle_list.forEach((vehicle) => {
-            const vehicleData: VehicleDataInterface = {
-              id: parseInt(vehicle.vehicle_id, 10),
-              name: vehicle.name.en,
-              faction: vehicleFaction(parseInt(vehicle.vehicle_id, 10)),
-            }
-            this.vehicleData.push(vehicleData)
-
-            // Chimera hack cos DBG are crap
-            this.vehicleData.push({
-              id: 2137,
-              name: 'Chimera',
-              faction: Faction.NS_OPERATIVES,
-            })
-          })
-        })
-        .catch((e) => {
-          this.error = e.message
-        })
+      this.vehicleData = await new VehicleDataRequest().pull()
     },
     async pull(): Promise<void> {
       if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
