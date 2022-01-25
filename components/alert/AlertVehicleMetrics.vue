@@ -44,7 +44,7 @@ import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
 import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
-import { CensusEndpoints, Endpoints } from '@/constants/Endpoints'
+import { Endpoints } from '@/constants/Endpoints'
 import { InstanceVehicleAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceVehicleAggregateResponseInterface'
 import { VehicleDataInterface } from '@/interfaces/VehicleDataInterface'
 import { Faction } from '@/constants/Faction'
@@ -55,7 +55,7 @@ import {
 import { AlertVehicleLeaderboardConfig } from '~/constants/DataTableConfig'
 import { AlertVehicleMetricsDataTableInterface } from '~/interfaces/alert/AlertVehicleMetricsDataTableInterface'
 import { VehicleStatsWithKd } from '~/interfaces/VehicleStatisticsInterface'
-import VehicleDataRequest from '~/libraries/VehicleDataRequest'
+import VehicleDataRequest from '@/libraries/VehicleDataRequest'
 
 export default Vue.extend({
   name: 'AlertVehicleMetrics',

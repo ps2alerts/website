@@ -43,8 +43,10 @@ import {
 } from '~/interfaces/VehicleStatisticsInterface'
 import { Faction } from '~/constants/Faction'
 import { VehicleDataInterface } from '~/interfaces/VehicleDataInterface'
+import { Vehicle } from '~/constants/Vehicle'
 
 interface TotalVehicleInterface extends VehicleStatsWithKd {
+  vehicleId?: Vehicle
   vehicleName?: string
   vehicleFaction?: Faction
   suicides?: number
@@ -89,6 +91,11 @@ export default Vue.extend({
       tableConfig: StatisticsVehicleLeaderboardConfig,
       items: [] as TotalVehicleInterface[],
       tableHeaders: [
+        // {
+        //   text: 'id',
+        //   align: 'left',
+        //   value: 'vehicleId',
+        // },
         {
           text: 'Vehicle',
           align: 'left',
@@ -208,15 +215,18 @@ export default Vue.extend({
 
           vehicle.vehicles = this.addMetrics(
             worldVehicle.vehicles,
-            vehicle.vehicles ?? undefined
+            vehicle.vehicles ?? undefined,
+            vehicle
           )
           vehicle.infantry = this.addMetrics(
             worldVehicle.infantry,
-            vehicle.infantry ?? undefined
+            vehicle.infantry ?? undefined,
+            vehicle
           )
           vehicle.totals = this.addMetrics(
             worldVehicle.totals,
-            vehicle.totals ?? undefined
+            vehicle.totals ?? undefined,
+            vehicle
           )
 
           vehicle.suicides = vehicle.suicides
@@ -227,6 +237,7 @@ export default Vue.extend({
             ? vehicle.roadkills + (worldVehicle?.roadkills ?? 0)
             : worldVehicle.roadkills ?? 0
 
+          vehicle.vehicleId = worldVehicle.vehicleId
           vehicle.vehicleName = worldVehicle.vehicleName
           vehicle.vehicleFaction = worldVehicle.vehicleFaction
 
@@ -249,7 +260,8 @@ export default Vue.extend({
 
     addMetrics(
       worldVehicle: VehicleStatsInterface | undefined,
-      totals: VehicleStatsWithKd | undefined
+      totals: VehicleStatsWithKd | undefined,
+      vehicle: TotalVehicleInterface
     ): VehicleStatsWithKd {
       const newData = totals ?? {
         kills: 0,
@@ -269,6 +281,11 @@ export default Vue.extend({
       newData.teamkilled += worldVehicle?.teamkilled ?? 0
       // @ts-ignore
       newData.kd = ((newData.kills ?? 0) / (newData.deaths ?? 0)).toFixed(2)
+
+      if (vehicle.vehicleId === Vehicle.BASTION) {
+        newData.deaths = 0
+        newData.kd = 'N/A'
+      }
 
       return newData
     },

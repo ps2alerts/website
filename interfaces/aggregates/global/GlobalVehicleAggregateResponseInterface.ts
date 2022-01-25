@@ -1,5 +1,6 @@
 import { Faction } from '@/constants/Faction'
 import { World } from '~/constants/World'
+import { Vehicle } from '~/constants/Vehicle'
 
 interface VehicleStatsInterface {
   kills?: number
@@ -10,7 +11,7 @@ interface VehicleStatsInterface {
 
 export interface GlobalVehicleAggregateResponseInterface {
   world: World
-  vehicle: number
+  vehicle: Vehicle
   vehicleName?: string
   vehicleFaction?: Faction
   vehicleDeathMatrix?: { [k: string]: number }

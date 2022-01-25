@@ -16,9 +16,7 @@ const vehicleFaction = Vue.filter('vehicleFaction', (vehicle: Vehicle) => {
     case Vehicle.MOSQUITO:
     case Vehicle.MOSQUITO_INTERCEPTOR:
       return Faction.TERRAN_REPUBLIC
-    case Vehicle.JAVELIN:
     case Vehicle.JAVELIN_2:
-    case Vehicle.JAVELIN_3:
     case Vehicle.DERVISH:
     case Vehicle.CHIMERA:
       return Faction.NS_OPERATIVES

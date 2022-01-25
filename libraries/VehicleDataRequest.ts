@@ -31,18 +31,8 @@ export default class VehicleDataRequest {
           faction: Faction.NS_OPERATIVES,
         })
         data.push({
-          id: Vehicle.DELIVERER_PROTOTYPE_2,
-          name: 'Delivery Prototype',
-          faction: Faction.NONE,
-        })
-        data.push({
           id: Vehicle.LODESTAR_PROTOTYPE_2,
           name: 'Lodestar Prototype',
-          faction: Faction.NONE,
-        })
-        data.push({
-          id: Vehicle.WASP_PROTOTYPE_2,
-          name: 'Wasp Prototype',
           faction: Faction.NONE,
         })
       })

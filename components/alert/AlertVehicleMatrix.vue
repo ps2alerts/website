@@ -56,7 +56,7 @@
               <td
                 v-for="vehicle in data"
                 :key="vehicle.id"
-                class="border-gray-600 border-r font-bold"
+                class="border-gray-500 border-r font-bold"
               >
                 {{ vehicle.vehicleName }}
               </td>
@@ -137,7 +137,8 @@ import { InstanceVehicleAggregateResponseInterface } from '@/interfaces/aggregat
 import { VehicleDataInterface } from '@/interfaces/VehicleDataInterface'
 import { Faction } from '@/constants/Faction'
 import { FactionBgClass } from '@/constants/FactionBgClass'
-import VehicleDataRequest from '~/libraries/VehicleDataRequest'
+import VehicleDataRequest from '@/libraries/VehicleDataRequest'
+import { allowedVehicleMatrixArray } from '@/constants/Vehicle'
 
 export default Vue.extend({
   name: 'AlertVehicleMatrix',
@@ -243,12 +244,7 @@ export default Vue.extend({
 
           // Destroy all other data beyond ID 15, we don't care about feckin turrets man.
           this.data = result.filter((vehicle) => {
-            return (
-              (vehicle.vehicle <= 15 ||
-                vehicle.vehicle === 2007 ||
-                vehicle.vehicle === 2019) &&
-              vehicle.vehicle !== 13
-            )
+            return allowedVehicleMatrixArray.includes(vehicle.vehicle)
           })
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000

@@ -3,7 +3,8 @@
     <h1 class="text-3xl text-center mb-2">Vehicle Statistics</h1>
     <p class="text-sm text-center mb-4 text-gray-400">
       Bastions will always have 0 deaths as the API gives us no "bastion was
-      killed" data.
+      killed" data. Bastion roadkills = people who died on it's deck or got
+      rammed by it.
     </p>
     <div v-if="loaded">
       <div v-if="data.length === 0">
@@ -48,11 +49,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import ApiRequest from '~/api-request'
-import { CensusEndpoints, Endpoints } from '~/constants/Endpoints'
+import { Endpoints } from '~/constants/Endpoints'
 import { GlobalVehicleAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVehicleAggregateResponseInterface'
-import { CensusVehicleResponseInterface } from '~/interfaces/census/CensusVehicleResponseInterface'
 import { VehicleDataInterface } from '~/interfaces/VehicleDataInterface'
-import vehicleFaction from '~/filters/VehicleFaction'
 import { StatisticsVehicleMetricsTableDataInterface } from '~/interfaces/statistics/StatisticsVehicleMetricsTableDataInterface'
 import { World } from '~/constants/World'
 import { VehicleStatsWithKd } from '~/interfaces/VehicleStatisticsInterface'
@@ -60,7 +59,8 @@ import { Faction } from '~/constants/Faction'
 import worldNameFilter from '~/filters/WorldName'
 import { Bracket } from '~/constants/Bracket'
 import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
-import VehicleDataRequest from '~/libraries/VehicleDataRequest'
+import VehicleDataRequest from '@/libraries/VehicleDataRequest'
+import { allowedStatisticsVehiclesArray } from '~/constants/Vehicle'
 
 export default Vue.extend({
   name: 'Vehicles',
@@ -168,6 +168,12 @@ export default Vue.extend({
         if (vehicle.world === World.JAEGER) {
           return
         }
+
+        // Remove any vehicle not on the allow list
+        if (!allowedStatisticsVehiclesArray.includes(vehicle.vehicle)) {
+          return
+        }
+
         const vehicleData = this.vehicleData.find((val, key) => {
           if (val.id === vehicle.vehicle) {
             return this.vehicleData[key]
@@ -215,6 +221,7 @@ export default Vue.extend({
 
         const tempData: StatisticsVehicleMetricsTableDataInterface =
           Object.assign(vehicle, {
+            vehicleId: vehicle.vehicle,
             vehicleName: vehicleData
               ? this.$options.filters?.itemShortName(vehicleData.name)
               : `UNKNOWN (ID: ${vehicle.vehicle})`,
