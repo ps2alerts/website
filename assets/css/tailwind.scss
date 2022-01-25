@@ -49,8 +49,14 @@
   .border-tr {
     @apply border border-red-400;
   }
+  .border-tr-alt {
+    border: 1px solid rgb(220, 80, 80);
+  }
   .border-other {
     @apply border border-gray-500;
+  }
+  .border-other-alt {
+    border: 1px solid rgba(134,148,167, 1)
   }
   .border-tint {
     border: 1px solid #5d6265;
@@ -67,22 +73,48 @@
   }
 
   .bg-tint {
-    background-color: rgba(55,71,79,0.8)
+    background-color: rgba(55,71,79,0.8);
+    transition: background-color 0.25s ease-out;
+
+    &.hover:hover {
+      background-color: rgba(70,90,100,1);
+    }
   }
   .bg-tint-light {
-    @apply bg-gray-600 bg-opacity-50;
+    background-color: rgba(100,130,140,0.5);
+    transition: background-color 0.25s ease-out;
+
+    &.hover:hover {
+      background-color: rgba(100,130,140,1);
+    }
   }
   .bg-vs {
     background-color: rgba(85,60,154,0.5);
+    transition: background-color 0.25s ease-out;
+
+    &.hover:hover {
+      background-color: rgba(85,60,154,1);
+    }
   }
   .bg-nc {
     background-color: rgba(43,108,176,0.5);
+    transition: background-color 0.25s ease-out;
+
+    &.hover:hover {
+      background-color: rgba(43,108,176,1);
+    }
   }
   .bg-tr {
     background-color: rgba(155,44,44,0.5);
+    transition: background-color 0.25s ease-out;
+
+    &.hover:hover {
+      background-color: rgba(155,44,44,1);
+    }
   }
   .bg-nso {
     @apply bg-cool-gray-500;
+    transition: background-color 0.25s ease-out;
   }
   .bg-indar {
     @apply bg-orange-500 bg-opacity-25;

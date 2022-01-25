@@ -3,6 +3,7 @@ module.exports = {
   purge: {
     enabled: true,
     content: [
+      'constants/**/*.ts',
       'components/**/*.vue',
       'layouts/**/*.vue',
       'pages/**/*.vue',
