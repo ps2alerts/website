@@ -4,9 +4,16 @@
   >
     <div class="tag announcement">
       <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>
-      Notice - 24th August 2021 17:35 UTC
+      Notice - 26th Jan 2022
     </div>
-    <div></div>
+    <div class="text-center">
+      <h1>Oshur support is in development!</h1>
+      <p>
+        Oshur has just been released! We are in the process of adding support to
+        Oshur very soon! Keep fighting on the islands, keep plundering your
+        enemy's booty, we will track the alerts soon!
+      </p>
+    </div>
   </div>
 </template>
 
