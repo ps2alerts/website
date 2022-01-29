@@ -55,7 +55,7 @@
     "eslint-plugin-nuxt": "^3.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.2.0",
-    "fibers": "^5.0.0",
+    "fibers": "^5.0.1",
     "node-sass": "^7.0.1",
     "postcss": "^8.4.4",
     "postcss-extend-rule": "^3.0.0",
