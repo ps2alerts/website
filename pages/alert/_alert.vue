@@ -18,6 +18,7 @@
       <AlertMapCaptureHistory
         :alert="alert"
         :facility-data="alertFacilityAggregate"
+        :outfit-data="alertOutfitAggregate"
         :data-ready="alertFacilityDataReady"
       />
       <AlertBattleranks :alert="alert" />
@@ -118,6 +119,7 @@ import AlertCombatHistory from '@/components/alert/AlertCombatHistory.vue'
 import AlertBattleranks from '~/components/alert/AlertBattleranks.vue'
 import { InstanceFacilityControlAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceFacilityControlAggregateResponseInterface'
 import facilityTypeName from '~/filters/FacilityTypeName'
+import { InstanceOutfitAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface'
 
 export default Vue.extend({
   name: 'Alert',
@@ -163,6 +165,10 @@ export default Vue.extend({
       alertFacilityAggregate: new Map() as Map<
         number,
         InstanceFacilityControlAggregateResponseInterface
+      >,
+      alertOutfitAggregate: new Map() as Map<
+        string,
+        InstanceOutfitAggregateResponseInterface
       >,
       alertFacilityDataReady: false,
       metricsTab: 'players',
@@ -224,10 +230,11 @@ export default Vue.extend({
     async init(instanceId: string): Promise<void> {
       await this.pull(instanceId)
       this.alertFacilityAggregate = await this.pullFacilityData(instanceId)
-
+      this.alertOutfitAggregate = await this.pullOutfitData(instanceId)
       this.alertFacilityDataReady = true
 
       console.log('Alert facility data', this.alertFacilityAggregate)
+      console.log('Alert outfit data', this.alertOutfitAggregate)
 
       if (this.alert.state === Ps2alertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
@@ -295,6 +302,25 @@ export default Vue.extend({
         })
         .catch((e) => {
           console.error('Unable to process Facility Data!', e)
+        })
+
+      return newMap
+    },
+    async pullOutfitData(
+      instanceId: string
+    ): Promise<Map<string, InstanceOutfitAggregateResponseInterface>> {
+      const newMap = new Map<string, InstanceOutfitAggregateResponseInterface>()
+
+      await new ApiRequest()
+        .get<InstanceOutfitAggregateResponseInterface[]>(
+          Endpoints.AGGREGATES_INSTANCE_OUTFIT.replace('{instance}', instanceId)
+        )
+        .then((outfitAggregate) => {
+          outfitAggregate.forEach(
+            (outfitData: InstanceOutfitAggregateResponseInterface) => {
+              newMap.set(outfitData.outfit.id, outfitData)
+            }
+          )
         })
 
       return newMap

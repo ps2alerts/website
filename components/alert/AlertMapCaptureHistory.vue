@@ -19,7 +19,8 @@
       </button>
       <p class="text-gray-400 text-sm m-2">
         *Defences mean when an capture timer has started then returned to
-        normal. There are going to be a lot of these.
+        normal. There are going to be a <b>lot</b> of these. We also don't know
+        who attempted to capture the base as the API doesn't provide this data.
       </p>
       <v-data-table
         class="datatable"
@@ -36,9 +37,17 @@
         <template slot="item.timestamp" slot-scope="{ item }">
           {{ item.timestamp | dateTimeFormatShort }}
         </template>
-        <template slot="item.outfit"> [DIG] Dignity Of War </template>
-        <template slot="item.facilityNameWithType" slot-scope="{ item }"
-          >>
+        <template slot="item.outfitFull" slot-scope="{ item }">
+          <div
+            v-if="item.outfitData.outfit && item.outfitData.outfit.id !== '0'"
+          >
+            <span v-show="item.outfitData.outfit.tag"
+              >[{{ item.outfitData.outfit.tag }}] </span
+            ><span>{{ item.outfitData.outfit.name }}</span>
+          </div>
+          <div v-else>== N/A (never captured) ==</div>
+        </template>
+        <template slot="item.facilityNameWithType" slot-scope="{ item }">
           <span
             >{{ item.facilityData.name }} ({{
               item.facilityData.typeName
@@ -97,6 +106,12 @@ export default Vue.extend({
       default: new Map(),
       required: true,
     },
+    // eslint-disable-next-line vue/require-prop-types
+    outfitData: {
+      // Omitted Type here as I couldn't figure out how to get TS to play nice
+      default: new Map(),
+      required: true,
+    },
     dataReady: {
       type: Boolean,
       default: false,
@@ -119,7 +134,7 @@ export default Vue.extend({
       headers: [
         {
           text: 'Timestamp',
-          align: 'left',
+          align: 'center',
           value: 'timestamp',
           width: '120px',
         },
@@ -132,7 +147,7 @@ export default Vue.extend({
         {
           text: 'Outfit',
           align: 'left',
-          value: 'outfit',
+          value: 'outfitFull',
         },
         {
           text: 'Win / Loss',
@@ -278,6 +293,7 @@ export default Vue.extend({
                 type: FacilityType.DEFAULT,
                 region: 12345,
               },
+              outfitData: this.outfitData.get(capture.outfitCaptured),
             }
           )
 
