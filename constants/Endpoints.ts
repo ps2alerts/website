@@ -52,7 +52,8 @@ export const Endpoints = {
   AGGREGATES_INSTANCE_WEAPON_SINGLE:
     '/aggregates/instance/{instance}/weapon/{weapon}',
 
-  INSTANCE_FACILITY_CONTROL_ENTRIES: '/instance-entries/{instance}/facility',
+  INSTANCE_FACILITY_CONTROL_ENTRIES:
+    '/instance-entries/{instance}/facility?sortBy=timestamp&order=desc',
   INSTANCE_FACILITY_CONTROL_ENTRIES_FACILITY:
     '/instance-entries/{instance}/facility/{facility}',
 

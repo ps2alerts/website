@@ -51,7 +51,6 @@ import { Endpoints } from '~/constants/Endpoints'
 import { GlobalFacilityControlAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalFacilityControlAggregateResponseInterface'
 import { Bracket } from '~/constants/Bracket'
 import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
-import { FacilityDataInterface } from '~/interfaces/FacilityDataInterface'
 import worldNameFilter from '~/filters/WorldName'
 import { StatisticsFacilityTableDataInterface } from '~/interfaces/statistics/StatisticsFacilityTableDataInterface'
 import { World } from '~/constants/World'
@@ -81,7 +80,6 @@ export default Vue.extend({
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       data: [] as StatisticsFacilityTableDataInterface[],
-      facilityData: new Map() as Map<number, FacilityDataInterface[]>,
       totalMode: true,
       filtered: false,
     }

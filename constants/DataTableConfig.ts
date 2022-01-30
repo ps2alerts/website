@@ -26,6 +26,13 @@ export const AlertLoadoutLeaderboardConfig = {
   },
 }
 
+export const AlertCaptureHistoryConfig = {
+  ...DataTableConfig,
+  'items-per-page': 40,
+  'sort-by': ['timestamp'],
+  'sort-desc': [true],
+}
+
 export const StatisticsCharactersLeaderboardConfig = {
   ...DataTableConfig,
   'sort-by': ['kills'],
