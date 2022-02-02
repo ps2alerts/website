@@ -15,7 +15,7 @@
         class="rtm-drawer mt-2 pb-2 visible lg:invisible"
         :class="{ absolute: drawerOpen }"
       >
-        <btn class="btn btn-sm" @click="toggleDrawer()">
+        <button class="btn btn-sm" @click="toggleDrawer()">
           <span v-show="!drawerOpen"
             >Show
             <font-awesome-icon :icon="['fas', 'arrow-down']"></font-awesome-icon
@@ -24,7 +24,7 @@
             >Hide
             <font-awesome-icon :icon="['fas', 'arrow-up']"></font-awesome-icon
           ></span>
-        </btn>
+        </button>
       </div>
       <div v-show="drawerOpen" class="pb-2">
         <p v-if="loading">Loading...</p>
@@ -84,7 +84,6 @@ export default Vue.extend({
     return {
       loading: true,
       error: null,
-      lastUpdated: 'fetching...',
       popsLastUpdated: 'fetching...',
       updateTerritoryRate: 5000,
       updateTerritoryCountdown: 0,
