@@ -4,15 +4,31 @@
   >
     <div class="tag announcement">
       <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>
-      Notice - 26th Jan 2022
+      Notice - 2nd Feb 2022
     </div>
-    <div class="text-center">
-      <h1>Oshur support is in development!</h1>
+    <div class="text-left">
+      <h1 class="mb-4 text-center">Oshur support nearly finished!</h1>
       <p>
-        Oshur has just been released! We are in the process of adding support to
-        Oshur very soon! Keep fighting on the islands, keep plundering your
-        enemy's booty, we will track the alerts soon!
+        Oshur support is still being developed! The collection system for
+        PS2Alerts now has a working prototype with the new Oshur alerts, which
+        is big step towards full Oshur support!
       </p>
+      <p>
+        Unfortunately, due to the lack of support from the game's API (it's
+        missing data since Containment Sites were added) it is hampering
+        development efforts and us API devs are having to do a lot of data
+        scraping from the game's files.
+        <a
+          href="https://github.com/ps2alerts/aggregator/commit/05acc299f9308ffde8395559b5e65bbfdd642bc1#diff-796089b7fb5c6121c15141b3e0a176527874b01ad8bb751af06c93833de0c70eR89"
+          class="text-red-500 hover:underline"
+          >Click here if you wish to understand my pain right now...</a
+        >
+      </p>
+      <p>
+        I'm hoping to have full Oshur support online by the end of the coming
+        weekend!
+      </p>
+      <p>- Maelstrome26 (PS2Alerts Developer)</p>
     </div>
   </div>
 </template>
