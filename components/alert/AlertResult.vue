@@ -28,7 +28,23 @@
       ></remaining-time>
     </div>
     <div class="rounded px-4 py-4 bg-tint relative" :class="victorClass">
-      <div class="tag section">Result</div>
+      <div class="tag section">
+        Result
+        <span v-if="alert.result.perBasePercentage"
+          >({{ alert.result.perBasePercentage.toFixed(1) }}% per base)
+          <v-tooltip bottom>
+            <template #activator="{ on, attrs }">
+              <font-awesome-icon
+                :icon="['fas', 'info-circle']"
+                v-bind="attrs"
+                v-on="on"
+              ></font-awesome-icon>
+            </template>
+            Each and every base is worth the same amount of territory. Yes, even
+            the 1 minute construction bases.
+          </v-tooltip></span
+        >
+      </div>
       <CountdownSpinner
         v-if="alert.state === 1"
         :percent="updateCountdownPercent"
