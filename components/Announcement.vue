@@ -16,12 +16,16 @@
       <p>
         Unfortunately, due to the lack of support from the game's API (it's
         missing data since Containment Sites were added) it is hampering
-        development efforts and us API devs are having to do a lot of data
-        scraping from the game's files.
+        development efforts and us API devs are having to do a lot of
         <a
-          href="https://github.com/ps2alerts/aggregator/commit/05acc299f9308ffde8395559b5e65bbfdd642bc1#diff-796089b7fb5c6121c15141b3e0a176527874b01ad8bb751af06c93833de0c70eR89"
+          href="https://github.com/ps2alerts/aggregator/blob/revive/src/constants/lattice/344-reverse-engineered.json"
           class="text-red-500 hover:underline"
-          >Click here if you wish to understand my pain right now...</a
+          >data scraping </a
+        >from the game's files.
+        <a
+          href="https://github.com/ps2alerts/aggregator/commit/05acc299f9308ffde8395559b5e65bbfdd642bc1#diff-796089b7fb5c6121c15141b3e0a176527874b01ad8bb751af06c93833de0c70eR89-R107"
+          class="text-red-500 hover:underline"
+          >Click to witness pain in code form.</a
         >
       </p>
       <p>
