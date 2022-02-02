@@ -3,6 +3,7 @@ export enum Zone {
   HOSSIN = 4,
   AMERISH = 6,
   ESAMIR = 8,
+  OSHUR = 344,
   // VR_TRAINING_NC = 96,
   // VR_TRAINING_TR = 97,
   // VR_TRAINING_VS = 98,
@@ -24,5 +25,7 @@ export const ZoneBgClassString = (zone: Zone | undefined): string => {
       return 'bg-amerish'
     case Zone.ESAMIR:
       return 'bg-esamir'
+    case Zone.OSHUR:
+      return 'bg-oshur'
   }
 }
