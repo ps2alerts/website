@@ -259,6 +259,25 @@ export default Vue.extend({
             )
           )
           .then((result) => {
+            // Ensure no data is missing so the page doesn't crash
+            if (!result.factionKills.vs) {
+              result.factionKills.vs = {
+                nc: 0,
+                tr: 0,
+              }
+            }
+            if (!result.factionKills.nc) {
+              result.factionKills.nc = {
+                vs: 0,
+                tr: 0,
+              }
+            }
+            if (!result.factionKills.tr) {
+              result.factionKills.tr = {
+                vs: 0,
+                nc: 0,
+              }
+            }
             return result
           })
       )
