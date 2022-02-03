@@ -16,6 +16,7 @@
       <AlertCombatHistory :alert="alert" />
       <AlertMap :alert="alert" />
       <AlertMapCaptureHistory
+        v-if="alert.features && alert.features.captureHistory"
         :alert="alert"
         :facility-data="alertFacilityAggregate"
         :outfit-data="alertOutfitAggregate"
@@ -229,9 +230,11 @@ export default Vue.extend({
     },
     async init(instanceId: string): Promise<void> {
       await this.pull(instanceId)
-      this.alertFacilityAggregate = await this.pullFacilityData(instanceId)
-      this.alertOutfitAggregate = await this.pullOutfitData(instanceId)
-      this.alertFacilityDataReady = true
+      if (this.alert.features?.captureHistory) {
+        this.alertFacilityAggregate = await this.pullFacilityData(instanceId)
+        this.alertOutfitAggregate = await this.pullOutfitData(instanceId)
+        this.alertFacilityDataReady = true
+      }
 
       console.log('Alert facility data', this.alertFacilityAggregate)
       console.log('Alert outfit data', this.alertOutfitAggregate)

@@ -64,12 +64,13 @@
           >
           <span v-else-if="item.isDefence && showDefences">-</span>
         </template>
-        <template slot="item.territory">
+        <template slot="item.territory" slot-scope="{ item }">
           <FactionSegmentBar
-            :vs="40"
-            :nc="20"
-            :tr="20"
-            :other="0"
+            :vs="item.mapControl.vs"
+            :nc="item.mapControl.nc"
+            :tr="item.mapControl.tr"
+            :other="item.mapControl.cutoff"
+            :out-of-play="item.mapControl.outOfPlay"
             dropoff-percent="15"
           ></FactionSegmentBar>
         </template>

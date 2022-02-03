@@ -1,4 +1,5 @@
 import { Faction } from '~/constants/Faction'
+import { MapControlInterface } from '~/interfaces/instance-entries/MapControlInterface'
 
 export interface InstanceFacilityControlEntriesResponseInterface {
   instance: string
@@ -10,4 +11,5 @@ export interface InstanceFacilityControlEntriesResponseInterface {
   isDefence: boolean
   isInitial: boolean
   outfitCaptured?: string
+  mapControl: MapControlInterface | null
 }

@@ -3,6 +3,7 @@ import { Zone } from '~/constants/Zone'
 import { Ps2alertsEventState } from '~/constants/Ps2alertsEventState'
 import { TerritoryResultInterface } from '~/interfaces/InstanceTerritoryResultInterface'
 import { Bracket } from '~/constants/Bracket'
+import { PS2AlertsInstanceFeaturesInterface } from '~/interfaces/PS2AlertsInstanceFeaturesInterface'
 
 export interface InstanceTerritoryControlResponseInterface {
   instanceId: string
@@ -15,4 +16,5 @@ export interface InstanceTerritoryControlResponseInterface {
   state: Ps2alertsEventState
   result: TerritoryResultInterface
   bracket: Bracket
+  features: PS2AlertsInstanceFeaturesInterface
 }
