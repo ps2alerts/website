@@ -30,6 +30,7 @@
                 :tr="scores.kills.vs.tr"
                 :other="0"
                 dropoff-percent="15"
+                :show-as-calculated-percentage="true"
               />
             </td>
             <td class="py-2 px-1 whitespace-nowrap">
@@ -39,6 +40,7 @@
                 :tr="scores.captures.vs.tr"
                 :other="0"
                 dropoff-percent="15"
+                :show-as-calculated-percentage="true"
               />
             </td>
             <td class="text-center">=</td>
@@ -65,6 +67,7 @@
                 :tr="0"
                 :other="0"
                 dropoff-percent="15"
+                :show-as-calculated-percentage="true"
               />
             </td>
             <td class="py-2 px-1 whitespace-nowrap">
@@ -74,6 +77,7 @@
                 :tr="0"
                 :other="0"
                 dropoff-percent="15"
+                :show-as-calculated-percentage="true"
               />
             </td>
             <td class="text-center">=</td>
@@ -99,6 +103,7 @@
                 :tr="scores.kills.nc.tr"
                 :other="0"
                 dropoff-percent="15"
+                :show-as-calculated-percentage="true"
               />
             </td>
             <td class="py-2 px-1 whitespace-nowrap">
@@ -108,6 +113,7 @@
                 :tr="scores.captures.nc.tr"
                 :other="0"
                 dropoff-percent="15"
+                :show-as-calculated-percentage="true"
               />
             </td>
             <td class="text-center">=</td>
@@ -195,7 +201,7 @@ export default Vue.extend({
       },
       captureWorth: 100,
       isPercentage: false,
-      showAsCalclatedPercentage: false,
+      showAsCalclatedPercentage: true,
     }
   },
   computed: {
