@@ -11,6 +11,7 @@
       <option :value="ESAMIR">Esamir</option>
       <option :value="HOSSIN">Hossin</option>
       <option :value="INDAR">Indar</option>
+      <option :value="OSHUR">Oshur</option>
     </select>
     <label class="text-center text-sm" for="zone">Continent</label>
   </div>
@@ -35,6 +36,7 @@ export default Vue.extend({
       ESAMIR: Zone.ESAMIR,
       HOSSIN: Zone.HOSSIN,
       INDAR: Zone.INDAR,
+      OSHUR: Zone.OSHUR,
     }
   },
   watch: {
