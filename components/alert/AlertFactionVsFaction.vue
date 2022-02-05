@@ -52,8 +52,8 @@
                 :tr="[scores.kills.vs.tr, scores.captures.vs.tr]"
                 other="0"
                 dropoff-percent="10"
-                :is-percentage="isPercentage"
-                :show-as-calculated-percentage="showAsCalclatedPercentage"
+                :is-percentage="false"
+                :show-as-calculated-percentage="false"
                 :vertical-points="[50]"
               />
             </td>
@@ -89,8 +89,8 @@
                 :tr="[0]"
                 other="0"
                 dropoff-percent="10"
-                :is-percentage="isPercentage"
-                :show-as-calculated-percentage="showAsCalclatedPercentage"
+                :is-percentage="false"
+                :show-as-calculated-percentage="false"
               />
             </td>
           </tr>
@@ -125,8 +125,8 @@
                 :tr="[scores.kills.nc.tr, scores.captures.nc.tr]"
                 other="0"
                 dropoff-percent="10"
-                :is-percentage="isPercentage"
-                :show-as-calculated-percentage="showAsCalclatedPercentage"
+                :is-percentage="false"
+                :show-as-calculated-percentage="false"
               />
             </td>
           </tr>
@@ -200,8 +200,6 @@ export default Vue.extend({
         captures: {} as FactionVsFactionDataInterface,
       },
       captureWorth: 100,
-      isPercentage: false,
-      showAsCalclatedPercentage: true,
     }
   },
   computed: {
