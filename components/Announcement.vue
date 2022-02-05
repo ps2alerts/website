@@ -4,14 +4,15 @@
   >
     <div class="tag announcement">
       <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>
-      Notice - 26th Jan 2022
+      Notice - 6th Feb 2022
     </div>
     <div class="text-center">
-      <h1>Oshur support is in development!</h1>
+      <h1>Oshur is now supported!</h1>
       <p>
-        Oshur has just been released! We are in the process of adding support to
-        Oshur very soon! Keep fighting on the islands, keep plundering your
-        enemy's booty, we will track the alerts soon!
+        Oshur support is now live! Development of Oshur support was delayed due
+        to lack of support from the game's API team, we had to do a lot of
+        reverse engineering in order to make this work. Many thanks to the
+        player API community on the PS2 Discord in the #api-dev channel.
       </p>
     </div>
   </div>
