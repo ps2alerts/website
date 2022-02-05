@@ -256,6 +256,12 @@ export default Vue.extend({
         return
       }
 
+      if (this.alert.features?.captureHistory) {
+        this.alertFacilityAggregate = await this.pullFacilityData(instanceId)
+        this.alertOutfitAggregate = await this.pullOutfitData(instanceId)
+        this.alertFacilityDataReady = true
+      }
+
       console.log('Alert details pull', instanceId)
 
       await new ApiRequest()
@@ -279,6 +285,8 @@ export default Vue.extend({
         number,
         InstanceFacilityControlAggregateResponseInterface
       >()
+
+      console.log('Alert.pullFacilityData', instanceId)
       await new ApiRequest()
         .get<InstanceFacilityControlAggregateResponseInterface[]>(
           Endpoints.AGGREGATES_INSTANCE_FACILITY.replace(
@@ -313,6 +321,8 @@ export default Vue.extend({
       instanceId: string
     ): Promise<Map<string, InstanceOutfitAggregateResponseInterface>> {
       const newMap = new Map<string, InstanceOutfitAggregateResponseInterface>()
+
+      console.log('Alert.pullOutfitData', instanceId)
 
       await new ApiRequest()
         .get<InstanceOutfitAggregateResponseInterface[]>(

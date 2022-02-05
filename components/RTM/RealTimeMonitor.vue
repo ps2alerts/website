@@ -50,8 +50,8 @@
             />
           </div>
           <p class="text-xs text-gray-400 mt-2">
-            Hover / tap over population bars to see player numbers.<br />
-            Pops updated: <b>{{ popsLastUpdated }}</b>
+            Hover / tap over population bars to see pop numbers.<br />
+            Non NSO players only. Pops updated: <b>{{ popsLastUpdated }}</b>
             <CountdownSpinner
               :percent="updatePopsCountdownPercentage"
               :update-rate="updatePopsRate"
