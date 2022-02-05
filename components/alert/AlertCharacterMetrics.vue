@@ -40,7 +40,6 @@
         </div>
         <v-data-table
           class="datatable"
-          show-expand
           item-key="character.id"
           :headers="headers"
           :items="data"

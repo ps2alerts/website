@@ -15,7 +15,13 @@
       <AlertPopulations :alert="alert" />
       <AlertCombatHistory :alert="alert" />
       <AlertMap :alert="alert" />
-      <AlertCaptureHistory :alert="alert" />
+      <!--      <AlertMapCaptureHistory-->
+      <!--        v-if="alert.features && alert.features.captureHistory"-->
+      <!--        :alert="alert"-->
+      <!--        :facility-data="alertFacilityAggregate"-->
+      <!--        :outfit-data="alertOutfitAggregate"-->
+      <!--        :data-ready="alertFacilityDataReady"-->
+      <!--      />-->
       <AlertBattleranks :alert="alert" />
 
       <div class="col-span-12">
@@ -102,7 +108,7 @@ import AlertDetails from '@/components/alert/AlertDetails.vue'
 import AlertFactionCombatMetrics from '@/components/alert/AlertFactionCombatMetrics.vue'
 import AlertFactionVsFaction from '@/components/alert/AlertFactionVsFaction.vue'
 import AlertMap from '@/components/alert/AlertMap.vue'
-import AlertCaptureHistory from '@/components/alert/AlertCaptureHistory.vue'
+// import AlertMapCaptureHistory from '~/components/alert/AlertMapCaptureHistory.vue'
 import AlertCharacterMetrics from '@/components/alert/AlertCharacterMetrics.vue'
 import AlertOutfitMetrics from '@/components/alert/AlertOutfitMetrics.vue'
 import AlertWeaponMetrics from '@/components/alert/AlertWeaponMetrics.vue'
@@ -112,6 +118,9 @@ import AlertPopulations from '@/components/alert/AlertPopulations.vue'
 import AlertClassMetrics from '@/components/alert/AlertLoadoutMetrics.vue'
 import AlertCombatHistory from '@/components/alert/AlertCombatHistory.vue'
 import AlertBattleranks from '~/components/alert/AlertBattleranks.vue'
+import { InstanceFacilityControlAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceFacilityControlAggregateResponseInterface'
+import facilityTypeName from '~/filters/FacilityTypeName'
+import { InstanceOutfitAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface'
 
 export default Vue.extend({
   name: 'Alert',
@@ -123,7 +132,7 @@ export default Vue.extend({
     AlertPopulations,
     AlertCombatHistory,
     AlertMap,
-    AlertCaptureHistory,
+    // AlertMapCaptureHistory,
     AlertBattleranks,
     AlertCharacterMetrics,
     AlertOutfitMetrics,
@@ -154,6 +163,15 @@ export default Vue.extend({
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       alert: {} as InstanceTerritoryControlResponseInterface,
+      alertFacilityAggregate: new Map() as Map<
+        number,
+        InstanceFacilityControlAggregateResponseInterface
+      >,
+      alertOutfitAggregate: new Map() as Map<
+        string,
+        InstanceOutfitAggregateResponseInterface
+      >,
+      alertFacilityDataReady: false,
       metricsTab: 'players',
       eager: true,
     }
@@ -212,6 +230,14 @@ export default Vue.extend({
     },
     async init(instanceId: string): Promise<void> {
       await this.pull(instanceId)
+      if (this.alert.features?.captureHistory) {
+        this.alertFacilityAggregate = await this.pullFacilityData(instanceId)
+        this.alertOutfitAggregate = await this.pullOutfitData(instanceId)
+        this.alertFacilityDataReady = true
+      }
+
+      console.log('Alert facility data', this.alertFacilityAggregate)
+      console.log('Alert outfit data', this.alertOutfitAggregate)
 
       if (this.alert.state === Ps2alertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
@@ -230,6 +256,12 @@ export default Vue.extend({
         return
       }
 
+      if (this.alert.features?.captureHistory) {
+        this.alertFacilityAggregate = await this.pullFacilityData(instanceId)
+        this.alertOutfitAggregate = await this.pullOutfitData(instanceId)
+        this.alertFacilityDataReady = true
+      }
+
       console.log('Alert details pull', instanceId)
 
       await new ApiRequest()
@@ -245,6 +277,66 @@ export default Vue.extend({
         .catch((e) => {
           this.error = e.message
         })
+    },
+    async pullFacilityData(
+      instanceId: string
+    ): Promise<Map<number, InstanceFacilityControlAggregateResponseInterface>> {
+      const newMap = new Map<
+        number,
+        InstanceFacilityControlAggregateResponseInterface
+      >()
+
+      console.log('Alert.pullFacilityData', instanceId)
+      await new ApiRequest()
+        .get<InstanceFacilityControlAggregateResponseInterface[]>(
+          Endpoints.AGGREGATES_INSTANCE_FACILITY.replace(
+            '{instance}',
+            instanceId
+          )
+        )
+        .then((facilityAggregate) => {
+          facilityAggregate.forEach(
+            (
+              facilityData: InstanceFacilityControlAggregateResponseInterface
+            ) => {
+              const tempData: InstanceFacilityControlAggregateResponseInterface =
+                Object.assign(facilityData, {
+                  facility: {
+                    ...facilityData.facility,
+                    typeName: facilityTypeName(facilityData.facility.type),
+                  },
+                })
+
+              newMap.set(facilityData.facility.id, tempData)
+            }
+          )
+        })
+        .catch((e) => {
+          console.error('Unable to process Facility Data!', e)
+        })
+
+      return newMap
+    },
+    async pullOutfitData(
+      instanceId: string
+    ): Promise<Map<string, InstanceOutfitAggregateResponseInterface>> {
+      const newMap = new Map<string, InstanceOutfitAggregateResponseInterface>()
+
+      console.log('Alert.pullOutfitData', instanceId)
+
+      await new ApiRequest()
+        .get<InstanceOutfitAggregateResponseInterface[]>(
+          Endpoints.AGGREGATES_INSTANCE_OUTFIT.replace('{instance}', instanceId)
+        )
+        .then((outfitAggregate) => {
+          outfitAggregate.forEach(
+            (outfitData: InstanceOutfitAggregateResponseInterface) => {
+              newMap.set(outfitData.outfit.id, outfitData)
+            }
+          )
+        })
+
+      return newMap
     },
   },
 })

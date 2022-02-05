@@ -188,7 +188,7 @@ export default Vue.extend({
     },
     showAsCalculatedPercentage: {
       type: Boolean,
-      default: true,
+      default: false,
       required: false,
     },
     dropoffPercent: {

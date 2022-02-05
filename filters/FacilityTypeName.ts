@@ -21,11 +21,11 @@ const facilityTypeName = Vue.filter(
         return 'Small Facility'
       // Unused
       case FacilityType.WARPGATE:
-        return 'Warpgate (unused)'
+        return 'Warpgate'
       case FacilityType.RELIC_OUTPOST:
         return 'Relic Outpost (Desolation - Unused)'
       case FacilityType.INTERLINK_FACILITY:
-        return 'Interlink Facility (unused)'
+        return 'Interlink Facility'
     }
   }
 )

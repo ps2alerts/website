@@ -15,7 +15,7 @@
         class="rtm-drawer mt-2 pb-2 visible lg:invisible"
         :class="{ absolute: drawerOpen }"
       >
-        <btn class="btn btn-sm" @click="toggleDrawer()">
+        <button class="btn btn-sm" @click="toggleDrawer()">
           <span v-show="!drawerOpen"
             >Show
             <font-awesome-icon :icon="['fas', 'arrow-down']"></font-awesome-icon
@@ -24,12 +24,12 @@
             >Hide
             <font-awesome-icon :icon="['fas', 'arrow-up']"></font-awesome-icon
           ></span>
-        </btn>
+        </button>
       </div>
       <div v-show="drawerOpen" class="pb-2">
         <p v-if="loading">Loading...</p>
         <p v-if="error">ERROR: {{ error }}</p>
-        <p v-show="!loading && actives.length === 0 && !error">
+        <p v-show="!loading && actives.length === 0 && !error" class="mt-2">
           There are no alerts currently running!
         </p>
         <div v-show="actives.length > 0">
@@ -50,8 +50,8 @@
             />
           </div>
           <p class="text-xs text-gray-400 mt-2">
-            Hover / tap over population bars to see player numbers.<br />
-            Pops updated: <b>{{ popsLastUpdated }}</b>
+            Hover / tap over population bars to see pop numbers.<br />
+            Non NSO players only. Pops updated: <b>{{ popsLastUpdated }}</b>
             <CountdownSpinner
               :percent="updatePopsCountdownPercentage"
               :update-rate="updatePopsRate"
@@ -84,7 +84,6 @@ export default Vue.extend({
     return {
       loading: true,
       error: null,
-      lastUpdated: 'fetching...',
       popsLastUpdated: 'fetching...',
       updateTerritoryRate: 5000,
       updateTerritoryCountdown: 0,

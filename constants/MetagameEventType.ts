@@ -352,4 +352,34 @@ export const metagameEventTypeDetailsMap: Map<
       unstable: false,
     },
   ],
+  [
+    222,
+    {
+      title: 'Oshur Liberation',
+      zone: Zone.INDAR,
+      duration: longAlert,
+      triggeringFaction: Faction.NEW_CONGLOMERATE,
+      unstable: false,
+    },
+  ],
+  [
+    223,
+    {
+      title: 'Oshur Superiority',
+      zone: Zone.INDAR,
+      duration: longAlert,
+      triggeringFaction: Faction.TERRAN_REPUBLIC,
+      unstable: false,
+    },
+  ],
+  [
+    224,
+    {
+      title: 'Oshur Enlightenment',
+      zone: Zone.INDAR,
+      duration: longAlert,
+      triggeringFaction: Faction.VANU_SOVEREIGNTY,
+      unstable: false,
+    },
+  ],
 ])
