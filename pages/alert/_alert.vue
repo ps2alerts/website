@@ -15,13 +15,13 @@
       <AlertPopulations :alert="alert" />
       <AlertCombatHistory :alert="alert" />
       <AlertMap :alert="alert" />
-      <AlertMapCaptureHistory
-        v-if="alert.features && alert.features.captureHistory"
-        :alert="alert"
-        :facility-data="alertFacilityAggregate"
-        :outfit-data="alertOutfitAggregate"
-        :data-ready="alertFacilityDataReady"
-      />
+      <!--      <AlertMapCaptureHistory-->
+      <!--        v-if="alert.features && alert.features.captureHistory"-->
+      <!--        :alert="alert"-->
+      <!--        :facility-data="alertFacilityAggregate"-->
+      <!--        :outfit-data="alertOutfitAggregate"-->
+      <!--        :data-ready="alertFacilityDataReady"-->
+      <!--      />-->
       <AlertBattleranks :alert="alert" />
 
       <div class="col-span-12">
@@ -108,7 +108,7 @@ import AlertDetails from '@/components/alert/AlertDetails.vue'
 import AlertFactionCombatMetrics from '@/components/alert/AlertFactionCombatMetrics.vue'
 import AlertFactionVsFaction from '@/components/alert/AlertFactionVsFaction.vue'
 import AlertMap from '@/components/alert/AlertMap.vue'
-import AlertMapCaptureHistory from '~/components/alert/AlertMapCaptureHistory.vue'
+// import AlertMapCaptureHistory from '~/components/alert/AlertMapCaptureHistory.vue'
 import AlertCharacterMetrics from '@/components/alert/AlertCharacterMetrics.vue'
 import AlertOutfitMetrics from '@/components/alert/AlertOutfitMetrics.vue'
 import AlertWeaponMetrics from '@/components/alert/AlertWeaponMetrics.vue'
@@ -132,7 +132,7 @@ export default Vue.extend({
     AlertPopulations,
     AlertCombatHistory,
     AlertMap,
-    AlertMapCaptureHistory,
+    // AlertMapCaptureHistory,
     AlertBattleranks,
     AlertCharacterMetrics,
     AlertOutfitMetrics,
