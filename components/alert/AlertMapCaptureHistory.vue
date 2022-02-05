@@ -29,9 +29,9 @@
         :item-class="tableItemClass"
         v-bind="tableConfig"
       >
-        <template #no-results>
+        <template #no-data>
           <div class="text-2xl text-white font-bold my-6">
-            Awaiting Captures...
+            Awaiting first capture...
           </div>
         </template>
         <template slot="item.timestamp" slot-scope="{ item }">
@@ -66,6 +66,7 @@
         </template>
         <template slot="item.territory" slot-scope="{ item }">
           <FactionSegmentBar
+            v-if="item.mapControl"
             :vs="item.mapControl.vs"
             :nc="item.mapControl.nc"
             :tr="item.mapControl.tr"
@@ -73,6 +74,7 @@
             :out-of-play="item.mapControl.outOfPlay"
             dropoff-percent="15"
           ></FactionSegmentBar>
+          <span v-if="!item.mapControl">No Territory control data!</span>
         </template>
       </v-data-table>
     </div>
