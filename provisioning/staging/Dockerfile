@@ -8,7 +8,7 @@ ARG BUILT="2022-01-01 00:00:00"
 
 ENV BUILT="$BUILT"
 ENV ENV="staging"
-ENV VERSION="v3.0.0-beta"
+ENV VERSION="v4.0.0"
 ENV BUILD=$BUILD_SHA
 ENV BASE_URL="https://staging.ps2alerts.com"
 ENV API_HOST="https://api.ps2alerts.com"
