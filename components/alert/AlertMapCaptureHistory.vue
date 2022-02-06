@@ -63,9 +63,15 @@
           <span v-show="!item.isDefence">Capture</span>
         </template>
         <template slot="item.winnerLooser" slot-scope="{ item }">
-          <span v-if="!item.isDefence"
-            >{{ item.factionWinner }} / {{ item.factionLooser }}</span
-          >
+          <span v-if="!item.isDefence" class="font-bold">
+            <span :class="captureClass(item.factionWinner)">{{
+              item.factionWinner
+            }}</span>
+            /
+            <span :class="captureClass(item.factionLooser)">{{
+              item.factionLooser
+            }}</span>
+          </span>
           <span v-else-if="item.isDefence && showDefences">-</span>
         </template>
         <template slot="item.territory" slot-scope="{ item }">
@@ -78,7 +84,7 @@
             :out-of-play="item.mapControl.outOfPlay"
             dropoff-percent="15"
           ></FactionSegmentBar>
-          <span v-if="!item.mapControl">No Territory control data!</span>
+          <span v-if="!item.mapControl">Awaiting data...</span>
         </template>
       </v-data-table>
     </div>
@@ -225,6 +231,17 @@ export default Vue.extend({
     tableItemClass(item: InstanceMapCaptureHistoryInterface): string {
       return FactionBgClassString(item.newFaction)
     },
+    captureClass(winner: string) {
+      switch (winner) {
+        case 'VS':
+          return 'text-vs'
+        case 'NC':
+          return 'text-nc'
+        case 'TR':
+          return 'text-tr'
+      }
+      return ''
+    },
     init(): void {
       this.pull()
       if (this.alert.state === Ps2alertsEventState.STARTED) {
@@ -297,13 +314,13 @@ export default Vue.extend({
               factionLooser: factionShortName(capture.oldFaction),
               facilityData: this.facilityData.get(capture.facility)
                 ?.facility ?? {
-                name: 'UNKNOWN',
+                name: 'Awaiting Data...',
                 id: 12345,
                 zone: this.alert.zone ?? Zone.ESAMIR,
                 type: FacilityType.DEFAULT,
                 region: 12345,
               },
-              outfitData: this.outfitData.get(capture.outfitCaptured),
+              outfitData: this.outfitData.get(capture.outfitCaptured ?? ''),
             }
           )
 
