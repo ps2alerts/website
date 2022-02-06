@@ -19,7 +19,6 @@
         v-if="alert.features && alert.features.captureHistory"
         :alert="alert"
         :facility-data="alertFacilityAggregate"
-        :outfit-data="alertOutfitAggregate"
         :data-ready="alertFacilityDataReady"
       />
       <AlertBattleranks :alert="alert" />
@@ -102,7 +101,7 @@ import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
 import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
-import { Endpoints } from '@/constants/Endpoints'
+import { CensusEndpoints, Endpoints } from '@/constants/Endpoints'
 import AlertResult from '@/components/alert/AlertResult.vue'
 import AlertDetails from '@/components/alert/AlertDetails.vue'
 import AlertFactionCombatMetrics from '@/components/alert/AlertFactionCombatMetrics.vue'
@@ -119,9 +118,10 @@ import AlertCombatHistory from '@/components/alert/AlertCombatHistory.vue'
 import AlertBattleranks from '~/components/alert/AlertBattleranks.vue'
 import { InstanceFacilityControlAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceFacilityControlAggregateResponseInterface'
 import facilityTypeName from '~/filters/FacilityTypeName'
-import { InstanceOutfitAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface'
 import { Zone } from '~/constants/Zone'
 import { PS2AlertsApiOshurDataInterface } from '~/interfaces/census/PS2AlertsApiOshurDataInterface'
+import { CensusMapRegionResponseInterface } from '~/interfaces/census/CensusMapRegionResponseInterface'
+import { CensusMapRegionResponseItem } from '~/interfaces/census/CensusMapRegionResponseItem'
 
 export default Vue.extend({
   name: 'Alert',
@@ -167,10 +167,6 @@ export default Vue.extend({
       alertFacilityAggregate: new Map() as Map<
         number,
         InstanceFacilityControlAggregateResponseInterface
-      >,
-      alertOutfitAggregate: new Map() as Map<
-        string,
-        InstanceOutfitAggregateResponseInterface
       >,
       alertFacilityDataReady: false,
       metricsTab: 'players',
@@ -233,12 +229,10 @@ export default Vue.extend({
       await this.pull(instanceId)
       if (this.alert.features?.captureHistory) {
         this.alertFacilityAggregate = await this.pullFacilityData(instanceId)
-        this.alertOutfitAggregate = await this.pullOutfitData(instanceId)
         this.alertFacilityDataReady = true
       }
 
       console.log('Alert facility data', this.alertFacilityAggregate)
-      console.log('Alert outfit data', this.alertOutfitAggregate)
 
       if (this.alert.state === Ps2alertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
@@ -259,7 +253,6 @@ export default Vue.extend({
 
       if (this.alert.features?.captureHistory) {
         this.alertFacilityAggregate = await this.pullFacilityData(instanceId)
-        this.alertOutfitAggregate = await this.pullOutfitData(instanceId)
         this.alertFacilityDataReady = true
       }
 
@@ -314,59 +307,43 @@ export default Vue.extend({
             )
           })
           .catch((e) => {
-            console.error('Unable to process Facility Data!', e)
+            console.error('Unable to process Oshur Facility Data!', e)
           })
       } else {
         console.log('Alert.pullFacilityData', instanceId)
         await new ApiRequest()
-          .get<InstanceFacilityControlAggregateResponseInterface[]>(
-            Endpoints.AGGREGATES_INSTANCE_FACILITY.replace(
-              '{instance}',
-              instanceId
-            )
+          .get<CensusMapRegionResponseInterface>(
+            CensusEndpoints.FACILITY_DATA.replace(
+              '{serviceId}',
+              'ps2alertsdotcom'
+            ).replace('{zone}', this.alert.zone.toString())
           )
-          .then((facilityAggregate) => {
-            facilityAggregate.forEach(
-              (
-                facilityData: InstanceFacilityControlAggregateResponseInterface
-              ) => {
+          .then((censusZoneData) => {
+            censusZoneData.map_region_list.forEach(
+              (facilityData: CensusMapRegionResponseItem) => {
                 const tempData: InstanceFacilityControlAggregateResponseInterface =
-                  Object.assign(facilityData, {
+                  {
+                    instance: this.alert.instanceId,
                     facility: {
-                      ...facilityData.facility,
-                      typeName: facilityTypeName(facilityData.facility.type),
+                      id: parseInt(facilityData.facility_id, 10),
+                      name: facilityData.facility_name,
+                      zone: this.alert.zone,
+                      type: parseInt(facilityData.facility_type_id, 10),
+                      typeName: facilityTypeName(
+                        parseInt(facilityData.facility_type_id, 10)
+                      ),
+                      region: parseInt(facilityData.map_region_id, 10),
                     },
-                  })
+                  }
 
-                newMap.set(facilityData.facility.id, tempData)
+                newMap.set(tempData.facility.id, tempData)
               }
             )
           })
           .catch((e) => {
-            console.error('Unable to process Facility Data!', e)
+            console.error('Unable to process non-Oshur Facility Data!', e)
           })
       }
-
-      return newMap
-    },
-    async pullOutfitData(
-      instanceId: string
-    ): Promise<Map<string, InstanceOutfitAggregateResponseInterface>> {
-      const newMap = new Map<string, InstanceOutfitAggregateResponseInterface>()
-
-      console.log('Alert.pullOutfitData', instanceId)
-
-      await new ApiRequest()
-        .get<InstanceOutfitAggregateResponseInterface[]>(
-          Endpoints.AGGREGATES_INSTANCE_OUTFIT.replace('{instance}', instanceId)
-        )
-        .then((outfitAggregate) => {
-          outfitAggregate.forEach(
-            (outfitData: InstanceOutfitAggregateResponseInterface) => {
-              newMap.set(outfitData.outfit.id, outfitData)
-            }
-          )
-        })
 
       return newMap
     },

@@ -39,13 +39,17 @@
         </template>
         <template slot="item.outfitFull" slot-scope="{ item }">
           <div
-            v-if="item.outfitData.outfit && item.outfitData.outfit.id !== '0'"
+            v-if="
+              item.outfitData &&
+              item.outfitData.outfit &&
+              item.outfitData.outfit.name
+            "
           >
             <span v-show="item.outfitData.outfit.tag"
               >[{{ item.outfitData.outfit.tag }}] </span
             ><span>{{ item.outfitData.outfit.name }}</span>
           </div>
-          <div v-else>== N/A (never captured) ==</div>
+          <div v-else>== No Outfit / Unknown ==</div>
         </template>
         <template slot="item.facilityNameWithType" slot-scope="{ item }">
           <span
@@ -94,6 +98,7 @@ import { FacilityType } from '~/constants/FacilityType'
 import { Zone } from '~/constants/Zone'
 import factionShortName from '~/filters/FactionShortName'
 import { FactionBgClassString } from '~/constants/FactionBgClass'
+import { InstanceOutfitAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface'
 
 export default Vue.extend({
   name: 'AlertMapCaptureHistory',
@@ -105,12 +110,6 @@ export default Vue.extend({
     },
     // eslint-disable-next-line vue/require-prop-types
     facilityData: {
-      // Omitted Type here as I couldn't figure out how to get TS to play nice
-      default: new Map(),
-      required: true,
-    },
-    // eslint-disable-next-line vue/require-prop-types
-    outfitData: {
       // Omitted Type here as I couldn't figure out how to get TS to play nice
       default: new Map(),
       required: true,
@@ -132,6 +131,10 @@ export default Vue.extend({
       shownData: {} as InstanceMapCaptureHistoryInterface[],
       captureData: {} as InstanceMapCaptureHistoryInterface[],
       defenceData: {} as InstanceMapCaptureHistoryInterface[],
+      outfitData: new Map() as Map<
+        string,
+        InstanceOutfitAggregateResponseInterface
+      >,
       showDefences: false,
       tableConfig: DataTableConfig,
       headers: [
@@ -239,6 +242,10 @@ export default Vue.extend({
         return
       }
 
+      this.outfitData = await this.pullOutfitData(
+        this.alert.instanceId ?? '12345'
+      )
+
       if (!this.dataReady) {
         console.log('AlertMapCaptureHistory.pull failed as data was not ready!')
         return
@@ -309,6 +316,27 @@ export default Vue.extend({
       )
 
       return { captures: captureData, defences: defenceData }
+    },
+    async pullOutfitData(
+      instanceId: string
+    ): Promise<Map<string, InstanceOutfitAggregateResponseInterface>> {
+      const newMap = new Map<string, InstanceOutfitAggregateResponseInterface>()
+
+      console.log('AlertMapCaptureHistory.pullOutfitData', instanceId)
+
+      await new ApiRequest()
+        .get<InstanceOutfitAggregateResponseInterface[]>(
+          Endpoints.AGGREGATES_INSTANCE_OUTFIT.replace('{instance}', instanceId)
+        )
+        .then((outfitAggregate) => {
+          outfitAggregate.forEach(
+            (outfitData: InstanceOutfitAggregateResponseInterface) => {
+              newMap.set(outfitData.outfit.id, outfitData)
+            }
+          )
+        })
+
+      return newMap
     },
   },
 })
