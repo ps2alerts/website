@@ -132,186 +132,168 @@
         </table>
       </div>
 
-      <div class="col-span-12 2xl:col-span-6 card relative">
-        <div class="tag section">
-          Server Activity Level Victories (Prime & High)
+      <div class="col-span-12 card relative">
+        <div class="tag section">Server Activity Level Victories</div>
+        <CountdownSpinner
+          :percent="updateCountdownPercent"
+          update-rate="60000"
+        />
+        <div class="overflow-x-auto">
+          <table
+            id="server-victories"
+            class="w-full table-auto border-row text-center"
+          >
+            <thead class="font-bold">
+              <tr>
+                <td class="text-left pr-1">Server</td>
+                <td>
+                  Prime
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <font-awesome-icon
+                        :icon="['fas', 'info-circle']"
+                        v-bind="attrs"
+                        v-on="on"
+                      ></font-awesome-icon>
+                    </template>
+                    4+ platoons per faction on average in an alert
+                  </v-tooltip>
+                </td>
+                <td>
+                  High
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <font-awesome-icon
+                        :icon="['fas', 'info-circle']"
+                        v-bind="attrs"
+                        v-on="on"
+                      ></font-awesome-icon>
+                    </template>
+                    3-4 platoons per faction on average in an alert
+                  </v-tooltip>
+                </td>
+                <td>
+                  Medium
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <font-awesome-icon
+                        :icon="['fas', 'info-circle']"
+                        v-bind="attrs"
+                        v-on="on"
+                      ></font-awesome-icon>
+                    </template>
+                    2-3 platoons per faction on average in an alert
+                  </v-tooltip>
+                </td>
+                <td>
+                  Low
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <font-awesome-icon
+                        :icon="['fas', 'info-circle']"
+                        v-bind="attrs"
+                        v-on="on"
+                      ></font-awesome-icon>
+                    </template>
+                    1-2 platoons per faction on average in an alert
+                  </v-tooltip>
+                </td>
+                <td>
+                  Dead
+                  <v-tooltip bottom>
+                    <template #activator="{ on, attrs }">
+                      <font-awesome-icon
+                        :icon="['fas', 'info-circle']"
+                        v-bind="attrs"
+                        v-on="on"
+                      ></font-awesome-icon>
+                    </template>
+                    &lt;1 platoons per faction on average in an alert
+                  </v-tooltip>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(data, world) in worldCounts" :key="world">
+                <td class="text-left pr-1">
+                  {{ parseInt(world, 10) | worldName }}
+                </td>
+                <td class="p-1 w-1/5">
+                  <FactionSegmentBar
+                    v-if="data.brackets[5]"
+                    :vs="data.brackets[5].vs"
+                    :nc="data.brackets[5].nc"
+                    :tr="data.brackets[5].tr"
+                    :other="data.brackets[5].draws"
+                    :is-percentage="mode === 'percent'"
+                    :show-as-calculated-percentage="mode === 'percent'"
+                    other-segment-text="Draws"
+                    dropoff-percent="20"
+                  />
+                  <div v-else class="text-center">No data yet!</div>
+                </td>
+                <td class="p-1 w-1/5">
+                  <FactionSegmentBar
+                    v-if="data.brackets[4]"
+                    :vs="data.brackets[4].vs"
+                    :nc="data.brackets[4].nc"
+                    :tr="data.brackets[4].tr"
+                    :other="data.brackets[4].draws"
+                    :is-percentage="mode === 'percent'"
+                    :show-as-calculated-percentage="mode === 'percent'"
+                    other-segment-text="Draws"
+                    dropoff-percent="20"
+                  />
+                  <div v-else class="text-center">No data yet!</div>
+                </td>
+                <td class="p-1 w-1/5">
+                  <FactionSegmentBar
+                    v-if="data.brackets[3]"
+                    :vs="data.brackets[3].vs"
+                    :nc="data.brackets[3].nc"
+                    :tr="data.brackets[3].tr"
+                    :other="data.brackets[3].draws"
+                    :is-percentage="mode === 'percent'"
+                    :show-as-calculated-percentage="mode === 'percent'"
+                    other-segment-text="Draws"
+                    dropoff-percent="20"
+                  />
+                  <div v-else class="text-center">No data yet!</div>
+                </td>
+                <td class="p-1 w-1/5">
+                  <FactionSegmentBar
+                    v-if="data.brackets[2]"
+                    :vs="data.brackets[2].vs"
+                    :nc="data.brackets[2].nc"
+                    :tr="data.brackets[2].tr"
+                    :other="data.brackets[2].draws"
+                    :is-percentage="mode === 'percent'"
+                    :show-as-calculated-percentage="mode === 'percent'"
+                    other-segment-text="Draws"
+                    dropoff-percent="20"
+                  />
+                  <div v-else class="text-center">No data yet!</div>
+                </td>
+                <td class="p-1 w-1/5">
+                  <FactionSegmentBar
+                    v-if="data.brackets[1]"
+                    :vs="data.brackets[1].vs"
+                    :nc="data.brackets[1].nc"
+                    :tr="data.brackets[1].tr"
+                    :other="data.brackets[1].draws"
+                    :is-percentage="mode === 'percent'"
+                    :show-as-calculated-percentage="mode === 'percent'"
+                    other-segment-text="Draws"
+                    dropoff-percent="20"
+                  />
+                  <div v-else class="text-center">No data yet!</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <CountdownSpinner
-          :percent="updateCountdownPercent"
-          update-rate="60000"
-        />
-        <table class="w-full table-auto border-row text-center">
-          <thead class="font-bold">
-            <tr>
-              <td class="text-left pr-1">Server</td>
-              <td>
-                Prime
-                <v-tooltip bottom>
-                  <template #activator="{ on, attrs }">
-                    <font-awesome-icon
-                      :icon="['fas', 'info-circle']"
-                      v-bind="attrs"
-                      v-on="on"
-                    ></font-awesome-icon>
-                  </template>
-                  4+ platoons per faction on average in an alert
-                </v-tooltip>
-              </td>
-              <td>
-                High
-                <v-tooltip bottom>
-                  <template #activator="{ on, attrs }">
-                    <font-awesome-icon
-                      :icon="['fas', 'info-circle']"
-                      v-bind="attrs"
-                      v-on="on"
-                    ></font-awesome-icon>
-                  </template>
-                  3-4 platoons per faction on average in an alert
-                </v-tooltip>
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(data, world) in worldCounts" :key="world">
-              <td class="text-left pr-1">
-                {{ parseInt(world, 10) | worldName }}
-              </td>
-              <td class="p-1 w-1/2">
-                <FactionSegmentBar
-                  v-if="data.brackets[5]"
-                  :vs="data.brackets[5].vs"
-                  :nc="data.brackets[5].nc"
-                  :tr="data.brackets[5].tr"
-                  :other="data.brackets[5].draws"
-                  :is-percentage="mode === 'percent'"
-                  :show-as-calculated-percentage="mode === 'percent'"
-                  other-segment-text="Draws"
-                  dropoff-percent="20"
-                />
-                <div v-else class="text-center">No data yet!</div>
-              </td>
-              <td class="p-1 w-1/2">
-                <FactionSegmentBar
-                  v-if="data.brackets[4]"
-                  :vs="data.brackets[4].vs"
-                  :nc="data.brackets[4].nc"
-                  :tr="data.brackets[4].tr"
-                  :other="data.brackets[4].draws"
-                  :is-percentage="mode === 'percent'"
-                  :show-as-calculated-percentage="mode === 'percent'"
-                  other-segment-text="Draws"
-                  dropoff-percent="20"
-                />
-                <div v-else class="text-center">No data yet!</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
       </div>
-      <div class="col-span-12 2xl:col-span-6 card relative">
-        <div class="tag section">Server Activity Level Victories (other)</div>
-        <CountdownSpinner
-          :percent="updateCountdownPercent"
-          update-rate="60000"
-        />
-        <table class="w-full table-auto border-row text-center">
-          <thead class="font-bold">
-            <tr>
-              <td class="text-left pr-1">Server</td>
-              <td>
-                Medium
-                <v-tooltip bottom>
-                  <template #activator="{ on, attrs }">
-                    <font-awesome-icon
-                      :icon="['fas', 'info-circle']"
-                      v-bind="attrs"
-                      v-on="on"
-                    ></font-awesome-icon>
-                  </template>
-                  2-3 platoons per faction on average in an alert
-                </v-tooltip>
-              </td>
-              <td>
-                Low
-                <v-tooltip bottom>
-                  <template #activator="{ on, attrs }">
-                    <font-awesome-icon
-                      :icon="['fas', 'info-circle']"
-                      v-bind="attrs"
-                      v-on="on"
-                    ></font-awesome-icon>
-                  </template>
-                  1-2 platoons per faction on average in an alert
-                </v-tooltip>
-              </td>
-              <td>
-                Dead
-                <v-tooltip bottom>
-                  <template #activator="{ on, attrs }">
-                    <font-awesome-icon
-                      :icon="['fas', 'info-circle']"
-                      v-bind="attrs"
-                      v-on="on"
-                    ></font-awesome-icon>
-                  </template>
-                  &lt;1 platoon per faction on average in an alert
-                </v-tooltip>
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(data, world) in worldCounts" :key="world">
-              <td class="text-left pr-1">
-                {{ parseInt(world, 10) | worldName }}
-              </td>
-              <td class="p-1 w-1/3">
-                <FactionSegmentBar
-                  v-if="data.brackets[3]"
-                  :vs="data.brackets[3].vs"
-                  :nc="data.brackets[3].nc"
-                  :tr="data.brackets[3].tr"
-                  :other="data.brackets[3].draws"
-                  :is-percentage="mode === 'percent'"
-                  :show-as-calculated-percentage="mode === 'percent'"
-                  other-segment-text="Draws"
-                  dropoff-percent="20"
-                />
-                <div v-else class="text-center">No data yet!</div>
-              </td>
-              <td class="p-1 w-1/3">
-                <FactionSegmentBar
-                  v-if="data.brackets[2]"
-                  :vs="data.brackets[2].vs"
-                  :nc="data.brackets[2].nc"
-                  :tr="data.brackets[2].tr"
-                  :other="data.brackets[2].draws"
-                  :is-percentage="mode === 'percent'"
-                  :show-as-calculated-percentage="mode === 'percent'"
-                  other-segment-text="Draws"
-                  dropoff-percent="20"
-                />
-                <div v-else class="text-center">No data yet!</div>
-              </td>
-              <td class="p-1 w-1/3">
-                <FactionSegmentBar
-                  v-if="data.brackets[1]"
-                  :vs="data.brackets[1].vs"
-                  :nc="data.brackets[1].nc"
-                  :tr="data.brackets[1].tr"
-                  :other="data.brackets[1].draws"
-                  :is-percentage="mode === 'percent'"
-                  :show-as-calculated-percentage="mode === 'percent'"
-                  other-segment-text="Draws"
-                  dropoff-percent="20"
-                />
-                <div v-else class="text-center">No data yet!</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="col-span-12 2xl:col-span-6 card relative">
+      <div class="col-span-12 2xl:col-span-3 card relative">
         <div class="tag section">Global Continent Victories</div>
         <CountdownSpinner
           :percent="updateCountdownPercent"
@@ -351,86 +333,106 @@
           </tbody>
         </table>
       </div>
-      <div class="col-span-12 2xl:col-span-6 card relative">
+      <div class="col-span-12 2xl:col-span-9 card relative">
         <div class="tag section">Server Continent Victories</div>
         <CountdownSpinner
           :percent="updateCountdownPercent"
           update-rate="60000"
         />
-        <table class="w-full table-auto border-row text-center">
-          <thead class="font-bold">
-            <tr>
-              <td class="text-left pr-1">Server</td>
-              <td>Indar</td>
-              <td>Hossin</td>
-              <td>Amerish</td>
-              <td>Esamir</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(data, world) in worldCounts" :key="world">
-              <td class="text-left pr-1">
-                {{ parseInt(world, 10) | worldName }}
-              </td>
-              <td class="p-1 w-1/4">
-                <FactionSegmentBar
-                  v-if="data.zones[2]"
-                  :vs="data.zones[2].vs"
-                  :nc="data.zones[2].nc"
-                  :tr="data.zones[2].tr"
-                  :other="data.zones[2].draws"
-                  :is-percentage="mode === 'percent'"
-                  :show-as-calculated-percentage="mode === 'percent'"
-                  other-segment-text="Draws"
-                  dropoff-percent="20"
-                />
-                <div v-else class="text-center">No data yet!</div>
-              </td>
-              <td class="p-1 w-1/4">
-                <FactionSegmentBar
-                  v-if="data.zones[4]"
-                  :vs="data.zones[4].vs"
-                  :nc="data.zones[4].nc"
-                  :tr="data.zones[4].tr"
-                  :other="data.zones[4].draws"
-                  :is-percentage="mode === 'percent'"
-                  :show-as-calculated-percentage="mode === 'percent'"
-                  other-segment-text="Draws"
-                  dropoff-percent="20"
-                />
-                <div v-else class="text-center">No data yet!</div>
-              </td>
-              <td class="p-1 w-1/4">
-                <FactionSegmentBar
-                  v-if="data.zones[6]"
-                  :vs="data.zones[6].vs"
-                  :nc="data.zones[6].nc"
-                  :tr="data.zones[6].tr"
-                  :other="data.zones[6].draws"
-                  :is-percentage="mode === 'percent'"
-                  :show-as-calculated-percentage="mode === 'percent'"
-                  other-segment-text="Draws"
-                  dropoff-percent="20"
-                />
-                <div v-else class="text-center">No data yet!</div>
-              </td>
-              <td class="p-1 w-1/4">
-                <FactionSegmentBar
-                  v-if="data.zones[8]"
-                  :vs="data.zones[8].vs"
-                  :nc="data.zones[8].nc"
-                  :tr="data.zones[8].tr"
-                  :other="data.zones[8].draws"
-                  :is-percentage="mode === 'percent'"
-                  :show-as-calculated-percentage="mode === 'percent'"
-                  other-segment-text="Draws"
-                  dropoff-percent="20"
-                />
-                <div v-else class="text-center">No data yet!</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="overflow-x-auto">
+          <table
+            id="server-cont-victories"
+            class="w-full table-auto border-row text-center"
+          >
+            <thead class="font-bold">
+              <tr>
+                <td class="text-left pr-1">Server</td>
+                <td>Indar</td>
+                <td>Hossin</td>
+                <td>Amerish</td>
+                <td>Esamir</td>
+                <td>Oshur</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(data, world) in worldCounts" :key="world">
+                <td class="text-left pr-1">
+                  {{ parseInt(world, 10) | worldName }}
+                </td>
+                <td class="p-1 w-1/5">
+                  <FactionSegmentBar
+                    v-if="data.zones[2]"
+                    :vs="data.zones[2].vs"
+                    :nc="data.zones[2].nc"
+                    :tr="data.zones[2].tr"
+                    :other="data.zones[2].draws"
+                    :is-percentage="mode === 'percent'"
+                    :show-as-calculated-percentage="mode === 'percent'"
+                    other-segment-text="Draws"
+                    dropoff-percent="20"
+                  />
+                  <div v-else class="text-center">No data yet!</div>
+                </td>
+                <td class="p-1 w-1/5">
+                  <FactionSegmentBar
+                    v-if="data.zones[4]"
+                    :vs="data.zones[4].vs"
+                    :nc="data.zones[4].nc"
+                    :tr="data.zones[4].tr"
+                    :other="data.zones[4].draws"
+                    :is-percentage="mode === 'percent'"
+                    :show-as-calculated-percentage="mode === 'percent'"
+                    other-segment-text="Draws"
+                    dropoff-percent="20"
+                  />
+                  <div v-else class="text-center">No data yet!</div>
+                </td>
+                <td class="p-1 w-1/5">
+                  <FactionSegmentBar
+                    v-if="data.zones[6]"
+                    :vs="data.zones[6].vs"
+                    :nc="data.zones[6].nc"
+                    :tr="data.zones[6].tr"
+                    :other="data.zones[6].draws"
+                    :is-percentage="mode === 'percent'"
+                    :show-as-calculated-percentage="mode === 'percent'"
+                    other-segment-text="Draws"
+                    dropoff-percent="20"
+                  />
+                  <div v-else class="text-center">No data yet!</div>
+                </td>
+                <td class="p-1 w-1/5">
+                  <FactionSegmentBar
+                    v-if="data.zones[8]"
+                    :vs="data.zones[8].vs"
+                    :nc="data.zones[8].nc"
+                    :tr="data.zones[8].tr"
+                    :other="data.zones[8].draws"
+                    :is-percentage="mode === 'percent'"
+                    :show-as-calculated-percentage="mode === 'percent'"
+                    other-segment-text="Draws"
+                    dropoff-percent="20"
+                  />
+                  <div v-else class="text-center">No data yet!</div>
+                </td>
+                <td class="p-1 w-1/5">
+                  <FactionSegmentBar
+                    v-if="data.zones[344]"
+                    :vs="data.zones[344].vs"
+                    :nc="data.zones[344].nc"
+                    :tr="data.zones[344].tr"
+                    :other="data.zones[344].draws"
+                    :is-percentage="mode === 'percent'"
+                    :show-as-calculated-percentage="mode === 'percent'"
+                    other-segment-text="Draws"
+                    dropoff-percent="20"
+                  />
+                  <div v-else class="text-center">No data yet!</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </section>
@@ -642,3 +644,16 @@ export default Vue.extend({
   },
 })
 </script>
+<style scoped lang="scss">
+#server-victories,
+#server-cont-victories {
+  width: 1000px;
+}
+
+@screen md {
+  #server-victories,
+  #server-cont-victories {
+    width: inherit;
+  }
+}
+</style>
