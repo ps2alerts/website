@@ -8,8 +8,9 @@
       />
       <h1 class="font-semibold text-4xl">PS2Alerts</h1>
     </div>
-    <div class="flex w-auto block justify-center">
-      <p class="text-center" v-html="motto" />
+    <div class="w-auto block justify-center text-center">
+      <p v-html="motto" />
+      <p class="text-sm text-gray-400">{{ version }}</p>
     </div>
   </header>
 </template>
@@ -38,6 +39,7 @@ export default Vue.extend({
         'NC Millah stronk matey',
         'Fueling the TR victim complex',
       ],
+      version: this.$config.version,
     }
   },
   created() {
