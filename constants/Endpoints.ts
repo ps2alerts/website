@@ -52,6 +52,8 @@ export const Endpoints = {
   AGGREGATES_INSTANCE_WEAPON_SINGLE:
     '/aggregates/instance/{instance}/weapon/{weapon}',
 
+  CENSUS_OSHUR_DATA: '/census/oshur',
+
   INSTANCE_FACILITY_CONTROL_ENTRIES:
     '/instance-entries/{instance}/facility?sortBy=timestamp&order=desc',
   INSTANCE_FACILITY_CONTROL_ENTRIES_FACILITY:

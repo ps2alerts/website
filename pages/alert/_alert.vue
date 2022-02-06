@@ -15,13 +15,13 @@
       <AlertPopulations :alert="alert" />
       <AlertCombatHistory :alert="alert" />
       <AlertMap :alert="alert" />
-      <!--      <AlertMapCaptureHistory-->
-      <!--        v-if="alert.features && alert.features.captureHistory"-->
-      <!--        :alert="alert"-->
-      <!--        :facility-data="alertFacilityAggregate"-->
-      <!--        :outfit-data="alertOutfitAggregate"-->
-      <!--        :data-ready="alertFacilityDataReady"-->
-      <!--      />-->
+      <AlertMapCaptureHistory
+        v-if="alert.features && alert.features.captureHistory"
+        :alert="alert"
+        :facility-data="alertFacilityAggregate"
+        :outfit-data="alertOutfitAggregate"
+        :data-ready="alertFacilityDataReady"
+      />
       <AlertBattleranks :alert="alert" />
 
       <div class="col-span-12">
@@ -108,7 +108,6 @@ import AlertDetails from '@/components/alert/AlertDetails.vue'
 import AlertFactionCombatMetrics from '@/components/alert/AlertFactionCombatMetrics.vue'
 import AlertFactionVsFaction from '@/components/alert/AlertFactionVsFaction.vue'
 import AlertMap from '@/components/alert/AlertMap.vue'
-// import AlertMapCaptureHistory from '~/components/alert/AlertMapCaptureHistory.vue'
 import AlertCharacterMetrics from '@/components/alert/AlertCharacterMetrics.vue'
 import AlertOutfitMetrics from '@/components/alert/AlertOutfitMetrics.vue'
 import AlertWeaponMetrics from '@/components/alert/AlertWeaponMetrics.vue'
@@ -121,6 +120,8 @@ import AlertBattleranks from '~/components/alert/AlertBattleranks.vue'
 import { InstanceFacilityControlAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceFacilityControlAggregateResponseInterface'
 import facilityTypeName from '~/filters/FacilityTypeName'
 import { InstanceOutfitAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface'
+import { Zone } from '~/constants/Zone'
+import { PS2AlertsApiOshurDataInterface } from '~/interfaces/census/PS2AlertsApiOshurDataInterface'
 
 export default Vue.extend({
   name: 'Alert',
@@ -286,34 +287,65 @@ export default Vue.extend({
         InstanceFacilityControlAggregateResponseInterface
       >()
 
-      console.log('Alert.pullFacilityData', instanceId)
-      await new ApiRequest()
-        .get<InstanceFacilityControlAggregateResponseInterface[]>(
-          Endpoints.AGGREGATES_INSTANCE_FACILITY.replace(
-            '{instance}',
-            instanceId
-          )
-        )
-        .then((facilityAggregate) => {
-          facilityAggregate.forEach(
-            (
-              facilityData: InstanceFacilityControlAggregateResponseInterface
-            ) => {
-              const tempData: InstanceFacilityControlAggregateResponseInterface =
-                Object.assign(facilityData, {
-                  facility: {
-                    ...facilityData.facility,
-                    typeName: facilityTypeName(facilityData.facility.type),
-                  },
-                })
+      // If Oshur, we need to do some craziness to get the facility data we want
+      if (this.alert.zone === Zone.OSHUR) {
+        await new ApiRequest()
+          .get<PS2AlertsApiOshurDataInterface[]>(Endpoints.CENSUS_OSHUR_DATA)
+          .then((oshurData) => {
+            oshurData.forEach(
+              (facilityData: PS2AlertsApiOshurDataInterface) => {
+                const tempData: InstanceFacilityControlAggregateResponseInterface =
+                  {
+                    instance: this.alert.instanceId,
+                    facility: {
+                      id: parseInt(facilityData.facility_id, 10),
+                      name: facilityData.facility_name,
+                      zone: this.alert.zone,
+                      type: parseInt(facilityData.facility_type_id, 10),
+                      typeName: facilityTypeName(
+                        parseInt(facilityData.facility_type_id, 10)
+                      ),
+                      region: parseInt(facilityData.map_region_id, 10),
+                    },
+                  }
 
-              newMap.set(facilityData.facility.id, tempData)
-            }
+                newMap.set(tempData.facility.id, tempData)
+              }
+            )
+          })
+          .catch((e) => {
+            console.error('Unable to process Facility Data!', e)
+          })
+      } else {
+        console.log('Alert.pullFacilityData', instanceId)
+        await new ApiRequest()
+          .get<InstanceFacilityControlAggregateResponseInterface[]>(
+            Endpoints.AGGREGATES_INSTANCE_FACILITY.replace(
+              '{instance}',
+              instanceId
+            )
           )
-        })
-        .catch((e) => {
-          console.error('Unable to process Facility Data!', e)
-        })
+          .then((facilityAggregate) => {
+            facilityAggregate.forEach(
+              (
+                facilityData: InstanceFacilityControlAggregateResponseInterface
+              ) => {
+                const tempData: InstanceFacilityControlAggregateResponseInterface =
+                  Object.assign(facilityData, {
+                    facility: {
+                      ...facilityData.facility,
+                      typeName: facilityTypeName(facilityData.facility.type),
+                    },
+                  })
+
+                newMap.set(facilityData.facility.id, tempData)
+              }
+            )
+          })
+          .catch((e) => {
+            console.error('Unable to process Facility Data!', e)
+          })
+      }
 
       return newMap
     },
