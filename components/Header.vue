@@ -8,9 +8,6 @@
       />
       <h1 class="font-semibold text-4xl">PS2Alerts</h1>
     </div>
-    <div class="flex w-auto block justify-center px-6 mb-2">
-      <div class="btn">BETA</div>
-    </div>
     <div class="flex w-auto block justify-center">
       <p class="text-center" v-html="motto" />
     </div>

@@ -7,35 +7,73 @@
         <p>Last updated: 23rd Jan 2022</p>
       </div>
     </div>
-    <!--    <div class="col-span-12 bg-tint card editorial relative">-->
-    <!--      <div class="tag">-->
-    <!--        <font-awesome-icon :icon="['fas', 'wrench']"></font-awesome-icon>-->
-    <!--        Fixes &amp; Improvements-->
-    <!--      </div>-->
-    <!--      <div class="h-full">-->
-    <!--        <h1 class="text-subtitle text-center">Fixes and improvements</h1>-->
-    <!--        <p class="content-spacing text-center">Added: 23rd Jan 2022</p>-->
-    <!--        <p>Long time no see!</p>-->
-    <!--        <p>It is calculated in the following ways:</p>-->
-    <!--        <ul>-->
-    <!--          <li>Kills made against a particular faction, added as a 1 point</li>-->
-    <!--          <li>-->
-    <!--            Bases captured against a faction, and applying 100 points to that-->
-    <!--            (numbers may be adjusted)-->
-    <!--          </li>-->
-    <!--        </ul>-->
-    <!--        <p>-->
-    <!--          Combining the two will give a reasonable (not 100% accurate but close-->
-    <!--          enough) view of the balance between factions in the alert, and to give-->
-    <!--          an indicator on how balanced it was.-->
-    <!--        </p>-->
-    <!--        <p>-->
-    <!--          In the example above, you can see TR was heavily double teamed by both-->
-    <!--          VS and NC. It appears NC focused TR a bit more than VS, only due to-->
-    <!--          their captures.-->
-    <!--        </p>-->
-    <!--      </div>-->
-    <!--    </div>-->
+    <div class="col-span-12 bg-tint card editorial relative">
+      <div class="tag">
+        <font-awesome-icon :icon="['fas', 'wrench']"></font-awesome-icon>
+        Fixes &amp; Improvements - New Features
+      </div>
+      <div class="h-full">
+        <h1 class="text-subtitle text-center">
+          PS2Alerts 4.0 has finally arrived!
+        </h1>
+        <p class="content-spacing text-center">Added: 6th Feb 2022</p>
+        <p>
+          Long time no see! Since the project has been running a long time, 95%
+          stable (there's occasionally some alerts missing due to Census giving
+          us crap responses resulting in errors), I've decided that PS2Alerts is
+          coming out of it's Beta phase and <b>officially releasing as v4.0</b>!
+        </p>
+        <p>
+          PS2Alerts has undergone some changes, listed below. The project is now
+          out of mothballs (2021 was a rough year) and you should continue to
+          expect new things coming for the site soon, namely things like Maps,
+          Per-Player and Per-Outfit searchable statistics within the alert meta
+          as a whole, and
+          <a
+            class="text-red-500"
+            href="https://github.com/ps2alerts/website/issues"
+            target="_blank"
+            >various other things</a
+          >.
+        </p>
+        <ul>
+          <li>
+            Alert Capture history has been added! Recording as of Feb 5th 17:34
+            BST. Maps are coming hopefully fairly soon!
+          </li>
+          <li>
+            Alert History results has had a redesign, resulting in a lot more
+            compact design, especially on mobile.
+          </li>
+          <li>
+            Alert Stats - Battle ranks are now a stacked graph rather than
+            separate tiny lines no-one could read
+          </li>
+          <li>
+            Alert Monitor (to the left side) has been re-worked, now showing
+            populations for each alert rather than being hidden behind a button
+            press, as well as various layout fixes
+          </li>
+          <li>
+            Added per-base worth for each alert as of Feb 5th 17:34 BST (you can
+            find this above the territory bar)
+          </li>
+          <li>
+            Stats (home page): Server Activity Level Victories and Server
+            Continent Victories have had a redesign pass, resulting in a vastly
+            better display on mobile and desktop.
+          </li>
+          <li>
+            Navigation bar has been redesigned from a pill format to a bar
+            format.
+          </li>
+          <li>
+            Various styling issues have been corrected and the site has been
+            updated to the latest technologies
+          </li>
+        </ul>
+      </div>
+    </div>
     <div class="col-span-12 lg:col-span-6 bg-tint card editorial relative">
       <div class="tag feature">
         <font-awesome-icon :icon="['fas', 'certificate']"></font-awesome-icon>
