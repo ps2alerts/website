@@ -27,8 +27,8 @@
         </button>
       </div>
       <div v-show="drawerOpen" class="pb-2">
-        <p v-if="loading">Loading...</p>
-        <p v-if="error">ERROR: {{ error }}</p>
+        <p v-if="loading" class="mt-2">Loading...</p>
+        <p v-if="error" class="mt-2">ERROR: {{ error }}</p>
         <p v-show="!loading && actives.length === 0 && !error" class="mt-2">
           There are no alerts currently running!
         </p>
