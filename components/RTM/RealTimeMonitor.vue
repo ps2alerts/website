@@ -36,7 +36,7 @@
           <div
             v-for="alert in actives"
             :key="alert.instanceId"
-            class="pt-2 pb-3 px-4 sm:px-2 border-b border-gray-500 border-no-bottom"
+            class="pt-2 pb-3 px-2 border-b border-gray-500 border-no-bottom"
           >
             <RealTimeAlert
               :world="alert.world"
@@ -50,8 +50,20 @@
             />
           </div>
           <p class="text-xs text-gray-400 mt-2">
-            Hover / tap over population bars to see pop numbers.<br />
-            Non NSO players only. Pops updated: <b>{{ popsLastUpdated }}</b>
+            Hover / tap over population bars to see pop numbers<br />
+            Non NSO players only
+            <v-tooltip bottom>
+              <template #activator="{ on, attrs }">
+                <font-awesome-icon
+                  :icon="['fas', 'info-circle']"
+                  v-bind="attrs"
+                  v-on="on"
+                ></font-awesome-icon>
+              </template>
+              The game's API does not give us the ability to understand what
+              faction NSO are playing for. </v-tooltip
+            ><br />
+            Pops updated: <b>{{ popsLastUpdated }}</b>
             <CountdownSpinner
               :percent="updatePopsCountdownPercentage"
               :update-rate="updatePopsRate"

@@ -21,7 +21,7 @@
               <font-awesome-icon
                 :icon="['fas', 'exclamation-triangle']"
               ></font-awesome-icon>
-              You are viewing the testing / staging copy of PS2Alerts.
+              You are viewing the testing / staging version of PS2Alerts.
               <a href="https://ps2alerts.com" class="text-red-600">
                 <b>Click here for the live version</b>
               </a>
