@@ -37,27 +37,36 @@
                 >various other things</a
               >.
             </p>
+            <h2 class="text-subtitle">Alert Statistics Pages</h2>
             <ul>
               <li>
-                Alert Capture history has been added! Recording as of Feb 5th
+                Alert Capture History has been added! Recording as of Feb 5th
                 17:34 BST. Maps are coming hopefully fairly soon!
               </li>
               <li>
-                Alert History results has had a redesign, resulting in a lot
-                more compact design, especially on mobile.
-              </li>
-              <li>
-                Alert Stats - Battle ranks are now a stacked graph rather than
-                separate tiny lines no-one could read
-              </li>
-              <li>
-                Alert Monitor (to the left side) has been re-worked, now showing
-                populations for each alert rather than being hidden behind a
-                button press, as well as various layout fixes
+                Battle ranks are now a stacked graph rather than separate tiny
+                lines no-one could read
               </li>
               <li>
                 Added per-base worth for each alert as of Feb 5th 17:34 BST (you
                 can find this above the territory bar)
+              </li>
+            </ul>
+            <h2 class="text-subtitle">Other changes</h2>
+            <ul>
+              <li>
+                <a href="/alert-history" class="text-red-500">Alert History</a>
+                results has had a redesign, resulting in a lot more compact
+                design, especially on mobile.
+              </li>
+              <li>
+                Alert Monitor (to the left side) has been re-worked, now showing
+                populations for each alert rather than being hidden behind a
+                button press, as well as various layout fixes.
+              </li>
+              <li>
+                Alert Monitor is now able to be collapsed / hidden on mobile if
+                it's taking too much space.
               </li>
               <li>
                 Stats (home page): Server Activity Level Victories and Server
@@ -69,6 +78,11 @@
                 format.
               </li>
               <li>
+                Some missing NSO vehicles (Dervish, Chimera) were added into
+                various parts of the site whereas previously they'd show up as
+                unknown vehicles
+              </li>
+              <li>
                 Various styling issues have been corrected and the site has been
                 updated to the latest technologies
               </li>
@@ -76,7 +90,7 @@
           </div>
           <div class="col-span-12 mb-2">
             <img
-              class="object-contain mx-auto rounded-lg"
+              class="w-72 mx-auto rounded-lg"
               src="/change-log/new-rtm.png"
               alt="Picture showing faction vs faction example"
             />
