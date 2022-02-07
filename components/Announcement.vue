@@ -7,7 +7,7 @@
       Notice - 7th Feb 2022 22:30 BST
     </div>
     <div class="text-center">
-      <h1>Alert collection temporarily offline</h1>
+      <h1 class="mb-2">Alert collection temporarily offline</h1>
       <p>
         Due to a DNS resolution issue, PS2Alerts is currently unable to connect
         to Census. We have isolated the issue to being to do with the Digital
