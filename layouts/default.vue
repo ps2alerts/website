@@ -35,7 +35,10 @@
           <!--              <font-awesome-icon-->
           <!--                :icon="['fas', 'exclamation-triangle']"-->
           <!--              ></font-awesome-icon>-->
-          <!--              PS2Alerts is currently experiencing issues with it's database. No new data will be collected for the time being. <a href="/">More info</a></b>-->
+          <!--              PS2Alerts is currently unable to contact the game's API. Please-->
+          <!--              visit the-->
+          <!--              <a class="text-gray-400 font-bold" href="/">homepage</a> for more-->
+          <!--              details-->
           <!--              <font-awesome-icon-->
           <!--                :icon="['fas', 'exclamation-triangle']"-->
           <!--              ></font-awesome-icon>-->
