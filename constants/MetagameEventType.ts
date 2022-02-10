@@ -2,53 +2,6 @@ import { Zone } from './Zone'
 import { Faction } from './Faction'
 import { MetagameDetailsInterface } from '@/interfaces/MetagameDetailsInterface'
 
-export enum MetagameEventType {
-  // VS Triggered
-  INDAR_ENLIGHTENMENT = 148,
-  HOSSIN_ENLIGHTENMENT = 154,
-  AMERISH_ENLIGHTENMENT = 157,
-  ESAMIR_ENLIGHTENMENT = 151,
-
-  // NC Triggered
-  INDAR_LIBERATION = 149,
-  HOSSIN_LIBERATION = 155,
-  AMERISH_LIBERATION = 158,
-  ESAMIR_LIBERATION = 152,
-
-  // TR Triggered
-  INDAR_SUPERIORITY = 147,
-  HOSSIN_SUPERIORITY = 153,
-  AMERISH_SUPERIORITY = 156,
-  ESAMIR_SUPERIORITY = 150,
-
-  // Current Generation Unstable Meltdowns
-  NC_INDAR_UNSTABLE_MELTDOWN = 179,
-  NC_HOSSIN_UNSTABLE_MELTDOWN = 177,
-  NC_AMERISH_UNSTABLE_MELTDOWN = 178,
-  NC_ESAMIR_UNSTABLE_MELTDOWN = 176,
-
-  VS_INDAR_UNSTABLE_MELTDOWN = 189,
-  VS_HOSSIN_UNSTABLE_MELTDOWN = 187,
-  VS_AMERISH_UNSTABLE_MELTDOWN = 188,
-  VS_ESAMIR_UNSTABLE_MELTDOWN = 186,
-
-  TR_INDAR_UNSTABLE_MELTDOWN = 193,
-  TR_HOSSIN_UNSTABLE_MELTDOWN = 191,
-  TR_AMERISH_UNSTABLE_MELTDOWN = 192,
-  TR_ESAMIR_UNSTABLE_MELTDOWN = 190,
-
-  // High pop alerts
-  AMERISH_HIGH_POP_CONQUEST = 211,
-  ESAMIR_HIGH_POP_CONQUEST = 212,
-  HOSSIN_HIGH_POP_CONQUEST = 213,
-  INDAR_HIGH_POP_CONQUEST = 214,
-}
-
-export const metagameEventTypeArray = [
-  147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 176, 177, 178,
-  179, 186, 187, 188, 189, 190, 191, 192, 193, 211, 212, 213, 214,
-]
-
 const longAlert = 90 * 60 * 1000
 const shortAlert = 45 * 60 * 1000
 
@@ -352,11 +305,13 @@ export const metagameEventTypeDetailsMap: Map<
       unstable: false,
     },
   ],
+
+  // Oshur
   [
     222,
     {
       title: 'Oshur Liberation',
-      zone: Zone.INDAR,
+      zone: Zone.OSHUR,
       duration: longAlert,
       triggeringFaction: Faction.NEW_CONGLOMERATE,
       unstable: false,
@@ -366,7 +321,7 @@ export const metagameEventTypeDetailsMap: Map<
     223,
     {
       title: 'Oshur Superiority',
-      zone: Zone.INDAR,
+      zone: Zone.OSHUR,
       duration: longAlert,
       triggeringFaction: Faction.TERRAN_REPUBLIC,
       unstable: false,
@@ -376,9 +331,19 @@ export const metagameEventTypeDetailsMap: Map<
     224,
     {
       title: 'Oshur Enlightenment',
-      zone: Zone.INDAR,
+      zone: Zone.OSHUR,
       duration: longAlert,
       triggeringFaction: Faction.VANU_SOVEREIGNTY,
+      unstable: false,
+    },
+  ],
+  [
+    226,
+    {
+      title: 'Oshur Conquest (high pop)',
+      zone: Zone.OSHUR,
+      duration: longAlert,
+      triggeringFaction: Faction.NONE,
       unstable: false,
     },
   ],
