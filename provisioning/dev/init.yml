@@ -39,7 +39,7 @@
           path: "{{ root_dir | realpath }}/provisioning/dev"
 
     - name: Get user's current UID
-      command: "id -u {{ lookup('ENV', 'USER') }}"
+      command: "id -u {{ lookup('env', 'USER') }}"
       register: id
       when: id is undefined
 
