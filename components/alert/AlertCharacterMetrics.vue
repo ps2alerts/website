@@ -296,9 +296,7 @@ export default Vue.extend({
         const tempData: AlertCharacterTableDataInterface = Object.assign(
           character,
           {
-            br: character.character.asp
-              ? character.character.battleRank + 120
-              : character.character.battleRank,
+            br: character.character.adjustedBattleRank,
             kd:
               character.kills && character.deaths
                 ? (character.kills / character.deaths).toFixed(2)

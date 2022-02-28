@@ -197,9 +197,7 @@ export default Vue.extend({
       const factionBattlerankData: BattlerankDistributionDataInterface = {}
 
       this.data.forEach((character) => {
-        const battlerank = character.character.asp
-          ? character.character.battleRank + 120
-          : character.character.battleRank
+        const battlerank = character.character.adjustedBattleRank
 
         if (!factionBattlerankData[character.character.faction]) {
           factionBattlerankData[character.character.faction] = []

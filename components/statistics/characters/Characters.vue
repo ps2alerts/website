@@ -185,9 +185,7 @@ export default Vue.extend({
               character.headshots && character.kills
                 ? ((character.headshots / character.kills) * 100).toFixed(2)
                 : 0,
-            br: character.character.asp
-              ? character.character.battleRank + 120
-              : character.character.battleRank,
+            br: character.character.adjustedBattleRank,
             worldName: worldNameFilter(character.world),
           }
         )
