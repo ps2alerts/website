@@ -191,7 +191,7 @@ export default Vue.extend({
         })
     },
     buildCollection() {
-      const battleranks: number[] = [...Array(221).keys()]
+      const battleranks: number[] = [...Array(321).keys()]
 
       const battlerankData: { [k: number]: number } = []
       const factionBattlerankData: BattlerankDistributionDataInterface = {}
