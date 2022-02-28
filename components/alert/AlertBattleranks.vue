@@ -78,6 +78,19 @@ export default Vue.extend({
                 enabled: true,
               },
             },
+            {
+              drawTime: 'afterDatasetsDraw',
+              type: 'line',
+              mode: 'vertical',
+              scaleID: 'x-axis-0',
+              borderColor: 'rgba(255, 0, 0, 0.25)',
+              borderWidth: 2,
+              value: 221,
+              label: {
+                content: 'ASP2',
+                enabled: true,
+              },
+            },
           ],
         },
         scales: {
