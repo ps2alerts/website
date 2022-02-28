@@ -204,10 +204,9 @@ export default Vue.extend({
         })
     },
     buildCollection() {
-      const battleranks: number[] = [...Array(321).keys()]
-
       const battlerankData: { [k: number]: number } = []
       const factionBattlerankData: BattlerankDistributionDataInterface = {}
+      let maxBR: number = 0
 
       this.data.forEach((character) => {
         const battlerank = character.character.adjustedBattleRank
@@ -225,7 +224,18 @@ export default Vue.extend({
         battlerankData[battlerank]
           ? battlerankData[battlerank]++
           : (battlerankData[battlerank] = 1)
+
+        if(Number.isSafeInteger(battlerank)) {
+          maxBR = Math.max(maxBR, battlerank)
+        }
       })
+
+      let limit: number = 121
+      
+      while(limit < maxBR){
+        limit += 100
+      }
+      const battleranks: number[] = [...Array(limit).keys()]
 
       this.dataCollection = {
         labels: battleranks,
