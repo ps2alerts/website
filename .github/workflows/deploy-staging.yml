@@ -86,16 +86,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Get short SHA
-        id: sha
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+      - name: Write kubeconfig env to file
+        run: echo ${{ secrets.KUBE_CONFIG }} >> ~/kube-config
 
       # Install the latest version of Terraform CLI and configure the Terraform
       # CLI configuration file with a Terraform Cloud user API token
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1.3.2
-        with:
-          cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
 
       # Initialize a new or existing Terraform working directory by creating initial
       # files, loading any remote state, downloading modules, etc.
@@ -115,13 +112,10 @@ jobs:
           terraform plan \
             -var='checksum_version=${{ steps.sha.outputs.sha_short }}' \
             -var='app_version=${{ steps.sha.outputs.sha_short }}' \
-            -var='dd_api_key=${{ secrets.DATADOG_API_KEY }}' \
-            -var='dd_app_key=${{ secrets.DATADOG_APP_KEY }}' \
             -target=module.website_staging -out='.tfout'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
 
       # Apply the terraform plan and inject the SHA
       - name: Terraform Apply
@@ -130,25 +124,3 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
-
-  # Unfortunately we need to do this step in order to provision the LE cert manager.
-  # Terraform currently doesn't support it :'(
-  deploy-cert-manager:
-    needs:
-      - deploy-terraform
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_TOKEN }}
-
-      - name: Save DO kubeconfig
-        run: doctl kubernetes cluster kubeconfig save my-cluster
-
-      - name: Apply Lets Encrypt cluster issuer manifest
-        run: kubectl apply -f provisioning/staging/k8s/manifests/cluster-issuer.yml
