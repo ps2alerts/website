@@ -4,7 +4,7 @@
     <div class="col-span-12">
       <div class="text-center h-full">
         <h1 class="text-title">Change Log</h1>
-        <p class="mt-1">Last updated: 6th Feb 2022</p>
+        <p class="mt-1">Last updated: 2nd March 2022</p>
       </div>
     </div>
     <div class="col-span-12 bg-tint card editorial relative">
@@ -14,7 +14,7 @@
       </div>
       <div class="h-full text-center">
         <h1 class="text-subtitle">PS2Alerts 4.0 has finally arrived!</h1>
-        <p class="content-spacing text-center">Added: 6th Feb 2022</p>
+        <p class="content-spacing text-center">Added: 2nd March 2022</p>
         <div class="grid grid-cols-12 gap-2">
           <div class="col-span-12 text-left">
             <p>
