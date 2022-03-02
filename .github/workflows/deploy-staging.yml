@@ -16,27 +16,6 @@ jobs:
 #      - name: Checkout
 #        uses: actions/checkout@v2
 #
-#      #      - name: Setup node env 🏗
-#      #        uses: actions/setup-node@v2.1.2
-#      #        with:
-#      #          node-version: ${{ matrix.node }}
-#
-#      #      - name: Cache node_modules 📦
-#      #        uses: actions/cache@v2
-#      #        with:
-#      #          path: ~/.npm
-#      #          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-#      #          restore-keys: |
-#      #            ${{ runner.os }}-node-
-#
-#      - name: Get short SHA
-#        id: sha
-#        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-#
-#      - name: Get current datetime
-#        id: datetime
-#        run: echo "::set-output name=datetime::$(date +'%Y-%m-%d %H:%M')"
-#
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v1
 #
@@ -51,16 +30,14 @@ jobs:
 #          username: ${{ secrets.DOCKERHUB_USERNAME }}
 #          password: ${{ secrets.DOCKERHUB_TOKEN }}
 #
-#      #       TODO: RE-ENABLE ONCE SITE IS PROPERLY LIVE
-##      - name: Build and push base image
-##        uses: docker/build-push-action@v2
-##        with:
-##          context: provisioning/base
-##          file: provisioning/base/Dockerfile
-##          platforms: linux/amd64
-##          push: true
-##          no-cache: true
-##          tags: maelstromeous/applications:ps2alerts-website-base
+#      #      - name: Build and push base image
+#      #        uses: docker/build-push-action@v2
+#      #        with:
+#      #          context: provisioning/base
+#      #          file: provisioning/base/Dockerfile
+#      #          platforms: linux/amd64
+#      #          push: true
+#      #          tags: maelstromeous/applications:ps2alerts-website-base
 #
 #      - name: Build and push staging image
 #        uses: docker/build-push-action@v2
@@ -68,60 +45,61 @@ jobs:
 #          file: provisioning/staging/Dockerfile
 #          platforms: linux/amd64
 #          push: true
-#          no-cache: true
-#          tags: maelstromeous/applications:ps2alerts-website-staging-${{ steps.sha.outputs.sha_short }}
+#          tags: maelstromeous/applications:ps2alerts-website-staging-${{ github.sha }}
 #          build-args: |
-#            BUILD_SHA=${{ steps.sha.outputs.sha_short }}
-#            BUILT=${{ steps.datetime.outputs.datetime }}
+#            BUILD_SHA=${{ github.sha }}
 
-  deploy-terraform:
-#    needs:
-#      - build-docker-images
+  deploy-to-k8s:
+#    needs: build-docker-images
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: provisioning/terraform
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Write kubeconfig env to file
-        run: echo ${{ secrets.KUBE_CONFIG }} >> ~/kube-config
+      # Inject the templates with the correct variables. {{ version }} refers to the Git SHA and is what changes the container version.
+      - name: Update the K8s common resource file
+        run: |
+          sed -is -e 's|{{ application }}|ps2alerts-website|' \
+          -e 's|{{ version }}|beeb735|' \
+          -e 's|{{ environment }}|staging|' \
+          -e 's|{{ replicas }}|2|' \
+          provisioning/k8s/service-template.yml
 
-      # Install the latest version of Terraform CLI and configure the Terraform
-      # CLI configuration file with a Terraform Cloud user API token
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1.3.2
-
-      # Initialize a new or existing Terraform working directory by creating initial
-      # files, loading any remote state, downloading modules, etc.
-      - name: Terraform Init
-        run: terraform init
+      # Apply the common resources, telling k8s to change the container version to the new one.
+      - uses: actions-hub/kubectl@master
+        name: Apply common resources
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        with:
+          args: apply -f provisioning/k8s/service-template.yml
 
-      # Checks that all Terraform configuration files adhere to a canonical format
-      - name: Terraform Format
-        run: terraform fmt -check
+      # Pass base64 encoded secrets to the environment to be used in the next step
+      - name: Base64 encode secrets
+        run: |
+          export AWS_ACCESS_KEY_ID=$(echo ${{ secrets.AWS_ACCESS_KEY_ID }} | base64) && echo "::add-mask::${AWS_ACCESS_KEY_ID}" && echo AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID >> $GITHUB_ENV \
+          export AWS_SECRET_ACCESS_KEY=$(echo ${{ secrets.AWS_SECRET_ACCESS_KEY }} | base64) && echo "::add-mask::${AWS_SECRET_ACCESS_KEY}" && echo AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY >> $GITHUB_ENV \
 
-      # Generates an execution plan for Terraform, with the injected SHA
-      - name: Terraform Plan
-        run: >
-          terraform plan \
-            -var='config_path=~/kube-config' \
-            -var='checksum_version=beeb735' \
-            -var='app_version=beeb735' \
-            -target=module.website_staging -out='.tfout'
+      # Inject the application template with variables
+      - name: Update the K8s application resource file
+        run: |
+          sed -is -e 's|{{ application }}|ps2alerts-website|' \
+          -e 's|{{ version }}|beeb735|' \
+          -e 's|{{ environment }}|staging|' \
+          -e 's|{{ hostname }}|staging.ps2alerts.com|' \
+          provisioning/k8s/application.yml
+
+      # Apply application specific resources
+      - uses: actions-hub/kubectl@master
+        name: Apply environment specific resources
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        with:
+          args: apply -f provisioning/k8s/application.yml
 
-      # Apply the terraform plan and inject the SHA
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
-        run: terraform apply -auto-approve .tfout
+      # Outputs the rollout status and returns a 0 signal (thus completing the workflow) once it's rolled out.
+      - uses: actions-hub/kubectl@master
+        name: Wait for deployment to finish
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        with:
+          args: rollout status deployment/ps2alerts-website-staging -n ps2alerts
