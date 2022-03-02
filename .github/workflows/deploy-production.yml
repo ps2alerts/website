@@ -1,5 +1,5 @@
 ---
-name: Build & Deploy Staging
+name: Build & Deploy Production
 on:
   push:
     branches: [master]
