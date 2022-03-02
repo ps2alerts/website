@@ -20,7 +20,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ application }}-{{ environment }}
-  namespace: {{ application }}
+  namespace: ps2alerts
   labels:
     app: {{ application }}-{{ environment }}
 spec:
