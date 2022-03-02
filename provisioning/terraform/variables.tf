@@ -7,6 +7,3 @@ variable "checksum_version" {
 variable "app_version" {
   default = "UNKNOWN!"
 }
-
-variable "dd_api_key" {}
-variable "dd_app_key" {}
