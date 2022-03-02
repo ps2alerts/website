@@ -4,53 +4,53 @@ on:
   push:
     branches: [staging]
 jobs:
-#  build-docker-images:
-#    runs-on: ${{ matrix.os }}
-#
-#    strategy:
-#      matrix:
-#        os: [ubuntu-latest]
-#        node: [20]
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#
-#      - name: Set up QEMU
-#        uses: docker/setup-qemu-action@v1
-#
-#      - name: Set up Docker Buildx
-#        uses: docker/setup-buildx-action@v1
-#        with:
-#          version: latest
-#
-#      - name: Login to DockerHub
-#        uses: docker/login-action@v1
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
-#
-#      #      - name: Build and push base image
-#      #        uses: docker/build-push-action@v2
-#      #        with:
-#      #          context: provisioning/base
-#      #          file: provisioning/base/Dockerfile
-#      #          platforms: linux/amd64
-#      #          push: true
-#      #          tags: maelstromeous/applications:ps2alerts-website-base
-#
-#      - name: Build and push staging image
-#        uses: docker/build-push-action@v2
-#        with:
-#          file: provisioning/staging/Dockerfile
-#          platforms: linux/amd64
-#          push: true
-#          tags: maelstromeous/applications:ps2alerts-website-staging-${{ github.sha }}
-#          build-args: |
-#            BUILD_SHA=${{ github.sha }}
+  build-docker-images:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [20]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          version: latest
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      #      - name: Build and push base image
+      #        uses: docker/build-push-action@v2
+      #        with:
+      #          context: provisioning/base
+      #          file: provisioning/base/Dockerfile
+      #          platforms: linux/amd64
+      #          push: true
+      #          tags: maelstromeous/applications:ps2alerts-website-base
+
+      - name: Build and push staging image
+        uses: docker/build-push-action@v2
+        with:
+          file: provisioning/staging/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: maelstromeous/applications:ps2alerts-website-staging-${{ github.sha }}
+          build-args: |
+            BUILD_SHA=${{ github.sha }}
 
   deploy-to-k8s:
-#    needs: build-docker-images
+    needs: build-docker-images
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -60,7 +60,7 @@ jobs:
       - name: Update the K8s common resource file
         run: |
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
-          -e 's|{{ version }}|beeb735|' \
+          -e 's|{{ version }}|{{ github.sha }}|' \
           -e 's|{{ environment }}|staging|' \
           -e 's|{{ replicas }}|2|' \
           provisioning/k8s/application.yml
@@ -83,7 +83,7 @@ jobs:
       - name: Update the K8s application resource file
         run: |
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
-          -e 's|{{ version }}|beeb735|' \
+          -e 's|{{ version }}|{{ github.sha }}|' \
           -e 's|{{ environment }}|staging|' \
           -e 's|{{ hostname }}|staging.ps2alerts.com|' \
           provisioning/staging/k8s.yml
