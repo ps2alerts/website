@@ -29,12 +29,24 @@ spec:
   selector:
     matchLabels:
       app: {{ application }}-{{ environment }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 2
+    type: RollingUpdate
   template:
     metadata:
       labels:
         app: {{ application }}-{{ environment }}
         version: {{ version }}
     spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: {{ application }}-{{ environment }}
       containers:
         - name: application
           image: maelstromeous/applications:{{ application }}-{{ environment }}-{{ version }}
