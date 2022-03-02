@@ -1,13 +1,13 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ps2alerts-{{ application }}-{{ environment }}
+  name: {{ application }}-{{ environment }}
   namespace: ps2alerts
 spec:
   tls:
     - hosts:
         - "{{ hostname }}"
-      secretName: ps2alerts-{{ application }}-{{ environment }}-tls
+      secretName: {{ application }}-{{ environment }}-tls
   rules:
     - host: "{{ hostname }}"
       http:
@@ -16,17 +16,17 @@ spec:
             path: "/"
             backend:
               service:
-                name: ps2alerts-{{ application }}-{{ environment }}
+                name: {{ application }}-{{ environment }}
                 port:
                   number: 80
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: ps2alerts-{{ application }}-{{ environment }}
+  name: {{ application }}-{{ environment }}
   namespace: ps2alerts
 spec:
-  secretName: ps2alerts-{{ application }}-{{ environment }}-tls
+  secretName: {{ application }}-{{ environment }}-tls
   issuerRef:
     name: letsencrypt
     kind: ClusterIssuer
