@@ -60,7 +60,7 @@ jobs:
       - name: Update the K8s common resource file
         run: |
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
-          -e 's|{{ version }}|{{ $github.sha }}|' \
+          -e 's|{{ version }}|${{ github.sha }}|' \
           -e 's|{{ environment }}|staging|' \
           -e 's|{{ replicas }}|2|' \
           provisioning/k8s/application.yml
@@ -83,7 +83,7 @@ jobs:
       - name: Update the K8s application resource file
         run: |
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
-          -e 's|{{ version }}|{{ $github.sha }}|' \
+          -e 's|{{ version }}|${{ github.sha }}|' \
           -e 's|{{ environment }}|staging|' \
           -e 's|{{ hostname }}|staging.ps2alerts.com|' \
           provisioning/staging/k8s.yml
