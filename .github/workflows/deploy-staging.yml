@@ -56,6 +56,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Set current date as env variable
+      run: echo "NOW::$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+        -
       # Inject the templates with the correct variables. {{ version }} refers to the Git SHA and is what changes the container version.
       - name: Update the K8s common resource file
         run: |
@@ -86,6 +89,7 @@ jobs:
           -e 's|{{ version }}|${{ github.sha }}|' \
           -e 's|{{ environment }}|staging|' \
           -e 's|{{ hostname }}|staging.ps2alerts.com|' \
+          -e 's|{{ built }}|$NOW|' \
           provisioning/staging/k8s.yml
 
       # Apply application specific resources
