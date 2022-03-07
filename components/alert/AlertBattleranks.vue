@@ -78,6 +78,19 @@ export default Vue.extend({
                 enabled: true,
               },
             },
+            {
+              drawTime: 'afterDatasetsDraw',
+              type: 'line',
+              mode: 'vertical',
+              scaleID: 'x-axis-0',
+              borderColor: 'rgba(255, 0, 0, 0.25)',
+              borderWidth: 2,
+              value: 221,
+              label: {
+                content: 'ASP2',
+                enabled: true,
+              },
+            },
           ],
         },
         scales: {
@@ -191,15 +204,12 @@ export default Vue.extend({
         })
     },
     buildCollection() {
-      const battleranks: number[] = [...Array(221).keys()]
-
       const battlerankData: { [k: number]: number } = []
       const factionBattlerankData: BattlerankDistributionDataInterface = {}
+      let maxBR: number = 0
 
       this.data.forEach((character) => {
-        const battlerank = character.character.asp
-          ? character.character.battleRank + 120
-          : character.character.battleRank
+        const battlerank = character.character.adjustedBattleRank
 
         if (!factionBattlerankData[character.character.faction]) {
           factionBattlerankData[character.character.faction] = []
@@ -214,7 +224,18 @@ export default Vue.extend({
         battlerankData[battlerank]
           ? battlerankData[battlerank]++
           : (battlerankData[battlerank] = 1)
+
+        if (Number.isSafeInteger(battlerank)) {
+          maxBR = Math.max(maxBR, battlerank)
+        }
       })
+
+      let limit: number = 121
+
+      while (limit < maxBR) {
+        limit += 100
+      }
+      const battleranks: number[] = [...Array(limit).keys()]
 
       this.dataCollection = {
         labels: battleranks,

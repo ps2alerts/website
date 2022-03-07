@@ -26,7 +26,7 @@
         <p class="text-gray-400 text-sm mb-2 text-center">
           BR, ASP and Outfit Membership info is updated once every 24 hours
           (upon your next play session). Any players above BR 120 have ASPed
-          (220 max).
+          (320 max).
         </p>
         <div class="mb-2">
           <input
@@ -296,9 +296,7 @@ export default Vue.extend({
         const tempData: AlertCharacterTableDataInterface = Object.assign(
           character,
           {
-            br: character.character.asp
-              ? character.character.battleRank + 120
-              : character.character.battleRank,
+            br: character.character.adjustedBattleRank,
             kd:
               character.kills && character.deaths
                 ? (character.kills / character.deaths).toFixed(2)

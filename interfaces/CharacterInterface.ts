@@ -8,6 +8,7 @@ export interface CharacterInterface {
   faction: Faction
   world: World
   battleRank: number
-  asp: boolean
+  asp: number
+  adjustedBattleRank: number
   outfit: OutfitInterface | null
 }
