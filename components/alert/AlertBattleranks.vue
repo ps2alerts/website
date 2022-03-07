@@ -225,14 +225,14 @@ export default Vue.extend({
           ? battlerankData[battlerank]++
           : (battlerankData[battlerank] = 1)
 
-        if(Number.isSafeInteger(battlerank)) {
+        if (Number.isSafeInteger(battlerank)) {
           maxBR = Math.max(maxBR, battlerank)
         }
       })
 
       let limit: number = 121
-      
-      while(limit < maxBR){
+
+      while (limit < maxBR) {
         limit += 100
       }
       const battleranks: number[] = [...Array(limit).keys()]
