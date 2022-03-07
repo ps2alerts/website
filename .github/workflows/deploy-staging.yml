@@ -16,6 +16,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Set current date as env variable
+        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+
+      - name: Set Short SHA variable
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
@@ -47,7 +53,8 @@ jobs:
           push: true
           tags: maelstromeous/applications:ps2alerts-website-staging-${{ github.sha }}
           build-args: |
-            BUILD_SHA=${{ github.sha }}
+            BUILD_SHA=${{ env.SHORT_SHA }}
+            BUILT=${{ env.NOW }}
 
   deploy-to-k8s:
     needs: build-docker-images
@@ -57,7 +64,7 @@ jobs:
         uses: actions/checkout@v2
 
       # Inject the templates with the correct variables. {{ version }} refers to the Git SHA and is what changes the container version.
-      - name: Update the K8s common resource file
+      - name: Update the K8s application resource file
         run: |
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
           -e 's|{{ version }}|${{ github.sha }}|' \
@@ -80,7 +87,7 @@ jobs:
 #          export AWS_SECRET_ACCESS_KEY=$(echo ${{ secrets.AWS_SECRET_ACCESS_KEY }} | base64) && echo "::add-mask::${AWS_SECRET_ACCESS_KEY}" && echo AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY >> $GITHUB_ENV \
 
       # Inject the application template with variables
-      - name: Update the K8s application resource file
+      - name: Update the K8s environmnt resource file
         run: |
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
           -e 's|{{ version }}|${{ github.sha }}|' \
