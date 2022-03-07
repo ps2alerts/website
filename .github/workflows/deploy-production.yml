@@ -56,13 +56,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Set current date as env variable
+        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+
       # Inject the templates with the correct variables. {{ version }} refers to the Git SHA and is what changes the container version.
-      - name: Update the K8s common resource file
+      - name: Update the K8s applicaiton resource file
         run: |
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
           -e 's|{{ version }}|${{ github.sha }}|' \
           -e 's|{{ environment }}|production|' \
           -e 's|{{ replicas }}|3|' \
+          -e 's|{{ built }}|${{ env.NOW }}|' \
           provisioning/k8s/application.yml
 
       # Apply the common resources, telling k8s to change the container version to the new one.
@@ -80,7 +84,7 @@ jobs:
       #          export AWS_SECRET_ACCESS_KEY=$(echo ${{ secrets.AWS_SECRET_ACCESS_KEY }} | base64) && echo "::add-mask::${AWS_SECRET_ACCESS_KEY}" && echo AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY >> $GITHUB_ENV \
 
       # Inject the application template with variables
-      - name: Update the K8s application resource file
+      - name: Update the K8s environment resource file
         run: |
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
           -e 's|{{ version }}|${{ github.sha }}|' \
