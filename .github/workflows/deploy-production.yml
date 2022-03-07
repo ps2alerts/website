@@ -16,6 +16,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Set current date as env variable
+        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+
+      - name: Set Short SHA variable
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
@@ -47,7 +53,8 @@ jobs:
           push: true
           tags: maelstromeous/applications:ps2alerts-website-production-${{ github.sha }}
           build-args: |
-            BUILD_SHA=${{ github.sha }}
+            BUILD_SHA=${{ env.SHORT_SHA }}
+            BUILT=${{ env.NOW }}
 
   deploy-to-k8s:
     needs: build-docker-images
@@ -56,9 +63,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set current date as env variable
-        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
-
       # Inject the templates with the correct variables. {{ version }} refers to the Git SHA and is what changes the container version.
       - name: Update the K8s applicaiton resource file
         run: |
@@ -66,7 +70,6 @@ jobs:
           -e 's|{{ version }}|${{ github.sha }}|' \
           -e 's|{{ environment }}|production|' \
           -e 's|{{ replicas }}|3|' \
-          -e 's|{{ built }}|${{ env.NOW }}|' \
           provisioning/k8s/application.yml
 
       # Apply the common resources, telling k8s to change the container version to the new one.

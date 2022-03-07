@@ -63,8 +63,6 @@ spec:
               value: "{{ environment }}"
             - name: VERSION
               value: "{{ version }}"
-            - name: BUILT
-              value: "{{ built }}"
           readinessProbe:
             httpGet:
               path: /
