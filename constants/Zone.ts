@@ -29,3 +29,17 @@ export const ZoneBgClassString = (zone: Zone | undefined): string => {
       return 'bg-oshur'
   }
 }
+
+export const ZoneHexSize = (zone: Zone | undefined): number => {
+  switch (zone) {
+    case Zone.AMERISH:
+    case Zone.ESAMIR:
+    case Zone.HOSSIN:
+    case Zone.INDAR:
+      return 115.5;
+    case Zone.OSHUR:
+      return 57.75;
+    default:
+      return 1;
+  }
+}

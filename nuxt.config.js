@@ -129,6 +129,7 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
+    'nuxt-leaflet',
     [
       'nuxt-fontawesome',
       {
