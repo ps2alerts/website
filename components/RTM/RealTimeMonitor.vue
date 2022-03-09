@@ -12,6 +12,7 @@
         :update-rate="updateTerritoryRate"
       />
       <div
+        v-show="actives.length > 0"
         class="rtm-drawer mt-2 pb-2 visible lg:invisible"
         :class="{ absolute: drawerOpen }"
       >
