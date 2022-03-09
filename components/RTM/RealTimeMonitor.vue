@@ -6,7 +6,7 @@
     <div
       class="lg:mt-2 bg-tint rounded lg:rounded-bl-none text-base text-center relative"
     >
-      <div class="tag section">{{ actives.length }} Active Alerts</div>
+      <div class="tag section">{{ actives.length }} Active {{ alertWord }}</div>
       <CountdownSpinner
         :percent="updateTerritoryCountdownPercentage"
         :update-rate="updateTerritoryRate"
@@ -123,6 +123,9 @@ export default Vue.extend({
     },
     updatePopsCountdownPercentage(): number {
       return (100 / (this.updatePopsRate / 1000)) * this.updatePopsCountdown
+    },
+    alertWord(): string {
+      return this.actives.length !== 1 ? 'Alerts' : 'Alert'
     },
   },
   watch: {
