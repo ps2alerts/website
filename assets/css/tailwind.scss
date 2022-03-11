@@ -246,6 +246,10 @@
 
   .nuxt-link-exact-active {
     @apply bg-red-600;
+
+    &.bg-tint {
+      @apply bg-tint-light;
+    }
   }
 
   .btn-alt {

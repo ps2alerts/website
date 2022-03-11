@@ -1,65 +1,58 @@
 <template>
-  <div :instanceId="instanceId">
-    <div class="grid grid-cols-12 place-items-center mb-0.5">
-      <div class="col-span-3 col-start-2">
-        {{ world | worldName }}
+  <NuxtLink
+    :to="{ name: 'alert-alert', params: { alert: instanceId } }"
+    class="block bg-tint hover rounded-md"
+  >
+    <div :instanceId="instanceId" class="p-2 pt-1">
+      <div class="grid grid-cols-12 place-items-center mb-0.5">
+        <div class="col-span-6 col-start-3">
+          {{ world | worldName }} - {{ zone | zoneName }}
+        </div>
+        <div class="col-span-3 justify-self-end">
+          <span class="font-bold"
+            ><remaining-time
+              :started="timeStarted"
+              :duration="duration"
+            ></remaining-time
+          ></span>
+        </div>
       </div>
+      <div class="grid grid-cols-12 place-items-center gap-y-1">
+        <div class="col-span-1 justify-self-start text-center">
+          <font-awesome-icon :icon="['fas', 'flag']"></font-awesome-icon>
+        </div>
+        <div class="col-span-11 w-full">
+          <FactionSegmentBar
+            :vs="result.vs"
+            :nc="result.nc"
+            :tr="result.tr"
+            :other="result.cutoff"
+            :out-of-play="result.outOfPlay"
+            dropoff-percent="8"
+          />
+        </div>
 
-      <div class="col-span-3">
-        {{ zone | zoneName }}
-      </div>
-
-      <div class="col-span-3 justify-self-center font-bold">
-        <remaining-time
-          :started="timeStarted"
-          :duration="duration"
-        ></remaining-time>
-      </div>
-
-      <div class="col-span-1 col-start-12 justify-self-end">
-        <NuxtLink
-          class="btn btn-xs rounded-r"
-          :to="{ name: 'alert-alert', params: { alert: instanceId } }"
-        >
-          <font-awesome-icon fixed-width :icon="['fas', 'arrow-right']" />
-        </NuxtLink>
+        <div class="col-span-1 justify-self-start text-center text-xs">
+          <font-awesome-icon :icon="['fas', 'users']"></font-awesome-icon>
+        </div>
+        <div class="col-span-11 w-full">
+          <FactionSegmentBar
+            :vs="pops.vs"
+            :nc="pops.nc"
+            :tr="pops.tr"
+            :other="0"
+            dropoff-percent="8"
+            :show-as-calculated-percentage="true"
+            :is-percentage="true"
+            other-segment-text="NSO"
+            :half-bar="true"
+            :no-leader-highlight="true"
+            :show-tooltip-as-number="true"
+          />
+        </div>
       </div>
     </div>
-    <div class="grid grid-cols-12 place-items-center gap-y-1">
-      <div class="col-span-1 justify-self-start text-center">
-        <font-awesome-icon :icon="['fas', 'flag']"></font-awesome-icon>
-      </div>
-      <div class="col-span-11 w-full">
-        <FactionSegmentBar
-          :vs="result.vs"
-          :nc="result.nc"
-          :tr="result.tr"
-          :other="result.cutoff"
-          :out-of-play="result.outOfPlay"
-          dropoff-percent="8"
-        />
-      </div>
-
-      <div class="col-span-1 justify-self-start text-center text-xs">
-        <font-awesome-icon :icon="['fas', 'users']"></font-awesome-icon>
-      </div>
-      <div class="col-span-11 w-full">
-        <FactionSegmentBar
-          :vs="pops.vs"
-          :nc="pops.nc"
-          :tr="pops.tr"
-          :other="0"
-          dropoff-percent="8"
-          :show-as-calculated-percentage="true"
-          :is-percentage="true"
-          other-segment-text="NSO"
-          :half-bar="true"
-          :no-leader-highlight="true"
-          :show-tooltip-as-number="true"
-        />
-      </div>
-    </div>
-  </div>
+  </NuxtLink>
 </template>
 
 <script lang="ts">

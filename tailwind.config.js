@@ -13,6 +13,7 @@ module.exports = {
       'filters/**/*.ts',
       'nuxt.config.ts',
     ],
+    safelist: ['.nuxt-link-exact-active'],
   },
   prefix: '',
   important: false,
