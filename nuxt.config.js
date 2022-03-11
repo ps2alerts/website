@@ -166,6 +166,13 @@ export default {
     debug: process.env.ENV !== 'production', // enable to track in dev / staging mode
   },
 
+  router: {
+    scrollBehavior() {
+      const elem = document.getElementById('panel-right')
+      return { x: 0, y: elem.offsetTop - 12 }
+    },
+  },
+
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {
     babel: {
