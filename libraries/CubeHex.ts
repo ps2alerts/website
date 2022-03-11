@@ -23,7 +23,7 @@ export class CubeHex implements CubeHexInterface {
     }
 
     corner(direction: number, hex_size: number): number[] {
-        const angle = (Math.PI / 6) * (2 * direction - 1)
+        const angle = (Math.PI / 6) * (2 * direction - 1);
         const center = this.to_world(hex_size)
         return [
             Math.round((center[0] + hex_size * Math.sin(angle)) * 100) / 100, 
@@ -34,10 +34,31 @@ export class CubeHex implements CubeHexInterface {
     edge(direction: number, hex_size: number): number[][] {
         const indices = [[0, 1], [1, 2], [2, 3],
                          [3, 4], [4, 5], [5, 0],]
+        direction = direction % indices.length;
+        if(direction < 0){
+            direction += 6;
+        }
         return [
-            this.corner(indices[(direction) % indices.length][0], hex_size), 
+            this.corner(indices[direction % indices.length][0], hex_size), 
             this.corner(indices[direction % indices.length][1], hex_size)
         ];
+    }
+
+    indexLoc(index: number, hex_size: number): number[] {
+        var edge = this.edge(-2 * index + 2, hex_size);
+        var center = this.to_world(hex_size);
+        return [
+            (((edge[0][0] + edge[1][0]) / 2) * 3 + center[0]) / 4,
+            (((edge[0][1] + edge[1][1]) / 2) * 3 + center[1]) / 4,
+        ]
+    }
+
+    vertices(hex_size: number): number[][] {
+        var to_return: number[][] = [];
+        for(var i = 0; i < 6; i++){
+            to_return.push(this.corner(i, hex_size));
+        }
+        return to_return;
     }
 
     neighbor(direction: number): CubeHexInterface {
@@ -62,6 +83,33 @@ export class CubeHex implements CubeHexInterface {
 
     static fromAxialRS(r: number, s: number): CubeHex {
         return new CubeHex(-r-s, r, s);
+    }
+
+    round(): CubeHex {
+        var q = Math.round(this.q);
+        var r = Math.round(this.r);
+        var s = Math.round(this.s);
+
+        var q_diff = Math.abs(q - this.q);
+        var r_diff = Math.abs(r - this.r);
+        var s_diff = Math.abs(s - this.s);
+
+        if(q_diff > r_diff && q_diff > s_diff){
+            q = -r - s;
+        } else if(r_diff > s_diff){
+            r = -q - s;
+        } else {
+            s = -q - r;
+        }
+        return new CubeHex(q, r, s);
+    }
+
+    static fromWorld(x: number, y: number, hex_size: number): CubeHex {
+        var q = (Math.sqrt(3) * y + x) / (3 * hex_size) + (2 / 3);
+        var r = -2 / 3 * (x / hex_size + 0.5);
+        var s = -q - r;
+
+        return new CubeHex(q, r, s).round();
     }
 }
 

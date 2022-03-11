@@ -4,8 +4,26 @@ import getIndarConstructionOutpost from "~/constants/IndarConstructionOutpostDat
 import { Zone, ZoneHexSize } from "~/constants/Zone";
 import { CensusMapRegionInterface } from "~/interfaces/mapping/CensusMapRegionInterface";
 import { CubeHexInterface } from "~/interfaces/mapping/CubeHexInterface";
+import { LatLng, worldToMap } from "~/interfaces/mapping/MapDrawingInterface";
 import { MapRegionDrawingInterface } from "~/interfaces/mapping/MapRegionInterface";
 import { CubeHex } from "./CubeHex";
+
+export class CubeHexIndices {
+    q: number;
+    r: number;
+    s: number;
+    locations: number[][];
+    constructor(hex: CubeHex, hex_size: number){
+        this.q = hex.q;
+        this.r = hex.r;
+        this.s = hex.s;
+        this.locations = [];
+        for(var i = 0; i < 3; i++){
+            this.locations.push(hex.indexLoc(i, hex_size));
+        }
+    }
+
+}
 
 export class MapRegion implements MapRegionDrawingInterface {
     badge: any;
@@ -18,12 +36,17 @@ export class MapRegion implements MapRegionDrawingInterface {
     connections: MapRegion[];
     connectionIds: number[];
     hexes: CubeHex[];
+    indices: CubeHexIndices[];
+    private cutoff: boolean;
     private outline_cache: number[][];
+    private hexSet: Record<string, CubeHex>;
     
     constructor(region: CensusMapRegionInterface, zone: Zone){
+        this.hexSet = {};
         this.id = parseInt(region.facility_id, 10);
         this.name = region.facility_name;
         this.facilityType = parseInt(region.facility_type_id, 10);
+        this.indices = [];
 
         //Fun data injections for the whole family
         const outpost = getIndarConstructionOutpost(this.id);
@@ -53,11 +76,31 @@ export class MapRegion implements MapRegionDrawingInterface {
         region.map_hexes.forEach((hex) => {
             var r: number = -parseInt(hex.y) - 1;
             var s: number = -parseInt(hex.x);
-            this.hexes.push(CubeHex.fromAxialRS(r, s)); 
+            var cubehex = CubeHex.fromAxialRS(r, s);
+            this.hexes.push(cubehex);
+            this.indices.push(new CubeHexIndices(cubehex, ZoneHexSize(this.zoneId)));
         });
 
         this.faction = Faction.NONE;
         this.outline_cache = [];
+        this.cutoff = false;
+    }
+
+    setCutoff(newVal: boolean): void {
+        this.cutoff = newVal;
+    }
+
+    isCutoff(): boolean {
+        return this.cutoff;
+    }
+
+    hexIndices(): CubeHexIndices[] {
+        return this.indices;
+    }
+
+    contains(point: number[]): boolean {
+        var toFind = CubeHex.fromWorld(point[0], point[1], ZoneHexSize(this.zoneId));
+        return this.hexSet[toFind.toString()] !== undefined;
     }
 
     outline(): number[][] {
@@ -65,13 +108,12 @@ export class MapRegion implements MapRegionDrawingInterface {
             return this.outline_cache;
         }
         var pile: number[][][] = [];
-        var hexSet: Record<string, CubeHex> = {};
         this.hexes.forEach((hex) => {
-            hexSet[hex.toString()] = hex;
+            this.hexSet[hex.toString()] = hex;
         });
         this.hexes.forEach((hex) => {
             for(var dir = 0; dir < 6; dir++){
-                if(!hexSet[hex.neighbor(dir).toString()]){
+                if(!this.hexSet[hex.neighbor(dir).toString()]){
                     pile.push(hex.edge(dir, ZoneHexSize(this.zoneId)));
                 }
             }
