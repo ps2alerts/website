@@ -1,6 +1,11 @@
 <template>
   <div class="col-span-12 card relative text-center">
     <div class="tag section">Map</div>
+    <CountdownSpinner
+      v-if="alert.state === 1"
+      :percent="updateCountdownPercent"
+      :update-rate="updateRate"
+    />
     <div class="h-full flex items-center place-content-center">
       <client-only>
       <l-map ref="map" style="height: 768px" 
@@ -22,7 +27,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
-import { MapDrawingInterface, MAP_FACTION_COLORS, Color, worldToMap, LatLng, MAP_LINK_COLORS, mapToWorld, MAP_CUTOFF_COLORS } from '~/interfaces/mapping/MapDrawingInterface';
+import { MapDrawingInterface, worldToMap, LatLng, mapToWorld,  } from '~/interfaces/mapping/MapDrawingInterface';
+import { MAP_FACTION_COLORS, MAP_LINK_COLORS, MAP_CUTOFF_COLORS } from '@/constants/FactionMapColors';
 import { Zone, ZoneHexSize } from '@/constants/Zone';
 import ApiRequest from '@/api-request';
 import MapRegionDataRequest from '@/libraries/MapRegionDataRequest';
@@ -35,6 +41,7 @@ import factionName from '~/filters/FactionName';
 import { MapRegion } from '~/libraries/MapRegion';
 import { Faction } from '~/constants/Faction';
 import { CubeHex } from '~/libraries/CubeHex';
+import { FacilityBadge } from '~/interfaces/FacilityBadge';
 // import { InstanceFactionCombatAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceFactionCombatAggregateResponseInterface'
 
 export default Vue.extend({
@@ -76,6 +83,10 @@ export default Vue.extend({
         pane: "linkPane"
       }),
       linkStamps: {} as Record<string, number>,
+      badges: this.$L.featureGroup([], {
+        pane: "badgePane"
+      }),
+      baseSVG: undefined as HTMLElement | SVGElement | undefined,
       // data: {} as InstanceFactionCombatAggregateResponseInterface,
     }
   },
@@ -97,9 +108,7 @@ export default Vue.extend({
   },
   created() {
     this.reset()
-    
   },
-  
   mounted(){
     this.$nextTick(() => {
       this.init()
@@ -121,6 +130,7 @@ export default Vue.extend({
       this.map = this.$refs["map"]?.mapObject as L.Map;
       this.map.createPane("hexPane", this.map.getPane("overlayPane"));
       this.map.createPane("linkPane", this.map.getPane("overlayPane"));
+      this.map.createPane("badgePane", this.map.getPane("overlayPane"));
       if (this.alert.state === Ps2alertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
           return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
@@ -139,6 +149,35 @@ export default Vue.extend({
     },
     alpha(facility_id: number): number {
       return MAP_FACTION_COLORS[this.mapDraw[facility_id].faction].a;
+    },
+    badge(region: MapRegion): FacilityBadge {
+      if(!this.baseSVG || region.badge.type !== FacilityType.DEFAULT){
+        return region.badge;
+      }
+      var badgeSVG = this.baseSVG.cloneNode(true) as HTMLElement;
+      var badgeBackground = document.createElementNS("http://www.w3.org/2000/svg", "use");
+      badgeBackground.setAttribute("href", "#facility-bg");
+      badgeBackground.setAttribute("class", region.id.toString());
+      badgeBackground.setAttribute("fill", MAP_FACTION_COLORS[region.faction].toString());
+      badgeSVG.appendChild(badgeBackground);
+      var badgeForeground = document.createElementNS("http://www.w3.org/2000/svg", "use");
+      badgeForeground.setAttribute("href", FacilityBadge.SVGDefinitionName(region.facilityType));
+      badgeSVG.appendChild(badgeForeground);
+      var icon = this.$L.divIcon({
+        html: badgeSVG,
+        className: "facility-badge",
+        iconSize: [
+          FacilityBadge.radius(region.facilityType) * 2, 
+          FacilityBadge.radius(region.facilityType) * 2
+          ],
+        pane: "badgePane"
+      });
+      var marker = this.$L.marker(worldToMap(region.badgeLocation.asArray()), {
+        pane: "badgePane",
+        icon: icon,
+        
+      }).addTo(this.badges);
+      return new FacilityBadge(region.facilityType, this.$L.stamp(marker));
     },
     outline(facility_id: number): LatLng[] {
       var to_return: LatLng[] = [];
@@ -276,6 +315,10 @@ export default Vue.extend({
               this.mapDraw[controlEvent.facility].faction = controlEvent.newFaction;
               capture = true;
               this.updateLinks(controlEvent.facility);
+              var badgeBackground = (<L.Marker | undefined>this.badges.getLayer(this.mapDraw[controlEvent.facility].badge.markerStamp));
+              if(!badgeBackground)
+                return;
+              (<HTMLElement>(<L.DivIcon>badgeBackground.getIcon()).options.html).getElementsByClassName(controlEvent.facility.toString())[0].setAttribute("fill", MAP_FACTION_COLORS[controlEvent.newFaction].toString());
             });
             if(capture){
               this.updateCutoffs();
@@ -309,13 +352,30 @@ export default Vue.extend({
       if (Object.keys(this.mapDraw).length !== 0) {
         return;
       }
+
       this.map.on("click", (e: L.LeafletMouseEvent) => {
         var worldcoord = mapToWorld([e.latlng.lat, e.latlng.lng]);
         console.log(worldcoord);
         console.log(CubeHex.fromWorld(worldcoord.x, worldcoord.z, ZoneHexSize(this.alert.zone)));
       });
+
       const regions = await new MapRegionDataRequest()
         .pull(this.alert.zone ? this.alert.zone : Zone.INDAR);
+      
+      await this.$axios.get(require("~/assets/img/facility-icon.svg"), {baseURL: this.$config.baseUrl})
+        .then((response) => {
+          if(response.status < 200 || response.status > 299){
+            console.error("Could not load facility icons!");
+            console.error(response.status.toString() + " " + response.statusText);
+            return;
+          }
+          var parser = new DOMParser();
+          this.baseSVG = parser.parseFromString(response.data, "image/svg+xml").documentElement;
+        }).catch((reason) => {
+          console.error("Could not load facility icons!");
+          console.error(reason);
+        });
+
       this.$L.Icon.Default.prototype.options.iconAnchor = [0, 0];
       this.$L.Icon.Default.prototype.options.tooltipAnchor = [0, 0];
       regions.forEach((region) => {
@@ -348,8 +408,8 @@ export default Vue.extend({
       regions.forEach((region) => {
         region.connections.forEach((connection) => {
           var link = this.$L.polyline([
-            worldToMap([region.badgeLocation.x, region.badgeLocation.y]), 
-            worldToMap([connection.badgeLocation.x, connection.badgeLocation.y])
+            worldToMap(region.badgeLocation.asArray()), 
+            worldToMap(connection.badgeLocation.asArray())
             ], {
               weight: 2,
               color: '#FFFFFF',
@@ -359,8 +419,8 @@ export default Vue.extend({
           this.linkStamps[region.id.toString() + " " + connection.id.toString()] = this.$L.stamp(link);
           
           var bglink = this.$L.polyline([
-            worldToMap([region.badgeLocation.x, region.badgeLocation.y]), 
-            worldToMap([connection.badgeLocation.x, connection.badgeLocation.y])
+            worldToMap(region.badgeLocation.asArray()), 
+            worldToMap(connection.badgeLocation.asArray())
             ], {
               weight: 2,
               color: MAP_LINK_COLORS[5]?.toString(),
@@ -372,10 +432,12 @@ export default Vue.extend({
             this.links.addLayer(bglink);
             this.links.addLayer(link);
         });
+        region.badge = this.badge(region);
       });
     
       this.polys.addTo(this.map);
       this.links.addTo(this.map);
+      this.badges.addTo(this.map);
     },
   },
 })

@@ -2,9 +2,10 @@ import { FacilityType } from "~/constants/FacilityType";
 import { Faction } from "~/constants/Faction";
 import getIndarConstructionOutpost from "~/constants/IndarConstructionOutpostData";
 import { Zone, ZoneHexSize } from "~/constants/Zone";
+import { FacilityBadge } from "~/interfaces/FacilityBadge";
 import { CensusMapRegionInterface } from "~/interfaces/mapping/CensusMapRegionInterface";
 import { CubeHexInterface } from "~/interfaces/mapping/CubeHexInterface";
-import { LatLng, worldToMap } from "~/interfaces/mapping/MapDrawingInterface";
+import { LatLng, Point, worldToMap } from "~/interfaces/mapping/MapDrawingInterface";
 import { MapRegionDrawingInterface } from "~/interfaces/mapping/MapRegionInterface";
 import { CubeHex } from "./CubeHex";
 
@@ -26,12 +27,12 @@ export class CubeHexIndices {
 }
 
 export class MapRegion implements MapRegionDrawingInterface {
-    badge: any;
+    badge: FacilityBadge;
     faction: Faction;
     id: number;
     name: string;
     facilityType: FacilityType;
-    badgeLocation: { x: number; y: number; };
+    badgeLocation: Point;
     zoneId: Zone;
     connections: MapRegion[];
     connectionIds: number[];
@@ -54,15 +55,9 @@ export class MapRegion implements MapRegionDrawingInterface {
             console.log(outpost);
         }
         if (outpost !== null) {
-            this.badgeLocation = {
-                x: outpost.location_x,
-                y: outpost.location_z
-            };
+            this.badgeLocation = new Point(outpost.location_x, outpost.location_z);
         } else {
-            this.badgeLocation = {
-                x: region.location_x ? parseFloat(region.location_x) : 0,
-                y: region.location_z ? parseFloat(region.location_z) : 0,
-            };
+            this.badgeLocation = new Point(region.location_x ? parseFloat(region.location_x) : 0, region.location_z ? parseFloat(region.location_z) : 0);
         }
         this.zoneId = zone;
         this.connections = [];
@@ -84,6 +79,7 @@ export class MapRegion implements MapRegionDrawingInterface {
         this.faction = Faction.NONE;
         this.outline_cache = [];
         this.cutoff = false;
+        this.badge = new FacilityBadge(FacilityType.DEFAULT, -1);
     }
 
     setCutoff(newVal: boolean): void {
@@ -94,6 +90,9 @@ export class MapRegion implements MapRegionDrawingInterface {
         return this.cutoff;
     }
 
+    // Specifically useful for debugging what cubehex math you're screwing up this time
+    //   Lets you easily find where and what the cube hex indices are in the region so 
+    //   you can draw them on the map
     hexIndices(): CubeHexIndices[] {
         return this.indices;
     }
