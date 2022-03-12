@@ -86,7 +86,6 @@ export default Vue.extend({
       badges: this.$L.featureGroup([], {
         pane: "badgePane"
       }),
-      baseSVG: undefined as HTMLElement | SVGElement | undefined,
       // data: {} as InstanceFactionCombatAggregateResponseInterface,
     }
   },
@@ -151,20 +150,22 @@ export default Vue.extend({
       return MAP_FACTION_COLORS[this.mapDraw[facility_id].faction].a;
     },
     badge(region: MapRegion): FacilityBadge {
-      if(!this.baseSVG || region.badge.type !== FacilityType.DEFAULT){
+      if(region.badge.type !== FacilityType.DEFAULT){
         return region.badge;
       }
-      var badgeSVG = this.baseSVG.cloneNode(true) as HTMLElement;
+
+      var badgeSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      badgeSVG.setAttribute("viewBox", "0 0 100 100");
       var badgeBackground = document.createElementNS("http://www.w3.org/2000/svg", "use");
-      badgeBackground.setAttribute("href", "#facility-bg");
+      badgeBackground.setAttribute("href", require("~/assets/img/facility-icon.svg") + "#facility-bg");
       badgeBackground.setAttribute("class", region.id.toString());
       badgeBackground.setAttribute("fill", MAP_FACTION_COLORS[region.faction].toString());
       badgeSVG.appendChild(badgeBackground);
       var badgeForeground = document.createElementNS("http://www.w3.org/2000/svg", "use");
-      badgeForeground.setAttribute("href", FacilityBadge.SVGDefinitionName(region.facilityType));
+      badgeForeground.setAttribute("href", require("~/assets/img/facility-icon.svg") + FacilityBadge.SVGDefinitionName(region.facilityType));
       badgeSVG.appendChild(badgeForeground);
       var icon = this.$L.divIcon({
-        html: badgeSVG,
+        html: badgeSVG as unknown as HTMLElement,
         className: "facility-badge",
         iconSize: [
           FacilityBadge.radius(region.facilityType) * 2, 
@@ -331,6 +332,16 @@ export default Vue.extend({
           .then(() => {
             Object.values(this.mapDraw).forEach((region: MapRegion) => {
               var polygon = (<L.Polygon | undefined>this.polys.getLayer(this.polyStamps[region.id]));
+              // if(polygon){
+              //   var center = polygon.getCenter();
+              //   var offset: L.PointTuple = [0, 0];
+              //   offset[0] = center.lat - worldToMap(region.badgeLocation.asArray()).lat;
+              //   offset[1] = center.lng - worldToMap(region.badgeLocation.asArray()).lng;
+              //   var tooltip = polygon.getTooltip();
+              //   if(tooltip){
+              //     tooltip.options.offset = offset;
+              //   }
+              // }
               polygon?.setStyle({
                   fillColor: region.isCutoff() ? this.cutoffColor(region.id) : this.color(region.id),
                   fillOpacity: this.alpha(region.id) + (region.isCutoff() ? 0.4 : 0),
@@ -362,20 +373,6 @@ export default Vue.extend({
       const regions = await new MapRegionDataRequest()
         .pull(this.alert.zone ? this.alert.zone : Zone.INDAR);
       
-      await this.$axios.get(require("~/assets/img/facility-icon.svg"), {baseURL: this.$config.baseUrl})
-        .then((response) => {
-          if(response.status < 200 || response.status > 299){
-            console.error("Could not load facility icons!");
-            console.error(response.status.toString() + " " + response.statusText);
-            return;
-          }
-          var parser = new DOMParser();
-          this.baseSVG = parser.parseFromString(response.data, "image/svg+xml").documentElement;
-        }).catch((reason) => {
-          console.error("Could not load facility icons!");
-          console.error(reason);
-        });
-
       this.$L.Icon.Default.prototype.options.iconAnchor = [0, 0];
       this.$L.Icon.Default.prototype.options.tooltipAnchor = [0, 0];
       regions.forEach((region) => {
@@ -398,8 +395,10 @@ export default Vue.extend({
             color: "#000000"
           });
           this.links.bringToFront();
-        }).bindTooltip(region.name);
-
+        });
+        
+        polygon.bindTooltip(region.name);
+        
         this.polyStamps[region.id] = this.$L.stamp(polygon);
 
         this.polys.addLayer(polygon);
