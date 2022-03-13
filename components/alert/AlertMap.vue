@@ -6,7 +6,7 @@
       :percent="updateCountdownPercent"
       :update-rate="updateRate"
     />
-    <div class="h-full flex items-center place-content-center">
+    <div class="flex items-center place-content-center">
       <client-only>
       <l-map ref="map" style="height: 768px" 
         :zoom="zoom" 
@@ -23,11 +23,31 @@
       </l-map>
       </client-only>
     </div>
+    <div>
+      <v-subheader dark>Alert Capture Timeline</v-subheader>
+      <v-card-text>
+        <v-slider 
+            ref="history"
+            tick-size="5"
+            ticks="always"
+            append-icon="mdi-update"
+            prepend-icon="mdi-history"
+            :max="sliderMax"
+            v-model="sliderVal"
+            dark
+            @change="historyCallback"
+            @click:prepend="decrementSlider"
+            @click:append="incrementSlider"
+            ></v-slider>
+      </v-card-text>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { VSlider } from 'vuetify/lib/components'
+//import AlertMapHistoryControl from '@/components/alert/AlertMapHistoryControl.vue';
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import { MapDrawingInterface, worldToMap, LatLng, mapToWorld,  } from '~/interfaces/mapping/MapDrawingInterface';
 import { MAP_FACTION_COLORS, MAP_LINK_COLORS, MAP_CUTOFF_COLORS } from '@/constants/FactionMapColors';
@@ -44,6 +64,7 @@ import { MapRegion } from '~/libraries/MapRegion';
 import { Faction } from '~/constants/Faction';
 import { CubeHex } from '~/libraries/CubeHex';
 import { FacilityBadge } from '~/interfaces/FacilityBadge';
+import factionShortName from '~/filters/FactionShortName';
 // import { InstanceFactionCombatAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceFactionCombatAggregateResponseInterface'
 
 export default Vue.extend({
@@ -90,7 +111,12 @@ export default Vue.extend({
       badges: this.$L.featureGroup([], {
         pane: "badgePane"
       }),
-      limited: false,
+      currentIndex: -1,
+      captureIndices: [] as number[],
+      tickLabels: [] as string[],
+      sliderVal: 0,
+      sliderMax: 0,
+      historyCache: [] as InstanceFacilityControlEntriesResponseInterface[],
       // data: {} as InstanceFactionCombatAggregateResponseInterface,
     }
   },
@@ -226,35 +252,80 @@ export default Vue.extend({
       }
       return true;
     },
-    resetLimit(): void {
-      this.limited = false;
-      this.setTimers();
-    },
-    updateTerritory(result: InstanceFacilityControlEntriesResponseInterface[], indexLimit: number | undefined): boolean {
-      var capture = false;
-      if(indexLimit && !this.limited){
-        this.limited = true;
-        this.clearTimers();
+    decrementSlider(){
+      if(this.sliderVal == 0){
+        return;
       }
-      if(!indexLimit && this.limited){
-        return capture;
+      this.sliderVal--;
+      this.historyCallback(this.sliderVal);
+    },
+    incrementSlider(){
+      if(this.sliderVal == this.captureIndices.length){
+        return;
+      }
+      this.sliderVal++;
+      this.historyCallback(this.sliderVal);
+    },
+    resetLimit(): void {
+      this.currentIndex = -1;
+    },
+    historyCallback(value: number): void {
+      this.sliderVal = value;
+
+      if(value >= this.captureIndices.length){
+        this.resetLimit();
+      }
+      //Force an update when returning to the latest capture
+      var forceUpdate = false;
+      if(value >= this.captureIndices.length){
+        forceUpdate = true;
+      }
+
+      var capture = this.updateTerritory(
+        // Copy the history since updateTerritory reverses the provided list
+        Object.assign([], this.historyCache), 
+        forceUpdate ? undefined : this.captureIndices[value], 
+        forceUpdate
+      );
+      if(capture){
+        this.updateCutoffs();
+      }
+    },
+    updateTerritory(result: InstanceFacilityControlEntriesResponseInterface[], indexLimit: number | undefined, force: boolean = false): boolean {
+      var capture = false;
+      if(indexLimit){
+        this.currentIndex = 0;
       }
       result.reverse().forEach((controlEvent, index) => {
-        // If the map has already loaded and we've already seen this event, return, unless we've limited the capture history to show.
+
+        // If the map has already loaded and we've already seen this event, return, unless we've limited the capture history.
         // If it is limited, we rerun the alert capture history to get to the requested capture.
-        if (this.loaded && (controlEvent.isInitial || this.lastUpdated > new Date(controlEvent.timestamp)) 
-              && (indexLimit !== undefined && index > indexLimit)) {
+        if (!force && this.loaded 
+            && (controlEvent.isInitial || this.lastUpdated > new Date(controlEvent.timestamp)) 
+            && (this.currentIndex === -1 || this.currentIndex > index)) {
           return;
         }
         
         if (controlEvent.isDefence) {
           return;
         }
-
-        this.mapDraw[controlEvent.facility].faction = controlEvent.newFaction;
-        capture = true;
-        this.updateLinks(controlEvent.facility);
-        this.mapDraw[controlEvent.facility].badge.update(this.map.getZoom());
+        if((this.currentIndex == -1 && indexLimit === undefined) || (indexLimit !== undefined && index < indexLimit)){
+          this.mapDraw[controlEvent.facility].faction = controlEvent.newFaction;
+          capture = true;
+          this.updateLinks(controlEvent.facility);
+          this.mapDraw[controlEvent.facility].badge.update(this.map.getZoom());
+          if(indexLimit){
+            this.currentIndex = index
+          }
+        }
+        if(!controlEvent.isInitial && !this.captureIndices.includes(index)){
+          this.captureIndices.push(index);
+          this.tickLabels.push(Object.values(factionShortName(controlEvent.newFaction)).join(""));
+          this.sliderMax = this.captureIndices.length;
+          if(this.currentIndex == -1){
+            this.sliderVal = this.sliderMax;
+          }
+        }
       });
       return capture;
     },
@@ -336,6 +407,8 @@ export default Vue.extend({
             )
           )
           .then((result) => {
+            // Copy the history since updateTerritory reverses the provided list
+            this.historyCache = Object.assign([], result);
             var capture = this.updateTerritory(result, undefined);
             if(capture){
               this.updateCutoffs();
