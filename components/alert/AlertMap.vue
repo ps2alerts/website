@@ -16,6 +16,8 @@
         :bounds="bounds"
         :maxBounds="maxBounds"
         :maxBoundsViscosity="viscosity"
+        :zoomSnap="zoomSnap"
+        :zoomDelta="zoomDelta"
         :crs="crs">
         <l-tile-layer :url="url"></l-tile-layer>
       </l-map>
@@ -68,6 +70,8 @@ export default Vue.extend({
       url: "https://assets.ps2alerts.com/zones/" + zoneNameFilter(this.alert.zone).toLowerCase() + "/{z}/tile_{x}_{y}.png",
       minZoom: 2,
       maxZoom: 5,
+      zoomSnap: 1,
+      zoomDelta: 1,
       bounds: [[0, 0], [-250, 250]],
       maxBounds: [[0, 0], [-250, 250]],
       viscosity: 1.0,
@@ -86,6 +90,7 @@ export default Vue.extend({
       badges: this.$L.featureGroup([], {
         pane: "badgePane"
       }),
+      limited: false,
       // data: {} as InstanceFactionCombatAggregateResponseInterface,
     }
   },
@@ -125,11 +130,7 @@ export default Vue.extend({
       clearInterval(this.interval)
       clearInterval(this.updateCountdownInterval)
     },
-    init(): void {
-      this.map = this.$refs["map"]?.mapObject as L.Map;
-      this.map.createPane("hexPane", this.map.getPane("overlayPane"));
-      this.map.createPane("linkPane", this.map.getPane("overlayPane"));
-      this.map.createPane("badgePane", this.map.getPane("overlayPane"));
+    setTimers() {
       if (this.alert.state === Ps2alertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
           return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
@@ -139,6 +140,13 @@ export default Vue.extend({
           this.pull()
         }, this.updateRate)
       }
+    },
+    init(): void {
+      this.map = this.$refs["map"]?.mapObject as L.Map;
+      this.map.createPane("hexPane", this.map.getPane("overlayPane"));
+      this.map.createPane("linkPane", this.map.getPane("overlayPane"));
+      this.map.createPane("badgePane", this.map.getPane("overlayPane"));
+      this.setTimers();
     },
     color(facility_id: number): string {
       return MAP_FACTION_COLORS[this.mapDraw[facility_id].faction].toString();
@@ -150,35 +158,27 @@ export default Vue.extend({
       return MAP_FACTION_COLORS[this.mapDraw[facility_id].faction].a;
     },
     badge(region: MapRegion): FacilityBadge {
-      if(region.badge.type !== FacilityType.DEFAULT){
+      // If the facility type is not given or the badge is already built, just return it
+      if(region.badge.ready()){
         return region.badge;
       }
 
-      var badgeSVG = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      badgeSVG.setAttribute("viewBox", "0 0 100 100");
-      var badgeBackground = document.createElementNS("http://www.w3.org/2000/svg", "use");
-      badgeBackground.setAttribute("href", require("~/assets/img/facility-icon.svg") + "#facility-bg");
-      badgeBackground.setAttribute("class", region.id.toString());
-      badgeBackground.setAttribute("fill", MAP_FACTION_COLORS[region.faction].toString());
-      badgeSVG.appendChild(badgeBackground);
-      var badgeForeground = document.createElementNS("http://www.w3.org/2000/svg", "use");
-      badgeForeground.setAttribute("href", require("~/assets/img/facility-icon.svg") + FacilityBadge.SVGDefinitionName(region.facilityType));
-      badgeSVG.appendChild(badgeForeground);
+      var indicator = this.$L.marker(worldToMap(region.badgeLocation.asArray()), {
+        pane: "badgePane",
+        bubblingMouseEvents: true,
+        riseOnHover: true
+      });
+
+      var badge = new FacilityBadge(region, this.$L.stamp(indicator));
       var icon = this.$L.divIcon({
-        html: badgeSVG as unknown as HTMLElement,
+        html: badge.getSVG(),
         className: "facility-badge",
-        iconSize: [
-          FacilityBadge.radius(region.facilityType) * 2, 
-          FacilityBadge.radius(region.facilityType) * 2
-          ],
+        iconSize: [badge.getSize().x, badge.getSize().z],
         pane: "badgePane"
       });
-      var marker = this.$L.marker(worldToMap(region.badgeLocation.asArray()), {
-        pane: "badgePane",
-        icon: icon,
-        
-      }).addTo(this.badges);
-      return new FacilityBadge(region.facilityType, this.$L.stamp(marker));
+
+      indicator.setIcon(icon).addTo(this.badges);
+      return badge;
     },
     outline(facility_id: number): LatLng[] {
       var to_return: LatLng[] = [];
@@ -226,9 +226,46 @@ export default Vue.extend({
       }
       return true;
     },
+    resetLimit(): void {
+      this.limited = false;
+      this.setTimers();
+    },
+    updateTerritory(result: InstanceFacilityControlEntriesResponseInterface[], indexLimit: number | undefined): boolean {
+      var capture = false;
+      if(indexLimit && !this.limited){
+        this.limited = true;
+        this.clearTimers();
+      }
+      if(!indexLimit && this.limited){
+        return capture;
+      }
+      result.reverse().forEach((controlEvent, index) => {
+        // If the map has already loaded and we've already seen this event, return, unless we've limited the capture history to show.
+        // If it is limited, we rerun the alert capture history to get to the requested capture.
+        if (this.loaded && (controlEvent.isInitial || this.lastUpdated > new Date(controlEvent.timestamp)) 
+              && (indexLimit !== undefined && index > indexLimit)) {
+          return;
+        }
+        
+        if (controlEvent.isDefence) {
+          return;
+        }
+
+        this.mapDraw[controlEvent.facility].faction = controlEvent.newFaction;
+        capture = true;
+        this.updateLinks(controlEvent.facility);
+        this.mapDraw[controlEvent.facility].badge.update(this.map.getZoom());
+      });
+      return capture;
+    },
     updateCutoffs(): void {
       Object.values(this.mapDraw).forEach((region: MapRegion) => {
         region.setCutoff(this.cutoff(region));
+        var polygon = (<L.Polygon | undefined>this.polys.getLayer(this.polyStamps[region.id]));
+        polygon?.setStyle({
+            fillColor: region.isCutoff() ? this.cutoffColor(region.id) : this.color(region.id),
+            fillOpacity: this.alpha(region.id) + (region.isCutoff() ? 0.4 : 0),
+        });
       });
     },
     updateLinks(facility: number){
@@ -289,7 +326,6 @@ export default Vue.extend({
         }
       
         console.log('AlertMap.pull', this.alert.instanceId)
-        var capture = false;
         await new ApiRequest()
           .get<InstanceFacilityControlEntriesResponseInterface[]>(
             Endpoints.INSTANCE_FACILITY_CONTROL_ENTRIES.replace(
@@ -300,27 +336,7 @@ export default Vue.extend({
             )
           )
           .then((result) => {
-            result.reverse().forEach((controlEvent) => {
-              if (this.loaded && controlEvent.isInitial) {
-                return;
-              }
-              
-              if (this.loaded && this.lastUpdated > new Date(controlEvent.timestamp)){
-                return;
-              }
-
-              if (controlEvent.isDefence) {
-                return;
-              }
-
-              this.mapDraw[controlEvent.facility].faction = controlEvent.newFaction;
-              capture = true;
-              this.updateLinks(controlEvent.facility);
-              var badgeBackground = (<L.Marker | undefined>this.badges.getLayer(this.mapDraw[controlEvent.facility].badge.markerStamp));
-              if(!badgeBackground)
-                return;
-              (<HTMLElement>(<L.DivIcon>badgeBackground.getIcon()).options.html).getElementsByClassName(controlEvent.facility.toString())[0].setAttribute("fill", MAP_FACTION_COLORS[controlEvent.newFaction].toString());
-            });
+            var capture = this.updateTerritory(result, undefined);
             if(capture){
               this.updateCutoffs();
             }
@@ -328,31 +344,6 @@ export default Vue.extend({
             var now = new Date();
             this.lastUpdated = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()));
             this.updateCountdown = this.updateRate / 1000
-          })
-          .then(() => {
-            Object.values(this.mapDraw).forEach((region: MapRegion) => {
-              var polygon = (<L.Polygon | undefined>this.polys.getLayer(this.polyStamps[region.id]));
-              // if(polygon){
-              //   var center = polygon.getCenter();
-              //   var offset: L.PointTuple = [0, 0];
-              //   offset[0] = center.lat - worldToMap(region.badgeLocation.asArray()).lat;
-              //   offset[1] = center.lng - worldToMap(region.badgeLocation.asArray()).lng;
-              //   var tooltip = polygon.getTooltip();
-              //   if(tooltip){
-              //     tooltip.options.offset = offset;
-              //   }
-              // }
-              polygon?.setStyle({
-                  fillColor: region.isCutoff() ? this.cutoffColor(region.id) : this.color(region.id),
-                  fillOpacity: this.alpha(region.id) + (region.isCutoff() ? 0.4 : 0),
-              });
-
-              polygon?.setTooltipContent(
-                this.mapDraw[region.id].name + "<br/>" + 
-                factionName(this.mapDraw[region.id].faction) + 
-                (this.mapDraw[region.id].isCutoff() ? "<br/>Cut Off!" : "")
-              );
-            });
           })
           .catch((e) => {
             this.error = e.message
@@ -384,20 +375,26 @@ export default Vue.extend({
           weight: 2,
           lineCap: 'butt',
           className: "map-region",
-          pane: "hexPane"
+          pane: "hexPane",
         }).on("mouseover", (e: L.LeafletMouseEvent) => {
           e.target.setStyle({
             color: "#FFFFFF"
           });
+          if(region.badge.ready()){
+            region.badge.setHovered(true, this.map.getZoom());
+            (<L.Marker | undefined>this.badges.getLayer(region.badge.indicatorStamp))?.fire("mouseover", e, false);
+          }
           e.target.bringToFront();
         }).on("mouseout", (e: L.LeafletMouseEvent) => {
           e.target.setStyle({
             color: "#000000"
           });
-          this.links.bringToFront();
+          if(region.badge.ready()){
+            region.badge.setHovered(false, this.map.getZoom());
+            (<L.Marker | undefined>this.badges.getLayer(region.badge.indicatorStamp))?.fire("mouseout", e, false);
+          }
         });
-        
-        polygon.bindTooltip(region.name);
+        //polygon.bindTooltip(region.name);
         
         this.polyStamps[region.id] = this.$L.stamp(polygon);
 
@@ -413,7 +410,9 @@ export default Vue.extend({
               weight: 2,
               color: '#FFFFFF',
               opacity: 0.6,
-              pane: "linkPane"
+              pane: "linkPane",
+              interactive: false,
+              bubblingMouseEvents: true
             });
           this.linkStamps[region.id.toString() + " " + connection.id.toString()] = this.$L.stamp(link);
           
@@ -432,6 +431,21 @@ export default Vue.extend({
             this.links.addLayer(link);
         });
         region.badge = this.badge(region);
+      });
+
+      this.map.on("zoom", (ev: L.LeafletEvent) => {
+        Object.values(this.mapDraw).forEach((region: MapRegion) => {
+          region.badge.update(this.map.getZoom())
+        });
+      });
+
+      Object.values(this.mapDraw).forEach((region: MapRegion) => {
+        var badge = this.badges.getLayer(region.badge.indicatorStamp);
+        var polygon = this.polys.getLayer(this.polyStamps[region.id]);
+        if(badge === undefined || polygon === undefined){
+          return;
+        }
+        badge.addEventParent(polygon);
       });
     
       this.polys.addTo(this.map);

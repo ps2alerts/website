@@ -20,6 +20,8 @@
     "@nuxt/content": "^1.15.1",
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/google-gtag": "^1.0.4",
+    "@svgdotjs/svg.filter.js": "^3.0.8",
+    "@svgdotjs/svg.js": "^3.1.2",
     "chart.js": "2.9.3",
     "chartjs-plugin-annotation": "^0.5.7",
     "core-js": "^3.19.3",

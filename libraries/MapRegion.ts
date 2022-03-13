@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import { FacilityType } from "~/constants/FacilityType";
 import { Faction } from "~/constants/Faction";
 import getIndarConstructionOutpost from "~/constants/IndarConstructionOutpostData";
@@ -79,7 +80,7 @@ export class MapRegion implements MapRegionDrawingInterface {
         this.faction = Faction.NONE;
         this.outline_cache = [];
         this.cutoff = false;
-        this.badge = new FacilityBadge(FacilityType.DEFAULT, -1);
+        this.badge = new FacilityBadge(this, -1);
     }
 
     setCutoff(newVal: boolean): void {

@@ -72,16 +72,7 @@
     );
   }
   .map-region {
-    transition: fill 0.25s, stroke 0.25s ease-in
-  }
-  .cutoff {
-    background: repeating-linear-gradient(
-      45deg,
-      #7f7f7f,
-      #666666 10px,
-      #7f7f7f 10px,
-      #b2b2b2 20px
-    )
+    transition: fill 0.25s ease-in, opacity 0.25s ease-in, stroke 0.25s ease-in, fill-opacity 0.25s ease-in, stroke-opacity 0.25s ease-in
   }
 
   .bg-tint {
