@@ -4,7 +4,7 @@
     class="px-4 pb-4 lg:px-0 lg:pb-0 border-b-2 border-red-700 mx-auto mb-2 lg:w-full sm:w-3/4 lg:border-b-0"
   >
     <div
-      class="lg:mt-2 bg-tint rounded lg:rounded-bl-none text-base text-center relative"
+      class="bg-tint rounded lg:rounded-bl-none text-base text-center relative"
     >
       <div class="tag section">{{ actives.length }} Active {{ alertWord }}</div>
       <CountdownSpinner
