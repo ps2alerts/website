@@ -128,21 +128,7 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
-    [
-      'nuxt-fontawesome',
-      {
-        imports: [
-          {
-            set: '@fortawesome/free-solid-svg-icons',
-            icons: ['fas'],
-          },
-          {
-            set: '@fortawesome/free-brands-svg-icons',
-            icons: ['fab'],
-          },
-        ],
-      },
-    ],
+    '@nuxtjs/fontawesome',
   ],
   tailwindcss: {
     configPath: 'tailwind.config.js',
@@ -153,6 +139,13 @@ export default {
 
   // Content module configuration (https://go.nuxtjs.dev/config-content)
   content: {},
+
+  fontawesome: {
+    icons: {
+      solid: true,
+      brands: true,
+    },
+  },
 
   // https://www.npmjs.com/package/@nuxtjs/vuetify
   vuetify: {
