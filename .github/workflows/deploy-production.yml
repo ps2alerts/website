@@ -80,12 +80,6 @@ jobs:
         with:
           args: apply -f provisioning/k8s/application.yml
 
-      #      # Pass base64 encoded secrets to the environment to be used in the next step
-      #      - name: Base64 encode secrets
-      #        run: |
-      #          export AWS_ACCESS_KEY_ID=$(echo ${{ secrets.AWS_ACCESS_KEY_ID }} | base64) && echo "::add-mask::${AWS_ACCESS_KEY_ID}" && echo AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID >> $GITHUB_ENV \
-      #          export AWS_SECRET_ACCESS_KEY=$(echo ${{ secrets.AWS_SECRET_ACCESS_KEY }} | base64) && echo "::add-mask::${AWS_SECRET_ACCESS_KEY}" && echo AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY >> $GITHUB_ENV \
-
       # Inject the application template with variables
       - name: Update the K8s environment resource file
         run: |
