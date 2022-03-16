@@ -1,5 +1,4 @@
 import join from 'memory-fs/lib/join'
-
 const metaTitle = 'Planetside 2 Alert Tracker'
 const metaDesc = "PS2Alerts - Building Planetside 2's Alert metagame"
 const metaImg = `${process.env.BASE_URL}/og-image.png`

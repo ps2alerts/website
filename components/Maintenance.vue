@@ -3,7 +3,7 @@
     <div class="p-12 w-screen text-center items-center justify-items-center">
       <img
         id="splash-icon"
-        src="../assets/img/alert-icon.png"
+        src="/img/alert-icon.png"
         alt="PS2Alerts Icon"
         class="inline-block"
       />
