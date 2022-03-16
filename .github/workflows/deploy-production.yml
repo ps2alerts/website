@@ -3,7 +3,6 @@ name: Build & Deploy Production
 on:
   push:
     branches: [master]
-  workflow_dispatch
 jobs:
   build-docker-images:
     runs-on: ${{ matrix.os }}
