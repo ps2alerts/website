@@ -1,0 +1,42 @@
+---
+name: Build base image
+on:
+  schedule:
+    # Runs 6am on Mondays (see https://crontab.guru)
+    - cron: '0 6 * * 1'
+jobs:
+  build-docker-images:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [20]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          version: latest
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push base image
+        uses: docker/build-push-action@v2
+        with:
+          context: provisioning/base
+          file: provisioning/base/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: maelstromeous/applications:ps2alerts-website-base
