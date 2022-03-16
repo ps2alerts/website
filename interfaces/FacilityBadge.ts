@@ -40,8 +40,7 @@ export class FacilityBadge {
                 value = value + "\n" + facilityTypeName(this.region.facilityType);
                 break;
             case FacilityType.CONTAINMENT_SITE:
-                //Only replace first space
-                value.replace(" ", "\n");
+                value = value.replaceAll(" ", "\n");
                 break;
             case FacilityType.TRIDENT:
                 break;
@@ -54,8 +53,6 @@ export class FacilityBadge {
                 var matches_length = value.match(/ /g)?.length;
                 if(matches_length !== undefined && matches_length > 1){
                     value = value.slice(0, value.indexOf(" ", value.indexOf(" ") + 1)) + "\n" + value.slice(value.indexOf(" ", value.indexOf(" ") + 1) + 1);
-                    console.log(value);
-                    console.log(value.indexOf("\n") > 14 && value.indexOf(" ") >= 7);
                 } else if(value.length > 16){
                     value = value.replace(" ", "\n");
                 }

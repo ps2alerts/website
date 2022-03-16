@@ -53,9 +53,10 @@ const NCLink = Color.fromString("#B0FFFFCC") as Color;
 const TRLink = Color.fromString("#FFBFB2CC") as Color;
 const ASSAULTABLELink = Color.fromString("#EAE690CC") as Color;
 const ASSAULTABLELinkBg = Color.fromString("#8B7251CC") as Color;
+const NSLinkBg = Color.fromString("#49474C66") as Color;
 
 export const MAP_FACTION_COLORS = [ NS, VS, NC, TR, NS ]
 
 export const MAP_CUTOFF_COLORS = [ NS, VSCutoff, NCCutoff, TRCutoff, NS ]
 
-export const MAP_LINK_COLORS = [NSLink, VSLink, NCLink, TRLink, ASSAULTABLELink, ASSAULTABLELinkBg]
+export const MAP_LINK_COLORS = [NSLink, VSLink, NCLink, TRLink, ASSAULTABLELink, ASSAULTABLELinkBg, NSLinkBg]

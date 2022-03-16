@@ -6,16 +6,41 @@
       :percent="updateCountdownPercent"
       :update-rate="updateRate"
     />
+    <v-row>
+      <v-col cols="3" style="height: 768px" class="timeline">
+        <client-only>
+        <v-subheader dark>Alert Capture Timeline</v-subheader>
+        <v-timeline dark dense>
+          <v-timeline-item
+            right
+            v-for="(captureIndex, index) in captureIndices.slice().reverse()"
+            :key="index"
+            :color="factionColor(historyCache[historyCache.length - captureIndex - 1].newFaction)"
+            >
+            <template v-slot:opposite>{{historyCache[historyCache.length - captureIndex - 1].timestamp | dateTimeFormatShort }}</template>
+            <div>
+            <v-card
+            @click="historyIndexCallback(captureIndices.length - index)">
+              <v-card-subtitle>
+              {{ mapDraw[historyCache[historyCache.length - captureIndex - 1].facility].name }}
+              </v-card-subtitle>
+              <v-card-text>
+                Captured by [UN17]
+              </v-card-text>
+            </v-card>
+            </div>
+          </v-timeline-item>
+        </v-timeline>
+        </client-only>
+      </v-col>
+      <v-col cols="9">
     <div class="flex items-center place-content-center">
       <client-only>
-      <l-map ref="map" style="height: 768px" 
+          <l-map class="map" ref="map" style="height: 768px" 
         :zoom="zoom" 
         :center="center" 
         :minZoom="minZoom" 
         :maxZoom="maxZoom"
-        :bounds="bounds"
-        :maxBounds="maxBounds"
-        :maxBoundsViscosity="viscosity"
         :zoomSnap="zoomSnap"
         :zoomDelta="zoomDelta"
         :crs="crs">
@@ -23,13 +48,13 @@
       </l-map>
       </client-only>
     </div>
-    <div>
-      <v-subheader dark>Alert Capture Timeline</v-subheader>
-      <v-card-text>
+      </v-col>
+    </v-row>
         <v-slider 
             ref="history"
             tick-size="5"
             ticks="always"
+      :tick-labels="tickLabels"
             append-icon="mdi-update"
             prepend-icon="mdi-history"
             :max="sliderMax"
@@ -39,8 +64,6 @@
             @click:prepend="decrementSlider"
             @click:append="incrementSlider"
             ></v-slider>
-      </v-card-text>
-    </div>
   </div>
 </template>
 
@@ -65,6 +88,7 @@ import { Faction } from '~/constants/Faction';
 import { CubeHex } from '~/libraries/CubeHex';
 import { FacilityBadge } from '~/interfaces/FacilityBadge';
 import factionShortName from '~/filters/FactionShortName';
+import factionCircleEmoji from '~/filters/FactionCircleEmoji';
 // import { InstanceFactionCombatAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceFactionCombatAggregateResponseInterface'
 
 export default Vue.extend({
@@ -86,8 +110,7 @@ export default Vue.extend({
       lastUpdated: new Date(0),
       interval: undefined as undefined | number,
       zoom: 2,
-      center: [0, 0],
-      markerLatLng: [-256, 256],
+      center: [-128, 128],
       url: "https://assets.ps2alerts.com/zones/" + zoneNameFilter(this.alert.zone).toLowerCase() + "/{z}/tile_{x}_{y}.png",
       minZoom: 2,
       maxZoom: 5,
@@ -114,6 +137,7 @@ export default Vue.extend({
       currentIndex: -1,
       captureIndices: [] as number[],
       tickLabels: [] as string[],
+      oldSliderVal: 0,
       sliderVal: 0,
       sliderMax: 0,
       historyCache: [] as InstanceFacilityControlEntriesResponseInterface[],
@@ -172,10 +196,16 @@ export default Vue.extend({
       this.map.createPane("hexPane", this.map.getPane("overlayPane"));
       this.map.createPane("linkPane", this.map.getPane("overlayPane"));
       this.map.createPane("badgePane", this.map.getPane("overlayPane"));
+      this.map.on('drag', () => {
+        this.map.fitBounds(this.map.getBounds());
+      });
       this.setTimers();
     },
     color(facility_id: number): string {
       return MAP_FACTION_COLORS[this.mapDraw[facility_id].faction].toString();
+    },
+    factionColor(faction: Faction){
+      return MAP_FACTION_COLORS[faction].toString();
     },
     cutoffColor(facility_id: number): string {
       return MAP_CUTOFF_COLORS[this.mapDraw[facility_id].faction].toString();
@@ -256,22 +286,29 @@ export default Vue.extend({
       if(this.sliderVal == 0){
         return;
       }
-      this.sliderVal--;
-      this.historyCallback(this.sliderVal);
+      this.historyCallback(this.sliderVal - 1);
     },
     incrementSlider(){
       if(this.sliderVal == this.captureIndices.length){
         return;
       }
-      this.sliderVal++;
-      this.historyCallback(this.sliderVal);
+      this.historyCallback(this.sliderVal + 1);
     },
     resetLimit(): void {
       this.currentIndex = -1;
     },
+    historyIndexCallback(captureIndex: number): void {
+      if(!this.loaded){
+        return;
+      }
+      console.log(captureIndex);
+      this.oldSliderVal = captureIndex;
+      this.historyCallback(captureIndex);
+    },
     historyCallback(value: number): void {
       this.sliderVal = value;
-
+      var reverse = this.oldSliderVal > this.sliderVal;
+      this.oldSliderVal = this.sliderVal;
       if(value >= this.captureIndices.length){
         this.resetLimit();
       }
@@ -284,19 +321,21 @@ export default Vue.extend({
       var capture = this.updateTerritory(
         // Copy the history since updateTerritory reverses the provided list
         Object.assign([], this.historyCache), 
-        forceUpdate ? undefined : this.captureIndices[value], 
-        forceUpdate
+        forceUpdate ? undefined : value, 
+        forceUpdate,
+        reverse
       );
       if(capture){
         this.updateCutoffs();
       }
     },
-    updateTerritory(result: InstanceFacilityControlEntriesResponseInterface[], indexLimit: number | undefined, force: boolean = false): boolean {
+    updateTerritory(result: InstanceFacilityControlEntriesResponseInterface[], indexLimit: number | undefined, force = false, reverse = false): boolean {
       var capture = false;
       if(indexLimit){
         this.currentIndex = 0;
       }
-      result.reverse().forEach((controlEvent, index) => {
+      var lastCaptureEvent = result.find((event) => { return !event.isDefence });
+      result.reverse().forEach((controlEvent, index, eventArray) => {
 
         // If the map has already loaded and we've already seen this event, return, unless we've limited the capture history.
         // If it is limited, we rerun the alert capture history to get to the requested capture.
@@ -309,21 +348,34 @@ export default Vue.extend({
         if (controlEvent.isDefence) {
           return;
         }
-        if((this.currentIndex == -1 && indexLimit === undefined) || (indexLimit !== undefined && index < indexLimit)){
+        if((this.currentIndex == -1 && indexLimit === undefined) || (indexLimit !== undefined && index < this.captureIndices[indexLimit])){
           this.mapDraw[controlEvent.facility].faction = controlEvent.newFaction;
           capture = true;
           this.updateLinks(controlEvent.facility);
           this.mapDraw[controlEvent.facility].badge.update(this.map.getZoom());
+          if(indexLimit && (index == this.captureIndices[indexLimit - 1]) || controlEvent.timestamp == lastCaptureEvent?.timestamp){
+            var facility = (reverse && indexLimit) ? eventArray[this.captureIndices[indexLimit]].facility : controlEvent.facility;
+            var polygon = (<L.Polygon | undefined>this.polys.getLayer(this.polyStamps[facility]));
+            polygon?.getElement()?.classList.add("captured");
+            polygon?.bringToFront();
+            setTimeout(() => {
+              polygon?.getElement()?.classList.remove("captured");
+            }, 1000);
+          }
           if(indexLimit){
             this.currentIndex = index
           }
         }
         if(!controlEvent.isInitial && !this.captureIndices.includes(index)){
+          if(this.captureIndices.length == 0 && index > 0){
+            this.tickLabels.push(factionCircleEmoji(eventArray[index - 1].newFaction));
+          }
           this.captureIndices.push(index);
-          this.tickLabels.push(Object.values(factionShortName(controlEvent.newFaction)).join(""));
+          this.tickLabels.push(factionCircleEmoji(controlEvent.newFaction));
           this.sliderMax = this.captureIndices.length;
           if(this.currentIndex == -1){
             this.sliderVal = this.sliderMax;
+            this.oldSliderVal = this.sliderVal;
           }
         }
       });
@@ -369,22 +421,36 @@ export default Vue.extend({
         // Disabled, just put an NS link there since it doesn't make it seem capturable
         else if(this.mapDraw[facility_ids[0]].faction === Faction.NONE || this.mapDraw[facility_ids[1]].faction === Faction.NONE){
           link?.setStyle({
-            color: MAP_LINK_COLORS[Faction.NONE]?.toString(),
-            opacity: MAP_LINK_COLORS[Faction.NONE]?.a,
+            color: MAP_LINK_COLORS[Faction.NONE].toString(),
+            opacity: MAP_LINK_COLORS[Faction.NONE].a,
             dashArray: [],
           });
           bglink?.setStyle({
             opacity: 0.0
           });
         }
-        // Enemy factions, set capturable color, dashes, and enable bglink
-        else {
+        // Warpgate's ain't capturable
+        else if(this.mapDraw[facility_ids[0]].facilityType === FacilityType.WARPGATE || this.mapDraw[facility_ids[1]].facilityType === FacilityType.WARPGATE){
           link?.setStyle({
-            color: MAP_LINK_COLORS[4]?.toString(),
+            color: MAP_LINK_COLORS[0].toString(),
             dashArray: "5 5"
           });
           bglink?.setStyle({
-            opacity: MAP_LINK_COLORS[5]?.a,
+            color: MAP_LINK_COLORS[6].toString(),
+            opacity: MAP_LINK_COLORS[6].a,
+            dashArray: "5 5",
+            dashOffset: "5"
+          });
+        }
+        // Enemy factions, set capturable color, dashes, and enable bglink
+        else {
+          link?.setStyle({
+            color: MAP_LINK_COLORS[4].toString(),
+            dashArray: "5 5"
+          });
+          bglink?.setStyle({
+            color: MAP_LINK_COLORS[5].toString(),
+            opacity: MAP_LINK_COLORS[5].a,
             dashArray: "5 5",
             dashOffset: "5"
           });
@@ -528,3 +594,58 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style lang="scss" scoped>
+ ::v-deep .v-slider__tick-label {
+    font-size: x-small;
+    left: calc(0% - 4.5px);
+    width: 9px;
+    height: 9px;
+  }
+
+  .map {
+    background: #010707;
+  }
+
+  .timeline {
+    --scrollbar-foreground: #303a40;
+    --scrollbar-background: rgba(55, 71, 79, 0.8);
+    --radius: 10px;
+    --size: 10px;
+    overflow-y: scroll;
+    scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
+    scrollbar-width: thin;
+  }
+  .timeline::-webkit-scrollbar {
+    background: var(--scrollbar-background);
+    border-radius: var(--radius);
+    width: var(--size);
+    height: var(--size);
+  }
+  .timeline::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-foreground); 
+  }
+
+  :root {
+    --timeline-opposite-item-width: 64px;
+    --timeline-line-width: 16px;
+  }
+
+  ::v-deep .v-timeline--dense .v-timeline-item__opposite {
+    display: inline-block;
+  }
+
+  ::v-deep .v-timeline-item__opposite {
+    flex: none;
+    min-width: var(--timeline-opposite-item-width);
+  }
+
+  /* line: divider in the middle is 96px wide by default */
+  ::v-deep .v-application--is-ltr .v-timeline--dense:not(.v-timeline--reverse):before {
+    left: calc(
+      var(--timeline-opposite-item-width) + 
+      (96px - var(--timeline-line-width)) / 2
+    );
+    width: var(--timeline-line-width);
+  }
+</style>
