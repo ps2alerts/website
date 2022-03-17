@@ -14,6 +14,8 @@ const FONT_OPTIONS = {
     leading: 1.1
 };
 
+const FACILITY_ICON_PATH = require("~/assets/img/facility-icon.svg");
+
 export class FacilityBadge {
     indicatorStamp: number;
     textStamp: number;
@@ -152,11 +154,11 @@ export class FacilityBadge {
             return this.svg.node;
         }
         
-        this.svg.use("facility-bg", require("~/assets/img/facility-icon.svg"))
+        this.svg.use("facility-bg", FACILITY_ICON_PATH)
             .addClass(this.region.id.toString())
             .fill(MAP_FACTION_COLORS[this.region.faction].toString());
 
-        this.svg.use(FacilityBadge.SVGDefinitionId(this.type), require("~/assets/img/facility-icon.svg"));
+        this.svg.use(FacilityBadge.SVGDefinitionId(this.type), FACILITY_ICON_PATH);
         this.svgBuilt = true;
         
         return this.svg.node;
@@ -172,8 +174,8 @@ export class FacilityBadge {
     getIcon(faction: Faction): SVGSVGElement {
         var toReturn = SVG();
         toReturn.viewbox(0, 0, 100, 100);
-        toReturn.use("facility-bg", require("~/assets/img/facility-icon.svg")).fill(MAP_FACTION_COLORS[faction].toString());
-        toReturn.use(FacilityBadge.SVGDefinitionId(this.type), require("~/assets/img/facility-icon.svg"));
+        toReturn.use("facility-bg", FACILITY_ICON_PATH).fill(MAP_FACTION_COLORS[faction].toString());
+        toReturn.use(FacilityBadge.SVGDefinitionId(this.type), FACILITY_ICON_PATH);
         toReturn.width(38);
         toReturn.height(38);
         return toReturn.node;
