@@ -5,6 +5,7 @@ import "@svgdotjs/svg.filter.js";
 import { Point } from "./mapping/MapDrawingInterface";
 import { MapRegion } from "~/libraries/MapRegion";
 import facilityTypeName from "~/filters/FacilityTypeName";
+import { Faction } from "~/constants/Faction";
 
 const FONT_OPTIONS = {
     family: "sans-serif",
@@ -15,23 +16,30 @@ const FONT_OPTIONS = {
 
 export class FacilityBadge {
     indicatorStamp: number;
+    textStamp: number;
     type: FacilityType;
     region: MapRegion;
     private svg: Svg;
     private svgBuilt: boolean;
+    private text: Svg;
+    private textBuilt: boolean;
     private hovered: boolean;
 
-    constructor(region: MapRegion, indictorStamp: number){
+    constructor(region: MapRegion, indictorStamp: number, textStamp: number){
         this.indicatorStamp = indictorStamp;
+        this.textStamp = textStamp;
         this.type = region.facilityType;
         this.svg = SVG();
         this.svg.viewbox(0, 0, 100, 100);
+        this.text = SVG();
+        this.text.viewbox(0, 0, 100, 100);
         this.svgBuilt = false;
+        this.textBuilt = false;
         this.region = region;
         this.hovered = false;
     }
 
-    private buildText(value: string){
+    private buildText(value: string): Svg {
         //var defs = this.svg.defs();
         switch (this.region.facilityType){
             case FacilityType.AMP_STATION:
@@ -61,13 +69,14 @@ export class FacilityBadge {
                 }
                 break;
         }
-        var text = this.svg.text((add) => {
+        this.text.viewbox(0, 0, 100, 100);
+        var text = this.text.text((add) => {
             value.split("\n").forEach((substr) => {
                 add.tspan(substr);
             });
         });
         
-        var text2 = this.svg.text((add) => {
+        var text2 = this.text.text((add) => {
             value.split("\n").forEach((substr) => {
                 add.tspan(substr);
             });
@@ -99,29 +108,33 @@ export class FacilityBadge {
             }
             tspan.cx(0);
         })
-        this.svg.viewbox(text.bbox().x, -text.bbox().h, text.bbox().w + 20, 100 + text.bbox().h * 2);
-        this.svg.viewbox();
-        this.svg.get(0).move(this.svg.viewbox().cx - 50, this.svg.viewbox().cy - 50);
-        this.svg.get(1).move(this.svg.viewbox().cx - 50, this.svg.viewbox().cy - 50);
+        this.text.viewbox(text.bbox().x, -text.bbox().h, text.bbox().w + 20, 100 + text.bbox().h * 2);
+        //this.svg.get(0).move(this.svg.viewbox().cx - 50, this.svg.viewbox().cy - 50);
+        //this.svg.get(1).move(this.svg.viewbox().cx - 50, this.svg.viewbox().cy - 50);
         
-        text.move(this.svg.viewbox().cx - text.bbox().w / 2, this.svg.viewbox().cy + 50);
+        text.move(this.text.viewbox().cx - text.bbox().w / 2, this.text.viewbox().cy + 50);
         
-        text2.move(this.svg.viewbox().cx - text.bbox().w / 2, this.svg.viewbox().cy + 50);
+        text2.move(this.text.viewbox().cx - text.bbox().w / 2, this.text.viewbox().cy + 50);
         text2.fill("white");
+        this.textBuilt = true;
+        return this.text;
     }
 
     update(zoom: number): void {
         if(!this.svgBuilt){
             this.getSVG();
         }
+        if(!this.textBuilt){
+            this.getText();
+        }
         var newColor = MAP_FACTION_COLORS[this.region.faction].toString();
         this.svg.get(0).fill(newColor);
         if(this.visibleAtZoom(zoom)){
-            this.svg.get(2).stroke({color: newColor, opacity: 1}).fill({color: newColor, opacity: 1});
-            this.svg.get(3).fill({color: "white", opacity: 1});
+            this.text.get(0).stroke({color: newColor, opacity: 1}).fill({color: newColor, opacity: 1});
+            this.text.get(1).fill({color: "white", opacity: 1});
         } else {
-            this.svg.get(2).stroke({opacity: 0}).fill({opacity: 0});
-            this.svg.get(3).fill({opacity: 0});
+            this.text.get(0).stroke({opacity: 0}).fill({opacity: 0});
+            this.text.get(1).fill({opacity: 0});
         }
     }
 
@@ -131,7 +144,7 @@ export class FacilityBadge {
     }
 
     ready(): boolean {
-        return this.svgBuilt;
+        return this.svgBuilt && this.textBuilt;
     }
 
     getSVG(): SVGSVGElement {
@@ -145,8 +158,25 @@ export class FacilityBadge {
 
         this.svg.use(FacilityBadge.SVGDefinitionId(this.type), require("~/assets/img/facility-icon.svg"));
         this.svgBuilt = true;
-        this.buildText(this.region.name);
+        
         return this.svg.node;
+    }
+
+    getText(): SVGSVGElement {
+        if(this.textBuilt){
+            return this.text.node;
+        }
+        return this.buildText(this.region.name).node;
+    }
+
+    getIcon(faction: Faction): SVGSVGElement {
+        var toReturn = SVG();
+        toReturn.viewbox(0, 0, 100, 100);
+        toReturn.use("facility-bg", require("~/assets/img/facility-icon.svg")).fill(MAP_FACTION_COLORS[faction].toString());
+        toReturn.use(FacilityBadge.SVGDefinitionId(this.type), require("~/assets/img/facility-icon.svg"));
+        toReturn.width(38);
+        toReturn.height(38);
+        return toReturn.node;
     }
 
     getSize(): Point {
@@ -155,6 +185,14 @@ export class FacilityBadge {
         }
         var rad = FacilityBadge.radius(this.type);
         return new Point(rad * 2 * this.svg.viewbox().width / 100, rad * 2 * this.svg.viewbox().height / 100);
+    }
+
+    getTextSize(): Point {
+        if(!this.textBuilt){
+            this.getText();
+        }
+        var rad = FacilityBadge.radius(this.type);
+        return new Point(rad * 2 * this.text.viewbox().width / 100, rad * 2 * this.text.viewbox().height / 100);
     }
 
     visibleAtZoom(zoom: number){

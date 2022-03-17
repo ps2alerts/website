@@ -39,9 +39,9 @@ export class Color {
 }
 
 const NS = Color.fromString("#71809666") as Color;
-const VS = Color.fromString("#440E6266") as Color;
-const NC = Color.fromString("#004B8066") as Color;
-const TR = Color.fromString("#9E0B0F66") as Color;
+const VS = Color.fromString("#6E18A366") as Color;
+const NC = Color.fromString("#0064AA66") as Color;
+const TR = Color.fromString("#BC121266") as Color;
 
 const VSCutoff = Color.fromString("#2E153D66") as Color;
 const NCCutoff = Color.fromString("#0F273F66") as Color;

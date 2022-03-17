@@ -6,17 +6,36 @@
       :percent="updateCountdownPercent"
       :update-rate="updateRate"
     />
-    <v-row>
-      <v-col cols="3" style="height: 768px" class="timeline">
+    <v-row style="height: 870px; flex-direction:row;" class="d-flex">
+      <v-col cols="12" lg="9">
+        <div class="flex items-center place-content-center">
+          <client-only>
+          <l-map class="map" ref="map" style="height: 768px" 
+            :zoom="zoom" 
+            :center="center" 
+            :minZoom="minZoom" 
+            :maxZoom="maxZoom"
+            :zoomSnap="zoomSnap"
+            :zoomDelta="zoomDelta"
+            :crs="crs">
+            <l-tile-layer :url="url">
+            </l-tile-layer>
+          </l-map>
+          </client-only>
+        </div>
+      </v-col>
+      <v-col lg="3" class="timeline">
         <client-only>
-        <v-subheader dark>Alert Capture Timeline</v-subheader>
+        <v-subheader dark>Alert Capture Timeline (Base, Capturing Outfit, Overall Territory Control)</v-subheader>
         <v-timeline dark dense>
           <v-timeline-item
             right
             v-for="(captureIndex, index) in captureIndices.slice().reverse()"
             :key="index"
             :color="factionColor(historyCache[historyCache.length - captureIndex - 1].newFaction)"
+            fill-dot
             >
+            <template v-slot:icon><div v-html="facilityIconSvg(captureIndex)"></div></template>
             <template v-slot:opposite>{{historyCache[historyCache.length - captureIndex - 1].timestamp | dateTimeFormatShort }}</template>
             <div>
             <v-card
@@ -24,54 +43,51 @@
               <v-card-subtitle>
               {{ mapDraw[historyCache[historyCache.length - captureIndex - 1].facility].name }}
               </v-card-subtitle>
-              <v-card-text>
-                Captured by [UN17]
+              <v-card-text class="captureOutfit">
+                Captured by {{capturingOutfitTag(captureIndex)}}<br/>from {{controlData(captureIndex).loser}}
               </v-card-text>
+              <div>
+                <FactionSegmentBar
+                  v-if="controlData(captureIndex).mapControl"
+                    :vs="mapControlData(captureIndex).vs"
+                    :nc="mapControlData(captureIndex).nc"
+                    :tr="mapControlData(captureIndex).tr"
+                    :other="mapControlData(captureIndex).cutoff"
+                    :out-of-play="mapControlData(captureIndex).outOfPlay"
+                    dropoff-percent="15"
+                ></FactionSegmentBar>
+                <span v-if="!controlData(captureIndex).mapControl">Awaiting data...</span>
+              </div>
             </v-card>
             </div>
           </v-timeline-item>
         </v-timeline>
         </client-only>
       </v-col>
-      <v-col cols="9">
-    <div class="flex items-center place-content-center">
-      <client-only>
-          <l-map class="map" ref="map" style="height: 768px" 
-        :zoom="zoom" 
-        :center="center" 
-        :minZoom="minZoom" 
-        :maxZoom="maxZoom"
-        :zoomSnap="zoomSnap"
-        :zoomDelta="zoomDelta"
-        :crs="crs">
-        <l-tile-layer :url="url"></l-tile-layer>
-      </l-map>
-      </client-only>
-    </div>
+      <v-col cols="12">
+      <v-slider 
+        ref="history"
+        tick-size="5"
+        ticks="always"
+        :tick-labels="tickLabels"
+        append-icon="mdi-update"
+        prepend-icon="mdi-history"
+        :max="sliderMax"
+        v-model="sliderVal"
+        dark
+        @change="historyCallback"
+        @click:prepend="decrementSlider"
+        @click:append="incrementSlider"
+        ></v-slider>
       </v-col>
     </v-row>
-        <v-slider 
-            ref="history"
-            tick-size="5"
-            ticks="always"
-      :tick-labels="tickLabels"
-            append-icon="mdi-update"
-            prepend-icon="mdi-history"
-            :max="sliderMax"
-            v-model="sliderVal"
-            dark
-            @change="historyCallback"
-            @click:prepend="decrementSlider"
-            @click:append="incrementSlider"
-            ></v-slider>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { VSlider } from 'vuetify/lib/components'
-//import AlertMapHistoryControl from '@/components/alert/AlertMapHistoryControl.vue';
-import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
+import Vue from 'vue';
+import { LMap } from 'vue2-leaflet';
+import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface';
 import { MapDrawingInterface, worldToMap, LatLng, mapToWorld,  } from '~/interfaces/mapping/MapDrawingInterface';
 import { MAP_FACTION_COLORS, MAP_LINK_COLORS, MAP_CUTOFF_COLORS } from '@/constants/FactionMapColors';
 import { Zone, ZoneHexSize } from '@/constants/Zone';
@@ -82,14 +98,14 @@ import { InstanceFacilityControlEntriesResponseInterface } from '~/interfaces/in
 import { Endpoints } from '~/constants/Endpoints';
 import zoneNameFilter from '~/filters/ZoneName';
 import { FacilityType } from '~/constants/FacilityType';
-import factionName from '~/filters/FactionName';
 import { MapRegion } from '~/libraries/MapRegion';
 import { Faction } from '~/constants/Faction';
 import { CubeHex } from '~/libraries/CubeHex';
 import { FacilityBadge } from '~/interfaces/FacilityBadge';
 import factionShortName from '~/filters/FactionShortName';
 import factionCircleEmoji from '~/filters/FactionCircleEmoji';
-// import { InstanceFactionCombatAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceFactionCombatAggregateResponseInterface'
+import { InstanceOutfitAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface';
+import { MapControlInterface } from '~/interfaces/instance-entries/MapControlInterface';
 
 export default Vue.extend({
   name: 'AlertMap',
@@ -118,7 +134,7 @@ export default Vue.extend({
       zoomDelta: 1,
       bounds: [[0, 0], [-250, 250]],
       maxBounds: [[0, 0], [-250, 250]],
-      viscosity: 1.0,
+      viscosity: 0.1,
       noWrap: true,
       mapDraw: {} as MapDrawingInterface,
       map: {} as L.Map,
@@ -134,6 +150,9 @@ export default Vue.extend({
       badges: this.$L.featureGroup([], {
         pane: "badgePane"
       }),
+      textBadges: this.$L.featureGroup([], {
+        pane: "badgeTextPane"
+      }),
       currentIndex: -1,
       captureIndices: [] as number[],
       tickLabels: [] as string[],
@@ -141,6 +160,7 @@ export default Vue.extend({
       sliderVal: 0,
       sliderMax: 0,
       historyCache: [] as InstanceFacilityControlEntriesResponseInterface[],
+      outfitData: new Map<string, InstanceOutfitAggregateResponseInterface>(),
       // data: {} as InstanceFactionCombatAggregateResponseInterface,
     }
   },
@@ -192,10 +212,11 @@ export default Vue.extend({
       }
     },
     init(): void {
-      this.map = this.$refs["map"]?.mapObject as L.Map;
+      this.map = (<LMap>this.$refs["map"]).mapObject as L.Map;
       this.map.createPane("hexPane", this.map.getPane("overlayPane"));
       this.map.createPane("linkPane", this.map.getPane("overlayPane"));
       this.map.createPane("badgePane", this.map.getPane("overlayPane"));
+      this.map.createPane("badgeTextPane", this.map.getPane("overlayPane"));
       this.map.on('drag', () => {
         this.map.fitBounds(this.map.getBounds());
       });
@@ -213,6 +234,42 @@ export default Vue.extend({
     alpha(facility_id: number): number {
       return MAP_FACTION_COLORS[this.mapDraw[facility_id].faction].a;
     },
+    facilityIconSvg(captureIndex: number): string {
+      var reverseIndex = this.historyCache.length - captureIndex - 1;
+      var controlEvent = this.historyCache[reverseIndex];
+      var faction = controlEvent.newFaction;
+      var badge = this.mapDraw[controlEvent.facility].badge;
+      return badge.getIcon(faction).outerHTML;
+    },
+    capturingOutfitTag(captureIndex: number): string {
+      var outfitId = this.historyCache[this.historyCache.length - captureIndex - 1].outfitCaptured;
+      if(outfitId){
+        var outfitAggregate = this.outfitData.get(outfitId);
+        if(outfitAggregate && outfitAggregate.outfit.tag){
+          return "[" + outfitAggregate.outfit.tag + "]";
+        } else if(outfitAggregate) {
+          return outfitAggregate.outfit.name
+        }
+      }
+      return factionShortName(this.historyCache[this.historyCache.length - captureIndex - 1].newFaction);
+    },
+    controlData(captureIndex: number): InstanceFacilityControlEntriesResponseInterface & { loser: string } {
+      var loser = factionShortName(this.historyCache[this.historyCache.length - captureIndex - 1].oldFaction)
+      return { ...this.historyCache[this.historyCache.length - captureIndex - 1], loser: loser };
+    },
+    mapControlData(captureIndex: number): MapControlInterface {
+      var mapControl = this.historyCache[this.historyCache.length - captureIndex - 1].mapControl
+      if(!mapControl){
+        return {
+          vs: 33,
+          nc: 33,
+          tr: 33,
+          cutoff: 0,
+          outOfPlay: 0,
+        }
+      }
+      return mapControl;
+    },
     badge(region: MapRegion): FacilityBadge {
       // If the facility type is not given or the badge is already built, just return it
       if(region.badge.ready()){
@@ -224,16 +281,28 @@ export default Vue.extend({
         bubblingMouseEvents: true,
         riseOnHover: true
       });
+      var indicatorText = this.$L.marker(worldToMap(region.badgeLocation.asArray()), {
+        pane: "badgeTextPane",
+        bubblingMouseEvents: true,
+        riseOnHover: true
+      });
 
-      var badge = new FacilityBadge(region, this.$L.stamp(indicator));
+      var badge = new FacilityBadge(region, this.$L.stamp(indicator), this.$L.stamp(indicatorText));
       var icon = this.$L.divIcon({
-        html: badge.getSVG(),
+        html: badge.getSVG() as unknown as HTMLElement,
         className: "facility-badge",
         iconSize: [badge.getSize().x, badge.getSize().z],
         pane: "badgePane"
       });
+      var text = this.$L.divIcon({
+        html: badge.getText() as unknown as HTMLElement,
+        className: "facility-badge",
+        iconSize: [badge.getTextSize().x, badge.getTextSize().z],
+        pane: "badgeTextPane"
+      });
 
       indicator.setIcon(icon).addTo(this.badges);
+      indicatorText.setIcon(text).addTo(this.textBadges);
       return badge;
     },
     outline(facility_id: number): LatLng[] {
@@ -301,7 +370,6 @@ export default Vue.extend({
       if(!this.loaded){
         return;
       }
-      console.log(captureIndex);
       this.oldSliderVal = captureIndex;
       this.historyCallback(captureIndex);
     },
@@ -352,7 +420,8 @@ export default Vue.extend({
           this.mapDraw[controlEvent.facility].faction = controlEvent.newFaction;
           capture = true;
           this.updateLinks(controlEvent.facility);
-          this.mapDraw[controlEvent.facility].badge.update(this.map.getZoom());
+          var badge = this.mapDraw[controlEvent.facility].badge;
+          badge.update(this.map.getZoom());
           if(indexLimit && (index == this.captureIndices[indexLimit - 1]) || controlEvent.timestamp == lastCaptureEvent?.timestamp){
             var facility = (reverse && indexLimit) ? eventArray[this.captureIndices[indexLimit]].facility : controlEvent.facility;
             var polygon = (<L.Polygon | undefined>this.polys.getLayer(this.polyStamps[facility]));
@@ -389,6 +458,7 @@ export default Vue.extend({
             fillColor: region.isCutoff() ? this.cutoffColor(region.id) : this.color(region.id),
             fillOpacity: this.alpha(region.id) + (region.isCutoff() ? 0.4 : 0),
         });
+        
       });
     },
     updateLinks(facility: number){
@@ -461,6 +531,10 @@ export default Vue.extend({
         if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
           return
         }
+
+        this.outfitData = await this.pullOutfitData(
+          this.alert.instanceId ?? "12345"
+        )
       
         console.log('AlertMap.pull', this.alert.instanceId)
         await new ApiRequest()
@@ -489,16 +563,31 @@ export default Vue.extend({
           });
         
     },
+    async pullOutfitData(
+      instanceId: string
+    ): Promise<Map<string, InstanceOutfitAggregateResponseInterface>> {
+      const newMap = new Map<string, InstanceOutfitAggregateResponseInterface>()
+
+      console.log('AlertMap.pullOutfitData', instanceId)
+
+      await new ApiRequest()
+        .get<InstanceOutfitAggregateResponseInterface[]>(
+          Endpoints.AGGREGATES_INSTANCE_OUTFIT.replace('{instance}', instanceId)
+        )
+        .then((outfitAggregate) => {
+          outfitAggregate.forEach(
+            (outfitData: InstanceOutfitAggregateResponseInterface) => {
+              newMap.set(outfitData.outfit.id, outfitData)
+            }
+          )
+        })
+
+      return newMap
+    },
     async loadRegions(): Promise<void> {
       if (Object.keys(this.mapDraw).length !== 0) {
         return;
       }
-
-      this.map.on("click", (e: L.LeafletMouseEvent) => {
-        var worldcoord = mapToWorld([e.latlng.lat, e.latlng.lng]);
-        console.log(worldcoord);
-        console.log(CubeHex.fromWorld(worldcoord.x, worldcoord.z, ZoneHexSize(this.alert.zone)));
-      });
 
       const regions = await new MapRegionDataRequest()
         .pull(this.alert.zone ? this.alert.zone : Zone.INDAR);
@@ -515,6 +604,7 @@ export default Vue.extend({
           lineCap: 'butt',
           className: "map-region",
           pane: "hexPane",
+          noClip: true,
         }).on("mouseover", (e: L.LeafletMouseEvent) => {
           e.target.setStyle({
             color: "#FFFFFF"
@@ -522,6 +612,7 @@ export default Vue.extend({
           if(region.badge.ready()){
             region.badge.setHovered(true, this.map.getZoom());
             (<L.Marker | undefined>this.badges.getLayer(region.badge.indicatorStamp))?.fire("mouseover", e, false);
+            (<L.Marker | undefined>this.textBadges.getLayer(region.badge.textStamp))?.fire("mouseover", e, false);
           }
           e.target.bringToFront();
         }).on("mouseout", (e: L.LeafletMouseEvent) => {
@@ -531,6 +622,7 @@ export default Vue.extend({
           if(region.badge.ready()){
             region.badge.setHovered(false, this.map.getZoom());
             (<L.Marker | undefined>this.badges.getLayer(region.badge.indicatorStamp))?.fire("mouseout", e, false);
+            (<L.Marker | undefined>this.textBadges.getLayer(region.badge.textStamp))?.fire("mouseout", e, false);
           }
         });
         //polygon.bindTooltip(region.name);
@@ -580,16 +672,19 @@ export default Vue.extend({
 
       Object.values(this.mapDraw).forEach((region: MapRegion) => {
         var badge = this.badges.getLayer(region.badge.indicatorStamp);
+        var text = this.textBadges.getLayer(region.badge.textStamp);
         var polygon = this.polys.getLayer(this.polyStamps[region.id]);
-        if(badge === undefined || polygon === undefined){
+        if(badge === undefined || polygon === undefined || text === undefined){
           return;
         }
         badge.addEventParent(polygon);
+        text.addEventParent(badge);
       });
     
       this.polys.addTo(this.map);
       this.links.addTo(this.map);
       this.badges.addTo(this.map);
+      this.textBadges.addTo(this.map);
     },
   },
 })
@@ -615,12 +710,19 @@ export default Vue.extend({
     overflow-y: scroll;
     scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
     scrollbar-width: thin;
+    height: 0px;
+    min-height: 90%;
   }
   .timeline::-webkit-scrollbar {
     background: var(--scrollbar-background);
     border-radius: var(--radius);
     width: var(--size);
     height: var(--size);
+  }
+  @media screen and (max-width: 1263px){
+    .timeline {
+      display: none;
+    }
   }
   .timeline::-webkit-scrollbar-thumb {
     background: var(--scrollbar-foreground); 
@@ -647,5 +749,10 @@ export default Vue.extend({
       (96px - var(--timeline-line-width)) / 2
     );
     width: var(--timeline-line-width);
+  }
+  @media screen and (max-width: 1550px){
+    ::v-deep .v-timeline--dense .v-timeline-item__opposite {
+      display: none;
+    }
   }
 </style>
