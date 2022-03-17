@@ -12,16 +12,16 @@
       <p v-html="motto" />
       <p class="text-sm text-gray-400">
         {{ version }}
-        <a
+        <NuxtLink
           v-if="showVersionChange"
-          href="/change-log"
+          to="/change-log"
           @click="updateVersionSeen"
         >
           <span
             class="bg-green-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
             >New changes!</span
           >
-        </a>
+        </NuxtLink>
       </p>
     </div>
   </header>
