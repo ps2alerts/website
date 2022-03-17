@@ -1,6 +1,6 @@
 {
   "name": "ps2alerts",
-  "version": "1.0.0",
+  "version": "4.0.3",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -13,10 +13,7 @@
     "lintfix": "prettier --write --list-different . && yarn lint:js --fix"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.34",
-    "@fortawesome/free-brands-svg-icons": "^5.15.2",
-    "@fortawesome/free-solid-svg-icons": "^5.15.2",
-    "@fortawesome/vue-fontawesome": "^2.0.2",
+    "@fortawesome/fontawesome-svg-core": "^6.1.0",
     "@nuxt/content": "^1.15.1",
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/google-gtag": "^1.0.4",
@@ -25,7 +22,8 @@
     "@svgdotjs/svg.js": "^3.1.2",
     "@tailwindcss/typography": "^0.2.0",
     "@tailwindcss/ui": "^0.7.2",
-    "chart.js": "2.9.3",
+    "autoprefixer": "^10.4.4",
+    "chart.js": "2.9.4",
     "chartjs-plugin-annotation": "^0.5.7",
     "core-js": "^3.19.3",
     "leaflet": "^1.7.1",
@@ -52,10 +50,14 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.16.3",
+    "@fortawesome/free-brands-svg-icons": "^6.1.0",
+    "@fortawesome/free-solid-svg-icons": "^6.1.0",
+    "@fortawesome/vue-fontawesome": "^2.0.6",
     "@nuxt/types": "^2.15.8",
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/eslint-config-typescript": "^8.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
+    "@nuxtjs/fontawesome": "^1.1.2",
     "@nuxtjs/google-analytics": "^2.4.0",
     "@nuxtjs/style-resources": "^1.2.1",
     "@nuxtjs/vuetify": "^1.11.3",

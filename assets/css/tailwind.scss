@@ -126,7 +126,7 @@
     }
   }
   .bg-nso {
-    @apply bg-cool-gray-500;
+    @apply bg-gray-500;
     transition: background-color 0.25s ease-out;
   }
   .bg-indar {
@@ -158,7 +158,7 @@
 /* CUSTOM OVERRIDES */
   html {
     @apply text-white;
-    background-image: url('../img/bg-tile.jpg');
+    background-image: url('../../static/img/bg-tile.jpg');
     background-repeat: repeat;
     margin: 0;
   }
@@ -259,6 +259,10 @@
 
   .nuxt-link-exact-active {
     @apply bg-red-600;
+
+    &.bg-tint {
+      @apply bg-tint-light;
+    }
   }
 
   .btn-alt {
@@ -355,6 +359,11 @@
   .editorial .text-title,
   .editorial .text-subtitle {
     @apply content-spacing;
+    margin-top: 1rem;
+  }
+
+  a.hyperlink {
+    @apply text-red-700 underline;
   }
 
   /* Components */
@@ -409,11 +418,11 @@
     }
 
     &.enhancement {
-      @apply bg-blue-800;
+      @apply bg-blue-500;
     }
 
     &.announcement {
-      @apply bg-orange-500;
+      @apply bg-red-600;
     }
 
     &.fix {
@@ -506,6 +515,50 @@
       .v-data-table-header,
       .v-data-footer {
         background-color: rgba(48,58,64,1) !important;
+      }
+    }
+
+    .v-expansion-panel {
+      background-color: #38444A !important;
+      margin-bottom: 0.75rem !important;
+
+      .v-expansion-panel-header {
+        transition: background-color 0.3s ease-out;
+
+      }
+      .v-expansion-panel-header--active {
+        background-color: lighten(#38444A, 10) !important;
+      }
+    }
+  }
+
+  nav {
+    .theme--dark {
+      &.v-tabs > .v-tabs-bar {
+        background-color: #9b2c2c !important;
+      }
+
+      .v-tab--active {
+        background-color: lighten(#9b2c2c, 10) !important
+      }
+    }
+
+    a {
+      margin-bottom: 0 !important;
+
+      &.nuxt-link-exact-active {
+        background-color: transparent !important;
+      }
+    }
+  }
+
+  #subTabs {
+    .theme--dark {
+      &.v-tabs > .v-tabs-bar {
+        background-color: #38444A !important;
+      }
+      .v-tab--active {
+        background-color: inherit !important; // Aka do nothing
       }
     }
   }

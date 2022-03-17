@@ -1,23 +1,18 @@
 module.exports = {
   mode: 'jit',
-  purge: {
-    enabled: true,
-    content: [
-      'constants/**/*.ts',
-      'components/**/*.vue',
-      'layouts/**/*.vue',
-      'pages/**/*.vue',
-      'filters/**/*.js',
-      'nuxt.config.js',
-      // TypeScript
-      'filters/**/*.ts',
-      'nuxt.config.ts',
-    ],
-  },
+  content: [
+    'components/**/*.vue',
+    'filters/**/*.js',
+    'layouts/**/*.vue',
+    'pages/**/*.vue',
+    'nuxt.config.js',
+    // TypeScript
+    'constants/**/*.ts',
+    'filters/**/*.ts',
+  ],
+  safelist: ['.nuxt-link-exact-active'],
   prefix: '',
   important: false,
   separator: ':',
   theme: {},
-  corePlugins: {},
-  plugins: [require('@tailwindcss/typography'), require('@tailwindcss/ui')],
 }

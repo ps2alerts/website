@@ -15,12 +15,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set current date as env variable
         run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
 
       - name: Set Short SHA variable
-        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-7`" >> $GITHUB_ENV
+
+      - name: Get Latest tag
+        id: latesttag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 'UNKNOWN' # Optional fallback tag to use when no tag can be found
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -36,15 +44,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      #      - name: Build and push base image
-      #        uses: docker/build-push-action@v2
-      #        with:
-      #          context: provisioning/base
-      #          file: provisioning/base/Dockerfile
-      #          platforms: linux/amd64
-      #          push: true
-      #          tags: maelstromeous/applications:ps2alerts-website-base
-
       - name: Build and push production image
         uses: docker/build-push-action@v2
         with:
@@ -55,6 +54,7 @@ jobs:
           build-args: |
             BUILD_SHA=${{ env.SHORT_SHA }}
             BUILT=${{ env.NOW }}
+            VERSION=${{ steps.latesttag.outputs.tag }}
 
   deploy-to-k8s:
     needs: build-docker-images
@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@v3
 
       # Inject the templates with the correct variables. {{ version }} refers to the Git SHA and is what changes the container version.
-      - name: Update the K8s applicaiton resource file
+      - name: Update the K8s application resource file
         run: |
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
           -e 's|{{ version }}|${{ github.sha }}|' \
@@ -79,12 +79,6 @@ jobs:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         with:
           args: apply -f provisioning/k8s/application.yml
-
-      #      # Pass base64 encoded secrets to the environment to be used in the next step
-      #      - name: Base64 encode secrets
-      #        run: |
-      #          export AWS_ACCESS_KEY_ID=$(echo ${{ secrets.AWS_ACCESS_KEY_ID }} | base64) && echo "::add-mask::${AWS_ACCESS_KEY_ID}" && echo AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID >> $GITHUB_ENV \
-      #          export AWS_SECRET_ACCESS_KEY=$(echo ${{ secrets.AWS_SECRET_ACCESS_KEY }} | base64) && echo "::add-mask::${AWS_SECRET_ACCESS_KEY}" && echo AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY >> $GITHUB_ENV \
 
       # Inject the application template with variables
       - name: Update the K8s environment resource file

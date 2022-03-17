@@ -4,13 +4,25 @@
       <img
         class="ps2alerts-logo mr-2 w-16"
         alt="PS2Alerts Logo"
-        src="../assets/img/alert-icon.png"
+        src="/img/alert-icon.png"
       />
       <h1 class="font-semibold text-4xl">PS2Alerts</h1>
     </div>
     <div class="w-auto block justify-center text-center">
       <p v-html="motto" />
-      <p class="text-sm text-gray-400">{{ version }}</p>
+      <p class="text-sm text-gray-400">
+        {{ version }}
+        <NuxtLink
+          v-if="showVersionChange"
+          to="/change-log"
+          @click="updateVersionSeen"
+        >
+          <span
+            class="bg-green-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >New changes!</span
+          >
+        </NuxtLink>
+      </p>
     </div>
   </header>
 </template>
@@ -49,11 +61,42 @@ export default Vue.extend({
         'An salty OS a day keeps the doctor away',
       ],
       version: this.$config.version,
+      lastVersionViewed: null,
+      showVersionChange: false,
     }
+  },
+  watch: {
+    lastVersionViewed() {
+      if (this.lastVersionViewed === this.version) {
+        this.showVersionChange = false
+      }
+    },
   },
   created() {
     const rand = Math.floor(Math.random() * this.mottos.length)
     this.motto = this.mottos[rand]
+  },
+  mounted() {
+    if (!localStorage.lastVersionSeen) {
+      localStorage.lastVersionSeen = null
+    }
+
+    const lastVersionSeen = localStorage.lastVersionSeen
+
+    if (lastVersionSeen !== this.version) {
+      this.showVersionChange = true
+    }
+
+    window.addEventListener('lastVersionSeenUpdated', (event) => {
+      console.log('Updating header with lastVersionSeenUpdated')
+      // @ts-ignore
+      this.lastVersionViewed = event.detail.version
+    })
+  },
+  methods: {
+    updateVersionSeen() {
+      localStorage.lastVersionSeen = this.version
+    },
   },
 })
 </script>

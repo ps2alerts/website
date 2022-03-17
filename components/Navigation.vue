@@ -1,49 +1,37 @@
 <template>
-  <nav class="pb-2 pt-4 mb-2 text-center lg:border-b-2 border-red-700">
-    <NuxtLink to="/" class="btn mb-2">
-      <font-awesome-icon :icon="['fas', 'chart-area']" /> Stats
-    </NuxtLink>
-
-    <NuxtLink to="/alert-history" class="btn mb-2">
-      <font-awesome-icon :icon="['fas', 'poll-h']" /> Alert History
-    </NuxtLink>
-
-    <NuxtLink to="/change-log" class="btn mb-2">
-      <font-awesome-icon :icon="['fas', 'tasks']" /> Change Log
-    </NuxtLink>
-
-    <div>
-      <a
-        href="https://www.patreon.com/PS2Alerts"
-        class="btn btn-sm btn-alt mb-2"
-        target="_blank"
-        style="box-shadow: 0 0 5px #ccc"
+  <div class="mb-4">
+    <nav>
+      <v-tabs
+        v-model="activeTab"
+        centered
+        dark
+        grow
+        optional
+        height="48"
+        show-arrows
+        mobile-breakpoint="720"
       >
-        <font-awesome-icon :icon="['fab', 'patreon']" /> Support the project!
-      </a>
-      <a
-        href="https://discord.io/ps2alerts"
-        class="btn btn-sm btn-alt mb-2"
-        target="_blank"
-      >
-        <font-awesome-icon :icon="['fab', 'discord']" /> Discord
-      </a>
-      <a
-        href="https://twitter.com/ps2alerttracker"
-        class="btn btn-sm btn-alt mb-2"
-        target="_blank"
-      >
-        <font-awesome-icon :icon="['fab', 'twitter']" /> Twitter
-      </a>
-      <a
-        href="https://github.com/ps2alerts"
-        class="btn btn-sm btn-alt mb-2"
-        target="_blank"
-      >
-        <font-awesome-icon :icon="['fab', 'github']" /> GitHub
-      </a>
-    </div>
-  </nav>
+        <v-tab v-for="tab in tabs" :key="tab.id" :to="tab.route" exact>
+          <font-awesome-icon :icon="tab.icon" class="mr-2" />
+          {{ tab.name }}
+        </v-tab>
+      </v-tabs>
+    </nav>
+    <nav id="subTabs" class="mb-2">
+      <v-tabs centered dark grow optional height="40" hide-slider show-arrows>
+        <v-tab
+          v-for="tab in subTabs"
+          :key="tab.id"
+          :href="tab.href"
+          exact
+          target="_blank"
+        >
+          <font-awesome-icon :icon="tab.icon" class="mr-2" />
+          {{ tab.name }}
+        </v-tab>
+      </v-tabs>
+    </nav>
+  </div>
 </template>
 
 <script lang="ts">
@@ -51,5 +39,51 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'Navigation',
+  data() {
+    return {
+      activeTab: `/`,
+      tabs: [
+        { id: 1, name: 'Statistics', route: `/`, icon: ['fas', 'chart-area'] },
+        {
+          id: 2,
+          name: 'Alert History',
+          route: `/alert-history`,
+          icon: ['fas', 'poll-h'],
+        },
+        {
+          id: 3,
+          name: 'Change Log',
+          route: `/change-log`,
+          icon: ['fas', 'tasks'],
+        },
+      ],
+      subTabs: [
+        {
+          id: 1,
+          name: 'Patreon',
+          href: `https://www.patreon.com/PS2Alerts`,
+          icon: ['fab', 'patreon'],
+        },
+        {
+          id: 2,
+          name: 'Discord',
+          href: `https://discord.io/ps2alerts`,
+          icon: ['fab', 'discord'],
+        },
+        {
+          id: 3,
+          name: 'Twitter',
+          href: `https://twitter.com/ps2alerttracker`,
+          icon: ['fab', 'twitter'],
+        },
+        {
+          id: 4,
+          name: 'GitHub',
+          href: `https://github.com/ps2alerts`,
+          icon: ['fab', 'github'],
+        },
+      ],
+    }
+  },
 })
 </script>

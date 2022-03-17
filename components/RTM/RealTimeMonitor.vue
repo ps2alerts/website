@@ -4,14 +4,15 @@
     class="px-4 pb-4 lg:px-0 lg:pb-0 border-b-2 border-red-700 mx-auto mb-2 lg:w-full sm:w-3/4 lg:border-b-0"
   >
     <div
-      class="lg:mt-2 bg-tint rounded lg:rounded-bl-none text-base text-center relative"
+      class="bg-tint rounded lg:rounded-bl-none text-base text-center relative"
     >
-      <div class="tag section">{{ actives.length }} Active Alerts</div>
+      <div class="tag section">{{ actives.length }} Active {{ alertWord }}</div>
       <CountdownSpinner
         :percent="updateTerritoryCountdownPercentage"
         :update-rate="updateTerritoryRate"
       />
       <div
+        v-show="actives.length > 0"
         class="rtm-drawer mt-2 pb-2 visible lg:invisible"
         :class="{ absolute: drawerOpen }"
       >
@@ -36,7 +37,7 @@
           <div
             v-for="alert in actives"
             :key="alert.instanceId"
-            class="pt-2 pb-3 px-2 border-b border-gray-500 border-no-bottom"
+            class="p-1 border-b border-gray-500 border-no-bottom"
           >
             <RealTimeAlert
               :world="alert.world"
@@ -122,6 +123,9 @@ export default Vue.extend({
     },
     updatePopsCountdownPercentage(): number {
       return (100 / (this.updatePopsRate / 1000)) * this.updatePopsCountdown
+    },
+    alertWord(): string {
+      return this.actives.length !== 1 ? 'Alerts' : 'Alert'
     },
   },
   watch: {

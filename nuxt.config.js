@@ -1,5 +1,4 @@
 import join from 'memory-fs/lib/join'
-
 const metaTitle = 'Planetside 2 Alert Tracker'
 const metaDesc = "PS2Alerts - Building Planetside 2's Alert metagame"
 const metaImg = `${process.env.BASE_URL}/og-image.png`
@@ -131,21 +130,22 @@ export default {
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
     'nuxt-leaflet',
-    [
-      'nuxt-fontawesome',
-      {
-        imports: [
-          {
-            set: '@fortawesome/free-solid-svg-icons',
-            icons: ['fas'],
-          },
-          {
-            set: '@fortawesome/free-brands-svg-icons',
-            icons: ['fab'],
-          },
-        ],
-      },
-    ],
+    // [
+    //   'nuxt-fontawesome',
+    //   {
+    //     imports: [
+    //       {
+    //         set: '@fortawesome/free-solid-svg-icons',
+    //         icons: ['fas'],
+    //       },
+    //       {
+    //         set: '@fortawesome/free-brands-svg-icons',
+    //         icons: ['fab'],
+    //       },
+    //     ],
+    //   },
+    // ],
+    '@nuxtjs/fontawesome',
   ],
   tailwindcss: {
     configPath: 'tailwind.config.js',
@@ -157,6 +157,13 @@ export default {
   // Content module configuration (https://go.nuxtjs.dev/config-content)
   content: {},
 
+  fontawesome: {
+    icons: {
+      solid: true,
+      brands: true,
+    },
+  },
+
   // https://www.npmjs.com/package/@nuxtjs/vuetify
   vuetify: {
     theme: { dark: true },
@@ -166,6 +173,13 @@ export default {
   'google-gtag': {
     id: process.env.GOOGLE_PROPERTY,
     debug: process.env.ENV !== 'production', // enable to track in dev / staging mode
+  },
+
+  router: {
+    scrollBehavior() {
+      const elem = document.getElementById('panel-right')
+      return { x: 0, y: elem.offsetTop - 12 }
+    },
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)

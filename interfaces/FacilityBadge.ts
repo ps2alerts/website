@@ -14,7 +14,7 @@ const FONT_OPTIONS = {
     leading: 1.1
 };
 
-const FACILITY_ICON_PATH = require("~/assets/img/facility-icon.svg");
+const FACILITY_ICON_PATH = require("~/static/img/facility-icon.svg");
 
 export class FacilityBadge {
     indicatorStamp: number;
