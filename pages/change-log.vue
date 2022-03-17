@@ -64,6 +64,7 @@ export default Vue.extend({
     return {
       pageTitle: 'Change Log',
       pageDesc: "See what's recently been released for PS2Alerts!",
+      version: this.$config.version,
       panel: [0],
       posts: [
         {
@@ -554,6 +555,17 @@ export default Vue.extend({
         },
       ],
     }
+  },
+  mounted() {
+    localStorage.lastVersionSeen = this.version
+
+    window.dispatchEvent(
+      new CustomEvent('lastVersionSeenUpdated', {
+        detail: {
+          version: localStorage.getItem('lastVersionSeen'),
+        },
+      })
+    )
   },
 })
 </script>

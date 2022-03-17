@@ -10,7 +10,19 @@
     </div>
     <div class="w-auto block justify-center text-center">
       <p v-html="motto" />
-      <p class="text-sm text-gray-400">{{ version }}</p>
+      <p class="text-sm text-gray-400">
+        {{ version }}
+        <a
+          v-if="showVersionChange"
+          href="/change-log"
+          @click="updateVersionSeen"
+        >
+          <span
+            class="bg-green-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >New changes!</span
+          >
+        </a>
+      </p>
     </div>
   </header>
 </template>
@@ -49,11 +61,42 @@ export default Vue.extend({
         'An salty OS a day keeps the doctor away',
       ],
       version: this.$config.version,
+      lastVersionViewed: null,
+      showVersionChange: false,
     }
+  },
+  watch: {
+    lastVersionViewed() {
+      if (this.lastVersionViewed === this.version) {
+        this.showVersionChange = false
+      }
+    },
   },
   created() {
     const rand = Math.floor(Math.random() * this.mottos.length)
     this.motto = this.mottos[rand]
+  },
+  mounted() {
+    if (!localStorage.lastVersionSeen) {
+      localStorage.lastVersionSeen = null
+    }
+
+    const lastVersionSeen = localStorage.lastVersionSeen
+
+    if (lastVersionSeen !== this.version) {
+      this.showVersionChange = true
+    }
+
+    window.addEventListener('lastVersionSeenUpdated', (event) => {
+      console.log('Updating header with lastVersionSeenUpdated')
+      // @ts-ignore
+      this.lastVersionViewed = event.detail.version
+    })
+  },
+  methods: {
+    updateVersionSeen() {
+      localStorage.lastVersionSeen = this.version
+    },
   },
 })
 </script>
