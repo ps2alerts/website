@@ -10,16 +10,16 @@ export enum FacilityType {
   CONSTRUCTION_OUTPOST = 9,
   RELIC_OUTPOST = 10, // Desolation only
   CONTAINMENT_SITE = 11,
-  TRIDENT = 12
+  TRIDENT = 12,
 }
 
 export const MAJOR_FACILITIES = [
-  FacilityType.AMP_STATION, 
+  FacilityType.AMP_STATION,
   FacilityType.BIO_LAB,
   FacilityType.CONTAINMENT_SITE,
   FacilityType.INTERLINK_FACILITY,
-  FacilityType.TRIDENT, 
-  FacilityType.TECH_PLANT, 
+  FacilityType.TRIDENT,
+  FacilityType.TECH_PLANT,
   FacilityType.WARPGATE,
-  FacilityType.RELIC_OUTPOST
+  FacilityType.RELIC_OUTPOST,
 ]
