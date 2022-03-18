@@ -6,11 +6,11 @@
       :percent="updateCountdownPercent"
       :update-rate="updateRate"
     />
-    <v-row style="height: 870px; flex-direction:row;" class="d-flex">
+    <v-row style="height: 960px; flex-direction:row;" class="d-flex">
       <v-col cols="12" lg="9">
         <div class="flex items-center place-content-center">
           <client-only>
-          <l-map class="map" ref="map" style="height: 768px" 
+          <l-map class="map" ref="map" style="height: 858px" 
             :zoom="zoom" 
             :center="center" 
             :minZoom="minZoom" 
@@ -41,7 +41,7 @@
             <v-card
             @click="historyIndexCallback(captureIndices.length - index)">
               <v-card-subtitle>
-              {{ mapDraw[historyCache[historyCache.length - captureIndex - 1].facility].name }}
+              {{ regionName(captureIndex) }}
               </v-card-subtitle>
               <v-card-text class="captureOutfit">
                 Captured by {{capturingOutfitTag(captureIndex)}}<br/>from {{controlData(captureIndex).loser}}
@@ -88,9 +88,9 @@
 import Vue from 'vue';
 import { LMap } from 'vue2-leaflet';
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface';
-import { MapDrawingInterface, worldToMap, LatLng, mapToWorld,  } from '~/interfaces/mapping/MapDrawingInterface';
-import { MAP_FACTION_COLORS, MAP_LINK_COLORS, MAP_CUTOFF_COLORS } from '@/constants/FactionMapColors';
-import { Zone, ZoneHexSize } from '@/constants/Zone';
+import { worldToMap, LatLng } from '~/interfaces/mapping/MapDrawingInterface';
+import { MAP_FACTION_COLORS, MAP_LINK_COLORS } from '@/constants/FactionMapColors';
+import { Zone, zoneToWarpgateArray } from '@/constants/Zone';
 import ApiRequest from '@/api-request';
 import MapRegionDataRequest from '@/libraries/MapRegionDataRequest';
 import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
@@ -100,7 +100,6 @@ import zoneNameFilter from '~/filters/ZoneName';
 import { FacilityType } from '~/constants/FacilityType';
 import { MapRegion } from '~/libraries/MapRegion';
 import { Faction } from '~/constants/Faction';
-import { CubeHex } from '~/libraries/CubeHex';
 import { FacilityBadge } from '~/interfaces/FacilityBadge';
 import factionShortName from '~/filters/FactionShortName';
 import factionCircleEmoji from '~/filters/FactionCircleEmoji';
@@ -136,7 +135,7 @@ export default Vue.extend({
       maxBounds: [[0, 0], [-250, 250]],
       viscosity: 0.1,
       noWrap: true,
-      mapDraw: {} as MapDrawingInterface,
+      mapRegions: new Map<number, MapRegion>(),
       map: {} as L.Map,
       crs: this.$L.extend({}, this.$L.CRS.Simple, {wrapLng: [0, 256]}),
       polys: this.$L.featureGroup([], {
@@ -222,27 +221,22 @@ export default Vue.extend({
       });
       this.setTimers();
     },
-    color(facility_id: number): string {
-      return MAP_FACTION_COLORS[this.mapDraw[facility_id].faction].toString();
-    },
     factionColor(faction: Faction){
       return MAP_FACTION_COLORS[faction].toString();
-    },
-    cutoffColor(facility_id: number): string {
-      return MAP_CUTOFF_COLORS[this.mapDraw[facility_id].faction].toString();
-    },
-    alpha(facility_id: number): number {
-      return MAP_FACTION_COLORS[this.mapDraw[facility_id].faction].a;
     },
     facilityIconSvg(captureIndex: number): string {
       var reverseIndex = this.historyCache.length - captureIndex - 1;
       var controlEvent = this.historyCache[reverseIndex];
       var faction = controlEvent.newFaction;
-      var badge = this.mapDraw[controlEvent.facility].badge;
-      return badge.getIcon(faction).outerHTML;
+      var region = this.mapRegions.get(controlEvent.facility);
+      if(!region)
+        return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 100" width="38" height="38"></svg>';
+      return region.badge().getIcon(faction, 38).outerHTML;
     },
     capturingOutfitTag(captureIndex: number): string {
-      var outfitId = this.historyCache[this.historyCache.length - captureIndex - 1].outfitCaptured;
+      var reverseIndex = this.historyCache.length - captureIndex - 1;
+      var controlEvent = this.historyCache[reverseIndex];
+      var outfitId = controlEvent.outfitCaptured;
       if(outfitId){
         var outfitAggregate = this.outfitData.get(outfitId);
         if(outfitAggregate && outfitAggregate.outfit.tag){
@@ -251,14 +245,17 @@ export default Vue.extend({
           return outfitAggregate.outfit.name
         }
       }
-      return factionShortName(this.historyCache[this.historyCache.length - captureIndex - 1].newFaction);
+      return factionShortName(controlEvent.newFaction);
     },
     controlData(captureIndex: number): InstanceFacilityControlEntriesResponseInterface & { loser: string } {
-      var loser = factionShortName(this.historyCache[this.historyCache.length - captureIndex - 1].oldFaction)
-      return { ...this.historyCache[this.historyCache.length - captureIndex - 1], loser: loser };
+      var reverseIndex = this.historyCache.length - captureIndex - 1;
+      var controlEvent = this.historyCache[reverseIndex];
+      var loser = factionShortName(controlEvent.oldFaction)
+      return { ...controlEvent, loser: loser };
     },
     mapControlData(captureIndex: number): MapControlInterface {
-      var mapControl = this.historyCache[this.historyCache.length - captureIndex - 1].mapControl
+      var reverseIndex = this.historyCache.length - captureIndex - 1;
+      var mapControl = this.historyCache[reverseIndex].mapControl
       if(!mapControl){
         return {
           vs: 33,
@@ -270,36 +267,32 @@ export default Vue.extend({
       }
       return mapControl;
     },
-    badge(region: MapRegion): FacilityBadge {
-      // If the facility type is not given or the badge is already built, just return it
-      if(region.badge.ready()){
-        return region.badge;
+    regionName(captureIndex: number): string {
+      var reverseIndex = this.historyCache.length - captureIndex - 1;
+      var facility_id = this.historyCache[reverseIndex].facility;
+      var name = this.mapRegions.get(facility_id)?.name;
+      if(name){
+        return name;
       }
-
-      var indicator = this.$L.marker(worldToMap(region.badgeLocation.asArray()), {
+      return "";
+    },
+    createRegionBadge(region: MapRegion): FacilityBadge {
+      // If the facility type is not given or the badge is already built, just return it
+      if(region.badge().ready()){
+        return region.badge();
+      }
+      var markerOptions = {
         pane: "badgePane",
         bubblingMouseEvents: true,
         riseOnHover: true
-      });
-      var indicatorText = this.$L.marker(worldToMap(region.badgeLocation.asArray()), {
-        pane: "badgeTextPane",
-        bubblingMouseEvents: true,
-        riseOnHover: true
-      });
+      };
 
-      var badge = new FacilityBadge(region, this.$L.stamp(indicator), this.$L.stamp(indicatorText));
-      var icon = this.$L.divIcon({
-        html: badge.getSVG() as unknown as HTMLElement,
-        className: "facility-badge",
-        iconSize: [badge.getSize().x, badge.getSize().z],
-        pane: "badgePane"
-      });
-      var text = this.$L.divIcon({
-        html: badge.getText() as unknown as HTMLElement,
-        className: "facility-badge",
-        iconSize: [badge.getTextSize().x, badge.getTextSize().z],
-        pane: "badgeTextPane"
-      });
+      var indicator = this.$L.marker(region.mapLocation(), markerOptions);
+      var indicatorText = this.$L.marker(region.mapLocation(), markerOptions);
+
+      var badge = region.badge(this.$L.stamp(indicator), this.$L.stamp(indicatorText));
+      var icon = this.$L.divIcon(badge.divOptions());
+      var text = this.$L.divIcon(badge.textDivOptions());
 
       indicator.setIcon(icon).addTo(this.badges);
       indicatorText.setIcon(text).addTo(this.textBadges);
@@ -307,21 +300,42 @@ export default Vue.extend({
     },
     outline(facility_id: number): LatLng[] {
       var to_return: LatLng[] = [];
-      this.mapDraw[facility_id].outline().forEach((point: number[]) => {
+      this.mapRegions.get(facility_id)?.outline().forEach((point: number[]) => {
         to_return.push(worldToMap(point));
       });
       return to_return;
     },
-    warpgate(faction: Faction): MapRegion {
-      return Object.values(this.mapDraw).find((region: MapRegion) => {
-        return region.facilityType === FacilityType.WARPGATE &&region.faction === faction;
+    warpgate(faction: Faction): MapRegion | undefined {
+      var zone = this.alert.zone;
+      if(!zone){
+        console.error("Unable to find warpgate of undefined zone!");
+        return undefined;
+      }
+      var warpgates: number[] | undefined = zoneToWarpgateArray.get(zone);
+      if(warpgates == undefined){
+        return undefined;
+      }
+      var region: MapRegion | undefined = undefined;
+      warpgates.forEach((facilityId: number) => {
+        if(region) {
+          return;
+        }
+        if(this.mapRegions.get(facilityId)?.faction === faction){
+          region = this.mapRegions.get(facilityId);
+        }
       });
+      return region;
     },
     cutoff(facility: MapRegion): boolean {
+      // This could use improvement, probably should be moved to MapRegion as well (Need to record all links in MapRegion first)
+      // Currently this performs a depth first search of all connected territories starting at the faction's warpgate
+      //    and returns true if it finds *facility* during the search.
       if(facility.facilityType == FacilityType.WARPGATE){
         return false;
       }
+      // This array is being treated as a stack
       var frontier = [this.warpgate(facility.faction)];
+      // Easy improvement here - don't use an array for the visited data structure
       var visited: MapRegion[] = [];
       while(frontier.length !== 0){
         var curr = frontier.pop();
@@ -331,6 +345,10 @@ export default Vue.extend({
         if(curr.id === facility.id){
           return false;
         }
+        // Linkstamps is a record of the shape { "1234 2345": <leaflet Layer id>, ... }, 
+        //    the keys are two facility ids concatenated with a space. Not every permutation is present
+        //    since most (but not all of course) facilities in the census do not reciprocate their map links
+        //    (AKA this describes something that is close to (but is not) a directed graph)
         Object.keys(this.linkStamps).forEach((pair) => {
           if(pair.includes("bg")){
             return;
@@ -338,12 +356,12 @@ export default Vue.extend({
           var facilities = pair.split(" ").map((val) => parseInt(val));
           if(!(facilities[0] === curr?.id || facilities[1] === curr?.id))
             return;
-          var connection = facilities[0] === curr?.id ? this.mapDraw[facilities[1]] : this.mapDraw[facilities[0]];
-          var wasVisited = visited.find((region) => { return region.id === connection.id; });
+          var connection = facilities[0] === curr?.id ? this.mapRegions.get(facilities[1]) : this.mapRegions.get(facilities[0]);
+          var wasVisited = visited.find((region) => { return region.id === connection?.id; });
           if (wasVisited){
             return;
           }
-          if(connection.faction === facility.faction){
+          if(connection?.faction === facility.faction){
             frontier.push(connection);
           }
         });
@@ -397,7 +415,7 @@ export default Vue.extend({
         this.updateCutoffs();
       }
     },
-    updateTerritory(result: InstanceFacilityControlEntriesResponseInterface[], indexLimit: number | undefined, force = false, reverse = false): boolean {
+    updateTerritory(result: InstanceFacilityControlEntriesResponseInterface[], indexLimit?: number, force = false, reverse = false): boolean {
       var capture = false;
       if(indexLimit){
         this.currentIndex = 0;
@@ -416,12 +434,26 @@ export default Vue.extend({
         if (controlEvent.isDefence) {
           return;
         }
+
+        // This basically checks to see if we are either:
+        //    1. Seeing a new capture come in while we are auto updating, or
+        //    2. Resetting the map to a capture event further along the alert than this one
+        // and applies the capture event if either of those are true
         if((this.currentIndex == -1 && indexLimit === undefined) || (indexLimit !== undefined && index < this.captureIndices[indexLimit])){
-          this.mapDraw[controlEvent.facility].faction = controlEvent.newFaction;
+          var region = this.mapRegions.get(controlEvent.facility);
+          if(!region){
+            return;
+          }
+          // Capture is used by callers to check whether we need to update hex colors in updateCutoffs or not
           capture = true;
+
+          // Update map region (TODO: Update links should probably be refactored into something the region can do)
+          // This does not immediately set the hex color, but instead waits for updateCutoffs to be called
+          region.faction = controlEvent.newFaction;
+          region.badge().update(this.map.getZoom());
           this.updateLinks(controlEvent.facility);
-          var badge = this.mapDraw[controlEvent.facility].badge;
-          badge.update(this.map.getZoom());
+
+          // If we've reached the final region we're updating, apply the "captured" class to the hex to animate the color change
           if(indexLimit && (index == this.captureIndices[indexLimit - 1]) || controlEvent.timestamp == lastCaptureEvent?.timestamp){
             var facility = (reverse && indexLimit) ? eventArray[this.captureIndices[indexLimit]].facility : controlEvent.facility;
             var polygon = (<L.Polygon | undefined>this.polys.getLayer(this.polyStamps[facility]));
@@ -435,6 +467,7 @@ export default Vue.extend({
             this.currentIndex = index
           }
         }
+        // If this is a brand new capture event, add it to our list
         if(!controlEvent.isInitial && !this.captureIndices.includes(index)){
           if(this.captureIndices.length == 0 && index > 0){
             this.tickLabels.push(factionCircleEmoji(eventArray[index - 1].newFaction));
@@ -451,15 +484,14 @@ export default Vue.extend({
       return capture;
     },
     updateCutoffs(): void {
-      Object.values(this.mapDraw).forEach((region: MapRegion) => {
+      for(var region of this.mapRegions.values()) {
         region.setCutoff(this.cutoff(region));
         var polygon = (<L.Polygon | undefined>this.polys.getLayer(this.polyStamps[region.id]));
         polygon?.setStyle({
-            fillColor: region.isCutoff() ? this.cutoffColor(region.id) : this.color(region.id),
-            fillOpacity: this.alpha(region.id) + (region.isCutoff() ? 0.4 : 0),
+            fillColor: region.color().toString(),
+            fillOpacity: region.color().a + (region.isCutoff() ? 0.4 : 0),
         });
-        
-      });
+      }
     },
     updateLinks(facility: number){
       Object.entries(this.linkStamps).forEach((linkEntry) => {
@@ -476,12 +508,17 @@ export default Vue.extend({
         
         var link = (<L.Polyline | undefined>this.links.getLayer(linkEntry[1]));
         var bglink = (<L.Polyline | undefined>this.links.getLayer(this.linkStamps["bg" + linkEntry[0]]));
-        
+        var regions = [this.mapRegions.get(facility_ids[0]), this.mapRegions.get(facility_ids[1])];
+
+        if(!(regions[0] && regions[1])){
+          return;
+        }
+
         // Both factions match, set friendly color and hide bglink
-        if(this.mapDraw[facility_ids[0]].faction === this.mapDraw[facility_ids[1]].faction){
+        if(regions[0].faction === regions[1].faction){
           link?.setStyle({
-            color: MAP_LINK_COLORS[this.mapDraw[facility_ids[0]].faction]?.toString(),
-            opacity: MAP_LINK_COLORS[this.mapDraw[facility_ids[0]].faction]?.a,
+            color: MAP_LINK_COLORS[regions[0].faction]?.toString(),
+            opacity: MAP_LINK_COLORS[regions[0].faction]?.a,
             dashArray: [],
           });
           bglink?.setStyle({
@@ -489,7 +526,7 @@ export default Vue.extend({
           });
         }
         // Disabled, just put an NS link there since it doesn't make it seem capturable
-        else if(this.mapDraw[facility_ids[0]].faction === Faction.NONE || this.mapDraw[facility_ids[1]].faction === Faction.NONE){
+        else if(regions[0].faction === Faction.NONE || regions[1].faction === Faction.NONE){
           link?.setStyle({
             color: MAP_LINK_COLORS[Faction.NONE].toString(),
             opacity: MAP_LINK_COLORS[Faction.NONE].a,
@@ -499,8 +536,8 @@ export default Vue.extend({
             opacity: 0.0
           });
         }
-        // Warpgate's ain't capturable
-        else if(this.mapDraw[facility_ids[0]].facilityType === FacilityType.WARPGATE || this.mapDraw[facility_ids[1]].facilityType === FacilityType.WARPGATE){
+        // Warpgate's ain't capturable, make it look like capturable link with disabled link colors
+        else if(regions[0].facilityType === FacilityType.WARPGATE || regions[1].facilityType === FacilityType.WARPGATE){
           link?.setStyle({
             color: MAP_LINK_COLORS[0].toString(),
             dashArray: "5 5"
@@ -566,6 +603,7 @@ export default Vue.extend({
     async pullOutfitData(
       instanceId: string
     ): Promise<Map<string, InstanceOutfitAggregateResponseInterface>> {
+      // Taken from AlertMapCaptureHistory.vue
       const newMap = new Map<string, InstanceOutfitAggregateResponseInterface>()
 
       console.log('AlertMap.pullOutfitData', instanceId)
@@ -585,7 +623,7 @@ export default Vue.extend({
       return newMap
     },
     async loadRegions(): Promise<void> {
-      if (Object.keys(this.mapDraw).length !== 0) {
+      if (this.mapRegions.size !== 0) {
         return;
       }
 
@@ -595,43 +633,40 @@ export default Vue.extend({
       this.$L.Icon.Default.prototype.options.iconAnchor = [0, 0];
       this.$L.Icon.Default.prototype.options.tooltipAnchor = [0, 0];
       regions.forEach((region) => {
-        this.mapDraw[region.id] = region;
-        var polygon = this.$L.polygon(this.outline(region.id), {
-          fillColor: this.color(region.id),
-          fillOpacity: this.alpha(region.id),
-          color: "#000000",
-          weight: 2,
-          lineCap: 'butt',
-          className: "map-region",
-          pane: "hexPane",
-          noClip: true,
-        }).on("mouseover", (e: L.LeafletMouseEvent) => {
+        this.mapRegions.set(region.id, region);
+        var polygon = this.$L.polygon(this.outline(region.id), region.outlineOptions());
+        
+        // Set on hover colors and ensure the attached badge layers get the same event
+        polygon.on("mouseover", (e: L.LeafletMouseEvent) => {
           e.target.setStyle({
             color: "#FFFFFF"
           });
-          if(region.badge.ready()){
-            region.badge.setHovered(true, this.map.getZoom());
-            (<L.Marker | undefined>this.badges.getLayer(region.badge.indicatorStamp))?.fire("mouseover", e, false);
-            (<L.Marker | undefined>this.textBadges.getLayer(region.badge.textStamp))?.fire("mouseover", e, false);
+          if(region.badge().ready()){
+            region.badge().setHovered(true, this.map.getZoom());
+            (<L.Marker | undefined>this.badges.getLayer(region.badge().indicatorStamp))?.fire("mouseover", e, false);
+            (<L.Marker | undefined>this.textBadges.getLayer(region.badge().textStamp))?.fire("mouseover", e, false);
           }
           e.target.bringToFront();
-        }).on("mouseout", (e: L.LeafletMouseEvent) => {
+        });
+        
+        // Set on hover colors and ensure the attached badge layers get the same event
+        polygon.on("mouseout", (e: L.LeafletMouseEvent) => {
           e.target.setStyle({
             color: "#000000"
           });
-          if(region.badge.ready()){
-            region.badge.setHovered(false, this.map.getZoom());
-            (<L.Marker | undefined>this.badges.getLayer(region.badge.indicatorStamp))?.fire("mouseout", e, false);
-            (<L.Marker | undefined>this.textBadges.getLayer(region.badge.textStamp))?.fire("mouseout", e, false);
+          if(region.badge().ready()){
+            region.badge().setHovered(false, this.map.getZoom());
+            (<L.Marker | undefined>this.badges.getLayer(region.badge().indicatorStamp))?.fire("mouseout", e, false);
+            (<L.Marker | undefined>this.textBadges.getLayer(region.badge().textStamp))?.fire("mouseout", e, false);
           }
         });
-        //polygon.bindTooltip(region.name);
         
+        // TODO: This should probably go on the region instead
         this.polyStamps[region.id] = this.$L.stamp(polygon);
-
         this.polys.addLayer(polygon);
       });
 
+      // Build facility links
       regions.forEach((region) => {
         region.connections.forEach((connection) => {
           var link = this.$L.polyline([
@@ -644,7 +679,8 @@ export default Vue.extend({
               pane: "linkPane",
               interactive: false,
               bubblingMouseEvents: true
-            });
+          });
+          // TODO: This should probably go on region and connection
           this.linkStamps[region.id.toString() + " " + connection.id.toString()] = this.$L.stamp(link);
           
           var bglink = this.$L.polyline([
@@ -655,31 +691,32 @@ export default Vue.extend({
               color: MAP_LINK_COLORS[5]?.toString(),
               opacity: 0.0,
               pane: "linkPane",
-            });
-            this.linkStamps["bg" + region.id.toString() + " " + connection.id.toString()] = this.$L.stamp(bglink);
+          });
+          // TODO: This should probably go on region and connection
+          this.linkStamps["bg" + region.id.toString() + " " + connection.id.toString()] = this.$L.stamp(bglink);
 
-            this.links.addLayer(bglink);
-            this.links.addLayer(link);
+          this.links.addLayer(bglink);
+          this.links.addLayer(link);
         });
-        region.badge = this.badge(region);
+        this.createRegionBadge(region);
       });
 
       this.map.on("zoom", (ev: L.LeafletEvent) => {
-        Object.values(this.mapDraw).forEach((region: MapRegion) => {
-          region.badge.update(this.map.getZoom())
-        });
+        for(var region of this.mapRegions.values()) {
+          region.badge().update(this.map.getZoom())
+        }
       });
 
-      Object.values(this.mapDraw).forEach((region: MapRegion) => {
-        var badge = this.badges.getLayer(region.badge.indicatorStamp);
-        var text = this.textBadges.getLayer(region.badge.textStamp);
+      for(var region of this.mapRegions.values()) {
+        var badge = this.badges.getLayer(region.badge().indicatorStamp);
+        var text = this.textBadges.getLayer(region.badge().textStamp);
         var polygon = this.polys.getLayer(this.polyStamps[region.id]);
         if(badge === undefined || polygon === undefined || text === undefined){
           return;
         }
         badge.addEventParent(polygon);
         text.addEventParent(badge);
-      });
+      }
     
       this.polys.addTo(this.map);
       this.links.addTo(this.map);

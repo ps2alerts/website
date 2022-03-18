@@ -130,21 +130,6 @@ export default {
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
     'nuxt-leaflet',
-    // [
-    //   'nuxt-fontawesome',
-    //   {
-    //     imports: [
-    //       {
-    //         set: '@fortawesome/free-solid-svg-icons',
-    //         icons: ['fas'],
-    //       },
-    //       {
-    //         set: '@fortawesome/free-brands-svg-icons',
-    //         icons: ['fab'],
-    //       },
-    //     ],
-    //   },
-    // ],
     '@nuxtjs/fontawesome',
   ],
   tailwindcss: {

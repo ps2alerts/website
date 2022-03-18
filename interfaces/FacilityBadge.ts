@@ -16,6 +16,61 @@ const FONT_OPTIONS = {
 
 const FACILITY_ICON_PATH = require("~/static/img/facility-icon.svg");
 
+class LPoint {
+    x: number;
+    y: number;
+    constructor(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+    }
+    clone(){
+        return new LPoint(this.x, this.y);
+    }
+    add(other: LPoint): LPoint {
+        return new LPoint(this.x + other.x, this.y + other.y);
+    }
+    subtract(other: LPoint): LPoint {
+        return new LPoint(this.x - other.x, this.y - other.y)
+    }
+    multiplyBy(value: number): LPoint {
+        return new LPoint(value * this.x, value * this.y);
+    }
+    divideBy(value: number, round?: boolean): LPoint {
+        if(round){
+            return new LPoint(Math.round(this.x / value), Math.round(this.y / value));
+        }
+        return new LPoint(this.x / value, this.y / value);
+    }
+    distanceTo(other: LPoint): number {
+        return Math.sqrt(Math.pow(other.x - this.x, 2) + Math.pow(other.y - this.y, 2));
+    }
+    scaleBy(other: LPoint): LPoint {
+        return new LPoint(this.x * other.x, this.y * other.y);
+    }
+    unscaleBy(other: LPoint): LPoint {
+        return new LPoint(this.x / other.x, this.y / other.y);
+    }
+    round(): LPoint {
+        return new LPoint(Math.round(this.x), Math.round(this.y));
+    }
+    floor(): LPoint {
+        return new LPoint(Math.floor(this.x), Math.floor(this.y));
+    }
+    ceil(): LPoint {
+        return new LPoint(Math.ceil(this.x), Math.ceil(this.y));
+    }
+    equals(other: LPoint): boolean {
+        return this.x == other.x && this.y == other.y;
+    }
+    contains(other: LPoint): boolean {
+        return Math.abs(other.x) < Math.abs(this.x) 
+            && Math.abs(other.y) < Math.abs(this.y);
+    }
+    toString(): string {
+        return "LPoint(" + this.x.toString() + ", " + this.y.toString() + ")";
+    }
+}
+
 export class FacilityBadge {
     indicatorStamp: number;
     textStamp: number;
@@ -39,10 +94,27 @@ export class FacilityBadge {
         this.textBuilt = false;
         this.region = region;
         this.hovered = false;
+    } 
+
+    divOptions(){
+        return {
+            html: this.getSVG() as unknown as HTMLElement,
+            className: "facility-badge",
+            iconSize: new LPoint(this.getSize().x, this.getSize().z),
+            pane: "badgePane"
+        };
+    }
+
+    textDivOptions(){
+        return {
+            html: this.getText() as unknown as HTMLElement,
+            className: "facility-badge",
+            iconSize: new LPoint(this.getTextSize().x, this.getTextSize().z),
+            pane: "badgeTextPane"
+        };
     }
 
     private buildText(value: string): Svg {
-        //var defs = this.svg.defs();
         switch (this.region.facilityType){
             case FacilityType.AMP_STATION:
             case FacilityType.BIO_LAB:
@@ -111,13 +183,11 @@ export class FacilityBadge {
             tspan.cx(0);
         })
         this.text.viewbox(text.bbox().x, -text.bbox().h, text.bbox().w + 20, 100 + text.bbox().h * 2);
-        //this.svg.get(0).move(this.svg.viewbox().cx - 50, this.svg.viewbox().cy - 50);
-        //this.svg.get(1).move(this.svg.viewbox().cx - 50, this.svg.viewbox().cy - 50);
         
         text.move(this.text.viewbox().cx - text.bbox().w / 2, this.text.viewbox().cy + 50);
-        
         text2.move(this.text.viewbox().cx - text.bbox().w / 2, this.text.viewbox().cy + 50);
         text2.fill("white");
+
         this.textBuilt = true;
         return this.text;
     }
@@ -171,13 +241,13 @@ export class FacilityBadge {
         return this.buildText(this.region.name).node;
     }
 
-    getIcon(faction: Faction): SVGSVGElement {
+    getIcon(faction: Faction, size: number | null = null): SVGSVGElement {
         var toReturn = SVG();
         toReturn.viewbox(0, 0, 100, 100);
         toReturn.use("facility-bg", FACILITY_ICON_PATH).fill(MAP_FACTION_COLORS[faction].toString());
         toReturn.use(FacilityBadge.SVGDefinitionId(this.type), FACILITY_ICON_PATH);
-        toReturn.width(38);
-        toReturn.height(38);
+        if(size)
+            toReturn.width(size).height(size);
         return toReturn.node;
     }
 

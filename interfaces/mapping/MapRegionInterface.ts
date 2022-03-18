@@ -17,7 +17,7 @@ export interface MapRegionInterface {
 
 export interface MapRegionDrawingInterface 
             extends MapRegionInterface {
-    badge: FacilityBadge,
+    badge(indicatorStamp?: number, indicatorTextStamp?: number): FacilityBadge,
     outline(): number[][],
     faction: Faction,
 }

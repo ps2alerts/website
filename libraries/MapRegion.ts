@@ -1,11 +1,10 @@
-import Vue from 'vue';
 import { FacilityType } from "~/constants/FacilityType";
 import { Faction } from "~/constants/Faction";
+import { Color, MAP_CUTOFF_COLORS, MAP_FACTION_COLORS } from "~/constants/FactionMapColors";
 import getIndarConstructionOutpost from "~/constants/IndarConstructionOutpostData";
 import { Zone, ZoneHexSize } from "~/constants/Zone";
 import { FacilityBadge } from "~/interfaces/FacilityBadge";
 import { CensusMapRegionInterface } from "~/interfaces/mapping/CensusMapRegionInterface";
-import { CubeHexInterface } from "~/interfaces/mapping/CubeHexInterface";
 import { LatLng, Point, worldToMap } from "~/interfaces/mapping/MapDrawingInterface";
 import { MapRegionDrawingInterface } from "~/interfaces/mapping/MapRegionInterface";
 import { CubeHex } from "./CubeHex";
@@ -27,8 +26,9 @@ export class CubeHexIndices {
 
 }
 
+type LineCapShape = 'butt' | 'round' | 'square' | 'inherit';
+
 export class MapRegion implements MapRegionDrawingInterface {
-    badge: FacilityBadge;
     faction: Faction;
     id: number;
     name: string;
@@ -39,6 +39,7 @@ export class MapRegion implements MapRegionDrawingInterface {
     connectionIds: number[];
     hexes: CubeHex[];
     indices: CubeHexIndices[];
+    private m_badge: FacilityBadge;
     private cutoff: boolean;
     private outline_cache: number[][];
     private hexSet: Record<string, CubeHex>;
@@ -80,7 +81,25 @@ export class MapRegion implements MapRegionDrawingInterface {
         this.faction = Faction.NONE;
         this.outline_cache = [];
         this.cutoff = false;
-        this.badge = new FacilityBadge(this, -1, -1);
+        this.m_badge = new FacilityBadge(this, -1, -1);
+    }
+
+    badge(indicatorStamp?: number, indicatorTextStamp?: number): FacilityBadge {
+        // If the facility type is not given or the badge is already built, just return it
+        if(!(indicatorStamp && indicatorTextStamp)){
+            return this.m_badge;
+        }
+      
+        if(this.m_badge.ready()){
+            return this.m_badge;
+        }
+
+        this.m_badge = new FacilityBadge(this, indicatorStamp, indicatorTextStamp);
+        return this.m_badge;
+    }
+
+    mapLocation(): LatLng {
+        return worldToMap(this.badgeLocation.asArray());
     }
 
     setCutoff(newVal: boolean): void {
@@ -101,6 +120,10 @@ export class MapRegion implements MapRegionDrawingInterface {
     contains(point: number[]): boolean {
         var toFind = CubeHex.fromWorld(point[0], point[1], ZoneHexSize(this.zoneId));
         return this.hexSet[toFind.toString()] !== undefined;
+    }
+
+    color(): Color {
+        return this.cutoff ? MAP_CUTOFF_COLORS[this.faction] : MAP_FACTION_COLORS[this.faction];
     }
 
     outline(): number[][] {
@@ -162,6 +185,18 @@ export class MapRegion implements MapRegionDrawingInterface {
             }
         }
         return this.outline_cache;
+    }
+
+    outlineOptions() {
+        return {
+            fillColor: MAP_FACTION_COLORS[this.faction].toString(),
+            fillOpacity: MAP_FACTION_COLORS[this.faction].a,
+            color: "#000000",
+            weight: 2,
+            lineCap: 'butt' as LineCapShape,
+            className: "map-region",
+            pane: "hexPane"
+        }
     }
     
 }
