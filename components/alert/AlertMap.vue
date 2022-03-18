@@ -287,8 +287,14 @@ export default Vue.extend({
         riseOnHover: true
       };
 
+      var textMarkerOptions = {
+        pane: "badgeTextPane",
+        bubblingMouseEvents: true,
+        riseOnHover: true
+      };
+
       var indicator = this.$L.marker(region.mapLocation(), markerOptions);
-      var indicatorText = this.$L.marker(region.mapLocation(), markerOptions);
+      var indicatorText = this.$L.marker(region.mapLocation(), textMarkerOptions);
 
       var badge = region.badge(this.$L.stamp(indicator), this.$L.stamp(indicatorText));
       var icon = this.$L.divIcon(badge.divOptions());
