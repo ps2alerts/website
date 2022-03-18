@@ -212,6 +212,10 @@ export default Vue.extend({
     },
     init(): void {
       this.map = (<LMap>this.$refs["map"]).mapObject as L.Map;
+      this.map.attributionControl.addAttribution('Tiles extracted from <a title="Planetside 2® Public Test Server" href="https://forums.daybreakgames.com/ps2/index.php?threads/read-first-test-server-policies-download-link.114038/">PTS client</a>')
+      this.map.attributionControl.addAttribution('Hex and region data from <a href="https://census.daybreakgames.com">Census</a>');
+      this.map.attributionControl.addAttribution('Oshur region data from <a title="Planetside 2 API developers\' Discord channel on the unofficial Planetside 2 Discord server" href="https://discord.com/channels/251073753759481856/451032574538547201">#api-dev</a>');
+      this.map.attributionControl.addAttribution('Oshur hex data from RiderAnton');
       this.map.createPane("hexPane", this.map.getPane("overlayPane"));
       this.map.createPane("linkPane", this.map.getPane("overlayPane"));
       this.map.createPane("badgePane", this.map.getPane("overlayPane"));
