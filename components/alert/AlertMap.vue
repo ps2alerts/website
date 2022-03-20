@@ -286,8 +286,10 @@ export default Vue.extend({
         var outfitAggregate = this.outfitData.get(outfitId);
         if(outfitAggregate && outfitAggregate.outfit.tag){
           return "[" + outfitAggregate.outfit.tag + "]";
-        } else if(outfitAggregate) {
+        } else if(outfitAggregate && outfitAggregate.outfit.name) {
           return outfitAggregate.outfit.name
+        } else {
+          return factionShortName(controlEvent.newFaction);
         }
       }
       return factionShortName(controlEvent.newFaction);
