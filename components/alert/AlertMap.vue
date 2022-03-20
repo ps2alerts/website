@@ -6,65 +6,67 @@
       :percent="updateCountdownPercent"
       :update-rate="updateRate"
     />
-    <v-row style="height: 960px; flex-direction:row;" class="d-flex">
-      <v-col cols="12" lg="9">
-        <div class="flex items-center place-content-center">
+    <div class="map-container">
+      <div class="map-grid-item">
           <client-only>
-          <l-map class="map" ref="map" style="height: 858px" 
+          <l-map class="map" ref="map" 
             :zoom="zoom" 
             :center="center" 
-            :minZoom="minZoom" 
             :maxZoom="maxZoom"
             :zoomSnap="zoomSnap"
             :zoomDelta="zoomDelta"
             :crs="crs">
-            <l-tile-layer :url="url">
-            </l-tile-layer>
+            <l-control ref="timer" position="topright" class="alert-timer-container">
+              <div class="alert-timer-icon">
+                <img src="/img/alert-icon.png" class="alert-timer-icon-bg"/>
+                <img src="/img/alert-icon.png" class="alert-timer-icon-fg"/>
+              </div>
+              <remaining-time class="alert-timer"
+                :started="alert.timeStarted" 
+                :duration="alert.duration"
+              ></remaining-time>
+            </l-control>
           </l-map>
           </client-only>
-        </div>
-      </v-col>
-      <v-col lg="3" class="timeline">
+      </div>
+      <div class="timeline">
         <client-only>
         <v-subheader dark>Alert Capture Timeline (Base, Capturing Outfit, Overall Territory Control)</v-subheader>
-        <v-timeline dark dense>
-          <v-timeline-item
-            right
-            v-for="(captureIndex, index) in captureIndices.slice().reverse()"
-            :key="index"
-            :color="factionColor(historyCache[historyCache.length - captureIndex - 1].newFaction)"
-            fill-dot
-            >
-            <template v-slot:icon><div v-html="facilityIconSvg(captureIndex)"></div></template>
-            <template v-slot:opposite>{{historyCache[historyCache.length - captureIndex - 1].timestamp | dateTimeFormatShort }}</template>
+        <v-card dark class="timeline-item"
+          v-for="(captureIndex, index) in captureIndices.slice().reverse()"
+          :key="index"
+          @click="historyIndexCallback(captureIndices.length - index)"
+          >
+          <div :class="controlData(captureIndex).bgClass">
+            <span style="position: absolute; left: 8px; top: 8px; color: rgba(255, 255, 255, 0.7); font-size: 12px;">{{historyCache[historyCache.length - captureIndex - 1].timestamp | dateTimeFormatShort }}</span>
+            <span style="position: absolute; right: 8px; top: 8px;" v-html="facilityIconSvg(captureIndex)"></span>
+            <v-card-subtitle 
+              style="padding-bottom: 4px;
+                      padding-top: 24px;
+                      padding-right: 38px;
+                      padding-left: 38px;">
+                {{ regionName(captureIndex) }}
+            </v-card-subtitle>
+            <v-card-text style="padding-left: 8px; padding-right: 8px;" class="captureOutfit">
+              Captured by {{capturingOutfitTag(captureIndex)}} from {{controlData(captureIndex).loser}}
+            </v-card-text>
             <div>
-            <v-card
-            @click="historyIndexCallback(captureIndices.length - index)">
-              <v-card-subtitle>
-              {{ regionName(captureIndex) }}
-              </v-card-subtitle>
-              <v-card-text class="captureOutfit">
-                Captured by {{capturingOutfitTag(captureIndex)}}<br/>from {{controlData(captureIndex).loser}}
-              </v-card-text>
-              <div>
-                <FactionSegmentBar
-                  v-if="controlData(captureIndex).mapControl"
-                    :vs="mapControlData(captureIndex).vs"
-                    :nc="mapControlData(captureIndex).nc"
-                    :tr="mapControlData(captureIndex).tr"
-                    :other="mapControlData(captureIndex).cutoff"
-                    :out-of-play="mapControlData(captureIndex).outOfPlay"
-                    dropoff-percent="15"
-                ></FactionSegmentBar>
-                <span v-if="!controlData(captureIndex).mapControl">Awaiting data...</span>
-              </div>
-            </v-card>
+              <FactionSegmentBar
+                v-if="controlData(captureIndex).mapControl"
+                  :vs="mapControlData(captureIndex).vs"
+                  :nc="mapControlData(captureIndex).nc"
+                  :tr="mapControlData(captureIndex).tr"
+                  :other="mapControlData(captureIndex).cutoff"
+                  :out-of-play="mapControlData(captureIndex).outOfPlay"
+                  dropoff-percent="15"
+              ></FactionSegmentBar>
+              <span v-if="!controlData(captureIndex).mapControl">Awaiting data...</span>
             </div>
-          </v-timeline-item>
-        </v-timeline>
+          </div>
+        </v-card>
         </client-only>
-      </v-col>
-      <v-col cols="12">
+      </div>
+      <div class="map-slider">
       <v-slider 
         ref="history"
         tick-size="5"
@@ -79,14 +81,14 @@
         @click:prepend="decrementSlider"
         @click:append="incrementSlider"
         ></v-slider>
-      </v-col>
-    </v-row>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { LMap } from 'vue2-leaflet';
+import { LControl, LMap } from 'vue2-leaflet';
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface';
 import { worldToMap, LatLng } from '~/interfaces/mapping/MapDrawingInterface';
 import { MAP_FACTION_COLORS, MAP_LINK_COLORS } from '@/constants/FactionMapColors';
@@ -105,8 +107,11 @@ import factionShortName from '~/filters/FactionShortName';
 import factionCircleEmoji from '~/filters/FactionCircleEmoji';
 import { InstanceOutfitAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface';
 import { MapControlInterface } from '~/interfaces/instance-entries/MapControlInterface';
+import { FactionBgClassString } from '~/constants/FactionBgClass';
+import RemainingTime from '../RemainingTime.vue';
 
 export default Vue.extend({
+  components: { RemainingTime },
   name: 'AlertMap',
   props: {
     alert: {
@@ -125,19 +130,21 @@ export default Vue.extend({
       lastUpdated: new Date(0),
       interval: undefined as undefined | number,
       zoom: 2,
+      prevZoom: 2,
       center: [-128, 128],
       url: "https://assets.ps2alerts.com/zones/" + zoneNameFilter(this.alert.zone).toLowerCase() + "/{z}/tile_{x}_{y}.png",
       minZoom: 2,
-      maxZoom: 5,
+      maxZoom: 7,
       zoomSnap: 1,
       zoomDelta: 1,
-      bounds: [[0, 0], [-250, 250]],
+      bounds: [[0, 0], [-256, 256]],
       maxBounds: [[0, 0], [-250, 250]],
       viscosity: 0.1,
       noWrap: true,
       mapRegions: new Map<number, MapRegion>(),
       map: {} as L.Map,
-      crs: this.$L.extend({}, this.$L.CRS.Simple, {wrapLng: [0, 256]}),
+      remaining: {} as LControl,
+      crs: this.$L.CRS.Simple, //this.$L.extend({}, this.$L.CRS.Simple, {wrapLng: [0, 256]}),
       polys: this.$L.featureGroup([], {
         pane: "hexPane"
       }),
@@ -160,6 +167,8 @@ export default Vue.extend({
       sliderMax: 0,
       historyCache: [] as InstanceFacilityControlEntriesResponseInterface[],
       outfitData: new Map<string, InstanceOutfitAggregateResponseInterface>(),
+      zoomInSound: new Audio('/audio/UI_INTERFACE_MAP_ZOOM_IN.wav'),
+      zoomOutSound: new Audio('/audio/UI_INTERFACE_MAP_ZOOM_OUT.wav'),
       // data: {} as InstanceFactionCombatAggregateResponseInterface,
     }
   },
@@ -173,6 +182,7 @@ export default Vue.extend({
       if (this.alert.state === Ps2alertsEventState.ENDED) {
         this.clearTimers()
         this.pull()
+        this.remaining.$el.remove();
       }
     },
   },
@@ -212,6 +222,7 @@ export default Vue.extend({
     },
     init(): void {
       this.map = (<LMap>this.$refs["map"]).mapObject as L.Map;
+      this.remaining = (<LControl>this.$refs["timer"]);
       this.map.attributionControl.addAttribution('Tiles extracted from <a title="Planetside 2® Public Test Server" href="https://forums.daybreakgames.com/ps2/index.php?threads/read-first-test-server-policies-download-link.114038/">PTS client</a>')
       this.map.attributionControl.addAttribution('Hex and region data from <a href="https://census.daybreakgames.com">Census</a>');
       this.map.attributionControl.addAttribution('Oshur region data from <a title="Planetside 2 API developers\' Discord channel on the unofficial Planetside 2 Discord server" href="https://discord.com/channels/251073753759481856/451032574538547201">#api-dev</a>');
@@ -223,7 +234,37 @@ export default Vue.extend({
       this.map.on('drag', () => {
         this.map.fitBounds(this.map.getBounds());
       });
+      this.$L.tileLayer(this.url, {
+        bounds: [[0, 0], [-256, 256]],
+        minNativeZoom: 2,
+        maxNativeZoom: 5
+      }).addTo(this.map);
+
+      this.zoomInSound.loop = false;
+      this.zoomOutSound.loop = false;
+      this.zoomInSound.volume = 0.1;
+      this.zoomOutSound.volume = 0.1;
+      this.map.on('zoom', () => {
+        if(Math.abs(this.prevZoom - this.map.getZoom()) < 0.1){
+          return;
+        }
+        const direction = this.prevZoom - this.map.getZoom();
+        // current zoom > previous zoom means we zoomed in
+        if(direction < 0 && this.zoomInSound.paused){
+          this.zoomOutSound.pause();
+          this.zoomInSound.currentTime = 0;
+          this.zoomInSound.play();
+        } else if(this.zoomOutSound.paused) {
+          this.zoomInSound.pause();
+          this.zoomOutSound.currentTime = 0;
+          this.zoomOutSound.play();
+        }
+        this.prevZoom = this.map.getZoom();
+      });
       this.setTimers();
+      if(this.alert.state === Ps2alertsEventState.ENDED){
+        this.remaining.$el.remove();
+      }
     },
     factionColor(faction: Faction){
       return MAP_FACTION_COLORS[faction].toString();
@@ -235,7 +276,7 @@ export default Vue.extend({
       var region = this.mapRegions.get(controlEvent.facility);
       if(!region)
         return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 100" width="38" height="38"></svg>';
-      return region.badge().getIcon(faction, 38).outerHTML;
+      return region.badge().getIcon(faction, 30).outerHTML;
     },
     capturingOutfitTag(captureIndex: number): string {
       var reverseIndex = this.historyCache.length - captureIndex - 1;
@@ -251,11 +292,12 @@ export default Vue.extend({
       }
       return factionShortName(controlEvent.newFaction);
     },
-    controlData(captureIndex: number): InstanceFacilityControlEntriesResponseInterface & { loser: string } {
+    controlData(captureIndex: number): InstanceFacilityControlEntriesResponseInterface & { loser: string, bgClass: string } {
       var reverseIndex = this.historyCache.length - captureIndex - 1;
       var controlEvent = this.historyCache[reverseIndex];
-      var loser = factionShortName(controlEvent.oldFaction)
-      return { ...controlEvent, loser: loser };
+      var loser = factionShortName(controlEvent.oldFaction);
+      var bgClass = FactionBgClassString(controlEvent.newFaction);
+      return { ...controlEvent, loser: loser, bgClass: bgClass};
     },
     mapControlData(captureIndex: number): MapControlInterface {
       var reverseIndex = this.historyCache.length - captureIndex - 1;
@@ -294,7 +336,7 @@ export default Vue.extend({
       var textMarkerOptions = {
         pane: "badgeTextPane",
         bubblingMouseEvents: true,
-        riseOnHover: true
+        riseOnHover: true,
       };
 
       var indicator = this.$L.marker(region.mapLocation(), markerOptions);
@@ -305,6 +347,15 @@ export default Vue.extend({
       var text = this.$L.divIcon(badge.textDivOptions());
 
       indicator.setIcon(icon).addTo(this.badges);
+      indicator.once('add', (event) => {
+        var el = indicator.getElement();
+        if(el){
+          el.style.width = 'max(' + badge.minSize().toString() + 'px, max(' + badge.widthVW().toString() + 'vw' + ',' + badge.widthVW().toString() + 'vh))';
+          el.style.height = 'max(' + badge.minSize().toString() + 'px, max(' + badge.heightVW().toString() + 'vw' + ',' + badge.heightVW().toString() + 'vh))';
+          el.style.marginTop = 'min(' + (-badge.minSize() / 2).toString() + 'px, min(' + (-badge.heightVW() / 2).toString() + 'vw' + ',' + (-badge.heightVW() / 2).toString() + 'vh))';
+          el.style.marginLeft = 'min(' + (-badge.minSize() / 2).toString() + 'px, min(' + (-badge.widthVW() / 2).toString() + 'vw' + ',' + (-badge.widthVW() / 2).toString() + 'vh))';
+        }
+      });
       indicatorText.setIcon(text).addTo(this.textBadges);
       return badge;
     },
@@ -738,18 +789,81 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
- ::v-deep .v-slider__tick-label {
+  ::v-deep .v-slider__tick-label {
     font-size: x-small;
     left: calc(0% - 4.5px);
     width: 9px;
     height: 9px;
   }
 
+  .alert-timer-container {
+    display: grid;
+    grid-template: 'icon timer';
+    gap: 4px;
+  }
+
+  @keyframes alert {
+    0% { filter: blur(2px); opacity: 0.5; width: 26px; left: -1px; }
+    50% { filter: blur(4px); opacity: 1; width: 26px; left: -1px; }
+    100% { filter: blur(0px); }
+  }
+
+  .alert-timer-icon-bg {
+    position: absolute;
+    left: 0px;
+    width: 24px;
+    animation-name: alert;
+    animation-direction: alternate;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+  }
+
+  .alert-timer-icon-fg {
+    position: absolute;
+    left: 0px;
+    width: 24px;
+  }
+
+  .alert-timer-icon {
+    grid-area: 'icon';
+    width: 24px;
+    margin-top: 25%;
+  }
+
+  .alert-timer {
+    grid-area: 'timer';
+    font-size: 24px;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 
+      0px 0px 5px rgba(0, 194, 253, 0.7), 
+      0px 0px 10px rgba(0, 194, 253, 0.7), 
+      0px 0px 15px rgba(0, 194, 253, 0.7),
+      0px 0px 20px rgba(0, 194, 253, 0.7);
+  }
+
+  .map-container {
+    display: grid;
+    gap: 8px 8px;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .map-grid-item {
+    grid-column: 1 / span 3;
+  }
+  
+  .map-slider {
+    grid-column: 1 / span 4;
+  }
+
   .map {
     background: #010707;
+    height: 850px;
+    max-height: min(70vw, 80vh);
   }
 
   .timeline {
+    grid-column: 4 / 4;
     --scrollbar-foreground: #303a40;
     --scrollbar-background: rgba(55, 71, 79, 0.8);
     --radius: 10px;
@@ -757,8 +871,8 @@ export default Vue.extend({
     overflow-y: scroll;
     scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
     scrollbar-width: thin;
-    height: 0px;
-    min-height: 90%;
+    height: 850px;
+    max-height: min(70vw, 80vh);
   }
   .timeline::-webkit-scrollbar {
     background: var(--scrollbar-background);
@@ -766,40 +880,25 @@ export default Vue.extend({
     width: var(--size);
     height: var(--size);
   }
-  @media screen and (max-width: 1263px){
-    .timeline {
-      display: none;
-    }
-  }
   .timeline::-webkit-scrollbar-thumb {
     background: var(--scrollbar-foreground); 
   }
-
-  :root {
-    --timeline-opposite-item-width: 64px;
-    --timeline-line-width: 16px;
-  }
-
-  ::v-deep .v-timeline--dense .v-timeline-item__opposite {
-    display: inline-block;
-  }
-
-  ::v-deep .v-timeline-item__opposite {
-    flex: none;
-    min-width: var(--timeline-opposite-item-width);
-  }
-
-  /* line: divider in the middle is 96px wide by default */
-  ::v-deep .v-application--is-ltr .v-timeline--dense:not(.v-timeline--reverse):before {
-    left: calc(
-      var(--timeline-opposite-item-width) + 
-      (96px - var(--timeline-line-width)) / 2
-    );
-    width: var(--timeline-line-width);
-  }
-  @media screen and (max-width: 1550px){
-    ::v-deep .v-timeline--dense .v-timeline-item__opposite {
-      display: none;
+  @media screen and (max-width: 1279px){
+    .alert-timer {
+      font-size: 12px;
     }
+
+    .timeline {
+      display: none;
+      grid-column: auto;
+    }
+
+    .map-grid-item {
+      grid-column: 1 / span 4;
+    }
+  }
+  
+  .timeline-item {
+    margin: 8px;
   }
 </style>

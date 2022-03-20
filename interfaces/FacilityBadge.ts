@@ -6,6 +6,7 @@ import '@svgdotjs/svg.filter.js'
 import { MapRegion } from '~/libraries/MapRegion'
 import facilityTypeName from '~/filters/FacilityTypeName'
 import { Faction } from '~/constants/Faction'
+import facilityTypeShortName from '~/filters/FacilityTypeShortName'
 
 const FONT_OPTIONS = {
   family: 'sans-serif',
@@ -117,7 +118,7 @@ export class FacilityBadge {
   divOptions() {
     return {
       html: this.getSVG() as unknown as HTMLElement,
-      className: 'facility-badge',
+      className: 'icon-' + facilityTypeShortName(this.type),
       iconSize: new LPoint(this.getSize().x, this.getSize().z),
       pane: 'badgePane',
     }
@@ -205,10 +206,10 @@ export class FacilityBadge {
       tspan.cx(0)
     })
     this.text.viewbox(
-      text.bbox().x,
+      text.bbox().x - 5,
       -text.bbox().h,
-      text.bbox().w + 20,
-      100 + text.bbox().h * 2
+      text.bbox().w + 10,
+      100 + text.bbox().h * 2 + 20
     )
 
     text.move(
@@ -238,11 +239,11 @@ export class FacilityBadge {
       this.text
         .get(0)
         .stroke({ color: newColor, opacity: 1 })
-        .fill({ color: newColor, opacity: 1 })
-      this.text.get(1).fill({ color: 'white', opacity: 1 })
+        .fill({ color: newColor, opacity: 1 });
+      //this.text.get(1).fill({ color: 'white', opacity: 1 })
+      this.text.show();
     } else {
-      this.text.get(0).stroke({ opacity: 0 }).fill({ opacity: 0 })
-      this.text.get(1).fill({ opacity: 0 })
+      this.text.hide();
     }
   }
 
@@ -316,7 +317,7 @@ export class FacilityBadge {
       return true
     }
     if (MAJOR_FACILITIES.includes(this.type)) {
-      return true
+      return zoom >= 1
     }
     switch (this.type) {
       case FacilityType.SMALL_OUTPOST:
@@ -330,15 +331,30 @@ export class FacilityBadge {
     }
   }
 
+  minSize(): number {
+    return FacilityBadge.radius(this.region.facilityType);
+  }
+
+  widthVW(): number {
+    return (FacilityBadge.radius(this.region.facilityType) * 0.04 * 2);
+  }
+
+  heightVW(): number {
+    return (FacilityBadge.radius(this.region.facilityType) * 0.04 * 2);
+  }
+
   static radius(type: FacilityType): number {
     if (MAJOR_FACILITIES.includes(type)) {
+      //0.44vw
       return 11
     }
     switch (type) {
       case FacilityType.SMALL_OUTPOST:
       case FacilityType.CONSTRUCTION_OUTPOST:
+        //0.36vw
         return 9
       case FacilityType.LARGE_OUTPOST:
+        //0.4vw
         return 10
       default:
         return 0
