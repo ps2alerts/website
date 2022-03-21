@@ -15,5 +15,8 @@ ENV BASE_URL="https://staging.ps2alerts.com"
 ENV API_HOST="https://api.ps2alerts.com"
 ENV GOOGLE_PROPERTY="G-FJDCBTJV5D"
 
+# Disable NGINX, we use proxy directly
+RUN rm -r /etc/service/nginx
+
 USER node
 RUN cd /app && yarn install && yarn run generate
