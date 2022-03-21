@@ -3,6 +3,10 @@ kind: Ingress
 metadata:
   name: {{ application }}-{{ environment }}
   namespace: ps2alerts
+  annotations:
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "server: hide";
+      more_set_headers "X-Powered-By: A7";
 spec:
   tls:
     - hosts:
