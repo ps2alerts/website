@@ -7,7 +7,7 @@ metadata:
     nginx.ingress.kubernetes.io/configuration-snippet: |
       more_set_headers "X-Powered-By: A7";
     nginx.ingress.kubernetes.io/server-snippet: |
-      expires 1D;
+      expires 1d;
 spec:
   tls:
     - hosts:
