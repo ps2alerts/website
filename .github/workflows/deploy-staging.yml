@@ -4,60 +4,60 @@ on:
   push:
     branches: [staging]
 jobs:
-#  build-docker-images:
-#    runs-on: ${{ matrix.os }}
-#
-#    strategy:
-#      matrix:
-#        os: [ubuntu-latest]
-#        node: [20]
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#        with:
-#          fetch-depth: 0
-#
-#      - name: Set current date as env variable
-#        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
-#
-#      - name: Set Short SHA variable
-#        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-7`" >> $GITHUB_ENV
-#
-#      - name: Get Latest tag
-#        id: latesttag
-#        uses: "WyriHaximus/github-action-get-previous-tag@v1"
-#        with:
-#          fallback: 'UNKNOWN' # Optional fallback tag to use when no tag can be found
-#
-#      - name: Set up QEMU
-#        uses: docker/setup-qemu-action@v1
-#
-#      - name: Set up Docker Buildx
-#        uses: docker/setup-buildx-action@v1
-#        with:
-#          version: latest
-#
-#      - name: Login to DockerHub
-#        uses: docker/login-action@v1
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
-#
-#      - name: Build and push staging image
-#        uses: docker/build-push-action@v2
-#        with:
-#          file: provisioning/staging/Dockerfile
-#          platforms: linux/amd64
-#          push: true
-#          tags: maelstromeous/applications:ps2alerts-website-staging-${{ github.sha }}
-#          build-args: |
-#            BUILD_SHA=${{ env.SHORT_SHA }}
-#            BUILT=${{ env.NOW }}
-#            VERSION=${{ steps.latesttag.outputs.tag }}
+  build-docker-images:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [20]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set current date as env variable
+        run: echo "NOW=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_ENV
+
+      - name: Set Short SHA variable
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-7`" >> $GITHUB_ENV
+
+      - name: Get Latest tag
+        id: latesttag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 'UNKNOWN' # Optional fallback tag to use when no tag can be found
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          version: latest
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push staging image
+        uses: docker/build-push-action@v2
+        with:
+          file: provisioning/staging/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: maelstromeous/applications:ps2alerts-website-staging-${{ github.sha }}
+          build-args: |
+            BUILD_SHA=${{ env.SHORT_SHA }}
+            BUILT=${{ env.NOW }}
+            VERSION=${{ steps.latesttag.outputs.tag }}
 
   deploy-to-k8s:
-#    needs: build-docker-images
+    needs: build-docker-images
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -67,7 +67,7 @@ jobs:
       - name: Update the K8s application resource file
         run: |
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
-          -e 's|{{ version }}|b60640137242ffa2936454c8ef710c6efcb8bdab|' \
+          -e 's|{{ version }}|${{ github.sha }}|' \
           -e 's|{{ environment }}|staging|' \
           -e 's|{{ replicas }}|2|' \
           provisioning/k8s/application.yml
@@ -84,7 +84,7 @@ jobs:
       - name: Update the K8s environment resource file
         run: |
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
-          -e 's|{{ version }}|b60640137242ffa2936454c8ef710c6efcb8bdab|' \
+          -e 's|{{ version }}|${{ github.sha }}|' \
           -e 's|{{ environment }}|staging|' \
           -e 's|{{ hostname }}|staging.ps2alerts.com|' \
           provisioning/staging/k8s.yml
