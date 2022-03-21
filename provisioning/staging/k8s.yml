@@ -24,7 +24,7 @@ spec:
               service:
                 name: {{ application }}-{{ environment }}
                 port:
-                  number: 80
+                  number: 3000
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
