@@ -1,6 +1,7 @@
 FROM maelstromeous/applications:ps2alerts-website-base
 USER root
-COPY ./provisioning/production/files/nginx/production.conf /etc/nginx/conf.d
+# Disable NGINX, we use proxy directly
+RUN rm -r /etc/service/nginx
 COPY --chown=node:node . /app
 
 ARG BUILD_SHA="abc12345"
