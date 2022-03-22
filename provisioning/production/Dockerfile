@@ -1,6 +1,6 @@
 FROM maelstromeous/applications:ps2alerts-website-base
 USER root
-COPY ./provisioning/staging/files/nginx/staging.conf /etc/nginx/conf.d
+COPY ./provisioning/staging/files/nginx/production.conf /etc/nginx/conf.d
 COPY --chown=node:node . /app
 
 ARG BUILD_SHA="abc12345"
