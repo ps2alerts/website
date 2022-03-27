@@ -155,7 +155,7 @@ import Vue from 'vue'
 import { LControl, LMap } from 'vue2-leaflet'
 import RemainingTime from '../RemainingTime.vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
-import { worldToMap, LatLng } from '~/interfaces/mapping/MapDrawingInterface'
+import { worldToMap } from '~/libraries/MapWorld'
 import {
   MAP_FACTION_COLORS,
   MAP_LINK_COLORS,
