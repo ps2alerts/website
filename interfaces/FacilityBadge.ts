@@ -239,11 +239,10 @@ export class FacilityBadge {
       this.text
         .get(0)
         .stroke({ color: newColor, opacity: 1 })
-        .fill({ color: newColor, opacity: 1 });
-      //this.text.get(1).fill({ color: 'white', opacity: 1 })
-      this.text.show();
+        .fill({ color: newColor, opacity: 1 })
+      this.text.show()
     } else {
-      this.text.hide();
+      this.text.hide()
     }
   }
 
@@ -332,29 +331,26 @@ export class FacilityBadge {
   }
 
   minSize(): number {
-    return FacilityBadge.radius(this.region.facilityType);
+    return FacilityBadge.radius(this.region.facilityType)
   }
 
   widthVW(): number {
-    return (FacilityBadge.radius(this.region.facilityType) * 0.04 * 2);
+    return FacilityBadge.radius(this.region.facilityType) * 0.04 * 2
   }
 
   heightVW(): number {
-    return (FacilityBadge.radius(this.region.facilityType) * 0.04 * 2);
+    return FacilityBadge.radius(this.region.facilityType) * 0.04 * 2
   }
 
   static radius(type: FacilityType): number {
     if (MAJOR_FACILITIES.includes(type)) {
-      //0.44vw
       return 11
     }
     switch (type) {
       case FacilityType.SMALL_OUTPOST:
       case FacilityType.CONSTRUCTION_OUTPOST:
-        //0.36vw
         return 9
       case FacilityType.LARGE_OUTPOST:
-        //0.4vw
         return 10
       default:
         return 0

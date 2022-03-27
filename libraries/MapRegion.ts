@@ -164,25 +164,25 @@ export class MapRegion implements MapRegionDrawingInterface {
     if (!edge) {
       return this.outlineCache
     }
-    var temp_outline_cache: number[][] = []
-    temp_outline_cache.push(edge[0])
-    temp_outline_cache.push(edge[1])
+    var tempOutlineCache: number[][] = []
+    tempOutlineCache.push(edge[0])
+    tempOutlineCache.push(edge[1])
     while (pile.length !== 0) {
       edge = pile.shift()
       if (!edge) {
         break;
       }
       const pointIndices = [-1, -1]
-      for (let i = 0; i < temp_outline_cache.length; i++) {
+      for (let i = 0; i < tempOutlineCache.length; i++) {
         if (
-          Math.abs(temp_outline_cache[i][0] - edge[0][0]) < 0.1 &&
-          Math.abs(temp_outline_cache[i][1] - edge[0][1]) < 0.1
+          Math.abs(tempOutlineCache[i][0] - edge[0][0]) < 0.1 &&
+          Math.abs(tempOutlineCache[i][1] - edge[0][1]) < 0.1
         ) {
           pointIndices[0] = i
         }
         if (
-          Math.abs(temp_outline_cache[i][0] - edge[1][0]) < 0.1 &&
-          Math.abs(temp_outline_cache[i][1] - edge[1][1]) < 0.1
+          Math.abs(tempOutlineCache[i][0] - edge[1][0]) < 0.1 &&
+          Math.abs(tempOutlineCache[i][1] - edge[1][1]) < 0.1
         ) {
           pointIndices[1] = i
         }
@@ -194,20 +194,20 @@ export class MapRegion implements MapRegionDrawingInterface {
         continue
       }
       if (pointIndices[0] !== -1) {
-        if (pointIndices[0] + 1 === temp_outline_cache.length) {
+        if (pointIndices[0] + 1 === tempOutlineCache.length) {
           pointIndices[0] = -1
         }
-        temp_outline_cache.splice(pointIndices[0] + 1, 0, edge[1])
+        tempOutlineCache.splice(pointIndices[0] + 1, 0, edge[1])
       } else if (pointIndices[1] !== -1) {
         if (pointIndices[1] === 0) {
-          pointIndices[1] = temp_outline_cache.length
+          pointIndices[1] = tempOutlineCache.length
         }
-        temp_outline_cache.splice(pointIndices[1], 0, edge[0])
+        tempOutlineCache.splice(pointIndices[1], 0, edge[0])
       } else {
         pile.push(edge)
       }
     }
-    temp_outline_cache.forEach((point) => {
+    tempOutlineCache.forEach((point) => {
       this.outlineCache.push(worldToMap(point));
     });
     return this.outlineCache
