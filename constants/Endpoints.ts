@@ -1,3 +1,5 @@
+export const AssetsBaseUrl = 'https://assets.ps2alerts.com'
+
 export const Endpoints = {
   AGGREGATES_GLOBAL_CHARACTER: '/aggregates/global/character',
   AGGREGATES_GLOBAL_CHARACTER_SINGLE:
@@ -51,6 +53,11 @@ export const Endpoints = {
   AGGREGATES_INSTANCE_WEAPON: '/aggregates/instance/{instance}/weapon',
   AGGREGATES_INSTANCE_WEAPON_SINGLE:
     '/aggregates/instance/{instance}/weapon/{weapon}',
+  
+  ASSETS_AUDIO_ZOOM_IN: AssetsBaseUrl + '/audio/UI_INTERFACE_MAP_ZOOM_IN.wav',
+  ASSETS_AUDIO_ZOOM_OUT: AssetsBaseUrl + '/audio/UI_INTERFACE_MAP_ZOOM_OUT.wav',
+  ASSETS_AUDIO_ALERT_START: AssetsBaseUrl + '/audio/UI_EVENT_NOTIFICATION_START.wav',
+  ASSETS_AUDIO_ALERT_END: AssetsBaseUrl + '/audio/UI_EVENT_NOTIFICATION_END.wav',
 
   CENSUS_OSHUR_DATA: '/census/oshur',
   CENSUS_OSHUR_HEX_DATA: '/census/oshur-hex',

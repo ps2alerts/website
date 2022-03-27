@@ -106,7 +106,7 @@ import ApiRequest from '@/api-request';
 import MapRegionDataRequest from '@/libraries/MapRegionDataRequest';
 import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
 import { InstanceFacilityControlEntriesResponseInterface } from '~/interfaces/instance-entries/InstanceFacilityControlEntriesResponseInterface';
-import { Endpoints } from '~/constants/Endpoints';
+import { AssetsBaseUrl, Endpoints } from '~/constants/Endpoints';
 import zoneNameFilter from '~/filters/ZoneName';
 import { FacilityType } from '~/constants/FacilityType';
 import { MapRegion } from '~/libraries/MapRegion';
@@ -141,7 +141,7 @@ export default Vue.extend({
       zoom: 2,
       prevZoom: 2,
       center: [-128, 128],
-      url: "https://assets.ps2alerts.com/zones/" + zoneNameFilter(this.alert.zone).toLowerCase() + "/{z}/tile_{x}_{y}.png",
+      url: AssetsBaseUrl + '/zones/' + zoneNameFilter(this.alert.zone).toLowerCase() + '/{z}/tile_{x}_{y}.png',
       minZoom: 2,
       maxZoom: 7,
       zoomSnap: 1,
@@ -153,7 +153,7 @@ export default Vue.extend({
       mapRegions: new Map<number, MapRegion>(),
       map: {} as L.Map,
       remaining: {} as LControl,
-      crs: this.$L.CRS.Simple, //this.$L.extend({}, this.$L.CRS.Simple, {wrapLng: [0, 256]}),
+      crs: this.$L.CRS.Simple,
       polys: this.$L.featureGroup([], {
         pane: "hexPane"
       }),
@@ -175,8 +175,8 @@ export default Vue.extend({
       sliderMax: 0,
       historyCache: [] as InstanceFacilityControlEntriesResponseInterface[],
       outfitData: new Map<string, InstanceOutfitAggregateResponseInterface>(),
-      zoomInSound: new Audio('/audio/UI_INTERFACE_MAP_ZOOM_IN.wav'),
-      zoomOutSound: new Audio('/audio/UI_INTERFACE_MAP_ZOOM_OUT.wav'),
+      zoomInSound: new Audio(Endpoints.ASSETS_AUDIO_ZOOM_IN),
+      zoomOutSound: new Audio(Endpoints.ASSETS_AUDIO_ZOOM_OUT),
       // data: {} as InstanceFactionCombatAggregateResponseInterface,
     }
   },
@@ -251,8 +251,8 @@ export default Vue.extend({
 
       this.zoomInSound.loop = false;
       this.zoomOutSound.loop = false;
-      this.zoomInSound.volume = 0.1;
-      this.zoomOutSound.volume = 0.1;
+      this.zoomInSound.volume = 0.5;
+      this.zoomOutSound.volume = 0.5;
       this.map.on('zoom', () => {
         if(Math.abs(this.prevZoom - this.map.getZoom()) < 0.1){
           return;
