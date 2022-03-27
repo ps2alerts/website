@@ -42,6 +42,8 @@ export class MapRegion implements MapRegionDrawingInterface {
   facilityType: FacilityType
   badgeLocation: Point
   zoneId: Zone
+  // ESLint apparently isn't smart enough to understand graphs ¯\_(ツ)_/¯
+  // eslint-disable-next-line no-use-before-define
   connections: MapRegion[]
   connectionIds: number[]
   hexes: CubeHex[]
@@ -164,13 +166,13 @@ export class MapRegion implements MapRegionDrawingInterface {
     if (!edge) {
       return this.outlineCache
     }
-    var tempOutlineCache: number[][] = []
+    const tempOutlineCache: number[][] = []
     tempOutlineCache.push(edge[0])
     tempOutlineCache.push(edge[1])
     while (pile.length !== 0) {
       edge = pile.shift()
       if (!edge) {
-        break;
+        break
       }
       const pointIndices = [-1, -1]
       for (let i = 0; i < tempOutlineCache.length; i++) {
@@ -208,8 +210,8 @@ export class MapRegion implements MapRegionDrawingInterface {
       }
     }
     tempOutlineCache.forEach((point) => {
-      this.outlineCache.push(worldToMap(point));
-    });
+      this.outlineCache.push(worldToMap(point))
+    })
     return this.outlineCache
   }
 
