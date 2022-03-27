@@ -78,6 +78,7 @@
           min="1"
           v-model="sliderVal"
           dark
+          thumb-color="#FFFFFF"
           @change="historyCallback"
           @click:prepend="decrementSlider"
           @click:append="incrementSlider"
