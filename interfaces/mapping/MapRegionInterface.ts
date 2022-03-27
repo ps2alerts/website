@@ -1,5 +1,5 @@
 import { FacilityBadge } from '../FacilityBadge'
-import { Point } from './MapDrawingInterface'
+import { LatLng, Point } from './MapDrawingInterface'
 import { FacilityType } from '~/constants/FacilityType'
 import { Faction } from '~/constants/Faction'
 import { Zone } from '~/constants/Zone'
@@ -16,6 +16,6 @@ export interface MapRegionInterface {
 
 export interface MapRegionDrawingInterface extends MapRegionInterface {
   badge(indicatorStamp?: number, indicatorTextStamp?: number): FacilityBadge
-  outline(): number[][]
+  outline(): LatLng[]
   faction: Faction
 }

@@ -46,9 +46,10 @@ export class MapRegion implements MapRegionDrawingInterface {
   connectionIds: number[]
   hexes: CubeHex[]
   indices: CubeHexIndices[]
+  outlineStamp: number
   private m_badge: FacilityBadge
   private cutoff: boolean
-  private outline_cache: number[][]
+  private outlineCache: LatLng[]
   private hexSet: Record<string, CubeHex>
 
   constructor(region: CensusMapRegionInterface, zone: Zone) {
@@ -57,6 +58,7 @@ export class MapRegion implements MapRegionDrawingInterface {
     this.name = region.facility_name
     this.facilityType = parseInt(region.facility_type_id, 10)
     this.indices = []
+    this.outlineStamp = -1
 
     // Fun data injections for the whole family
     const outpost = getIndarConstructionOutpost(this.id)
@@ -89,7 +91,7 @@ export class MapRegion implements MapRegionDrawingInterface {
     })
 
     this.faction = Faction.NONE
-    this.outline_cache = []
+    this.outlineCache = []
     this.cutoff = false
     this.m_badge = new FacilityBadge(this, -1, -1)
   }
@@ -142,9 +144,9 @@ export class MapRegion implements MapRegionDrawingInterface {
       : MAP_FACTION_COLORS[this.faction]
   }
 
-  outline(): number[][] {
-    if (this.outline_cache.length > 0 || this.hexes.length === 0) {
-      return this.outline_cache
+  outline(): LatLng[] {
+    if (this.outlineCache.length > 0 || this.hexes.length === 0) {
+      return this.outlineCache
     }
     const pile: number[][][] = []
     this.hexes.forEach((hex) => {
@@ -160,26 +162,27 @@ export class MapRegion implements MapRegionDrawingInterface {
 
     let edge = pile.shift()
     if (!edge) {
-      return this.outline_cache
+      return this.outlineCache
     }
-    this.outline_cache.push(edge[0])
-    this.outline_cache.push(edge[1])
+    var temp_outline_cache: number[][] = []
+    temp_outline_cache.push(edge[0])
+    temp_outline_cache.push(edge[1])
     while (pile.length !== 0) {
       edge = pile.shift()
       if (!edge) {
-        return this.outline_cache
+        break;
       }
       const pointIndices = [-1, -1]
-      for (let i = 0; i < this.outline_cache.length; i++) {
+      for (let i = 0; i < temp_outline_cache.length; i++) {
         if (
-          Math.abs(this.outline_cache[i][0] - edge[0][0]) < 0.1 &&
-          Math.abs(this.outline_cache[i][1] - edge[0][1]) < 0.1
+          Math.abs(temp_outline_cache[i][0] - edge[0][0]) < 0.1 &&
+          Math.abs(temp_outline_cache[i][1] - edge[0][1]) < 0.1
         ) {
           pointIndices[0] = i
         }
         if (
-          Math.abs(this.outline_cache[i][0] - edge[1][0]) < 0.1 &&
-          Math.abs(this.outline_cache[i][1] - edge[1][1]) < 0.1
+          Math.abs(temp_outline_cache[i][0] - edge[1][0]) < 0.1 &&
+          Math.abs(temp_outline_cache[i][1] - edge[1][1]) < 0.1
         ) {
           pointIndices[1] = i
         }
@@ -191,20 +194,23 @@ export class MapRegion implements MapRegionDrawingInterface {
         continue
       }
       if (pointIndices[0] !== -1) {
-        if (pointIndices[0] + 1 === this.outline_cache.length) {
+        if (pointIndices[0] + 1 === temp_outline_cache.length) {
           pointIndices[0] = -1
         }
-        this.outline_cache.splice(pointIndices[0] + 1, 0, edge[1])
+        temp_outline_cache.splice(pointIndices[0] + 1, 0, edge[1])
       } else if (pointIndices[1] !== -1) {
         if (pointIndices[1] === 0) {
-          pointIndices[1] = this.outline_cache.length
+          pointIndices[1] = temp_outline_cache.length
         }
-        this.outline_cache.splice(pointIndices[1], 0, edge[0])
+        temp_outline_cache.splice(pointIndices[1], 0, edge[0])
       } else {
         pile.push(edge)
       }
     }
-    return this.outline_cache
+    temp_outline_cache.forEach((point) => {
+      this.outlineCache.push(worldToMap(point));
+    });
+    return this.outlineCache
   }
 
   outlineOptions() {

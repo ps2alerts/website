@@ -31,7 +31,7 @@
       </div>
       <div class="timeline">
         <client-only>
-        <v-subheader dark>Alert Capture Timeline (Base, Capturing Outfit, Overall Territory Control)</v-subheader>
+        <v-card-text style="opacity: 0.7">Alert Capture Timeline</v-card-text>
         <v-card dark class="timeline-item"
           v-for="(captureIndex, index) in captureIndices.slice().reverse()"
           :key="index"
@@ -48,7 +48,7 @@
                 {{ regionName(captureIndex) }}
             </v-card-subtitle>
             <v-card-text style="padding-left: 8px; padding-right: 8px;" class="captureOutfit">
-              Captured by {{capturingOutfitTag(captureIndex)}} from {{controlData(captureIndex).loser}}
+              {{capturingOutfitTag(captureIndex)}} captured the base from the {{controlData(captureIndex).loser}}
             </v-card-text>
             <div>
               <FactionSegmentBar
@@ -67,20 +67,28 @@
         </client-only>
       </div>
       <div class="map-slider">
-      <v-slider 
-        ref="history"
-        tick-size="5"
-        ticks="always"
-        :tick-labels="tickLabels"
-        append-icon="mdi-update"
-        prepend-icon="mdi-history"
-        :max="sliderMax"
-        v-model="sliderVal"
-        dark
-        @change="historyCallback"
-        @click:prepend="decrementSlider"
-        @click:append="incrementSlider"
-        ></v-slider>
+        <v-slider 
+          ref="history"
+          tick-size="5"
+          ticks="always"
+          :tick-labels="tickLabels"
+          append-icon="mdi-update"
+          prepend-icon="mdi-history"
+          :max="sliderMax"
+          min="1"
+          v-model="sliderVal"
+          dark
+          @change="historyCallback"
+          @click:prepend="decrementSlider"
+          @click:append="incrementSlider"
+          ></v-slider>
+      </div>
+      <div class="current-capture" v-if="captureIndices.length > sliderVal - 1 && sliderVal - 1 >= 0">
+        <span style="background-color: rgb(30, 30, 30); border: 1px solid black; border-radius: 4px; padding-top: 8px; padding-bottom: 8px;">
+          <span :class="controlData(captureIndices[sliderVal - 1]).bgClass" style="padding: 8px;">
+            <span style="opacity: 0.7;">{{controlData(captureIndices[sliderVal - 1]).timestamp | dateTimeFormatShort}}:</span> {{regionName(captureIndices[sliderVal - 1])}} captured by {{capturingOutfitTag(captureIndices[sliderVal - 1])}}
+          </span>
+        </span>
       </div>
     </div>
   </div>
@@ -148,7 +156,6 @@ export default Vue.extend({
       polys: this.$L.featureGroup([], {
         pane: "hexPane"
       }),
-      polyStamps: {} as Record<number, number>,
       links: this.$L.featureGroup([], {
         pane: "linkPane"
       }),
@@ -227,6 +234,7 @@ export default Vue.extend({
       this.map.attributionControl.addAttribution('Hex and region data from <a href="https://census.daybreakgames.com">Census</a>');
       this.map.attributionControl.addAttribution('Oshur region data from <a title="Planetside 2 API developers\' Discord channel on the unofficial Planetside 2 Discord server" href="https://discord.com/channels/251073753759481856/451032574538547201">#api-dev</a>');
       this.map.attributionControl.addAttribution('Oshur hex data from RiderAnton');
+      this.map.attributionControl.getContainer()?.classList.add('alert-map-attribution');
       this.map.createPane("hexPane", this.map.getPane("overlayPane"));
       this.map.createPane("linkPane", this.map.getPane("overlayPane"));
       this.map.createPane("badgePane", this.map.getPane("overlayPane"));
@@ -274,8 +282,9 @@ export default Vue.extend({
       var controlEvent = this.historyCache[reverseIndex];
       var faction = controlEvent.newFaction;
       var region = this.mapRegions.get(controlEvent.facility);
+      const size = '30';
       if(!region)
-        return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 100" width="38" height="38"></svg>';
+        return '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 100" width="'+ size + '" height="' + size + '"></svg>';
       return region.badge().getIcon(faction, 30).outerHTML;
     },
     capturingOutfitTag(captureIndex: number): string {
@@ -285,7 +294,11 @@ export default Vue.extend({
       if(outfitId){
         var outfitAggregate = this.outfitData.get(outfitId);
         if(outfitAggregate && outfitAggregate.outfit.tag){
-          return "[" + outfitAggregate.outfit.tag + "]";
+          // Nested if so that it will drop out of the if statements to return the faction name
+          //   when the "SERVER" outfit captures a base
+          if(outfitAggregate.outfit.tag !== 'SERVER'){
+            return "[" + outfitAggregate.outfit.tag + "]";
+          }
         } else if(outfitAggregate && outfitAggregate.outfit.name) {
           return outfitAggregate.outfit.name
         } else {
@@ -360,13 +373,6 @@ export default Vue.extend({
       });
       indicatorText.setIcon(text).addTo(this.textBadges);
       return badge;
-    },
-    outline(facility_id: number): LatLng[] {
-      var to_return: LatLng[] = [];
-      this.mapRegions.get(facility_id)?.outline().forEach((point: number[]) => {
-        to_return.push(worldToMap(point));
-      });
-      return to_return;
     },
     warpgate(faction: Faction): MapRegion | undefined {
       var zone = this.alert.zone;
@@ -458,19 +464,19 @@ export default Vue.extend({
       this.sliderVal = value;
       var reverse = this.oldSliderVal > this.sliderVal;
       this.oldSliderVal = this.sliderVal;
-      if(value >= this.captureIndices.length){
+      if(this.sliderVal >= this.captureIndices.length){
         this.resetLimit();
       }
       //Force an update when returning to the latest capture
       var forceUpdate = false;
-      if(value >= this.captureIndices.length){
+      if(this.sliderVal >= this.captureIndices.length){
         forceUpdate = true;
       }
 
       var capture = this.updateTerritory(
         // Copy the history since updateTerritory reverses the provided list
         Object.assign([], this.historyCache), 
-        forceUpdate ? undefined : value, 
+        forceUpdate ? undefined : this.sliderVal, 
         forceUpdate,
         reverse
       );
@@ -518,13 +524,33 @@ export default Vue.extend({
 
           // If we've reached the final region we're updating, apply the "captured" class to the hex to animate the color change
           if(indexLimit && (index == this.captureIndices[indexLimit - 1]) || controlEvent.timestamp == lastCaptureEvent?.timestamp){
-            var facility = (reverse && indexLimit) ? eventArray[this.captureIndices[indexLimit]].facility : controlEvent.facility;
-            var polygon = (<L.Polygon | undefined>this.polys.getLayer(this.polyStamps[facility]));
+            //var facility = (reverse && indexLimit) ? eventArray[this.captureIndices[indexLimit]].facility : controlEvent.facility;
+            var reverseFacility = (reverse && indexLimit) ? eventArray[this.captureIndices[indexLimit]].facility : undefined;
+            var facility = controlEvent.facility;
+            var region = this.mapRegions.get(facility)
+            if(!region){
+              console.error("Region not found for facility " + facility.toString());
+              return;
+            }
+            var polygon = (<L.Polygon | undefined>this.polys.getLayer(region.outlineStamp));
             polygon?.getElement()?.classList.add("captured");
             polygon?.bringToFront();
             setTimeout(() => {
               polygon?.getElement()?.classList.remove("captured");
             }, 1000);
+
+            if(reverseFacility){
+              region = this.mapRegions.get(reverseFacility);
+              if(!region){
+                console.error("Region not found for facility " + reverseFacility.toString());
+                return;
+              }
+              polygon = (<L.Polygon | undefined>this.polys.getLayer(region.outlineStamp));
+              polygon?.getElement()?.classList.add("uncaptured");
+              setTimeout(() => {
+                polygon?.getElement()?.classList.remove("uncaptured");
+              }, 1000);
+            }
           }
           if(indexLimit){
             this.currentIndex = index
@@ -532,9 +558,6 @@ export default Vue.extend({
         }
         // If this is a brand new capture event, add it to our list
         if(!controlEvent.isInitial && !this.captureIndices.includes(index)){
-          if(this.captureIndices.length == 0 && index > 0){
-            this.tickLabels.push(factionCircleEmoji(eventArray[index - 1].newFaction));
-          }
           this.captureIndices.push(index);
           this.tickLabels.push(factionCircleEmoji(controlEvent.newFaction));
           this.sliderMax = this.captureIndices.length;
@@ -549,7 +572,7 @@ export default Vue.extend({
     updateCutoffs(): void {
       for(var region of this.mapRegions.values()) {
         region.setCutoff(this.cutoff(region));
-        var polygon = (<L.Polygon | undefined>this.polys.getLayer(this.polyStamps[region.id]));
+        var polygon = (<L.Polygon | undefined>this.polys.getLayer(region.outlineStamp));
         polygon?.setStyle({
             fillColor: region.color().toString(),
             fillOpacity: region.color().a + (region.isCutoff() ? 0.4 : 0),
@@ -697,7 +720,7 @@ export default Vue.extend({
       this.$L.Icon.Default.prototype.options.tooltipAnchor = [0, 0];
       regions.forEach((region) => {
         this.mapRegions.set(region.id, region);
-        var polygon = this.$L.polygon(this.outline(region.id), region.outlineOptions());
+        var polygon = this.$L.polygon(region.outline(), region.outlineOptions());
         
         // Set on hover colors and ensure the attached badge layers get the same event
         polygon.on("mouseover", (e: L.LeafletMouseEvent) => {
@@ -725,7 +748,7 @@ export default Vue.extend({
         });
         
         // TODO: This should probably go on the region instead
-        this.polyStamps[region.id] = this.$L.stamp(polygon);
+        region.outlineStamp = this.$L.stamp(polygon);
         this.polys.addLayer(polygon);
       });
 
@@ -773,7 +796,7 @@ export default Vue.extend({
       for(var region of this.mapRegions.values()) {
         var badge = this.badges.getLayer(region.badge().indicatorStamp);
         var text = this.textBadges.getLayer(region.badge().textStamp);
-        var polygon = this.polys.getLayer(this.polyStamps[region.id]);
+        var polygon = this.polys.getLayer(region.outlineStamp);
         if(badge === undefined || polygon === undefined || text === undefined){
           return;
         }
@@ -805,8 +828,8 @@ export default Vue.extend({
   }
 
   @keyframes alert {
-    0% { filter: blur(2px); opacity: 0.5; width: 26px; left: -1px; }
-    50% { filter: blur(4px); opacity: 1; width: 26px; left: -1px; }
+    0% { filter: blur(2px); opacity: 0.5; width: 28px; left: -2px; }
+    50% { filter: blur(4px); opacity: 1; width: 28px; left: -2px; }
     100% { filter: blur(0px); }
   }
 
@@ -858,6 +881,10 @@ export default Vue.extend({
     grid-column: 1 / span 4;
   }
 
+  .current-capture {
+    grid-column: 1 / span 4;
+  }
+
   .map {
     background: #010707;
     height: 850px;
@@ -887,6 +914,32 @@ export default Vue.extend({
   }
   @media screen and (max-width: 1279px){
     .alert-timer {
+      font-size: 12px;
+    }
+
+    @keyframes alert {
+      0% { filter: blur(2px); opacity: 0.5; width: 14px; left: -1px; }
+      50% { filter: blur(4px); opacity: 1; width: 14px; left: -1px; }
+      100% { filter: blur(0px); }
+    }
+
+    .alert-timer-icon-bg {
+      width: 12px;
+    }
+
+    .alert-timer-icon-fg {
+      width: 12px;
+    }
+
+    .alert-timer-icon {
+      width: 12px;
+    }
+
+    ::v-deep .alert-map-attribution {
+      font-size: 6px !important;
+    }
+
+    .current-capture {
       font-size: 12px;
     }
 
