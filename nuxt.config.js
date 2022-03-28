@@ -97,6 +97,7 @@ export default {
     { src: '@/filters/AlertEndTime', mode: 'client' },
     { src: '@/filters/BracketName', mode: 'client' },
     { src: '@/filters/DateTimeFormat', mode: 'client' },
+    { src: '@/filters/FacilityTypeShortName', mode: 'client' },
     { src: '@/filters/FactionCircleEmoji', mode: 'client' },
     { src: '@/filters/FactionId', mode: 'client' },
     { src: '@/filters/FactionName', mode: 'client' },
