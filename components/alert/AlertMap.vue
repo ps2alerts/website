@@ -6,8 +6,8 @@
       :percent="updateCountdownPercent"
       :update-rate="updateRate"
     />
-    <div class="map-container">
-      <div class="map-grid-item">
+    <div class="grid gap-2 grid-cols-4">
+      <div class="col-start-1 col-span-4 xl:col-span-3">
         <client-only>
           <l-map
             ref="map"
@@ -22,14 +22,20 @@
             <l-control
               ref="timer"
               position="topright"
-              class="alert-timer-container"
+              class="grid grid-flow-col auto-cols-max gap-1"
             >
-              <div class="alert-timer-icon">
-                <img src="/img/alert-icon.png" class="alert-timer-icon-bg" />
-                <img src="/img/alert-icon.png" class="alert-timer-icon-fg" />
+              <div class="w-3 mt-[3px] xl:w-6 xl:mt-1.5">
+                <img
+                  src="/img/alert-icon.png"
+                  class="absolute left-0 w-3 xl:w-6 animate-alert-small xl:animate-alert"
+                />
+                <img
+                  src="/img/alert-icon.png"
+                  class="absolute left-0 w-3 xl:w-6"
+                />
               </div>
               <remaining-time
-                class="alert-timer"
+                class="alert-timer text-xs xl:text-2xl"
                 :started="alert.timeStarted"
                 :duration="alert.duration"
               ></remaining-time>
@@ -37,53 +43,36 @@
           </l-map>
         </client-only>
       </div>
-      <div class="timeline">
+      <div
+        class="timeline overflow-y-auto col-start-4 col-span-1 hidden xl:block"
+      >
         <client-only>
-          <v-card-text class="text-gray-700">
+          <v-card-text class="text-gray-300">
             Alert Capture Timeline
           </v-card-text>
           <v-card
             v-for="(captureIndex, index) in captureIndices.slice().reverse()"
             :key="index"
             dark
-            class="timeline-item"
+            class="m-2"
             @click="historyIndexCallback(captureIndices.length - index)"
           >
             <div :class="controlData(captureIndex).bgClass">
+              <span class="text-gray-300 text-xs absolute top-2 left-2">{{
+                historyCache[historyCache.length - captureIndex - 1].timestamp
+                  | dateTimeFormatShort
+              }}</span>
               <span
-                style="
-                  position: absolute;
-                  left: 8px;
-                  top: 8px;
-                  color: rgba(255, 255, 255, 0.7);
-                  font-size: 12px;
-                "
-                >{{
-                  historyCache[historyCache.length - captureIndex - 1].timestamp
-                    | dateTimeFormatShort
-                }}</span
-              >
-              <span
-                style="position: absolute; right: 8px; top: 8px"
+                class="absolute top-2 right-2"
                 v-html="facilityIconSvg(captureIndex)"
               ></span>
-              <v-card-subtitle
-                style="
-                  padding-bottom: 4px;
-                  padding-top: 24px;
-                  padding-right: 38px;
-                  padding-left: 38px;
-                "
-              >
+              <div class="pb-1 pt-6 px-10 text-sm">
                 {{ regionName(captureIndex) }}
-              </v-card-subtitle>
-              <v-card-text
-                style="padding-left: 8px; padding-right: 8px"
-                class="captureOutfit"
-              >
+              </div>
+              <div class="px-2 pb-4 text-sm">
                 {{ capturingOutfitTag(captureIndex) }} captured the base from
                 the {{ controlData(captureIndex).loser }}
-              </v-card-text>
+              </div>
               <div>
                 <FactionSegmentBar
                   v-if="controlData(captureIndex).mapControl"
@@ -102,7 +91,7 @@
           </v-card>
         </client-only>
       </div>
-      <div class="map-slider">
+      <div class="col-start-1 col-span-4">
         <v-slider
           ref="history"
           v-model="sliderVal"
@@ -122,22 +111,15 @@
       </div>
       <div
         v-if="captureIndices.length > sliderVal - 1 && sliderVal - 1 >= 0"
-        class="current-capture"
+        class="col-start-1 col-span-4 text-xs xl:text-base"
       >
         <span
-          style="
-            background-color: rgb(30, 30, 30);
-            border: 1px solid black;
-            border-radius: 4px;
-            padding-top: 8px;
-            padding-bottom: 8px;
-          "
+          class="bg-neutral-800 border border-black border-solid rounded py-2"
         >
           <span
-            :class="controlData(captureIndices[sliderVal - 1]).bgClass"
-            style="padding: 8px"
+            :class="controlData(captureIndices[sliderVal - 1]).bgClass + ' p-2'"
           >
-            <span style="opacity: 0.7"
+            <span class="text-gray-300"
               >{{
                 controlData(captureIndices[sliderVal - 1]).timestamp
                   | dateTimeFormatShort
@@ -302,20 +284,18 @@ export default Vue.extend({
       this.map = (this.$refs.map as LMap).mapObject as L.Map
       this.remaining = this.$refs.timer as LControl
       this.map.attributionControl.addAttribution(
-        'Tiles extracted from <a title="Planetside 2® Public Test Server" href="https://forums.daybreakgames.com/ps2/index.php?threads/read-first-test-server-policies-download-link.114038/">PTS client</a>'
+        'Tiles from <a title="Planetside 2® Public Test Server" href="https://forums.daybreakgames.com/ps2/index.php?threads/read-first-test-server-policies-download-link.114038/">PTS client</a>'
       )
       this.map.attributionControl.addAttribution(
-        'Hex and region data from <a href="https://census.daybreakgames.com">Census</a>'
+        'Map data from <a href="https://census.daybreakgames.com">Census</a>'
       )
       this.map.attributionControl.addAttribution(
-        'Oshur region data from <a title="Planetside 2 API developers\' Discord channel on the unofficial Planetside 2 Discord server" href="https://discord.com/channels/251073753759481856/451032574538547201">#api-dev</a>'
+        'Oshur data from <a title="Planetside 2 API developers\' Discord channel on the unofficial Planetside 2 Discord server" href="https://discord.com/channels/251073753759481856/451032574538547201">#api-dev</a>'
       )
-      this.map.attributionControl.addAttribution(
-        'Oshur hex data from RiderAnton'
-      )
+      this.map.attributionControl.addAttribution('Oshur hexes from RiderAnton')
       this.map.attributionControl
         .getContainer()
-        ?.classList.add('alert-map-attribution')
+        ?.classList.add('whitespace-nowrap')
       this.map.createPane('hexPane', this.map.getPane('overlayPane'))
       this.map.createPane('linkPane', this.map.getPane('overlayPane'))
       this.map.createPane('badgePane', this.map.getPane('overlayPane'))
@@ -1042,78 +1022,11 @@ export default Vue.extend({
   height: 9px;
 }
 
-.alert-timer-container {
-  display: grid;
-  grid-template: 'icon timer';
-  gap: 4px;
-}
-
-@keyframes alert {
-  0% {
-    filter: blur(2px);
-    opacity: 0.5;
-    width: 28px;
-    left: -2px;
-  }
-  50% {
-    filter: blur(4px);
-    opacity: 1;
-    width: 28px;
-    left: -2px;
-  }
-  100% {
-    filter: blur(0px);
-  }
-}
-
-.alert-timer-icon-bg {
-  position: absolute;
-  left: 0px;
-  width: 24px;
-  animation-name: alert;
-  animation-direction: alternate;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-}
-
-.alert-timer-icon-fg {
-  position: absolute;
-  left: 0px;
-  width: 24px;
-}
-
-.alert-timer-icon {
-  grid-area: 'icon';
-  width: 24px;
-  margin-top: 25%;
-}
-
 .alert-timer {
-  grid-area: 'timer';
-  font-size: 24px;
   color: rgba(255, 255, 255, 0.8);
   text-shadow: 0px 0px 5px rgba(0, 194, 253, 0.7),
     0px 0px 10px rgba(0, 194, 253, 0.7), 0px 0px 15px rgba(0, 194, 253, 0.7),
     0px 0px 20px rgba(0, 194, 253, 0.7);
-}
-
-.map-container {
-  display: grid;
-  gap: 8px 8px;
-
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.map-grid-item {
-  grid-column: 1 / span 3;
-}
-
-.map-slider {
-  grid-column: 1 / span 4;
-}
-
-.current-capture {
-  grid-column: 1 / span 4;
 }
 
 .map {
@@ -1123,12 +1036,10 @@ export default Vue.extend({
 }
 
 .timeline {
-  grid-column: 4 / 4;
-  --scrollbar-foreground: #303a40;
-  --scrollbar-background: rgba(55, 71, 79, 0.8);
+  --scrollbar-foreground: rgb(48, 58, 64);
+  --scrollbar-background: rgba(55, 65, 81, 0);
   --radius: 10px;
   --size: 10px;
-  overflow-y: scroll;
   scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
   scrollbar-width: thin;
   height: 850px;
@@ -1142,61 +1053,5 @@ export default Vue.extend({
 }
 .timeline::-webkit-scrollbar-thumb {
   background: var(--scrollbar-foreground);
-}
-@media screen and (max-width: 1279px) {
-  .alert-timer {
-    font-size: 12px;
-  }
-
-  @keyframes alert {
-    0% {
-      filter: blur(2px);
-      opacity: 0.5;
-      width: 14px;
-      left: -1px;
-    }
-    50% {
-      filter: blur(4px);
-      opacity: 1;
-      width: 14px;
-      left: -1px;
-    }
-    100% {
-      filter: blur(0px);
-    }
-  }
-
-  .alert-timer-icon-bg {
-    width: 12px;
-  }
-
-  .alert-timer-icon-fg {
-    width: 12px;
-  }
-
-  .alert-timer-icon {
-    width: 12px;
-  }
-
-  ::v-deep .alert-map-attribution {
-    font-size: 6px !important;
-  }
-
-  .current-capture {
-    font-size: 12px;
-  }
-
-  .timeline {
-    display: none;
-    grid-column: auto;
-  }
-
-  .map-grid-item {
-    grid-column: 1 / span 4;
-  }
-}
-
-.timeline-item {
-  margin: 8px;
 }
 </style>
