@@ -39,7 +39,9 @@
       </div>
       <div class="timeline">
         <client-only>
-          <v-card-text style="opacity: 0.7">Alert Capture Timeline</v-card-text>
+          <v-card-text class="text-gray-700">
+            Alert Capture Timeline
+          </v-card-text>
           <v-card
             v-for="(captureIndex, index) in captureIndices.slice().reverse()"
             :key="index"

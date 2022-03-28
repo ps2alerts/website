@@ -1,5 +1,5 @@
 import { SVG, Svg } from '@svgdotjs/svg.js'
-import { Point } from './mapping/MapDrawingInterface'
+import { Point } from '~/libraries/MapWorld'
 import { FacilityType, MAJOR_FACILITIES } from '~/constants/FacilityType'
 import { MAP_FACTION_COLORS } from '~/constants/FactionMapColors'
 import '@svgdotjs/svg.filter.js'

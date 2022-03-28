@@ -10,11 +10,7 @@ import getIndarConstructionOutpost from '~/constants/IndarConstructionOutpostDat
 import { Zone, ZoneHexSize } from '~/constants/Zone'
 import { FacilityBadge } from '~/interfaces/FacilityBadge'
 import { CensusMapRegionInterface } from '~/interfaces/mapping/CensusMapRegionInterface'
-import {
-  LatLng,
-  Point,
-  worldToMap,
-} from '~/interfaces/mapping/MapDrawingInterface'
+import { LatLng, Point, worldToMap } from '~/libraries/MapWorld'
 import { MapRegionDrawingInterface } from '~/interfaces/mapping/MapRegionInterface'
 
 export class CubeHexIndices {
