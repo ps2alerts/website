@@ -519,8 +519,7 @@ export default Vue.extend({
       }
       // This array is being treated as a stack
       const frontier = [this.warpgate(facility.faction)]
-      // Easy improvement here - don't use an array for the visited data structure
-      const visited: MapRegion[] = []
+      const visited = new Map<number, boolean>()
       while (frontier.length !== 0) {
         const curr = frontier.pop()
         if (!curr) {
@@ -544,17 +543,17 @@ export default Vue.extend({
             facilities[0] === curr?.id
               ? this.mapRegions.get(facilities[1])
               : this.mapRegions.get(facilities[0])
-          const wasVisited = visited.find((region) => {
-            return region.id === connection?.id
-          })
-          if (wasVisited) {
+          if (!connection) {
+            return
+          }
+          if (visited.get(connection.id)) {
             return
           }
           if (connection?.faction === facility.faction) {
             frontier.push(connection)
           }
         })
-        visited.push(curr)
+        visited.set(curr.id, true)
       }
       return true
     },
@@ -717,13 +716,13 @@ export default Vue.extend({
     },
     updateCutoffs(): void {
       for (const region of this.mapRegions.values()) {
-        region.setCutoff(this.cutoff(region))
+        region.cutoff = this.cutoff(region)
         const polygon = this.polys.getLayer(region.outlineStamp) as
           | L.Polygon
           | undefined
         polygon?.setStyle({
           fillColor: region.color().toString(),
-          fillOpacity: region.color().a + (region.isCutoff() ? 0.4 : 0),
+          fillOpacity: region.color().a + (region.cutoff ? 0.4 : 0),
         })
       }
     },

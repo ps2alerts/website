@@ -45,8 +45,8 @@ export class MapRegion implements MapRegionDrawingInterface {
   hexes: CubeHex[]
   indices: CubeHexIndices[]
   outlineStamp: number
+  cutoff: boolean
   private m_badge: FacilityBadge
-  private cutoff: boolean
   private outlineCache: LatLng[]
   private hexSet: Record<string, CubeHex>
 
@@ -110,14 +110,6 @@ export class MapRegion implements MapRegionDrawingInterface {
 
   mapLocation(): LatLng {
     return worldToMap(this.badgeLocation.asArray())
-  }
-
-  setCutoff(newVal: boolean): void {
-    this.cutoff = newVal
-  }
-
-  isCutoff(): boolean {
-    return this.cutoff
   }
 
   // Specifically useful for debugging what cubehex math you're screwing up this time
