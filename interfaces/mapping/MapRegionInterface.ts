@@ -1,5 +1,5 @@
 import { FacilityBadge } from '../FacilityBadge'
-import { LatLng, Point } from './MapDrawingInterface'
+import { LatLng, Point } from '~/libraries/MapWorld'
 import { FacilityType } from '~/constants/FacilityType'
 import { Faction } from '~/constants/Faction'
 import { Zone } from '~/constants/Zone'
