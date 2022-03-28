@@ -1,4 +1,4 @@
-import { FacilityBadge } from '../FacilityBadge'
+import { FacilityBadge } from '~/libraries/FacilityBadge'
 import { LatLng, Point } from '~/libraries/MapWorld'
 import { FacilityType } from '~/constants/FacilityType'
 import { Faction } from '~/constants/Faction'

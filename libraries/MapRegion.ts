@@ -8,7 +8,7 @@ import {
 } from '~/constants/FactionMapColors'
 import getIndarConstructionOutpost from '~/constants/IndarConstructionOutpostData'
 import { Zone, ZoneHexSize } from '~/constants/Zone'
-import { FacilityBadge } from '~/interfaces/FacilityBadge'
+import { FacilityBadge } from '~/libraries/FacilityBadge'
 import { CensusMapRegionInterface } from '~/interfaces/mapping/CensusMapRegionInterface'
 import { LatLng, Point, worldToMap } from '~/libraries/MapWorld'
 import { MapRegionDrawingInterface } from '~/interfaces/mapping/MapRegionInterface'
