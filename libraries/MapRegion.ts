@@ -138,10 +138,13 @@ export class MapRegion implements MapRegionDrawingInterface {
     if (this.outlineCache.length > 0 || this.hexes.length === 0) {
       return this.outlineCache
     }
-    const pile: number[][][] = []
+    // An array of 2-tuples of 2-number tuples is better than an array array array, I guess
+    // Also this is gonna be used as a queue
+    const pile: [[number, number], [number, number]][] = []
     this.hexes.forEach((hex) => {
       this.hexSet[hex.toString()] = hex
     })
+    // Add all exterior edges of the hexes to the queue
     this.hexes.forEach((hex) => {
       for (let dir = 0; dir < 6; dir++) {
         if (!this.hexSet[hex.neighbor(dir).toString()]) {
@@ -154,49 +157,60 @@ export class MapRegion implements MapRegionDrawingInterface {
     if (!edge) {
       return this.outlineCache
     }
-    const tempOutlineCache: number[][] = []
+    // starting from whatever edge is taken first, add the outline vertices in order for drawing
+    const tempOutlineCache: [number, number][] = []
     tempOutlineCache.push(edge[0])
     tempOutlineCache.push(edge[1])
     while (pile.length !== 0) {
+      // Grab an edge from the pile
       edge = pile.shift()
       if (!edge) {
         break
       }
       const pointIndices = [-1, -1]
+      // Figure out if one or both of its points matches any point in the current outline
       for (let i = 0; i < tempOutlineCache.length; i++) {
         if (
           Math.abs(tempOutlineCache[i][0] - edge[0][0]) < 0.1 &&
           Math.abs(tempOutlineCache[i][1] - edge[0][1]) < 0.1
         ) {
+          // "left" point matched, record its matching index
           pointIndices[0] = i
         }
         if (
           Math.abs(tempOutlineCache[i][0] - edge[1][0]) < 0.1 &&
           Math.abs(tempOutlineCache[i][1] - edge[1][1]) < 0.1
         ) {
+          // "right" point matched, record its matching index
           pointIndices[1] = i
         }
+        // If both match we've already added this edge, break...
         if (pointIndices[0] !== -1 && pointIndices[1] !== -1) {
           break
         }
       }
+      // ... and then discard
       if (pointIndices[0] !== -1 && pointIndices[1] !== -1) {
         continue
       }
       if (pointIndices[0] !== -1) {
+        // if the "left" point matched, add the "right" point after the matching point
         if (pointIndices[0] + 1 === tempOutlineCache.length) {
           pointIndices[0] = -1
         }
         tempOutlineCache.splice(pointIndices[0] + 1, 0, edge[1])
       } else if (pointIndices[1] !== -1) {
+        // if the "right" point matched, add the "left" point before the matching point
         if (pointIndices[1] === 0) {
           pointIndices[1] = tempOutlineCache.length
         }
         tempOutlineCache.splice(pointIndices[1], 0, edge[0])
       } else {
+        // if neither were found, chuck the edge back on the queue to try again later
         pile.push(edge)
       }
     }
+    // finished constructing the outline, convert the points to map coordinates from world coordinates and memoize them.
     tempOutlineCache.forEach((point) => {
       this.outlineCache.push(worldToMap(point))
     })
