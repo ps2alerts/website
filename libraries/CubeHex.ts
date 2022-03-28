@@ -22,7 +22,7 @@ export class CubeHex implements CubeHexInterface {
     return [x, z]
   }
 
-  corner(direction: number, hexSize: number): number[] {
+  corner(direction: number, hexSize: number): [number, number] {
     const angle = (Math.PI / 6) * (2 * direction - 1)
     const center = this.to_world(hexSize)
     return [
@@ -31,7 +31,10 @@ export class CubeHex implements CubeHexInterface {
     ]
   }
 
-  edge(direction: number, hexSize: number): number[][] {
+  edge(
+    direction: number,
+    hexSize: number
+  ): [[number, number], [number, number]] {
     const indices = [
       [0, 1],
       [1, 2],
