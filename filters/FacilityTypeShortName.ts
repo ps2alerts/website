@@ -5,8 +5,6 @@ const facilityTypeShortName = Vue.filter(
   'facilityTypeShortName',
   (facilityType: FacilityType) => {
     switch (facilityType) {
-      case FacilityType.DEFAULT:
-        return 'unknown'
       case FacilityType.AMP_STATION:
         return 'amp'
       case FacilityType.BIO_LAB:
@@ -30,7 +28,7 @@ const facilityTypeShortName = Vue.filter(
       case FacilityType.TRIDENT:
         return 'trid'
       default:
-        return ''
+        return 'unknown'
     }
   }
 )
