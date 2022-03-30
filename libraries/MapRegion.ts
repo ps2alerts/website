@@ -1,8 +1,8 @@
-import { CubeHex } from './CubeHex'
+import { CubeHex } from '~/libraries/CubeHex'
+import { Color } from '~/libraries/Color'
 import { FacilityType } from '~/constants/FacilityType'
 import { Faction } from '~/constants/Faction'
 import {
-  Color,
   MAP_CUTOFF_COLORS,
   MAP_FACTION_COLORS,
 } from '~/constants/FactionMapColors'
