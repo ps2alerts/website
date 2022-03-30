@@ -212,7 +212,6 @@ export default Vue.extend({
       links: this.$L.featureGroup([], {
         pane: 'linkPane',
       }),
-      linkStamps: {} as Record<string, number>,
       badges: this.$L.featureGroup([], {
         pane: 'badgePane',
       }),
@@ -513,7 +512,7 @@ export default Vue.extend({
     cutoff(facility: MapRegion): boolean {
       // This could use improvement, probably should be moved to MapRegion as well (Need to record all links in MapRegion first)
       // Currently this performs a depth first search of all connected territories starting at the faction's warpgate
-      //    and returns true if it finds *facility* during the search.
+      //    and returns false if it finds *facility* during the search.
       if (facility.facilityType === FacilityType.WARPGATE) {
         return false
       }
@@ -528,28 +527,12 @@ export default Vue.extend({
         if (curr.id === facility.id) {
           return false
         }
-        // Linkstamps is a record of the shape { "1234 2345": <leaflet Layer id>, ... },
-        //    the keys are two facility ids concatenated with a space. Not every permutation is present
-        //    since most (but not all of course) facilities in the census do not reciprocate their map links
-        //    (AKA this describes something that is close to (but is not) a directed graph)
-        Object.keys(this.linkStamps).forEach((pair) => {
-          if (pair.includes('bg')) {
-            return
-          }
-          const facilities = pair.split(' ').map((val) => parseInt(val))
-          if (!(facilities[0] === curr?.id || facilities[1] === curr?.id))
-            return
-          const connection =
-            facilities[0] === curr?.id
-              ? this.mapRegions.get(facilities[1])
-              : this.mapRegions.get(facilities[0])
-          if (!connection) {
-            return
-          }
+        // Check all connections and add them to the frontier if they match factions
+        curr.connections.forEach((connection) => {
           if (visited.get(connection.id)) {
             return
           }
-          if (connection?.faction === facility.faction) {
+          if (connection.faction === facility.faction) {
             frontier.push(connection)
           }
         })
@@ -671,7 +654,7 @@ export default Vue.extend({
               )
               return
             }
-            let polygon = this.polys.getLayer(region.outlineStamp) as
+            const polygon = this.polys.getLayer(region.outlineStamp) as
               | L.Polygon
               | undefined
             polygon?.getElement()?.classList.add('captured')
@@ -688,12 +671,12 @@ export default Vue.extend({
                 )
                 return
               }
-              polygon = this.polys.getLayer(region.outlineStamp) as
+              const revPolygon = this.polys.getLayer(region.outlineStamp) as
                 | L.Polygon
                 | undefined
-              polygon?.getElement()?.classList.add('uncaptured')
+              revPolygon?.getElement()?.classList.add('uncaptured')
               setTimeout(() => {
-                polygon?.getElement()?.classList.remove('uncaptured')
+                revPolygon?.getElement()?.classList.remove('uncaptured')
               }, 1000)
             }
           }
@@ -727,66 +710,73 @@ export default Vue.extend({
       }
     },
     updateLinks(facility: number) {
-      Object.entries(this.linkStamps).forEach((linkEntry) => {
-        // Only look at foreground links
-        if (linkEntry[0].includes('bg')) {
+      const region = this.mapRegions.get(facility)
+      if (region === undefined) {
+        return
+      }
+      region.connections.forEach((connection) => {
+        const linkStamp = region.linkStamps.get(connection.id)
+        const bgLinkStamp = region.bgLinkStamps.get(connection.id)
+        if (linkStamp === undefined || bgLinkStamp === undefined) {
+          console.error(
+            'AlertMap.updateLinks: link between ' +
+              region.name +
+              ' and ' +
+              connection.name +
+              ' does not exist!'
+          )
           return
         }
-
-        // If this link isn't connected to the facility we're interested in, exit early
-        const facilityIds = linkEntry[0].split(' ').map((num) => parseInt(num))
-        if (!(facilityIds[0] === facility || facilityIds[1] === facility)) {
+        const link = this.links.getLayer(linkStamp) as L.Polyline | undefined
+        const bglink = this.links.getLayer(bgLinkStamp) as
+          | L.Polyline
+          | undefined
+        if (link === undefined || bglink === undefined) {
+          console.error(
+            'AlertMap.updateLinks: link between ' +
+              region.name +
+              ' and ' +
+              connection.name +
+              ' does not exist!'
+          )
           return
         }
-
-        const link = this.links.getLayer(linkEntry[1]) as L.Polyline | undefined
-        const bglink = this.links.getLayer(
-          this.linkStamps['bg' + linkEntry[0]]
-        ) as L.Polyline | undefined
-        const regions = [
-          this.mapRegions.get(facilityIds[0]),
-          this.mapRegions.get(facilityIds[1]),
-        ]
-
-        if (!(regions[0] && regions[1])) {
-          return
-        }
-
         // Both factions match, set friendly color and hide bglink
-        if (regions[0].faction === regions[1].faction) {
-          link?.setStyle({
-            color: MAP_LINK_COLORS[regions[0].faction]?.toString(),
-            opacity: MAP_LINK_COLORS[regions[0].faction]?.a,
+        if (region.faction === connection.faction) {
+          link.setStyle({
+            color: MAP_LINK_COLORS[region.faction]?.toString(),
+            opacity: MAP_LINK_COLORS[region.faction]?.a,
             dashArray: [],
           })
-          bglink?.setStyle({
-            opacity: 0.0,
+          bglink.setStyle({
+            stroke: false,
           })
         }
         // Disabled, just put an NS link there since it doesn't make it seem capturable
         else if (
-          regions[0].faction === Faction.NONE ||
-          regions[1].faction === Faction.NONE
+          region.faction === Faction.NONE ||
+          connection.faction === Faction.NONE
         ) {
-          link?.setStyle({
+          link.setStyle({
             color: MAP_LINK_COLORS[Faction.NONE].toString(),
             opacity: MAP_LINK_COLORS[Faction.NONE].a,
             dashArray: [],
           })
-          bglink?.setStyle({
-            opacity: 0.0,
+          bglink.setStyle({
+            stroke: false,
           })
         }
         // Warpgate's ain't capturable, make it look like capturable link with disabled link colors
         else if (
-          regions[0].facilityType === FacilityType.WARPGATE ||
-          regions[1].facilityType === FacilityType.WARPGATE
+          region.facilityType === FacilityType.WARPGATE ||
+          connection.facilityType === FacilityType.WARPGATE
         ) {
-          link?.setStyle({
+          link.setStyle({
             color: MAP_LINK_COLORS[0].toString(),
             dashArray: '5 5',
           })
-          bglink?.setStyle({
+          bglink.setStyle({
+            stroke: true,
             color: MAP_LINK_COLORS[6].toString(),
             opacity: MAP_LINK_COLORS[6].a,
             dashArray: '5 5',
@@ -795,11 +785,12 @@ export default Vue.extend({
         }
         // Enemy factions, set capturable color, dashes, and enable bglink
         else {
-          link?.setStyle({
+          link.setStyle({
             color: MAP_LINK_COLORS[4].toString(),
             dashArray: '5 5',
           })
-          bglink?.setStyle({
+          bglink.setStyle({
+            stroke: true,
             color: MAP_LINK_COLORS[5].toString(),
             opacity: MAP_LINK_COLORS[5].a,
             dashArray: '5 5',
@@ -933,7 +924,6 @@ export default Vue.extend({
           }
         })
 
-        // TODO: This should probably go on the region instead
         region.outlineStamp = this.$L.stamp(polygon)
         this.polys.addLayer(polygon)
       })
@@ -941,6 +931,10 @@ export default Vue.extend({
       // Build facility links
       regions.forEach((region) => {
         region.connections.forEach((connection) => {
+          // No duplicates
+          if (region.linkStamps.get(connection.id) !== undefined) {
+            return
+          }
           const link = this.$L.polyline(
             [
               worldToMap(region.badgeLocation.asArray()),
@@ -955,10 +949,8 @@ export default Vue.extend({
               bubblingMouseEvents: true,
             }
           )
-          // TODO: This should probably go on region and connection
-          this.linkStamps[
-            region.id.toString() + ' ' + connection.id.toString()
-          ] = this.$L.stamp(link)
+          region.linkStamps.set(connection.id, this.$L.stamp(link))
+          connection.linkStamps.set(region.id, this.$L.stamp(link))
 
           const bglink = this.$L.polyline(
             [
@@ -973,9 +965,8 @@ export default Vue.extend({
             }
           )
           // TODO: This should probably go on region and connection
-          this.linkStamps[
-            'bg' + region.id.toString() + ' ' + connection.id.toString()
-          ] = this.$L.stamp(bglink)
+          region.bgLinkStamps.set(connection.id, this.$L.stamp(bglink))
+          connection.bgLinkStamps.set(region.id, this.$L.stamp(bglink))
 
           this.links.addLayer(bglink)
           this.links.addLayer(link)

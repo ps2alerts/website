@@ -36,7 +36,16 @@ export default class MapRegionDataRequest {
 
       this.data.forEach((region) => {
         region.connectionIds.forEach((id) => {
+          // Don't add duplicates
+          if (
+            region.connections.find((r) => {
+              return r.id === id
+            }) !== undefined
+          ) {
+            return
+          }
           region.connections.push(regionIdMap[id])
+          regionIdMap[id].connections.push(region)
         })
       })
     })

@@ -45,6 +45,8 @@ export class MapRegion implements MapRegionDrawingInterface {
   hexes: CubeHex[]
   indices: CubeHexIndices[]
   outlineStamp: number
+  linkStamps: Map<number, number>
+  bgLinkStamps: Map<number, number>
   cutoff: boolean
   private m_badge: FacilityBadge
   private outlineCache: LatLng[]
@@ -57,6 +59,8 @@ export class MapRegion implements MapRegionDrawingInterface {
     this.facilityType = parseInt(region.facility_type_id, 10)
     this.indices = []
     this.outlineStamp = -1
+    this.linkStamps = new Map<number, number>()
+    this.bgLinkStamps = new Map<number, number>()
 
     // Fun data injections for the whole family
     const outpost = getIndarConstructionOutpost(this.id)
