@@ -19,27 +19,29 @@
             :zoom-delta="zoomDelta"
             :crs="crs"
           >
-            <l-control
-              ref="timer"
-              position="topright"
-              class="grid grid-flow-col auto-cols-max gap-1"
-            >
-              <div class="w-3 mt-[3px] xl:w-6 xl:mt-1.5">
-                <img
-                  src="/img/alert-icon.png"
-                  class="absolute left-0 w-3 xl:w-6 animate-alert-small xl:animate-alert"
-                />
-                <img
-                  src="/img/alert-icon.png"
-                  class="absolute left-0 w-3 xl:w-6"
-                />
-              </div>
-              <remaining-time
-                class="alert-timer text-xs xl:text-2xl"
-                :started="alert.timeStarted"
-                :duration="alert.duration"
-              ></remaining-time>
-            </l-control>
+            <div v-show="alert.state === 1">
+              <l-control
+                ref="timer"
+                position="topright"
+                class="grid grid-flow-col auto-cols-max gap-1"
+              >
+                <div class="w-3 mt-[3px] xl:w-6 xl:mt-1.5">
+                  <img
+                    src="/img/alert-icon.png"
+                    class="absolute left-0 w-3 xl:w-6 animate-alert-small xl:animate-alert"
+                  />
+                  <img
+                    src="/img/alert-icon.png"
+                    class="absolute left-0 w-3 xl:w-6"
+                  />
+                </div>
+                <remaining-time
+                  class="alert-timer text-xs xl:text-2xl"
+                  :started="alert.timeStarted"
+                  :duration="alert.duration"
+                ></remaining-time>
+              </l-control>
+            </div>
           </l-map>
         </client-only>
       </div>
@@ -241,7 +243,6 @@ export default Vue.extend({
       if (this.alert.state === Ps2alertsEventState.ENDED) {
         this.clearTimers()
         this.pull()
-        this.remaining.$el.remove()
       }
     },
   },
@@ -1010,6 +1011,49 @@ export default Vue.extend({
   left: calc(0% - 4.5px);
   width: 9px;
   height: 9px;
+}
+
+@keyframes alert {
+  0% {
+    filter: blur(2px);
+    opacity: 0.5;
+    width: 28px;
+    left: -2px;
+  }
+  50% {
+    filter: blur(4px);
+    opacity: 1;
+    width: 28px;
+    left: -2px;
+  }
+  100% {
+    filter: blur(0);
+  }
+}
+@keyframes alert-small {
+  0% {
+    filter: blur(2px);
+    opacity: 0.5;
+    width: 14px;
+    left: -1px;
+  }
+  50% {
+    filter: blur(4px);
+    opacity: 1;
+    width: 14px;
+    left: -1px;
+  }
+  100% {
+    filter: blur(0);
+  }
+}
+
+.animate-alert-small {
+  animation: alert-small 1s linear infinite alternate;
+}
+
+.animate-alert {
+  animation: alert 1s linear infinite alternate;
 }
 
 .alert-timer {
