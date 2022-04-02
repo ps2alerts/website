@@ -28,7 +28,7 @@
                 <div class="w-3 mt-[3px] xl:w-6 xl:mt-1.5">
                   <img
                     src="/img/alert-icon.png"
-                    class="absolute left-0 w-3 xl:w-6 animate-alert-small xl:animate-alert"
+                    class="absolute left-0 w-3 xl:w-6 animate-alert"
                   />
                   <img
                     src="/img/alert-icon.png"
@@ -497,6 +497,7 @@ export default Vue.extend({
       }
       const warpgates: number[] | undefined = zoneToWarpgateArray.get(zone)
       if (warpgates === undefined) {
+        console.error('AlertMap.warpgate: Unsupported continent? Zone ID: ' + zone.toString())
         return undefined
       }
       let region: MapRegion | undefined
@@ -601,20 +602,22 @@ export default Vue.extend({
         return !event.isDefence
       })
       result.reverse().forEach((controlEvent, index, eventArray) => {
-        // If the map has already loaded and we've already seen this event, return, unless we've limited the capture history.
-        // If it is limited, we rerun the alert capture history to get to the requested capture.
-        if (
-          !force &&
-          this.loaded &&
-          (controlEvent.isInitial ||
-            this.lastUpdated > new Date(controlEvent.timestamp)) &&
-          (this.currentIndex === -1 || this.currentIndex > index)
-        ) {
+        // Defence events do not affect the map state
+        //   (TODO: Though they could be used for interesting data in the future)
+        if (controlEvent.isDefence) {
           return
         }
 
-        if (controlEvent.isDefence) {
-          return
+        // We aren't forcing an update and the map has already loaded
+        if (!force && this.loaded) {
+          // This is an initial control event or an event we've already consumed
+          if (controlEvent.isInitial || this.lastUpdated > new Date(controlEvent.timestamp)) {
+            // We are not scrubbing through history
+            if (this.currentIndex === -1 || this.currentIndex > index) {
+              // Do nothing with the control event
+              return;
+            }
+          }
         }
 
         // This basically checks to see if we are either:
@@ -664,6 +667,7 @@ export default Vue.extend({
               polygon?.getElement()?.classList.remove('captured')
             }, 1000)
 
+            // if we're moving backwards through time, add an 'uncaptured' animation to show what base we backed off from
             if (reverseFacility) {
               region = this.mapRegions.get(reverseFacility)
               if (!region) {
@@ -1017,39 +1021,18 @@ export default Vue.extend({
   0% {
     filter: blur(2px);
     opacity: 0.5;
-    width: 28px;
-    left: -2px;
+    width: 23%;
+    left: -1.5%;
   }
   50% {
     filter: blur(4px);
     opacity: 1;
-    width: 28px;
-    left: -2px;
+    width: 23%;
+    left: -1.5%;
   }
   100% {
     filter: blur(0);
   }
-}
-@keyframes alert-small {
-  0% {
-    filter: blur(2px);
-    opacity: 0.5;
-    width: 14px;
-    left: -1px;
-  }
-  50% {
-    filter: blur(4px);
-    opacity: 1;
-    width: 14px;
-    left: -1px;
-  }
-  100% {
-    filter: blur(0);
-  }
-}
-
-.animate-alert-small {
-  animation: alert-small 1s linear infinite alternate;
 }
 
 .animate-alert {
