@@ -362,7 +362,7 @@ export default Vue.extend({
           // Nested if so that it will drop out of the if statements to return the faction name
           //   when the "SERVER" outfit captures a base
           if (outfitAggregate.outfit.tag !== 'SERVER') {
-            return '[' + outfitAggregate.outfit.tag + ']'
+            return `[${outfitAggregate.outfit.tag}]`
           }
         } else if (outfitAggregate && outfitAggregate.outfit.name) {
           return outfitAggregate.outfit.name
@@ -653,7 +653,7 @@ export default Vue.extend({
             region = this.mapRegions.get(facility)
             if (!region) {
               console.error(
-                'Region not found for facility ' + facility.toString()
+                `Region not found for facility ${facility.toString()}`
               )
               return
             }
@@ -675,7 +675,7 @@ export default Vue.extend({
               region = this.mapRegions.get(reverseFacility)
               if (!region) {
                 console.error(
-                  'Region not found for facility ' + reverseFacility.toString()
+                  `Region not found for facility ${reverseFacility.toString()}`
                 )
                 return
               }
@@ -788,7 +788,7 @@ export default Vue.extend({
             classList.remove(aClassName)
           }
         })
-        bglink.getElement()?.classList.add('bg' + className)
+        bglink.getElement()?.classList.add(`bg${className}`)
       })
     },
     async pull(): Promise<void> {
@@ -819,6 +819,9 @@ export default Vue.extend({
           }
           this.loaded = true
           const now = new Date()
+          // Yes, there really isn't a Date.UTCNow() or similar
+          // Yes, I looked it up too
+          // Yes, I am as appalled as you are
           this.lastUpdated = new Date(
             Date.UTC(
               now.getUTCFullYear(),
@@ -866,8 +869,6 @@ export default Vue.extend({
         this.alert.zone ? this.alert.zone : Zone.INDAR
       )
 
-      this.$L.Icon.Default.prototype.options.iconAnchor = [0, 0]
-      this.$L.Icon.Default.prototype.options.tooltipAnchor = [0, 0]
       regions.forEach((region) => {
         this.mapRegions.set(region.id, region)
         const polygon = this.$L.polygon(
