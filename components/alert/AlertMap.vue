@@ -1052,6 +1052,10 @@ export default Vue.extend({
   max-height: min(70vw, 80vh);
 }
 
+::v-deep .map-region {
+  transition: fill 0.1s ease-in, opacity 0.1s ease-in, stroke 0.1s ease-in, fill-opacity 0.1s ease-in, stroke-opacity 0.1s ease-in
+}
+
 .timeline {
   --scrollbar-foreground: rgb(48, 58, 64);
   --scrollbar-background: rgba(55, 65, 81, 0);

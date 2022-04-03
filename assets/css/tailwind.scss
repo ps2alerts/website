@@ -83,10 +83,6 @@
     100% { stroke: black }
   }
 
-  .map-region {
-    transition: fill 0.25s ease-in, opacity 0.25s ease-in, stroke 0.25s ease-in, fill-opacity 0.25s ease-in, stroke-opacity 0.25s ease-in
-  }
-
   .captured {
     animation: capture linear 0.5s 1 normal;
   }
