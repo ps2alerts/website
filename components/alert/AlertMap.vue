@@ -19,29 +19,28 @@
             :zoom-delta="zoomDelta"
             :crs="crs"
           >
-            <div v-show="alert.state === 1">
-              <l-control
-                ref="timer"
-                position="topright"
-                class="grid grid-flow-col auto-cols-max gap-1"
-              >
-                <div class="w-3 mt-[3px] xl:w-6 xl:mt-1.5">
-                  <img
-                    src="/img/alert-icon.png"
-                    class="absolute left-0 w-3 xl:w-6 animate-alert"
-                  />
-                  <img
-                    src="/img/alert-icon.png"
-                    class="absolute left-0 w-3 xl:w-6"
-                  />
-                </div>
-                <remaining-time
-                  class="alert-timer text-xs xl:text-2xl"
-                  :started="alert.timeStarted"
-                  :duration="alert.duration"
-                ></remaining-time>
-              </l-control>
-            </div>
+            <l-control
+              v-show="alert.state === 1"
+              ref="timer"
+              position="topright"
+              class="grid grid-flow-col auto-cols-max gap-1"
+            >
+              <div class="w-3 mt-[3px] xl:w-6 xl:mt-1.5">
+                <img
+                  src="/img/alert-icon.png"
+                  class="absolute left-0 w-3 xl:w-6 animate-alert"
+                />
+                <img
+                  src="/img/alert-icon.png"
+                  class="absolute left-0 w-3 xl:w-6"
+                />
+              </div>
+              <remaining-time
+                class="alert-timer text-xs xl:text-2xl"
+                :started="alert.timeStarted"
+                :duration="alert.duration"
+              ></remaining-time>
+            </l-control>
           </l-map>
         </client-only>
       </div>
@@ -142,10 +141,7 @@ import { LControl, LMap } from 'vue2-leaflet'
 import RemainingTime from '../RemainingTime.vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import { worldToMap } from '~/libraries/MapWorld'
-import {
-  MAP_FACTION_COLORS,
-  MAP_LINK_COLORS,
-} from '@/constants/FactionMapColors'
+import { MAP_FACTION_COLORS } from '@/constants/FactionMapColors'
 import { Zone, zoneToWarpgateArray } from '@/constants/Zone'
 import ApiRequest from '@/api-request'
 import MapRegionDataRequest from '@/libraries/MapRegionDataRequest'
@@ -336,9 +332,6 @@ export default Vue.extend({
         this.prevZoom = this.map.getZoom()
       })
       this.setTimers()
-      if (this.alert.state === Ps2alertsEventState.ENDED) {
-        this.remaining.$el.remove()
-      }
     },
     factionColor(faction: Faction) {
       return MAP_FACTION_COLORS[faction].toString()
@@ -497,7 +490,10 @@ export default Vue.extend({
       }
       const warpgates: number[] | undefined = zoneToWarpgateArray.get(zone)
       if (warpgates === undefined) {
-        console.error('AlertMap.warpgate: Unsupported continent? Zone ID: ' + zone.toString())
+        console.error(
+          'AlertMap.warpgate: Unsupported continent? Zone ID: ' +
+            zone.toString()
+        )
         return undefined
       }
       let region: MapRegion | undefined
@@ -611,11 +607,14 @@ export default Vue.extend({
         // We aren't forcing an update and the map has already loaded
         if (!force && this.loaded) {
           // This is an initial control event or an event we've already consumed
-          if (controlEvent.isInitial || this.lastUpdated > new Date(controlEvent.timestamp)) {
+          if (
+            controlEvent.isInitial ||
+            this.lastUpdated > new Date(controlEvent.timestamp)
+          ) {
             // We are not scrubbing through history
             if (this.currentIndex === -1 || this.currentIndex > index) {
               // Do nothing with the control event
-              return;
+              return
             }
           }
         }
@@ -662,9 +661,13 @@ export default Vue.extend({
               | L.Polygon
               | undefined
             polygon?.getElement()?.classList.add('captured')
-            polygon?.getElement()?.addEventListener('animationend', (event) => {
-              (event.target as Element).classList.remove('captured')
-            }, { once: true })
+            polygon?.getElement()?.addEventListener(
+              'animationend',
+              (event) => {
+                ;(event.target as Element).classList.remove('captured')
+              },
+              { once: true }
+            )
             polygon?.bringToFront()
 
             // if we're moving backwards through time, add an 'uncaptured' animation to show what base we backed off from
@@ -680,9 +683,13 @@ export default Vue.extend({
                 | L.Polygon
                 | undefined
               revPolygon?.getElement()?.classList.add('uncaptured')
-              revPolygon?.getElement()?.addEventListener('animationend', (event) => {
-                (event.target as Element).classList.remove('uncaptured')
-              }, { once: true })
+              revPolygon?.getElement()?.addEventListener(
+                'animationend',
+                (event) => {
+                  ;(event.target as Element).classList.remove('uncaptured')
+                },
+                { once: true }
+              )
             }
           }
           if (indexLimit) {
@@ -708,10 +715,16 @@ export default Vue.extend({
         const polygon = this.polys.getLayer(region.outlineStamp) as
           | L.Polygon
           | undefined
-        polygon?.setStyle({
-          fillColor: region.color().toString(),
-          fillOpacity: region.color().a + (region.cutoff ? 0.4 : 0),
+        polygon?.getElement()?.classList.forEach((className, _, classList) => {
+          if (className.startsWith('region-')) {
+            classList.remove(className)
+          }
         })
+        const className =
+          'region-' +
+          factionShortName(region.faction, true) +
+          (region.cutoff ? '-cutoff' : '')
+        polygon?.getElement()?.classList.add(className)
       }
     },
     updateLinks(facility: number) {
@@ -746,62 +759,36 @@ export default Vue.extend({
           )
           return
         }
-        // Both factions match, set friendly color and hide bglink
-        if (region.faction === connection.faction) {
-          link.setStyle({
-            color: MAP_LINK_COLORS[region.faction]?.toString(),
-            opacity: MAP_LINK_COLORS[region.faction]?.a,
-            dashArray: [],
-          })
-          bglink.setStyle({
-            stroke: false,
-          })
-        }
-        // Disabled, just put an NS link there since it doesn't make it seem capturable
-        else if (
-          region.faction === Faction.NONE ||
-          connection.faction === Faction.NONE
-        ) {
-          link.setStyle({
-            color: MAP_LINK_COLORS[Faction.NONE].toString(),
-            opacity: MAP_LINK_COLORS[Faction.NONE].a,
-            dashArray: [],
-          })
-          bglink.setStyle({
-            stroke: false,
-          })
-        }
-        // Warpgate's ain't capturable, make it look like capturable link with disabled link colors
-        else if (
+
+        const warpgate =
           region.facilityType === FacilityType.WARPGATE ||
           connection.facilityType === FacilityType.WARPGATE
-        ) {
-          link.setStyle({
-            color: MAP_LINK_COLORS[0].toString(),
-            dashArray: '5 5',
-          })
-          bglink.setStyle({
-            stroke: true,
-            color: MAP_LINK_COLORS[6].toString(),
-            opacity: MAP_LINK_COLORS[6].a,
-            dashArray: '5 5',
-            dashOffset: '5',
-          })
-        }
-        // Enemy factions, set capturable color, dashes, and enable bglink
-        else {
-          link.setStyle({
-            color: MAP_LINK_COLORS[4].toString(),
-            dashArray: '5 5',
-          })
-          bglink.setStyle({
-            stroke: true,
-            color: MAP_LINK_COLORS[5].toString(),
-            opacity: MAP_LINK_COLORS[5].a,
-            dashArray: '5 5',
-            dashOffset: '5',
-          })
-        }
+        const allied = region.faction === connection.faction
+        const disabled =
+          region.faction === Faction.NONE || connection.faction === Faction.NONE
+        const className =
+          'link-' +
+          (allied
+            ? factionShortName(region.faction, true)
+            : disabled
+            ? factionShortName(Faction.NONE, true)
+            : warpgate
+            ? 'warpgate'
+            : 'captureable')
+
+        link.getElement()?.classList.forEach((aClassName, _, classList) => {
+          if (aClassName.startsWith('link-')) {
+            classList.remove(aClassName)
+          }
+        })
+        link.getElement()?.classList.add(className)
+
+        bglink.getElement()?.classList.forEach((aClassName, _, classList) => {
+          if (aClassName.startsWith('bglink-')) {
+            classList.remove(aClassName)
+          }
+        })
+        bglink.getElement()?.classList.add('bg' + className)
       })
     },
     async pull(): Promise<void> {
@@ -947,9 +934,8 @@ export default Vue.extend({
             ],
             {
               weight: 2,
-              color: '#FFFFFF',
-              opacity: 0.6,
               pane: 'linkPane',
+              className: 'link-NS',
               interactive: false,
               bubblingMouseEvents: true,
             }
@@ -964,12 +950,12 @@ export default Vue.extend({
             ],
             {
               weight: 2,
-              color: MAP_LINK_COLORS[5]?.toString(),
-              opacity: 0.0,
               pane: 'linkPane',
+              className: 'bglink-NS',
+              interactive: false,
+              bubblingMouseEvents: true,
             }
           )
-          // TODO: This should probably go on region and connection
           region.bgLinkStamps.set(connection.id, this.$L.stamp(bglink))
           connection.bgLinkStamps.set(region.id, this.$L.stamp(bglink))
 
@@ -1053,7 +1039,101 @@ export default Vue.extend({
 }
 
 ::v-deep .map-region {
-  transition: fill 0.1s ease-in, opacity 0.1s ease-in, stroke 0.1s ease-in, fill-opacity 0.1s ease-in, stroke-opacity 0.1s ease-in
+  transition: fill 0.1s ease-in, opacity 0.1s ease-in, stroke 0.1s ease-in,
+    fill-opacity 0.1s ease-in, stroke-opacity 0.1s ease-in;
+}
+
+::v-deep .region-TR {
+  fill: #bc1212;
+  fill-opacity: 0.4;
+}
+
+::v-deep .region-NC {
+  fill: #0064aa;
+  fill-opacity: 0.4;
+}
+
+::v-deep .region-VS {
+  fill: #6e18a3;
+  fill-opacity: 0.4;
+}
+
+::v-deep .region-NS {
+  fill: #718096;
+  fill-opacity: 0.4;
+}
+
+::v-deep .region-NS-cutoff {
+  fill: #718096;
+  fill-opacity: 0.8;
+}
+
+::v-deep .region-VS-cutoff {
+  fill: #2e153d;
+  fill-opacity: 0.8;
+}
+
+::v-deep .region-NC-cutoff {
+  fill: #0f273f;
+  fill-opacity: 0.8;
+}
+
+::v-deep .region-TR-cutoff {
+  fill: #3a0005;
+  fill-opacity: 0.8;
+}
+
+::v-deep .link-NS {
+  stroke: #928e99;
+  opacity: 0.6;
+}
+
+::v-deep .link-VS {
+  stroke: #ffb2ff;
+  opacity: 0.8;
+}
+
+::v-deep .link-NC {
+  stroke: #b0ffff;
+  opacity: 0.8;
+}
+
+::v-deep .link-TR {
+  stroke: #ffbfb2;
+  opacity: 0.8;
+}
+
+::v-deep .link-warpgate {
+  stroke: #928e99;
+  opacity: 0.8;
+  stroke-dasharray: 5 5;
+}
+
+::v-deep .link-captureable {
+  stroke: #eae690;
+  opacity: 0.8;
+  stroke-dasharray: 5 5;
+}
+
+::v-deep .bglink-NS,
+::v-deep .bglink-VS,
+::v-deep .bglink-NC,
+::v-deep .bglink-TR {
+  stroke: none;
+}
+
+::v-deep .bglink-warpgate {
+  stroke: #49474c;
+  opacity: 0.8;
+  stroke-dasharray: 5 5;
+  stroke-dashoffset: 5;
+}
+
+::v-deep .bglink-captureable {
+  stroke: #8b7251;
+  opacity: 0.8;
+  stroke-dasharray: 5 5;
+  stroke-dashoffset: 5;
 }
 
 .timeline {

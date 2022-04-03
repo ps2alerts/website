@@ -223,8 +223,6 @@ export class MapRegion implements MapRegionDrawingInterface {
 
   outlineOptions() {
     return {
-      fillColor: MAP_FACTION_COLORS[this.faction].toString(),
-      fillOpacity: MAP_FACTION_COLORS[this.faction].a,
       color: '#000000',
       weight: 2,
       lineCap: 'butt' as LineCapShape,
