@@ -314,23 +314,6 @@ export default Vue.extend({
       this.zoomOutSound.loop = false
       this.zoomInSound.volume = 0.5
       this.zoomOutSound.volume = 0.5
-      this.map.on('zoom', () => {
-        if (Math.abs(this.prevZoom - this.map.getZoom()) < 0.1) {
-          return
-        }
-        const direction = this.prevZoom - this.map.getZoom()
-        // current zoom > previous zoom means we zoomed in
-        if (direction < 0 && this.zoomInSound.paused) {
-          this.zoomOutSound.pause()
-          this.zoomInSound.currentTime = 0
-          this.zoomInSound.play()
-        } else if (this.zoomOutSound.paused) {
-          this.zoomInSound.pause()
-          this.zoomOutSound.currentTime = 0
-          this.zoomOutSound.play()
-        }
-        this.prevZoom = this.map.getZoom()
-      })
       this.setTimers()
     },
     factionColor(faction: Faction) {
@@ -972,6 +955,21 @@ export default Vue.extend({
         for (const region of this.mapRegions.values()) {
           region.badge().update(this.map.getZoom())
         }
+        if (Math.abs(this.prevZoom - this.map.getZoom()) < 0.1) {
+          return
+        }
+        const direction = this.prevZoom - this.map.getZoom()
+        // current zoom > previous zoom means we zoomed in
+        if (direction < 0 && this.zoomInSound.paused) {
+          this.zoomOutSound.pause()
+          this.zoomInSound.currentTime = 0
+          this.zoomInSound.play()
+        } else if (this.zoomOutSound.paused) {
+          this.zoomInSound.pause()
+          this.zoomOutSound.currentTime = 0
+          this.zoomOutSound.play()
+        }
+        this.prevZoom = this.map.getZoom()
       })
 
       for (const region of this.mapRegions.values()) {
