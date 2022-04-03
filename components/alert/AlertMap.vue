@@ -662,10 +662,10 @@ export default Vue.extend({
               | L.Polygon
               | undefined
             polygon?.getElement()?.classList.add('captured')
+            polygon?.getElement()?.addEventListener('animationend', (event) => {
+              (event.target as Element).classList.remove('captured')
+            }, { once: true })
             polygon?.bringToFront()
-            setTimeout(() => {
-              polygon?.getElement()?.classList.remove('captured')
-            }, 1000)
 
             // if we're moving backwards through time, add an 'uncaptured' animation to show what base we backed off from
             if (reverseFacility) {
@@ -680,9 +680,9 @@ export default Vue.extend({
                 | L.Polygon
                 | undefined
               revPolygon?.getElement()?.classList.add('uncaptured')
-              setTimeout(() => {
-                revPolygon?.getElement()?.classList.remove('uncaptured')
-              }, 1000)
+              revPolygon?.getElement()?.addEventListener('animationend', (event) => {
+                (event.target as Element).classList.remove('uncaptured')
+              }, { once: true })
             }
           }
           if (indexLimit) {
