@@ -796,12 +796,12 @@ export default Vue.extend({
         return
       }
 
-      this.outfitData = await this.pullOutfitData(
-        this.alert.instanceId ?? '12345'
-      )
-
       console.log('AlertMap.pull', this.alert.instanceId)
-      await new ApiRequest()
+      await Promise.all([
+        this.pullOutfitData(
+          this.alert.instanceId ?? '12345'
+        ),
+        new ApiRequest()
         .get<InstanceFacilityControlEntriesResponseInterface[]>(
           Endpoints.INSTANCE_FACILITY_CONTROL_ENTRIES.replace(
             '{instance}',
@@ -810,7 +810,9 @@ export default Vue.extend({
               : 'whatever'
           )
         )
-        .then((result) => {
+      ]).then((values) => {
+          this.outfitData = values[0]
+          const result = values[1]
           // Copy the history since updateTerritory reverses the provided list
           this.historyCache = Object.assign([], result)
           const capture = this.updateTerritory(result, undefined)
