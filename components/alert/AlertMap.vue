@@ -563,7 +563,7 @@ export default Vue.extend({
         forceUpdate,
         reverse
       )
-      
+
       this.updateCutoffs()
     },
     updateTerritory(
@@ -576,7 +576,7 @@ export default Vue.extend({
         this.currentIndex = 0
       }
       // result is ordered by timestamp descending, so the most recent is first, and all defences are filtered by the API
-      const lastCaptureEvent = result[0];
+      const lastCaptureEvent = result[0]
       result.reverse().forEach((controlEvent, index, eventArray) => {
         // We aren't forcing an update and the map has already loaded
         if (!force && this.loaded) {
@@ -769,26 +769,24 @@ export default Vue.extend({
 
       console.log('AlertMap.pull', this.alert.instanceId)
       await Promise.all([
-        this.pullOutfitData(
-          this.alert.instanceId ?? '12345'
-        ),
-        new ApiRequest()
-        .get<InstanceFacilityControlEntriesResponseInterface[]>(
+        this.pullOutfitData(this.alert.instanceId ?? '12345'),
+        new ApiRequest().get<InstanceFacilityControlEntriesResponseInterface[]>(
           `${Endpoints.INSTANCE_FACILITY_CONTROL_ENTRIES.replace(
             '{instance}',
             this.alert.instanceId
               ? this.alert.instanceId.toString()
               : 'whatever'
           )}&noDefences=true`
-        )
-      ]).then((values) => {
+        ),
+      ])
+        .then((values) => {
           this.outfitData = values[0]
           const result = values[1]
           // Copy the history since updateTerritory reverses the provided list
           this.historyCache = Object.assign([], result)
           this.updateTerritory(result, undefined)
           this.updateCutoffs()
-          
+
           this.loaded = true
           const now = new Date()
           // Yes, there really isn't a Date.UTCNow() or similar
