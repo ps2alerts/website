@@ -556,24 +556,22 @@ export default Vue.extend({
         forceUpdate = true
       }
 
-      const capture = this.updateTerritory(
+      this.updateTerritory(
         // Copy the history since updateTerritory reverses the provided list
         Object.assign([], this.historyCache),
         forceUpdate ? undefined : this.sliderVal,
         forceUpdate,
         reverse
       )
-      if (capture) {
-        this.updateCutoffs()
-      }
+      
+      this.updateCutoffs()
     },
     updateTerritory(
       result: InstanceFacilityControlEntriesResponseInterface[],
       indexLimit?: number,
       force = false,
       reverse = false
-    ): boolean {
-      let changed = false
+    ): void {
       if (indexLimit) {
         this.currentIndex = 0
       }
@@ -607,8 +605,6 @@ export default Vue.extend({
           if (!region) {
             return
           }
-          // changed is used by callers to check whether we need to update hex colors in updateCutoffs or not
-          changed = true
 
           // Update map region (TODO: Update links should probably be refactored into something the region can do)
           // This does not immediately set the hex color, but instead waits for updateCutoffs to be called
@@ -683,7 +679,6 @@ export default Vue.extend({
           }
         }
       })
-      return changed
     },
     updateCutoffs(): void {
       for (const region of this.mapRegions.values()) {
@@ -791,10 +786,9 @@ export default Vue.extend({
           const result = values[1]
           // Copy the history since updateTerritory reverses the provided list
           this.historyCache = Object.assign([], result)
-          const capture = this.updateTerritory(result, undefined)
-          if (capture) {
-            this.updateCutoffs()
-          }
+          this.updateTerritory(result, undefined)
+          this.updateCutoffs()
+          
           this.loaded = true
           const now = new Date()
           // Yes, there really isn't a Date.UTCNow() or similar
