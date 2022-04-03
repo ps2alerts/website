@@ -573,20 +573,13 @@ export default Vue.extend({
       force = false,
       reverse = false
     ): boolean {
-      let capture = false
+      let changed = false
       if (indexLimit) {
         this.currentIndex = 0
       }
-      const lastCaptureEvent = result.find((event) => {
-        return !event.isDefence
-      })
+      // result is ordered by timestamp descending, so the most recent is first, and all defences are filtered by the API
+      const lastCaptureEvent = result[0];
       result.reverse().forEach((controlEvent, index, eventArray) => {
-        // Defence events do not affect the map state
-        //   (TODO: Though they could be used for interesting data in the future)
-        if (controlEvent.isDefence) {
-          return
-        }
-
         // We aren't forcing an update and the map has already loaded
         if (!force && this.loaded) {
           // This is an initial control event or an event we've already consumed
@@ -614,8 +607,8 @@ export default Vue.extend({
           if (!region) {
             return
           }
-          // Capture is used by callers to check whether we need to update hex colors in updateCutoffs or not
-          capture = true
+          // changed is used by callers to check whether we need to update hex colors in updateCutoffs or not
+          changed = true
 
           // Update map region (TODO: Update links should probably be refactored into something the region can do)
           // This does not immediately set the hex color, but instead waits for updateCutoffs to be called
@@ -690,7 +683,7 @@ export default Vue.extend({
           }
         }
       })
-      return capture
+      return changed
     },
     updateCutoffs(): void {
       for (const region of this.mapRegions.values()) {
@@ -786,12 +779,12 @@ export default Vue.extend({
         ),
         new ApiRequest()
         .get<InstanceFacilityControlEntriesResponseInterface[]>(
-          Endpoints.INSTANCE_FACILITY_CONTROL_ENTRIES.replace(
+          `${Endpoints.INSTANCE_FACILITY_CONTROL_ENTRIES.replace(
             '{instance}',
             this.alert.instanceId
               ? this.alert.instanceId.toString()
               : 'whatever'
-          )
+          )}&noDefences=true`
         )
       ]).then((values) => {
           this.outfitData = values[0]
