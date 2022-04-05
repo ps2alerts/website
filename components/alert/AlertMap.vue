@@ -142,7 +142,7 @@ import RemainingTime from '../RemainingTime.vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import { worldToMap } from '~/libraries/MapWorld'
 import { MAP_FACTION_COLORS } from '@/constants/FactionMapColors'
-import { Zone, zoneToWarpgateArray } from '@/constants/Zone'
+import { zoneToWarpgateArray } from '@/constants/Zone'
 import ApiRequest from '@/api-request'
 import MapRegionDataRequest from '@/libraries/MapRegionDataRequest'
 import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
@@ -834,10 +834,12 @@ export default Vue.extend({
       if (this.mapRegions.size !== 0) {
         return
       }
-
-      const regions = await new MapRegionDataRequest().pull(
-        this.alert.zone ? this.alert.zone : Zone.INDAR
-      )
+      const zone = this.alert.zone
+      if (!zone) {
+        console.error('AlertMap.loadRegions: No zone information found')
+        return
+      }
+      const regions = await new MapRegionDataRequest().pull(zone)
 
       regions.forEach((region) => {
         this.mapRegions.set(region.id, region)
