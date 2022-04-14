@@ -1,0 +1,77 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <g id="facility-bg" stroke="none">
+            <circle fill="white" fill-opacity="1.0" cx="50" cy="50" r="50"/>
+            <circle fill-opacity="0.75" cx="50" cy="50" r="45"/>
+        </g>
+        <g id="amp-fg" stroke="white" fill="white">
+            <polygon points="55,18.75 31.25,55 50,55 45,81.25 68.75,45 50,45"/>
+        </g>
+        <g id="bio-fg" stroke="white" fill="none" stroke-width="8.34">
+            <polygon stroke-linejoin="round" points="31.25,71.875 68.75,71.875 50,34.375 31.25,71.875"/>
+            <polygon stroke-linejoin="round" stroke-width="5" fill="white" points="50,34.375 40,25 60,25 50,34.375"/>
+        </g>
+        <g id="tech-fg" stroke="white" stroke-width="5" fill="none">
+            <line x1="41.67" y1="33.34" x2="58.34" y2="33.34"/>
+            <line x1="41.67" y1="66.67" x2="58.34" y2="66.67"/>
+            <rect x="25" y="25" width="16.67" height="16.67"/>
+            <circle cx="66.67" cy="33.34" r="8.34"/>
+            <circle cx="66.67" cy="66.67" r="8.34"/>
+            <circle cx="33.34" cy="66.67" r="8.34"/>
+        </g>
+        <g id="lg-outpost-fg" stroke="white" fill="none" stroke-width="12.5">
+            <polyline stroke-width="10" points="56.25,70 75,70 75,40.41 56.25,23.75  43.75,23.75 25,40.41 25,70 43.75,70"/>
+            <line x1="75" y1="40.41" x2="87.5" y2="40.41"/>
+            <line x1="25" y1="40.41" x2="12.5" y2="40.41"/>
+        </g>
+        <g id="sm-outpost-fg" stroke="white" fill="none" stroke-width="10">
+            <polyline points="56.25,70 75,70 75,47.09 56.25,30.42  43.75,30.42 25,47.09 25,70 43.75,70"/>
+        </g>
+        <g id="warpgate-fg" stroke="white" stroke-width="7.5" fill="none">
+            <path d="M 30 27.5 A 34 34 0 0 0 17.66 65.5 L 50 55 L 82.34 65.5 A 34 34 0 0 0 70 27.5"/>-->
+            <polygon stroke="none" fill="white" points="44,65 48,15 52,15 56,65"/>
+        </g>
+        <g id="interlink-fg" stroke="white" fill="white" stroke-width="3.89" stroke-linejoin="miter">
+            <path d="M 73.91 26.09 A 35 35 0 0 1 26.09 73.91 L 73.91 26.09 Z"/>
+            <line x1="50" y1="50" x2="33.5" y2="33.5"/>
+            <circle cx="33.5" cy="33.5" r="3.5"/>
+        </g>
+        <g id="const-outpost-fg" stroke="white" fill="white" stroke-linejoin="miter">
+            <polygon points="50,50 67.5,67.5 50,85 32.5,67.5"/>
+            <polygon points="68.75,62.5 52.5,15 52.5,45"/>
+            <polygon points="31.25,62.5 47.5,15 47.5,45"/>
+        </g>
+        <g id="relic-fg" stroke="none" fill="white">
+            <g transform="translate(31,-207)">
+                <path d="m 19.2,259.49998 6.45,6.575 c 19.20799,-18.55137 9.930756,-30.50452 -1.65,-39.075 -0.01293,-5.56439 -0.01626,-4.33477 0,-10 24.182011,8.53501 8.72114,30.41876 -4.8,42.5 z"/>
+                <path d="m 36.5,245.24898 v -14.90014 l -1.491065,8.55723 z"/>
+                <path d="m 28.936341,270.7829 c 5.356109,4.97649 7.566694,14.48577 7.563658,25.4324 -17.765571,-19.83589 -54.138637,-42.73891 -22.5,-69.21532 v -10 c -29.537503,12.43876 0.736743,40.58974 14.936342,53.78292 z"/>
+                <path d="m 1.5,248.4942 v -16.49422 l 1.8707248,8.1169 z"/>
+                <path d="m 6.85,266.88 c -17.0819606,8.99477 12.1126814,18.7207 14.6500004,30.12 -3.628522,0.007 -6.368919,0.0649 -10.000001,0 -18.826505,-12.00459 -7.0338538,-13.42498 2.000001,-22 z"/>
+                <path d="m 1.5,273 v 13.56 l 4.84,-5.96 z"/>
+            </g>
+            <rect x="19" y="45" width="4" height="30"/>
+            <rect fill-opacity="0.8" x="22.5" y="50" width="5" height="30"/>
+            <rect fill-opacity="0.7" x="25" y="35" width="3" height="7"/>
+            <rect x="81" y="40" width="4" height="35"/>
+            <rect fill-opacity="0.8" x="74" y="25" width="5" height="30"/>
+            <rect fill-opacity="0.65" x="74" y="63" width="5" height="8"/>
+        </g>
+        <g id="containment-fg" stroke="white" fill="none" stroke-linejoin="miter">
+            <line stroke-width="3" x1="10" y1="54.17" x2="90" y2="54.17"/>
+            <polygon stroke="none" fill="white" points="37.5,50 62.5,50 50,28.35"/>
+            <polygon stroke-width="2.9" points="30,54.16 50,19.52 70,54.16"/>
+            <polygon stroke-width="2" points="37.5,62.5 62.5,62.5 50,84.15"/>
+        </g>
+        <g id="trident-fg" stroke="white" stroke-width="7.5" fill="none">
+            <polygon stroke="none" fill="white" points="57.5,80 51,15 49,15 42.5,80"/>
+            <polyline points="36.77,41.8 28.6,66.95 50.0,82.5 71.4,66.95 63.23,41.8"/>
+            <polygon stroke="none" fill="white" points="33.20,40.8 40.33,43.1 42.5,36"/>
+            <polygon stroke="none" fill="white" points="66.8,40.8 59.67,43.1 57.5,36"/>
+            <polygon stroke="none" fill="white" points="50,55 60,65 50,75 40,65"/>
+        </g>
+    </defs>
+    <!--<rect x="0" y="0" width="100" height="100" fill="black"/>
+    <use href="#facility-bg" fill="red"/>
+    <use href="#const-outpost-fg"/>-->
+</svg>

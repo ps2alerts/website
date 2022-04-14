@@ -1,3 +1,5 @@
+export const AssetsBaseUrl = 'https://assets.ps2alerts.com'
+
 export const Endpoints = {
   AGGREGATES_GLOBAL_CHARACTER: '/aggregates/global/character',
   AGGREGATES_GLOBAL_CHARACTER_SINGLE:
@@ -52,7 +54,15 @@ export const Endpoints = {
   AGGREGATES_INSTANCE_WEAPON_SINGLE:
     '/aggregates/instance/{instance}/weapon/{weapon}',
 
+  ASSETS_AUDIO_ZOOM_IN: AssetsBaseUrl + '/audio/UI_INTERFACE_MAP_ZOOM_IN.wav',
+  ASSETS_AUDIO_ZOOM_OUT: AssetsBaseUrl + '/audio/UI_INTERFACE_MAP_ZOOM_OUT.wav',
+  ASSETS_AUDIO_ALERT_START:
+    AssetsBaseUrl + '/audio/UI_EVENT_NOTIFICATION_START.wav',
+  ASSETS_AUDIO_ALERT_END:
+    AssetsBaseUrl + '/audio/UI_EVENT_NOTIFICATION_END.wav',
+
   CENSUS_OSHUR_DATA: '/census/oshur',
+  CENSUS_OSHUR_HEX_DATA: '/census/oshur-hex',
 
   INSTANCE_FACILITY_CONTROL_ENTRIES:
     '/instance-entries/{instance}/facility?sortBy=timestamp&order=desc',
@@ -67,6 +77,8 @@ export const Endpoints = {
 export const CensusEndpoints = {
   CHARACTER_NAME_SEARCH:
     'https://census.daybreakgames.com/s:{serviceId}/get/ps2:v2/character?name.first_lower={characterName}',
+  CONTINENT_MAP_DATA:
+    "https://census.daybreakgames.com/s:{serviceId}/get/ps2:v2/map_region?zone_id={zone}&c:show=map_region_id,facility_id,facility_name,facility_type_id,location_x,location_z&c:limit=10000&c:join=map_hex^on:map_region_id^to:map_region_id^list:1^show:x'y^inject_at:map_hexes,facility_link^on:facility_id^to:facility_id_a^list:1^show:facility_id_b^inject_at:facility_links(map_region^on:facility_id_b^to:facility_id^show:map_region_id^inject_at:map_region)",
   FACILITY_DATA:
     'https://census.daybreakgames.com/s:{serviceId}/get/ps2:v2/map_region?zone_id={zone}&c:limit=1000',
   VEHICLE_DATA:

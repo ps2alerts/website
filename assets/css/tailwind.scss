@@ -14,21 +14,21 @@
 
   /* COLOURS */
   .vs {
-    background-color: rgba(107,70,193,1);
+    background-color: rgba(107, 70, 193, 1);
     &.bg-leader {
       box-shadow: 0 0 10px #8e6bdd;
       background-color: #8055e5;
     }
   }
   .nc {
-    background-color: rgba(43,108,176,1);
+    background-color: rgba(43, 108, 176, 1);
     &.bg-leader {
       box-shadow: 0 0 10px #5aabff;
       background-color: #347dca;
     }
   }
   .tr {
-    background-color: rgba(197,48,48,1);
+    background-color: rgba(197, 48, 48, 1);
     &.bg-leader {
       box-shadow: 0 0 10px #fb6060;
       background-color: #ef3d3d;
@@ -56,7 +56,7 @@
     @apply border border-gray-500;
   }
   .border-other-alt {
-    border: 1px solid rgba(134,148,167, 1)
+    border: 1px solid rgba(134, 148, 167, 1);
   }
   .border-tint {
     border: 1px solid #5d6265;
@@ -64,52 +64,84 @@
   .outofplay {
     @apply bg-gray-800;
     background: repeating-linear-gradient(
-        45deg,
-        #801a1a,
-        #631c1c 10px,
-        #881a1a 10px,
-        #b94b4b 20px
+      45deg,
+      #801a1a,
+      #631c1c 10px,
+      #881a1a 10px,
+      #b94b4b 20px
     );
+  }
+  @keyframes capture {
+    0% {
+      stroke: black;
+    }
+    50% {
+      stroke: white;
+      fill: gold;
+    }
+    100% {
+      stroke: black;
+    }
+  }
+
+  @keyframes uncapture {
+    0% {
+      stroke: black;
+    }
+    50% {
+      fill: silver;
+    }
+    100% {
+      stroke: black;
+    }
+  }
+
+  .captured {
+    animation: capture linear 0.5s 1 normal;
+  }
+
+  .uncaptured {
+    animation: uncapture linear 0.5s 1 normal;
   }
 
   .bg-tint {
-    background-color: rgba(55,71,79,0.8);
+    background-color: rgba(55, 71, 79, 0.8);
     transition: background-color 0.25s ease-out;
 
     &.hover:hover {
-      background-color: rgba(70,90,100,1);
+      background-color: rgba(70, 90, 100, 1);
     }
   }
   .bg-tint-light {
-    background-color: rgba(100,130,140,0.5);
+    background-color: rgba(100, 130, 140, 0.5);
     transition: background-color 0.25s ease-out;
 
     &.hover:hover {
-      background-color: rgba(100,130,140,1);
+      background-color: rgba(100, 130, 140, 1);
     }
   }
   .bg-vs {
-    background-color: rgba(85,60,154,0.5);
+    background-color: rgba(85, 60, 154, 0.5);
     transition: background-color 0.25s ease-out;
 
     &.hover:hover {
-      background-color: rgba(85,60,154,1);
+      background-color: rgba(85, 60, 154, 1);
     }
   }
   .bg-nc {
-    background-color: rgba(43,108,176,0.5);
+    background-color: rgba(43, 108, 176, 0.5);
     transition: background-color 0.25s ease-out;
 
     &.hover:hover {
-      background-color: rgba(43,108,176,1);
+      background-color: rgba(43, 108, 176, 1);
     }
   }
   .bg-tr {
-    background-color: rgba(155,44,44,0.5);
+    background-color: rgba(155, 44, 44, 0.5);
     transition: background-color 0.25s ease-out;
 
     &.hover:hover {
-      background-color: rgba(155,44,44,1);
+      background-color: rgba(155, 44, 44, 1);
     }
   }
   .bg-nso {
@@ -142,7 +174,7 @@
     @apply text-gray-600;
   }
 
-/* CUSTOM OVERRIDES */
+  /* CUSTOM OVERRIDES */
   html {
     @apply text-white;
     background-image: url('../../static/img/bg-tile.jpg');
@@ -397,7 +429,7 @@
     margin: -1rem -1rem 1rem;
 
     &.section {
-      background-color: rgba(48,58,64,1)
+      background-color: rgba(48, 58, 64, 1);
     }
 
     &.feature {
@@ -422,7 +454,7 @@
   }
 
   .datatable {
-    @apply bg-tint rounded-md
+    @apply bg-tint rounded-md;
   }
 
   table {
@@ -501,20 +533,19 @@
 
       .v-data-table-header,
       .v-data-footer {
-        background-color: rgba(48,58,64,1) !important;
+        background-color: rgba(48, 58, 64, 1) !important;
       }
     }
 
     .v-expansion-panel {
-      background-color: #38444A !important;
+      background-color: #38444a !important;
       margin-bottom: 0.75rem !important;
 
       .v-expansion-panel-header {
         transition: background-color 0.3s ease-out;
-
       }
       .v-expansion-panel-header--active {
-        background-color: lighten(#38444A, 10) !important;
+        background-color: lighten(#38444a, 10) !important;
       }
     }
   }
@@ -526,7 +557,7 @@
       }
 
       .v-tab--active {
-        background-color: lighten(#9b2c2c, 10) !important
+        background-color: lighten(#9b2c2c, 10) !important;
       }
     }
 
@@ -542,7 +573,7 @@
   #subTabs {
     .theme--dark {
       &.v-tabs > .v-tabs-bar {
-        background-color: #38444A !important;
+        background-color: #38444a !important;
       }
       .v-tab--active {
         background-color: inherit !important; // Aka do nothing
