@@ -71,8 +71,8 @@
                 {{ regionName(captureIndex) }}
               </div>
               <div class="px-2 pb-4 text-sm">
-                {{ capturingOutfitTag(captureIndex) }} captured the base from
-                the {{ controlData(captureIndex).loser }}
+                {{ capturingOutfitTag(captureIndex) }} captured from the
+                {{ controlData(captureIndex).loser }}
               </div>
               <div>
                 <FactionSegmentBar
@@ -1015,9 +1015,8 @@ export default Vue.extend({
 
 .alert-timer {
   color: rgba(255, 255, 255, 0.8);
-  text-shadow: 0px 0px 5px rgba(0, 194, 253, 0.7),
-    0px 0px 10px rgba(0, 194, 253, 0.7), 0px 0px 15px rgba(0, 194, 253, 0.7),
-    0px 0px 20px rgba(0, 194, 253, 0.7);
+  text-shadow: 0 0 5px rgba(0, 194, 253, 0.7), 0 0 10px rgba(0, 194, 253, 0.7),
+    0 0 15px rgba(0, 194, 253, 0.7), 0 0 20px rgba(0, 194, 253, 0.7);
 }
 
 .map {
