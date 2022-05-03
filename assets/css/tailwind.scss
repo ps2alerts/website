@@ -75,12 +75,16 @@
     0% {
       stroke: black;
     }
+    25% {
+      stroke: white;
+      fill: gold;
+    }
     50% {
       stroke: white;
       fill: gold;
     }
     100% {
-      stroke: black;
+      stroke: white;
     }
   }
 
@@ -88,20 +92,42 @@
     0% {
       stroke: black;
     }
+    25% {
+      fill: silver;
+    }
     50% {
       fill: silver;
+      stroke: black;
     }
     100% {
       stroke: black;
     }
   }
 
+  @keyframes highlighted {
+    0% {
+    }
+    50% {
+      background-color: white;
+    }
+    100% {
+    }
+  }
+
+  .lastCaptured {
+    stroke: white;
+  }
+
+  .highlight {
+    animation: highlighted linear 0.5s 1 normal;
+  }
+
   .captured {
-    animation: capture linear 0.5s 1 normal;
+    animation: capture linear 1s 1 normal;
   }
 
   .uncaptured {
-    animation: uncapture linear 0.5s 1 normal;
+    animation: uncapture linear 1s 1 normal;
   }
 
   .bg-tint {
