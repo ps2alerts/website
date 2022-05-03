@@ -12,7 +12,7 @@
           <l-map
             ref="map"
             class="map"
-            :options="{ zoomControl: false }"
+            :options="{ zoomControl: false, zoomSnap, zoomDelta }"
             :zoom="zoom"
             :center="center"
             :max-zoom="maxZoom"
@@ -244,8 +244,8 @@ export default Vue.extend({
         '/{z}/tile_{x}_{y}.png',
       minZoom: 2,
       maxZoom: 7,
-      zoomSnap: 1,
-      zoomDelta: 1,
+      zoomSnap: 0.5,
+      zoomDelta: 0.5,
       bounds: [
         [0, 0],
         [-256, 256],
@@ -388,6 +388,11 @@ export default Vue.extend({
       this.zoomOutSound.loop = false
       this.zoomInSound.volume = 0.5
       this.zoomOutSound.volume = 0.5
+
+      if (window.matchMedia('(min-width: 1280px)').matches) {
+        this.map.setMinZoom(1.5)
+      }
+
       this.setTimers()
     },
     factionColor(faction: Faction) {
@@ -1110,11 +1115,11 @@ export default Vue.extend({
         }
         const direction = this.prevZoom - this.map.getZoom()
         // current zoom > previous zoom means we zoomed in
-        if (direction < 0 && this.zoomInSound.paused) {
+        if (direction < 0) {
           this.zoomOutSound.pause()
           this.zoomInSound.currentTime = 0
           this.zoomInSound.play()
-        } else if (this.zoomOutSound.paused) {
+        } else if (direction > 0) {
           this.zoomInSound.pause()
           this.zoomOutSound.currentTime = 0
           this.zoomOutSound.play()
