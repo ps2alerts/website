@@ -560,7 +560,7 @@ export default Vue.extend({
       return true
     },
     decrementSlider() {
-      if (this.sliderVal === 0) {
+      if (this.sliderVal <= 1) {
         return
       }
       const captureCards = this.$refs.captureCards as Vue[]
