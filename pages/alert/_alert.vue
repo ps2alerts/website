@@ -12,15 +12,50 @@
       <AlertDetails :alert="alert" />
       <AlertFactionCombatMetrics :alert="alert" />
       <AlertFactionVsFaction :alert="alert" />
+      <div class="col-span-4 col-start-5">
+        <v-tabs v-model="mapsTab" center-active dark fixed-tabs class="mt-2">
+          <v-tabs-slider></v-tabs-slider>
+
+          <v-tab href="#map">
+            <font-awesome-icon
+              :icon="['fas', 'map']"
+              class="mr-2"
+            ></font-awesome-icon>
+            Map
+          </v-tab>
+
+          <v-tab
+            v-if="alert.features && alert.features.captureHistory"
+            href="#captureHistory"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'hourglass']"
+              class="mr-2"
+            ></font-awesome-icon>
+            Capture History
+          </v-tab>
+        </v-tabs>
+      </div>
+      <div class="col-span-12">
+        <v-tabs-items v-model="mapsTab">
+          <v-tab-item :eager="eager" value="map">
+            <AlertMap :alert="alert" />
+          </v-tab-item>
+          <v-tab-item
+            v-if="alert.features && alert.features.captureHistory"
+            value="captureHistory"
+          >
+            <AlertMapCaptureHistory
+              v-if="alert.features && alert.features.captureHistory"
+              :alert="alert"
+              :facility-data="alertFacilityAggregate"
+              :data-ready="alertFacilityDataReady"
+            />
+          </v-tab-item>
+        </v-tabs-items>
+      </div>
       <AlertPopulations :alert="alert" />
       <AlertCombatHistory :alert="alert" />
-      <AlertMap :alert="alert" />
-      <AlertMapCaptureHistory
-        v-if="alert.features && alert.features.captureHistory"
-        :alert="alert"
-        :facility-data="alertFacilityAggregate"
-        :data-ready="alertFacilityDataReady"
-      />
       <AlertBattleranks :alert="alert" />
 
       <div class="col-span-12">
@@ -31,7 +66,7 @@
           fixed-tabs
           dark
           show-arrows
-          class="my-4"
+          class="mt-4"
         >
           <v-tabs-slider></v-tabs-slider>
 
@@ -170,6 +205,7 @@ export default Vue.extend({
       >,
       alertFacilityDataReady: false,
       metricsTab: 'players',
+      mapsTab: 'map',
       eager: true,
     }
   },

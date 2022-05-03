@@ -54,6 +54,22 @@
         class="timeline overflow-y-auto col-start-4 col-span-1 hidden xl:block"
       >
         <client-only>
+          <v-card-title v-show="!loaded" class="text-gray-300 flex-col">
+            Loading Map &amp; Timeline...
+          </v-card-title>
+          <v-card-title v-show="loaded" class="text-gray-300 flex-col">
+            Alert Capture Timeline
+          </v-card-title>
+          <v-card-text
+            v-show="loaded && captureIndices.length === 0"
+            class="text-gray-300"
+          >
+            Awaiting first capture...
+            <font-awesome-icon
+              :icon="['fa', 'sync']"
+              class="animate-spin"
+            ></font-awesome-icon>
+          </v-card-text>
           <v-card
             v-for="(captureIndex, index) in captureIndices.slice().reverse()"
             :key="index"
@@ -71,12 +87,12 @@
                 class="absolute top-2 right-2"
                 v-html="facilityIconSvg(captureIndex)"
               ></span>
-              <div class="pb-1 pt-6 px-10 text-sm">
+              <div class="pb-1 pt-6 px-10 text-sm font-bold">
                 {{ regionName(captureIndex) }}
               </div>
               <div class="px-2 pb-4 text-sm">
-                {{ capturingOutfitTag(captureIndex) }} captured the base from
-                the {{ controlData(captureIndex).loser }}
+                {{ capturingOutfitTag(captureIndex) }} captured from the
+                {{ controlData(captureIndex).loser }}
               </div>
               <div>
                 <FactionSegmentBar
@@ -88,9 +104,29 @@
                   :out-of-play="mapControlData(captureIndex).outOfPlay"
                   dropoff-percent="15"
                 ></FactionSegmentBar>
-                <span v-if="!controlData(captureIndex).mapControl"
-                  >Awaiting data...</span
-                >
+                <span
+                  v-if="
+                    !controlData(captureIndex).mapControl &&
+                    captureIndex === historyCache.length - 1
+                  "
+                  class="text-sm"
+                  >Awaiting data...
+                  <font-awesome-icon
+                    :icon="['fa', 'sync']"
+                    class="animate-spin"
+                  ></font-awesome-icon
+                ></span>
+                <span
+                  v-if="
+                    !controlData(captureIndex).mapControl &&
+                    captureIndex !== historyCache.length - 1
+                  "
+                  class="text-sm"
+                  >Data not available
+                  <font-awesome-icon
+                    :icon="['fa', 'face-frown']"
+                  ></font-awesome-icon>
+                </span>
               </div>
             </div>
           </v-card>
@@ -1142,9 +1178,8 @@ export default Vue.extend({
 
 .alert-timer {
   color: rgba(255, 255, 255, 0.8);
-  text-shadow: 0px 0px 5px rgba(0, 194, 253, 0.7),
-    0px 0px 10px rgba(0, 194, 253, 0.7), 0px 0px 15px rgba(0, 194, 253, 0.7),
-    0px 0px 20px rgba(0, 194, 253, 0.7);
+  text-shadow: 0 0 5px rgba(0, 194, 253, 0.7), 0 0 10px rgba(0, 194, 253, 0.7),
+    0 0 15px rgba(0, 194, 253, 0.7), 0 0 20px rgba(0, 194, 253, 0.7);
 }
 
 .map {

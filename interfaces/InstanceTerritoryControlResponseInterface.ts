@@ -11,6 +11,7 @@ export interface InstanceTerritoryControlResponseInterface {
   world: World
   zone: Zone
   timeStarted: string
+  timeEnded?: string | null
   censusMetagameEventType: number
   duration: number
   state: Ps2alertsEventState

@@ -52,7 +52,7 @@
       <p v-show="filteredByDate()">
         {{ length }} alert{{ length > 1 ? 's' : '' }} found
       </p>
-      <p v-show="length === 300">
+      <p v-show="length === 300 && page === 1">
         Hard limit of 300 alerts reached. Please narrow your criteria.
       </p>
     </div>
@@ -89,6 +89,16 @@
         :key="index"
         :alert="alert"
       />
+      <div class="col-span-3 col-start-5">
+        <button v-show="loadMoreDone" class="btn mb-2" @click="loadMore">
+          <font-awesome-icon icon="arrow-down"></font-awesome-icon> Load More
+          <font-awesome-icon icon="arrow-down"></font-awesome-icon>
+        </button>
+        <button v-show="!loadMoreDone" class="btn mb-2" disabled>
+          <font-awesome-icon icon="refresh"></font-awesome-icon> Loading...
+          <font-awesome-icon icon="refresh"></font-awesome-icon>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -146,6 +156,8 @@ export default Vue.extend({
       selectedDateFrom: now,
       selectedDateTo: now,
       dateNow: now,
+      page: 1,
+      loadMoreDone: true,
     }
   },
   head(): object {
@@ -225,20 +237,28 @@ export default Vue.extend({
       this.setTimers()
       await this.pull()
     },
-    async pull(): Promise<void> {
+    async pull(additive = false): Promise<void> {
       console.log('AlertHistory.pull')
       this.error = { message: '' }
 
       try {
-        this.alerts = await this.ApiRequest.get(
-          Endpoints.INSTANCES_TERRITORY_CONTROL,
-          this.filter
-        )
+        const alerts: InstanceTerritoryControlResponseInterface[] =
+          await this.ApiRequest.get(
+            Endpoints.INSTANCES_TERRITORY_CONTROL + `?page=${this.page}`,
+            this.filter
+          )
+        if (additive) {
+          this.alerts.push(...alerts)
+          this.clearTimers()
+        } else {
+          this.alerts = alerts
+          this.updateCountdown = this.updateRate / 1000
+        }
+
         this.loaded = true
         this.length = Object.keys(this.alerts).length
-        this.updateCountdown = this.updateRate / 1000
-      } catch (e) {
-        this.error = e
+      } catch (e: any) {
+        this.error = e.message
       }
     },
     updateWorld(world: World): void {
@@ -288,6 +308,12 @@ export default Vue.extend({
         this.selectedDateFrom !== this.dateNow &&
         this.selectedDateTo !== this.dateNow
       )
+    },
+    async loadMore(): Promise<void> {
+      this.page = this.page + 1
+      this.loadMoreDone = false
+      await this.pull(true)
+      this.loadMoreDone = true
     },
   },
 })

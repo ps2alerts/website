@@ -3,6 +3,10 @@ kind: Ingress
 metadata:
   name: {{ application }}-{{ environment }}
   namespace: ps2alerts
+  annotations:
+    nginx.ingress.kubernetes.io/server-snippet: |
+      expires 1d;
+      add_header Cache-Control "public, must-revalidate";
 spec:
   tls:
     - hosts:
