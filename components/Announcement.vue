@@ -4,21 +4,20 @@
   >
     <div class="tag announcement">
       <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>
-      Notice - 7th Feb 2022 22:30 BST
+      Notice - 5th May 2022
     </div>
     <div class="text-center">
-      <h1 class="mb-2">Alert collection temporarily offline</h1>
+      <h1 class="mb-2">SolTech alerts are currently unsupported</h1>
       <p>
-        Due to a DNS resolution issue, PS2Alerts is currently unable to connect
-        to Census (the game's API). I've isolated the issue to the Digital Ocean
-        hosts that PS2Alerts runs upon being unable to resolve
-        push.planetside2.com (the websocket API PS2Alerts uses for its data).
+        Applications using PS2's real time API are currently not getting any
+        data from SolTech. As a result, collection of SolTech alerts have been
+        disabled.
       </p>
       <p>
-        A support ticket with DO has been opened, hopefully it will be sorted
-        out soon. It may also just randomly start working while I'm sleeping
-        (I'm from the UK), if so disregard this message. Apologies for the
-        inconvenience but this is an issue mostly out of my control.
+        We have reached out to DBG in order to fix this, but unfortunately this
+        will take some time. If you are a SolTech player, please reach out to
+        customer service saying you are unable to use apps like Recursion, who
+        will hopefully pass the message onto the dev team.
       </p>
       <p>- Maelstrome26 (PS2Alerts Dev)</p>
     </div>
