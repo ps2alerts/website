@@ -64,9 +64,6 @@ export class MapRegion implements MapRegionDrawingInterface {
 
     // Fun data injections for the whole family
     const outpost = getIndarConstructionOutpost(this.id)
-    if (this.name === 'Berjess Overlook') {
-      console.log(outpost)
-    }
     if (outpost !== null) {
       this.badgeLocation = new Point(outpost.location_x, outpost.location_z)
     } else {

@@ -12,6 +12,7 @@
           <l-map
             ref="map"
             class="map"
+            :options="{ zoomControl: false, zoomSnap, zoomDelta }"
             :zoom="zoom"
             :center="center"
             :max-zoom="maxZoom"
@@ -19,6 +20,11 @@
             :zoom-delta="zoomDelta"
             :crs="crs"
           >
+            <font-awesome-icon
+              v-show="false"
+              ref="centerIcon"
+              icon="fa-solid fa-arrows-to-dot"
+            />
             <l-control
               v-show="alert.state === 1"
               ref="timer"
@@ -67,6 +73,7 @@
           <v-card
             v-for="(captureIndex, index) in captureIndices.slice().reverse()"
             :key="index"
+            ref="captureCards"
             dark
             class="m-2"
             @click="historyIndexCallback(captureIndices.length - index)"
@@ -138,31 +145,45 @@
           min="1"
           dark
           thumb-color="#FFFFFF"
-          @change="historyCallback"
+          @change="sliderHistoryCallback"
           @click:prepend="decrementSlider"
           @click:append="incrementSlider"
         ></v-slider>
       </div>
       <div
         v-if="captureIndices.length > sliderVal - 1 && sliderVal - 1 >= 0"
-        class="col-start-1 col-span-4 text-xs xl:text-base"
+        class="col-start-1 col-span-4 text-xs xl:text-base flex justify-center flex-shrink-1"
       >
-        <span
-          class="bg-neutral-800 border border-black border-solid rounded py-2"
-        >
-          <span
-            :class="controlData(captureIndices[sliderVal - 1]).bgClass + ' p-2'"
+        <div class="bg-neutral-800 border border-black border-solid rounded">
+          <div
+            :class="
+              controlData(captureIndices[sliderVal - 1]).bgClass + ' pt-2'
+            "
           >
-            <span class="text-gray-300"
-              >{{
-                controlData(captureIndices[sliderVal - 1]).timestamp
-                  | dateTimeFormatShort
-              }}:</span
-            >
-            {{ regionName(captureIndices[sliderVal - 1]) }} captured by
-            {{ capturingOutfitTag(captureIndices[sliderVal - 1]) }}
-          </span>
-        </span>
+            <span class="p-2">
+              <span class="text-gray-300"
+                >{{
+                  controlData(captureIndices[sliderVal - 1]).timestamp
+                    | dateTimeFormatShort
+                }}:</span
+              >
+              {{ regionName(captureIndices[sliderVal - 1]) }} captured by
+              {{ capturingOutfitTag(captureIndices[sliderVal - 1]) }}
+            </span>
+            <FactionSegmentBar
+              v-if="controlData(captureIndices[sliderVal - 1]).mapControl"
+              class="pt-2"
+              :vs="mapControlData(captureIndices[sliderVal - 1]).vs"
+              :nc="mapControlData(captureIndices[sliderVal - 1]).nc"
+              :tr="mapControlData(captureIndices[sliderVal - 1]).tr"
+              :other="mapControlData(captureIndices[sliderVal - 1]).cutoff"
+              :out-of-play="
+                mapControlData(captureIndices[sliderVal - 1]).outOfPlay
+              "
+              dropoff-percent="15"
+            ></FactionSegmentBar>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -171,9 +192,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import { LControl, LMap } from 'vue2-leaflet'
+import { Constructor } from 'vue/types/options'
 import RemainingTime from '../RemainingTime.vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import { worldToMap } from '~/libraries/MapWorld'
+// import { ZoomCenter } from '~/plugins/ZoomCenter.client'
 import { MAP_FACTION_COLORS } from '@/constants/FactionMapColors'
 import { zoneToWarpgateArray } from '@/constants/Zone'
 import ApiRequest from '@/api-request'
@@ -221,8 +244,8 @@ export default Vue.extend({
         '/{z}/tile_{x}_{y}.png',
       minZoom: 2,
       maxZoom: 7,
-      zoomSnap: 1,
-      zoomDelta: 1,
+      zoomSnap: 0.5,
+      zoomDelta: 0.5,
       bounds: [
         [0, 0],
         [-256, 256],
@@ -235,6 +258,7 @@ export default Vue.extend({
       noWrap: true,
       mapRegions: new Map<number, MapRegion>(),
       map: {} as L.Map,
+      lastCaptured: undefined as L.Polygon | undefined,
       remaining: {} as LControl,
       crs: this.$L.CRS.Simple,
       polys: this.$L.featureGroup([], {
@@ -252,6 +276,8 @@ export default Vue.extend({
       currentIndex: -1,
       captureIndices: [] as number[],
       tickLabels: [] as string[],
+      scrollEndTimer: null as NodeJS.Timeout | null,
+      scrolledCard: null as Element | null,
       oldSliderVal: 0,
       sliderVal: 0,
       sliderMax: 0,
@@ -259,6 +285,7 @@ export default Vue.extend({
       outfitData: new Map<string, InstanceOutfitAggregateResponseInterface>(),
       zoomInSound: new Audio(Endpoints.ASSETS_AUDIO_ZOOM_IN),
       zoomOutSound: new Audio(Endpoints.ASSETS_AUDIO_ZOOM_OUT),
+      ZoomCenterControl: undefined as Constructor | undefined,
       // data: {} as InstanceFactionCombatAggregateResponseInterface,
     }
   },
@@ -282,6 +309,8 @@ export default Vue.extend({
     this.reset()
   },
   mounted() {
+    const { ZoomCenter } = require('~/libraries/ZoomCenter')
+    this.ZoomCenterControl = ZoomCenter
     this.$nextTick(() => {
       this.init()
       this.loadRegions().then(() => {
@@ -312,6 +341,17 @@ export default Vue.extend({
     init(): void {
       this.map = (this.$refs.map as LMap).mapObject as L.Map
       this.remaining = this.$refs.timer as LControl
+      const centerIcon = (this.$refs.centerIcon as HTMLElement).cloneNode(
+        true
+      ) as HTMLElement
+      centerIcon.setAttribute('style', '')
+      if (this.ZoomCenterControl) {
+        this.map.addControl(
+          new this.ZoomCenterControl({
+            zoomCenterText: centerIcon.outerHTML,
+          })
+        )
+      }
       this.map.attributionControl.addAttribution(
         'Tiles from <a title="Planetside 2® Public Test Server" href="https://forums.daybreakgames.com/ps2/index.php?threads/read-first-test-server-policies-download-link.114038/">PTS client</a>'
       )
@@ -326,6 +366,7 @@ export default Vue.extend({
         .getContainer()
         ?.classList.add('whitespace-nowrap')
       this.map.createPane('hexPane', this.map.getPane('overlayPane'))
+      this.map.createPane('capturedHexPane', this.map.getPane('overlayPane'))
       this.map.createPane('linkPane', this.map.getPane('overlayPane'))
       this.map.createPane('badgePane', this.map.getPane('overlayPane'))
       this.map.createPane('badgeTextPane', this.map.getPane('overlayPane'))
@@ -347,6 +388,11 @@ export default Vue.extend({
       this.zoomOutSound.loop = false
       this.zoomInSound.volume = 0.5
       this.zoomOutSound.volume = 0.5
+
+      if (window.matchMedia('(min-width: 1280px)').matches) {
+        this.map.setMinZoom(1.5)
+      }
+
       this.setTimers()
     },
     factionColor(faction: Faction) {
@@ -555,15 +601,31 @@ export default Vue.extend({
       return true
     },
     decrementSlider() {
-      if (this.sliderVal === 0) {
+      if (this.sliderVal <= 1) {
         return
       }
+      const captureCards = this.$refs.captureCards as Vue[]
+      captureCards[
+        captureCards.length - (this.sliderVal - 1)
+      ].$el.scrollIntoView({
+        block: 'nearest',
+        inline: 'nearest',
+        behavior: 'smooth',
+      })
       this.historyCallback(this.sliderVal - 1)
     },
     incrementSlider() {
       if (this.sliderVal === this.captureIndices.length) {
         return
       }
+      const captureCards = this.$refs.captureCards as Vue[]
+      captureCards[
+        captureCards.length - (this.sliderVal + 1)
+      ].$el.scrollIntoView({
+        block: 'nearest',
+        inline: 'nearest',
+        behavior: 'smooth',
+      })
       this.historyCallback(this.sliderVal + 1)
     },
     resetLimit(): void {
@@ -575,6 +637,66 @@ export default Vue.extend({
       }
       this.oldSliderVal = captureIndex
       this.historyCallback(captureIndex)
+    },
+    highlightRemovalListener(): void {
+      this.scrolledCard?.classList.remove('highlight')
+    },
+    scrollHighlightListener(): void {
+      if (this.scrollEndTimer) {
+        clearTimeout(this.scrollEndTimer)
+      }
+      this.scrollEndTimer = setTimeout(() => {
+        if (this.scrolledCard) {
+          this.scrolledCard.parentElement?.removeEventListener(
+            'scroll',
+            this.scrollHighlightListener
+          )
+          this.scrolledCard.classList.add('highlight')
+          this.scrolledCard.addEventListener(
+            'animationend',
+            () => {
+              this.scrolledCard?.classList.remove('highlight')
+            },
+            { once: true }
+          )
+        }
+      }, 100)
+    },
+    sliderHistoryCallback(value: number): void {
+      if (!this.loaded) {
+        return
+      }
+      const captureCards = this.$refs.captureCards as Vue[]
+      if (value <= captureCards.length && value > 0) {
+        this.scrolledCard = captureCards[captureCards.length - value].$el
+        this.scrolledCard.parentElement?.addEventListener(
+          'scroll',
+          this.scrollHighlightListener
+        )
+        this.scrolledCard.scrollIntoView({
+          block: 'nearest',
+          inline: 'nearest',
+          behavior: 'smooth',
+        })
+        // add highlight here to make the animation play if no scroll is needed
+        this.scrollEndTimer = setTimeout(() => {
+          if (this.scrolledCard) {
+            this.scrolledCard.parentElement?.removeEventListener(
+              'scroll',
+              this.scrollHighlightListener
+            )
+            this.scrolledCard.classList.add('highlight')
+            this.scrolledCard.addEventListener(
+              'animationend',
+              () => {
+                this.scrolledCard?.classList.remove('highlight')
+              },
+              { once: true }
+            )
+          }
+        }, 100)
+      }
+      this.historyCallback(value)
     },
     historyCallback(value: number): void {
       this.sliderVal = value
@@ -605,6 +727,12 @@ export default Vue.extend({
       force = false,
       reverse = false
     ): void {
+      if (this.lastCaptured) {
+        this.lastCaptured.getElement()?.classList.remove('lastCaptured')
+        this.polys.removeLayer(this.lastCaptured)
+        this.lastCaptured.options.pane = 'hexPane'
+        this.polys.addLayer(this.lastCaptured)
+      }
       if (indexLimit) {
         this.currentIndex = 0
       }
@@ -665,15 +793,22 @@ export default Vue.extend({
             const polygon = this.polys.getLayer(region.outlineStamp) as
               | L.Polygon
               | undefined
-            polygon?.getElement()?.classList.add('captured')
-            polygon?.getElement()?.addEventListener(
-              'animationend',
-              (event) => {
-                ;(event.target as Element).classList.remove('captured')
-              },
-              { once: true }
-            )
-            polygon?.bringToFront()
+            if (polygon) {
+              this.lastCaptured = polygon
+              this.polys.removeLayer(this.lastCaptured)
+              this.lastCaptured.options.pane = 'capturedHexPane'
+              this.polys.addLayer(this.lastCaptured)
+              this.lastCaptured
+                .getElement()
+                ?.classList.add('captured', 'lastCaptured')
+              this.lastCaptured.getElement()?.addEventListener(
+                'animationend',
+                (event) => {
+                  ;(event.target as Element).classList.remove('captured')
+                },
+                { once: true }
+              )
+            }
 
             // if we're moving backwards through time, add an 'uncaptured' animation to show what base we backed off from
             if (reverseFacility) {
@@ -980,11 +1115,11 @@ export default Vue.extend({
         }
         const direction = this.prevZoom - this.map.getZoom()
         // current zoom > previous zoom means we zoomed in
-        if (direction < 0 && this.zoomInSound.paused) {
+        if (direction < 0) {
           this.zoomOutSound.pause()
           this.zoomInSound.currentTime = 0
           this.zoomInSound.play()
-        } else if (this.zoomOutSound.paused) {
+        } else if (direction > 0) {
           this.zoomInSound.pause()
           this.zoomOutSound.currentTime = 0
           this.zoomOutSound.play()
