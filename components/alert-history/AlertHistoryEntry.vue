@@ -121,15 +121,15 @@ export default Vue.extend({
       return moment(this.alert.timeEnded).format(DATE_TIME_FORMAT_SHORT)
     },
     victorClass(): object {
+      if (!this.alert.result || !this.alert.result.victor) {
+        return {}
+      }
+
       if (this.alert.result.draw) {
         return {
           'bg-tint-light': true,
           'border-other-alt': true,
         }
-      }
-
-      if (!this.alert.result || !this.alert.result.victor) {
-        return {}
       }
 
       return {

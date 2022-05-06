@@ -68,6 +68,26 @@ export default Vue.extend({
       panel: [0],
       posts: [
         {
+          id: 10,
+          title: `V4.1.0 - Alert mapping, Alert History improvements`,
+          date: '15th April 2022',
+          type: 'minor-update',
+          body: `
+           <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+              <div>
+                <h2 class="text-subtitle">Alert Maps!</h2>
+                <p>
+                  For a long, long time the alert pages were sorely missing maps, which is a fundamental cornerstone of the alert metagame. Thanks to some <b>extraordinary</b> work by [UN17] RiderAnton from Connery, they are finally here.
+                </p>
+                <p>The PS2Alerts map should be a familiar experience to you. It should work and feel exactly like the in game map - Rider has taken a high level of attention to detail to his work, including things like zoom levels, lattice links with proper coloring, hover-over facility names, properly showing cutoffs, zoom sounds, and lots more! It should feel like you were watching the alert from the map screen.</p>
+                <p>Soon, there are going to be changes to the Capture History which will be showing a lot more detail about each individual capture. Stay tuned for more on that!</p>
+              </div>
+              <div>
+                <h2 class="text-subtitle">Alert history load more</h2>
+                <p>On the bottom of the Alert History page there is now a Load More button! This enables you, in theory, to infinitely scroll back to the beginning of time to find the alert you need. In theory.</p>
+              </div>`,
+        },
+        {
           id: 9,
           title: `v4.0.1 - v4.0.3 - ASP2 support, Alert Monitor improvements &amp; more`,
           date: '16th March 2022',
