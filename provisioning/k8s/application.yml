@@ -40,13 +40,6 @@ spec:
         app: {{ application }}-{{ environment }}
         version: {{ version }}
     spec:
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: DoNotSchedule
-          labelSelector:
-            matchLabels:
-              app: {{ application }}-{{ environment }}
       containers:
         - name: application
           image: maelstromeous/applications:{{ application }}-{{ environment }}-{{ version }}
