@@ -45,7 +45,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push production image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           file: provisioning/production/Dockerfile
           platforms: linux/amd64
