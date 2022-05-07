@@ -150,9 +150,46 @@
           @click:append="incrementSlider"
         ></v-slider>
       </div>
+      <div class="col-start-1 col-span-1 flex justify-center items-center">
+        <div
+          v-if="loaded"
+          class="btn-group mr-2"
+        >
+          <button
+            class="btn btn-sm px-4 xl:px-2"
+            :class="{ 'btn-active': playback.playing }"
+            @click="
+              playback.playing = !playback.playing
+              startOrEndPlayback()
+            "
+          >
+            <font-awesome-icon :icon="['fas', 'play']"></font-awesome-icon>
+            <span class="align-top hidden xl:inline">Play<span v-if="playback.playing">ing</span></span>
+          </button>
+          <button
+            class="btn btn-sm px-4 xl:px-2"
+            :class="{ 'btn-active': !playback.playing }"
+            @click="
+              playback.playing = false
+              startOrEndPlayback()
+            "
+          >
+            <font-awesome-icon :icon="['fas', 'pause']"></font-awesome-icon>
+            <span class="align-top hidden xl:inline">Pause<span v-if="!playback.playing">d</span></span>
+          </button>
+          <button
+            class="btn btn-sm px-4 xl:px-2"
+            :class="{ 'btn-active': playback.repeat }"
+            @click="playback.repeat = !playback.repeat"
+          >
+            <font-awesome-icon :icon="['fas', 'repeat']"></font-awesome-icon>
+            <span class="align-top hidden xl:inline">Repeat: <span v-if="playback.repeat">On</span><span v-if="!playback.repeat">Off</span></span>
+          </button>
+        </div>
+      </div>
       <div
         v-if="captureIndices.length > sliderVal - 1 && sliderVal - 1 >= 0"
-        class="col-start-1 col-span-4 text-xs xl:text-base flex justify-center flex-shrink-1"
+        class="col-start-2 col-span-2 text-xs xl:text-base flex justify-center flex-shrink-1"
       >
         <div class="bg-neutral-800 border border-black border-solid rounded">
           <div
@@ -185,6 +222,15 @@
           </div>
         </div>
       </div>
+      <div class="col-start-4 col-span-1 flex justify-center items-center">
+        <v-slider
+            v-model="playback.delay"
+            min="250"
+            max="2000"
+            :label="`Playback delay: ${(playback.delay / 1000).toFixed(2)}s`"
+            @change="updatePlaybackDelay()"
+          ></v-slider>
+      </div>
     </div>
   </div>
 </template>
@@ -196,7 +242,6 @@ import { Constructor } from 'vue/types/options'
 import RemainingTime from '../RemainingTime.vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import { worldToMap } from '~/libraries/MapWorld'
-// import { ZoomCenter } from '~/plugins/ZoomCenter.client'
 import { MAP_FACTION_COLORS } from '@/constants/FactionMapColors'
 import { zoneToWarpgateArray } from '@/constants/Zone'
 import ApiRequest from '@/api-request'
@@ -286,6 +331,12 @@ export default Vue.extend({
       zoomInSound: new Audio(Endpoints.ASSETS_AUDIO_ZOOM_IN),
       zoomOutSound: new Audio(Endpoints.ASSETS_AUDIO_ZOOM_OUT),
       ZoomCenterControl: undefined as Constructor | undefined,
+      playback: {
+        playing: false,
+        repeat: false,
+        interval: undefined as number | undefined,
+        delay: 1000,
+      },
       // data: {} as InstanceFactionCombatAggregateResponseInterface,
     }
   },
@@ -627,6 +678,51 @@ export default Vue.extend({
         behavior: 'smooth',
       })
       this.historyCallback(this.sliderVal + 1)
+    },
+    startOrEndPlayback() {
+      if (this.playback.playing) {
+        this.playback.interval = window.setInterval(this.runPlayback, this.playback.delay)
+        if (this.sliderVal === this.captureIndices.length) {
+          this.runPlayback(0)
+        } else {
+          this.runPlayback()
+        }
+      } else {
+        window.clearInterval(this.playback.interval)
+        this.playback.interval = undefined
+      }
+    },
+    updatePlaybackDelay() {
+      if (this.playback.playing) {
+        window.clearInterval(this.playback.interval)
+        this.playback.interval = window.setInterval(this.runPlayback, this.playback.delay)
+      }
+    },
+    runPlayback(sliderOverride?: number) {
+      if (sliderOverride === undefined) {
+        sliderOverride = this.sliderVal
+      }
+      let nextVal = sliderOverride + 1
+      if (
+        sliderOverride === this.captureIndices.length &&
+        !this.playback.repeat
+      ) {
+        this.playback.playing = false
+        this.startOrEndPlayback()
+        return
+      } else if (
+        sliderOverride === this.captureIndices.length &&
+        this.playback.repeat
+      ) {
+        nextVal = 1
+      }
+      const captureCards = this.$refs.captureCards as Vue[]
+      captureCards[captureCards.length - nextVal].$el.scrollIntoView({
+        block: 'nearest',
+        inline: 'nearest',
+        behavior: this.playback.delay < 450 && this.sliderVal > nextVal ? 'auto' : 'smooth',
+      })
+      this.historyCallback(nextVal)
     },
     resetLimit(): void {
       this.currentIndex = -1
