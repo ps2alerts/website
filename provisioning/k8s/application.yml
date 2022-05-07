@@ -51,6 +51,8 @@ spec:
         - name: application
           image: maelstromeous/applications:{{ application }}-{{ environment }}-{{ version }}
           imagePullPolicy: IfNotPresent
+          imagePullSecrets:
+            - name: dockercreds
           resources:
             requests:
               cpu: "50m"
