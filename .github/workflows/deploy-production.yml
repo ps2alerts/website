@@ -69,7 +69,7 @@ jobs:
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
           -e 's|{{ version }}|${{ github.sha }}|' \
           -e 's|{{ environment }}|production|' \
-          -e 's|{{ replicas }}|3|' \
+          -e 's|{{ replicas }}|2|' \
           provisioning/k8s/application.yml
 
       # Apply the common resources, telling k8s to change the container version to the new one.
