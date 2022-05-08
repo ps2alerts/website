@@ -71,7 +71,7 @@ export default Vue.extend({
           id: 10,
           title: `V4.1.0 - Alert mapping, Alert History improvements`,
           date: '15th April 2022',
-          type: 'minor-update',
+          type: 'major-update',
           body: `
            <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
               <div>
