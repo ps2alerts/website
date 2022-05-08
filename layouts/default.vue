@@ -31,7 +31,7 @@
             </div>
           </div>
           <div>
-            <div class="bg-orange-600 w-full p-4 mt-4 text-center rounded">
+            <div class="bg-orange-600 w-full p-4 m-4 text-center rounded">
               <font-awesome-icon
                 :icon="['fas', 'exclamation-triangle']"
               ></font-awesome-icon>
