@@ -31,8 +31,8 @@ spec:
       app: {{ application }}-{{ environment }}
   strategy:
     rollingUpdate:
-      maxSurge: 2
-      maxUnavailable: 2
+      maxSurge: 1
+      maxUnavailable: 1
     type: RollingUpdate
   template:
     metadata:
