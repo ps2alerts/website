@@ -770,9 +770,6 @@ export default Vue.extend({
       this.oldSliderVal = captureIndex
       this.historyCallback(captureIndex)
     },
-    highlightRemovalListener(): void {
-      this.scrolledCard?.classList.remove('highlight')
-    },
     scrollHighlightListener(): void {
       if (this.scrollEndTimer) {
         clearTimeout(this.scrollEndTimer)
