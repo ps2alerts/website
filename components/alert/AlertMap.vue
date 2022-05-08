@@ -6,8 +6,8 @@
       :percent="updateCountdownPercent"
       :update-rate="updateRate"
     />
-    <div class="grid gap-2 grid-cols-4">
-      <div class="col-start-1 col-span-4 xl:col-span-3">
+    <div class="grid gap-2 grid-cols-12">
+      <div class="col-start-1 col-span-12 xl:col-span-9">
         <client-only>
           <l-map
             ref="map"
@@ -53,7 +53,7 @@
         </client-only>
       </div>
       <div
-        class="timeline overflow-y-auto col-start-4 col-span-1 hidden xl:block"
+        class="timeline overflow-y-auto col-span-12 xl:col-span-3 hidden xl:block"
       >
         <client-only>
           <v-card-title v-show="!loaded" class="text-gray-300 flex-col">
@@ -134,7 +134,7 @@
           </v-card>
         </client-only>
       </div>
-      <div class="col-start-1 col-span-4">
+      <div class="col-start-1 col-span-12">
         <v-slider
           ref="history"
           v-model="sliderVal"
@@ -152,7 +152,8 @@
           @click:append="incrementSlider"
         ></v-slider>
       </div>
-      <div class="col-start-1 col-span-1 flex justify-center items-center">
+      <!-- Playback buttons -->
+      <div class="col-start-1 col-span-3 flex justify-center items-center">
         <div v-if="loaded" class="btn-group mr-2">
           <button
             class="btn btn-sm px-4 xl:px-2"
@@ -190,11 +191,14 @@
           </button>
         </div>
       </div>
+      <!-- Capture status -->
       <div
         v-if="captureIndices.length > sliderVal - 1 && sliderVal - 1 >= 0"
-        class="col-start-2 col-span-2 text-xs xl:text-base flex justify-center flex-shrink-1"
+        class="col-start-4 col-span-6 text-xs xl:text-base justify-center"
       >
-        <div class="bg-neutral-800 border border-black border-solid rounded">
+        <div
+          class="w-full bg-neutral-800 border border-black border-solid rounded"
+        >
           <div
             :class="
               controlData(captureIndices[sliderVal - 1]).bgClass + ' pt-2'
@@ -225,12 +229,14 @@
           </div>
         </div>
       </div>
-      <div class="col-start-4 col-span-1 flex justify-center items-center">
+      <!-- Playback speed -->
+      <div class="col-start-10 col-span-3">
+        <span>Playback speed: {{ (playback.delay / 1000).toFixed(2) }}s</span>
         <v-slider
           v-model="playback.delay"
+          class="w-full"
           min="250"
           max="2000"
-          :label="`Playback delay: ${(playback.delay / 1000).toFixed(2)}s`"
           @change="updatePlaybackDelay()"
         ></v-slider>
       </div>
