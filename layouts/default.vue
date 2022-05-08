@@ -30,20 +30,19 @@
               ></font-awesome-icon>
             </div>
           </div>
-          <!--          <div>-->
-          <!--            <div class="bg-orange-600 w-full p-4 mt-4 text-center rounded">-->
-          <!--              <font-awesome-icon-->
-          <!--                :icon="['fas', 'exclamation-triangle']"-->
-          <!--              ></font-awesome-icon>-->
-          <!--              PS2Alerts is currently unable to contact the game's API. Please-->
-          <!--              visit the-->
-          <!--              <a class="text-gray-400 font-bold" href="/">homepage</a> for more-->
-          <!--              details-->
-          <!--              <font-awesome-icon-->
-          <!--                :icon="['fas', 'exclamation-triangle']"-->
-          <!--              ></font-awesome-icon>-->
-          <!--            </div>-->
-          <!--          </div>-->
+          <div>
+            <div class="bg-orange-600 w-full p-4 mt-4 text-center rounded">
+              <font-awesome-icon
+                :icon="['fas', 'exclamation-triangle']"
+              ></font-awesome-icon>
+              PC Alert tracking is offline. Visit the
+              <a class="text-gray-400 font-bold" href="/">homepage</a> for more
+              details
+              <font-awesome-icon
+                :icon="['fas', 'exclamation-triangle']"
+              ></font-awesome-icon>
+            </div>
+          </div>
           <Navigation class="hidden lg:block" />
         </client-only>
         <client-only>
