@@ -162,24 +162,20 @@
               startOrEndPlayback()
             "
           >
-            <font-awesome-icon :icon="['fas', 'play']"></font-awesome-icon>
-            <span class="align-top hidden xl:inline"
-              >Play<span v-if="playback.playing">ing</span></span
+            <font-awesome-icon
+              v-if="!playback.playing"
+              :icon="['fas', 'play']"
+            ></font-awesome-icon>
+            <font-awesome-icon
+              v-if="playback.playing"
+              :icon="['fas', 'pause']"
+            ></font-awesome-icon>
+            <span v-if="!playback.playing" class="align-top hidden xl:inline"
+              >Play</span
             >
-          </button>
-          <button
-            class="btn btn-sm px-4 xl:px-2"
-            :class="{ 'btn-active': !playback.playing }"
-            @click="
-              playback.playing = false
-              startOrEndPlayback()
-            "
-          >
-            <font-awesome-icon :icon="['fas', 'pause']"></font-awesome-icon>
-            <span class="align-top hidden xl:inline">
-              Pause
-              <span v-if="!playback.playing">d</span>
-            </span>
+            <span v-if="playback.playing" class="align-top hidden xl:inline"
+              >Pause</span
+            >
           </button>
           <button
             class="btn btn-sm px-4 xl:px-2"
