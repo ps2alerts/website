@@ -1379,7 +1379,7 @@ export default Vue.extend({
   }
 
   .link-warpgate,
-  .link-capturable,
+  .link-captureable,
   .bglink-warpgate,
   .bglink-captureable {
     stroke-dasharray: 5 5;
