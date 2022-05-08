@@ -4,20 +4,15 @@
   >
     <div class="tag announcement">
       <font-awesome-icon :icon="['fas', 'bullhorn']"></font-awesome-icon>
-      Notice - 5th May 2022
+      Notice - 8th May 2022
     </div>
     <div class="text-center">
-      <h1 class="mb-2">SolTech alerts are currently unsupported</h1>
+      <h1 class="mb-2">PC Alert tracking is currently inoperable</h1>
       <p>
-        Applications using PS2's real time API are currently not getting any
-        data from SolTech. As a result, collection of SolTech alerts have been
-        disabled.
-      </p>
-      <p>
-        We have reached out to DBG in order to fix this, but unfortunately this
-        will take some time. If you are a SolTech player, please reach out to
-        customer service saying you are unable to use apps like Recursion, who
-        will hopefully pass the message onto the dev team.
+        Due to an issue in the game's API (Census), we are unable to receive
+        notifications for alerts starting. This appears to be affecting PC
+        servers only, PS4 servers remain operable. Hopefully the devs can fix
+        this soon.
       </p>
       <p>- Maelstrome26 (PS2Alerts Dev)</p>
     </div>
