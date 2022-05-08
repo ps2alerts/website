@@ -84,15 +84,7 @@
             class="m-2"
             @click="historyIndexCallback(captureIndices.length - index)"
           >
-            <div
-              :class="[
-                controlData(captureIndex).bgClass,
-                currentIndex === captureIndex
-                  ? 'border-amber-500'
-                  : 'border-transparent',
-              ]"
-              class="border"
-            >
+            <div :class="controlData(captureIndex).bgClass">
               <span class="text-gray-300 text-xs absolute top-2 left-2">{{
                 historyCache[historyCache.length - captureIndex - 1].timestamp
                   | dateTimeFormatShort
@@ -749,16 +741,12 @@ export default Vue.extend({
       ) {
         nextVal = 1
       }
-      const captureCards = this.$refs.captureCards as Vue[]
-      captureCards[captureCards.length - nextVal].$el.scrollIntoView({
-        block: 'nearest',
-        inline: 'nearest',
-        behavior:
-          this.playback.delay < 450 && this.sliderVal > nextVal
-            ? 'auto'
-            : 'smooth',
-      })
-      this.historyCallback(nextVal)
+      this.sliderHistoryCallback(
+        nextVal,
+        this.playback.delay < 450 && this.sliderVal > nextVal
+          ? 'auto'
+          : 'smooth'
+      )
     },
     resetLimit(): void {
       this.currentIndex = -1
@@ -791,13 +779,14 @@ export default Vue.extend({
         }
       }, 100)
     },
-    sliderHistoryCallback(value: number): void {
+    sliderHistoryCallback(value: number, behavior?: 'smooth' | 'auto'): void {
       if (!this.loaded) {
         return
       }
       const captureCards = this.$refs.captureCards as Vue[]
       if (value <= captureCards.length && value > 0) {
         this.scrolledCard = captureCards[captureCards.length - value].$el
+        this.scrolledCard.classList.remove('highlight')
         this.scrolledCard.parentElement?.addEventListener(
           'scroll',
           this.scrollHighlightListener
@@ -805,7 +794,7 @@ export default Vue.extend({
         this.scrolledCard.scrollIntoView({
           block: 'nearest',
           inline: 'nearest',
-          behavior: 'smooth',
+          behavior: behavior !== undefined ? 'smooth' : behavior,
         })
         // add highlight here to make the animation play if no scroll is needed
         this.scrollEndTimer = setTimeout(() => {
