@@ -1327,109 +1327,111 @@ export default Vue.extend({
     fill-opacity 0.1s ease-in, stroke-opacity 0.1s ease-in;
 }
 
-::v-deep .region-TR {
-  fill: #bc1212;
-  fill-opacity: 0.4;
+::v-deep {
+  .region-VS,
+  .region-NC,
+  .region-TR,
+  .region-NS {
+    fill-opacity: 0.4;
+  }
+
+  .region-VS {
+    fill: #6e18a3;
+  }
+  .region-NC {
+    fill: #0064aa;
+  }
+  .region-TR {
+    fill: #bc1212;
+  }
+  .region-NS {
+    fill: #718096;
+  }
+
+  .region-VS-cutoff,
+  .region-NC-cutoff,
+  .region-TR-cutoff,
+  .region-NS-cutoff {
+    fill-opacity: 0.8;
+  }
+
+  .region-VS-cutoff {
+    fill: #2e153d;
+  }
+  .region-NC-cutoff {
+    fill: #0f273f;
+  }
+  .region-TR-cutoff {
+    fill: #3a0005;
+  }
+  .region-NS-cutoff {
+    fill: #718096;
+  }
+
+  .link-VS,
+  .link-NC,
+  .link-TR,
+  .link-warpgate,
+  .link-capturable,
+  .bglink-warpgate,
+  .bglink-captureable {
+    opacity: 0.8;
+  }
+
+  .link-warpgate,
+  .link-capturable,
+  .bglink-warpgate,
+  .bglink-captureable {
+    stroke-dasharray: 5 5;
+  }
+
+  .link-VS {
+    stroke: #ffb2ff;
+  }
+  .link-NC {
+    stroke: #b0ffff;
+  }
+  .link-TR {
+    stroke: #ffbfb2;
+  }
+  .link-NS {
+    stroke: #928e99;
+    opacity: 0.6;
+  }
+  .link-warpgate {
+    stroke: #928e99;
+  }
+  .link-captureable {
+    stroke: #eae690;
+  }
+
+  .bglink-NS,
+  .bglink-VS,
+  .bglink-NC,
+  .bglink-TR {
+    stroke: none;
+  }
+  .bglink-warpgate {
+    stroke: #49474c;
+    stroke-dashoffset: 5;
+  }
+  .bglink-captureable {
+    stroke: #8b7251;
+    stroke-dashoffset: 5;
+  }
+
+  .timeline {
+    --scrollbar-foreground: rgb(48, 58, 64);
+    --scrollbar-background: rgba(55, 65, 81, 0);
+    --radius: 10px;
+    --size: 10px;
+    scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
+    scrollbar-width: thin;
+    height: 850px;
+    max-height: min(70vw, 80vh);
+  }
 }
 
-::v-deep .region-NC {
-  fill: #0064aa;
-  fill-opacity: 0.4;
-}
-
-::v-deep .region-VS {
-  fill: #6e18a3;
-  fill-opacity: 0.4;
-}
-
-::v-deep .region-NS {
-  fill: #718096;
-  fill-opacity: 0.4;
-}
-
-::v-deep .region-NS-cutoff {
-  fill: #718096;
-  fill-opacity: 0.8;
-}
-
-::v-deep .region-VS-cutoff {
-  fill: #2e153d;
-  fill-opacity: 0.8;
-}
-
-::v-deep .region-NC-cutoff {
-  fill: #0f273f;
-  fill-opacity: 0.8;
-}
-
-::v-deep .region-TR-cutoff {
-  fill: #3a0005;
-  fill-opacity: 0.8;
-}
-
-::v-deep .link-NS {
-  stroke: #928e99;
-  opacity: 0.6;
-}
-
-::v-deep .link-VS {
-  stroke: #ffb2ff;
-  opacity: 0.8;
-}
-
-::v-deep .link-NC {
-  stroke: #b0ffff;
-  opacity: 0.8;
-}
-
-::v-deep .link-TR {
-  stroke: #ffbfb2;
-  opacity: 0.8;
-}
-
-::v-deep .link-warpgate {
-  stroke: #928e99;
-  opacity: 0.8;
-  stroke-dasharray: 5 5;
-}
-
-::v-deep .link-captureable {
-  stroke: #eae690;
-  opacity: 0.8;
-  stroke-dasharray: 5 5;
-}
-
-::v-deep .bglink-NS,
-::v-deep .bglink-VS,
-::v-deep .bglink-NC,
-::v-deep .bglink-TR {
-  stroke: none;
-}
-
-::v-deep .bglink-warpgate {
-  stroke: #49474c;
-  opacity: 0.8;
-  stroke-dasharray: 5 5;
-  stroke-dashoffset: 5;
-}
-
-::v-deep .bglink-captureable {
-  stroke: #8b7251;
-  opacity: 0.8;
-  stroke-dasharray: 5 5;
-  stroke-dashoffset: 5;
-}
-
-.timeline {
-  --scrollbar-foreground: rgb(48, 58, 64);
-  --scrollbar-background: rgba(55, 65, 81, 0);
-  --radius: 10px;
-  --size: 10px;
-  scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
-  scrollbar-width: thin;
-  height: 850px;
-  max-height: min(70vw, 80vh);
-}
 .timeline::-webkit-scrollbar {
   background: var(--scrollbar-background);
   border-radius: var(--radius);
