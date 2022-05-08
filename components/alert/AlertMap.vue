@@ -6,7 +6,9 @@
       :percent="updateCountdownPercent"
       :update-rate="updateRate"
     />
+    <!-- Map container -->
     <div class="grid gap-2 grid-cols-12">
+      <!-- Map -->
       <div class="col-start-1 col-span-12 xl:col-span-9">
         <client-only>
           <l-map
@@ -52,6 +54,7 @@
           </l-map>
         </client-only>
       </div>
+      <!-- Timeline -->
       <div
         class="timeline overflow-y-auto col-span-12 xl:col-span-3 hidden xl:block"
       >
@@ -72,6 +75,7 @@
               class="animate-spin"
             ></font-awesome-icon>
           </v-card-text>
+          <!-- Timeline entries -->
           <v-card
             v-for="(captureIndex, index) in captureIndices.slice().reverse()"
             :key="index"
@@ -80,7 +84,15 @@
             class="m-2"
             @click="historyIndexCallback(captureIndices.length - index)"
           >
-            <div :class="controlData(captureIndex).bgClass">
+            <div
+              :class="[
+                controlData(captureIndex).bgClass,
+                currentIndex === captureIndex
+                  ? 'border-amber-500'
+                  : 'border-transparent',
+              ]"
+              class="border"
+            >
               <span class="text-gray-300 text-xs absolute top-2 left-2">{{
                 historyCache[historyCache.length - captureIndex - 1].timestamp
                   | dateTimeFormatShort
