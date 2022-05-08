@@ -461,6 +461,10 @@ export default Vue.extend({
       this.zoomInSound.volume = 0.5
       this.zoomOutSound.volume = 0.5
 
+      this.playback.delay = parseInt(
+        localStorage.getItem('mapPlaybackSpeed') ?? '1000'
+      )
+
       if (window.matchMedia('(min-width: 1280px)').matches) {
         this.map.setMinZoom(1.5)
       }
@@ -717,6 +721,8 @@ export default Vue.extend({
       }
     },
     updatePlaybackDelay() {
+      // Save the playback so it'll load the user's preference
+      localStorage.setItem('mapPlaybackSpeed', String(this.playback.delay))
       if (this.playback.playing) {
         window.clearInterval(this.playback.interval)
         this.playback.interval = window.setInterval(
