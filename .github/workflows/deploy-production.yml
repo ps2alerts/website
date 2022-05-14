@@ -69,7 +69,9 @@ jobs:
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
           -e 's|{{ version }}|${{ github.sha }}|' \
           -e 's|{{ environment }}|production|' \
-          -e 's|{{ replicas }}|2|' \
+          -e 's|{{ port }}|80|' \
+          -e 's|{{ min_replicas }}|2|' \
+          -e 's|{{ max_replicas }}|4|' \
           provisioning/k8s/application.yml
 
       # Apply the common resources, telling k8s to change the container version to the new one.
@@ -84,9 +86,9 @@ jobs:
       - name: Update the K8s environment resource file
         run: |
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
-          -e 's|{{ version }}|${{ github.sha }}|' \
           -e 's|{{ environment }}|production|' \
           -e 's|{{ hostname }}|ps2alerts.com|' \
+          -e 's|{{ port }}|80|' \
           provisioning/production/k8s.yml
 
       # Apply application specific resources

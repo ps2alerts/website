@@ -86,7 +86,6 @@ jobs:
       - name: Update the K8s environment resource file
         run: |
           sed -is -e 's|{{ application }}|ps2alerts-website|' \
-          -e 's|{{ version }}|${{ github.sha }}|' \
           -e 's|{{ environment }}|staging|' \
           -e 's|{{ port }}|80|' \
           -e 's|{{ hostname }}|staging.ps2alerts.com|' \
