@@ -4,8 +4,8 @@
       <font-awesome-icon
         :icon="['fas', 'exclamation-triangle']"
       ></font-awesome-icon>
-      May 14th 14:51 BST: PS2Alerts is currently migrating it's database between
-      hosting providers. Site will be unstable for approx 2 hours.
+      May 14th 17:50 BST: Database migration is still ongoing, approx 45 mins
+      remaining. During this time the site will not function.
       <font-awesome-icon
         :icon="['fas', 'exclamation-triangle']"
       ></font-awesome-icon>
