@@ -30,7 +30,7 @@
               ></font-awesome-icon>
             </div>
           </div>
-          <!--<NoticeBanner></NoticeBanner>-->
+          <NoticeBanner></NoticeBanner>
           <Navigation class="hidden lg:block" />
         </client-only>
         <client-only>

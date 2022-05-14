@@ -4,8 +4,8 @@
       <font-awesome-icon
         :icon="['fas', 'exclamation-triangle']"
       ></font-awesome-icon>
-      PC Alert tracking is offline. Visit the
-      <a class="text-gray-400 font-bold" href="/">homepage</a> for more details
+      May 14th 14:51 BST: PS2Alerts is currently migrating it's database between
+      hosting providers. Site will be unstable for approx 2 hours.
       <font-awesome-icon
         :icon="['fas', 'exclamation-triangle']"
       ></font-awesome-icon>
