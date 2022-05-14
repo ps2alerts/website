@@ -13,8 +13,8 @@ spec:
     app: {{ application }}-{{ environment }}
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
+      port: {{ port }}
+      targetPort: {{ port }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -24,7 +24,6 @@ metadata:
   labels:
     app: {{ application }}-{{ environment }}
 spec:
-  replicas: {{ replicas }}
   revisionHistoryLimit: 3
   selector:
     matchLabels:
@@ -54,7 +53,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: 80
+              port: {{ port }}
             initialDelaySeconds: 5
             periodSeconds: 5
             successThreshold: 1
@@ -63,7 +62,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /
-              port: 80
+              port: {{ port }}
             initialDelaySeconds: 15
             periodSeconds: 15
             successThreshold: 1
@@ -84,6 +83,6 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ application }}-{{ environment }}
-  minReplicas: 2
-  maxReplicas: 10
+  minReplicas: {{ min_replicas }}
+  maxReplicas: {{ max_replicas }}
   targetCPUUtilizationPercentage: 75
