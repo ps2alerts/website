@@ -78,6 +78,7 @@ apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ application }}-{{ environment }}
+  namespace: ps2alerts
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
