@@ -51,11 +51,6 @@ spec:
             limits:
               cpu: "150m"
               memory: "128Mi"
-          env:
-            - name: ENVIRONMENT
-              value: "{{ environment }}"
-            - name: VERSION
-              value: "{{ version }}"
           readinessProbe:
             httpGet:
               path: /
@@ -74,3 +69,21 @@ spec:
             successThreshold: 1
             failureThreshold: 2
             timeoutSeconds: 5
+          env:
+            - name: ENVIRONMENT
+              value: "{{ environment }}"
+            - name: VERSION
+              value: "{{ version }}"
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ application }}-{{ environment }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ application }}-{{ environment }}
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 75
