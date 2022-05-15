@@ -13,7 +13,7 @@
     <div class="bg-blue-500 w-full p-4 my-4 text-center rounded">
       <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
       On May 14th, there was only a partial recording due to downtime moving
-      databases
+      databases, some alerts were not recorded on this date.
       <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
     </div>
   </div>
