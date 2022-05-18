@@ -8,24 +8,10 @@ export default class MapRegionDataRequest {
   private data: MapRegion[] = []
 
   public async pull(zone: Zone): Promise<MapRegion[]> {
-    let request: Promise<CensusMapRegionResponseInterface>
-    switch (zone) {
-      case Zone.OSHUR:
-        request = new ApiRequest().get<CensusMapRegionResponseInterface>(
-          Endpoints.CENSUS_OSHUR_HEX_DATA
-        )
-        break
-      default:
-        request = new ApiRequest(
-          'https://census.daybreakgames.com'
-        ).get<CensusMapRegionResponseInterface>(
-          CensusEndpoints.CONTINENT_MAP_DATA.replace(
-            '{serviceId}',
-            'ps2alertsdotcom'
-          ).replace('{zone}', zone.toString())
-        )
-        break
-    }
+    const request = new ApiRequest().get<CensusMapRegionResponseInterface>(
+      Endpoints.CENSUS_CONTINENT_HEX_DATA.replace('{zone}', zone.valueOf().toString())
+    )
+    
     await request.then((result) => {
       const regionIdMap: Record<number, MapRegion> = {}
       result.map_region_list.forEach((region) => {
