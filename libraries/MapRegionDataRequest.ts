@@ -1,6 +1,6 @@
 import { MapRegion } from './MapRegion'
 import ApiRequest from '~/api-request'
-import { CensusEndpoints, Endpoints } from '~/constants/Endpoints'
+import { Endpoints } from '~/constants/Endpoints'
 import { CensusMapRegionResponseInterface } from '~/interfaces/mapping/CensusMapRegionResponseInterface'
 import { Zone } from '~/constants/Zone'
 
@@ -9,9 +9,12 @@ export default class MapRegionDataRequest {
 
   public async pull(zone: Zone): Promise<MapRegion[]> {
     const request = new ApiRequest().get<CensusMapRegionResponseInterface>(
-      Endpoints.CENSUS_CONTINENT_HEX_DATA.replace('{zone}', zone.valueOf().toString())
+      Endpoints.CENSUS_CONTINENT_HEX_DATA.replace(
+        '{zone}',
+        zone.valueOf().toString()
+      )
     )
-    
+
     await request.then((result) => {
       const regionIdMap: Record<number, MapRegion> = {}
       result.map_region_list.forEach((region) => {
