@@ -1,13 +1,15 @@
 <template>
   <header class="items-center justify-center bg-tint p-4">
-    <div class="flex text-white px-6 justify-center items-center mb-2">
-      <img
-        class="ps2alerts-logo mr-2 w-16"
-        alt="PS2Alerts Logo"
-        src="/img/alert-icon.png"
-      />
-      <h1 class="font-semibold text-4xl">PS2Alerts</h1>
-    </div>
+    <nuxt-link to="/">
+      <div class="flex text-white px-6 justify-center items-center mb-2">
+        <img
+          class="ps2alerts-logo mr-2 w-16"
+          alt="PS2Alerts Logo"
+          src="/img/alert-icon.png"
+        />
+        <h1 class="font-semibold text-4xl">PS2Alerts</h1>
+      </div>
+    </nuxt-link>
     <div class="w-auto block justify-center text-center">
       <p v-html="motto" />
       <p class="text-sm text-gray-400">
