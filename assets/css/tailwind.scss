@@ -173,6 +173,10 @@
   .bg-nso {
     @apply bg-gray-500;
     transition: background-color 0.25s ease-out;
+
+    &.hover:hover {
+      background-color: rgb(121, 121, 121);
+    }
   }
   .bg-indar {
     @apply bg-orange-500 bg-opacity-25;

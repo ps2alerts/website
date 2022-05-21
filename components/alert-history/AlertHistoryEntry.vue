@@ -1,11 +1,15 @@
 <template>
-  <NuxtLink :to="{ name: 'alert-alert', params: { alert: alert.instanceId } }">
+  <NuxtLink
+    :to="{ name: 'alert-alert', params: { alert: alert.instanceId } }"
+    :disabled="alert.state === 0"
+    :event="alert.state === 0 ? '' : 'click'"
+  >
     <div class="p-2 mb-2 bg-tint rounded relative hover" :class="victorClass">
       <div
         class="grid grid-cols-5 lg:grid-cols-12 place-items-center text-center"
       >
         <div class="col-span-1 text-sm mb-2 lg:mb-0">
-          <div v-show="alert.state === 1">
+          <div v-show="alert.state !== 2">
             <div class="mb-1">
               {{ started }}
             </div>
@@ -48,6 +52,7 @@
                 the metagame, this is a draw.
               </v-tooltip>
             </span>
+            <span v-show="alert.state === 0"> ??? </span>
             <span v-show="alert.state === 2 && !draw">
               {{ victor | factionShortName }}
             </span>
@@ -75,6 +80,12 @@
             </span>
           </div>
         </div>
+        <div v-if="alert.state === 0" class="col-span-5 lg:col-span-7 w-full">
+          <p>
+            Alert FAILED to start recording! This is likely an issue with
+            PS2Alerts unable to communicate to Census properly.
+          </p>
+        </div>
         <div v-if="alert.result" class="col-span-5 lg:col-span-7 w-full">
           <FactionSegmentBar
             :vs="alert.result.vs"
@@ -86,7 +97,7 @@
           />
         </div>
       </div>
-      <div v-if="!alert.result">
+      <div v-if="alert.state !== 0 && !alert.result">
         <p>Awaiting territory data...</p>
       </div>
     </div>
@@ -121,6 +132,11 @@ export default Vue.extend({
       return moment(this.alert.timeEnded).format(DATE_TIME_FORMAT_SHORT)
     },
     victorClass(): object {
+      if (this.alert.state === 0) {
+        return {
+          'bg-nso': true,
+        }
+      }
       if (!this.alert.result || !this.alert.result.victor) {
         return {}
       }
