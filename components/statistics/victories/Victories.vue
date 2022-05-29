@@ -7,7 +7,7 @@
           No alerts have yet been recorded! Check back soon!
         </h1>
       </div>
-      <div v-else>
+      <div v-else :class="{ 'opacity-50': loading }">
         <h1 class="text-2xl text-center mb-4">
           <b>{{ totalInstances }}</b> alerts recorded since {{ beginningDate }}
         </h1>
@@ -58,6 +58,7 @@ export default Vue.extend({
     return {
       error: null,
       loaded: false,
+      loading: false,
       updateRate: 60000,
       updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
@@ -138,6 +139,7 @@ export default Vue.extend({
     },
     async pull(): Promise<void> {
       console.log('VictoryStatistics.pull', this.apiFilter)
+      this.loading = true
 
       await new ApiRequest()
         .get<GlobalVictoriesAggregateResponseInterface[]>(
@@ -147,8 +149,9 @@ export default Vue.extend({
         .then((result) => {
           this.data = result
           this.loaded = true
-          this.updateCountdown = this.updateRate / 1000
+          this.loading = false
 
+          this.updateCountdown = this.updateRate / 1000
           console.log('VictoryStatistics: Emitting loaded')
           this.$emit('loaded', {})
         })
