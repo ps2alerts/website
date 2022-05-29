@@ -309,6 +309,10 @@
   // Selects
   select {
     appearance: auto !important;
+
+    &.select-standard {
+      @apply block w-full bg-tint border-tint py-3 pl-3 pr-8 rounded;
+    }
   }
 
   .nuxt-link-exact-active {
@@ -344,6 +348,10 @@
         @apply rounded-r-md;
       }
     }
+  }
+
+  .label {
+    @apply btn bg-red-600 text-white text-xs font-semibold mr-2 px-2 py-0.5 rounded
   }
 
   .card {

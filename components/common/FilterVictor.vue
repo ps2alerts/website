@@ -3,7 +3,7 @@
     <select
       id="victor"
       v-model="victor"
-      class="block w-full bg-tint border-tint py-3 px-4 pr-8 rounded"
+      class="select-standard"
       @change="changeVictor()"
     >
       <option :value="NONE">Any</option>

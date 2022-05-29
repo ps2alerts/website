@@ -19,8 +19,7 @@
           to="/change-log"
           @click="updateVersionSeen"
         >
-          <span
-            class="bg-green-500 text-white text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+          <span class="label bg-green-600 hover:bg-green-500"
             >New changes!</span
           >
         </NuxtLink>

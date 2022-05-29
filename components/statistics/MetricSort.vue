@@ -3,7 +3,7 @@
     <select
       id="metric"
       v-model="metric"
-      class="block w-full bg-tint border-tint py-3 px-4 pr-8 rounded"
+      class="select-standard"
       :disabled="disabled"
       @change="changeMetric()"
     >

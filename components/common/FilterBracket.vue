@@ -3,7 +3,7 @@
     <select
       id="bracket"
       v-model="bracket"
-      class="block w-full bg-tint border-tint py-3 px-4 pr-8 rounded"
+      class="select-standard"
       :disabled="disabled"
       @change="changeBracket()"
     >
