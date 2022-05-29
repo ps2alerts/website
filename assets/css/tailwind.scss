@@ -240,6 +240,31 @@
     @media (min-width: 1024px) {
       margin-left: 325px;
     }
+
+    .fade-in {
+      animation: fadeInOpacity 0.5s ease-out
+    }
+
+    .fade-out {
+      animation: fadeOutOpacity 0.25s ease-out !important;
+    }
+
+    @keyframes fadeOutOpacity {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0.5;
+      }
+    }
+    @keyframes fadeInOpacity {
+      0% {
+        opacity: 0.5;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
   }
 
   h1 {
@@ -563,6 +588,7 @@
     text-align: center;
   }
 
+  // This is horrible, I am fully aware.
   .theme--dark {
     &.v-tabs > .v-tabs-bar {
       background-color: #9b2c2c !important;
@@ -607,6 +633,12 @@
 
     &.v-picker {
       border: 0 !important;
+    }
+
+    .v-input__slot {
+      margin-top: -1px !important;
+      height: 46px !important;
+      padding-left: 16px !important;
     }
   }
 

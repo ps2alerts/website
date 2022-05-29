@@ -7,7 +7,7 @@
           No alerts have yet been recorded! Check back soon!
         </h1>
       </div>
-      <div v-else :class="{ 'opacity-50': loading }">
+      <div v-else class="fade-in" :class="{ 'fade-out': loading }">
         <h1 class="text-2xl text-center mb-4">
           <b>{{ totalInstances }}</b> alerts recorded since {{ beginningDate }}
         </h1>

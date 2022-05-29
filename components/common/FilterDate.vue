@@ -231,10 +231,6 @@ export default Vue.extend({
     margin-top: 0 !important;
     padding-top: 0 !important;
     height: 45px !important; // Hack to stop vuetify weirdity with date pickers
-
-    div {
-      height: 45px !important;
-    }
   }
 }
 </style>
