@@ -1,107 +1,103 @@
 <template>
   <div class="flex justify-center items-center">
     <div id="date-pickers">
-      <div class="pr-2 mx-2">
-        <div class="mr-1 inline-block">
-          <v-dialog
-            ref="dialogFrom"
-            v-model="modalFrom"
-            dark
-            width="290px"
-            :disabled="disabled"
-          >
-            <template #activator="{ on, attrs }">
-              <v-text-field
-                id="dateFrom"
-                v-model="dateFrom"
-                :value="dateFrom"
-                :disabled="disabled"
-                prepend-icon="mdi-calendar"
-                background-color="#37474fcc"
-                readonly
-                dark
-                dense
-                filled
-                outlined
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker
+      <div class="mr-1 inline-block">
+        <v-dialog
+          ref="dialogFrom"
+          v-model="modalFrom"
+          dark
+          width="290px"
+          :disabled="disabled"
+        >
+          <template #activator="{ on, attrs }">
+            <v-text-field
+              id="dateFrom"
               v-model="dateFrom"
-              scrollable
-              dark
-              color="#A03636"
+              :value="dateFrom"
               :disabled="disabled"
-              :min="dateStartedRecording"
-              :max="dateNow"
-            >
-              <v-spacer></v-spacer>
-              <v-btn text class="btn" @click="setDateFromToStart()">
-                Start of data
-              </v-btn>
-            </v-date-picker>
-          </v-dialog>
-          <label
-            class="text-center text-sm"
-            for="dateFrom"
-            :class="{ 'text-gray-600': disabled }"
-            >Date from</label
-          >
-        </div>
-        <div class="inline-block">
-          <v-dialog
-            ref="dialogTo"
-            v-model="modalTo"
+              prepend-icon="mdi-calendar"
+              background-color="#37474fcc"
+              readonly
+              dark
+              dense
+              filled
+              outlined
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker
+            v-model="dateFrom"
+            scrollable
             dark
-            width="290px"
-            :value="dateTo"
+            color="#A03636"
             :disabled="disabled"
+            :min="dateStartedRecording"
+            :max="dateNow"
           >
-            <template #activator="{ on, attrs }">
-              <v-text-field
-                id="dateTo"
-                v-model="dateTo"
-                prepend-icon="mdi-calendar"
-                background-color="#37474fcc"
-                readonly
-                dark
-                dense
-                filled
-                outlined
-                v-bind="attrs"
-                :disabled="disabled"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              v-model="dateTo"
-              scrollable
-              dark
-              color="#A03636"
-              :disabled="disabled"
-              :min="dateStartedRecording"
-              :max="dateNow"
-            >
-              <v-spacer></v-spacer>
-              <v-btn class="btn" text @click="setDateToToNow()"> Today </v-btn>
-            </v-date-picker>
-          </v-dialog>
-          <label
-            class="text-center text-sm"
-            for="dateFrom"
-            :class="{ 'text-gray-600': disabled }"
-            >Date to</label
-          >
-        </div>
+            <v-spacer></v-spacer>
+            <v-btn text class="btn" @click="setDateFromToStart()">
+              Start of data
+            </v-btn>
+          </v-date-picker>
+        </v-dialog>
+        <label
+          class="text-center text-sm"
+          for="dateFrom"
+          :class="{ 'text-gray-600': disabled }"
+          >Date from</label
+        >
       </div>
-    </div>
-    <div>
-      <div>
+      <div class="mr-2 inline-block">
+        <v-dialog
+          ref="dialogTo"
+          v-model="modalTo"
+          dark
+          width="290px"
+          :value="dateTo"
+          :disabled="disabled"
+        >
+          <template #activator="{ on, attrs }">
+            <v-text-field
+              id="dateTo"
+              v-model="dateTo"
+              prepend-icon="mdi-calendar"
+              background-color="#37474fcc"
+              readonly
+              dark
+              dense
+              filled
+              outlined
+              v-bind="attrs"
+              :disabled="disabled"
+              v-on="on"
+            ></v-text-field>
+          </template>
+          <v-date-picker
+            v-model="dateTo"
+            scrollable
+            dark
+            color="#A03636"
+            :disabled="disabled"
+            :min="dateStartedRecording"
+            :max="dateNow"
+          >
+            <v-spacer></v-spacer>
+            <v-btn class="btn" text @click="setDateToToNow()"> Today </v-btn>
+          </v-date-picker>
+        </v-dialog>
+        <label
+          class="text-center text-sm"
+          for="dateFrom"
+          :class="{ 'text-gray-600': disabled }"
+          >Date to</label
+        >
+      </div>
+      <div class="inline-block">
         <select
           id="quickFilter"
           v-model="quickFilter"
-          class="block w-full bg-tint border-tint pt-3 pb-2 px-4 pr-8 mb-1 rounded form-select"
+          class="select-standard"
           :disabled="disabled"
         >
           <option v-for="i in quickFilterItems" :key="i.val" :value="i.val">
@@ -113,12 +109,7 @@
           for="quickFilter"
           :class="{ 'text-gray-600': disabled }"
           >Quick Filter
-          <button
-            class="btn bg-red-500 text-white text-xs font-semibold mr-2 px-2 py-0.5 rounded"
-            :disabled="disabled"
-          >
-            New!
-          </button>
+          <button class="label" :disabled="disabled">New!</button>
         </label>
       </div>
     </div>
