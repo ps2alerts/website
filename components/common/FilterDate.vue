@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center items-center gap-x-2">
+  <div class="flex justify-center items-center">
     <div id="date-pickers">
       <div class="pr-2 mx-2">
         <div class="mr-1 inline-block">
@@ -12,15 +12,17 @@
           >
             <template #activator="{ on, attrs }">
               <v-text-field
+                id="dateFrom"
                 v-model="dateFrom"
                 :value="dateFrom"
                 :disabled="disabled"
-                label="Date from"
                 prepend-icon="mdi-calendar"
+                background-color="#37474fcc"
                 readonly
                 dark
                 dense
                 filled
+                outlined
                 v-bind="attrs"
                 v-on="on"
               ></v-text-field>
@@ -40,6 +42,12 @@
               </v-btn>
             </v-date-picker>
           </v-dialog>
+          <label
+            class="text-center text-sm"
+            for="dateFrom"
+            :class="{ 'text-gray-600': disabled }"
+            >Date from</label
+          >
         </div>
         <div class="inline-block">
           <v-dialog
@@ -52,13 +60,15 @@
           >
             <template #activator="{ on, attrs }">
               <v-text-field
+                id="dateTo"
                 v-model="dateTo"
-                label="Date to"
                 prepend-icon="mdi-calendar"
+                background-color="#37474fcc"
                 readonly
                 dark
                 dense
                 filled
+                outlined
                 v-bind="attrs"
                 :disabled="disabled"
                 v-on="on"
@@ -77,23 +87,21 @@
               <v-btn class="btn" text @click="setDateToToNow()"> Today </v-btn>
             </v-date-picker>
           </v-dialog>
+          <label
+            class="text-center text-sm"
+            for="dateFrom"
+            :class="{ 'text-gray-600': disabled }"
+            >Date to</label
+          >
         </div>
-      </div>
-      <div>
-        <label
-          class="text-center text-sm"
-          for="date-pickers"
-          :class="{ 'text-gray-600': disabled }"
-          >Select date range (both required)</label
-        >
       </div>
     </div>
     <div>
-      <div class="mb-1 mt-2">
+      <div>
         <select
           id="quickFilter"
           v-model="quickFilter"
-          class="block w-full bg-tint border-tint py-3 px-4 pr-8 rounded form-select"
+          class="block w-full bg-tint border-tint pt-3 pb-2 px-4 pr-8 mb-1 rounded form-select"
           :disabled="disabled"
         >
           <option v-for="i in quickFilterItems" :key="i.val" :value="i.val">
@@ -104,43 +112,14 @@
           class="text-center text-sm"
           for="quickFilter"
           :class="{ 'text-gray-600': disabled }"
-          >Quick Filter</label
-        >
-        <!--        <button-->
-        <!--          class="btn"-->
-        <!--          :disabled="disabled"-->
-        <!--          @click="updateFromDateDays(365)"-->
-        <!--        >-->
-        <!--          <font-awesome-icon :icon="['fas', 'hourglass']" /> 1 year-->
-        <!--        </button>-->
-        <!--        <button-->
-        <!--          class="btn"-->
-        <!--          :disabled="disabled"-->
-        <!--          @click="updateFromDateDays(180)"-->
-        <!--        >-->
-        <!--          <font-awesome-icon :icon="['fas', 'hourglass']" /> 6 months-->
-        <!--        </button>-->
-        <!--        <button-->
-        <!--          class="btn"-->
-        <!--          :disabled="disabled"-->
-        <!--          @click="updateFromDateDays(90)"-->
-        <!--        >-->
-        <!--          <font-awesome-icon :icon="['fas', 'hourglass']" /> 3 months-->
-        <!--        </button>-->
-        <!--        <button-->
-        <!--          class="btn"-->
-        <!--          :disabled="disabled"-->
-        <!--          @click="updateFromDateDays(30)"-->
-        <!--        >-->
-        <!--          <font-awesome-icon :icon="['fas', 'hourglass']" /> 30 Days-->
-        <!--        </button>-->
-        <!--        <button-->
-        <!--          class="btn"-->
-        <!--          :disabled="disabled"-->
-        <!--          @click="updateFromDateDays(14)"-->
-        <!--        >-->
-        <!--          <font-awesome-icon :icon="['fas', 'hourglass']" /> 2 weeks-->
-        <!--        </button>-->
+          >Quick Filter
+          <button
+            class="btn bg-red-500 text-white text-xs font-semibold mr-2 px-2 py-0.5 rounded"
+            :disabled="disabled"
+          >
+            New!
+          </button>
+        </label>
       </div>
     </div>
   </div>
@@ -244,10 +223,12 @@ export default Vue.extend({
     setDateFromToStart(): void {
       console.log('setting to beginning of recording')
       this.dateFrom = dateStartedRecording
+      this.modalFrom = false // Force close it in all cases
     },
     // Wonky function name I know leave me alone
     setDateToToNow(): void {
       this.dateTo = dateNow
+      this.modalTo = false // Force close it in all cases
     },
   },
 })
@@ -258,7 +239,11 @@ export default Vue.extend({
   .v-text-field {
     margin-top: 0 !important;
     padding-top: 0 !important;
-    height: 55px !important; // Hack to stop vuetify weirdity with date pickers
+    height: 45px !important; // Hack to stop vuetify weirdity with date pickers
+
+    div {
+      height: 45px !important;
+    }
   }
 }
 </style>

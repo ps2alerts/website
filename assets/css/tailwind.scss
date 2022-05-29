@@ -596,6 +596,10 @@
     .v-input__prepend-outer {
       margin-right: 4px;
     }
+
+    &.v-picker {
+      border: 0 !important;
+    }
   }
 
   nav {
