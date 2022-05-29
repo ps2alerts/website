@@ -306,6 +306,11 @@
     }
   }
 
+  // Selects
+  select {
+    appearance: auto !important;
+  }
+
   .nuxt-link-exact-active {
     @apply bg-red-600;
 
@@ -577,6 +582,19 @@
       .v-expansion-panel-header--active {
         background-color: lighten(#38444a, 10) !important;
       }
+    }
+    &.v-btn {
+      &.accent--text {
+        color: rgb(238, 15, 15) !important;
+        caret-color: rgba(197, 48, 48, 1) !important;
+      }
+      &.v-btn--active {
+        color: rgb(238, 15, 15) !important;
+        caret-color: rgba(197, 48, 48, 1) !important;
+      }
+    }
+    .v-input__prepend-outer {
+      margin-right: 4px;
     }
   }
 

@@ -9,7 +9,7 @@
       </div>
       <div v-else>
         <h1 class="text-2xl text-center mb-4">
-          <b>{{ totalInstances }}</b> alerts recorded since 4th Jan 2021
+          <b>{{ totalInstances }}</b> alerts recorded since {{ beginningDate }}
         </h1>
         <VictoriesTimeline
           :raw-data="data"
@@ -69,11 +69,11 @@ export default Vue.extend({
     apiFilter() {
       const filter: GlobalAggregateParamsInterface = {}
 
+      // This NEEDS to be in milliseconds!
       if (this.filter.dateFrom && this.filter.dateTo) {
         filter.dateFrom = this.filter.dateFrom.startOf('day').format('x')
         filter.dateTo = this.filter.dateTo.startOf('day').format('x')
       }
-
       return filter
     },
     updateCountdownPercent(): number {
@@ -95,9 +95,16 @@ export default Vue.extend({
       })
       return count
     },
+    beginningDate(): string {
+      console.log(this.filter.dateFrom)
+      return this.filter.dateFrom
+        ? this.filter.dateFrom.format('Do MMM YYYY')
+        : '4th Jan 2021'
+    },
   },
   watch: {
     async filter() {
+      console.log('VictoryStatistics: Detected filter change')
       await this.filterResults()
     },
   },
@@ -141,6 +148,9 @@ export default Vue.extend({
           this.data = result
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
+
+          console.log('VictoryStatistics: Emitting loaded')
+          this.$emit('loaded', {})
         })
         .catch((e) => {
           this.error = e.message
@@ -148,6 +158,8 @@ export default Vue.extend({
     },
     async filterResults(): Promise<void> {
       this.clearTimers()
+      console.log('VictoryStatistics: New Filter', this.apiFilter)
+
       await this.pull()
       this.setTimers()
     },

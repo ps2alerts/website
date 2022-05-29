@@ -125,6 +125,7 @@
         <StatisticsFiltering
           :metrics="availableMetrics"
           :filter-container-size="filterContainerSize"
+          :date-buttons-disabled="dateButtonsDisabled"
           @metric-changed="metricChanged"
           @world-changed="worldChanged"
           @zone-changed="zoneChanged"
@@ -135,7 +136,11 @@
 
       <v-tabs-items v-model="tab" touchless>
         <v-tab-item value="victories">
-          <Victories :mode="mode" :filter="filter"></Victories>
+          <Victories
+            :mode="mode"
+            :filter="filter"
+            @loaded="removeDateDisable()"
+          ></Victories>
         </v-tab-item>
         <v-tab-item value="players">
           <Characters :mode="mode" :filter="filter"></Characters>
@@ -199,6 +204,7 @@ export default Vue.extend({
       dateNow: now,
       dateFrom: now,
       dateTo: now,
+      dateButtonsDisabled: true,
     }
   },
   computed: {
@@ -222,12 +228,13 @@ export default Vue.extend({
     filterContainerSize(): string {
       switch (this.tab) {
         case 'victories':
+          return 'lg:col-span-12 xl:col-span-10 xl:col-start-2'
         case 'vehicles':
         case 'classes':
         case 'combat':
-          return 'lg:col-span-8 lg:col-start-3 2xl:col-span-4 2xl:col-start-5'
+          return 'lg:col-span-8 lg:col-start-3 xl:col-span-6 xl:col-start-4'
         default:
-          return '2xl:col-span-6 2xl:col-start-4'
+          return 'xl:col-span-6 xl:col-start-4'
       }
     },
     availableMetrics(): AvailableMetricsInterface {
@@ -293,9 +300,6 @@ export default Vue.extend({
           return defaults
       }
     },
-    dateFiltering(): boolean {
-      return ['victories'].includes(this.tab)
-    },
   },
   methods: {
     toggleMode(mode: string) {
@@ -313,10 +317,18 @@ export default Vue.extend({
     bracketChanged(bracket: Bracket) {
       this.bracket = bracket
     },
-    datesChanged(dates: { from: Moment; to: Moment }) {
-      // These are converted into UTC from StatisticsFiltering
-      this.dateFrom = dates.from
-      this.dateTo = dates.to
+    // Supplied as unix
+    datesChanged(dates: { from: number; to: number }) {
+      console.log('Index: Caught event dates-change', dates)
+      this.dateButtonsDisabled = true
+      // These are converted into UTC from StatisticsFiltering <-- FilterDate. We convert it to a moment here as VictoryStatistics expects it. This will be killed off in https://github.com/ps2alerts/website/issues/425
+      this.dateFrom = moment.unix(dates.from)
+      this.dateTo = moment.unix(dates.to)
+
+      console.log('Index: Set filter', this.filter)
+    },
+    removeDateDisable() {
+      this.dateButtonsDisabled = false
     },
   },
 })

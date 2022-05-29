@@ -25,13 +25,9 @@
       </div>
       <div v-if="metrics.dates" class="flex-1 mb-3">
         <FilterDate
-          :is-filtered="false"
-          date-only="true"
-          @date-changed="updateDate"
+          :disabled="dateButtonsDisabled"
+          @dates-changed="updateDates"
         />
-        <!--      <button class="btn" :disabled="filtered === false" @click="clearFilter()">-->
-        <!--        <font-awesome-icon :icon="['fas', 'undo']" /> Clear-->
-        <!--      </button>-->
       </div>
     </div>
     <div v-if="!metrics.dates" class="col-span-12">
@@ -91,8 +87,13 @@ export default Vue.extend({
     } as PropOptions<AvailableMetricsInterface>,
     filterContainerSize: {
       type: String,
-      default: 'col-span-6 lg:col-start-4',
+      default: '',
       required: false,
+    },
+    dateButtonsDisabled: {
+      type: Boolean,
+      default: false,
+      required: true,
     },
   },
   data() {
@@ -124,13 +125,10 @@ export default Vue.extend({
       this.bracket = bracket === Bracket.UNKNOWN ? Bracket.TOTAL : bracket
       this.$emit('bracket-changed', this.bracket)
     },
-    updateDate(dates: {
-      dateFrom: moment.Moment
-      dateTo: moment.Moment
-    }): void {
-      this.dateFrom = dates.dateFrom.utc() // This converts the user's time back into UTC
-      this.dateTo = dates.dateTo.utc()
-      this.$emit('dates-changed', { from: this.dateFrom, to: this.dateTo })
+    updateDates(dates: { dateFrom: number; dateTo: number }): void {
+      console.log('StatisticsFiltering: Re-emitting dates-changed', dates)
+      // Re-emit higher to index
+      this.$emit('dates-changed', dates)
     },
   },
 })
