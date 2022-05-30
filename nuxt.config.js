@@ -6,14 +6,14 @@ const metaImg = `${process.env.BASE_URL}/og-image.png`
 export default {
   // We're forced to use env injection for this otherwise we can't build it into class constructors.
   env: {
-    apiHost: process.env.API_HOST ?? 'http://dev.api.ps2alerts.com',
+    apiHost: process.env.API_HOST ?? 'https://dev.api.ps2alerts.com',
   },
   publicRuntimeConfig: {
     built: process.env.BUILT ?? 'UNKNOWN BUILD TIME',
     environment: process.env.ENV ?? 'UNKNOWN ENVIRONMENT',
     build: process.env.BUILD ?? 'UNKNOWN BUILD',
     version: process.env.VERSION ?? 'UNKNOWN VERSION',
-    baseUrl: process.env.BASE_URL ?? 'http://dev.ps2alerts.com',
+    baseUrl: process.env.BASE_URL ?? 'https://dev.ps2alerts.com',
     maintenance: false,
   },
   server: {

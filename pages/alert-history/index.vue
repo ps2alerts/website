@@ -1,11 +1,16 @@
 <template>
-  <div class="grid grid-cols-12 gap-2 text-center relative">
+  <section
+    id="alert-history"
+    ref="alertHistoryTop"
+    class="grid grid-cols-12 gap-2 text-center relative"
+  >
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
     <div class="col-span-12">
       <h1 class="text-title">Alert History</h1>
       <CountdownSpinner
         :percent="updateCountdownPercent"
         :update-rate="updateRate"
+        :class="{ 'opacity-50': filtered }"
       />
     </div>
     <div class="col-span-6 lg:col-span-2 lg:col-start-3">
@@ -52,19 +57,18 @@
         <font-awesome-icon :icon="['fas', 'undo']" /> Reset Filters
       </button>
     </div>
-    <div
-      v-show="loaded === true && length > 0"
-      class="col-span-12 text-center mb-4"
-    >
-      <p v-show="!filteredByDate()">
-        {{ length }} alert{{ length > 1 ? 's' : '' }} found (100 max when not
-        filtered by date)
+    <div v-show="loaded === true && length > 0" class="col-span-12 text-center">
+      <p v-show="!filtered">
+        {{ length }} alert{{ length > 1 ? 's' : '' }} found ({{
+          maximumUnfilteredLength
+        }}
+        max when not filtered)
       </p>
-      <p v-show="filteredByDate()">
+      <p v-show="filtered">
         {{ length }} alert{{ length > 1 ? 's' : '' }} found
-      </p>
-      <p v-show="length === 300 && page === 1">
-        Hard limit of 300 alerts reached. Please narrow your criteria.
+        <span v-show="length === maximumFilteredLength && page === 1">
+          - scroll down to load more
+        </span>
       </p>
     </div>
     <div
@@ -84,15 +88,19 @@
     >
       <p>Both from and to dates need to be defined.</p>
     </div>
-    <div v-show="loaded === false" class="col-span-12 text-center">
-      <h1>Loading...</h1>
-    </div>
     <div v-show="error.message !== ''" class="col-span-12 text-center">
       <h1>Error loading results!</h1>
       <p>{{ error.message }}</p>
     </div>
     <div
-      v-if="loaded === true && length > 0"
+      v-show="!loaded || loading"
+      class="col-span-12 h-full items-center justify-center"
+      :class="{ 'mt-7': !loaded }"
+    >
+      <AlertHistoryEntryPlaceholder v-for="index in 20" :key="index" />
+    </div>
+    <div
+      v-if="loaded && length > 0"
       class="col-span-12 h-full items-center justify-center"
     >
       <AlertHistoryEntry
@@ -100,18 +108,35 @@
         :key="index"
         :alert="alert"
       />
-      <div class="col-span-3 col-start-5">
-        <button v-show="loadMoreDone" class="btn mb-2" @click="loadMore">
-          <font-awesome-icon icon="arrow-down"></font-awesome-icon> Load More
-          <font-awesome-icon icon="arrow-down"></font-awesome-icon>
-        </button>
-        <button v-show="!loadMoreDone" class="btn mb-2" disabled>
-          <font-awesome-icon icon="refresh"></font-awesome-icon> Loading...
-          <font-awesome-icon icon="refresh"></font-awesome-icon>
-        </button>
+      <div
+        v-show="!moreResultsExpected && loadMoreDone"
+        class="col-span-12 text-center"
+      >
+        <h1 class="my-4">No more results</h1>
+      </div>
+      <div class="flex justify-center gap-x-1">
+        <div
+          v-show="moreResultsExpected || !loadMoreDone"
+          class="col-span-3 col-start-5"
+        >
+          <button v-show="loadMoreDone" class="btn mb-2" @click="loadMore">
+            <font-awesome-icon icon="arrow-down"></font-awesome-icon> Load More
+            <font-awesome-icon icon="arrow-down"></font-awesome-icon>
+          </button>
+          <button v-show="!loadMoreDone" class="btn mb-2" disabled>
+            <font-awesome-icon icon="refresh"></font-awesome-icon> Loading...
+            <font-awesome-icon icon="refresh"></font-awesome-icon>
+          </button>
+        </div>
+        <div>
+          <button class="btn mb-2" @click="goToTop">
+            <font-awesome-icon icon="arrow-up"></font-awesome-icon> Back to top
+            <font-awesome-icon icon="arrow-up"></font-awesome-icon>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
@@ -127,6 +152,7 @@ import ApiRequest from '~/api-request'
 import { World } from '~/constants/World'
 import { Faction } from '~/constants/Faction'
 import AlertHistoryEntry from '~/components/alert-history/AlertHistoryEntry.vue'
+import AlertHistoryEntryPlaceholder from '~/components/alert-history/AlertHistoryEntryPlaceholder.vue'
 import FilterWorld from '~/components/common/FilterWorld.vue'
 import FilterZone from '~/components/common/FilterZone.vue'
 import FilterBracket from '~/components/common/FilterBracket.vue'
@@ -138,6 +164,7 @@ export default Vue.extend({
   components: {
     MetaHead,
     AlertHistoryEntry,
+    AlertHistoryEntryPlaceholder,
     FilterWorld,
     FilterZone,
     FilterBracket,
@@ -151,6 +178,7 @@ export default Vue.extend({
       pageDesc:
         'Filterable Alert History showing all past and current alerts going on in Planetside 2.',
       loaded: false,
+      loading: true,
       filtered: false,
       error: { message: '' },
       alerts: [] as InstanceTerritoryControlResponseInterface[],
@@ -169,6 +197,9 @@ export default Vue.extend({
       dateNow: now,
       page: 1,
       loadMoreDone: true,
+      maximumFilteredLength: 300,
+      maximumUnfilteredLength: 100,
+      ignoreChanges: false,
     }
   },
   head(): object {
@@ -195,7 +226,9 @@ export default Vue.extend({
       const filter: InstanceParamsInterface = {
         sortBy: 'timeStarted',
         order: 'desc',
-        pageSize: this.filteredByDate() ? 300 : 100,
+        pageSize: this.filtered
+          ? this.maximumFilteredLength
+          : this.maximumUnfilteredLength,
       }
       if (this.selectedWorld > 0) filter.world = this.selectedWorld
       if (this.selectedZone > 0) filter.zone = this.selectedZone
@@ -216,6 +249,13 @@ export default Vue.extend({
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
     },
+    moreResultsExpected(): boolean {
+      if (this.filtered) {
+        // If the length is lower than expected, we've run out of results thus don't need to load more.
+        return this.length === this.page * this.maximumFilteredLength
+      }
+      return this.length === this.page * this.maximumUnfilteredLength
+    },
   },
   beforeDestroy() {
     this.reset()
@@ -235,10 +275,18 @@ export default Vue.extend({
     },
     setTimers() {
       this.updateCountdownInterval = window.setInterval(() => {
+        // If filtered, don't count down.
+        if (this.filtered) {
+          return
+        }
         return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
       }, 1000)
       this.interval = window.setInterval(() => {
-        this.pull()
+        // If already filtered, don't pull any more
+        if (this.filtered) {
+          return
+        }
+        this.pull(false, false)
       }, this.updateRate)
     },
     created() {
@@ -248,9 +296,22 @@ export default Vue.extend({
       this.setTimers()
       await this.pull()
     },
-    async pull(additive = false): Promise<void> {
+    async pull(
+      additive = false,
+      showLoading = true,
+      force = false
+    ): Promise<void> {
+      if (this.ignoreChanges && !force) {
+        console.log('Currently ignoring changes')
+        return
+      }
       console.log('AlertHistory.pull')
       this.error = { message: '' }
+
+      // Stops the blinking every time alert history is refreshed or page jumps loading more rows
+      if (showLoading) {
+        this.loading = true
+      }
 
       try {
         const alerts: InstanceTerritoryControlResponseInterface[] =
@@ -267,6 +328,7 @@ export default Vue.extend({
         }
 
         this.loaded = true
+        this.loading = false
         this.length = Object.keys(this.alerts).length
       } catch (e: any) {
         this.error = e.message
@@ -274,31 +336,35 @@ export default Vue.extend({
     },
     updateWorld(world: World): void {
       this.selectedWorld = world
+      this.filterResults()
     },
     updateZone(zone: Zone): void {
       this.selectedZone = zone
+      this.filterResults()
     },
     updateBracket(bracket: Bracket): void {
       this.selectedBracket = bracket
+      this.filterResults()
     },
     updateVictor(victor: Faction): void {
       this.selectedVictor = victor
+      this.filterResults()
     },
-    updateDate(dates: {
-      dateFrom: moment.Moment
-      dateTo: moment.Moment
-    }): void {
-      this.selectedDateFrom = dates.dateFrom.utc() // This converts the user's time back into UTC
-      this.selectedDateTo = dates.dateTo.utc()
+    updateDate(dates: { from: number; to: number }): void {
+      console.log('Alert History: Updating Dates', dates)
+      this.selectedDateFrom = moment.unix(dates.from)
+      this.selectedDateTo = moment.unix(dates.to)
+      this.filterResults()
     },
-    async filterResults(): Promise<void> {
+    async filterResults(force = false): Promise<void> {
       // If filter keys length is 2, it hasn't changed therefore mark it as unfiltered.
       this.filtered = Object.keys(this.filter).length !== 2
       this.clearTimers()
       this.setTimers()
-      await this.pull()
+      await this.pull(false, true, force)
     },
-    clearFilter(): void {
+    async clearFilter(): Promise<void> {
+      this.ignoreChanges = true
       const now = moment()
       this.selectedWorld = 0
       this.selectedZone = 0
@@ -308,23 +374,28 @@ export default Vue.extend({
       this.selectedDateTo = now
       this.dateNow = now
 
-      if (this.filtered) {
-        this.filterResults()
+      const dateComponent = this.$refs.dateComponent as any
+
+      if (dateComponent) {
+        dateComponent.clearDates()
       }
+
+      await this.filterResults(true)
       this.filtered = false
-    },
-    filteredByDate(): boolean {
-      return (
-        this.filtered &&
-        this.selectedDateFrom !== this.dateNow &&
-        this.selectedDateTo !== this.dateNow
-      )
+      this.ignoreChanges = false
     },
     async loadMore(): Promise<void> {
       this.page = this.page + 1
       this.loadMoreDone = false
-      await this.pull(true)
+      await this.pull(true, false)
       this.loadMoreDone = true
+    },
+    goToTop() {
+      const el = this.$refs.alertHistoryTop
+
+      if (el instanceof HTMLElement) {
+        el.scrollIntoView({ behavior: 'smooth' })
+      }
     },
   },
 })

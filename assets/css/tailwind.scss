@@ -273,6 +273,7 @@
 
   .text-title {
     @apply text-5xl;
+    margin: 0.5rem 0 1rem 0;
   }
 
   .text-subtitle {
@@ -392,6 +393,23 @@
     white-space: nowrap;
     position: relative;
 
+    &.skeleton {
+      .faction-bar-segment {
+        .border-vs, .border-nc, .border-tr, .border-other {
+          border: transparent
+        }
+        .vs {
+          background-color: #403845
+        }
+        .nc {
+          background-color: #2d3e50
+        }
+        .tr {
+          background-color: #442e2e
+        }
+      }
+    }
+
     .vertical-bar {
       position: absolute;
       top: -3px;
@@ -489,6 +507,26 @@
     }
     to {
       opacity: 0;
+    }
+  }
+
+  .shimmer {
+    opacity: 0.75;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: shimmer;
+    animation-timing-function: linear;
+    background: linear-gradient(to right, #484848 8%, #838383 18%, #484848 33%);
+    background-size: 1200px 100%;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1200px 0;
+    }
+    100% {
+      background-position: 1200px 0;
     }
   }
 
