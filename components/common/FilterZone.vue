@@ -4,6 +4,7 @@
       id="zone"
       v-model="zone"
       class="select-standard"
+      :disabled="disabled"
       @change="changeZone()"
     >
       <option value="0">Any</option>
@@ -13,7 +14,12 @@
       <option :value="INDAR">Indar</option>
       <option :value="OSHUR">Oshur</option>
     </select>
-    <label class="text-center text-sm" for="zone">Continent</label>
+    <label
+      class="text-center text-sm"
+      for="zone"
+      :class="{ 'text-gray-600': disabled }"
+      >Continent</label
+    >
   </div>
 </template>
 
@@ -27,6 +33,11 @@ export default Vue.extend({
     zoneFilter: {
       type: Number,
       default: 0,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      required: false,
     },
   },
   data() {

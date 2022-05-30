@@ -6,7 +6,7 @@
     <div
       v-show="total > 0"
       class="faction-bar text-sm text-center text-white"
-      :class="{ half: halfBar }"
+      :class="{ half: halfBar, skeleton }"
     >
       <v-tooltip bottom>
         <template #activator="{ on, attrs }">
@@ -217,6 +217,11 @@ export default Vue.extend({
       required: false,
     },
     showTooltipAsNumber: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    skeleton: {
       type: Boolean,
       default: false,
       required: false,

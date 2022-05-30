@@ -9,36 +9,47 @@
       />
     </div>
     <div class="col-span-6 lg:col-span-2 lg:col-start-3">
-      <FilterWorld :world-filter="selectedWorld" @world-changed="updateWorld" />
+      <FilterWorld
+        :world-filter="selectedWorld"
+        :disabled="loading"
+        @world-changed="updateWorld"
+      />
     </div>
     <div class="col-span-6 lg:col-span-2">
-      <FilterZone :zone-filter="selectedZone" @zone-changed="updateZone" />
+      <FilterZone
+        :zone-filter="selectedZone"
+        :disabled="loading"
+        @zone-changed="updateZone"
+      />
     </div>
     <div class="col-span-6 lg:col-span-2">
       <FilterBracket
         :bracket-filter="selectedBracket"
+        :disabled="loading"
         @bracket-changed="updateBracket"
       />
     </div>
     <div class="col-span-6 lg:col-span-2">
       <FilterVictor
         :victor-filter="selectedVictor"
+        :disabled="loading"
         @victor-changed="updateVictor"
       />
     </div>
     <div class="col-span-12 lg:col-span-8 lg:col-start-3">
-      <FilterDate :is-filtered="filtered" @date-changed="updateDate" />
+      <FilterDate
+        ref="dateComponent"
+        :disabled="loading"
+        @dates-changed="updateDate"
+      />
     </div>
     <div class="col-span-12 text-center">
-      <button class="btn" :disabled="loaded === false" @click="filterResults()">
-        <font-awesome-icon :icon="['fas', 'filter']" /> Filter
-      </button>
       <button
         class="btn"
         :disabled="loaded === false || (loaded === true && filtered === false)"
         @click="clearFilter()"
       >
-        <font-awesome-icon :icon="['fas', 'undo']" /> Clear
+        <font-awesome-icon :icon="['fas', 'undo']" /> Reset Filters
       </button>
     </div>
     <div

@@ -4,6 +4,7 @@
       id="victor"
       v-model="victor"
       class="select-standard"
+      :disabled="disabled"
       @change="changeVictor()"
     >
       <option :value="NONE">Any</option>
@@ -11,7 +12,12 @@
       <option :value="NEW_CONGLOMERATE">New Conglomerate</option>
       <option :value="TERRAN_REPUBLIC">Terran Republic</option>
     </select>
-    <label class="text-center text-sm" for="victor">Victor</label>
+    <label
+      class="text-center text-sm"
+      for="victor"
+      :class="{ 'text-gray-600': disabled }"
+      >Victor</label
+    >
   </div>
 </template>
 
@@ -25,6 +31,11 @@ export default Vue.extend({
     victorFilter: {
       type: Number,
       default: 0,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+      required: false,
     },
   },
   data() {

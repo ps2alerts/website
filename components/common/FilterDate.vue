@@ -132,7 +132,7 @@ export default Vue.extend({
     disabled: {
       type: Boolean,
       default: false,
-      required: true,
+      required: false,
     },
   },
   data() {
@@ -173,7 +173,7 @@ export default Vue.extend({
       this.updateIfBoth()
     },
     quickFilter(value: number) {
-      if (value === -1) {
+      if (value === -1 && !this.waitingForData) {
         this.clearDates()
         return
       }
@@ -189,6 +189,8 @@ export default Vue.extend({
       ) {
         console.log('ready to emit')
         this.emitDateUpdate()
+      } else {
+        console.log('NOT ready to emit, waiting for data?')
       }
     },
     updateFromDateDays(numOfDays: number): void {
@@ -200,6 +202,7 @@ export default Vue.extend({
     clearDates(): void {
       this.dateFrom = dateStartedRecording
       this.dateTo = dateNow
+      this.quickFilter = -1
       this.emitDateUpdate()
     },
     emitDateUpdate(): void {
