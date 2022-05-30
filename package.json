@@ -19,7 +19,7 @@
     "@nuxtjs/google-gtag": "^1.0.4",
     "@svgdotjs/svg.filter.js": "^3.0.8",
     "@svgdotjs/svg.js": "^3.1.2",
-    "chart.js": "2.9.4",
+    "chart.js": "3.8.0",
     "chartjs-plugin-annotation": "^0.5.7",
     "core-js": "^3.19.3",
     "dayjs": "^1.11.2",
