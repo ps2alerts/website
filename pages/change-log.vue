@@ -4,7 +4,7 @@
     <div class="col-span-12 xl:col-span-10 xl:col-start-2">
       <div class="text-center h-full">
         <h1 class="text-title">Change Log</h1>
-        <p class="mt-1">Last updated: 15th March 2022</p>
+        <p class="mt-1">Last updated: 31st May 2022</p>
         <v-expansion-panels
           v-model="panel"
           accordion
@@ -69,22 +69,67 @@ export default Vue.extend({
       posts: [
         {
           id: 10,
-          title: `V4.1.0 - Alert mapping, Alert History improvements`,
-          date: '15th April 2022',
+          title: `v4.1.0 - Alert mapping, Victory Timeline & Alert History improvements`,
+          date: '31st May 2022',
           type: 'major-update',
           body: `
            <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
               <div>
-                <h2 class="text-subtitle">Alert Maps!</h2>
+                <h2 class="text-subtitle">Alert Maps &amp; timeline! <a href="https://www.youtube.com/watch?v=_J6-3l3hCm0" target="_blank" class="text-sm text-red-500">Hell, it's about time.</a></h2>
                 <p>
                   For a long, long time the alert pages were sorely missing maps, which is a fundamental cornerstone of the alert metagame. Thanks to some <b>extraordinary</b> work by [UN17] RiderAnton from Connery, they are finally here.
                 </p>
-                <p>The PS2Alerts map should be a familiar experience to you. It should work and feel exactly like the in game map - Rider has taken a high level of attention to detail to his work, including things like zoom levels, lattice links with proper coloring, hover-over facility names, properly showing cutoffs, zoom sounds, and lots more! It should feel like you were watching the alert from the map screen.</p>
+                <p>The Alert map should be a familiar experience to you. It should work and feel exactly like the in game map - Rider has taken an ungodly level of attention to detail to his work, including things like zoom levels, lattice links with proper coloring, hover-over facility names, properly showing cutoffs, zoom sounds, and lots more! It should feel like you were watching the alert from the map screen.</p>
                 <p>Soon, there are going to be changes to the Capture History which will be showing a lot more detail about each individual capture. Stay tuned for more on that!</p>
+                <video controls>
+                    <source src="https://assets.ps2alerts.com/change-log/v4.1-map.mp4" type="video/mp4">
+                </video>
+                <p class="text-center text-sm">Example map of an alert (has sound)</p>
               </div>
               <div>
-                <h2 class="text-subtitle">Alert history load more</h2>
-                <p>On the bottom of the Alert History page there is now a Load More button! This enables you, in theory, to infinitely scroll back to the beginning of time to find the alert you need. In theory.</p>
+                <h2 class="text-subtitle">Date filtering improvements</h2>
+                <img
+                  class="w-72 mx-auto rounded-lg"
+                  src="https://assets.ps2alerts.com/change-log/v4.1-date-filters.png"
+                  alt="Date filters example"
+                />
+                <p>Date filters (seen on the Statistics / home page and the Alert History page) has received an improvement. We've now added a "Quick Filter" dropdown enabling you to pull in data from the following time references very quickly, without having to choose dates manually:</p>
+                <ul>
+                  <li>1 year</li>
+                  <li>6 months (180d)</li>
+                  <li>3 months (90d)</li>
+                  <li>2 months (60d)</li>
+                  <li>1 month (30d)</li>
+                  <li>2 weeks</li>
+                  <li>1 week</li>
+                </ul>
+
+                The above filters are used in the below features:
+              </div>
+              <div>
+                <h2 class="text-subtitle">Victory Timeline improvements</h2>
+                <p>There have been many, <b>many</b> alerts added since the site's creation back in January 2021. As a result, the victories graph was very cluttered, therefore it needed a good redesign. It has been changed in the following ways:</p>
+                <ul>
+                  <li>It is now possible to change data points to be on a Daily, Weekly, Monthly or Yearly basis. This makes the chart vastly more readable.</li>
+                  <li>Hovering over a chart point now shows all metrics for that point in time, e.g. VS, NC, TR wins and Draws without having to hover each point individually.</li>
+                  <li>As you "zoom in" on a particular date range using the new date filters, the time granularity will change to an appropriate level (e.g. you won't see days on a yearly basis - making it practically unreadable - you will see weekly stats.)</li>
+                </ul>
+                <video controls>
+                    <source src="https://assets.ps2alerts.com/change-log/v4.1-victory-timeline.mp4" type="video/mp4">
+                </video>
+                 <p class="text-center text-sm">New Victory Timeline</p>
+              </div>
+              <div>
+                <h2 class="text-subtitle">Alert History improvements</h2>
+                <p>In tandem with the new Date Filters, we took another pass at the Alert History page. It has recieved the following improvements</p>
+                <ul>
+                  <li>"Load More" button has been added, which will enable you to parse through the alert history essentially infinately. You will be limited to 300 results at a time when using filters (100 without). There's also a handy "Go to top" button should you be lost in the depths of the results and want to re-filter.</li>
+                  <li>"Ghost" elements have been added in to give the page that extra polish</li>
+                </ul>
+
+              <video controls>
+                  <source src="https://assets.ps2alerts.com/change-log/v4.1-alert-history.mp4" type="video/mp4">
+              </video>
               </div>`,
         },
         {
