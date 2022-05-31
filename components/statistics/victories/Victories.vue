@@ -14,6 +14,7 @@
         <VictoriesTimeline
           :raw-data="data"
           :update-countdown-percent="updateCountdownPercent"
+          :filter="filter"
         />
         <VictoriesCounts
           :raw-data="data"

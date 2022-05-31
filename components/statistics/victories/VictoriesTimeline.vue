@@ -17,7 +17,7 @@
           />
           <TimeGranularity
             class="col-span-6 lg:col-span-4 2xl:col-span-2"
-            :bracket-filter="selectedBracket"
+            :time-filter="selectedTimeOption"
             @time-granularity-changed="updateTimeGranularity"
           />
         </div>
@@ -64,6 +64,11 @@ export default Vue.extend({
       default: 100,
       required: true,
     },
+    filter: {
+      type: Object,
+      default: () => {},
+      required: true,
+    },
   },
   data() {
     return {
@@ -92,6 +97,7 @@ export default Vue.extend({
               max: dayjs().format(),
               ticks: {
                 fontColor: '#fff',
+                source: 'labels',
               },
               gridLines: {
                 display: true,
@@ -145,9 +151,26 @@ export default Vue.extend({
   },
   methods: {
     render() {
+      this.optimiseTimeResolution()
       this.transformData()
       this.buildCollection()
       this.adjustChartOptions()
+    },
+    optimiseTimeResolution(): void {
+      // Perform trickery to set the time granularity to appropriate levels based on time frame requested
+      if (this.filter.dateFrom && this.filter.dateTo) {
+        const date1 = dayjs(this.filter.dateFrom)
+        const date2 = dayjs(this.filter.dateTo)
+
+        const difference = date2.diff(date1, 'days')
+
+        // Set the time option to week to force a change in the TimeGranularity component upon re-draw, don't ask me why it just works ok.
+        this.selectedTimeOption = TimeGranularity.WEEK
+
+        if (difference <= 60) {
+          this.selectedTimeOption = TimeGranularity.DAY
+        }
+      }
     },
     transformData(): void {
       // Tot up all brackets and worlds together
@@ -175,6 +198,8 @@ export default Vue.extend({
           date = dayjs(this.getMondayOfWeek(row.date)).utc().format()
         } else if (this.selectedTimeOption === TimeGranularity.MONTH) {
           date = dayjs(row.date).format('YYYY-MM-01 00:00:00')
+        } else if (this.selectedTimeOption === TimeGranularity.YEAR) {
+          date = dayjs(row.date).format('YYYY-01-01 00:00:00')
         }
 
         if (!worldCounts[date]) {
@@ -212,9 +237,6 @@ export default Vue.extend({
 
       this.totalCounts = totalCounts
       this.worldCounts = worldCounts
-
-      console.log('totalCounts', this.totalCounts)
-      console.log('worldCounts', this.worldCounts)
     },
     buildCollection() {
       const times: string[] = []
@@ -236,9 +258,6 @@ export default Vue.extend({
         pointHoverBorderWidth: 4,
         lineTension: 0,
       }
-
-      console.log(times)
-      console.log(vsData)
 
       this.dataCollection = {
         labels: times,
@@ -284,13 +303,10 @@ export default Vue.extend({
       const objectKeys = Object.keys(this.totalCounts)
 
       // For some reason Object.keys puts the result in reverse of actuality...
-      console.log('objectKeys', objectKeys)
       const firstObject = objectKeys[objectKeys.length - 1]
-      console.log('firstObject', firstObject)
       const firstObjectDate = dayjs(firstObject).format()
 
       const lastObject = objectKeys[0]
-      console.log('lastObject', lastObject)
       const lastObjectDate = dayjs(lastObject).format()
       this.chartOptions.scales.xAxes[0].min = firstObjectDate
       this.chartOptions.scales.xAxes[0].max = lastObjectDate
@@ -299,9 +315,7 @@ export default Vue.extend({
       this.chartOptions.scales.xAxes[0].time.unit = this.selectedTimeOption
 
       // Generate labels based off data
-      console.log('minDate', firstObjectDate)
-      console.log('maxDate', lastObjectDate)
-      console.log('chartOptions', this.chartOptions)
+      console.log('chartOptions', this.chartOptions.scales.xAxes[0])
     },
     updateWorld(world: World) {
       this.selectedWorld = world

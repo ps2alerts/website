@@ -152,6 +152,7 @@ export default Vue.extend({
         { text: '1 year', val: 365 },
         { text: '6 months (180d)', val: 180 },
         { text: '3 months (90d)', val: 90 },
+        { text: '2 months (60d)', val: 60 },
         { text: '1 month (30d)', val: 30 },
         { text: '2 weeks', val: 14 },
         { text: '1 week', val: 7 },

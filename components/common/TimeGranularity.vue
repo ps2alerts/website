@@ -1,8 +1,8 @@
 <template>
   <div>
     <select
-      id="bracket"
-      v-model="chosenOption"
+      id="timeOption"
+      v-model="timeOption"
       class="select-standard"
       :disabled="disabled"
       @change="changeOption()"
@@ -13,7 +13,7 @@
     </select>
     <label
       class="text-center text-sm"
-      for="bracket"
+      for="timeOption"
       :class="{ 'text-gray-600': disabled }"
       >Time Resolution</label
     >
@@ -27,6 +27,10 @@ import { TimeGranularity } from '~/constants/Time'
 export default Vue.extend({
   name: 'TimeGranularity',
   props: {
+    timeFilter: {
+      type: String,
+      default: TimeGranularity.WEEK,
+    },
     disabled: {
       type: Boolean,
       default: false,
@@ -39,13 +43,19 @@ export default Vue.extend({
         TimeGranularity.DAY,
         TimeGranularity.WEEK,
         TimeGranularity.MONTH,
+        TimeGranularity.YEAR,
       ],
-      chosenOption: TimeGranularity.WEEK,
+      timeOption: TimeGranularity.WEEK,
     }
+  },
+  watch: {
+    timeFilter(timeOption: TimeGranularity): void {
+      this.timeOption = timeOption
+    },
   },
   methods: {
     changeOption(): void {
-      this.$emit('time-granularity-changed', this.chosenOption)
+      this.$emit('time-granularity-changed', this.timeOption)
     },
   },
 })
