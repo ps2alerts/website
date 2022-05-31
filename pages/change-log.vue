@@ -89,7 +89,7 @@ export default Vue.extend({
               <div>
                 <h2 class="text-subtitle">Date filtering improvements</h2>
                 <img
-                  class="w-72 mx-auto rounded-lg"
+                  class="mx-auto rounded-lg mb-4"
                   src="https://assets.ps2alerts.com/change-log/v4.1-date-filters.png"
                   alt="Date filters example"
                 />
