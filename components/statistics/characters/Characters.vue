@@ -82,6 +82,7 @@ export default Vue.extend({
         pageSize: 1000,
       }
       if (this.filter.world > 0) filter.world = this.filter.world
+      if (!this.filter.bracket) filter.bracket = Bracket.TOTAL
       if (this.filter.bracket !== Bracket.UNKNOWN)
         filter.bracket = this.filter.bracket
 
