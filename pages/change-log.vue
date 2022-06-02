@@ -86,12 +86,12 @@ export default Vue.extend({
                 <p>Thanks to DobBole69 for reporting the <a class="text-red-500" href="https://github.com/ps2alerts/website/issues/427">feature on GitHub!</a></p>
               </div>
               <div>
-                <h2 class="text-subtitle">Facility Capture / Defences participation stats</h2>
+                <h2 class="text-subtitle">Player &amp; Outfit Facility Capture / Defences participation stats</h2>
                 <p>Status: <span class="label gray">WIP (initial phase)</span></p>
                 <p>With this update, we will bring an expansion to the Capture History system where each capture will show all players (and thus, outfits) present at the Capture / Defense of a base, along with rough population calculations. <b>Note</b>, there is a heavy caveat here that the data we receive is literally a snapshot of the base at the time, e.g. if some people have left the base ahead of the capture / defence of said base, they will not be registered.</p>
                 <p>In addition to showing the players on the Capture History, the facilities the player has been involved capturing will show up on the player's entry in the Player section. Outfits will also have their bases they were involved in capturing listed under their row in the Outfit section on each alert as well, along with the percentage of players present both on a same-faction and all outfits level.</p>
-                <p>Full list of additions</p>
-                <ul>
+                <p>Full list of additions can be see on the <a href="https://github.com/ps2alerts/website/issues/418" class="text-red-500">GitHub feature request.</a></p>
+                <!--<ul>
                   <li>Faction Combat Metrics - Bases captured &amp; defended by faction, seperated by base size</li>
                   <li><b>Players</b></li>
                     <ul>
@@ -100,7 +100,7 @@ export default Vue.extend({
                       <li>Alert-wide Capture / Defense participation(# of total alert captures (any faction) / player involved captures / defences)</li>
                     </ul>
                   </li>
-                </ul>
+                </ul>-->
               </div>
               <div>
                 <h2 class="text-subtitle">Alert timer de-sync bugfix</h2>
