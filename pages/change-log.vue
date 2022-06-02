@@ -73,7 +73,7 @@ export default Vue.extend({
       posts: [
         {
           id: 12,
-          title: `v4.2.0 BETA - XPM / XPM-PP Metrics, Player Facility Capture support`,
+          title: `v4.2.0-alpha-1 - XPM / XPM-PP Metrics, Player Facility Capture support`,
           date: 'TBA',
           type: 'wip',
           body: `
