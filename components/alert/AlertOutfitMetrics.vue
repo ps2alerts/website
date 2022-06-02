@@ -53,7 +53,7 @@
         </div>
         <v-data-table
           class="datatable"
-          show-expand
+          :show-expand="alert.features.xpm"
           :single-expand="false"
           item-key="outfit.id"
           :headers="headers"
@@ -66,7 +66,7 @@
           <template #no-results>
             <div class="text-2xl text-white font-bold my-6">No results!</div>
           </template>
-          <template #expanded-item="{ item }">
+          <template v-if="alert.features.xpm" #expanded-item="{ item }">
             <td colspan="10">
               <table class="w-full">
                 <tr class="border-b border-b-white">
@@ -248,7 +248,6 @@ export default Vue.extend({
     },
     setupTableHeaders() {
       const tableHeaders = [
-        { text: '', value: 'data-table-expand' },
         {
           text: 'Outfit',
           align: 'left',
@@ -327,6 +326,11 @@ export default Vue.extend({
       ]
 
       if (this.alert.features?.xpm) {
+        tableHeaders.unshift({
+          text: '',
+          align: 'middle',
+          value: 'data-table-expand',
+        })
         tableHeaders.push(
           {
             text: 'Time Played',
