@@ -73,27 +73,44 @@ export default Vue.extend({
       posts: [
         {
           id: 12,
-          title: `v4.2.0-alpha-1 - XPM / XPM-PP Metrics, Player Facility Capture support`,
+          title: `v4.2.0-alpha-1 - XPM / XPM-PP Metrics, Facility Capture / Defences participation stats & Alert timer de-sync fix`,
           date: 'TBA',
           type: 'wip',
           body: `
             <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
               <div>
                 <h2 class="text-subtitle">XPM &amp; XPM-PP Metrics</h2>
-                <p>Status: <span class="label green">LIVE</span></p>
+                <p>Status: <span class="label green">Feature Complete - Polish Phase</span></p>
                 <p>XPM (X statistic Per Minute) and XPM-PP (X statistic Per Minute - Per Player) metrics are here! Now on alert pages you are able to see your Kills, Deaths, Headshots, Teamkills (kek) and Suicides per minute. In addition, you are also able to see your Time Played during the alert as well. XPM metrics are calculated based off your time in the alert, so if you are late to the party you won't have a super low XPM metrics, you'll be on the same level playing field as someone who started at the very beginning of the alert, in order to remain competitive.</p>
                 <p>For outfits, there is also an expansion to this to show said metrics on a per-participant level. In addition, new "X-PP" metrics are present as well.</p>
                 <p>Thanks to DobBole69 for reporting the <a class="text-red-500" href="https://github.com/ps2alerts/website/issues/427">feature on GitHub!</a></p>
               </div>
               <div>
-                <h2 class="text-subtitle">Player Facility Capture support</h2>
-                <p>Status: <span class="label gray">WIP</span></p>
+                <h2 class="text-subtitle">Facility Capture / Defences participation stats</h2>
+                <p>Status: <span class="label gray">WIP (initial phase)</span></p>
+                <p>With this update, we will bring an expansion to the Capture History system where each capture will show all players (and thus, outfits) present at the Capture / Defense of a base, along with rough population calculations. <b>Note</b>, there is a heavy caveat here that the data we receive is literally a snapshot of the base at the time, e.g. if some people have left the base ahead of the capture / defence of said base, they will not be registered.</p>
+                <p>In addition to showing the players on the Capture History, the facilities the player has been involved capturing will show up on the player's entry in the Player section. Outfits will also have their bases they were involved in capturing listed under their row in the Outfit section on each alert as well, along with the percentage of players present both on a same-faction and all outfits level.</p>
+                <p>Full list of additions</p>
+                <ul>
+                  <li>Faction Combat Metrics - Bases captured &amp; defended by faction, seperated by base size</li>
+                  <li><b>Players</b></li>
+                    <ul>
+                      <li>Helped capture / defend counts for the player</li>
+                      <li>Faction capture / defense participation (# of total faction captures / player involved captures / defences)</li>
+                      <li>Alert-wide Capture / Defense participation(# of total alert captures (any faction) / player involved captures / defences)</li>
+                    </ul>
+                  </li>
+                </ul>
               </div>
+              <div>
+                <h2 class="text-subtitle">Alert timer de-sync bugfix</h2>
+                <p>Status: <span class="label">Not started</span></p>
+                <p>There is currently a very annoying bug where if you are alt tabbed from your browser, certain optimisations browsers perform is to stop "timers" from working occurring in the background, which results in timers getting de-synced, requiring a page refresh to fix. In this update we will add in a re-sync mechanism using when you're looking at the page to trigger a timer refresh.</p>
            </div>`,
         },
         {
           id: 11,
-          title: `v4.1.1 Leaderboard fixes`,
+          title: `v4.1.1 - Leaderboard fixes`,
           date: '2nd June 2022',
           type: 'minor-update',
           body: `
