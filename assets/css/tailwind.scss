@@ -557,6 +557,10 @@
     &.known-issue {
       @apply bg-yellow-800;
     }
+
+    &.wip {
+      @apply bg-green-700;
+    }
   }
 
   .datatable {

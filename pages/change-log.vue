@@ -4,7 +4,7 @@
     <div class="col-span-12 xl:col-span-10 xl:col-start-2">
       <div class="text-center h-full">
         <h1 class="text-title">Change Log</h1>
-        <p class="mt-1">Last updated: 31st May 2022</p>
+        <p class="mt-1">Last updated: 2nd June 2022</p>
         <v-expansion-panels
           v-model="panel"
           accordion
@@ -39,6 +39,10 @@
               <font-awesome-icon :icon="['fas', 'wrench']"></font-awesome-icon>
               Minor Update
             </div>
+            <div v-if="post.type === 'wip'" class="tag m-0 wip">
+              <font-awesome-icon :icon="['fas', 'wrench']"></font-awesome-icon>
+              Upcoming Update / WIP
+            </div>
             <v-expansion-panel-header>
               <div>
                 <h1 class="text-xl mb-2 font-bold" v-html="post.title"></h1>
@@ -65,8 +69,41 @@ export default Vue.extend({
       pageTitle: 'Change Log',
       pageDesc: "See what's recently been released for PS2Alerts!",
       version: this.$config.version,
-      panel: [0],
+      panel: [1, 2],
       posts: [
+        {
+          id: 12,
+          title: `v4.2.0 BETA - XPM / XPM-PP Metrics, Player Facility Capture support`,
+          date: 'TBA',
+          type: 'wip',
+          body: `
+           <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+              <div>
+                <h2 class="text-subtitle">XPM &amp; XPM-PP Metrics</h2>
+                <p>Status: <span class="label green">LIVE</span></p>
+                <p>XPM (X statistic Per Minute) and XPM-PP (X statistic Per Minute - Per Player) metrics are here! Now on alert pages you are able to see your Kills, Deaths, Headshots, Teamkills (kek) and Suicides per minute. In addition, you are also able to see your Time Played during the alert as well. XPM metrics are calculated based off your time in the alert, so if you are late to the party you won't have a super low XPM metrics, you'll be on the same level playing field as someone who started at the very beginning of the alert, in order to remain competitive.</p>
+                <p>For outfits, there is also an expansion to this to show said metrics on a per-participant level. In addition, new "X-PP" metrics are present as well.</p>
+                <p>Thanks to DobBole69 for reporting the <a class="text-red-500" href="https://github.com/ps2alerts/website/issues/427">feature on GitHub!</a></p>
+              </div>
+              <div>
+                <h2 class="text-subtitle">Player Facility Capture support</h2>
+                <p>Status: <span class="label gray">WIP</span></p>
+              </div>
+           </div>`,
+        },
+        {
+          id: 11,
+          title: `v4.1.1 Leaderboard fixes`,
+          date: '2nd June 2022',
+          type: 'minor-update',
+          body: `
+           <div>
+             <p>
+              There was a bug when you searched for certain high kill items in the player leaderboard and outfit leaderboards pulling in duplicate records. Each player and outfit has separate records, split out by the Activity Level. There was a bug where it was pulling in all activity levels when there wasn't one selected, now it only pulls in totals or any selected activity level.
+              </p>
+              <p>Thanks to [NEXO] lly1 / lly1bot for reporting the bug!</p>
+            </div>`,
+        },
         {
           id: 10,
           title: `v4.1.0 - Alert mapping, Victory Timeline & Alert History improvements`,
