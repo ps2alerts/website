@@ -77,7 +77,7 @@ export default Vue.extend({
           date: 'TBA',
           type: 'wip',
           body: `
-           <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+            <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
               <div>
                 <h2 class="text-subtitle">XPM &amp; XPM-PP Metrics</h2>
                 <p>Status: <span class="label green">LIVE</span></p>
@@ -97,10 +97,8 @@ export default Vue.extend({
           date: '2nd June 2022',
           type: 'minor-update',
           body: `
-           <div>
-             <p>
-              There was a bug when you searched for certain high kill items in the player leaderboard and outfit leaderboards pulling in duplicate records. Each player and outfit has separate records, split out by the Activity Level. There was a bug where it was pulling in all activity levels when there wasn't one selected, now it only pulls in totals or any selected activity level.
-              </p>
+            <div>
+              <p>There was a bug when you searched for certain high kill items in the player leaderboard and outfit leaderboards pulling in duplicate records. Each player and outfit has separate records, split out by the Activity Level. There was a bug where it was pulling in all activity levels when there wasn't one selected, now it only pulls in totals or any selected activity level.</p>
               <p>Thanks to [NEXO] lly1 / lly1bot for reporting the bug!</p>
             </div>`,
         },
@@ -110,7 +108,7 @@ export default Vue.extend({
           date: '31st May 2022',
           type: 'major-update',
           body: `
-           <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+            <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
               <div>
                 <h2 class="text-subtitle">Alert Maps &amp; timeline! <a href="https://www.youtube.com/watch?v=_J6-3l3hCm0" target="_blank" class="text-sm text-red-500">Hell, it's about time.</a></h2>
                 <p>
@@ -266,127 +264,127 @@ export default Vue.extend({
           date: '2nd March 2022',
           type: 'major-update',
           body: `
-          <div class="grid grid-cols-12 gap-2 editorial">
-            <div class="col-span-12 text-left">
-              <p>
-                Long time no see! Since the project has been running a long
-                time, 95% stable (there's occasionally some alerts missing
-                due to Census giving us crap responses resulting in errors),
-                I've decided that PS2Alerts is coming out of it's Beta phase
-                and
-                <b>officially releasing as v4.0!</b>
-              </p>
-              <p>
-                PS2Alerts has undergone some changes, listed below. The
-                project is now out of mothballs (2021 was a rough year) and
-                you should continue to expect new things coming for the site
-                soon, namely things like Maps, Per-Player and Per-Outfit
-                searchable statistics within the alert meta as a whole, and
-                <a
-                  class="text-red-500"
-                  href="https://github.com/ps2alerts/website/issues"
-                  target="_blank"
-                  >various other things</a
-                >.
-              </p>
-              <h2 class="text-subtitle">Alert Statistics Pages</h2>
-              <ul>
-                <li>
-                  Alert Capture History has been added! Recording as of Feb
-                  5th 17:34 BST. Maps are coming hopefully fairly soon!
-                </li>
-                <li>
-                  Battle ranks are now a stacked graph rather than separate
-                  tiny lines no-one could read
-                </li>
-                <li>
-                  Added per-base worth for each alert as of Feb 5th 17:34
-                  BST (you can find this above the territory bar)
-                </li>
-              </ul>
-              <h2 class="text-subtitle">Other changes</h2>
-              <ul>
-                <li>
-                  <a href="/alert-history" class="text-red-500"
-                    >Alert History</a
+            <div class="grid grid-cols-12 gap-2 editorial">
+              <div class="col-span-12 text-left">
+                <p>
+                  Long time no see! Since the project has been running a long
+                  time, 95% stable (there's occasionally some alerts missing
+                  due to Census giving us crap responses resulting in errors),
+                  I've decided that PS2Alerts is coming out of it's Beta phase
+                  and
+                  <b>officially releasing as v4.0!</b>
+                </p>
+                <p>
+                  PS2Alerts has undergone some changes, listed below. The
+                  project is now out of mothballs (2021 was a rough year) and
+                  you should continue to expect new things coming for the site
+                  soon, namely things like Maps, Per-Player and Per-Outfit
+                  searchable statistics within the alert meta as a whole, and
+                  <a
+                    class="text-red-500"
+                    href="https://github.com/ps2alerts/website/issues"
+                    target="_blank"
+                    >various other things</a
+                  >.
+                </p>
+                <h2 class="text-subtitle">Alert Statistics Pages</h2>
+                <ul>
+                  <li>
+                    Alert Capture History has been added! Recording as of Feb
+                    5th 17:34 BST. Maps are coming hopefully fairly soon!
+                  </li>
+                  <li>
+                    Battle ranks are now a stacked graph rather than separate
+                    tiny lines no-one could read
+                  </li>
+                  <li>
+                    Added per-base worth for each alert as of Feb 5th 17:34
+                    BST (you can find this above the territory bar)
+                  </li>
+                </ul>
+                <h2 class="text-subtitle">Other changes</h2>
+                <ul>
+                  <li>
+                    <a href="/alert-history" class="text-red-500"
+                      >Alert History</a
+                    >
+                    results has had a redesign, resulting in a lot more
+                    compact design, especially on mobile.
+                  </li>
+                  <li>
+                    Alert Monitor (to the left side) has been re-worked, now
+                    showing populations for each alert rather than being
+                    hidden behind a button press, as well as various layout
+                    fixes.
+                  </li>
+                  <li>
+                    Alert Monitor is now able to be collapsed / hidden on
+                    mobile if it's taking too much space.
+                  </li>
+                  <li>
+                    Stats (home page): Server Activity Level Victories and
+                    Server Continent Victories have had a redesign pass,
+                    resulting in a vastly better display on mobile and
+                    desktop.
+                  </li>
+                  <li>
+                    Navigation bar has been redesigned from a pill format to a
+                    bar format.
+                  </li>
+                  <li>
+                    Some missing NSO vehicles (Dervish, Chimera) were added
+                    into various parts of the site whereas previously they'd
+                    show up as unknown vehicles
+                  </li>
+                  <li>
+                    Various styling issues have been corrected and the site
+                    has been updated to the latest technologies
+                  </li>
+                </ul>
+              </div>
+              <div class="col-span-12 mb-2">
+                <img
+                  class="w-72 mx-auto rounded-lg"
+                  src="/change-log/new-rtm.png"
+                  alt="Picture showing faction vs faction example"
+                />
+                <p class="text-gray-400 text-sm mt-1">
+                  New redesign of the Real Time Monitor
+                  <a
+                    href="/change-log/old-rtm.png"
+                    class="text-red-500"
+                    target="_blank"
+                    >old design</a
                   >
-                  results has had a redesign, resulting in a lot more
-                  compact design, especially on mobile.
-                </li>
-                <li>
-                  Alert Monitor (to the left side) has been re-worked, now
-                  showing populations for each alert rather than being
-                  hidden behind a button press, as well as various layout
-                  fixes.
-                </li>
-                <li>
-                  Alert Monitor is now able to be collapsed / hidden on
-                  mobile if it's taking too much space.
-                </li>
-                <li>
-                  Stats (home page): Server Activity Level Victories and
-                  Server Continent Victories have had a redesign pass,
-                  resulting in a vastly better display on mobile and
-                  desktop.
-                </li>
-                <li>
-                  Navigation bar has been redesigned from a pill format to a
-                  bar format.
-                </li>
-                <li>
-                  Some missing NSO vehicles (Dervish, Chimera) were added
-                  into various parts of the site whereas previously they'd
-                  show up as unknown vehicles
-                </li>
-                <li>
-                  Various styling issues have been corrected and the site
-                  has been updated to the latest technologies
-                </li>
-              </ul>
-            </div>
-            <div class="col-span-12 mb-2">
-              <img
-                class="w-72 mx-auto rounded-lg"
-                src="/change-log/new-rtm.png"
-                alt="Picture showing faction vs faction example"
-              />
-              <p class="text-gray-400 text-sm mt-1">
-                New redesign of the Real Time Monitor
-                <a
-                  href="/change-log/old-rtm.png"
-                  class="text-red-500"
-                  target="_blank"
-                  >old design</a
-                >
-              </p>
-            </div>
-            <div class="col-span-12 mb-2">
-              <img
-                class="object-contain mx-auto rounded-lg w-full"
-                src="/change-log/new-alert-history.png"
-                alt="Picture showing new alert history design"
-              />
-              <p class="text-gray-400 text-sm mt-1">
-                New redesign of Alert History
-                <a
-                  href="/change-log/old-alert-history.png"
-                  class="text-red-500"
-                  target="_blank"
-                  >old design</a
-                >
-              </p>
-            </div>
-            <div class="col-span-12 mb-2">
-              <img
-                class="object-contain mx-auto rounded-lg w-full"
-                src="/change-log/capture-history.png"
-                alt="Picture showing new capture history design"
-              />
-              <p class="text-gray-400 text-sm mt-1">
-                Introduction of Capture History
-              </p>
-            </div>
-          </div>`,
+                </p>
+              </div>
+              <div class="col-span-12 mb-2">
+                <img
+                  class="object-contain mx-auto rounded-lg w-full"
+                  src="/change-log/new-alert-history.png"
+                  alt="Picture showing new alert history design"
+                />
+                <p class="text-gray-400 text-sm mt-1">
+                  New redesign of Alert History
+                  <a
+                    href="/change-log/old-alert-history.png"
+                    class="text-red-500"
+                    target="_blank"
+                    >old design</a
+                  >
+                </p>
+              </div>
+              <div class="col-span-12 mb-2">
+                <img
+                  class="object-contain mx-auto rounded-lg w-full"
+                  src="/change-log/capture-history.png"
+                  alt="Picture showing new capture history design"
+                />
+                <p class="text-gray-400 text-sm mt-1">
+                  Introduction of Capture History
+                </p>
+              </div>
+            </div>`,
         },
         {
           id: 7,
@@ -432,7 +430,7 @@ export default Vue.extend({
           date: '28th January 2021',
           type: 'feature',
           body: `
-           <div class="text-center">
+            <div class="text-center">
               <img
                 class="object-contain mx-auto content-spacing rounded-lg"
                 src="/change-log/statistics.png"
@@ -453,7 +451,7 @@ export default Vue.extend({
           date: '23rd December 2020',
           type: 'announcement',
           body: `
-           <div class="text-center">
+            <div class="text-center">
               <img
                 src="/change-log/ps4.jpg"
                 alt="PS2Alerts Icon"
@@ -574,34 +572,34 @@ export default Vue.extend({
           date: '21st November 2020',
           type: 'feature',
           body: `
-          <a href="/change-log/alert-history.jpg">
-            <img
-              class="object-contain mx-auto content-spacing rounded-lg"
-              src="/change-log/alert-history.jpg"
-              alt="Picture showing alert history example"
-            />
-          </a>
-          <p>
-            Filterable Alert History is now available! This shows a list of alerts
-            filtered down by a variety of options. This list continuously updates
-            over time as alerts come in based off your criteria. You're able to
-            select the below criteria:
-          </p>
-          <ul>
-            <li>Server</li>
-            <li>Continent</li>
-            <li>
-              Time Bracket (Mornings = 00:00-10:59, Afternoons = 11:00-15:59,
-              Prime = 16:00-22:59)
-            </li>
-            <li>Victor</li>
-            <li>Date &amp; Time Range</li>
-          </ul>
-          <p>
-            Note this is currently not updated in real time (every 30 secs), and
-            there's a known issue when the data is refreshed where it bounces you
-            back to the top, that will be fixed in due course.
-          </p>`,
+            <a href="/change-log/alert-history.jpg">
+              <img
+                class="object-contain mx-auto content-spacing rounded-lg"
+                src="/change-log/alert-history.jpg"
+                alt="Picture showing alert history example"
+              />
+            </a>
+            <p>
+              Filterable Alert History is now available! This shows a list of alerts
+              filtered down by a variety of options. This list continuously updates
+              over time as alerts come in based off your criteria. You're able to
+              select the below criteria:
+            </p>
+            <ul>
+              <li>Server</li>
+              <li>Continent</li>
+              <li>
+                Time Bracket (Mornings = 00:00-10:59, Afternoons = 11:00-15:59,
+                Prime = 16:00-22:59)
+              </li>
+              <li>Victor</li>
+              <li>Date &amp; Time Range</li>
+            </ul>
+            <p>
+              Note this is currently not updated in real time (every 30 secs), and
+              there's a known issue when the data is refreshed where it bounces you
+              back to the top, that will be fixed in due course.
+            </p>`,
         },
         {
           id: 1,
