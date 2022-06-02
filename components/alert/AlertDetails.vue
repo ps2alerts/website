@@ -83,32 +83,53 @@
             </div>
           </td>
         </tr>
-        <!--        <tr v-if="alert.world < 1000">-->
-        <!--          <td class="px-2 pt-1 md:pt-2 whitespace-no-wrap text-center">-->
-        <!--            <v-tooltip bottom>-->
-        <!--              <template #activator="{ on, attrs }">-->
-        <!--                <div v-bind="attrs" v-on="on">-->
-        <!--                  <NuxtLink-->
-        <!--                    :to="{-->
-        <!--                      name: 'streaming-alert-alert',-->
-        <!--                      params: { alert: alert.instanceId },-->
-        <!--                    }"-->
-        <!--                    class="btn btn-sm twitch"-->
-        <!--                  >-->
-        <!--                    <font-awesome-icon :icon="['fab', 'twitch']" /> Streaming-->
-        <!--                    Overlay-->
-        <!--                  </NuxtLink>-->
-        <!--                </div>-->
-        <!--              </template>-->
-        <!--              PC only. Semi WIP - To use the overlay, put this link within a-->
-        <!--              Browser Capture source within OBS / StreamLabs. There is a cog top-->
-        <!--              right to configure the overlay, which will generate a URL in your-->
-        <!--              browser. Copy this to the source to use your generated settings.-->
-        <!--            </v-tooltip>-->
-        <!--          </td>-->
-        <!--        </tr>-->
       </tbody>
     </table>
+    <div class="border-t border-t-white pl-2 pt-2">
+      <div class="font-bold mb-1">PS2Alerts features</div>
+      <div>
+        <v-tooltip bottom z-index="1001">
+          <template #activator="{ on, attrs }">
+            <span
+              v-bind="attrs"
+              class="label"
+              :class="{ green: alert.features.captureHistory }"
+              v-on="on"
+              ><font-awesome-icon
+                :icon="[
+                  'fas',
+                  alert.features.captureHistory ? 'check' : 'xmark',
+                ]"
+                class="mr-1"
+              ></font-awesome-icon
+              >Capture History</span
+            >
+          </template>
+          Introduced in v4.0. Collection of capture history metrics such as
+          point-in-time territory percentages.
+        </v-tooltip>
+        <v-tooltip bottom z-index="1001">
+          <template #activator="{ on, attrs }">
+            <span
+              v-bind="attrs"
+              class="label"
+              :class="{ green: alert.features.xpm }"
+              v-on="on"
+              ><font-awesome-icon
+                :icon="['fas', alert.features.xpm ? 'check' : 'xmark']"
+                class="mr-1"
+              ></font-awesome-icon
+              >XPM &amp; Play Time</span
+            >
+          </template>
+          Introduced in v4.2. KPM, DPM, TKPM, SPM and HSPM (see below the
+          players table for an explanation of the acronyms) are present in this
+          alert page in the faction combat, player and outfit statistics
+          sections. Additionally the player's play time of the alert is listed
+          in the players section.
+        </v-tooltip>
+      </div>
+    </div>
   </div>
 </template>
 

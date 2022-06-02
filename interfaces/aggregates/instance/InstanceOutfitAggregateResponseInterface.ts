@@ -1,5 +1,6 @@
 import { CombatMetricsInterface } from '@/interfaces/CombatMetricsInterface'
 import { OutfitInterface } from '@/interfaces/OutfitInterface'
+import XPerMinuteOutfitInterface from '~/interfaces/XPerMinuteOutfitInterface'
 
 export interface InstanceOutfitAggregateResponseInterface
   extends CombatMetricsInterface {
@@ -7,4 +8,7 @@ export interface InstanceOutfitAggregateResponseInterface
   participants: number
   captures?: number
   outfit: OutfitInterface
+  durationInAlert: number
+  durationFirstSeen: number
+  xPerMinutes: XPerMinuteOutfitInterface
 }

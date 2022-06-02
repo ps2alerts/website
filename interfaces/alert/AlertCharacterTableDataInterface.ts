@@ -5,4 +5,5 @@ export interface AlertCharacterTableDataInterface
   kd: string | number
   hsr: string | number
   br: number
+  durationPlaying?: string
 }

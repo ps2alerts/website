@@ -377,7 +377,23 @@
   }
 
   .label {
-    @apply btn bg-red-600 text-white text-xs font-semibold mr-2 px-2 py-0.5 rounded
+    @apply btn bg-red-600 text-white text-xs font-semibold px-2 py-0.5 rounded;
+
+    &.green {
+      @apply bg-green-600;
+
+      &:hover {
+        @apply bg-green-500;
+      }
+    }
+
+    &.gray {
+      @apply bg-gray-500;
+
+      &:hover {
+        @apply bg-gray-600;
+      }
+    }
   }
 
   .card {

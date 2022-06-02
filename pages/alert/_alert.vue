@@ -268,8 +268,6 @@ export default Vue.extend({
         this.alertFacilityDataReady = true
       }
 
-      console.log('Alert facility data', this.alertFacilityAggregate)
-
       if (this.alert.state === Ps2alertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
           return this.updateCountdown >= 0 ? this.updateCountdown-- : 0

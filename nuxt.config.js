@@ -103,6 +103,7 @@ export default {
     { src: '@/filters/FactionName', mode: 'client' },
     { src: '@/filters/FactionShortName', mode: 'client' },
     { src: '@/filters/ItemShortName', mode: 'client' },
+    { src: '@/filters/SecondsInHumanTime', mode: 'client' },
     { src: '@/filters/UcFirst', mode: 'client' },
     { src: '@/filters/VehicleFaction', mode: 'client' },
     { src: '@/filters/WorldName', mode: 'client' },

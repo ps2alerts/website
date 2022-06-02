@@ -28,6 +28,22 @@
           (upon your next play session). Any players above BR 120 have ASPed
           (320 max).
         </p>
+        <div
+          v-if="alert.features.xpm"
+          class="text-gray-400 text-sm mb-2 text-center"
+        >
+          <p>
+            <span class="label bg-green-600 hover:bg-green-500 mr-2"
+              >New in v4.2</span
+            >Time played in alert, per minute metrics (kills, deaths, TKs,
+            suicides &amp; headshots) - scroll right on the table below to see
+            them! Updates every 15s.
+          </p>
+          <p class="text-xs">
+            XPM starts counting upon the first kill or death of a player. "Time
+            Played" represents the time used for XPM calculations.
+          </p>
+        </div>
         <div class="mb-2">
           <input
             v-model="filter"
@@ -58,6 +74,28 @@
             </td>
           </template>
         </v-data-table>
+        <p class="mt-2 text-sm">
+          Key:
+          <span class="label mb-1 gray"><b>BR</b> = Battle Rank</span>
+          <span class="label mb-1 gray"><b>KD</b> = Kill / Death Ratio</span>
+          <span class="label mb-1 gray"><b>HS</b> = Head Shots</span>
+          <span class="label mb-1 gray"><b>HSR%</b> = Head Shot Ratio</span>
+          <span class="label mb-1 gray"><b>TKs</b> = Team Kills</span>
+          <span class="label mb-1 gray"
+            ><b>TKed</b> = Team killed by same faction</span
+          >
+          <span class="label mb-1 gray"><b>Sui</b> = Suicides</span>
+          <span class="label mb-1 gray"><b>KPM</b> = Kills Per Minute</span>
+          <span class="label mb-1 gray"><b>DPM</b> = Deaths Per Minute</span>
+          <span class="label mb-1 gray"
+            ><b>HSPM</b> = Head Shots Per Minute</span
+          >
+          <span class="label mb-1 gray"
+            ><b>TKPM</b> = Team Kills Per Minute</span
+          >
+          <span class="label mb-1 gray"><b>SuiPM</b> = Suicides Per Minute</span
+          >Improv
+        </p>
       </div>
     </div>
   </div>
@@ -77,6 +115,7 @@ import {
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { AlertCharacterTableDataInterface } from '~/interfaces/alert/AlertCharacterTableDataInterface'
 import { DataTableConfig } from '~/constants/DataTableConfig'
+import secondsInHumanTime from '~/filters/SecondsInHumanTime'
 
 export default Vue.extend({
   name: 'AlertCharacterMetrics',
@@ -91,7 +130,7 @@ export default Vue.extend({
     return {
       error: null,
       loaded: false,
-      updateRate: 10000,
+      updateRate: 15000,
       updateCountdown: 0,
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
@@ -99,73 +138,7 @@ export default Vue.extend({
       filter: '',
       leaderboardConfig: DataTableConfig,
       expanded: [],
-      headers: [
-        {
-          text: 'Player',
-          align: 'left',
-          value: 'character.name',
-        },
-        {
-          text: 'Outfit',
-          align: 'left',
-          value: 'character.outfit.name',
-        },
-        {
-          text: 'BR',
-          align: 'middle',
-          filterable: false,
-          value: 'br',
-        },
-        {
-          text: 'Kills',
-          align: 'middle',
-          filterable: false,
-          value: 'kills',
-        },
-        {
-          text: 'Deaths',
-          align: 'middle',
-          filterable: false,
-          value: 'deaths',
-        },
-        {
-          text: 'KD',
-          align: 'middle',
-          filterable: false,
-          value: 'kd',
-        },
-        {
-          text: 'TKs',
-          align: 'middle',
-          filterable: false,
-          value: 'teamKills',
-        },
-        {
-          text: 'TKed',
-          align: 'middle',
-          filterable: false,
-          value: 'teamKilled',
-        },
-        {
-          text: 'Suicides',
-          align: 'middle',
-          filterable: false,
-          value: 'suicides',
-        },
-        {
-          text: 'Headshots',
-          align: 'middle',
-          filterable: false,
-          value: 'headshots',
-        },
-        {
-          text: 'HSR %',
-          align: 'middle',
-          filterable: false,
-          value: 'hsr',
-        },
-        { text: '', value: 'data-table-expand' },
-      ],
+      headers: [] as any[],
     }
   },
   computed: {
@@ -220,6 +193,7 @@ export default Vue.extend({
       clearInterval(this.updateCountdownInterval)
     },
     init(): void {
+      this.setupTableHeaders()
       this.pull()
 
       if (this.alert.state === Ps2alertsEventState.STARTED) {
@@ -231,6 +205,132 @@ export default Vue.extend({
           this.pull()
         }, this.updateRate)
       }
+    },
+    setupTableHeaders() {
+      const tableHeaders = [
+        {
+          text: 'Player',
+          align: 'left',
+          value: 'character.name',
+        },
+        {
+          text: 'Outfit',
+          align: 'left',
+          value: 'character.outfit.name',
+        },
+        {
+          text: 'BR',
+          align: 'middle',
+          filterable: false,
+          value: 'br',
+          cellClass: 'text-center',
+        },
+        {
+          text: 'Kills',
+          align: 'middle',
+          filterable: false,
+          value: 'kills',
+          cellClass: 'text-center',
+        },
+        {
+          text: 'Deaths',
+          align: 'middle',
+          filterable: false,
+          value: 'deaths',
+          cellClass: 'text-center',
+        },
+        {
+          text: 'KD',
+          align: 'middle',
+          filterable: false,
+          value: 'kd',
+          cellClass: 'text-center',
+        },
+        {
+          text: 'HS',
+          align: 'middle',
+          filterable: false,
+          value: 'headshots',
+          cellClass: 'text-center',
+        },
+        {
+          text: 'HSR%',
+          align: 'middle',
+          filterable: false,
+          value: 'hsr',
+          cellClass: 'text-center',
+        },
+        {
+          text: 'TKs',
+          align: 'middle',
+          filterable: false,
+          value: 'teamKills',
+          cellClass: 'text-center',
+        },
+        {
+          text: 'TKed',
+          align: 'middle',
+          filterable: false,
+          value: 'teamKilled',
+          cellClass: 'text-center',
+        },
+        {
+          text: 'Sui',
+          align: 'middle',
+          filterable: false,
+          value: 'suicides',
+          cellClass: 'text-center',
+        },
+      ]
+
+      if (this.alert.features?.xpm) {
+        tableHeaders.push(
+          {
+            text: 'Time Played',
+            align: 'middle',
+            filterable: false,
+            value: 'durationPlaying',
+            cellClass: 'text-center',
+          },
+          {
+            text: 'KPM',
+            align: 'middle',
+            filterable: false,
+            value: 'xPerMinutes.killsPerMinute',
+            cellClass: 'text-center',
+          },
+          {
+            text: 'DPM',
+            align: 'middle',
+            filterable: false,
+            value: 'xPerMinutes.deathsPerMinute',
+            cellClass: 'text-center',
+          },
+          {
+            text: 'HSPM',
+            align: 'middle',
+            filterable: false,
+            value: 'xPerMinutes.headshotsPerMinute',
+            cellClass: 'text-center',
+          },
+          {
+            text: 'TKPM',
+            align: 'middle',
+            filterable: false,
+            value: 'xPerMinutes.teamKillsPerMinute',
+            cellClass: 'text-center',
+          },
+          {
+            text: 'SuiPM',
+            align: 'middle',
+            filterable: false,
+            value: 'xPerMinutes.suicidesPerMinute',
+            cellClass: 'text-center',
+          }
+        )
+      }
+
+      this.headers = tableHeaders
     },
     async pull(): Promise<void> {
       if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
@@ -278,6 +378,27 @@ export default Vue.extend({
         character.suicides = character.suicides ?? 0
         character.headshots = character.headshots ?? 0
 
+        // XPM data may not be available for an outfit upon API call (takes up to 15 seconds to generate the data) so we must zero it
+        if (this.alert.features?.xpm) {
+          if (!character.xPerMinutes) {
+            character.xPerMinutes = {
+              killsPerMinute: 0,
+              deathsPerMinute: 0,
+              headshotsPerMinute: 0,
+              teamKillsPerMinute: 0,
+              suicidesPerMinute: 0,
+            }
+          } else {
+            character.xPerMinutes = {
+              killsPerMinute: character.xPerMinutes.killsPerMinute ?? 0,
+              deathsPerMinute: character.xPerMinutes.deathsPerMinute ?? 0,
+              headshotsPerMinute: character.xPerMinutes.headshotsPerMinute ?? 0,
+              teamKillsPerMinute: character.xPerMinutes.teamKillsPerMinute ?? 0,
+              suicidesPerMinute: character.xPerMinutes.suicidesPerMinute ?? 0,
+            }
+          }
+        }
+
         // Outfit name formatting
         if (character.character.outfit) {
           character.character.outfit.name = character.character.outfit?.tag
@@ -303,8 +424,12 @@ export default Vue.extend({
                 : character.kills || 0,
             hsr:
               character.headshots && character.kills
-                ? ((character.headshots / character.kills) * 100).toFixed(2)
+                ? ((character.headshots / character.kills) * 100).toFixed(1)
                 : 0,
+            durationPlaying:
+              this.alert.features?.xpm && character.durationInAlert
+                ? secondsInHumanTime(character.durationInAlert)
+                : '-',
           }
         )
         newData.push(tempData)
