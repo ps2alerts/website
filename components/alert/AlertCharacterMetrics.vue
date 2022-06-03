@@ -29,7 +29,7 @@
           (320 max).
         </p>
         <div
-          v-if="alert.features.xpm"
+          v-if="alert.features && alert.features.xpm"
           class="text-gray-400 text-sm mb-2 text-center"
         >
           <p>

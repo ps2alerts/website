@@ -17,5 +17,5 @@ export interface InstanceTerritoryControlResponseInterface {
   state: Ps2alertsEventState
   result: TerritoryResultInterface
   bracket: Bracket
-  features: PS2AlertsInstanceFeaturesInterface
+  features?: PS2AlertsInstanceFeaturesInterface
 }

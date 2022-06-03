@@ -93,12 +93,16 @@
             <span
               v-bind="attrs"
               class="label"
-              :class="{ green: alert.features.captureHistory }"
+              :class="{
+                green: alert.features && alert.features.captureHistory,
+              }"
               v-on="on"
               ><font-awesome-icon
                 :icon="[
                   'fas',
-                  alert.features.captureHistory ? 'check' : 'xmark',
+                  alert.features && alert.features.captureHistory
+                    ? 'check'
+                    : 'xmark',
                 ]"
                 class="mr-1"
               ></font-awesome-icon
@@ -113,10 +117,13 @@
             <span
               v-bind="attrs"
               class="label"
-              :class="{ green: alert.features.xpm }"
+              :class="{ green: alert.features && alert.features.xpm }"
               v-on="on"
               ><font-awesome-icon
-                :icon="['fas', alert.features.xpm ? 'check' : 'xmark']"
+                :icon="[
+                  'fas',
+                  alert.features && alert.features.xpm ? 'check' : 'xmark',
+                ]"
                 class="mr-1"
               ></font-awesome-icon
               >XPM &amp; Play Time</span

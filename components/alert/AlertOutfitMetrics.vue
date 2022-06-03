@@ -24,7 +24,7 @@
       </div>
       <div class="col-span-12">
         <div
-          v-if="alert.features.xpm"
+          v-if="alert.features && alert.features.xpm"
           class="text-gray-400 text-sm mb-2 text-center"
         >
           <p>
@@ -53,7 +53,7 @@
         </div>
         <v-data-table
           class="datatable"
-          :show-expand="alert.features.xpm"
+          :show-expand="alert.features && alert.features.xpm"
           :single-expand="false"
           item-key="outfit.id"
           :headers="headers"
@@ -66,7 +66,10 @@
           <template #no-results>
             <div class="text-2xl text-white font-bold my-6">No results!</div>
           </template>
-          <template v-if="alert.features.xpm" #expanded-item="{ item }">
+          <template
+            v-if="alert.features && alert.features.xpm"
+            #expanded-item="{ item }"
+          >
             <td colspan="10">
               <table class="w-full">
                 <tr class="border-b border-b-white">
