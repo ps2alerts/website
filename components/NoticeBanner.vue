@@ -1,19 +1,26 @@
 <template>
   <div>
-    <div class="bg-orange-600 w-full p-4 my-4 text-center rounded">
+    <div class="bg-orange-500 w-full p-4 my-4 text-center rounded">
       <p>
         <font-awesome-icon
           :icon="['fas', 'exclamation-triangle']"
         ></font-awesome-icon>
-        <b>Census (PS2 API) instability continues</b>
+        <b>Census (PS2's API) instability continues</b>
         <font-awesome-icon
           :icon="['fas', 'exclamation-triangle']"
         ></font-awesome-icon>
       </p>
+      <p class="text-sm">Updated: 05-Jun-22 02:45 UTC</p>
+
       <p>
-        Alerts are recording again however kill data is unstable. Alert
-        populations, brackets, kills (and other combat data) is currently
-        <b>highly</b> inaccurate, but it appears territory is fine.
+        Census continues to have intermittent issues at varying degrees on
+        different servers regarding kill / combat data. This appears to be
+        impacting the US servers the most.<br />
+        You may notice gaps in Population &amp; Combat History graphs and player
+        / outfit leaderboards. This also affects alert activity level brackets.
+        <br />All reasonable attempts have been taken to mitigate this on the
+        PS2Alerts side, but nothing seems to make the connection work reliably.
+        Other Census users are also experiencing the same issues.
       </p>
     </div>
     <!--    <div class="bg-blue-500 w-full p-4 my-4 text-center rounded">
