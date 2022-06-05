@@ -17,13 +17,17 @@
         degrees on random servers sending combat and experience data. This
         appears to be impacting the US servers the most.<br />
         <b>Impact:</b> You may notice sharp drops in Population &amp; Combat
-        History graphs and inaccurate player / outfit leaderboards. This also
-        affects alert activity level brackets causing them to be
-        mis-categorized. Sometimes alerts will fail to start. Thankfully it
-        appears Facility captures are unaffected meaning alert territory results
-        are accurate. All reasonable attempts have been taken to mitigate this
-        on the PS2Alerts side, but nothing seems to make the connection work
-        reliably. Other Census users are also experiencing the same issues.
+        History graphs and inaccurate player / outfit leaderboards. Activity
+        levels use combat data so some alerts are being mis-categorized.
+        Sometimes alerts will fail to start recording. Thankfully it appears
+        Facility captures are unaffected meaning alert territory results are
+        accurate. <br />
+        <b>Actions taken:</b> All reasonable actions have been taken to mitigate
+        this on the PS2Alerts side - including reconnecting every X minutes -
+        but nothing seems to make the connection work reliably and in some cases
+        made it worse. Other mitigations like alert start retries are in the
+        works, but nothing can account for missing combat data. Other Census
+        users are also experiencing the same issues.
       </p>
     </div>
     <!--    <div class="bg-blue-500 w-full p-4 my-4 text-center rounded">
