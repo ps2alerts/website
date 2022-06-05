@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="bg-orange-500 w-full p-4 my-4 text-center rounded">
+    <div class="bg-orange-600 w-full p-4 my-4 text-center rounded">
       <p>
         <font-awesome-icon
           :icon="['fas', 'exclamation-triangle']"
@@ -16,10 +16,12 @@
         <b>Issue:</b> Census continues to have intermittent issues at varying
         degrees on random servers sending combat and experience data. This
         appears to be impacting the US servers the most.<br />
-        <b>Impact:</b> You may notice gaps in Population &amp; Combat History
-        graphs and player / outfit leaderboards. This also affects alert
-        activity level brackets. Thankfully it appears Facility capture messages
-        are unaffected. All reasonable attempts have been taken to mitigate this
+        <b>Impact:</b> You may notice sharp drops in Population &amp; Combat
+        History graphs and inaccurate player / outfit leaderboards. This also
+        affects alert activity level brackets causing them to be
+        mis-categorized. Sometimes alerts will fail to start. Thankfully it
+        appears Facility captures are unaffected meaning alert territory results
+        are accurate. All reasonable attempts have been taken to mitigate this
         on the PS2Alerts side, but nothing seems to make the connection work
         reliably. Other Census users are also experiencing the same issues.
       </p>
