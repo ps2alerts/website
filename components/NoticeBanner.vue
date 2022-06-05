@@ -13,14 +13,15 @@
       <p class="text-sm">Updated: 05-Jun-22 02:45 UTC</p>
 
       <p>
-        Census continues to have intermittent issues at varying degrees on
-        different servers regarding kill / combat data. This appears to be
-        impacting the US servers the most.<br />
-        You may notice gaps in Population &amp; Combat History graphs and player
-        / outfit leaderboards. This also affects alert activity level brackets.
-        <br />All reasonable attempts have been taken to mitigate this on the
-        PS2Alerts side, but nothing seems to make the connection work reliably.
-        Other Census users are also experiencing the same issues.
+        <b>Issue:</b> Census continues to have intermittent issues at varying
+        degrees on random servers sending combat and experience data. This
+        appears to be impacting the US servers the most.<br />
+        <b>Impact:</b> You may notice gaps in Population &amp; Combat History
+        graphs and player / outfit leaderboards. This also affects alert
+        activity level brackets. Thankfully it appears Facility capture messages
+        are unaffected. All reasonable attempts have been taken to mitigate this
+        on the PS2Alerts side, but nothing seems to make the connection work
+        reliably. Other Census users are also experiencing the same issues.
       </p>
     </div>
     <!--    <div class="bg-blue-500 w-full p-4 my-4 text-center rounded">
