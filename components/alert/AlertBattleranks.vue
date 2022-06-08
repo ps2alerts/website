@@ -27,6 +27,7 @@ import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceCharacterAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceCharacterAggregateResponseInterface'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
+import { Faction } from '~/constants/Faction'
 
 interface BattlerankDistributionDataInterface {
   // Faction
@@ -63,6 +64,9 @@ export default Vue.extend({
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
+        tooltips: {
+          mode: 'x',
+        },
         annotation: {
           annotations: [
             {
@@ -204,26 +208,40 @@ export default Vue.extend({
         })
     },
     buildCollection() {
-      const battlerankData: { [k: number]: number } = []
       const factionBattlerankData: BattlerankDistributionDataInterface = {}
       let maxBR: number = 0
 
+      // Ensure all factions have at least zero
+      ;[
+        Faction.VANU_SOVEREIGNTY,
+        Faction.NEW_CONGLOMERATE,
+        Faction.TERRAN_REPUBLIC,
+        Faction.NS_OPERATIVES,
+      ].forEach((faction) => {
+        factionBattlerankData[faction] = []
+      })
+
       this.data.forEach((character) => {
+        const faction = character.character.faction
         const battlerank = character.character.adjustedBattleRank
 
-        if (!factionBattlerankData[character.character.faction]) {
-          factionBattlerankData[character.character.faction] = []
+        ;[
+          Faction.VANU_SOVEREIGNTY,
+          Faction.NEW_CONGLOMERATE,
+          Faction.TERRAN_REPUBLIC,
+          Faction.NS_OPERATIVES,
+        ].forEach((faction) => {
+          if (!factionBattlerankData[faction][battlerank]) {
+            factionBattlerankData[faction][battlerank] = 0
+          }
+        })
+
+        // Excludes "World" players
+        if (faction === 0) {
+          return
         }
 
-        if (!factionBattlerankData[character.character.faction][battlerank]) {
-          factionBattlerankData[character.character.faction][battlerank] = 0
-        }
-
-        factionBattlerankData[character.character.faction][battlerank]++
-
-        battlerankData[battlerank]
-          ? battlerankData[battlerank]++
-          : (battlerankData[battlerank] = 1)
+        factionBattlerankData[faction][battlerank]++
 
         if (Number.isSafeInteger(battlerank)) {
           maxBR = Math.max(maxBR, battlerank)

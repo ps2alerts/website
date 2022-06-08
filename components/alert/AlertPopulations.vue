@@ -85,6 +85,9 @@ import { InstancePopulationAggregateResponseInterface } from '~/interfaces/aggre
 const commonChartOptions = {
   responsive: true,
   maintainAspectRatio: false,
+  tooltips: {
+    mode: 'x',
+  },
   scales: {
     xAxes: [
       {

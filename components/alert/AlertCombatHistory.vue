@@ -91,6 +91,9 @@ export default Vue.extend({
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
+        tooltips: {
+          mode: 'x',
+        },
         scales: {
           xAxes: [
             {
