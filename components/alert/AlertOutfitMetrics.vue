@@ -10,7 +10,7 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded" class="grid grid-cols-12">
-      <div class="col-span-12 mb-4 flex justify-center">
+      <div class="col-span-12 mb-2 flex justify-center">
         <div class="pr-2 py-2">Outfit Counts:</div>
         <div
           v-for="(count, index) in counts"
@@ -39,6 +39,39 @@
             calculations.
             <br />In contrast to Players, there is also a dropdown to show
             per-participant (XPP &amp; XPM-PP) metrics as well.
+          </p>
+        </div>
+        <div class="col-span-12 mb-2 text-sm text-center">
+          <p>
+            Key:
+            <span class="label mb-1 gray"><b>KD</b> = Kill / Death Ratio</span>
+            <span class="label mb-1 gray"><b>HS</b> = Head Shots</span>
+            <span class="label mb-1 gray"><b>HSR%</b> = Head Shot Ratio</span>
+            <span class="label mb-1 gray"><b>TKs</b> = Team Kills</span>
+            <span class="label mb-1 gray"
+              ><b>TKed</b> = Team killed by same faction</span
+            >
+            <span class="label mb-1 gray"><b>Sui</b> = Suicides</span>
+            <span class="label mb-1 gray"><b>KPM</b> = Kills Per Minute</span>
+            <span class="label mb-1 gray"><b>DPM</b> = Deaths Per Minute</span>
+            <span class="label mb-1 gray"
+              ><b>HSPM</b> = Head Shots Per Minute</span
+            >
+            <span class="label mb-1 gray"
+              ><b>TKPM</b> = Team Kills Per Minute</span
+            >
+            <span class="label mb-1 gray"
+              ><b>SuiPM</b> = Suicides Per Minute</span
+            >
+          </p>
+          <p>
+            Key within table dropdowns:
+            <span class="label mb-1 gray"
+              ><b>X-PP</b> = X metric per player</span
+            >
+            <span class="label mb-1 gray"
+              ><b>XPM-PP</b> = X metric per minute per player</span
+            >
           </p>
         </div>
         <div class="mb-2">
@@ -106,39 +139,6 @@
             </td>
           </template>
         </v-data-table>
-        <div class="mt-2 text-sm">
-          <p>
-            Key:
-            <span class="label mb-1 gray"><b>KD</b> = Kill / Death Ratio</span>
-            <span class="label mb-1 gray"><b>HS</b> = Head Shots</span>
-            <span class="label mb-1 gray"><b>HSR%</b> = Head Shot Ratio</span>
-            <span class="label mb-1 gray"><b>TKs</b> = Team Kills</span>
-            <span class="label mb-1 gray"
-              ><b>TKed</b> = Team killed by same faction</span
-            >
-            <span class="label mb-1 gray"><b>Sui</b> = Suicides</span>
-            <span class="label mb-1 gray"><b>KPM</b> = Kills Per Minute</span>
-            <span class="label mb-1 gray"><b>DPM</b> = Deaths Per Minute</span>
-            <span class="label mb-1 gray"
-              ><b>HSPM</b> = Head Shots Per Minute</span
-            >
-            <span class="label mb-1 gray"
-              ><b>TKPM</b> = Team Kills Per Minute</span
-            >
-            <span class="label mb-1 gray"
-              ><b>SuiPM</b> = Suicides Per Minute</span
-            >
-          </p>
-          <p>
-            Key within table dropdowns:
-            <span class="label mb-1 gray"
-              ><b>X-PP</b> = X metric per player</span
-            >
-            <span class="label mb-1 gray"
-              ><b>XPM-PP</b> = X metric per minute per player</span
-            >
-          </p>
-        </div>
       </div>
     </div>
   </div>

@@ -23,11 +23,6 @@
         </div>
       </div>
       <div class="col-span-12">
-        <p class="text-gray-400 text-sm mb-2 text-center">
-          BR, ASP and Outfit Membership info is updated once every 24 hours
-          (upon your next play session). Any players above BR 120 have ASPed
-          (320 max).
-        </p>
         <div
           v-if="alert.features && alert.features.xpm"
           class="text-gray-400 text-sm mb-2 text-center"
@@ -44,6 +39,34 @@
             Played" represents the time used for XPM calculations.
           </p>
         </div>
+        <p class="text-gray-400 text-sm mb-2 text-center">
+          BR, ASP and Outfit Membership info is updated once every 24 hours
+          (upon your next play session). Any players above BR 120 have ASPed
+          (320 max).
+        </p>
+        <p class="my-2 text-sm text-center">
+          Key:
+          <span class="label mb-1 gray"><b>BR</b> = Battle Rank</span>
+          <span class="label mb-1 gray"><b>KD</b> = Kill / Death Ratio</span>
+          <span class="label mb-1 gray"><b>HS</b> = Head Shots</span>
+          <span class="label mb-1 gray"><b>HSR%</b> = Head Shot Ratio</span>
+          <span class="label mb-1 gray"><b>TKs</b> = Team Kills</span>
+          <span class="label mb-1 gray"
+            ><b>TKed</b> = Team killed by same faction</span
+          >
+          <span class="label mb-1 gray"><b>Sui</b> = Suicides</span>
+          <span class="label mb-1 gray"><b>KPM</b> = Kills Per Minute</span>
+          <span class="label mb-1 gray"><b>DPM</b> = Deaths Per Minute</span>
+          <span class="label mb-1 gray"
+            ><b>HSPM</b> = Head Shots Per Minute</span
+          >
+          <span class="label mb-1 gray"
+            ><b>TKPM</b> = Team Kills Per Minute</span
+          >
+          <span class="label mb-1 gray"
+            ><b>SuiPM</b> = Suicides Per Minute</span
+          >
+        </p>
         <div class="mb-2">
           <input
             v-model="filter"
@@ -74,28 +97,6 @@
             </td>
           </template>
         </v-data-table>
-        <p class="mt-2 text-sm">
-          Key:
-          <span class="label mb-1 gray"><b>BR</b> = Battle Rank</span>
-          <span class="label mb-1 gray"><b>KD</b> = Kill / Death Ratio</span>
-          <span class="label mb-1 gray"><b>HS</b> = Head Shots</span>
-          <span class="label mb-1 gray"><b>HSR%</b> = Head Shot Ratio</span>
-          <span class="label mb-1 gray"><b>TKs</b> = Team Kills</span>
-          <span class="label mb-1 gray"
-            ><b>TKed</b> = Team killed by same faction</span
-          >
-          <span class="label mb-1 gray"><b>Sui</b> = Suicides</span>
-          <span class="label mb-1 gray"><b>KPM</b> = Kills Per Minute</span>
-          <span class="label mb-1 gray"><b>DPM</b> = Deaths Per Minute</span>
-          <span class="label mb-1 gray"
-            ><b>HSPM</b> = Head Shots Per Minute</span
-          >
-          <span class="label mb-1 gray"
-            ><b>TKPM</b> = Team Kills Per Minute</span
-          >
-          <span class="label mb-1 gray"><b>SuiPM</b> = Suicides Per Minute</span
-          >Improv
-        </p>
       </div>
     </div>
   </div>
