@@ -2,6 +2,7 @@
   "name": "ps2alerts",
   "version": "4.1.0",
   "private": true,
+  "license": "GNU",
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
