@@ -13,10 +13,9 @@
       <p class="text-sm">Updated: 03-Jul-22 07:29 UTC</p>
 
       <p>
-        <b>Issue:</b> There are currently having difficulties receiving the
-        alert start messages from Census, thus no alerts are being recorded. We
-        are actively investigating the issue and attempting to put workarounds
-        in place.
+        <b>Issue:</b> There are currently difficulties receiving the alert start
+        messages from Census, thus no alerts are being recorded. We are actively
+        investigating the issue and attempting to put workarounds in place.
       </p>
     </div>
   </div>
