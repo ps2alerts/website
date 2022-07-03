@@ -10,32 +10,15 @@
           :icon="['fas', 'exclamation-triangle']"
         ></font-awesome-icon>
       </p>
-      <p class="text-sm">Updated: 05-Jun-22 02:45 UTC</p>
+      <p class="text-sm">Updated: 03-Jul-22 07:29 UTC</p>
 
       <p>
-        <b>Issue:</b> Census continues to have intermittent issues at varying
-        degrees on random servers sending combat and experience data. This
-        appears to be impacting the US servers the most.<br />
-        <b>Impact:</b> You may notice sharp drops in Population &amp; Combat
-        History graphs and inaccurate player / outfit leaderboards. Activity
-        levels use combat data so some alerts are being mis-categorized.
-        Sometimes alerts will fail to start recording. Thankfully it appears
-        Facility captures are unaffected meaning alert territory results are
-        accurate. <br />
-        <b>Actions taken:</b> All reasonable actions have been taken to mitigate
-        this on the PS2Alerts side - including reconnecting every X minutes -
-        but nothing seems to make the connection work reliably and in some cases
-        made it worse. Other mitigations like alert start retries are in the
-        works, but nothing can account for missing combat data. Other Census
-        users are also experiencing the same issues.
+        <b>Issue:</b> There are currently having difficulties receiving the
+        alert start messages from Census, thus no alerts are being recorded. We
+        are actively investigating the issue and attempting to put workarounds
+        in place.
       </p>
     </div>
-    <!--    <div class="bg-blue-500 w-full p-4 my-4 text-center rounded">
-      <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
-      On May 14th, there was only a partial recording due to downtime moving
-      databases, some alerts were not recorded on this date.
-      <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
-    </div>-->
   </div>
 </template>
 
