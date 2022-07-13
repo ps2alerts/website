@@ -18,4 +18,5 @@ export interface InstanceTerritoryControlResponseInterface {
   result: TerritoryResultInterface
   bracket: Bracket
   features?: PS2AlertsInstanceFeaturesInterface
+  mapVersion?: string
 }
