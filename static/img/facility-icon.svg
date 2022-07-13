@@ -70,6 +70,14 @@
             <polygon stroke="none" fill="white" points="66.8,40.8 59.67,43.1 57.5,36"/>
             <polygon stroke="none" fill="white" points="50,55 60,65 50,75 40,65"/>
         </g>
+        <g id="seapost-fg" stroke="white" stroke-width="5" fill="none">
+            <circle cx="50" cy="25" r="10"/>
+            <line x1="50" y1="35" x2="50" y2="80"/>
+            <line x1="42.5" y1="45" x2="57.5" y2="45"/>
+            <path fill="white" stroke="none" d="M 14.644 65.355 A 42.5 42.5 0 0 0 85.355 65.355 A 57.5 57.5 0 0 1 14.644 65.355"/>
+            <path fill="white" stroke="none" d="M 14.644 65.355 L 30 68 L 22.5 72.5 Z"/>
+            <path fill="white" stroke="none" d="M 85.355 65.355 L 70 68 L 77.5 72.5 Z"/>
+        </g>
     </defs>
     <!--<rect x="0" y="0" width="100" height="100" fill="black"/>
     <use href="#facility-bg" fill="red"/>

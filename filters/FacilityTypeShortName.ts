@@ -27,6 +27,8 @@ const facilityTypeShortName = Vue.filter(
         return 'con-site'
       case FacilityType.TRIDENT:
         return 'trid'
+      case FacilityType.UNDERWATER:
+        return 'seapost'
       default:
         return 'unknown'
     }
