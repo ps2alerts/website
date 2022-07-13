@@ -104,7 +104,11 @@ export class FacilityBadge {
   constructor(region: MapRegion, indictorStamp: number, textStamp: number) {
     this.indicatorStamp = indictorStamp
     this.textStamp = textStamp
-    this.type = region.facilityType
+    if(region.name.includes("Seapost") || region.name == "Bathala Garden"){
+      this.type = FacilityType.UNDERWATER
+    } else {
+      this.type = region.facilityType
+    }
     this.svg = SVG()
     this.svg.viewbox(0, 0, 100, 100)
     this.text = SVG()
@@ -381,6 +385,8 @@ export class FacilityBadge {
         return 'containment-fg'
       case FacilityType.TRIDENT:
         return 'trident-fg'
+      case FacilityType.UNDERWATER:
+        return 'seapost-fg'
       default:
         return ''
     }

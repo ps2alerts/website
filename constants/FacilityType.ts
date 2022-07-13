@@ -11,6 +11,7 @@ export enum FacilityType {
   RELIC_OUTPOST = 10, // Desolation only
   CONTAINMENT_SITE = 11,
   TRIDENT = 12,
+  UNDERWATER = 13,
 }
 
 export const MAJOR_FACILITIES = [
