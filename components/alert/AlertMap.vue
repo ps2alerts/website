@@ -296,10 +296,10 @@ export default Vue.extend({
       prevZoom: 2,
       center: [-128, 128],
       url:
-        AssetsBaseUrl +
-        '/zones/' +
-        zoneNameFilter(this.alert.zone).toLowerCase() +
-        '/{z}/tile_{x}_{y}.png',
+        AssetsBaseUrl + '/zones/' + this.alert.mapVersion ??
+        '/1.0/' +
+          zoneNameFilter(this.alert.zone).toLowerCase() +
+          '/{z}/tile_{x}_{y}.png',
       minZoom: 2,
       maxZoom: 7,
       zoomSnap: 0.5,
