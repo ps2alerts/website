@@ -104,7 +104,7 @@ export class FacilityBadge {
   constructor(region: MapRegion, indictorStamp: number, textStamp: number) {
     this.indicatorStamp = indictorStamp
     this.textStamp = textStamp
-    if(region.name.includes("Seapost") || region.name == "Bathala Garden"){
+    if (region.name.includes('Seapost') || region.name === 'Bathala Garden') {
       this.type = FacilityType.UNDERWATER
     } else {
       this.type = region.facilityType
