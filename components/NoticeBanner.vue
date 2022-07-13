@@ -5,17 +5,18 @@
         <font-awesome-icon
           :icon="['fas', 'exclamation-triangle']"
         ></font-awesome-icon>
-        <b>Census (PS2's API) instability continues</b>
+        <b>Oshur alerts collection is temporarily disabled</b>
         <font-awesome-icon
           :icon="['fas', 'exclamation-triangle']"
         ></font-awesome-icon>
       </p>
-      <p class="text-sm">Updated: 03-Jul-22 07:29 UTC</p>
+      <p class="text-sm">Updated: 13-Jul-22 22:36 UTC</p>
 
       <p>
-        <b>Issue:</b> There are currently difficulties receiving the alert start
-        messages from Census, thus no alerts are being recorded. We are actively
-        investigating the issue and attempting to put workarounds in place.
+        There were major changes made to Oshur in the latest update, in
+        particular the map and the introduction of the Corsair. Unfortunately
+        the PS2 developers have not been forthcoming with new identifiers and
+        map data, so it has to be reversed engineered which takes some time.
       </p>
     </div>
   </div>
