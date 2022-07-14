@@ -7,12 +7,12 @@ import { Zone } from '~/constants/Zone'
 export default class MapRegionDataRequest {
   private data: MapRegion[] = []
 
-  public async pull(zone: Zone): Promise<MapRegion[]> {
+  public async pull(zone: Zone, version: string = '1.0'): Promise<MapRegion[]> {
     const request = new ApiRequest().get<CensusMapRegionResponseInterface>(
       Endpoints.CENSUS_CONTINENT_HEX_DATA.replace(
         '{zone}',
         zone.valueOf().toString()
-      )
+      ).replace('{version}', version)
     )
 
     await request.then((result) => {
