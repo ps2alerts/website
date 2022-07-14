@@ -296,10 +296,11 @@ export default Vue.extend({
       prevZoom: 2,
       center: [-128, 128],
       url:
-        AssetsBaseUrl + '/zones/' + this.alert.mapVersion ??
-        '/1.0/' +
-          zoneNameFilter(this.alert.zone).toLowerCase() +
-          '/{z}/tile_{x}_{y}.png',
+        AssetsBaseUrl +
+        '/zones/' +
+        zoneNameFilter(this.alert.zone).toLowerCase() +
+        (this.alert.mapVersion ?? '/1.0/') +
+        '{z}/tile_{x}_{y}.png',
       minZoom: 2,
       maxZoom: 7,
       zoomSnap: 0.5,
@@ -1125,7 +1126,10 @@ export default Vue.extend({
         console.error('AlertMap.loadRegions: No zone information found')
         return
       }
-      const regions = await new MapRegionDataRequest().pull(zone)
+      const regions = await new MapRegionDataRequest().pull(
+        zone,
+        this.alert.mapVersion ?? '1.0'
+      )
 
       regions.forEach((region) => {
         this.mapRegions.set(region.id, region)
