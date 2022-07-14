@@ -299,7 +299,7 @@ export default Vue.extend({
         AssetsBaseUrl +
         '/zones/' +
         zoneNameFilter(this.alert.zone).toLowerCase() +
-        (this.alert.mapVersion ?? '/1.0/') +
+        `/${this.alert.mapVersion ?? '1.0'}/` +
         '{z}/tile_{x}_{y}.png',
       minZoom: 2,
       maxZoom: 7,
