@@ -1,22 +1,21 @@
 <template>
   <div>
-    <div class="bg-orange-600 w-full p-4 my-4 text-center rounded">
+    <div class="bg-green-700 w-full p-4 my-4 text-center rounded">
       <p>
-        <font-awesome-icon
-          :icon="['fas', 'exclamation-triangle']"
-        ></font-awesome-icon>
-        <b>Oshur alerts collection is temporarily disabled</b>
-        <font-awesome-icon
-          :icon="['fas', 'exclamation-triangle']"
-        ></font-awesome-icon>
+        <!--        <font-awesome-icon-->
+        <!--          :icon="['fas', 'exclamation-triangle']"-->
+        <!--        ></font-awesome-icon>-->
+        <b>Oshur alerts are again supported</b>
+        <!--        <font-awesome-icon-->
+        <!--          :icon="['fas', 'exclamation-triangle']"-->
+        <!--        ></font-awesome-icon>-->
       </p>
-      <p class="text-sm">Updated: 13-Jul-22 22:36 UTC</p>
+      <p class="text-sm">Updated: 14-Jul-22 08:10 UTC</p>
 
       <p>
-        There were major changes made to Oshur in the latest update, in
-        particular the map and the introduction of the Corsair. Unfortunately
-        the PS2 developers have not been forthcoming with new identifiers and
-        map data, so it has to be reversed engineered which takes some time.
+        New Oshur map is now supported. Please report any wonkyness / inaccurate
+        results to our Discord (link below) with a screenshot of the map and the
+        Territory Control <b>vertical bars</b> view on the right.
       </p>
     </div>
   </div>
