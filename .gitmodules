@@ -1,0 +1,3 @@
+[submodule "constants"]
+	path = constants
+	url = https://github.com/ps2alerts/constants.git
