@@ -1,6 +1,6 @@
-import { World } from '~/constants/World'
-import { Zone } from '~/constants/Zone'
-import { Bracket } from '~/constants/Bracket'
+import { World } from '~/constants/world'
+import { Zone } from '@/constants/zone'
+import { Bracket } from '~/constants/bracket'
 
 export interface CommonApiParamsInterface {
   world?: World

@@ -1,5 +1,5 @@
-import { Zone } from '~/constants/Zone'
-import { FacilityType } from '~/constants/FacilityType'
+import { Zone } from '@/constants/zone'
+import { FacilityType } from '~/constants/facilityType'
 
 export interface FacilityDataInterface {
   id: number

@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Zone } from '~/constants/Zone'
+import { Zone } from '@/constants/zone'
 
 export default Vue.extend({
   name: 'FilterZone',

@@ -1,5 +1,5 @@
-import { Zone } from '~/constants/Zone'
-import { Faction } from '~/constants/Faction'
+import { Zone } from '@/constants/zone'
+import { Faction } from '~/constants/faction'
 
 export interface MetagameDetailsInterface {
   title: string

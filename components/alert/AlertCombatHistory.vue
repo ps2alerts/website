@@ -67,9 +67,9 @@
 import Vue from 'vue'
 import moment from 'moment-timezone'
 import LineChart from '../LineChart.js'
-import { Ps2alertsEventState } from '~/constants/Ps2alertsEventState'
+import { Ps2alertsEventState } from '~/constants/ps2alertsEventState'
 import ApiRequest from '~/api-request'
-import { Endpoints } from '~/constants/Endpoints'
+import { Endpoints } from '~/src/constants/Endpoints'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { InstanceCombatHistoryAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceCombatHistoryAggregateResponseInterface'
 

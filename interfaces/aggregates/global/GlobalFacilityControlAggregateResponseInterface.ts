@@ -1,6 +1,6 @@
-import { World } from '~/constants/World'
-import { Bracket } from '~/constants/Bracket'
-import { Zone } from '~/constants/Zone'
+import { World } from '~/constants/world'
+import { Bracket } from '~/constants/bracket'
+import { Zone } from '@/constants/zone'
 import { FacilityDataInterface } from '~/interfaces/FacilityDataInterface'
 
 interface FacilityControlVersusInterface {

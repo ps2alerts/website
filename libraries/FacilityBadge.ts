@@ -1,11 +1,11 @@
 import { SVG, Svg } from '@svgdotjs/svg.js'
 import { Point } from '~/libraries/MapWorld'
-import { FacilityType, MAJOR_FACILITIES } from '~/constants/FacilityType'
-import { MAP_FACTION_COLORS } from '~/constants/FactionMapColors'
+import { FacilityType, MAJOR_FACILITIES } from '~/constants/facilityType'
+import { MAP_FACTION_COLORS } from '~/src/constants/FactionMapColors'
 import '@svgdotjs/svg.filter.js'
 import { MapRegion } from '~/libraries/MapRegion'
 import facilityTypeName from '~/filters/FacilityTypeName'
-import { Faction } from '~/constants/Faction'
+import { Faction } from '~/constants/faction'
 import facilityTypeShortName from '~/filters/FacilityTypeShortName'
 
 const FONT_OPTIONS = {

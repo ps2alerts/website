@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Bracket } from '@/constants/Bracket'
+import { Bracket } from '@/constants/bracket'
 
 const bracketName = Vue.filter('bracketName', (value: Bracket) => {
   switch (value) {

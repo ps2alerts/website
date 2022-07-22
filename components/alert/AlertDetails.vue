@@ -143,8 +143,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
-import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
-import { InstanceEventDetails } from '@/constants/InstanceEventDetails'
+import { Ps2alertsEventState } from '@/constants/ps2alertsEventState'
+import { InstanceEventDetails } from '@/src/constants/InstanceEventDetails'
 import { MetagameDetailsInterface } from '@/interfaces/MetagameDetailsInterface'
 
 export default Vue.extend({

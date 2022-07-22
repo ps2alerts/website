@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Zone } from '@/constants/Zone'
+import { Zone } from '@/constants/zone'
 
 const zoneNameFilter = Vue.filter('zoneName', (value: Zone) => {
   switch (value) {

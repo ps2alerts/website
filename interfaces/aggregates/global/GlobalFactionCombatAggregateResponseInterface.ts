@@ -1,5 +1,5 @@
 import { CombatMetricsInterface } from '@/interfaces/CombatMetricsInterface'
-import { World } from '~/constants/World'
+import { World } from '~/constants/world'
 
 export interface GlobalCombatMetricsInterface extends CombatMetricsInterface {
   hsr: string | number

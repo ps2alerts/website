@@ -40,10 +40,10 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { StatisticsWeaponsLeaderboardConfig } from '~/constants/DataTableConfig'
-import { FactionBgClassString } from '~/constants/FactionBgClass'
+import { StatisticsWeaponsLeaderboardConfig } from '~/src/constants/DataTableConfig'
+import { FactionBgClassString } from '~/src/constants/FactionBgClass'
 import { StatisticsWeaponTableDataInterface } from '~/interfaces/statistics/StatisticsWeaponTableDataInterface'
-import { World } from '~/constants/World'
+import { World } from '~/constants/world'
 import worldNameFilter from '~/filters/WorldName'
 import { GlobalWeaponAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalWeaponAggregateResponseInterface'
 

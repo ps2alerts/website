@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Faction } from '~/constants/Faction'
+import { Faction } from '~/constants/faction'
 
 const factionShortName = Vue.filter(
   'factionShortName',

@@ -1,10 +1,10 @@
 import ApiRequest from '~/api-request'
 import { CensusVehicleResponseInterface } from '~/interfaces/census/CensusVehicleResponseInterface'
-import { CensusEndpoints } from '~/constants/Endpoints'
+import { CensusEndpoints } from '~/src/constants/Endpoints'
 import { VehicleDataInterface } from '~/interfaces/VehicleDataInterface'
 import vehicleFaction from '~/filters/VehicleFaction'
-import { Faction } from '~/constants/Faction'
-import { Vehicle } from '~/constants/Vehicle'
+import { Faction } from '~/constants/faction'
+import { Vehicle } from '~/constants/vehicle'
 
 export default class VehicleDataRequest {
   public async pull(): Promise<VehicleDataInterface[]> {

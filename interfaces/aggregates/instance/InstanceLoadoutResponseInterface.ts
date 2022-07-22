@@ -1,5 +1,5 @@
 import { CombatMetricsInterface } from '@/interfaces/CombatMetricsInterface'
-import { Loadout } from '~/constants/Loadout'
+import { Loadout } from '~/constants/loadout'
 
 export interface InstanceLoadoutResponseInterface
   extends CombatMetricsInterface {

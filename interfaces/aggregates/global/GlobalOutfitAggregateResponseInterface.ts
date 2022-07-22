@@ -1,5 +1,5 @@
-import { World } from '~/constants/World'
-import { Bracket } from '~/constants/Bracket'
+import { World } from '~/constants/world'
+import { Bracket } from '~/constants/bracket'
 import { CombatMetricsInterface } from '~/interfaces/CombatMetricsInterface'
 import { OutfitInterface } from '~/interfaces/OutfitInterface'
 

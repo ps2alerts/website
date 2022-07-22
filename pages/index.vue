@@ -176,9 +176,9 @@ import moment from 'moment/moment'
 import StatisticsFiltering, {
   AvailableMetricsInterface,
 } from '~/components/statistics/StatisticsFiltering.vue'
-import { World } from '~/constants/World'
-import { Bracket } from '~/constants/Bracket'
-import { Zone } from '~/constants/Zone'
+import { World } from '~/constants/world'
+import { Bracket } from '~/constants/bracket'
+import { Zone } from '@/constants/zone'
 
 interface FilterInterface {
   metric: string

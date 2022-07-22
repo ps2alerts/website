@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { FacilityType } from '~/constants/FacilityType'
+import { FacilityType } from '~/constants/facilityType'
 
 const facilityTypeName = Vue.filter(
   'facilityTypeName',

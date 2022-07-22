@@ -1,13 +1,13 @@
 import { CubeHex } from '~/libraries/CubeHex'
 import { Color } from '~/libraries/Color'
-import { FacilityType } from '~/constants/FacilityType'
-import { Faction } from '~/constants/Faction'
+import { FacilityType } from '~/constants/facilityType'
+import { Faction } from '~/constants/faction'
 import {
   MAP_CUTOFF_COLORS,
   MAP_FACTION_COLORS,
-} from '~/constants/FactionMapColors'
-import getIndarConstructionOutpost from '~/constants/IndarConstructionOutpostData'
-import { Zone, ZoneHexSize } from '~/constants/Zone'
+} from '~/src/constants/FactionMapColors'
+import getIndarConstructionOutpost from '~/src/constants/IndarConstructionOutpostData'
+import { Zone, ZoneHexSize } from '@/constants/zone'
 import { FacilityBadge } from '~/libraries/FacilityBadge'
 import { CensusMapRegionInterface } from '~/interfaces/mapping/CensusMapRegionInterface'
 import { LatLng, Point, worldToMap } from '~/libraries/MapWorld'

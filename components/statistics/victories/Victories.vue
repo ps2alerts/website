@@ -32,10 +32,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import ApiRequest from '~/api-request'
-import { Endpoints } from '~/constants/Endpoints'
+import { Endpoints } from '~/src/constants/Endpoints'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import VictoriesCounts from '~/components/statistics/victories/VictoriesCounts.vue'
-import { Bracket } from '~/constants/Bracket'
+import { Bracket } from '~/constants/bracket'
 import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
 
 export default Vue.extend({

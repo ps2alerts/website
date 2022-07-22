@@ -148,15 +148,15 @@
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
-import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
-import { Endpoints } from '@/constants/Endpoints'
+import { Ps2alertsEventState } from '@/constants/ps2alertsEventState'
+import { Endpoints } from '~/src/constants/Endpoints'
 import { InstanceOutfitAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface'
-import { Faction } from '@/constants/Faction'
+import { Faction } from '@/constants/faction'
 import {
   FactionBgClass,
   FactionBgClassString,
-} from '@/constants/FactionBgClass'
-import { DataTableConfig } from '~/constants/DataTableConfig'
+} from '@/src/constants/FactionBgClass'
+import { DataTableConfig } from '~/src/constants/DataTableConfig'
 import { AlertOutfitTableDataInterface } from '~/interfaces/alert/AlertOutfitTableDataInterface'
 import secondsInHumanTime from '~/filters/SecondsInHumanTime'
 

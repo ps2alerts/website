@@ -1,5 +1,5 @@
 import { InstanceVehicleAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceVehicleAggregateResponseInterface'
-import { Faction } from '~/constants/Faction'
+import { Faction } from '~/constants/faction'
 import { VehicleStatsWithKd } from '~/interfaces/VehicleStatisticsInterface'
 
 export interface AlertVehicleMetricsDataTableInterface

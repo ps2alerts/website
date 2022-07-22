@@ -84,8 +84,8 @@ import moment from 'moment-timezone'
 import ApiRequest from '@/api-request'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import { InstancePopulationAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstancePopulationAggregateResponseInterface'
-import { TIME_FORMAT } from '@/constants/Time'
-import { Endpoints } from '@/constants/Endpoints'
+import { TIME_FORMAT } from '@/src/constants/Time'
+import { Endpoints } from '~/src/constants/Endpoints'
 import RealTimeAlert from '~/components/RTM/RealTimeAlert.vue'
 
 export default Vue.extend({

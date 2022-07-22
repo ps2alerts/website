@@ -1,5 +1,5 @@
-import { World } from '@/constants/World'
-import { Faction } from '@/constants/Faction'
+import { World } from '@/constants/world'
+import { Faction } from '@/constants/faction'
 import { CharacterInterface } from '@/interfaces/CharacterInterface'
 
 export interface OutfitInterface {

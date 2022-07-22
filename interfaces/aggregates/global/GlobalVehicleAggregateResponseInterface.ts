@@ -1,6 +1,6 @@
-import { Faction } from '@/constants/Faction'
-import { World } from '~/constants/World'
-import { Vehicle } from '~/constants/Vehicle'
+import { Faction } from '@/constants/faction'
+import { World } from '~/constants/world'
+import { Vehicle } from '~/constants/vehicle'
 
 interface VehicleStatsInterface {
   kills?: number

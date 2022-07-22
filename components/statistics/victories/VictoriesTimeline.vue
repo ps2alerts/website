@@ -44,9 +44,9 @@ import isoWeek from 'dayjs/plugin/isoWeek'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import { FactionMetricsInterface } from '~/interfaces/FactionMetricsInterface'
 import LineChart from '~/components/LineChart'
-import { DATE_FORMAT, TimeGranularity } from '~/constants/Time'
-import { World } from '~/constants/World'
-import { Bracket } from '~/constants/Bracket'
+import { DATE_FORMAT, TimeGranularity } from '~/src/constants/Time'
+import { World } from '~/constants/world'
+import { Bracket } from '~/constants/bracket'
 
 export default Vue.extend({
   name: 'VictoriesTimeline',

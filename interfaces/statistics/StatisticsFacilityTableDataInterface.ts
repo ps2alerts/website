@@ -1,4 +1,4 @@
-import { Zone } from '~/constants/Zone'
+import { Zone } from '@/constants/zone'
 import { FacilityDataInterface } from '~/interfaces/FacilityDataInterface'
 
 export interface StatisticsFacilityTableDataInterface {

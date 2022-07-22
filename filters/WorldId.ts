@@ -1,4 +1,4 @@
-import { World } from '@/constants/World'
+import { World } from '@/constants/world'
 
 export const WorldId = (world: string): World => {
   switch (world.toLowerCase()) {

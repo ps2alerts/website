@@ -1,4 +1,4 @@
-import { Faction } from '@/constants/Faction'
+import { Faction } from '@/constants/faction'
 
 export const FactionBorderClass = (faction: Faction, alt = false) => {
   return {

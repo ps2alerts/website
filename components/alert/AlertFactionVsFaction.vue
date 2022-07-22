@@ -171,12 +171,12 @@
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
-import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
+import { Ps2alertsEventState } from '@/constants/ps2alertsEventState'
 import { InstanceFactionCombatAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceFactionCombatAggregateResponseInterface'
-import { Endpoints } from '@/constants/Endpoints'
+import { Endpoints } from '~/src/constants/Endpoints'
 import { FactionVsFactionDataInterface } from '~/interfaces/FactionVsFactionDataInterface'
 import { InstanceFacilityControlAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceFacilityControlAggregateResponseInterface'
-import { FacilityType } from '~/constants/FacilityType'
+import { FacilityType } from '~/constants/facilityType'
 
 export default Vue.extend({
   name: 'AlertFactionVsFaction',

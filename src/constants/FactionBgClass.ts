@@ -1,4 +1,4 @@
-import { Faction } from '@/constants/Faction'
+import { Faction } from '@/constants/faction'
 
 export const FactionBgClass = (faction: Faction) => {
   return {

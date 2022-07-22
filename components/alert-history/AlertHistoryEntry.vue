@@ -107,11 +107,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import moment from 'moment-timezone'
-import { DATE_TIME_FORMAT_SHORT } from '@/constants/Time'
-import { Faction } from '@/constants/Faction'
-import { FactionBgClass } from '@/constants/FactionBgClass'
+import { DATE_TIME_FORMAT_SHORT } from '@/src/constants/Time'
+import { Faction } from '@/constants/faction'
+import { FactionBgClass } from '@/src/constants/FactionBgClass'
 import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
-import { FactionBorderClass } from '~/constants/FactionBorderClass'
+import { FactionBorderClass } from '~/src/constants/FactionBorderClass'
 
 export default Vue.extend({
   name: 'AlertHistoryEntry',

@@ -44,14 +44,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import ApiRequest from '@/api-request'
-import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
-import { Endpoints } from '@/constants/Endpoints'
-import { FactionBgClassString } from '@/constants/FactionBgClass'
+import { Ps2alertsEventState } from '@/constants/ps2alertsEventState'
+import { Endpoints } from '~/src/constants/Endpoints'
+import { FactionBgClassString } from '@/src/constants/FactionBgClass'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { AlertLoadoutTableDataInterface } from '~/interfaces/alert/AlertLoadoutTableDataInterface'
-import { AlertLoadoutLeaderboardConfig } from '~/constants/DataTableConfig'
+import { AlertLoadoutLeaderboardConfig } from '~/src/constants/DataTableConfig'
 import { InstanceLoadoutResponseInterface } from '~/interfaces/aggregates/instance/InstanceLoadoutResponseInterface'
-import { LoadoutFaction, LoadoutName } from '~/constants/Loadout'
+import { LoadoutFaction, LoadoutName } from '~/constants/loadout'
 
 export default Vue.extend({
   name: 'AlertClassMetrics',

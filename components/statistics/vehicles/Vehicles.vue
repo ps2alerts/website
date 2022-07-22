@@ -49,18 +49,18 @@
 <script lang="ts">
 import Vue from 'vue'
 import ApiRequest from '~/api-request'
-import { Endpoints } from '~/constants/Endpoints'
+import { Endpoints } from '~/src/constants/Endpoints'
 import { GlobalVehicleAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVehicleAggregateResponseInterface'
 import { VehicleDataInterface } from '~/interfaces/VehicleDataInterface'
 import { StatisticsVehicleMetricsTableDataInterface } from '~/interfaces/statistics/StatisticsVehicleMetricsTableDataInterface'
-import { World } from '~/constants/World'
+import { World } from '~/constants/world'
 import { VehicleStatsWithKd } from '~/interfaces/VehicleStatisticsInterface'
-import { Faction } from '~/constants/Faction'
+import { Faction } from '~/constants/faction'
 import worldNameFilter from '~/filters/WorldName'
-import { Bracket } from '~/constants/Bracket'
+import { Bracket } from '~/constants/bracket'
 import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
 import VehicleDataRequest from '@/libraries/VehicleDataRequest'
-import { allowedStatisticsVehiclesArray } from '~/constants/Vehicle'
+import { allowedStatisticsVehiclesArray } from '~/constants/vehicle'
 
 export default Vue.extend({
   name: 'Vehicles',
