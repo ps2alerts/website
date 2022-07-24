@@ -33,7 +33,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push base image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: provisioning/base
           file: provisioning/base/Dockerfile
