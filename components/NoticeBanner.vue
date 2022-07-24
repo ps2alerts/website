@@ -1,21 +1,24 @@
 <template>
   <div>
-    <div class="bg-green-700 w-full p-4 my-4 text-center rounded">
+    <div
+      class="bg-gray-600 border-green-500 border w-full p-4 my-4 text-center rounded"
+    >
       <p>
         <!--        <font-awesome-icon-->
         <!--          :icon="['fas', 'exclamation-triangle']"-->
         <!--        ></font-awesome-icon>-->
-        <b>Oshur alerts are again supported</b>
+        <b>PS2Alerts v4.2.0 "CALM" update is live!</b>
         <!--        <font-awesome-icon-->
         <!--          :icon="['fas', 'exclamation-triangle']"-->
         <!--        ></font-awesome-icon>-->
       </p>
-      <p class="text-sm">Updated: 14-Jul-22 08:10 UTC</p>
+      <!--      <p class="text-sm">Updated: 14-Jul-22 08:10 UTC</p>-->
 
       <p>
-        New Oshur map is now supported. Please report any wonkyness / inaccurate
-        results to our Discord (link below) with a screenshot of the map and the
-        Territory Control <b>vertical bars</b> view on the right.
+        The Collect All Lost Messages update massively improves the reliability
+        and accuracy of PS2Alerts. Check the
+        <a class="text-red-500" href="/change-log">change log</a> for more
+        details!
       </p>
     </div>
   </div>

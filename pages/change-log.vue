@@ -69,8 +69,70 @@ export default Vue.extend({
       pageTitle: 'Change Log',
       pageDesc: "See what's recently been released for PS2Alerts!",
       version: this.$config.version,
-      panel: [1, 2],
+      panel: [0, 1],
       posts: [
+        {
+          id: 13,
+          title: `v4.2.0 - the CALM release`,
+          date: '22/Jul/2022',
+          type: 'major-update',
+          body: `
+            <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+              <div>
+                <h2 class="text-subtitle">Collect All Lost Messages release - large stability improvements</h2>
+                <p>Status: <span class="label green">Released</span></p>
+                <p>
+                    TL;DR: In this release we have massively improved stability for the project. For some time now Census (the game's API) has been in a very poor state, not providing data like it should. We've made some fundamental changes how data is collected in order to ensure alerts are not missed and everyone's kills are being recorded etc.
+                </p>
+                <p>
+                    In terms of changes to the website itself not a lot will change as these changes were purely backend. However, what you should see is alerts should always be present on the site now, and your kill counts should be a LOT more accurate (there's still some edge cases not making it 100% yet). <a class="text-red-500" target="_blank" href="https://discord.gg/abXGXHnE">Please report any alerts not being logged by PS2A in our feedback section</a>.
+                  </p>
+                <p>
+                    I'd like to thank everyone for their patience and most importantly understanding with the project and why the data has often been missing. The recent instability of Census has really affected a lot of community projects, we hope the DBG team will be able to address the issues we've presented to them two months ago with some haste.
+                </p>
+
+                <h2 class="text-subtitle">Technical details</h2>
+
+                <p>Link to the <a class="text-red-500" href="https://github.com/ps2alerts/aggregator/pull/565/files">pull request for these changes</a>. Note, it is MEATY!</p>
+
+                <h2 class="text-2xl mb-2">The major issues</h2>
+                <p>For those interested in the more technical detail of the changes made, I'd like to explain what's changed. Up until very recently, the Aggregator module of the project which has the job of processing the Census data (such as kill events) via a singular websocket stream and spit out stats to hit our API which then stores the data. There were however the below major issues with the component:
+                    <ul>
+                        <li>The aggregator processed <b>ALL</b> messages coming in from Census, whether it needed to or not. This was in excess of about <b>500 messages a second</b>! This meant every Death, XP tick, base capture, vehicle destruction etc were all being processed, on every server. This resulted in many messages getting lost, including MetagameEvents (alerts) resulting in the whole alert not being recorded.</li>
+                        <li>The aggregator would eventually "lock up", where it would just crawl to a halt. It was never fully understood why it did this, presumably due to message volume causing thread locks within NodeJS.</li>
+                        <li>A major bug was discovered where the aggregator was not caching queries from Census properly (which holds things like Character data, char name, outfit etc). This was released prior to this release as a hotfix a week ago, the fix slashed processing times down by 83% even without the additional improvements in v4.2.0</li>
+                        <li>Should the aggregator ever crash (and it has, many times), all messages where lost during the downtime.</li>
+                        <li>Census itself is currently unstable when using singular connections, connections would outright just drop over time, including alert notifications.</li>
+                    </ul>
+                </p>
+
+                <h2 class="text-2xl mb-2">How did we resolve them?</h2>
+                <p>
+                    These issues were mainly solved by using Message Queues using RabbitMQ, and the use of a new service called the <a class="text-red-500" href="https://github.com/ps2alerts/collector">ps2alerts-collector</a>. This is a bundled version of the <a  class="text-red-500" href="https://github.com/nanite-systems/stream-collector">Nanite Systems Collector project</a>, who's job is to handle all the connections to Census and forward those messages to RabbitMQ. This provides the following benefits:
+                    <ul>
+                        <li>The collector has a dedicated function to - as you've probably guessed by now - collect data from Census and forward it to RabbitMQ into a series of queues, and it does this role very well.</li>
+                        <li>The aggregator now only processes messages where there's active alerts, rather than absorbing all the census messages. It opens up queues and uses a <a class="text-red-500" href="https://www.cloudamqp.com/blog/part4-rabbitmq-for-beginners-exchanges-routing-keys-bindings.html">RabbitMQ Topic Exchange</a> which the collector passes the messages using routing keys seperated out by world and event type, e.g. "10.Death.foo". Upon alert start the aggregator opens queues which filter by the world and event types and processes them.
+                          <ul>
+                            <li>e.g. A player dies, an event is emitted with key "10.Death.somerandomuuid"</li>
+                            <li>A queue for the alert has been bound to the topic exchange filtering on "10.Death.*"</li>
+                            <li>The message drops in the queue, and then is consumed by the Aggregator, processed, sent to the API then acknowledged.</li>
+                          </ul>
+                        </li>
+                        <li>A huge benefit comes from using the <a class="text-red-500" href="https://github.com/nanite-systems/stream-manifold">Nanite Systems Manifold</a> system, which combines the connections of 3+ collectors and merges them, de-duplicates them, and then provides a "cleaner" data stream which should have very little missing data. It also has the responsibility of maintaining a healthy connection with Census, abstracting a lot of that away from PS2Alerts and simplifying a ton of code in the project. Massive shout-out to Microwavekonijn for his efforts on that project!</li>
+                        <li>A nice side benefit of using queues if the aggregator ever crashes, no messages are lost, and it will resume processing when it's restarted.</li>
+                        <li>An additional side benefit is because now message rates are all located within queues, we can better alert and report on whether we have lost connections to certain servers, which unfortunately often happens with Census.</li>
+                    </ul>
+                </p>
+                <p>Amongst all the data collection fixes, there were also a ton of internal fixes made as well:
+                    <ul>
+                        <li>Territory calculations (which produce the alert result upon a facility capture) were improved. This fixed a series of edge cases with certain lattice combinations. The fix was basically to ensure a base has links between every base in a bidirectional manner, whereas before (and this is wonky data from census), each base only had a link in one direction.</li>
+                        <li>Massive cleanup of the code base to make it a lot more expandable for the future, and we still plan on adding new processing of events e.g. revives, Player Facility Capture stuff etc.</li>
+                    </ul>
+                </p>
+                <p>If you've got to the bottom of this very detailed technical change log, thank you for your interest! If you're interested in working on the PS2Alerts project, please <a class="text-red-500" href="https://discord.io/ps2alerts">join us on Discord</a> and introduce yourself!</p>
+              </div>
+            </div>`,
+        },
         {
           id: 12,
           title: `v4.2.0-alpha-1 - XPM / XPM-PP Metrics, Facility Capture / Defences participation stats & Alert timer de-sync fix`,
@@ -80,13 +142,16 @@ export default Vue.extend({
             <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
               <div>
                 <h2 class="text-subtitle">XPM &amp; XPM-PP Metrics</h2>
-                <p>Status: <span class="label green">Feature Complete - Polish Phase</span></p>
+                <p>Status: <span class="label green">Released</span></p>
                 <p>XPM (X statistic Per Minute) and XPM-PP (X statistic Per Minute - Per Player) metrics are here! Now on alert pages you are able to see your Kills, Deaths, Headshots, Teamkills (kek) and Suicides per minute. In addition, you are also able to see your Time Played during the alert as well. XPM metrics are calculated based off your time in the alert, so if you are late to the party you won't have a super low XPM metrics, you'll be on the same level playing field as someone who started at the very beginning of the alert, in order to remain competitive.</p>
                 <p>For outfits, there is also an expansion to this to show said metrics on a per-participant level. In addition, new "X-PP" metrics are present as well.</p>
                 <p>Thanks to DobBole69 for reporting the <a class="text-red-500" href="https://github.com/ps2alerts/website/issues/427">feature on GitHub!</a></p>
               </div>
+              <div class="mt-6 mb-2 pt-6">
+                <h1>Edit: The below features have been pushed back to the v4.3.0 release!</h1>
+              </div>
               <div>
-                <h2 class="text-subtitle">Player &amp; Outfit Facility Capture / Defences participation stats</h2>
+                <h2 class="text-xl">Player &amp; Outfit Facility Capture / Defences participation stats</h2>
                 <p>Status: <span class="label gray">WIP (initial phase)</span></p>
                 <p>With this update, we will bring an expansion to the Capture History system where each capture will show all players (and thus, outfits) present at the Capture / Defense of a base, along with rough population calculations. <b>Note</b>, there is a heavy caveat here that the data we receive is literally a snapshot of the base at the time, e.g. if some people have left the base ahead of the capture / defence of said base, they will not be registered.</p>
                 <p>In addition to showing the players on the Capture History, the facilities the player has been involved capturing will show up on the player's entry in the Player section. Outfits will also have their bases they were involved in capturing listed under their row in the Outfit section on each alert as well, along with the percentage of players present both on a same-faction and all outfits level.</p>
@@ -103,7 +168,7 @@ export default Vue.extend({
                 </ul>-->
               </div>
               <div>
-                <h2 class="text-subtitle">Alert timer de-sync bugfix</h2>
+                <h2 class="text-xl">Alert timer de-sync bugfix</h2>
                 <p>Status: <span class="label">Not started</span></p>
                 <p>There is currently a very annoying bug where if you are alt tabbed from your browser, certain optimisations browsers perform is to stop "timers" from working occurring in the background, which results in timers getting de-synced, requiring a page refresh to fix. In this update we will add in a re-sync mechanism using when you're looking at the page to trigger a timer refresh.</p>
            </div>`,
