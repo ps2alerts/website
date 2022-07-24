@@ -25,7 +25,7 @@
     "core-js": "^3.19.3",
     "dayjs": "^1.11.2",
     "leaflet": "^1.7.1",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.33",
     "nuxt": "^2.15.8",
     "nuxt-leaflet": "^0.0.27",
