@@ -171,14 +171,13 @@
 <script lang="ts">
 import Vue from 'vue'
 // eslint-disable-next-line import/named
-import { Moment } from 'moment'
-import moment from 'moment/moment'
+import moment, { Moment } from 'moment'
 import StatisticsFiltering, {
   AvailableMetricsInterface,
 } from '~/components/statistics/StatisticsFiltering.vue'
-import { World } from '~/constants/World'
-import { Bracket } from '~/constants/Bracket'
-import { Zone } from '~/constants/Zone'
+import { World } from '@/ps2alerts-constants/world'
+import { Bracket } from '@/ps2alerts-constants/bracket'
+import { Zone } from '@/ps2alerts-constants/zone'
 
 interface FilterInterface {
   metric: string

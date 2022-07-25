@@ -1,6 +1,6 @@
-import { World } from '~/constants/World'
-import { Bracket } from '~/constants/Bracket'
-import { Zone } from '~/constants/Zone'
+import { World } from '@/ps2alerts-constants/world'
+import { Bracket } from '@/ps2alerts-constants/bracket'
+import { Zone } from '@/ps2alerts-constants/zone'
 import { FacilityDataInterface } from '~/interfaces/FacilityDataInterface'
 
 interface FacilityControlVersusInterface {

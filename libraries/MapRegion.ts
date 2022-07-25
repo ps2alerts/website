@@ -1,13 +1,14 @@
 import { CubeHex } from '~/libraries/CubeHex'
 import { Color } from '~/libraries/Color'
-import { FacilityType } from '~/constants/FacilityType'
-import { Faction } from '~/constants/Faction'
+import { FacilityType } from '@/ps2alerts-constants/facilityType'
+import { Faction } from '@/ps2alerts-constants/faction'
 import {
   MAP_CUTOFF_COLORS,
   MAP_FACTION_COLORS,
-} from '~/constants/FactionMapColors'
-import getIndarConstructionOutpost from '~/constants/IndarConstructionOutpostData'
-import { Zone, ZoneHexSize } from '~/constants/Zone'
+} from '@/constants/FactionMapColors'
+import getIndarConstructionOutpost from '@/constants/IndarConstructionOutpostData'
+import { Zone } from '@/ps2alerts-constants/zone'
+import { ZoneHexSize } from '@/constants/Zone'
 import { FacilityBadge } from '~/libraries/FacilityBadge'
 import { CensusMapRegionInterface } from '~/interfaces/mapping/CensusMapRegionInterface'
 import { LatLng, Point, worldToMap } from '~/libraries/MapWorld'

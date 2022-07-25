@@ -1,6 +1,6 @@
-import { Zone } from '~/constants/Zone'
-import { Bracket } from '~/constants/Bracket'
-import { World } from '~/constants/World'
+import { Zone } from '@/ps2alerts-constants/zone'
+import { Bracket } from '@/ps2alerts-constants/bracket'
+import { World } from '@/ps2alerts-constants/world'
 
 export interface GlobalVictoriesAggregateResponseInterface {
   world: World

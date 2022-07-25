@@ -1,6 +1,6 @@
 import { CombatMetricsInterface } from '@/interfaces/CombatMetricsInterface'
-import { World } from '~/constants/World'
-import { Loadout } from '~/constants/Loadout'
+import { World } from '@/ps2alerts-constants/world'
+import { Loadout } from '@/ps2alerts-constants/loadout'
 
 export interface GlobalLoadoutAggregateResponseInterface
   extends CombatMetricsInterface {

@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { TimeGranularity } from '~/constants/Time'
+import { TimeGranularity } from '@/constants/Time'
 
 export default Vue.extend({
   name: 'TimeGranularity',

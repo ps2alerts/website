@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { World } from '~/constants/World'
+import { World } from '@/ps2alerts-constants/world'
 
 export default Vue.extend({
   name: 'FilterWorld',

@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { FacilityType } from '~/constants/FacilityType'
+import { FacilityType } from '@/ps2alerts-constants/facilityType'
 
 const facilityTypeShortName = Vue.filter(
   'facilityTypeShortName',

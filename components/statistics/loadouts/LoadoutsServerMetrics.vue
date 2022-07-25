@@ -37,9 +37,9 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { LoadoutFaction } from '~/constants/Loadout'
-import { StatisticsLoadoutServerMetricsLeaderboardConfig } from '~/constants/DataTableConfig'
-import { FactionBgClassString } from '~/constants/FactionBgClass'
+import { LoadoutFaction } from '@/constants/Loadout'
+import { StatisticsLoadoutServerMetricsLeaderboardConfig } from '@/constants/DataTableConfig'
+import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { StatisticsLoadoutTableDataInterface } from '~/interfaces/statistics/StatisticsLoadoutTableDataInterface'
 
 export default Vue.extend({

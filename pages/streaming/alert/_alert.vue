@@ -236,10 +236,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Ps2alertsEventState } from '~/constants/Ps2alertsEventState'
+import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
 import ApiRequest from '~/api-request'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
-import { CensusEndpoints, Endpoints } from '~/constants/Endpoints'
+import { CensusEndpoints, Endpoints } from '@/constants/Endpoints'
 import { InstanceCharacterAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceCharacterAggregateResponseInterface'
 import { AlertCharacterTableDataInterface } from '~/interfaces/alert/AlertCharacterTableDataInterface'
 import { CensusCharacterResponseInterface } from '~/interfaces/census/CensusCharacterResponseInterface'

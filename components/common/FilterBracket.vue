@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Bracket } from '~/constants/Bracket'
+import { Bracket } from '@/ps2alerts-constants/bracket'
 
 export default Vue.extend({
   name: 'FilterBracket',

@@ -43,12 +43,12 @@
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
-import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
+import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceWeaponAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceWeaponAggregateResponseInterface'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { AlertWeaponTableDataInterface } from '~/interfaces/alert/AlertWeaponTableDataInterface'
-import { DataTableConfig } from '~/constants/DataTableConfig'
+import { DataTableConfig } from '@/constants/DataTableConfig'
 
 export default Vue.extend({
   name: 'AlertWeaponMetrics',

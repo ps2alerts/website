@@ -38,17 +38,17 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { StatisticsCombatServerFactionLeaderboardConfig } from '~/constants/DataTableConfig'
+import { StatisticsCombatServerFactionLeaderboardConfig } from '@/constants/DataTableConfig'
 import {
   GlobalCombatMetricsInterface,
   GlobalFactionCombatAggregateResponseInterface,
 } from '~/interfaces/aggregates/global/GlobalFactionCombatAggregateResponseInterface'
 import worldNameFilter from '~/filters/WorldName'
-import { World } from '~/constants/World'
+import { World } from '@/ps2alerts-constants/world'
 import factionName from '~/filters/FactionName'
 import factionId from '~/filters/FactionId'
-import { Faction } from '~/constants/Faction'
-import { FactionBgClassString } from '~/constants/FactionBgClass'
+import { Faction } from '@/ps2alerts-constants/faction'
+import { FactionBgClassString } from '@/constants/FactionBgClass'
 
 interface WorldFactionInterface {
   world: World
