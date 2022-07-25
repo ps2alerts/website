@@ -94,16 +94,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
-import { Ps2alertsEventState } from '~/constants/ps2alertsEventState'
+import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
 import ApiRequest from '~/api-request'
-import { Endpoints } from '~/src/constants/Endpoints'
+import { Endpoints } from '@/constants/Endpoints'
 import { InstanceFacilityControlEntriesResponseInterface } from '~/interfaces/instance-entries/InstanceFacilityControlEntriesResponseInterface'
-import { DataTableConfig } from '~/src/constants/DataTableConfig'
+import { DataTableConfig } from '@/constants/DataTableConfig'
 import { InstanceMapCaptureHistoryInterface } from '~/interfaces/instance-entries/InstanceMapCaptureHistoryInterface'
-import { FacilityType } from '~/constants/facilityType'
-import { Zone } from '@/constants/zone'
+import { FacilityType } from '@/ps2alerts-constants/facilityType'
+import { Zone } from '@/ps2alerts-constants/zone'
 import factionShortName from '~/filters/FactionShortName'
-import { FactionBgClassString } from '~/src/constants/FactionBgClass'
+import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { InstanceOutfitAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface'
 
 export default Vue.extend({

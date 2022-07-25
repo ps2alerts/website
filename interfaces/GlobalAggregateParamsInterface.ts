@@ -1,4 +1,4 @@
-import { Bracket } from '~/constants/bracket'
+import { Bracket } from '@/ps2alerts-constants/bracket'
 import { CommonApiParamsInterface } from '~/interfaces/CommonApiParmsInterface'
 
 export interface GlobalAggregateParamsInterface

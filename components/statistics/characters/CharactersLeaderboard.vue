@@ -48,9 +48,9 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { StatisticsCharactersLeaderboardConfig } from '~/src/constants/DataTableConfig'
+import { StatisticsCharactersLeaderboardConfig } from '@/constants/DataTableConfig'
 import { StatisticsCharacterTableDataInterface } from '~/interfaces/statistics/StatisticsCharacterTableDataInterface'
-import { FactionBgClassString } from '~/src/constants/FactionBgClass'
+import { FactionBgClassString } from '@/constants/FactionBgClass'
 
 export default Vue.extend({
   name: 'CharactersLeaderboard',

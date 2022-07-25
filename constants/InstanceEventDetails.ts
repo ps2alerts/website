@@ -1,4 +1,4 @@
-import { metagameEventTypeDetailsMap } from '@/constants/metagameEventType'
+import { metagameEventTypeDetailsMap } from '@/ps2alerts-constants/metagameEventType'
 
 export const InstanceEventDetails = (eventTypeId: number) => {
   // @ts-ignore

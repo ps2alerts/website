@@ -1,5 +1,5 @@
 import { CombatMetricsInterface } from '@/interfaces/CombatMetricsInterface'
-import { Loadout } from '~/constants/loadout'
+import { Loadout } from '@/ps2alerts-constants/loadout'
 
 export interface InstanceLoadoutResponseInterface
   extends CombatMetricsInterface {

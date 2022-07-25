@@ -34,16 +34,16 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { StatisticsVehicleLeaderboardConfig } from '~/src/constants/DataTableConfig'
-import { FactionBgClassString } from '~/src/constants/FactionBgClass'
+import { StatisticsVehicleLeaderboardConfig } from '@/constants/DataTableConfig'
+import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { StatisticsVehicleMetricsTableDataInterface } from '~/interfaces/statistics/StatisticsVehicleMetricsTableDataInterface'
 import {
   VehicleStatsInterface,
   VehicleStatsWithKd,
 } from '~/interfaces/VehicleStatisticsInterface'
-import { Faction } from '~/constants/faction'
+import { Faction } from '@/ps2alerts-constants/faction'
 import { VehicleDataInterface } from '~/interfaces/VehicleDataInterface'
-import { Vehicle } from '~/constants/vehicle'
+import { Vehicle } from '@/ps2alerts-constants/vehicle'
 
 interface TotalVehicleInterface extends VehicleStatsWithKd {
   vehicleId?: Vehicle

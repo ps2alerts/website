@@ -1,8 +1,8 @@
 import { MapRegion } from './MapRegion'
 import ApiRequest from '~/api-request'
-import { Endpoints } from '~/src/constants/Endpoints'
+import { Endpoints } from '@/constants/Endpoints'
 import { CensusMapRegionResponseInterface } from '~/interfaces/mapping/CensusMapRegionResponseInterface'
-import { Zone } from '@/constants/zone'
+import { Zone } from '@/ps2alerts-constants/zone'
 
 export default class MapRegionDataRequest {
   private data: MapRegion[] = []

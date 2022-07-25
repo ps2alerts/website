@@ -131,14 +131,14 @@
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
-import { Ps2alertsEventState } from '@/constants/ps2alertsEventState'
-import { Endpoints } from '~/src/constants/Endpoints'
+import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
+import { Endpoints } from '@/constants/Endpoints'
 import { InstanceVehicleAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceVehicleAggregateResponseInterface'
 import { VehicleDataInterface } from '@/interfaces/VehicleDataInterface'
-import { Faction } from '@/constants/faction'
-import { FactionBgClass } from '@/src/constants/FactionBgClass'
+import { Faction } from '@/ps2alerts-constants/faction'
+import { FactionBgClass } from '@/constants/FactionBgClass'
 import VehicleDataRequest from '@/libraries/VehicleDataRequest'
-import { allowedVehicleMatrixArray } from '@/constants/vehicle'
+import { allowedVehicleMatrixArray } from '@/constants/Vehicle'
 
 export default Vue.extend({
   name: 'AlertVehicleMatrix',

@@ -1,4 +1,4 @@
-import { World } from '@/constants/world'
+import { World } from '@/ps2alerts-constants/world'
 
 export const WorldId = (world: string): World => {
   switch (world.toLowerCase()) {

@@ -7,8 +7,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import AlertRemainingTime from '@/src/constants/AlertRemainingTime'
-import AlertRemainingTimeText from '@/src/constants/AlertRemainingTimeText'
+import AlertRemainingTime from '@/constants/AlertRemainingTime'
+import AlertRemainingTimeText from '@/constants/AlertRemainingTimeText'
 
 export default Vue.extend({
   name: 'RemainingTime',

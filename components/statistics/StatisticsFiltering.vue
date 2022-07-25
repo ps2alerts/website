@@ -64,10 +64,10 @@
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
 import moment from 'moment/moment'
-import { World } from '~/constants/world'
-import { Bracket } from '~/constants/bracket'
+import { World } from '@/ps2alerts-constants/world'
+import { Bracket } from '@/ps2alerts-constants/bracket'
 import { MetricSortInterface } from '~/interfaces/MetricSortInterface'
-import { Zone } from '@/constants/zone'
+import { Zone } from '@/ps2alerts-constants/zone'
 
 export interface AvailableMetricsInterface {
   dates?: boolean

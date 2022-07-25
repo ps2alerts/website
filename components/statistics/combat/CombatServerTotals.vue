@@ -28,13 +28,13 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { StatisticsCombatServerTotalsLeaderboardConfig } from '~/src/constants/DataTableConfig'
+import { StatisticsCombatServerTotalsLeaderboardConfig } from '@/constants/DataTableConfig'
 import {
   GlobalCombatMetricsInterface,
   GlobalFactionCombatAggregateResponseInterface,
 } from '~/interfaces/aggregates/global/GlobalFactionCombatAggregateResponseInterface'
 import worldNameFilter from '~/filters/WorldName'
-import { World } from '~/constants/world'
+import { World } from '@/ps2alerts-constants/world'
 import { CombatMetricsInterface } from '~/interfaces/CombatMetricsInterface'
 
 interface StatisticsServerCombatTableDataInterface

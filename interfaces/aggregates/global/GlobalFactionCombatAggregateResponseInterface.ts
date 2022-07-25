@@ -1,5 +1,5 @@
 import { CombatMetricsInterface } from '@/interfaces/CombatMetricsInterface'
-import { World } from '~/constants/world'
+import { World } from '@/ps2alerts-constants/world'
 
 export interface GlobalCombatMetricsInterface extends CombatMetricsInterface {
   hsr: string | number

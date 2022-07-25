@@ -37,8 +37,8 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { StatisticsWeaponsLeaderboardConfig } from '~/src/constants/DataTableConfig'
-import { FactionBgClassString } from '~/src/constants/FactionBgClass'
+import { StatisticsWeaponsLeaderboardConfig } from '@/constants/DataTableConfig'
+import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { StatisticsWeaponTableDataInterface } from '~/interfaces/statistics/StatisticsWeaponTableDataInterface'
 
 import { GlobalWeaponAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalWeaponAggregateResponseInterface'

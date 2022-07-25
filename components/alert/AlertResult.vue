@@ -69,10 +69,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import FactionSegmentBar from '@/components/common/FactionSegmentBar.vue'
-import { Ps2alertsEventState } from '@/constants/ps2alertsEventState'
+import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import factionName from '@/filters/FactionName'
-import { FactionBgClass } from '@/src/constants/FactionBgClass'
+import { FactionBgClass } from '@/constants/FactionBgClass'
 
 export default Vue.extend({
   name: 'AlertResult',

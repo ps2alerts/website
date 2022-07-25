@@ -1,5 +1,5 @@
-import { Zone } from '@/constants/zone'
-import { FacilityType } from '~/constants/facilityType'
+import { Zone } from '@/ps2alerts-constants/zone'
+import { FacilityType } from '@/ps2alerts-constants/facilityType'
 
 export interface FacilityDataInterface {
   id: number

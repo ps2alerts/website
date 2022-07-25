@@ -36,12 +36,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import ApiRequest from '~/api-request'
-import { Endpoints } from '~/src/constants/Endpoints'
+import { Endpoints } from '@/constants/Endpoints'
 import { GlobalWeaponAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalWeaponAggregateResponseInterface'
-import { World } from '~/constants/world'
+import { World } from '@/ps2alerts-constants/world'
 import worldNameFilter from '~/filters/WorldName'
 import { StatisticsWeaponTableDataInterface } from '~/interfaces/statistics/StatisticsWeaponTableDataInterface'
-import { Bracket } from '~/constants/bracket'
+import { Bracket } from '@/ps2alerts-constants/bracket'
 import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
 
 export default Vue.extend({

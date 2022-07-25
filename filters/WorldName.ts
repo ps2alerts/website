@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { World } from '@/constants/world'
+import { World } from '@/ps2alerts-constants/world'
 
 const worldNameFilter = Vue.filter('worldName', (world: World) => {
   switch (world) {

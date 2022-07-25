@@ -1,6 +1,6 @@
-import { World } from '~/constants/world'
-import { Zone } from '@/constants/zone'
-import { Bracket } from '~/constants/bracket'
+import { World } from '@/ps2alerts-constants/world'
+import { Zone } from '@/ps2alerts-constants/zone'
+import { Bracket } from '@/ps2alerts-constants/bracket'
 
 export interface CommonApiParamsInterface {
   world?: World

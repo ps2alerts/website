@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Faction } from '@/constants/faction'
+import { Faction } from '@/ps2alerts-constants/faction'
 
 const factionId = Vue.filter('factionId', (value: string): Faction => {
   switch (value) {

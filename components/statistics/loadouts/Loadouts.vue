@@ -35,13 +35,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import ApiRequest from '~/api-request'
-import { Endpoints } from '~/src/constants/Endpoints'
-import { World } from '~/constants/world'
+import { Endpoints } from '@/constants/Endpoints'
+import { World } from '@/ps2alerts-constants/world'
 import worldNameFilter from '~/filters/WorldName'
 import { GlobalLoadoutAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalLoadoutAggregateResponseInterface'
 import { StatisticsLoadoutTableDataInterface } from '~/interfaces/statistics/StatisticsLoadoutTableDataInterface'
-import { LoadoutName } from '~/constants/loadout'
-import { Bracket } from '~/constants/bracket'
+import { LoadoutName } from '@/constants/Loadout'
+import { Bracket } from '@/ps2alerts-constants/bracket'
 import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
 
 export default Vue.extend({

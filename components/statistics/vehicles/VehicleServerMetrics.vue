@@ -34,8 +34,8 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { StatisticsVehicleLeaderboardConfig } from '~/src/constants/DataTableConfig'
-import { FactionBgClassString } from '~/src/constants/FactionBgClass'
+import { StatisticsVehicleLeaderboardConfig } from '@/constants/DataTableConfig'
+import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { StatisticsVehicleMetricsTableDataInterface } from '~/interfaces/statistics/StatisticsVehicleMetricsTableDataInterface'
 import { VehicleDataInterface } from '~/interfaces/VehicleDataInterface'
 

@@ -1,4 +1,4 @@
-import { Faction } from '~/constants/faction'
+import { Faction } from '@/ps2alerts-constants/faction'
 import { MapControlInterface } from '~/interfaces/instance-entries/MapControlInterface'
 
 export interface InstanceFacilityControlEntriesResponseInterface {

@@ -1,4 +1,4 @@
-import { Zone } from '@/constants/zone'
+import { Zone } from '@/ps2alerts-constants/zone'
 import { FacilityDataInterface } from '~/interfaces/FacilityDataInterface'
 
 export interface StatisticsFacilityTableDataInterface {

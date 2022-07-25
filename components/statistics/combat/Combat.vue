@@ -38,12 +38,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import ApiRequest from '~/api-request'
-import { Endpoints } from '~/src/constants/Endpoints'
+import { Endpoints } from '@/constants/Endpoints'
 import CombatFactionTotals from '~/components/statistics/combat/CombatFactionTotals.vue'
 import { GlobalFactionCombatAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalFactionCombatAggregateResponseInterface'
 import CombatServerTotals from '~/components/statistics/combat/CombatServerTotals.vue'
 import CombatServerFaction from '~/components/statistics/combat/CombatServerFaction.vue'
-import { Bracket } from '~/constants/bracket'
+import { Bracket } from '@/ps2alerts-constants/bracket'
 import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
 
 export default Vue.extend({

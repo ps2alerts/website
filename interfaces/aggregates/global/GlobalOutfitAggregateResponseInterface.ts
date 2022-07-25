@@ -1,5 +1,5 @@
-import { World } from '~/constants/world'
-import { Bracket } from '~/constants/bracket'
+import { World } from '@/ps2alerts-constants/world'
+import { Bracket } from '@/ps2alerts-constants/bracket'
 import { CombatMetricsInterface } from '~/interfaces/CombatMetricsInterface'
 import { OutfitInterface } from '~/interfaces/OutfitInterface'
 

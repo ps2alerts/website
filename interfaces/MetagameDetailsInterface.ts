@@ -1,5 +1,5 @@
-import { Zone } from '@/constants/zone'
-import { Faction } from '~/constants/faction'
+import { Zone } from '@/ps2alerts-constants/zone'
+import { Faction } from '@/ps2alerts-constants/faction'
 
 export interface MetagameDetailsInterface {
   title: string
