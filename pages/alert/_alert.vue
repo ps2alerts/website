@@ -12,7 +12,7 @@
       <AlertDetails :alert="alert" />
       <AlertFactionCombatMetrics :alert="alert" />
       <AlertFactionVsFaction :alert="alert" />
-      <div class="col-span-4 col-start-5">
+      <div class="col-span-full md:col-span-4 md:col-start-5">
         <v-tabs v-model="mapsTab" center-active dark fixed-tabs class="mt-2">
           <v-tabs-slider></v-tabs-slider>
 
