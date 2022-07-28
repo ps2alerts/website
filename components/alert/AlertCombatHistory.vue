@@ -12,7 +12,7 @@
     <div v-if="loaded" class="text-center">
       <div class="btn-group justify-center flex">
         <button
-          class="btn btn-smmobile md:btn-sm"
+          class="btn btn-sm"
           :class="{ 'btn-active': mode === 'kills' }"
           @click="updateMode('kills')"
         >
@@ -40,7 +40,7 @@
           Teamkills
         </button>
         <button
-          class="btn btn-smmobile md:btn-sm"
+          class="btn btn-sm"
           :class="{ 'btn-active': mode === 'suicides' }"
           @click="updateMode('suicides')"
         >
