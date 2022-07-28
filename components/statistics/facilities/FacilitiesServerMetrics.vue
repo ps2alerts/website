@@ -37,9 +37,9 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { StatisticsFacilityServerMetricsLeaderboardConfig } from '~/constants/DataTableConfig'
+import { StatisticsFacilityServerMetricsLeaderboardConfig } from '@/constants/DataTableConfig'
 import { StatisticsFacilityTableDataInterface } from '~/interfaces/statistics/StatisticsFacilityTableDataInterface'
-import { ZoneBgClassString } from '~/constants/Zone'
+import { ZoneBgClassString } from '@/constants/Zone'
 
 export default Vue.extend({
   name: 'FacilitiesServerMetrics',

@@ -43,16 +43,16 @@
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
-import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
+import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceVehicleAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceVehicleAggregateResponseInterface'
 import { VehicleDataInterface } from '@/interfaces/VehicleDataInterface'
-import { Faction } from '@/constants/Faction'
+import { Faction } from '@/ps2alerts-constants/faction'
 import {
   FactionBgClass,
   FactionBgClassString,
 } from '@/constants/FactionBgClass'
-import { AlertVehicleLeaderboardConfig } from '~/constants/DataTableConfig'
+import { AlertVehicleLeaderboardConfig } from '@/constants/DataTableConfig'
 import { AlertVehicleMetricsDataTableInterface } from '~/interfaces/alert/AlertVehicleMetricsDataTableInterface'
 import { VehicleStatsWithKd } from '~/interfaces/VehicleStatisticsInterface'
 import VehicleDataRequest from '@/libraries/VehicleDataRequest'

@@ -156,8 +156,8 @@
           @click:append="incrementSlider"
         ></v-slider>
       </div>
-      <!-- Playback buttons -->
-      <div class="col-start-1 col-span-3 flex justify-center items-center">
+      <!-- Playback button for general sizes -->
+      <div class="hidden md:col-start-1 md:col-span-3 md:flex justify-center items-center">
         <div v-if="loaded" class="btn-group mr-2">
           <button
             class="btn btn-sm px-4 xl:px-2"
@@ -195,10 +195,11 @@
           </button>
         </div>
       </div>
+
       <!-- Capture status -->
       <div
         v-if="captureIndices.length > sliderVal - 1 && sliderVal - 1 >= 0"
-        class="col-start-4 col-span-6 text-xs xl:text-base justify-center"
+        class="col-span-full md:col-start-4 md:col-span-6 text-xs xl:text-base justify-center"
       >
         <div
           class="w-full bg-neutral-800 border border-black border-solid rounded"
@@ -233,8 +234,49 @@
           </div>
         </div>
       </div>
+
+      <!-- Playback button for phones -->
+      <div class="flex md:hidden col-start-2 w-1/2 col-span-3 justify-center items-center">
+        <div v-if="loaded" class="btn-group mr-2">
+          <button
+            class="btn btn-sm px-4 xl:px-2"
+            :class="{ 'btn-active': playback.playing }"
+            @click="
+              playback.playing = !playback.playing
+              startOrEndPlayback()
+            "
+          >
+            <font-awesome-icon
+              v-if="!playback.playing"
+              :icon="['fas', 'play']"
+            ></font-awesome-icon>
+            <font-awesome-icon
+              v-if="playback.playing"
+              :icon="['fas', 'pause']"
+            ></font-awesome-icon>
+            <span v-if="!playback.playing" class="align-top hidden xl:inline"
+              >Play</span
+            >
+            <span v-if="playback.playing" class="align-top hidden xl:inline"
+              >Pause</span
+            >
+          </button>
+          <button
+            class="btn btn-sm px-4 xl:px-2"
+            :class="{ 'btn-active': playback.repeat }"
+            @click="playback.repeat = !playback.repeat"
+          >
+            <font-awesome-icon :icon="['fas', 'repeat']"></font-awesome-icon>
+            <span class="align-top hidden xl:inline">
+              Repeat: <span v-if="playback.repeat">On</span>
+              <span v-if="!playback.repeat">Off</span>
+            </span>
+          </button>
+        </div>
+      </div>
+
       <!-- Playback speed -->
-      <div class="col-start-10 col-span-3">
+      <div class="col-start-5 col-span-full mt-5 md:col-start-10 md:col-span-3 md:mt-0">
         <span>Playback speed: {{ (playback.delay / 1000).toFixed(2) }}s</span>
         <v-slider
           v-model="playback.delay"
@@ -256,22 +298,22 @@ import RemainingTime from '../RemainingTime.vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import { worldToMap } from '~/libraries/MapWorld'
 import { MAP_FACTION_COLORS } from '@/constants/FactionMapColors'
-import { zoneToWarpgateArray } from '@/constants/Zone'
+import { zoneToWarpgateArray } from '@/ps2alerts-constants/zone'
 import ApiRequest from '@/api-request'
 import MapRegionDataRequest from '@/libraries/MapRegionDataRequest'
-import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
+import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
 import { InstanceFacilityControlEntriesResponseInterface } from '~/interfaces/instance-entries/InstanceFacilityControlEntriesResponseInterface'
-import { AssetsBaseUrl, Endpoints } from '~/constants/Endpoints'
+import { AssetsBaseUrl, Endpoints } from '@/constants/Endpoints'
 import zoneNameFilter from '~/filters/ZoneName'
-import { FacilityType } from '~/constants/FacilityType'
+import { FacilityType } from '@/ps2alerts-constants/facilityType'
 import { MapRegion } from '~/libraries/MapRegion'
-import { Faction } from '~/constants/Faction'
+import { Faction } from '@/ps2alerts-constants/faction'
 import { FacilityBadge } from '~/libraries/FacilityBadge'
 import factionShortName from '~/filters/FactionShortName'
 import factionCircleEmoji from '~/filters/FactionCircleEmoji'
 import { InstanceOutfitAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface'
 import { MapControlInterface } from '~/interfaces/instance-entries/MapControlInterface'
-import { FactionBgClassString } from '~/constants/FactionBgClass'
+import { FactionBgClassString } from '@/constants/FactionBgClass'
 
 export default Vue.extend({
   name: 'AlertMap',

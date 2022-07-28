@@ -1,8 +1,8 @@
 import { FacilityBadge } from '~/libraries/FacilityBadge'
 import { LatLng, Point } from '~/libraries/MapWorld'
-import { FacilityType } from '~/constants/FacilityType'
-import { Faction } from '~/constants/Faction'
-import { Zone } from '~/constants/Zone'
+import { FacilityType } from '@/ps2alerts-constants/facilityType'
+import { Faction } from '@/ps2alerts-constants/faction'
+import { Zone } from '@/ps2alerts-constants/zone'
 
 export interface MapRegionInterface {
   id: number

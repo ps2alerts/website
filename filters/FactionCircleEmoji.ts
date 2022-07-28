@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Faction } from '~/constants/Faction'
+import { Faction } from '@/ps2alerts-constants/faction'
 
 const factionCircleEmoji = Vue.filter(
   'factionCircleEmoji',

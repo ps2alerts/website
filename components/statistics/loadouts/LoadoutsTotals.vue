@@ -37,11 +37,11 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import { StatisticsLoadoutLeaderboardConfig } from '~/constants/DataTableConfig'
-import { FactionBgClassString } from '~/constants/FactionBgClass'
+import { StatisticsLoadoutLeaderboardConfig } from '@/constants/DataTableConfig'
+import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { StatisticsLoadoutTableDataInterface } from '~/interfaces/statistics/StatisticsLoadoutTableDataInterface'
 import { GlobalLoadoutAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalLoadoutAggregateResponseInterface'
-import { LoadoutFaction, LoadoutName } from '~/constants/Loadout'
+import { LoadoutFaction, LoadoutName } from '@/constants/Loadout'
 
 interface TotalLoadoutInterface
   extends GlobalLoadoutAggregateResponseInterface {

@@ -12,7 +12,7 @@
       <AlertDetails :alert="alert" />
       <AlertFactionCombatMetrics :alert="alert" />
       <AlertFactionVsFaction :alert="alert" />
-      <div class="col-span-4 col-start-5">
+      <div class="col-span-full md:col-span-4 md:col-start-5">
         <v-tabs v-model="mapsTab" center-active dark fixed-tabs class="mt-2">
           <v-tabs-slider></v-tabs-slider>
 
@@ -135,7 +135,7 @@
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
-import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
+import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
 import { CensusEndpoints, Endpoints } from '@/constants/Endpoints'
 import AlertResult from '@/components/alert/AlertResult.vue'
 import AlertDetails from '@/components/alert/AlertDetails.vue'
@@ -153,7 +153,7 @@ import AlertCombatHistory from '@/components/alert/AlertCombatHistory.vue'
 import AlertBattleranks from '~/components/alert/AlertBattleranks.vue'
 import { InstanceFacilityControlAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceFacilityControlAggregateResponseInterface'
 import facilityTypeName from '~/filters/FacilityTypeName'
-import { Zone } from '~/constants/Zone'
+import { Zone } from '@/ps2alerts-constants/zone'
 import { PS2AlertsApiOshurDataInterface } from '~/interfaces/census/PS2AlertsApiOshurDataInterface'
 import { CensusMapRegionResponseInterface } from '~/interfaces/census/CensusMapRegionResponseInterface'
 import { CensusMapRegionResponseItem } from '~/interfaces/census/CensusMapRegionResponseItem'

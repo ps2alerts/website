@@ -23,11 +23,11 @@
 import Vue from 'vue'
 import BarChart from '../BarChart.js'
 import ApiRequest from '@/api-request'
-import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
+import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceCharacterAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceCharacterAggregateResponseInterface'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
-import { Faction } from '~/constants/Faction'
+import { Faction } from '@/ps2alerts-constants/faction'
 
 interface BattlerankDistributionDataInterface {
   // Faction

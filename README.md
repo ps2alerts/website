@@ -12,6 +12,8 @@ This module uses [Nuxt](https://nuxtjs.org/), a JavaScript frontend Framework bu
 
 ## TL;DR
 
+When you first clone make sure to run `git submodule update --init --recursive` so you can setup the `ps2alerts-constants` submodule
+
 Run `ps2alerts-website-init` on first run. For any subsequent starts, run `ps2alerts-website-dev`.
 
 # Technologies

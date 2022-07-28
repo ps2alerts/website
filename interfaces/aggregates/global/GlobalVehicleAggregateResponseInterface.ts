@@ -1,6 +1,6 @@
-import { Faction } from '@/constants/Faction'
-import { World } from '~/constants/World'
-import { Vehicle } from '~/constants/Vehicle'
+import { Faction } from '@/ps2alerts-constants/faction'
+import { World } from '@/ps2alerts-constants/world'
+import { Vehicle } from '@/ps2alerts-constants/vehicle'
 
 interface VehicleStatsInterface {
   kills?: number

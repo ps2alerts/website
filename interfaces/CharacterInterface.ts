@@ -1,5 +1,5 @@
-import { World } from '@/constants/World'
-import { Faction } from '@/constants/Faction'
+import { World } from '@/ps2alerts-constants/world'
+import { Faction } from '@/ps2alerts-constants/faction'
 import { OutfitInterface } from '@/interfaces/OutfitInterface'
 
 export interface CharacterInterface {

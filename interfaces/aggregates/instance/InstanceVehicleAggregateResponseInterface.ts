@@ -1,4 +1,4 @@
-import { Faction } from '@/constants/Faction'
+import { Faction } from '@/ps2alerts-constants/faction'
 import { VehicleStatsInterface } from '~/interfaces/VehicleStatisticsInterface'
 
 export interface InstanceVehicleAggregateResponseInterface {

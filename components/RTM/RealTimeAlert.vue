@@ -57,8 +57,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { World } from '@/constants/World'
-import { Zone } from '@/constants/Zone'
+import { World } from '@/ps2alerts-constants/world'
+import { Zone } from '@/ps2alerts-constants/zone'
 import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
 
 export default Vue.extend({

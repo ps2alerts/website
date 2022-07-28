@@ -441,9 +441,9 @@
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
-import { Bracket } from '~/constants/Bracket'
+import { Bracket } from '@/ps2alerts-constants/bracket'
 import { FactionMetricsInterface } from '~/interfaces/FactionMetricsInterface'
-import { World } from '~/constants/World'
+import { World } from '@/ps2alerts-constants/world'
 
 interface DataCollectionRowInterface {
   world: FactionMetricsInterface

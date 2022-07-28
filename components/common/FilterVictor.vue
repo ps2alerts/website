@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Faction } from '~/constants/Faction'
+import { Faction } from '@/ps2alerts-constants/faction'
 
 export default Vue.extend({
   name: 'FilterVictor',

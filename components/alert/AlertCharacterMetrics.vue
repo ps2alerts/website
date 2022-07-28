@@ -105,17 +105,17 @@
 <script lang="ts">
 import Vue from 'vue'
 import ApiRequest from '@/api-request'
-import { Ps2alertsEventState } from '@/constants/Ps2alertsEventState'
+import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceCharacterAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceCharacterAggregateResponseInterface'
-import { Faction } from '@/constants/Faction'
+import { Faction } from '@/ps2alerts-constants/faction'
 import {
   FactionBgClass,
   FactionBgClassString,
 } from '@/constants/FactionBgClass'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { AlertCharacterTableDataInterface } from '~/interfaces/alert/AlertCharacterTableDataInterface'
-import { DataTableConfig } from '~/constants/DataTableConfig'
+import { DataTableConfig } from '@/constants/DataTableConfig'
 import secondsInHumanTime from '~/filters/SecondsInHumanTime'
 
 export default Vue.extend({

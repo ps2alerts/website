@@ -154,7 +154,7 @@ import {
   GlobalCombatMetricsInterface,
   GlobalFactionCombatAggregateResponseInterface,
 } from '~/interfaces/aggregates/global/GlobalFactionCombatAggregateResponseInterface'
-import { World } from '~/constants/World'
+import { World } from '@/ps2alerts-constants/world'
 
 interface TotalFactionInterface {
   vs?: GlobalCombatMetricsInterface
