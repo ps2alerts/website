@@ -359,6 +359,9 @@
   .btn-sm {
     @apply text-sm py-1 px-2 rounded-sm;
   }
+  .btn-smmobile {
+    @apply btn-sm p-1
+  }
   .btn-xs {
     @apply text-xs p-1 rounded-sm;
   }
