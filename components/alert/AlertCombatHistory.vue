@@ -10,44 +10,44 @@
       <h1 class="mb-4">Loading...</h1>
     </div>
     <div v-if="loaded" class="text-center">
-      <div class="btn-group mr-2">
+      <div class="md:btn-group justify-center grid grid-cols-3 md:flex">
         <button
-          class="btn btn-sm"
+          class="btn btn-sm mx-1 my-1 md:mx-0 md:my-0 col-span-1"
           :class="{ 'btn-active': mode === 'kills' }"
           @click="updateMode('kills')"
         >
           Kills
         </button>
         <button
-          class="btn btn-sm"
+          class="btn btn-sm mx-1 my-1 md:mx-0 md:my-0 col-span-1"
           :class="{ 'btn-active': mode === 'deaths' }"
           @click="updateMode('deaths')"
         >
           Deaths
         </button>
         <button
-          class="btn btn-sm"
+          class="btn btn-sm mx-1 my-1 md:mx-0 md:my-0 col-span-1"
           :class="{ 'btn-active': mode === 'kd' }"
           @click="updateMode('kd')"
         >
           KD
         </button>
         <button
-          class="btn btn-sm"
+          class="btn btn-sm mx-1 my-1 md:mx-0 md:my-0 col-span-1"
           :class="{ 'btn-active': mode === 'teamKills' }"
           @click="updateMode('teamKills')"
         >
           Teamkills
         </button>
         <button
-          class="btn btn-sm"
+          class="btn btn-sm mx-1 my-1 md:mx-0 md:my-0 col-span-1"
           :class="{ 'btn-active': mode === 'suicides' }"
           @click="updateMode('suicides')"
         >
           Suicides
         </button>
         <button
-          class="btn btn-sm"
+          class="btn btn-sm mx-1 my-1 md:mx-0 md:my-0 col-span-1"
           :class="{ 'btn-active': mode === 'headshots' }"
           @click="updateMode('headshots')"
         >
