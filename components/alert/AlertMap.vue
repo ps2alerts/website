@@ -298,7 +298,7 @@ import RemainingTime from '../RemainingTime.vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import { worldToMap } from '~/libraries/MapWorld'
 import { MAP_FACTION_COLORS } from '@/constants/FactionMapColors'
-import { zoneToWarpgateArray } from '@/ps2alerts-constants/zone'
+import { Zone, zoneToWarpgateArray } from '@/ps2alerts-constants/zone'
 import ApiRequest from '@/api-request'
 import MapRegionDataRequest from '@/libraries/MapRegionDataRequest'
 import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
@@ -447,6 +447,12 @@ export default Vue.extend({
     },
     init(): void {
       this.map = (this.$refs.map as LMap).mapObject as L.Map
+      if (this.alert.zone === Zone.NEXUS) {
+        (this.$refs.map as Vue).$el.classList.add('bg-nexus')
+      }
+      if (this.alert.zone === Zone.OSHUR) {
+        (this.$refs.map as Vue).$el.classList.add('bg-oshur')
+      }
       this.remaining = this.$refs.timer as LControl
       const centerIcon = (this.$refs.centerIcon as HTMLElement).cloneNode(
         true
@@ -1355,6 +1361,14 @@ export default Vue.extend({
   background: #010707;
   height: 850px;
   max-height: min(70vw, 80vh);
+}
+
+.bg-nexus {
+  background: #051010;
+}
+
+.bg-oshur {
+  background: #051010;
 }
 
 ::v-deep .map-region {
