@@ -10,8 +10,8 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded" class="grid grid-cols-12">
-      <div class="col-span-12 mb-2 flex justify-center">
-        <div class="pr-2 py-2">Player Counts:</div>
+    <div class="col-start-5 col-span-4 flex align-center justify-center mb-2">Player Counts</div>
+      <div class="col-start-4 col-span-full  md:col-start-4 md:col-span-5 mb-2 flex justify-center md:mr-1">
         <div
           v-for="(count, index) in counts"
           :key="index"
