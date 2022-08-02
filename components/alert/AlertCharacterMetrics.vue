@@ -10,7 +10,7 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded" class="grid grid-cols-12">
-      <div class="col-start-1 col-span-full mb-2 flex flex-wrap justify-center">
+      <div class="col-span-full mb-2 flex flex-wrap justify-center">
         <div class = "p-2">Player Counts</div>
         <div
           v-for="(count, index) in counts"
