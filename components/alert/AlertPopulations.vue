@@ -59,14 +59,44 @@
           :chart-data="dataCollection"
           :options="popNumberChartOptions"
           style="width: 100%; height: 400px"
+          class="hidden"
         ></line-chart>
+        <div
+          style="width: 100%; height: 400px"
+          class="flex justify-center items-center flex-wrap"
+        >
+          <h1 class="w-full">
+            Awating data...
+            <font-awesome-icon
+              :icon="['fa', 'sync']"
+              class="animate-spin"
+            ></font-awesome-icon>
+          </h1>
+          <h3>Data is gathered once a minute</h3>
+        </div>
       </div>
       <div v-show="mode === 'average'" class="text-center">
         <line-chart
           :chart-data="dataAvgCollection"
           :options="activityChartOptions"
           style="width: 100%; height: 400px"
+          class="hidden"
         ></line-chart>
+        <div
+          style="width: 100%; height: 400px"
+          class="flex flex-wrap justify-center items-center"
+        >
+          <h1 class="mx-auto">
+            Awating data...
+            <font-awesome-icon
+              :icon="['fa', 'sync']"
+              class="animate-spin"
+            ></font-awesome-icon>
+          </h1>
+          <h3 class="mx-auto">
+            Data gathering starts 5 mins after alert start
+          </h3>
+        </div>
       </div>
     </div>
   </div>
