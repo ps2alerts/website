@@ -86,16 +86,14 @@
           style="width: 100%; height: 400px"
           class="flex flex-wrap justify-center items-center"
         >
-          <h1 class="mx-auto">
+          <h1 class="w-full">
             Awating data...
             <font-awesome-icon
               :icon="['fa', 'sync']"
               class="animate-spin"
             ></font-awesome-icon>
           </h1>
-          <h3 class="mx-auto">
-            Data gathering starts 5 mins after alert start
-          </h3>
+          <h3>Data gathering starts 5 mins after alert start</h3>
         </div>
       </div>
     </div>
