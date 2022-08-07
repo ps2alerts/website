@@ -56,15 +56,16 @@
 
       <div v-show="mode === 'number'">
         <line-chart
-          v-if="!(alert.duration > 5)"
+          v-if="alert"
           :chart-data="dataCollection"
           :options="popNumberChartOptions"
-          style="width: 100%; height: 400px"
+          style="height: 400px"
+          class="w-full"
         ></line-chart>
         <div
           v-else
-          style="width: 100%; height: 400px"
-          class="flex justify-center items-center flex-wrap"
+          style="height: 400px"
+          class="w-full flex justify-center items-center flex-wrap"
         >
           <h1 class="w-full">
             Awating data...
@@ -78,15 +79,16 @@
       </div>
       <div v-show="mode === 'average'" class="text-center">
         <line-chart
-          v-if="alert.duration > 5"
+          v-if="alert"
           :chart-data="dataAvgCollection"
           :options="activityChartOptions"
-          style="width: 100%; height: 400px"
+          style="height: 400px"
+          class="w-full"
         ></line-chart>
         <div
           v-else
-          style="width: 100%; height: 400px"
-          class="flex flex-wrap justify-center items-center"
+          style="height: 400px"
+          class="w-full flex flex-wrap justify-center items-center"
         >
           <h1 class="w-full">
             Awating data...
