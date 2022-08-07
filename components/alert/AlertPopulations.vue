@@ -56,17 +56,49 @@
 
       <div v-show="mode === 'number'">
         <line-chart
+          v-if="!dataCollection"
           :chart-data="dataCollection"
           :options="popNumberChartOptions"
-          style="width: 100%; height: 400px"
+          style="height: 400px"
+          class="w-full"
         ></line-chart>
+        <div
+          v-else
+          style="height: 400px"
+          class="w-full flex flex-col justify-center items-center flex-wrap"
+        >
+          <h1>
+            Awating data...
+            <font-awesome-icon
+              :icon="['fa', 'sync']"
+              class="animate-spin"
+            ></font-awesome-icon>
+          </h1>
+          <h3>Data is gathered once a minute</h3>
+        </div>
       </div>
       <div v-show="mode === 'average'" class="text-center">
         <line-chart
+          v-if="dataAvgCollection"
           :chart-data="dataAvgCollection"
           :options="activityChartOptions"
-          style="width: 100%; height: 400px"
+          style="height: 400px"
+          class="w-full"
         ></line-chart>
+        <div
+          v-else
+          style="height: 400px"
+          class="w-full flex flex-col flex-wrap justify-center items-center"
+        >
+          <h1>
+            Awating data...
+            <font-awesome-icon
+              :icon="['fa', 'sync']"
+              class="animate-spin"
+            ></font-awesome-icon>
+          </h1>
+          <h3>Data gathering starts 5 mins after alert start</h3>
+        </div>
       </div>
     </div>
   </div>
