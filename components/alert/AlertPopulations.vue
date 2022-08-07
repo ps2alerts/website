@@ -56,7 +56,7 @@
 
       <div v-show="mode === 'number'">
         <line-chart
-          v-if="dataCollection"
+          v-if="!dataCollection"
           :chart-data="dataCollection"
           :options="popNumberChartOptions"
           style="height: 400px"
@@ -65,9 +65,9 @@
         <div
           v-else
           style="height: 400px"
-          class="w-full flex justify-center items-center flex-wrap"
+          class="w-full flex flex-col justify-center items-center flex-wrap"
         >
-          <h1 class="w-full">
+          <h1>
             Awating data...
             <font-awesome-icon
               :icon="['fa', 'sync']"
@@ -88,9 +88,9 @@
         <div
           v-else
           style="height: 400px"
-          class="w-full flex flex-wrap justify-center items-center"
+          class="w-full flex flex-col flex-wrap justify-center items-center"
         >
-          <h1 class="w-full">
+          <h1>
             Awating data...
             <font-awesome-icon
               :icon="['fa', 'sync']"
