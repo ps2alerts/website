@@ -56,7 +56,7 @@
 
       <div v-show="mode === 'number'">
         <line-chart
-          v-if="!dataCollection"
+          v-if="dataCollection"
           :chart-data="dataCollection"
           :options="popNumberChartOptions"
           style="height: 400px"
