@@ -56,7 +56,7 @@
 
       <div v-show="mode === 'number'">
         <line-chart
-          v-if="dataCollection"
+          v-if="data.length"
           :chart-data="dataCollection"
           :options="popNumberChartOptions"
           style="height: 400px"
@@ -79,7 +79,7 @@
       </div>
       <div v-show="mode === 'average'" class="text-center">
         <line-chart
-          v-if="dataAvgCollection"
+          v-if="avgData.length"
           :chart-data="dataAvgCollection"
           :options="activityChartOptions"
           style="height: 400px"
