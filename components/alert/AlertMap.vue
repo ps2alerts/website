@@ -462,6 +462,7 @@ export default Vue.extend({
         this.map.addControl(
           new this.ZoomCenterControl({
             zoomCenterText: centerIcon.outerHTML,
+            zoomCenterLevel: this.alert.zone === Zone.NEXUS ? 3 : 2,
           })
         )
       }
