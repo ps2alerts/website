@@ -33,6 +33,24 @@
         <p v-show="!loading && actives.length === 0 && !error" class="mt-2">
           There are no alerts currently running!
         </p>
+        <div v-show="owactives.length > 0">
+          <div
+            v-for="outfitwar in owactives"
+            :key="outfitwar.instanceId"
+            class="p-1 border-b border-gray-500 border-no-bottom"
+          >
+            <RealTimeOutfitWar
+              :world="outfitwar.world"
+              :zone="outfitwar.zone"
+              :time-started="outfitwar.timeStarted"
+              :duration="outfitwar.duration"
+              :result="outfitwar.result"
+              :instance-id="outfitwar.instanceId"
+              :pops="getPops(outfitwar.instanceId)"
+              :is-percentage="showPopPercent"
+            />
+          </div>
+        </div>
         <div v-show="actives.length > 0">
           <div
             v-for="alert in actives"
@@ -83,15 +101,19 @@ import Vue from 'vue'
 import moment from 'moment-timezone'
 import ApiRequest from '@/api-request'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
+import { InstanceOutfitWarsResponseInterface } from '@/interfaces/InstanceOutfitWarsResponseInterface'
 import { InstancePopulationAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstancePopulationAggregateResponseInterface'
 import { TIME_FORMAT } from '@/constants/Time'
 import { Endpoints } from '@/constants/Endpoints'
 import RealTimeAlert from '~/components/RTM/RealTimeAlert.vue'
+import RealTimeOutfitWar from '~/components/RTM/RealTimeOutfitWar.vue'
+import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 
 export default Vue.extend({
   name: 'RealTimeMonitor',
   components: {
     RealTimeAlert,
+    RealTimeOutfitWar,
   },
   data() {
     return {
@@ -105,6 +127,7 @@ export default Vue.extend({
       updatePopsCountdown: 0,
       updatePopsCountdownInterval: undefined as undefined | number,
       actives: [] as InstanceTerritoryControlResponseInterface[],
+      owactives: [] as InstanceOutfitWarsResponseInterface[],
       populations: new Map<
         string,
         InstancePopulationAggregateResponseInterface
@@ -135,6 +158,7 @@ export default Vue.extend({
   async created() {
     // TEMP polling until real time websocket is implemented
     await this.activeAlerts()
+    await this.activeOutfitWars()
     await this.alertPops()
 
     this.updateTerritoryCountdownInterval = window.setInterval(() => {
@@ -150,6 +174,7 @@ export default Vue.extend({
     setInterval(() => {
       this.error = null
       this.activeAlerts()
+      this.activeOutfitWars()
     }, this.updateTerritoryRate)
     setInterval(() => {
       this.alertPops()
@@ -167,6 +192,22 @@ export default Vue.extend({
           this.error = null
           this.actives = result
           this.updateTerritoryCountdown = this.updateTerritoryRate / 1000
+        })
+        .catch((e) => {
+          this.loading = false
+          this.error = e.message
+        })
+    },
+    async activeOutfitWars(): Promise<void> {
+      await new ApiRequest()
+        .get<InstanceOutfitWarsResponseInterface[]>(
+          ps2AlertsApiEndpoints.outfitwarsActive,
+          { sortBy: 'timeStarted' }
+        )
+        .then((result) => {
+          this.loading = false
+          this.error = null
+          this.owactives = result
         })
         .catch((e) => {
           this.loading = false
