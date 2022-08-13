@@ -1,3 +1,5 @@
+// TODO: Migrate this to constants and rename references
+
 export const AssetsBaseUrl = 'https://assets.ps2alerts.com'
 
 export const Endpoints = {
