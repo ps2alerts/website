@@ -14,8 +14,8 @@ export interface InstanceOutfitWarsResponseInterface {
   timeEnded?: string | null
   duration: number
   state: Ps2alertsEventState
-  phase: Phase,
-  round: number,
+  phase: Phase
+  round: number
   mapVersion?: string
   result: OutfitwarsTerritoryResultInterface
   features?: PS2AlertsInstanceFeaturesInterface
