@@ -13,7 +13,7 @@
         :class="{ 'opacity-50': filtered }"
       />
     </div>
-    <div class="col-span-6 lg:col-span-3 lg:col-start-4">
+    <div class="col-span-6 lg:col-span-2 lg:col-start-3">
       <FilterWorld
         :world-filter="selectedWorld"
         :disabled="loading"
@@ -21,28 +21,37 @@
         @world-changed="updateWorld"
       />
     </div>
-    <div class="col-span-6 lg:col-span-3 lg:col-start-7">
+    <div class="col-span-6 lg:col-span-2 lg:col-start-5">
       <FilterPhase
         :phase-filter="selectedPhase"
         :disabled="loading"
         @phase-changed="updatePhase"
       />
     </div>
-    <div class="col-span-6 lg:col-span-3 lg:col-start-4">
-      <FilterVictor
-        :world-filter="selectedVictor"
-        :disabled="loading"
-        :outfitWars="true"
-        @world-changed="updateVictor"
-      />
-    </div>
-    <div class="col-span-6 lg:col-span-3 lg:col-start-7" :v-if="selectedPhase === QUALIFIERS">
+    <div class="col-span-6 lg:col-span-2 lg:col-start-7">
       <FilterRound
         :round-filter="selectedRound"
         :disabled="loading"
         :phase="selectedPhase"
         @round-changed="updateRound"
       />
+    </div>
+    <div class="col-span-6 lg:col-span-2 lg:col-start-9">
+      <FilterVictor
+        :victor-filter="selectedVictor"
+        :disabled="loading"
+        :outfitWars="true"
+        @victor-changed="updateVictor"
+      />
+    </div>
+    <div class="col-span-12 text-center">
+      <button
+        class="btn"
+        :disabled="loaded === false || (loaded === true && filtered === false)"
+        @click="clearFilter()"
+      >
+        <font-awesome-icon :icon="['fas', 'undo']" /> Reset Filters
+      </button>
     </div>
     <div
       v-show="!loaded || loading"
@@ -275,15 +284,19 @@ export default Vue.extend({
     },
     updateWorld(world: World): void {
       this.selectedWorld = world
+      this.filterResults()
     },
     updatePhase(phase: Phase): void {
       this.selectedPhase = phase
+      this.filterResults()
     },
     updateRound(round: number): void {
       this.selectedRound = round
+      this.filterResults()
     },
     updateVictor(victor: number): void {
       this.selectedVictor = victor
+      this.filterResults()
     },
     async filterResults(force = false): Promise<void> {
       // If filter keys length is 2, it hasn't changed therefore mark it as unfiltered.
