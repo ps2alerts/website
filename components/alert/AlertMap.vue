@@ -1138,7 +1138,6 @@ export default Vue.extend({
               (<MapControlInterface>facilityControl.mapControl).nc = (<OWMapControlInterface>facilityControl.mapControl).blue;
               (<MapControlInterface>facilityControl.mapControl).vs = 0;
             }
-            console.log(facilityControl)
           }
           // Copy the history since updateTerritory reverses the provided list
           this.historyCache = Object.assign([], result)
