@@ -5,6 +5,7 @@ import { Phase } from '@/ps2alerts-constants/outfitwars/phase'
 import { OutfitwarsTerritoryResultInterface } from '@/ps2alerts-constants/interfaces/OutfitwarsTerritoryResultInterface'
 import { PS2AlertsInstanceFeaturesInterface } from '~/interfaces/PS2AlertsInstanceFeaturesInterface'
 import { OutfitWarsTeamsInterface } from './OutfitWarsTeamsInterface'
+import { Ps2alertsEventType } from '~/ps2alerts-constants/ps2alertsEventType'
 
 export interface InstanceOutfitWarsResponseInterface {
   instanceId: string
@@ -21,4 +22,5 @@ export interface InstanceOutfitWarsResponseInterface {
   result: OutfitwarsTerritoryResultInterface
   features?: PS2AlertsInstanceFeaturesInterface
   teams?: OutfitWarsTeamsInterface
+  ps2alertsEventType?: Ps2alertsEventType
 }
