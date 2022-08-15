@@ -272,12 +272,12 @@ export default Vue.extend({
 
       await new ApiRequest()
         .get<InstanceFacilityControlEntriesResponseInterface[]>(
-          Endpoints.INSTANCE_FACILITY_CONTROL_ENTRIES.replace(
+          `${Endpoints.INSTANCE_FACILITY_CONTROL_ENTRIES.replace(
             '{instance}',
             this.alert.instanceId
               ? this.alert.instanceId.toString()
               : 'whatever'
-          )
+          )}?sortBy=timestamp&order=desc`
         )
         .then((result) => {
           const processedData = this.transformData(result)

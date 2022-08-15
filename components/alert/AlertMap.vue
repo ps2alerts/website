@@ -314,6 +314,9 @@ import factionCircleEmoji from '~/filters/FactionCircleEmoji'
 import { InstanceOutfitAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface'
 import { MapControlInterface } from '~/interfaces/instance-entries/MapControlInterface'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
+import { Ps2alertsEventType } from '~/ps2alerts-constants/ps2alertsEventType'
+import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
+import { OWMapControlInterface } from '~/interfaces/instance-entries/OWMapControlInterface'
 
 export default Vue.extend({
   name: 'AlertMap',
@@ -566,7 +569,7 @@ export default Vue.extend({
     },
     mapControlData(captureIndex: number): MapControlInterface {
       const reverseIndex = this.historyCache.length - captureIndex - 1
-      const mapControl = this.historyCache[reverseIndex].mapControl
+      const mapControl = <MapControlInterface>this.historyCache[reverseIndex].mapControl
       if (!mapControl) {
         return {
           vs: 33,
@@ -1103,21 +1106,40 @@ export default Vue.extend({
         return
       }
 
+      let endpoint = Endpoints.INSTANCE_FACILITY_CONTROL_ENTRIES.replace(
+        '{instance}',
+        this.alert.instanceId
+          ? this.alert.instanceId.toString()
+          : 'whatever'
+      );
+      if(this.alert.ps2alertsEventType && this.alert.ps2alertsEventType === Ps2alertsEventType.OUTFIT_WARS_AUG_2022) {
+        endpoint = ps2AlertsApiEndpoints.outfitwarsInstanceFacility.replace(
+          '{instanceId}',
+          this.alert.instanceId
+            ? this.alert.instanceId.toString()
+            : 'whatever'
+        );
+      }
+
       console.log('AlertMap.pull', this.alert.instanceId)
       await Promise.all([
         this.pullOutfitData(this.alert.instanceId ?? '12345'),
         new ApiRequest().get<InstanceFacilityControlEntriesResponseInterface[]>(
-          `${Endpoints.INSTANCE_FACILITY_CONTROL_ENTRIES.replace(
-            '{instance}',
-            this.alert.instanceId
-              ? this.alert.instanceId.toString()
-              : 'whatever'
-          )}&noDefences=true`
+          `${endpoint}?sortBy=timestamp&order=desc&noDefences=true`
         ),
       ])
         .then((values) => {
           this.outfitData = values[0]
           const result = values[1]
+          // Ensure the correct fields are filled from the map control embed
+          for(var facilityControl of result) {
+            if(this.alert.ps2alertsEventType === Ps2alertsEventType.OUTFIT_WARS_AUG_2022 && facilityControl.mapControl) {
+              (<MapControlInterface>facilityControl.mapControl).tr = (<OWMapControlInterface>facilityControl.mapControl).red;
+              (<MapControlInterface>facilityControl.mapControl).nc = (<OWMapControlInterface>facilityControl.mapControl).blue;
+              (<MapControlInterface>facilityControl.mapControl).vs = 0;
+            }
+            console.log(facilityControl)
+          }
           // Copy the history since updateTerritory reverses the provided list
           this.historyCache = Object.assign([], result)
           this.updateTerritory(result, undefined)
