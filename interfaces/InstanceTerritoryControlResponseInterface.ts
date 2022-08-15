@@ -4,6 +4,7 @@ import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
 import { TerritoryResultInterface } from '~/interfaces/InstanceTerritoryResultInterface'
 import { Bracket } from '@/ps2alerts-constants/bracket'
 import { PS2AlertsInstanceFeaturesInterface } from '~/interfaces/PS2AlertsInstanceFeaturesInterface'
+import { Ps2alertsEventType } from '~/ps2alerts-constants/ps2alertsEventType'
 
 export interface InstanceTerritoryControlResponseInterface {
   instanceId: string
@@ -19,4 +20,5 @@ export interface InstanceTerritoryControlResponseInterface {
   bracket: Bracket
   features?: PS2AlertsInstanceFeaturesInterface
   mapVersion?: string
+  ps2alertsEventType?: Ps2alertsEventType
 }
