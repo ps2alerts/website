@@ -1,6 +1,9 @@
 <template>
   <NuxtLink
-    :to="{ name: 'outfitwars-outfitwars', params: { outfitwars: match.instanceId } }"
+    :to="{
+      name: 'outfitwars-outfitwars',
+      params: { outfitwars: match.instanceId },
+    }"
     :disabled="match.state === 0"
     :event="match.state === 0 ? '' : 'click'"
   >
@@ -22,7 +25,7 @@
         </div>
         <div class="col-span-1 text-base mb-2 lg:mb-0">
           <div class="mb-1">
-            {{ ordinalSuffixOf(roundByPhase(match.round)) }}
+            {{ match.round | owRoundByPhase(match.phase) | ordinalSuffix }}
           </div>
           <div class="text-xs text-gray-400">Round</div>
         </div>
@@ -56,9 +59,7 @@
             <span v-if="match.teams && match.teams.red">
               {{ match.teams.red.tag }}
             </span>
-            <span v-if="!(match.teams && match.teams.red)">
-              Unknown
-            </span>
+            <span v-if="!(match.teams && match.teams.red)"> Unknown </span>
           </div>
           <div class="text-xs text-gray-400">
             Red Team
@@ -71,9 +72,9 @@
                     v-on="on"
                   ></font-awesome-icon>
                 </template>
-                This is populated once the first combat event occurs,
-                since outfits may be assigned to either team irrespective
-                of their faction.
+                This is populated once the first combat event occurs, since
+                outfits may be assigned to either team irrespective of their
+                faction.
               </v-tooltip>
             </span>
           </div>
@@ -83,9 +84,7 @@
             <span v-if="match.teams && match.teams.blue">
               {{ match.teams.blue.tag }}
             </span>
-            <span v-if="!(match.teams && match.teams.blue)">
-              Unknown
-            </span>
+            <span v-if="!(match.teams && match.teams.blue)"> Unknown </span>
           </div>
           <div class="text-xs text-gray-400">
             Blue Team
@@ -98,9 +97,9 @@
                     v-on="on"
                   ></font-awesome-icon>
                 </template>
-                This is populated once the first combat event occurs,
-                since outfits may be assigned to either team irrespective
-                of their faction.
+                This is populated once the first combat event occurs, since
+                outfits may be assigned to either team irrespective of their
+                faction.
               </v-tooltip>
             </span>
           </div>
@@ -137,7 +136,6 @@ import { Team } from '@/ps2alerts-constants/outfitwars/team'
 import { FactionBgClass } from '@/constants/FactionBgClass'
 import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
 import { FactionBorderClass } from '@/constants/FactionBorderClass'
-import { Phase } from '~/ps2alerts-constants/outfitwars/phase'
 
 export default Vue.extend({
   name: 'MatchEntry',
@@ -186,33 +184,5 @@ export default Vue.extend({
       return this.match.result ? this.match.result.victor : null
     },
   },
-  methods: {
-    roundByPhase(round: number) {
-      switch(this.match.phase) {
-        case Phase.QUALIFIERS:
-          return round
-        case Phase.PLAYOFFS:
-          return round - 4
-        case Phase.CHAMPIONSHIPS:
-          return 1
-        default:
-          return -1
-      }
-    },
-    ordinalSuffixOf(value: number) {
-      const ones = value % 10;
-      const tens = value % 100;
-      if (ones === 1 && tens !== 11) {
-        return `${value}st`
-      }
-      if (ones === 2 && tens !== 12) {
-        return `${value}nd`
-      }
-      if (ones === 3 && tens !== 13) {
-        return `${value}rd`
-      }
-      return `${value}th`
-    }
-  }
 })
 </script>

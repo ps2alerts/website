@@ -2,13 +2,12 @@
   <div class="col-span-12">
     <div class="text-center">
       <div v-if="alert.ps2alertsEventType !== OUTFIT_WARS_AUG_2022">
-        <h1 class="text-4xl">
-          Alert #{{ alert.instanceId }}
-        </h1>
+        <h1 class="text-4xl">Alert #{{ alert.instanceId }}</h1>
       </div>
       <div v-if="alert.ps2alertsEventType === OUTFIT_WARS_AUG_2022">
         <h1 class="text-4xl">
-          {{ alert.world | worldName }} {{ alert.phase | phaseName }}{{ alert.phase !== CHAMPIONSHIPS ? ` Round ${roundByPhase}` : '' }}
+          {{ alert.world | worldName }} {{ alert.phase | phaseName }} Round
+          {{ alert.round | owRoundByPhase(alert.phase) }}
         </h1>
       </div>
     </div>
@@ -65,9 +64,21 @@
       </div>
       <FactionSegmentBar
         v-else
-        :vs="alert.ps2alertsEventType !== OUTFIT_WARS_AUG_2022 ? alert.result.vs : 0"
-        :nc="alert.ps2alertsEventType !== OUTFIT_WARS_AUG_2022 ? alert.result.nc : alert.result.blue"
-        :tr="alert.ps2alertsEventType !== OUTFIT_WARS_AUG_2022 ? alert.result.tr : alert.result.red"
+        :vs="
+          alert.ps2alertsEventType !== OUTFIT_WARS_AUG_2022
+            ? alert.result.vs
+            : 0
+        "
+        :nc="
+          alert.ps2alertsEventType !== OUTFIT_WARS_AUG_2022
+            ? alert.result.nc
+            : alert.result.blue
+        "
+        :tr="
+          alert.ps2alertsEventType !== OUTFIT_WARS_AUG_2022
+            ? alert.result.tr
+            : alert.result.red
+        "
         :other="alert.result.cutoff"
         :out-of-play="alert.result.outOfPlay"
       />
@@ -80,14 +91,11 @@ import Vue from 'vue'
 import FactionSegmentBar from '@/components/common/FactionSegmentBar.vue'
 import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
-import factionName from '@/filters/FactionName'
 import { FactionBgClass } from '@/constants/FactionBgClass'
 import { Ps2alertsEventType } from '~/ps2alerts-constants/ps2alertsEventType'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Phase } from '~/ps2alerts-constants/outfitwars/phase'
-import { Faction } from '~/ps2alerts-constants/faction'
-import { Team } from '~/ps2alerts-constants/outfitwars/team'
-import teamName from '~/filters/TeamName'
+import factionOrTeamName from '~/filters/FactionOrTeamName'
 
 export default Vue.extend({
   name: 'AlertResult',
@@ -96,7 +104,8 @@ export default Vue.extend({
   },
   props: {
     alert: {
-      type: Object as () => (InstanceTerritoryControlResponseInterface & InstanceOutfitWarsResponseInterface),
+      type: Object as () => InstanceTerritoryControlResponseInterface &
+        InstanceOutfitWarsResponseInterface,
       default: {},
       required: true,
     },
@@ -115,11 +124,19 @@ export default Vue.extend({
   },
   computed: {
     victorText(): string {
+      const isOutfitWars =
+        this.alert.ps2alertsEventType ===
+        Ps2alertsEventType.OUTFIT_WARS_AUG_2022
       return this.alert.state === Ps2alertsEventState.STARTED
         ? 'In progress...'
         : this.alert.result?.draw === true
         ? 'Draw!'
-        : `${this.factionOrTeamName(this.alert.result?.victor)} victory!`
+        : `${
+            factionOrTeamName(
+              this.alert.result?.victor,
+              this.alert.ps2alertsEventType
+            ) + (isOutfitWars ? ' Team' : '')
+          } victory!`
     },
     victorClass(): object {
       if (!this.alert.result || !this.alert.result.victor) {
@@ -130,29 +147,6 @@ export default Vue.extend({
         ...FactionBgClass(this.alert.result.victor),
       }
     },
-    roundByPhase(): string {
-      if (this.alert.ps2alertsEventType !== Ps2alertsEventType.OUTFIT_WARS_AUG_2022) {
-        return ''
-      }
-      const match = this.alert as InstanceOutfitWarsResponseInterface;
-      if (match.phase === Phase.QUALIFIERS) {
-        return match.round.toString()
-      } else if (match.phase === Phase.PLAYOFFS) {
-        return (match.round - 4).toString()
-      }
-      return ''
-    }
   },
-  methods: {
-    factionOrTeamName(value: Faction & Team | null | undefined) {
-      if (!value) {
-        return '';
-      }
-      if (this.alert.ps2alertsEventType !== Ps2alertsEventType.OUTFIT_WARS_AUG_2022) {
-        return factionName(value)
-      }
-      return teamName(value) + ' Team'
-    }
-  }
 })
 </script>

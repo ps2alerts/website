@@ -4,7 +4,7 @@ import { Team } from '@/ps2alerts-constants/outfitwars/team'
 const teamName = Vue.filter('teamName', (value: Team) => {
   switch (value) {
     case Team.NONE:
-      return 'None / High Pops'
+      return 'Neutral'
     case Team.BLUE:
       return 'Blue'
     case Team.RED:

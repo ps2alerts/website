@@ -1,6 +1,6 @@
 import { Faction } from '@/ps2alerts-constants/faction'
 import { MapControlInterface } from '~/interfaces/instance-entries/MapControlInterface'
-import { OWMapControlInterface } from './OWMapControlInterface'
+import { OutfitwarsTerritoryResultInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsTerritoryResultInterface'
 
 export interface InstanceFacilityControlEntriesResponseInterface {
   instance: string
@@ -12,5 +12,5 @@ export interface InstanceFacilityControlEntriesResponseInterface {
   isDefence: boolean
   isInitial: boolean
   outfitCaptured?: string
-  mapControl: MapControlInterface | OWMapControlInterface | null
+  mapControl: MapControlInterface | OutfitwarsTerritoryResultInterface | null
 }
