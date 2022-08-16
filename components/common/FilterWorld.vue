@@ -7,8 +7,17 @@
       :disabled="disabled"
     >
       <option :value="ANY">Any</option>
-      <option v-for="world in options" v-bind:key="world" :value="world">
-        {{ world | worldName }}{{ world === CERES ? ' (PS4 EU)' : world === GENUDINE ? ' (PS4 US)' : world === JAEGER ? ' (PC Events)' : '' }}
+      <option v-for="world in options" :key="world" :value="world">
+        {{ world | worldName
+        }}{{
+          world === CERES
+            ? ' (PS4 EU)'
+            : world === GENUDINE
+            ? ' (PS4 US)'
+            : world === JAEGER
+            ? ' (PC Events)'
+            : ''
+        }}
       </option>
     </select>
     <label
@@ -41,7 +50,7 @@ export default Vue.extend({
       type: Boolean,
       default: false,
       required: false,
-    }
+    },
   },
   data() {
     return {
@@ -58,8 +67,8 @@ export default Vue.extend({
     }
   },
   computed: {
-    options(){ 
-      if(this.outfitWars) {
+    options() {
+      if (this.outfitWars) {
         const owWorlds = pcWorldArray
         owWorlds.splice(4, 1)
         owWorlds.sort((a: number, b: number) => {
@@ -67,7 +76,7 @@ export default Vue.extend({
           const nameB: string = worldNameFilter(b)
           return nameA.localeCompare(nameB)
         })
-        return owWorlds;
+        return owWorlds
       }
       return worldArray.sort((a: number, b: number) => {
         const nameA: string = worldNameFilter(a)

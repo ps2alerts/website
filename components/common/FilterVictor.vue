@@ -8,7 +8,7 @@
       @change="changeVictor()"
     >
       <option :value="NONE">Any</option>
-      <option v-for="faction in options" v-bind:key="faction" :value="faction">
+      <option v-for="faction in options" :key="faction" :value="faction">
         {{ factionOrTeamName(faction) }}
       </option>
     </select>
@@ -24,7 +24,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Faction, factionArray } from '@/ps2alerts-constants/faction'
-import { Team, outfitWarsTeamArray } from '@/ps2alerts-constants/outfitwars/team'
+import {
+  Team,
+  outfitWarsTeamArray,
+} from '@/ps2alerts-constants/outfitwars/team'
 import factionName from '~/filters/FactionName'
 import teamName from '~/filters/TeamName'
 
@@ -43,8 +46,8 @@ export default Vue.extend({
     outfitWars: {
       type: Boolean,
       default: false,
-      required: false
-    }
+      required: false,
+    },
   },
   data() {
     return {
@@ -55,18 +58,18 @@ export default Vue.extend({
       TERRAN_REPUBLIC: Faction.TERRAN_REPUBLIC,
     }
   },
+  computed: {
+    options() {
+      if (this.outfitWars) {
+        return outfitWarsTeamArray.slice(1)
+      }
+      return factionArray.slice(1, 4)
+    },
+  },
   watch: {
     victorFilter(Victor: Faction): void {
       this.victor = Victor
     },
-  },
-  computed: {
-    options() {
-      if(this.outfitWars) {
-        return outfitWarsTeamArray.slice(1)
-      }
-      return factionArray.slice(1, 4)
-    }
   },
   methods: {
     changeVictor(): void {
@@ -77,7 +80,7 @@ export default Vue.extend({
         return teamName(value)
       }
       return factionName(value)
-    }
+    },
   },
 })
 </script>

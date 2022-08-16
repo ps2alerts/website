@@ -242,7 +242,7 @@
     }
 
     .fade-in {
-      animation: fadeInOpacity 0.5s ease-out
+      animation: fadeInOpacity 0.5s ease-out;
     }
 
     .fade-out {
@@ -411,17 +411,20 @@
 
     &.skeleton {
       .faction-bar-segment {
-        .border-vs, .border-nc, .border-tr, .border-other {
-          border: transparent
+        .border-vs,
+        .border-nc,
+        .border-tr,
+        .border-other {
+          border: transparent;
         }
         .vs {
-          background-color: #403845
+          background-color: #403845;
         }
         .nc {
-          background-color: #2d3e50
+          background-color: #2d3e50;
         }
         .tr {
-          background-color: #442e2e
+          background-color: #442e2e;
         }
       }
     }

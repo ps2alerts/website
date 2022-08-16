@@ -17,7 +17,7 @@
       <FilterWorld
         :world-filter="selectedWorld"
         :disabled="loading"
-        :outfitWars="true"
+        :outfit-wars="true"
         @world-changed="updateWorld"
       />
     </div>
@@ -40,7 +40,7 @@
       <FilterVictor
         :victor-filter="selectedVictor"
         :disabled="loading"
-        :outfitWars="true"
+        :outfit-wars="true"
         @victor-changed="updateVictor"
       />
     </div>
@@ -148,7 +148,7 @@ export default Vue.extend({
       interval: undefined as undefined | number,
       ignoreChanges: false,
       loadMoreDone: true,
-      QUALIFIERS: Phase.QUALIFIERS
+      QUALIFIERS: Phase.QUALIFIERS,
     }
   },
   head(): object {
@@ -182,8 +182,7 @@ export default Vue.extend({
       if (this.selectedWorld > 0) filter.world = this.selectedWorld
       if (this.selectedPhase > 0) filter.phase = this.selectedPhase
       if (this.selectedRound > 0) filter.round = this.selectedRound
-      if (this.selectedVictor !== Team.NONE)
-        filter.victor = this.selectedVictor
+      if (this.selectedVictor !== Team.NONE) filter.victor = this.selectedVictor
       // if (
       //   this.selectedDateFrom !== this.dateNow &&
       //   this.selectedDateTo !== this.dateNow

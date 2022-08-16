@@ -7,7 +7,7 @@
       :disabled="disabled"
     >
       <option :value="ANY">Any</option>
-      <option v-for="round in options" v-bind:key="round" :value="round">
+      <option v-for="round in options" :key="round" :value="round">
         {{ round }}
       </option>
     </select>
@@ -40,7 +40,7 @@ export default Vue.extend({
       type: Number,
       default: Phase.ANY,
       required: false,
-    }
+    },
   },
   data() {
     return {
@@ -49,11 +49,11 @@ export default Vue.extend({
     }
   },
   computed: {
-    options(){
+    options() {
       if (this.phase === Phase.QUALIFIERS) {
-        return [ 1, 2, 3, 4 ]
-      } else if (this.phase == Phase.PLAYOFFS) {
-        return [ 1, 2 ]
+        return [1, 2, 3, 4]
+      } else if (this.phase === Phase.PLAYOFFS) {
+        return [1, 2]
       }
       return []
     },

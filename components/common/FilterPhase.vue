@@ -7,7 +7,7 @@
       :disabled="disabled"
     >
       <option :value="ANY">Any</option>
-      <option v-for="phase in options" v-bind:key="phase" :value="phase">
+      <option v-for="phase in options" :key="phase" :value="phase">
         {{ phase | phaseName }}
       </option>
     </select>
@@ -44,8 +44,8 @@ export default Vue.extend({
     }
   },
   computed: {
-    options(){ 
-      return phaseArray;
+    options() {
+      return phaseArray
     },
   },
   watch: {

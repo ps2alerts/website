@@ -296,7 +296,10 @@ export default Vue.extend({
 
       await new ApiRequest()
         .get<InstanceOutfitWarsResponseInterface>(
-          ps2AlertsApiEndpoints.outfitwarsInstance.replace('{instanceId}', instanceId)
+          ps2AlertsApiEndpoints.outfitwarsInstance.replace(
+            '{instanceId}',
+            instanceId
+          )
         )
         .then((alert) => {
           this.alert = alert
@@ -345,13 +348,15 @@ export default Vue.extend({
           .catch((e) => {
             console.error('Unable to process Oshur Facility Data!', e)
           })
-      } else if(this.alert.zone === Zone.NEXUS) {
+      } else if (this.alert.zone === Zone.NEXUS) {
         await new ApiRequest()
           .get<PS2AlertsApiNexusDataInterface>(
-            Endpoints.CENSUS_CONTINENT_HEX_DATA
-              .replace('{zone}', `${this.alert.zone}`)
-              .replace('{version}', `${this.alert.mapVersion}`)
-          ).then((nexusData) => {
+            Endpoints.CENSUS_CONTINENT_HEX_DATA.replace(
+              '{zone}',
+              `${this.alert.zone}`
+            ).replace('{version}', `${this.alert.mapVersion}`)
+          )
+          .then((nexusData) => {
             nexusData.map_region_list.forEach((facilityData) => {
               const tempData: InstanceFacilityControlAggregateResponseInterface =
                 {
@@ -367,7 +372,7 @@ export default Vue.extend({
                     region: parseInt(facilityData.map_region_id, 10),
                   },
                 }
-              newMap.set(tempData.facility.id, tempData);
+              newMap.set(tempData.facility.id, tempData)
             })
           })
           .catch((e) => {

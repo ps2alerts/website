@@ -157,7 +157,9 @@
         ></v-slider>
       </div>
       <!-- Playback button for general sizes -->
-      <div class="hidden md:col-start-1 md:col-span-3 md:flex justify-center items-center">
+      <div
+        class="hidden md:col-start-1 md:col-span-3 md:flex justify-center items-center"
+      >
         <div v-if="loaded" class="btn-group mr-2">
           <button
             class="btn btn-sm px-4 xl:px-2"
@@ -236,7 +238,9 @@
       </div>
 
       <!-- Playback button for phones -->
-      <div class="flex md:hidden col-start-2 w-1/2 col-span-3 justify-center items-center">
+      <div
+        class="flex md:hidden col-start-2 w-1/2 col-span-3 justify-center items-center"
+      >
         <div v-if="loaded" class="btn-group mr-2">
           <button
             class="btn btn-sm px-4 xl:px-2"
@@ -276,7 +280,9 @@
       </div>
 
       <!-- Playback speed -->
-      <div class="col-start-5 col-span-full mt-5 md:col-start-10 md:col-span-3 md:mt-0">
+      <div
+        class="col-start-5 col-span-full mt-5 md:col-start-10 md:col-span-3 md:mt-0"
+      >
         <span>Playback speed: {{ (playback.delay / 1000).toFixed(2) }}s</span>
         <v-slider
           v-model="playback.delay"
@@ -316,7 +322,7 @@ import { MapControlInterface } from '~/interfaces/instance-entries/MapControlInt
 import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { Ps2alertsEventType } from '~/ps2alerts-constants/ps2alertsEventType'
 import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
-import { OWMapControlInterface } from '~/interfaces/instance-entries/OWMapControlInterface'
+import { OutfitwarsTerritoryResultInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsTerritoryResultInterface'
 
 export default Vue.extend({
   name: 'AlertMap',
@@ -569,7 +575,7 @@ export default Vue.extend({
     },
     mapControlData(captureIndex: number): MapControlInterface {
       const reverseIndex = this.historyCache.length - captureIndex - 1
-      const mapControl = <MapControlInterface>this.historyCache[reverseIndex].mapControl
+      const mapControl = this.historyCache[reverseIndex].mapControl as MapControlInterface
       if (!mapControl) {
         return {
           vs: 33,
@@ -1108,17 +1114,17 @@ export default Vue.extend({
 
       let endpoint = Endpoints.INSTANCE_FACILITY_CONTROL_ENTRIES.replace(
         '{instance}',
-        this.alert.instanceId
-          ? this.alert.instanceId.toString()
-          : 'whatever'
-      );
-      if(this.alert.ps2alertsEventType && this.alert.ps2alertsEventType === Ps2alertsEventType.OUTFIT_WARS_AUG_2022) {
+        this.alert.instanceId ? this.alert.instanceId.toString() : 'whatever'
+      )
+      if (
+        this.alert.ps2alertsEventType &&
+        this.alert.ps2alertsEventType ===
+          Ps2alertsEventType.OUTFIT_WARS_AUG_2022
+      ) {
         endpoint = ps2AlertsApiEndpoints.outfitwarsInstanceFacility.replace(
           '{instanceId}',
-          this.alert.instanceId
-            ? this.alert.instanceId.toString()
-            : 'whatever'
-        );
+          this.alert.instanceId ? this.alert.instanceId.toString() : 'whatever'
+        )
       }
 
       console.log('AlertMap.pull', this.alert.instanceId)
@@ -1132,11 +1138,15 @@ export default Vue.extend({
           this.outfitData = values[0]
           const result = values[1]
           // Ensure the correct fields are filled from the map control embed
-          for(var facilityControl of result) {
-            if(this.alert.ps2alertsEventType === Ps2alertsEventType.OUTFIT_WARS_AUG_2022 && facilityControl.mapControl) {
-              (<MapControlInterface>facilityControl.mapControl).tr = (<OWMapControlInterface>facilityControl.mapControl).red;
-              (<MapControlInterface>facilityControl.mapControl).nc = (<OWMapControlInterface>facilityControl.mapControl).blue;
-              (<MapControlInterface>facilityControl.mapControl).vs = 0;
+          for (let facilityControl of result) {
+            if (
+              this.alert.ps2alertsEventType ===
+                Ps2alertsEventType.OUTFIT_WARS_AUG_2022 &&
+              facilityControl.mapControl
+            ) {
+              (facilityControl.mapControl as MapControlInterface).tr = (facilityControl.mapControl as OutfitwarsTerritoryResultInterface).red;
+              (facilityControl.mapControl as MapControlInterface).nc = (facilityControl.mapControl as OutfitwarsTerritoryResultInterface).blue;
+              (facilityControl.mapControl as MapControlInterface).vs = 0
             }
           }
           // Copy the history since updateTerritory reverses the provided list

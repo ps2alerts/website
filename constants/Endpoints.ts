@@ -67,8 +67,7 @@ export const Endpoints = {
   CENSUS_OSHUR_HEX_DATA: '/census/oshur-hex',
   CENSUS_CONTINENT_HEX_DATA: '/census/regions/{zone}/{version}',
 
-  INSTANCE_FACILITY_CONTROL_ENTRIES:
-    '/instance-entries/{instance}/facility',
+  INSTANCE_FACILITY_CONTROL_ENTRIES: '/instance-entries/{instance}/facility',
   INSTANCE_FACILITY_CONTROL_ENTRIES_FACILITY:
     '/instance-entries/{instance}/facility/{facility}',
 
