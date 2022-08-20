@@ -17,6 +17,8 @@ export const ZoneBgClassString = (zone: Zone | undefined): string => {
     case Zone.OSHUR:
       return 'bg-oshur'
   }
+
+  return ''
 }
 
 export const ZoneHexSize = (zone: Zone | undefined): number => {

@@ -158,7 +158,7 @@ import {
 } from '@/constants/FactionBgClass'
 import { DataTableConfig } from '@/constants/DataTableConfig'
 import { AlertOutfitTableDataInterface } from '~/interfaces/alert/AlertOutfitTableDataInterface'
-import secondsInHumanTime from '~/filters/SecondsInHumanTime'
+import timeText from '~/utilities/timeText'
 
 export default Vue.extend({
   name: 'AlertOutfitMetrics',
@@ -500,7 +500,7 @@ export default Vue.extend({
               : 0,
           durationPlaying:
             this.alert.features?.xpm && outfit.durationInAlert
-              ? secondsInHumanTime(outfit.durationInAlert)
+              ? timeText(outfit.durationInAlert)
               : '-',
         })
         newData.push(tempData)

@@ -116,7 +116,7 @@ import {
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { AlertCharacterTableDataInterface } from '~/interfaces/alert/AlertCharacterTableDataInterface'
 import { DataTableConfig } from '@/constants/DataTableConfig'
-import secondsInHumanTime from '~/filters/SecondsInHumanTime'
+import timeText from '~/utilities/timeText'
 
 export default Vue.extend({
   name: 'AlertCharacterMetrics',
@@ -429,7 +429,7 @@ export default Vue.extend({
                 : 0,
             durationPlaying:
               this.alert.features?.xpm && character.durationInAlert
-                ? secondsInHumanTime(character.durationInAlert)
+                ? timeText(character.durationInAlert)
                 : '-',
           }
         )
