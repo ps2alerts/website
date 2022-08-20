@@ -48,6 +48,11 @@
         Outfitwars Metagame including announcements on when matches start on
         each server!
       </p>
+      <p class="text-sm text-left mb-2">
+        Please note, unfortunately DBG has not fixed the issues surrounding
+        getting data from SolTech, so that server will not be supported, and nor
+        will any PS4 servers as it is a PC event.
+      </p>
       <p class="text-xs mb-2">
         OW logo &copy; Daybreak Games, many thanks to Mithril for providing it!
       </p>
