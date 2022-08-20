@@ -52,6 +52,12 @@ export default Vue.extend({
         },
         {
           id: 3,
+          name: 'Outfit Wars',
+          route: `/outfit-wars`,
+          icon: ['fas', 'trophy'],
+        },
+        {
+          id: 4,
           name: 'Change Log',
           route: `/change-log`,
           icon: ['fas', 'tasks'],
