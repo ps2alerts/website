@@ -9,32 +9,33 @@
       <img
         class="ps2alerts-logo m-auto"
         alt="PS2Alerts Logo"
-        src="/img/ow-cropped.png"
+        src="/img/outfitwars-logo.png"
       />
-      <p class="text-title mb-2">
+      <p class="text-title mb-1">
         <remaining-time :time-remaining="timeRemaining"></remaining-time>
       </p>
+      <p class="text-sm mb-2">includes 20 min prep time</p>
       <h1 class="text-subtitle mt-4 mb-4">
         Outfit Wars 2022 statistics is coming!
       </h1>
 
       <p class="text-xl mb-2">
-        PS2Alerts will be bring <b>full</b> support of per-match and tournament
+        PS2Alerts will bring <b>full</b> support of per-match and tournament
         wide statistics for Outfit Wars 2022!
       </p>
-      <p class="mb-2">
+      <p class="mb-2 text-left">
         You will be able to look at the players, outfits, weapons etc on a
         global and per-server basis as you can with the normal alert metagame.
         Additionally, we will keep a track record of all match results along
         with their scores, so you don't need to go in-game to see them.
       </p>
-      <p class="mb-2">
+      <p class="mb-2 text-left">
         Every single match will be recorded, including full support for Map
         Replay, combat histories and of course all the per-player and outfit
         metrics, where you can see how the battle over Nexus for the match went
         over time.
       </p>
-      <p class="mb-2">
+      <p class="mb-2 text-left">
         Join us on our
         <a
           class="text-red-500"
@@ -67,7 +68,8 @@ export default Vue.extend({
       pageTitle: 'Outfit Wars',
       pageDesc: 'Your source for all Outfitwars 2022 Statistics',
       now: parseInt(moment().tz('UTC').format('X'), 10),
-      end: 1662231600,
+      end: parseInt(moment.tz('2022-09-03 18:20:00', 'UTC').format('X'), 10),
+      timeRemaining: 0,
     }
   },
   head(): object {
@@ -89,10 +91,11 @@ export default Vue.extend({
       ],
     }
   },
-  computed: {
-    timeRemaining() {
-      return TimeRemainingFromDuration(this.now, this.end - this.now)
-    },
+  created() {
+    this.timeRemaining = TimeRemainingFromDuration(
+      this.now,
+      this.end - this.now
+    )
   },
 })
 </script>
