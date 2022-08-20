@@ -5,7 +5,7 @@
     class="grid grid-cols-12 gap-2 text-center relative"
   >
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
-    <div class="col-span-12">
+    <div class="col-span-12 md:col-span-10 md:col-start-2">
       <img
         class="ps2alerts-logo m-auto"
         alt="PS2Alerts Logo"
@@ -24,10 +24,11 @@
         wide statistics for Outfit Wars 2022!
       </p>
       <p class="mb-2 text-left">
-        You will be able to look at the players, outfits, weapons etc on a
-        global and per-server basis as you can with the normal alert metagame.
-        Additionally, we will keep a track record of all match results along
-        with their scores, so you don't need to go in-game to see them.
+        Here you will find all the players, outfits, weapons &amp; more
+        statistics on a global and per-server basis, just like the normal alert
+        stats throughout the site. Additionally, we will keep a track record of
+        all match results along with their scores, so you don't need to go
+        in-game to see them.
       </p>
       <p class="mb-2 text-left">
         Every single match will be recorded, including full support for Map
@@ -44,10 +45,12 @@
           >Discord Server</a
         >
         to receive the latest announcements about PS2Alerts and the overall
-        Outfitwars Metagame including announcements on when matchees start on
+        Outfitwars Metagame including announcements on when matches start on
         each server!
       </p>
-      <p class="text-xs mb-2">OW logo &copy; Daybreak Games</p>
+      <p class="text-xs mb-2">
+        OW logo &copy; Daybreak Games, many thanks to Mithril for providing it!
+      </p>
     </div>
   </section>
 </template>
