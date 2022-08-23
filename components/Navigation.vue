@@ -139,7 +139,7 @@ const outfitWarsTabs: TabInterface[] = [
   {
     id: 3,
     name: 'Statistics',
-    route: '/outfit-wars/stats',
+    route: '/outfit-wars/statistics',
     icon: ['fas', 'ranking-star'],
     class: 'ow-subtab',
   },

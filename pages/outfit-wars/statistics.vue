@@ -6,15 +6,8 @@
   >
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
     <div class="col-span-12">
-      <h1 class="text-title">Rankings</h1>
-      <iframe
-        src="https://giphy.com/embed/xTiIzJSKB4l7xTouE8"
-        width="480"
-        height="208"
-        frameBorder="0"
-        class="giphy-embed m-auto"
-        allowFullScreen
-      ></iframe>
+      <h1 class="text-title">Statistics</h1>
+      <p>General Kenobi</p>
     </div>
   </section>
 </template>
@@ -24,14 +17,14 @@ import Vue from 'vue'
 import MetaHead from '~/components/MetaHead.vue'
 
 export default Vue.extend({
-  name: 'OutfitWarsRankings',
+  name: 'OutfitWarsStatistics',
   components: {
     MetaHead,
   },
   data() {
     return {
-      pageTitle: 'Outfit Wars - Rankings',
-      pageDesc: 'View all Rankings / Brackets for the Outfit Wars tournament!',
+      pageTitle: 'Outfit Wars - Statistics',
+      pageDesc: 'Statistics for the Outfit Wars Tournament!',
       // loading: false,
       // loaded: false,
     }
@@ -50,7 +43,7 @@ export default Vue.extend({
         {
           hid: 'canonical',
           rel: 'canonical',
-          href: `${this.$config.baseUrl}/outfit-wars`,
+          href: `${this.$config.baseUrl}/outfit-wars/statistics`,
         },
       ],
     }
