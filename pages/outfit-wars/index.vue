@@ -41,7 +41,7 @@
         <a
           class="text-red-500"
           target="_blank"
-          href="https://discord.gg/abXGXHnE"
+          href="https://discord.io/ps2alerts"
           >Discord Server</a
         >
         to receive the latest announcements about PS2Alerts and the overall
