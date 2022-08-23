@@ -9,6 +9,7 @@
         optional
         height="48"
         show-arrows
+        hide-slider
         mobile-breakpoint="720"
       >
         <v-tab
@@ -42,7 +43,7 @@
         <v-tab
           v-for="tab in outfitWarsTabs"
           :key="tab.id"
-          :href="tab.href"
+          :to="tab.route"
           exact
           :class="returnClass(tab)"
         >
@@ -123,7 +124,7 @@ const outfitWarsTabs: TabInterface[] = [
   {
     id: 1,
     name: 'Rankings',
-    href: '/outfit-wars',
+    route: '/outfit-wars',
     icon: ['fas', 'code-fork'],
     iconClass: { '-rotate-90': true },
     class: 'ow-subtab',
@@ -131,14 +132,14 @@ const outfitWarsTabs: TabInterface[] = [
   {
     id: 2,
     name: 'Matches',
-    href: '/outfit-wars/matches',
+    route: '/outfit-wars/matches',
     icon: ['fas', 'bars-progress'],
     class: 'ow-subtab',
   },
   {
     id: 3,
     name: 'Statistics',
-    href: '/outfit-wars/stats',
+    route: '/outfit-wars/stats',
     icon: ['fas', 'ranking-star'],
     class: 'ow-subtab',
   },
@@ -157,9 +158,11 @@ export default Vue.extend({
   },
   watch: {
     activeTab() {
-      this.isOutfitWars = this.activeTab.includes('outfit-wars')
-      console.log(this.isOutfitWars)
+      this.updateOutfitwarsMode()
     },
+  },
+  created() {
+    this.updateOutfitwarsMode()
   },
   methods: {
     returnClass(tab: TabInterface): { [k: string]: boolean } {
@@ -167,8 +170,20 @@ export default Vue.extend({
       if (tab.class) {
         const key = tab.class
         object[key] = true
+
+        if (tab.class === 'ow-tab') {
+          const currentRouteHasOw =
+            this.$nuxt.$route.path.includes('outfit-wars')
+
+          if (currentRouteHasOw) {
+            object['v-tab--active'] = true
+          }
+        }
       }
       return object
+    },
+    updateOutfitwarsMode() {
+      this.isOutfitWars = this.$nuxt.$route.path.includes('outfit-wars')
     },
   },
 })

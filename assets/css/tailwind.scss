@@ -713,8 +713,6 @@
           &.ow-tab {
             background: radial-gradient(circle at 50%, #9b2c2c, #9b2c2c 50%, #ff0000 100%, #333 100%);
           }
-          &.ow-subtab {
-          }
         }
 
         .v-tab--active {
@@ -737,8 +735,20 @@
       &.v-tabs > .v-tabs-bar {
         background-color: #38444a !important;
       }
+
+      .v-tab:not(.v-tab--active) {
+        &.ow-subtab {
+          border-bottom: red 2px solid;
+        }
+      }
+
       .v-tab--active {
         background-color: inherit !important; // Aka do nothing
+
+        &.ow-subtab {
+          border-bottom: red 2px solid;
+          background-color: #600606 !important;
+        }
       }
     }
   }
