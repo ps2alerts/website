@@ -1,11 +1,10 @@
-import { OutfitWarsTeamsInterface } from './OutfitWarsTeamsInterface'
 import { World } from '@/ps2alerts-constants/world'
 import { Zone } from '@/ps2alerts-constants/zone'
 import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
-import { Phase } from '@/ps2alerts-constants/outfitwars/phase'
 import { OutfitwarsTerritoryResultInterface } from '@/ps2alerts-constants/interfaces/OutfitwarsTerritoryResultInterface'
 import { PS2AlertsInstanceFeaturesInterface } from '~/interfaces/PS2AlertsInstanceFeaturesInterface'
 import { Ps2alertsEventType } from '~/ps2alerts-constants/ps2alertsEventType'
+import { OutfitWarsMetadataInterface } from './OutfitWarsMetadataInterface'
 
 export interface InstanceOutfitWarsResponseInterface {
   instanceId: string
@@ -16,11 +15,9 @@ export interface InstanceOutfitWarsResponseInterface {
   timeEnded?: string | null
   duration: number
   state: Ps2alertsEventState
-  phase: Phase
-  round: number
+  outfitwars: OutfitWarsMetadataInterface
   mapVersion?: string
   result: OutfitwarsTerritoryResultInterface
   features?: PS2AlertsInstanceFeaturesInterface
-  teams?: OutfitWarsTeamsInterface
   ps2alertsEventType?: Ps2alertsEventType
 }

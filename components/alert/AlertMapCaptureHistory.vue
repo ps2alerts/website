@@ -107,7 +107,7 @@ import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { InstanceOutfitAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface'
 import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 import { Ps2alertsEventType } from '~/ps2alerts-constants/ps2alertsEventType'
-import { OWMapControlInterface } from '~/interfaces/instance-entries/OWMapControlInterface'
+import { OutfitwarsTerritoryResultInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsTerritoryResultInterface'
 import { MapControlInterface } from '~/interfaces/instance-entries/MapControlInterface'
 import teamName from '~/filters/TeamName'
 
@@ -327,10 +327,10 @@ export default Vue.extend({
             Ps2alertsEventType.OUTFIT_WARS_AUG_2022
           if (isOutfitWars && capture.mapControl) {
             ;(capture.mapControl as MapControlInterface).tr = (
-              capture.mapControl as OWMapControlInterface
+              capture.mapControl as OutfitwarsTerritoryResultInterface
             ).red
             ;(capture.mapControl as MapControlInterface).nc = (
-              capture.mapControl as OWMapControlInterface
+              capture.mapControl as OutfitwarsTerritoryResultInterface
             ).blue
             ;(capture.mapControl as MapControlInterface).vs = 0
           }

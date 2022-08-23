@@ -19,13 +19,23 @@
         </div>
         <div class="col-span-1 text-sm mb-2 lg:mb-0">
           <div class="mb-1">
-            {{ match.phase | phaseName }}
+            <span v-if="match.outfitwars">
+            {{ match.outfitwars.phase | phaseName }}
+            </span>
+            <span v-if="!match.outfitwars">
+              Unknown!
+            </span>
           </div>
           <div class="text-xs text-gray-400">Phase</div>
         </div>
         <div class="col-span-1 text-base mb-2 lg:mb-0">
           <div class="mb-1">
-            {{ match.round | owRoundByPhase(match.phase) | ordinalSuffix }}
+            <span v-if="match.outfitwars">
+              {{ match.outfitwars.round | owRoundByPhase(match.outfitwars.phase) | ordinalSuffix }}
+            </span>
+            <span v-if="!match.outfitwars">
+              Unknown!
+            </span>
           </div>
           <div class="text-xs text-gray-400">Round</div>
         </div>
@@ -56,10 +66,10 @@
         </div>
         <div class="col-span-1 text-base mb-2 lg:mb-0">
           <div class="mb-1">
-            <span v-if="match.teams && match.teams.red">
-              {{ match.teams.red.tag }}
+            <span v-if="match.outfitwars && match.outfitwars.teams && match.outfitwars.teams.red">
+              [{{ match.outfitwars.teams.red.tag }}]
             </span>
-            <span v-if="!(match.teams && match.teams.red)"> Unknown </span>
+            <span v-if="!(match.outfitwars && match.outfitwars.teams && match.outfitwars.teams.red)"> Unknown </span>
           </div>
           <div class="text-xs text-gray-400">
             Red Team
@@ -72,7 +82,7 @@
                     v-on="on"
                   ></font-awesome-icon>
                 </template>
-                This is populated once the first combat event occurs, since
+                This is populated once the first capture event occurs, since
                 outfits may be assigned to either team irrespective of their
                 faction.
               </v-tooltip>
@@ -81,10 +91,10 @@
         </div>
         <div class="col-span-1 text-base mb-2 lg:mb-0">
           <div class="mb-1">
-            <span v-if="match.teams && match.teams.blue">
-              {{ match.teams.blue.tag }}
+            <span v-if="match.outfitwars && match.outfitwars.teams && match.outfitwars.teams.blue">
+              [{{ match.outfitwars.teams.blue.tag }}]
             </span>
-            <span v-if="!(match.teams && match.teams.blue)"> Unknown </span>
+            <span v-if="!(match.outfitwars && match.outfitwars.teams && match.outfitwars.teams.blue)"> Unknown </span>
           </div>
           <div class="text-xs text-gray-400">
             Blue Team
@@ -97,7 +107,7 @@
                     v-on="on"
                   ></font-awesome-icon>
                 </template>
-                This is populated once the first combat event occurs, since
+                This is populated once the first capture event occurs, since
                 outfits may be assigned to either team irrespective of their
                 faction.
               </v-tooltip>
