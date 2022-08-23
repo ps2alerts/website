@@ -165,7 +165,7 @@ export default Vue.extend({
         {
           hid: 'canonical',
           rel: 'canonical',
-          href: `${this.$config.baseUrl}/outfitwars`,
+          href: `${this.$config.baseUrl}/outfit-wars`,
         },
       ],
     }
