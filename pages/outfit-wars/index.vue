@@ -15,11 +15,11 @@
         allowFullScreen
       ></iframe>
     </div>
-    <div class="col-span-6">
+    <div class="col-span-3">
       <p>Obviously rough</p>
       <v-card max-width="600" class="mx-auto" dark>
         <v-toolbar color="light-blue" dark>
-          <v-toolbar-title>Miller</v-toolbar-title>
+          <v-toolbar-title>Miller Gigachads</v-toolbar-title>
         </v-toolbar>
 
         <v-list subheader two-line>
@@ -40,7 +40,7 @@
 
             <v-list-item-action>
               <v-btn icon>
-                <v-icon color="grey lighten-1">mdi-information</v-icon>
+                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
               </v-btn>
             </v-list-item-action>
           </v-list-item>
@@ -68,7 +68,187 @@
 
             <v-list-item-action>
               <v-btn icon>
-                <v-icon color="grey lighten-1">mdi-information</v-icon>
+                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+        </v-list>
+      </v-card>
+    </div>
+    <div class="col-span-3">
+      <p>Obviously rough</p>
+      <v-card max-width="600" class="mx-auto" dark>
+        <v-toolbar color="light-blue" dark>
+          <v-toolbar-title>Connery "where my ping at"</v-toolbar-title>
+        </v-toolbar>
+
+        <v-list subheader two-line>
+          <v-subheader inset>Qualified</v-subheader>
+
+          <v-list-item v-for="outfit in qualified" :key="outfit.title">
+            <v-list-item-avatar>
+              <v-icon class="grey lighten-1" dark> mdi-folder </v-icon>
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title v-text="outfit.title"></v-list-item-title>
+
+              <v-list-item-subtitle
+                v-text="outfit.subtitle"
+              ></v-list-item-subtitle>
+            </v-list-item-content>
+
+            <v-list-item-action>
+              <v-btn icon>
+                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+
+          <v-divider inset></v-divider>
+
+          <v-subheader inset>Disqualified</v-subheader>
+
+          <v-list-item
+            v-for="outfit in disqualified"
+            :key="outfit.title"
+            disabled
+          >
+            <v-list-item-avatar>
+              <v-icon class="grey darken-1" dark> mdi-folder </v-icon>
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title v-text="outfit.title"></v-list-item-title>
+
+              <v-list-item-subtitle
+                v-text="outfit.subtitle"
+              ></v-list-item-subtitle>
+            </v-list-item-content>
+
+            <v-list-item-action>
+              <v-btn icon>
+                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+        </v-list>
+      </v-card>
+    </div>
+    <div class="col-span-3">
+      <p>Obviously rough</p>
+      <v-card max-width="600" class="mx-auto" dark>
+        <v-toolbar color="light-blue" dark>
+          <v-toolbar-title>Memerald</v-toolbar-title>
+        </v-toolbar>
+
+        <v-list subheader two-line>
+          <v-subheader inset>Qualified</v-subheader>
+
+          <v-list-item v-for="outfit in qualified" :key="outfit.title">
+            <v-list-item-avatar>
+              <v-icon class="grey lighten-1" dark> mdi-folder </v-icon>
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title v-text="outfit.title"></v-list-item-title>
+
+              <v-list-item-subtitle
+                v-text="outfit.subtitle"
+              ></v-list-item-subtitle>
+            </v-list-item-content>
+
+            <v-list-item-action>
+              <v-btn icon>
+                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+
+          <v-divider inset></v-divider>
+
+          <v-subheader inset>Disqualified</v-subheader>
+
+          <v-list-item
+            v-for="outfit in disqualified"
+            :key="outfit.title"
+            disabled
+          >
+            <v-list-item-avatar>
+              <v-icon class="grey darken-1" dark> mdi-folder </v-icon>
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title v-text="outfit.title"></v-list-item-title>
+
+              <v-list-item-subtitle
+                v-text="outfit.subtitle"
+              ></v-list-item-subtitle>
+            </v-list-item-content>
+
+            <v-list-item-action>
+              <v-btn icon>
+                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+        </v-list>
+      </v-card>
+    </div>
+    <div class="col-span-3">
+      <p>Obviously rough</p>
+      <v-card max-width="600" class="mx-auto" dark>
+        <v-toolbar color="light-blue" dark>
+          <v-toolbar-title>Cobad</v-toolbar-title>
+        </v-toolbar>
+
+        <v-list subheader two-line>
+          <v-subheader inset>Qualified</v-subheader>
+
+          <v-list-item v-for="outfit in qualified" :key="outfit.title">
+            <v-list-item-avatar>
+              <v-icon class="grey lighten-1" dark> mdi-folder </v-icon>
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title v-text="outfit.title"></v-list-item-title>
+
+              <v-list-item-subtitle
+                v-text="outfit.subtitle"
+              ></v-list-item-subtitle>
+            </v-list-item-content>
+
+            <v-list-item-action>
+              <v-btn icon>
+                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+
+          <v-divider inset></v-divider>
+
+          <v-subheader inset>Disqualified</v-subheader>
+
+          <v-list-item
+            v-for="outfit in disqualified"
+            :key="outfit.title"
+            disabled
+          >
+            <v-list-item-avatar>
+              <v-icon class="grey darken-1" dark> mdi-folder </v-icon>
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title v-text="outfit.title"></v-list-item-title>
+
+              <v-list-item-subtitle
+                v-text="outfit.subtitle"
+              ></v-list-item-subtitle>
+            </v-list-item-content>
+
+            <v-list-item-action>
+              <v-btn icon>
+                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
               </v-btn>
             </v-list-item-action>
           </v-list-item>
