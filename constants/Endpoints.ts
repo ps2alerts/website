@@ -74,6 +74,14 @@ export const Endpoints = {
   INSTANCE: '/instances/{instance}',
   INSTANCES_ACTIVE: '/instances/active',
   INSTANCES_TERRITORY_CONTROL: '/instances/territory-control',
+
+  // Outfitwars
+  OW_RANKINGS_ALL: '/outfit-wars/rankings?sortBy=order&order=asc',
+  OW_RANKINGS_WORLD: '/outfit-wars/rankings/{world}',
+
+  // 3rd party
+  OUTFIT_TRACKER_OUTFIT_LOGO:
+    'https://outfit-tracker.com/outfit-logo/{outfitId}.png',
 }
 
 export const CensusEndpoints = {

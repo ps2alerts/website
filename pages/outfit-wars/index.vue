@@ -6,244 +6,93 @@
   >
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
     <div class="col-span-12">
-      <h1 class="text-title">Rankings &amp; Brackets</h1>
+      <h1 class="text-title text-center">Rankings &amp; Brackets</h1>
+      <p>
+        <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
+        Is your outfit logo missing?
+        <a
+          href="https://www.outfit-tracker.com/outfitsearch/"
+          target="_blank"
+          class="text-red-600"
+          >Upload it to Outfit Tracker!</a
+        >
+      </p>
     </div>
-    <div class="col-span-3">
-      <img src="/img/MillerBadge.png" class="mx-auto my-4 max-h-60" />
-
-      <v-card max-width="600" class="mx-auto" dark>
-        <div class="py-4 bg-tint">
-          <p class="text-2xl text-center">Miller Gigachads</p>
-        </div>
-
-        <v-list subheader>
-          <v-subheader><b>Qualified</b></v-subheader>
-
-          <v-list-item v-for="outfit in qualified" :key="outfit.title">
-            <v-list-item-avatar>
-              <img :src="outfit.image" />
-            </v-list-item-avatar>
-
-            <v-list-item-content>
-              <v-list-item-title v-text="outfit.title"></v-list-item-title>
-
-              <v-list-item-subtitle
-                ><b>{{ outfit.subtitle }}</b> - {{ outfit.wins }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-action>
-              <v-btn icon>
-                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-
-          <v-divider></v-divider>
-          <v-subheader>Disqualified</v-subheader>
-
-          <v-list-item
-            v-for="outfit in disqualified"
-            :key="outfit.title"
-            disabled
-          >
-            <v-list-item-avatar>
-              <img :src="outfit.image" />
-            </v-list-item-avatar>
-
-            <v-list-item-content>
-              <v-list-item-title v-text="outfit.title"></v-list-item-title>
-
-              <v-list-item-subtitle
-                ><b>{{ outfit.subtitle }}</b> - {{ outfit.wins }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-action>
-              <v-btn icon>
-                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-      </v-card>
+    <div class="col-span-12">
+      <a
+        v-for="world in worlds"
+        :key="world"
+        class="btn mx-1"
+        :href="'#world-' + world"
+        >{{ world | worldName }}</a
+      >
     </div>
-    <div class="col-span-3">
-      <img src="/img/ConneryBadge.png" class="mx-auto my-4 max-h-60" />
-      <v-card max-width="600" class="mx-auto" dark>
-        <div class="py-4 bg-tint">
-          <p class="text-2xl text-center">Connery "ping 1000+"</p>
+    <div
+      v-for="world in worlds"
+      :id="'world-' + world"
+      :key="world"
+      class="col-span-12 mb-4 pb-4 border-b border-b-gray-500"
+    >
+      <div class="grid grid-cols-12 gap-2">
+        <div class="col-span-12 md:col-span-3">
+          <img
+            alt="Server Logo"
+            :src="getWorldImage(world)"
+            class="mx-auto my-4 max-h-60"
+          />
+
+          <v-card v-if="!loaded" max-width="600" class="mx-auto bg-tint" dark>
+            <div class="py-4 bg-tint">
+              <p class="text-2xl text-center">{{ world | worldName }}</p>
+              <p class="text-sm text-center">Loading...</p>
+            </div>
+          </v-card>
+
+          <v-card v-if="loaded" max-width="600" class="mx-auto" dark>
+            <div class="py-4 bg-tint">
+              <p class="text-2xl text-center">{{ world | worldName }}</p>
+              <p v-if="currentWorldRankingsMap.has(world)" class="text-sm">
+                {{ currentWorldRankingsMap.get(world).size }} outfits signed up
+              </p>
+            </div>
+
+            <v-list subheader>
+              <v-list-item
+                v-for="outfit in currentWorldRankingsMap.get(world)"
+                :key="outfit.id"
+              >
+                <object
+                  :data="outfit.outfitImageUrl"
+                  type="image/png"
+                  width="50px"
+                >
+                  <img
+                    :src="getFactionImage(outfit.faction)"
+                    :alt="outfit.faction"
+                  />
+                </object>
+
+                <v-list-item-content>
+                  <v-list-item-title v-text="outfit.name"></v-list-item-title>
+                  <v-list-item-subtitle v-html="outfit.metricsString">
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+
+                <v-list-item-action>
+                  <v-btn icon>
+                    <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
+                  </v-btn>
+                </v-list-item-action>
+              </v-list-item>
+            </v-list>
+          </v-card>
         </div>
-
-        <v-list subheader>
-          <v-subheader>Qualified</v-subheader>
-
-          <v-list-item v-for="outfit in qualified" :key="outfit.title">
-            <v-list-item-avatar>
-              <v-icon class="grey lighten-1" dark> mdi-folder </v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-content>
-              <v-list-item-title v-text="outfit.title"></v-list-item-title>
-
-              <v-list-item-subtitle
-                v-text="outfit.subtitle"
-              ></v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-action>
-              <v-btn icon>
-                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-
-          <v-divider></v-divider>
-          <v-subheader>Disqualified</v-subheader>
-
-          <v-list-item
-            v-for="outfit in disqualified"
-            :key="outfit.title"
-            disabled
-          >
-            <v-list-item-avatar>
-              <v-icon class="grey darken-1" dark> mdi-folder </v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-content>
-              <v-list-item-title v-text="outfit.title"></v-list-item-title>
-
-              <v-list-item-subtitle
-                v-text="outfit.subtitle"
-              ></v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-action>
-              <v-btn icon>
-                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-      </v-card>
-    </div>
-    <div class="col-span-3">
-      <img src="/img/EmeraldBadge.png" class="mx-auto my-4 max-h-60" />
-
-      <v-card max-width="600" class="mx-auto" dark>
-        <div class="py-4 bg-tint">
-          <p class="text-2xl text-center">Memerald</p>
+        <div
+          class="col-span-12 md:col-span-9 bg-tint rounded border border-gray-900"
+        >
+          Brackets here
         </div>
-        <v-list subheader>
-          <v-subheader>Qualified</v-subheader>
-          <v-list-item v-for="outfit in qualified" :key="outfit.title">
-            <v-list-item-avatar>
-              <v-icon class="grey lighten-1" dark> mdi-folder </v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-content>
-              <v-list-item-title v-text="outfit.title"></v-list-item-title>
-
-              <v-list-item-subtitle
-                v-text="outfit.subtitle"
-              ></v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-action>
-              <v-btn icon>
-                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-
-          <v-divider></v-divider>
-          <v-subheader>Disqualified</v-subheader>
-
-          <v-list-item
-            v-for="outfit in disqualified"
-            :key="outfit.title"
-            disabled
-          >
-            <v-list-item-avatar>
-              <v-icon class="grey darken-1" dark> mdi-folder </v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-content>
-              <v-list-item-title v-text="outfit.title"></v-list-item-title>
-
-              <v-list-item-subtitle
-                v-text="outfit.subtitle"
-              ></v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-action>
-              <v-btn icon>
-                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-      </v-card>
-    </div>
-    <div class="col-span-3">
-      <img src="/img/CobaltBadge.png" class="mx-auto my-4 max-h-60" />
-
-      <v-card max-width="600" class="mx-auto" dark>
-        <div class="py-4 bg-tint">
-          <p class="text-2xl text-center">Cobad</p>
-        </div>
-
-        <v-list subheader>
-          <v-subheader>Qualified</v-subheader>
-
-          <v-list-item v-for="outfit in qualified" :key="outfit.title">
-            <v-list-item-avatar>
-              <v-icon class="grey lighten-1" dark> mdi-folder </v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-content>
-              <v-list-item-title v-text="outfit.title"></v-list-item-title>
-
-              <v-list-item-subtitle
-                v-text="outfit.subtitle"
-              ></v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-action>
-              <v-btn icon>
-                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-
-          <v-divider></v-divider>
-          <v-subheader>Disqualified</v-subheader>
-
-          <v-list-item
-            v-for="outfit in disqualified"
-            :key="outfit.title"
-            disabled
-          >
-            <v-list-item-avatar>
-              <v-icon class="grey darken-1" dark> mdi-folder </v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-content>
-              <v-list-item-title v-text="outfit.title"></v-list-item-title>
-
-              <v-list-item-subtitle
-                v-text="outfit.subtitle"
-              ></v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-action>
-              <v-btn icon>
-                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-      </v-card>
+      </div>
     </div>
   </section>
 </template>
@@ -251,6 +100,36 @@
 <script lang="ts">
 import Vue from 'vue'
 import MetaHead from '~/components/MetaHead.vue'
+import { World } from '~/ps2alerts-constants/world'
+import ApiRequest from '~/api-request'
+import { Endpoints } from '~/constants/Endpoints'
+import { Faction } from '~/ps2alerts-constants/faction'
+import { Phase } from '~/ps2alerts-constants/outfitwars/phase'
+import { OutfitwarsRankingInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsRankingInterface'
+import { getOutfitWarPhase } from '~/ps2alerts-constants/outfitwars/utils'
+import worldName from '~/filters/WorldName'
+
+interface RankingInterface {
+  totalScore: number
+  played: number
+  points: number
+  position: number
+  factionRank: number
+  globalRank: number
+}
+
+interface ParsedOutfitDataInterface {
+  id: string
+  name: string
+  tag: string | null
+  faction: Faction
+  world: World
+  round: string
+  phase: Phase
+  rankings: RankingInterface
+  outfitImageUrl: string
+  metricsString: string
+}
 
 export default Vue.extend({
   name: 'OutfitWarsRankings',
@@ -261,75 +140,15 @@ export default Vue.extend({
     return {
       pageTitle: 'Outfit Wars - Rankings',
       pageDesc: 'View all Rankings / Brackets for the Outfit Wars tournament!',
-      // loading: false,
-      // loaded: false,
-      qualified: [
-        {
-          subtitle: '1st Place',
-          wins: '4 wins | 1 losses',
-          title: '[DIG] Dignity Of War',
-          image:
-            'https://www.outfit-tracker.com/outfit-logo/37509488620604883.png',
-        },
-        {
-          subtitle: '2nd Place',
-          wins: '3 wins | 2 losses',
-          title: '[VCBC] Vanu Creme Bun Community',
-          image:
-            'https://www.outfit-tracker.com/outfit-logo/37512998641482810.png',
-        },
-        {
-          subtitle: '3rd Place',
-          wins: '2 wins | 3 losses',
-          title: '[EDIM] Emerald Immersion',
-          image:
-            'https://www.outfit-tracker.com/outfit-logo/37511594860086186.png',
-        },
-      ],
-      disqualified: [
-        {
-          subtitle: '4th Place',
-          wins: '1 wins | 4 losses',
-          title: '[NCAV] New Conglomerate Cavalry Corps',
-          image:
-            'https://www.outfit-tracker.com/outfit-logo/37568950690946355.png',
-        },
-        {
-          subtitle: '5th Place',
-          wins: '1 wins | 4 losses',
-          title: '[ELME] Elementary Beginnings',
-          image:
-            'https://www.outfit-tracker.com/outfit-logo/37513995010205725.png',
-        },
-        {
-          subtitle: '6th Place',
-          wins: '0 wins | 5 losses',
-          title: '[1PRC] 1E REGIMENT DES PARA COMMANDOS',
-          image:
-            'https://www.outfit-tracker.com/outfit-logo/37513677696702165.png',
-        },
-        {
-          subtitle: '7th Place',
-          wins: '0 wins | 5 losses',
-          title: '[SIN]Singularity of Dark Stars',
-          image:
-            'https://www.outfit-tracker.com/outfit-logo/37562834348233054.png',
-        },
-        {
-          subtitle: '8th Place',
-          wins: '0 wins | 5 losses',
-          title: '[NCAV] New Conglomerate Cavalry Corps',
-          image:
-            'https://www.outfit-tracker.com/outfit-logo/37568950690946355.png',
-        },
-        {
-          subtitle: '9th Place',
-          wins: '0 wins | 5 losses',
-          title: '[NCAV] New Conglomerate Cavalry Corps',
-          image:
-            'https://www.outfit-tracker.com/outfit-logo/37568950690946355.png',
-        },
-      ],
+      loading: true,
+      loaded: false,
+      error: '',
+      worlds: [World.COBALT, World.CONNERY, World.EMERALD, World.MILLER],
+      currentWorldRankingsMap: new Map<World, Set<ParsedOutfitDataInterface>>(),
+      currentFactionRankingsMap: new Map<
+        Faction,
+        Set<ParsedOutfitDataInterface>
+      >(),
     }
   },
   head(): object {
@@ -350,6 +169,126 @@ export default Vue.extend({
         },
       ],
     }
+  },
+  created() {
+    this.init()
+  },
+  methods: {
+    async init() {
+      await this.pull()
+    },
+    async pull() {
+      if (this.loaded) {
+        return
+      }
+
+      console.log('OutfitwarsRankings.pull')
+
+      await new ApiRequest()
+        .get<OutfitwarsRankingInterface[]>(Endpoints.OW_RANKINGS_ALL)
+        .then((result) => {
+          console.log('result', result)
+          this.parse(result)
+        })
+        .catch((e) => {
+          this.error = e.message
+        })
+    },
+    parse(data: OutfitwarsRankingInterface[]) {
+      for (const record of data) {
+        const position = record.rankingParameters.Gold
+          ? 1
+          : record.rankingParameters.Silver
+          ? 2
+          : record.rankingParameters.Bronze
+          ? 3
+          : 0
+
+        const outfitImageUrl = Endpoints.OUTFIT_TRACKER_OUTFIT_LOGO.replace(
+          '{outfitId}',
+          record.outfit.id
+        )
+
+        const score = record.rankingParameters.TotalScore ?? 0
+        const wins = record.rankingParameters.VictoryPoints ?? 0
+        const defeats = score - wins
+
+        let metricsString = ''
+
+        if (record.rankingParameters.MatchesPlayed > 0) {
+          metricsString = `<b>${score} points</b> <br>${wins} wins | ${defeats} defeats`
+        } else {
+          metricsString = 'Not yet played a match'
+        }
+        const outfitTagFormatted = record.outfit.tag
+          ? `[${record.outfit.tag}] `
+          : ''
+
+        const parsedOutfitData: ParsedOutfitDataInterface = {
+          id: record.outfit.id,
+          name: `${outfitTagFormatted}${record.outfit.name}`,
+          tag: record.outfit.tag ?? null,
+          faction: record.outfit.faction,
+          world: record.world,
+          round: record.roundId,
+          phase: getOutfitWarPhase(parseInt(record.roundId, 10)),
+          rankings: {
+            totalScore: record.rankingParameters.TotalScore,
+            played: record.rankingParameters.MatchesPlayed,
+            points: record.rankingParameters.TotalScore,
+            position,
+            factionRank: record.rankingParameters.FactionRank,
+            globalRank: record.rankingParameters.GlobalRank,
+          },
+          outfitImageUrl,
+          metricsString,
+        }
+
+        // Create world rankings data
+        const currentWorldRankings: Set<ParsedOutfitDataInterface> | undefined =
+          this.currentWorldRankingsMap.get(parsedOutfitData.world)
+
+        // If doesn't already exist, create the set now
+        if (!currentWorldRankings) {
+          this.currentWorldRankingsMap.set(
+            parsedOutfitData.world,
+            new Set([parsedOutfitData])
+          )
+        } else {
+          // Otherwise just add to the current set
+          currentWorldRankings.add(parsedOutfitData)
+        }
+
+        // Create faction rankings data
+        const currentFactionRankings:
+          | Set<ParsedOutfitDataInterface>
+          | undefined = this.currentFactionRankingsMap.get(
+          parsedOutfitData.faction
+        )
+
+        // If doesn't already exist, create the set now
+        if (!currentFactionRankings) {
+          this.currentFactionRankingsMap.set(
+            parsedOutfitData.faction,
+            new Set([parsedOutfitData])
+          )
+        } else {
+          // Otherwise just add to the current set
+          currentFactionRankings.add(parsedOutfitData)
+        }
+      }
+      console.log('world rankings', this.currentWorldRankingsMap)
+      console.log('faction rankings', this.currentFactionRankingsMap)
+
+      this.loaded = true
+      this.loading = false
+    },
+    getWorldImage(world: World) {
+      return `/img/worlds/${worldName(world)}.png`
+    },
+    getFactionImage(faction: Faction) {
+      return `/img/factions/${faction}.png`
+    },
   },
 })
 </script>
