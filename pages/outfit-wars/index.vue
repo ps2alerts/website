@@ -22,8 +22,8 @@
           <v-toolbar-title>Miller Gigachads</v-toolbar-title>
         </v-toolbar>
 
-        <v-list subheader two-line>
-          <v-subheader inset>Qualified</v-subheader>
+        <v-list subheader>
+          <v-subheader>Qualified</v-subheader>
 
           <v-list-item v-for="outfit in qualified" :key="outfit.title">
             <v-list-item-avatar>
@@ -45,9 +45,8 @@
             </v-list-item-action>
           </v-list-item>
 
-          <v-divider inset></v-divider>
-
-          <v-subheader inset>Disqualified</v-subheader>
+          <v-divider></v-divider>
+          <v-subheader>Disqualified</v-subheader>
 
           <v-list-item
             v-for="outfit in disqualified"
@@ -82,8 +81,8 @@
           <v-toolbar-title>Connery "where my ping at"</v-toolbar-title>
         </v-toolbar>
 
-        <v-list subheader two-line>
-          <v-subheader inset>Qualified</v-subheader>
+        <v-list subheader>
+          <v-subheader>Qualified</v-subheader>
 
           <v-list-item v-for="outfit in qualified" :key="outfit.title">
             <v-list-item-avatar>
@@ -105,9 +104,8 @@
             </v-list-item-action>
           </v-list-item>
 
-          <v-divider inset></v-divider>
-
-          <v-subheader inset>Disqualified</v-subheader>
+          <v-divider></v-divider>
+          <v-subheader>Disqualified</v-subheader>
 
           <v-list-item
             v-for="outfit in disqualified"
@@ -142,9 +140,8 @@
           <v-toolbar-title>Memerald</v-toolbar-title>
         </v-toolbar>
 
-        <v-list subheader two-line>
-          <v-subheader inset>Qualified</v-subheader>
-
+        <v-list subheader>
+          <v-subheader>Qualified</v-subheader>
           <v-list-item v-for="outfit in qualified" :key="outfit.title">
             <v-list-item-avatar>
               <v-icon class="grey lighten-1" dark> mdi-folder </v-icon>
@@ -165,9 +162,8 @@
             </v-list-item-action>
           </v-list-item>
 
-          <v-divider inset></v-divider>
-
-          <v-subheader inset>Disqualified</v-subheader>
+          <v-divider></v-divider>
+          <v-subheader>Disqualified</v-subheader>
 
           <v-list-item
             v-for="outfit in disqualified"
@@ -202,8 +198,8 @@
           <v-toolbar-title>Cobad</v-toolbar-title>
         </v-toolbar>
 
-        <v-list subheader two-line>
-          <v-subheader inset>Qualified</v-subheader>
+        <v-list subheader>
+          <v-subheader>Qualified</v-subheader>
 
           <v-list-item v-for="outfit in qualified" :key="outfit.title">
             <v-list-item-avatar>
@@ -225,9 +221,8 @@
             </v-list-item-action>
           </v-list-item>
 
-          <v-divider inset></v-divider>
-
-          <v-subheader inset>Disqualified</v-subheader>
+          <v-divider></v-divider>
+          <v-subheader>Disqualified</v-subheader>
 
           <v-list-item
             v-for="outfit in disqualified"
