@@ -16,7 +16,10 @@
       ></iframe>
     </div>
     <div class="col-span-3">
-      <p>Obviously rough</p>
+      <img
+        src="https://placehold.co/600x600?text=Server+Logo"
+        class="m-auto w-full mb-4 rounded"
+      />
       <v-card max-width="600" class="mx-auto" dark>
         <v-toolbar color="light-blue" dark>
           <v-toolbar-title>Miller Gigachads</v-toolbar-title>
@@ -75,7 +78,10 @@
       </v-card>
     </div>
     <div class="col-span-3">
-      <p>Obviously rough</p>
+      <img
+        src="https://placehold.co/600x600?text=Server+Logo"
+        class="m-auto w-full mb-4 rounded"
+      />
       <v-card max-width="600" class="mx-auto" dark>
         <v-toolbar color="light-blue" dark>
           <v-toolbar-title>Connery "where my ping at"</v-toolbar-title>
@@ -134,7 +140,10 @@
       </v-card>
     </div>
     <div class="col-span-3">
-      <p>Obviously rough</p>
+      <img
+        src="https://placehold.co/600x600?text=Server+Logo"
+        class="m-auto w-full mb-4 rounded"
+      />
       <v-card max-width="600" class="mx-auto" dark>
         <v-toolbar color="light-blue" dark>
           <v-toolbar-title>Memerald</v-toolbar-title>
@@ -192,7 +201,10 @@
       </v-card>
     </div>
     <div class="col-span-3">
-      <p>Obviously rough</p>
+      <img
+        src="https://placehold.co/600x600?text=Server+Logo"
+        class="m-auto w-full mb-4 rounded"
+      />
       <v-card max-width="600" class="mx-auto" dark>
         <v-toolbar color="light-blue" dark>
           <v-toolbar-title>Cobad</v-toolbar-title>
