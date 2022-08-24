@@ -107,7 +107,6 @@ export default {
     { src: '@/filters/OrdinalSuffix', mode: 'client' },
     { src: '@/filters/OWRoundByPhase', mode: 'client' },
     { src: '@/filters/PhaseName', mode: 'client' },
-    { src: '@/filters/SecondsInHumanTime', mode: 'client' },
     { src: '@/filters/TeamName', mode: 'client' },
     { src: '@/filters/UcFirst', mode: 'client' },
     { src: '@/filters/VehicleFaction', mode: 'client' },

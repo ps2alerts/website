@@ -1,25 +1,32 @@
 <template>
-  <div :remaining="remaining" class="inline">
+  <div class="inline">
     {{ remainingTimeText }}
-    <span v-if="showRemaining === 'true' && remaining > 0">remaining</span>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import AlertRemainingTime from '@/constants/AlertRemainingTime'
-import AlertRemainingTimeText from '@/constants/AlertRemainingTimeText'
+import moment from 'moment-timezone'
+import timeText from '~/utilities/timeText'
+import TimeRemainingFromDuration from '~/utilities/timeRemainingFromDuration'
 
 export default Vue.extend({
   name: 'RemainingTime',
   props: {
     started: {
       type: String,
-      required: true,
+      required: false,
+      default: '',
     },
     duration: {
       type: Number,
-      required: true,
+      required: false,
+      default: 0,
+    },
+    timeRemaining: {
+      type: Number,
+      required: false,
+      default: 0,
     },
     showRemaining: {
       type: String,
@@ -29,20 +36,10 @@ export default Vue.extend({
   },
   data() {
     return {
-      remaining: AlertRemainingTime(this.started, this.duration),
+      remaining: 0,
+      remainingTimeText: '00:00:00',
       interval: undefined as undefined | number,
     }
-  },
-  computed: {
-    remainingTimeText(): string {
-      if (this.remaining < -30) {
-        return 'Overdue!'
-      }
-      if (this.remaining <= 0) {
-        return 'Ending...'
-      }
-      return AlertRemainingTimeText(this.remaining)
-    },
   },
   created() {
     this.init()
@@ -52,12 +49,34 @@ export default Vue.extend({
   },
   methods: {
     init() {
+      // Accept both a direct duration left, or calculate it
+      if (this.timeRemaining) {
+        this.remaining = this.timeRemaining
+      } else {
+        this.remaining = TimeRemainingFromDuration(
+          parseInt(moment(this.started).tz('UTC').format('X'), 10),
+          this.duration / 1000
+        )
+      }
+
+      this.updateRemainingTimeText()
+
       this.interval = window.setInterval(() => {
-        this.tickTock()
+        this.remaining = this.remaining - 1
+        this.updateRemainingTimeText()
       }, 1000)
     },
-    tickTock() {
-      this.remaining = this.remaining - 1
+    updateRemainingTimeText() {
+      if (this.remaining < -30) {
+        return 'Overdue!'
+      }
+      if (this.remaining <= 0) {
+        return 'Ending...'
+      }
+
+      const remainingString = this.showRemaining === 'true' ? ' remaining' : ''
+
+      this.remainingTimeText = `${timeText(this.remaining)}${remainingString}`
     },
   },
 })

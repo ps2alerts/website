@@ -19,6 +19,8 @@ export const ZoneBgClassString = (zone: Zone | undefined): string => {
     case Zone.NEXUS:
       return 'bg-nexus'
   }
+
+  return ''
 }
 
 export const ZoneHexSize = (zone: Zone | undefined): number => {

@@ -5,160 +5,79 @@
     class="grid grid-cols-12 gap-2 text-center relative"
   >
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
-    <div class="col-span-12 md:col-span-4">
-      <img src="/img/outfitwars-nexus.png" class="rounded-xl w-full" />
-    </div>
-    <div class="col-span-12 md:col-span-8">
-      <h1 class="text-title">Outfit Wars 2022</h1>
-      <h1 class="text-subtitle">11D 12:34:00</h1>
-      <p class="text-xl">
-        Until the season begins (including 20 min prep time)
+    <div class="col-span-12 md:col-span-10 md:col-start-2">
+      <img
+        class="ps2alerts-logo m-auto"
+        alt="PS2Alerts Logo"
+        src="/img/outfitwars-logo.png"
+      />
+      <p class="text-title mb-1">
+        <remaining-time :time-remaining="timeRemaining"></remaining-time>
       </p>
-    </div>
-    <div class="col-span-12">
-      <h1 class="text-title text-center">Rankings &amp; Brackets</h1>
-      <p>
-        <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
-        Is your outfit logo missing?
+      <p class="text-sm mb-2">includes 20 min prep time</p>
+      <h1 class="text-subtitle mt-4 mb-4">
+        Outfit Wars 2022 statistics is coming!
+      </h1>
+
+      <p class="text-xl mb-2">
+        PS2Alerts will bring <b>full</b> support of per-match and tournament
+        wide statistics for Outfit Wars 2022!
+      </p>
+      <p class="mb-2 text-left">
+        Here you will find all the players, outfits, weapons &amp; more
+        statistics on a global and per-server basis, just like the normal alert
+        stats throughout the site. Additionally, we will keep a track record of
+        all match results along with their scores, so you don't need to go
+        in-game to see them.
+      </p>
+      <p class="mb-2 text-left">
+        Every single match will be recorded, including full support for Map
+        Replay, combat histories and of course all the per-player and outfit
+        metrics, where you can see how the battle over Nexus for the match went
+        over time.
+      </p>
+      <p class="mb-2 text-left">
+        Join us on our
         <a
-          href="https://www.outfit-tracker.com/outfitsearch/"
+          class="text-red-500"
           target="_blank"
-          class="text-red-600"
-          >Upload it to Outfit Tracker!</a
+          href="https://discord.gg/abXGXHnE"
+          >Discord Server</a
         >
+        to receive the latest announcements about PS2Alerts and the overall
+        Outfitwars Metagame including announcements on when matches start on
+        each server!
       </p>
-    </div>
-    <div class="col-span-12">
-      <a
-        v-for="world in worlds"
-        :key="world"
-        class="btn mx-1"
-        :href="'#world-' + world"
-        >{{ world | worldName }}</a
-      >
-    </div>
-    <div
-      v-for="world in worlds"
-      :id="'world-' + world"
-      :key="world"
-      class="col-span-12 mb-4 pb-4 border-b border-b-gray-500"
-    >
-      <div class="grid grid-cols-12 gap-2">
-        <div class="col-span-12 md:col-span-3">
-          <img
-            alt="Server Logo"
-            :src="getWorldImage(world)"
-            class="mx-auto my-4 max-h-60"
-          />
-
-          <v-card v-if="!loaded" max-width="600" class="mx-auto bg-tint" dark>
-            <div class="py-4 bg-tint">
-              <p class="text-2xl text-center">{{ world | worldName }}</p>
-              <p class="text-sm text-center">Loading...</p>
-            </div>
-          </v-card>
-
-          <v-card v-if="loaded" max-width="600" class="mx-auto" dark>
-            <div class="py-4 bg-tint">
-              <p class="text-2xl text-center">{{ world | worldName }}</p>
-              <p v-if="currentWorldRankingsMap.has(world)" class="text-sm">
-                {{ currentWorldRankingsMap.get(world).size }} outfits signed up
-              </p>
-            </div>
-
-            <v-list subheader>
-              <v-list-item
-                v-for="outfit in currentWorldRankingsMap.get(world)"
-                :key="outfit.id"
-              >
-                <object
-                  :data="outfit.outfitImageUrl"
-                  type="image/png"
-                  width="50px"
-                >
-                  <img
-                    :src="getFactionImage(outfit.faction)"
-                    :alt="outfit.faction"
-                  />
-                </object>
-
-                <v-list-item-content>
-                  <v-list-item-title v-text="outfit.name"></v-list-item-title>
-                  <v-list-item-subtitle v-html="outfit.metricsString">
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-
-                <v-list-item-action>
-                  <v-btn icon>
-                    <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-                  </v-btn>
-                </v-list-item-action>
-              </v-list-item>
-            </v-list>
-          </v-card>
-        </div>
-        <div
-          class="col-span-12 md:col-span-9 bg-tint rounded border border-gray-900"
-        >
-          Brackets here
-        </div>
-      </div>
+      <p class="text-sm text-left mb-2">
+        Please note, unfortunately DBG has not fixed the issues surrounding
+        getting data from SolTech, so that server will not be supported, and nor
+        will any PS4 servers as it is a PC event.
+      </p>
+      <p class="text-xs mb-2">
+        OW logo &copy; Daybreak Games, many thanks to Mithril for providing it!
+      </p>
     </div>
   </section>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import moment from 'moment-timezone'
 import MetaHead from '~/components/MetaHead.vue'
-import { World } from '~/ps2alerts-constants/world'
-import ApiRequest from '~/api-request'
-import { Endpoints } from '~/constants/Endpoints'
-import { Faction } from '~/ps2alerts-constants/faction'
-import { Phase } from '~/ps2alerts-constants/outfitwars/phase'
-import { OutfitwarsRankingInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsRankingInterface'
-import { getOutfitWarPhase } from '~/ps2alerts-constants/outfitwars/utils'
-import worldName from '~/filters/WorldName'
-
-interface RankingInterface {
-  totalScore: number
-  played: number
-  points: number
-  position: number
-  factionRank: number
-  globalRank: number
-}
-
-interface ParsedOutfitDataInterface {
-  id: string
-  name: string
-  tag: string | null
-  faction: Faction
-  world: World
-  round: string
-  phase: Phase
-  rankings: RankingInterface
-  outfitImageUrl: string
-  metricsString: string
-}
+import TimeRemainingFromDuration from '~/utilities/timeRemainingFromDuration'
 
 export default Vue.extend({
-  name: 'OutfitWarsRankings',
+  name: 'OutfitWars',
   components: {
     MetaHead,
   },
   data() {
     return {
-      pageTitle: 'Outfit Wars - Rankings',
-      pageDesc: 'View all Rankings / Brackets for the Outfit Wars tournament!',
-      loading: true,
-      loaded: false,
-      error: '',
-      worlds: [World.COBALT, World.CONNERY, World.EMERALD, World.MILLER],
-      currentWorldRankingsMap: new Map<World, Set<ParsedOutfitDataInterface>>(),
-      currentFactionRankingsMap: new Map<
-        Faction,
-        Set<ParsedOutfitDataInterface>
-      >(),
+      pageTitle: 'Outfit Wars',
+      pageDesc: 'Your source for all Outfitwars 2022 Statistics',
+      now: parseInt(moment().tz('UTC').format('X'), 10),
+      end: parseInt(moment.tz('2022-09-03 18:20:00', 'UTC').format('X'), 10),
+      timeRemaining: 0,
     }
   },
   head(): object {
@@ -181,124 +100,10 @@ export default Vue.extend({
     }
   },
   created() {
-    this.init()
-  },
-  methods: {
-    async init() {
-      await this.pull()
-    },
-    async pull() {
-      if (this.loaded) {
-        return
-      }
-
-      console.log('OutfitwarsRankings.pull')
-
-      await new ApiRequest()
-        .get<OutfitwarsRankingInterface[]>(Endpoints.OW_RANKINGS_ALL)
-        .then((result) => {
-          console.log('result', result)
-          this.parse(result)
-        })
-        .catch((e) => {
-          this.error = e.message
-        })
-    },
-    parse(data: OutfitwarsRankingInterface[]) {
-      for (const record of data) {
-        const position = record.rankingParameters.Gold
-          ? 1
-          : record.rankingParameters.Silver
-          ? 2
-          : record.rankingParameters.Bronze
-          ? 3
-          : 0
-
-        const outfitImageUrl = Endpoints.OUTFIT_TRACKER_OUTFIT_LOGO.replace(
-          '{outfitId}',
-          record.outfit.id
-        )
-
-        const score = record.rankingParameters.TotalScore ?? 0
-        const wins = record.rankingParameters.VictoryPoints ?? 0
-        const defeats = score - wins
-
-        let metricsString = ''
-
-        if (record.rankingParameters.MatchesPlayed > 0) {
-          metricsString = `<b>${score} points</b> <br>${wins} wins | ${defeats} defeats`
-        } else {
-          metricsString = 'Not yet played a match'
-        }
-        const outfitTagFormatted = record.outfit.tag
-          ? `[${record.outfit.tag}] `
-          : ''
-
-        const parsedOutfitData: ParsedOutfitDataInterface = {
-          id: record.outfit.id,
-          name: `${outfitTagFormatted}${record.outfit.name}`,
-          tag: record.outfit.tag ?? null,
-          faction: record.outfit.faction,
-          world: record.world,
-          round: record.roundId,
-          phase: getOutfitWarPhase(parseInt(record.roundId, 10)),
-          rankings: {
-            totalScore: record.rankingParameters.TotalScore,
-            played: record.rankingParameters.MatchesPlayed,
-            points: record.rankingParameters.TotalScore,
-            position,
-            factionRank: record.rankingParameters.FactionRank,
-            globalRank: record.rankingParameters.GlobalRank,
-          },
-          outfitImageUrl,
-          metricsString,
-        }
-
-        // Create world rankings data
-        const currentWorldRankings: Set<ParsedOutfitDataInterface> | undefined =
-          this.currentWorldRankingsMap.get(parsedOutfitData.world)
-
-        // If doesn't already exist, create the set now
-        if (!currentWorldRankings) {
-          this.currentWorldRankingsMap.set(
-            parsedOutfitData.world,
-            new Set([parsedOutfitData])
-          )
-        } else {
-          // Otherwise just add to the current set
-          currentWorldRankings.add(parsedOutfitData)
-        }
-
-        // Create faction rankings data
-        const currentFactionRankings:
-          | Set<ParsedOutfitDataInterface>
-          | undefined = this.currentFactionRankingsMap.get(
-          parsedOutfitData.faction
-        )
-
-        // If doesn't already exist, create the set now
-        if (!currentFactionRankings) {
-          this.currentFactionRankingsMap.set(
-            parsedOutfitData.faction,
-            new Set([parsedOutfitData])
-          )
-        } else {
-          // Otherwise just add to the current set
-          currentFactionRankings.add(parsedOutfitData)
-        }
-      }
-      console.log('world rankings', this.currentWorldRankingsMap)
-      console.log('faction rankings', this.currentFactionRankingsMap)
-
-      this.loaded = true
-      this.loading = false
-    },
-    getWorldImage(world: World) {
-      return `/img/worlds/${worldName(world)}.png`
-    },
-    getFactionImage(faction: Faction) {
-      return `/img/factions/${faction}.png`
-    },
+    this.timeRemaining = TimeRemainingFromDuration(
+      this.now,
+      this.end - this.now
+    )
   },
 })
 </script>
