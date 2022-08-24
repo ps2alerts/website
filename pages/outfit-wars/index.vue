@@ -6,24 +6,74 @@
   >
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
     <div class="col-span-12">
-      <h1 class="text-title">Rankings</h1>
-      <iframe
-        src="https://giphy.com/embed/xTiIzJSKB4l7xTouE8"
-        width="480"
-        height="208"
-        class="giphy-embed m-auto"
-        allowFullScreen
-      ></iframe>
+      <h1 class="text-title">Rankings &amp; Brackets</h1>
     </div>
     <div class="col-span-3">
-      <img
-        src="https://placehold.co/600x600?text=Server+Logo"
-        class="m-auto w-full mb-4 rounded"
-      />
+      <img src="/img/MillerBadge.png" class="mx-auto my-4 max-h-60" />
+
       <v-card max-width="600" class="mx-auto" dark>
-        <v-toolbar color="light-blue" dark>
-          <v-toolbar-title>Miller Gigachads</v-toolbar-title>
-        </v-toolbar>
+        <div class="py-4 bg-tint">
+          <p class="text-2xl text-center">Miller Gigachads</p>
+        </div>
+
+        <v-list subheader>
+          <v-subheader><b>Qualified</b></v-subheader>
+
+          <v-list-item v-for="outfit in qualified" :key="outfit.title">
+            <v-list-item-avatar>
+              <img :src="outfit.image" />
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title v-text="outfit.title"></v-list-item-title>
+
+              <v-list-item-subtitle
+                ><b>{{ outfit.subtitle }}</b> - {{ outfit.wins }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+
+            <v-list-item-action>
+              <v-btn icon>
+                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+
+          <v-divider></v-divider>
+          <v-subheader>Disqualified</v-subheader>
+
+          <v-list-item
+            v-for="outfit in disqualified"
+            :key="outfit.title"
+            disabled
+          >
+            <v-list-item-avatar>
+              <img :src="outfit.image" />
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title v-text="outfit.title"></v-list-item-title>
+
+              <v-list-item-subtitle
+                ><b>{{ outfit.subtitle }}</b> - {{ outfit.wins }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+
+            <v-list-item-action>
+              <v-btn icon>
+                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
+        </v-list>
+      </v-card>
+    </div>
+    <div class="col-span-3">
+      <img src="/img/ConneryBadge.png" class="mx-auto my-4 max-h-60" />
+      <v-card max-width="600" class="mx-auto" dark>
+        <div class="py-4 bg-tint">
+          <p class="text-2xl text-center">Connery "ping 1000+"</p>
+        </div>
 
         <v-list subheader>
           <v-subheader>Qualified</v-subheader>
@@ -78,77 +128,12 @@
       </v-card>
     </div>
     <div class="col-span-3">
-      <img
-        src="https://placehold.co/600x600?text=Server+Logo"
-        class="m-auto w-full mb-4 rounded"
-      />
+      <img src="/img/EmeraldBadge.png" class="mx-auto my-4 max-h-60" />
+
       <v-card max-width="600" class="mx-auto" dark>
-        <v-toolbar color="light-blue" dark>
-          <v-toolbar-title>Connery "where my ping at"</v-toolbar-title>
-        </v-toolbar>
-
-        <v-list subheader>
-          <v-subheader>Qualified</v-subheader>
-
-          <v-list-item v-for="outfit in qualified" :key="outfit.title">
-            <v-list-item-avatar>
-              <v-icon class="grey lighten-1" dark> mdi-folder </v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-content>
-              <v-list-item-title v-text="outfit.title"></v-list-item-title>
-
-              <v-list-item-subtitle
-                v-text="outfit.subtitle"
-              ></v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-action>
-              <v-btn icon>
-                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-
-          <v-divider></v-divider>
-          <v-subheader>Disqualified</v-subheader>
-
-          <v-list-item
-            v-for="outfit in disqualified"
-            :key="outfit.title"
-            disabled
-          >
-            <v-list-item-avatar>
-              <v-icon class="grey darken-1" dark> mdi-folder </v-icon>
-            </v-list-item-avatar>
-
-            <v-list-item-content>
-              <v-list-item-title v-text="outfit.title"></v-list-item-title>
-
-              <v-list-item-subtitle
-                v-text="outfit.subtitle"
-              ></v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-action>
-              <v-btn icon>
-                <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-      </v-card>
-    </div>
-    <div class="col-span-3">
-      <img
-        src="https://placehold.co/600x600?text=Server+Logo"
-        class="m-auto w-full mb-4 rounded"
-      />
-      <v-card max-width="600" class="mx-auto" dark>
-        <v-toolbar color="light-blue" dark>
-          <v-toolbar-title>Memerald</v-toolbar-title>
-        </v-toolbar>
-
+        <div class="py-4 bg-tint">
+          <p class="text-2xl text-center">Memerald</p>
+        </div>
         <v-list subheader>
           <v-subheader>Qualified</v-subheader>
           <v-list-item v-for="outfit in qualified" :key="outfit.title">
@@ -201,14 +186,12 @@
       </v-card>
     </div>
     <div class="col-span-3">
-      <img
-        src="https://placehold.co/600x600?text=Server+Logo"
-        class="m-auto w-full mb-4 rounded"
-      />
+      <img src="/img/CobaltBadge.png" class="mx-auto my-4 max-h-60" />
+
       <v-card max-width="600" class="mx-auto" dark>
-        <v-toolbar color="light-blue" dark>
-          <v-toolbar-title>Cobad</v-toolbar-title>
-        </v-toolbar>
+        <div class="py-4 bg-tint">
+          <p class="text-2xl text-center">Cobad</p>
+        </div>
 
         <v-list subheader>
           <v-subheader>Qualified</v-subheader>
@@ -282,41 +265,69 @@ export default Vue.extend({
       // loaded: false,
       qualified: [
         {
-          icon: 'mdi-clipboard-text',
           subtitle: '1st Place',
+          wins: '4 wins | 1 losses',
           title: '[DIG] Dignity Of War',
+          image:
+            'https://www.outfit-tracker.com/outfit-logo/37509488620604883.png',
         },
         {
-          icon: 'mdi-gesture-tap-button',
           subtitle: '2nd Place',
+          wins: '3 wins | 2 losses',
           title: '[VCBC] Vanu Creme Bun Community',
+          image:
+            'https://www.outfit-tracker.com/outfit-logo/37512998641482810.png',
         },
         {
-          icon: 'mdi-gesture-tap-button',
           subtitle: '3rd Place',
-          title: '[EDIM] Emerald Immerson',
+          wins: '2 wins | 3 losses',
+          title: '[EDIM] Emerald Immersion',
+          image:
+            'https://www.outfit-tracker.com/outfit-logo/37511594860086186.png',
         },
       ],
       disqualified: [
         {
-          icon: 'mdi-gesture-tap-button',
           subtitle: '4th Place',
-          title: '[FOO] Foobar',
+          wins: '1 wins | 4 losses',
+          title: '[NCAV] New Conglomerate Cavalry Corps',
+          image:
+            'https://www.outfit-tracker.com/outfit-logo/37568950690946355.png',
         },
         {
-          icon: 'mdi-gesture-tap-button',
           subtitle: '5th Place',
-          title: '[EDIM] Emerald Immerson',
+          wins: '1 wins | 4 losses',
+          title: '[ELME] Elementary Beginnings',
+          image:
+            'https://www.outfit-tracker.com/outfit-logo/37513995010205725.png',
         },
         {
-          icon: 'mdi-gesture-tap-button',
           subtitle: '6th Place',
-          title: '[EDIM] Emerald Immerson',
+          wins: '0 wins | 5 losses',
+          title: '[1PRC] 1E REGIMENT DES PARA COMMANDOS',
+          image:
+            'https://www.outfit-tracker.com/outfit-logo/37513677696702165.png',
         },
         {
-          icon: 'mdi-gesture-tap-button',
           subtitle: '7th Place',
-          title: '[EDIM] Emerald Immerson',
+          wins: '0 wins | 5 losses',
+          title: '[SIN]Singularity of Dark Stars',
+          image:
+            'https://www.outfit-tracker.com/outfit-logo/37562834348233054.png',
+        },
+        {
+          subtitle: '8th Place',
+          wins: '0 wins | 5 losses',
+          title: '[NCAV] New Conglomerate Cavalry Corps',
+          image:
+            'https://www.outfit-tracker.com/outfit-logo/37568950690946355.png',
+        },
+        {
+          subtitle: '9th Place',
+          wins: '0 wins | 5 losses',
+          title: '[NCAV] New Conglomerate Cavalry Corps',
+          image:
+            'https://www.outfit-tracker.com/outfit-logo/37568950690946355.png',
         },
       ],
     }
