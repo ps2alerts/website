@@ -5,6 +5,16 @@
     class="grid grid-cols-12 gap-2 text-center relative"
   >
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
+    <div class="col-span-12 md:col-span-4">
+      <img src="/img/outfitwars-nexus.png" class="rounded-xl w-full" />
+    </div>
+    <div class="col-span-12 md:col-span-8">
+      <h1 class="text-title">Outfit Wars 2022</h1>
+      <h1 class="text-subtitle">11D 12:34:00</h1>
+      <p class="text-xl">
+        Until the season begins (including 20 min prep time)
+      </p>
+    </div>
     <div class="col-span-12">
       <h1 class="text-title text-center">Rankings &amp; Brackets</h1>
       <p>
