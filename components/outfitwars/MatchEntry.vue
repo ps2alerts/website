@@ -1,8 +1,8 @@
 <template>
   <NuxtLink
     :to="{
-      name: 'outfitwars-outfitwars',
-      params: { outfitwars: match.instanceId },
+      name: 'outfit-wars-outfitwars',
+      params: { 'outfitwars': match.instanceId },
     }"
     :disabled="match.state === 0"
     :event="match.state === 0 ? '' : 'click'"
