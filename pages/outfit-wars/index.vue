@@ -110,9 +110,27 @@
           </v-card>
         </div>
         <div
+          v-if="loaded"
+          class="flex p-2 gap-y-2 gap-x-4 overflow-x-auto col-span-12 md:col-span-9 bg-tint rounded border border-gray-900"
+        >
+          <div
+            v-for="(round, index) in rounds"
+            :key="index"
+            class="col-span-1 flex-shrink-0 "
+          >
+            Round {{ round }}
+            <RoundBracket
+              :rankings="rawData"
+              :round="round"
+              :server="world"
+            />
+          </div>
+        </div>
+        <div
+          v-if="!loaded"
           class="col-span-12 md:col-span-9 bg-tint rounded border border-gray-900"
         >
-          Brackets here
+          Loading...
         </div>
       </div>
     </div>
@@ -123,6 +141,7 @@
 import Vue from 'vue'
 import moment from 'moment-timezone'
 import MetaHead from '~/components/MetaHead.vue'
+import RoundBracket from '~/components/outfitwars/RoundBracket.vue'
 import { World } from '~/ps2alerts-constants/world'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
@@ -159,6 +178,7 @@ export default Vue.extend({
   name: 'OutfitWarsRankings',
   components: {
     MetaHead,
+    RoundBracket
   },
   data() {
     return {
@@ -177,6 +197,8 @@ export default Vue.extend({
         Set<ParsedOutfitDataInterface>
       >(),
       totalOutfits: 0,
+      rawData: [] as OutfitwarsRankingInterface[],
+      seenOutfits: [] as string[]
     }
   },
   head(): object {
@@ -200,6 +222,23 @@ export default Vue.extend({
   },
   created() {
     this.init()
+  },
+  computed: {
+    rounds(): number[] {
+      console.log(`Rounds: loaded = ${this.loaded}`)
+      if(!this.loaded) {
+        return [1]
+      }
+      let rounds: number[] = []
+      for (const ranking of this.rawData) {
+        if(!rounds.includes(ranking.round)) {
+          rounds.push(ranking.round)
+        }
+      }
+      rounds.sort()
+      console.log(`Rounds: ${JSON.stringify(rounds)}`)
+      return rounds
+    }
   },
   methods: {
     async init() {
@@ -227,7 +266,12 @@ export default Vue.extend({
         })
     },
     parse(data: OutfitwarsRankingInterface[]) {
+      this.rawData = data;
       for (const record of data) {
+        if(this.seenOutfits.includes(record.outfit.id)) {
+          continue
+        }
+        this.seenOutfits.push(record.outfit.id)
         const position = record.rankingParameters.Gold
           ? 1
           : record.rankingParameters.Silver
