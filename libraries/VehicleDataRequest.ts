@@ -35,6 +35,11 @@ export default class VehicleDataRequest {
           name: 'Lodestar Prototype',
           faction: Faction.NONE,
         })
+        data.push({
+          id: Vehicle.CORSAIR,
+          name: 'Corsair',
+          faction: Faction.NONE,
+        })
       })
     return data
   }
