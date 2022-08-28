@@ -11,8 +11,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import RoundBracketEntry from '~/components/outfitwars/RoundBracketEntry.vue'
-import { OutfitwarsRankingInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsRankingInterface'
+import { OutfitwarsRankingInterface, OutfitwarsOutfitDataInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsRankingInterface'
 import { pcWorldArray, WorldPC, World } from '~/ps2alerts-constants/world'
+import { PropValidator } from 'vue/types/options'
 
 export default Vue.extend({
     name: 'RoundBracket',
@@ -26,7 +27,7 @@ export default Vue.extend({
                 return pcWorldArray.slice(0, 4).includes(value)
             },
             required: true
-        },
+        } as PropValidator<WorldPC>,
         round: {
             type: Number,
             required: true
@@ -39,15 +40,15 @@ export default Vue.extend({
               return true
             },
             required: true
-        }
+        } as PropValidator<OutfitwarsRankingInterface[]>
     },
     data() {
       return {
-        pairs: [] as OutfitwarsRankingInterface[][]
+        pairs: [] as OutfitwarsOutfitDataInterface[][]
       }
     },
     computed: {
-      rankingPairs(): OutfitwarsRankingInterface[][] {
+      rankingPairs(): OutfitwarsOutfitDataInterface[][] {
         if(this.pairs.length !== 0) {
           return this.pairs
         }
