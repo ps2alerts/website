@@ -8,10 +8,21 @@
       <AlertResult
         :alert="alert"
         :update-countdown-percent="updateCountdownPercent"
+        class="2xl:order-first"
       />
-      <OutfitWarDetails :alert="alert" />
-      <AlertFactionCombatMetrics :alert="alert" />
-      <AlertFactionVsFaction :alert="alert" />
+      <TeamInfo 
+        class="col-span-12 2xl:col-span-6 2xl:-order-2"
+        :alert="alert"
+      />
+      <OutfitWarDetails 
+        class="col-span-12 lg:col-span-6 2xl:col-span-3 2xl:-order-3"
+        :alert="alert" 
+      />
+      <AlertFactionCombatMetrics
+        class="col-span-12 lg:col-span-6 2xl:col-span-3 2xl:col-start-10 2xl:-order-1" 
+        :alert="alert"
+      />
+      <!--<AlertFactionVsFaction :alert="alert" />-->
       <div class="col-span-full md:col-span-4 md:col-start-5">
         <v-tabs v-model="mapsTab" center-active dark fixed-tabs class="mt-2">
           <v-tabs-slider></v-tabs-slider>
@@ -138,7 +149,7 @@ import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
 import { ps2AlertsApiEndpoints } from '@/ps2alerts-constants/ps2AlertsApiEndpoints'
 import { CensusEndpoints, Endpoints } from '@/constants/Endpoints'
 import AlertResult from '@/components/alert/AlertResult.vue'
-import OutfitWarDetails from '@/components/outfitwars/OutfitWarDetails.vue'
+import AlertDetails from '@/components/alert/AlertDetails.vue'
 import AlertFactionCombatMetrics from '@/components/alert/AlertFactionCombatMetrics.vue'
 import AlertFactionVsFaction from '@/components/alert/AlertFactionVsFaction.vue'
 import AlertMap from '@/components/alert/AlertMap.vue'
@@ -150,7 +161,8 @@ import AlertVehicleMatrix from '@/components/alert/AlertVehicleMatrix.vue'
 import AlertPopulations from '@/components/alert/AlertPopulations.vue'
 import AlertClassMetrics from '@/components/alert/AlertLoadoutMetrics.vue'
 import AlertCombatHistory from '@/components/alert/AlertCombatHistory.vue'
-import AlertBattleranks from '~/components/alert/AlertBattleranks.vue'
+import AlertBattleranks from '@/components/alert/AlertBattleranks.vue'
+import TeamInfo from '@/components/outfitwars/TeamInfo.vue'
 import { InstanceFacilityControlAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceFacilityControlAggregateResponseInterface'
 import facilityTypeName from '~/filters/FacilityTypeName'
 import { Zone } from '@/ps2alerts-constants/zone'
@@ -164,7 +176,7 @@ export default Vue.extend({
   name: 'Alert',
   components: {
     AlertResult,
-    OutfitWarDetails,
+    AlertDetails,
     AlertFactionCombatMetrics,
     AlertFactionVsFaction,
     AlertPopulations,
@@ -178,6 +190,7 @@ export default Vue.extend({
     AlertVehicleMetrics,
     AlertVehicleMatrix,
     AlertClassMetrics,
+    TeamInfo,
   },
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   beforeRouteUpdate(to, from, next) {

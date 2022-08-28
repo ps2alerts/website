@@ -1,6 +1,6 @@
 <template>
   <div
-    class="col-span-12 lg:col-span-6 2xl:col-span-3 card relative items-center"
+    class="card relative items-center"
   >
     <div class="tag section">{{ !outfitwar ? 'Faction' : 'Team' }} Combat Metrics</div>
     <CountdownSpinner
