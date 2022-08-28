@@ -10,7 +10,7 @@
     <div class="flex gap-2 p-2 mb-2 bg-tint rounded relative hover bg-[#1e1e1e]">
       <div class="self-center">
         <object
-          :data="outfitImageUrls[0]"
+          :data="outfits[0].id | outfitImage"
           type="image/png"
           width="50px"
         >
@@ -55,7 +55,7 @@
       </div>
       <div class="self-center">
         <object
-          :data="outfitImageUrls[1]"
+          :data="outfits[1].id | outfitImage"
           type="image/png"
           width="50px"
         >
@@ -77,7 +77,6 @@ import { Team } from '@/ps2alerts-constants/outfitwars/team'
 import { FactionBgClass } from '@/constants/FactionBgClass'
 import { FactionBorderClass } from '@/constants/FactionBorderClass'
 import { OutfitInterface } from '~/interfaces/OutfitInterface'
-import { Endpoints } from '~/constants/Endpoints'
 import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
 
 export default Vue.extend({
@@ -143,12 +142,6 @@ export default Vue.extend({
     victor(): Team {
       return this.match.result ? this.match.result.victor : null
     },
-    outfitImageUrls(): string[] {
-      return [
-        Endpoints.OUTFIT_TRACKER_OUTFIT_LOGO.replace('{outfitId}', this.outfits[0].id),
-        Endpoints.OUTFIT_TRACKER_OUTFIT_LOGO.replace('{outfitId}', this.outfits[1].id),
-      ]
-    }
   },
 })
 </script>
