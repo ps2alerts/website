@@ -1,17 +1,19 @@
 <template>
-  <div class="aspect-square relative place-items-center">
-    <img
-      class="absolute inset-0 m-auto"
-      :src="outfitId | outfitImage"
-      :alt="outfitFaction | factionShortName"
-      @error="imageUrlAlt"
-    />
-    <img
-      ref="faction-badge"
-      :class="'absolute bottom-0 w-1/4 ' + (badgeLeft ? 'left-0' : 'right-0')"
-      :src="outfitFaction | factionImage"
-      :alt="outfitFaction | factionShortName"
-    />
+  <div>
+    <div class="aspect-square relative place-items-center">
+      <img
+        class="absolute inset-0 m-auto"
+        :src="outfitId | outfitImage"
+        :alt="outfitFaction | factionShortName"
+        @error="imageUrlAlt"
+      />
+      <img
+        ref="faction-badge"
+        :class="'absolute bottom-0 w-1/4 ' + (badgeLeft ? 'left-0' : 'right-0')"
+        :src="outfitFaction | factionImage"
+        :alt="outfitFaction | factionShortName"
+      />
+    </div>
   </div>
 </template>
 <script lang="ts">
