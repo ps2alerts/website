@@ -39,7 +39,7 @@
             :key="outfitwar.instanceId"
             class="p-1 border-b border-gray-500 border-no-bottom"
           >
-            <RealTimeOutfitWar
+            <RealTimeAlert
               :world="outfitwar.world"
               :zone="outfitwar.zone"
               :time-started="outfitwar.timeStarted"
@@ -48,6 +48,7 @@
               :instance-id="outfitwar.instanceId"
               :pops="getPops(outfitwar.instanceId)"
               :is-percentage="showPopPercent"
+              :outfitwars="true"
             />
           </div>
         </div>
@@ -106,14 +107,12 @@ import { InstancePopulationAggregateResponseInterface } from '@/interfaces/aggre
 import { TIME_FORMAT } from '@/constants/Time'
 import { Endpoints } from '@/constants/Endpoints'
 import RealTimeAlert from '~/components/RTM/RealTimeAlert.vue'
-import RealTimeOutfitWar from '~/components/RTM/RealTimeOutfitWar.vue'
 import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 
 export default Vue.extend({
   name: 'RealTimeMonitor',
   components: {
     RealTimeAlert,
-    RealTimeOutfitWar,
   },
   data() {
     return {

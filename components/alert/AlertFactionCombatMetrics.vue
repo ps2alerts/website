@@ -2,7 +2,7 @@
   <div
     class="col-span-12 lg:col-span-6 2xl:col-span-3 card relative items-center"
   >
-    <div class="tag section">Faction Combat Metrics</div>
+    <div class="tag section">{{ !outfitwar ? 'Faction' : 'Team' }} Combat Metrics</div>
     <CountdownSpinner
       v-if="alert.state === 1"
       :percent="updateCountdownPercent"
@@ -16,16 +16,16 @@
         <thead>
           <tr class="font-bold text-base">
             <td class="text-left">Metric</td>
-            <td class="bg-vs px-4">VS</td>
-            <td class="bg-tr px-4">TR</td>
-            <td class="bg-nc px-4">NC</td>
-            <td class="bg-nso px-4">NSO</td>
+            <td class="bg-vs px-4" v-if="!outfitwar">VS</td>
+            <td class="bg-tr px-4">{{ !outfitwar ? 'TR' : redTeamName }}</td>
+            <td class="bg-nc px-4">{{ !outfitwar ? 'NC' : blueTeamName }}</td>
+            <td class="bg-nso px-4" v-if="!outfitwar">NSO</td>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td class="text-left">Kills</td>
-            <td class="bg-vs">
+            <td class="bg-vs" v-if="!outfitwar">
               <span v-if="data.vs">{{ data.vs.kills || 0 }}</span>
             </td>
             <td class="bg-tr">
@@ -34,7 +34,7 @@
             <td class="bg-nc">
               <span v-if="data.nc">{{ data.nc.kills || 0 }}</span>
             </td>
-            <td class="bg-nso">
+            <td class="bg-nso" v-if="!outfitwar">
               <span v-if="data.nso"
                 >{{ data.nso.kills || 0 }}<sup>*1</sup></span
               >
@@ -42,7 +42,7 @@
           </tr>
           <tr>
             <td class="text-left">Deaths</td>
-            <td class="bg-vs">
+            <td class="bg-vs" v-if="!outfitwar">
               <span v-if="data.vs">{{ data.vs.deaths || 0 }}</span>
             </td>
             <td class="bg-tr">
@@ -51,13 +51,13 @@
             <td class="bg-nc">
               <span v-if="data.nc">{{ data.nc.deaths || 0 }}</span>
             </td>
-            <td class="bg-nso">
+            <td class="bg-nso" v-if="!outfitwar">
               <span v-if="data.nso">{{ data.nso.deaths || 0 }}</span>
             </td>
           </tr>
           <tr>
             <td class="text-left">K/D</td>
-            <td class="bg-vs">
+            <td class="bg-vs" v-if="!outfitwar">
               <span v-if="data.vs">
                 {{
                   data.vs.kills && data.vs.deaths
@@ -84,7 +84,7 @@
                 }}
               </span>
             </td>
-            <td class="bg-nso">
+            <td class="bg-nso" v-if="!outfitwar">
               <span v-if="data.nso">
                 {{
                   data.nso.kills && data.nso.deaths
@@ -96,7 +96,7 @@
           </tr>
           <tr>
             <td class="text-left">Teamkills</td>
-            <td class="bg-vs">
+            <td class="bg-vs" v-if="!outfitwar">
               <span v-if="data.vs">{{ data.vs.teamKills || 0 }}</span>
             </td>
             <td class="bg-tr">
@@ -105,7 +105,7 @@
             <td class="bg-nc">
               <span v-if="data.nc">{{ data.nc.teamKills || 0 }}</span>
             </td>
-            <td class="bg-nso">
+            <td class="bg-nso" v-if="!outfitwar">
               <span v-if="data.nso"
                 >{{ data.nso.teamKills || 0 }}<sup>*2</sup>
               </span>
@@ -113,7 +113,7 @@
           </tr>
           <tr>
             <td class="text-left">TK %</td>
-            <td class="bg-vs">
+            <td class="bg-vs" v-if="!outfitwar">
               <span v-if="data.vs"
                 >{{
                   data.vs.teamKills && data.vs.deaths
@@ -140,7 +140,7 @@
                 }}%</span
               >
             </td>
-            <td class="bg-nso">
+            <td class="bg-nso" v-if="!outfitwar">
               <span v-if="data.nso"
                 >{{
                   data.nso.teamKills && data.nso.deaths
@@ -152,7 +152,7 @@
           </tr>
           <tr>
             <td class="text-left">Suicides</td>
-            <td class="bg-vs">
+            <td class="bg-vs" v-if="!outfitwar">
               <span v-if="data.vs">{{ data.vs.suicides || 0 }}</span>
             </td>
             <td class="bg-tr">
@@ -161,13 +161,13 @@
             <td class="bg-nc">
               <span v-if="data.nc">{{ data.nc.suicides || 0 }}</span>
             </td>
-            <td class="bg-nso">
+            <td class="bg-nso" v-if="!outfitwar">
               <span v-if="data.nso">{{ data.nso.suicides || 0 }}</span>
             </td>
           </tr>
           <tr>
             <td class="text-left">Headshots</td>
-            <td class="bg-vs">
+            <td class="bg-vs" v-if="!outfitwar">
               <span v-if="data.vs">{{ data.vs.headshots || 0 }}</span>
             </td>
             <td class="bg-tr">
@@ -176,13 +176,13 @@
             <td class="bg-nc">
               <span v-if="data.nc">{{ data.nc.headshots || 0 }}</span>
             </td>
-            <td class="bg-nso">
+            <td class="bg-nso" v-if="!outfitwar">
               <span v-if="data.nso">{{ data.nso.headshots || 0 }}</span>
             </td>
           </tr>
           <tr>
             <td class="text-left">HSR</td>
-            <td class="bg-vs">
+            <td class="bg-vs" v-if="!outfitwar">
               <span v-if="data.vs">
                 {{
                   data.vs.headshots && data.vs.kills
@@ -209,7 +209,7 @@
                 }}%
               </span>
             </td>
-            <td class="bg-nso">
+            <td class="bg-nso" v-if="!outfitwar">
               <span v-if="data.nso">
                 {{
                   data.nso.headshots && data.nso.kills
@@ -221,7 +221,7 @@
           </tr>
         </tbody>
       </table>
-      <div class="col-span-12 text-xs text-gray-400 text-left">
+      <div class="col-span-12 text-xs text-gray-400 text-left" v-if="!outfitwar">
         <p>*1 does not include NSO vs NSO kills.</p>
         <p>
           *2 NSO Teamkills represent NSO vs NSO. It is currently not possible to
@@ -237,16 +237,18 @@
 <script lang="ts">
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
+import { InstanceOutfitWarsResponseInterface } from '@/interfaces/InstanceOutfitWarsResponseInterface'
 import ApiRequest from '@/api-request'
 import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
 import { InstanceFactionCombatAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceFactionCombatAggregateResponseInterface'
 import { Endpoints } from '@/constants/Endpoints'
+import { Ps2alertsEventType } from '~/ps2alerts-constants/ps2alertsEventType'
 
 export default Vue.extend({
   name: 'AlertFactionCombat',
   props: {
     alert: {
-      type: Object as () => InstanceTerritoryControlResponseInterface,
+      type: Object as () => InstanceTerritoryControlResponseInterface & InstanceOutfitWarsResponseInterface,
       default: {},
       required: true,
     },
@@ -260,12 +262,23 @@ export default Vue.extend({
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       data: {} as InstanceFactionCombatAggregateResponseInterface,
+      outfitwar: this.alert.ps2alertsEventType === Ps2alertsEventType.OUTFIT_WARS_AUG_2022,
     }
   },
   computed: {
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
     },
+    redTeamName(): string {
+      return this.alert.outfitwars?.teams?.red?.tag 
+                ? this.alert.outfitwars.teams.red.tag 
+                : 'Red';
+    },
+    blueTeamName(): string {
+      return this.alert.outfitwars?.teams?.blue?.tag 
+                ? this.alert.outfitwars.teams.blue.tag 
+                : 'Blue';
+    }
   },
   watch: {
     'alert.state'() {
@@ -309,6 +322,8 @@ export default Vue.extend({
       }
 
       console.log('AlertFactionCombatMetrics.pull', this.alert.instanceId)
+
+      console.log(`Is outfit war? ${this.outfitwar}`)
 
       await new ApiRequest()
         .get<InstanceFactionCombatAggregateResponseInterface>(
