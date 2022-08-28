@@ -45,7 +45,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import factionImage from '~/filters/FactionImage'
 import TeamLogo from './TeamLogo.vue'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 
