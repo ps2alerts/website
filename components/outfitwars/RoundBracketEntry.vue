@@ -7,31 +7,63 @@
     :disabled="!match"
     :event="match && match.state !== 0 ? 'click' : ''"
   >
-    <div class="p-2 mb-2 bg-tint rounded relative hover" :class="victorClass">
-      <div
-        class="grid grid-cols-3 place-items-center text-center"
-      >
-        <div class="col-span-3 text-base mb-2">
-          <div class="mb-1">
+    <div class="flex gap-2 p-2 mb-2 bg-tint rounded relative hover bg-[#1e1e1e]">
+      <div class="self-center">
+        <object
+          :data="outfitImageUrls[0]"
+          type="image/png"
+          width="50px"
+        >
+          <img
+            :src="outfits[0].faction | factionImage"
+            :alt="outfits[0].faction"
+          />
+        </object>
+      </div>
+      <div class="grid grid-cols-7 gap-2 justify-center grow">
+        <div class="col-start-1 col-span-3 text-base mb-2 lg:mb-0">
+          <div class="text-right mb-1">
             <span v-if="outfits[0].tag">
               [{{ outfits[0].tag }}]
             </span>
             {{ outfits[0].name.trim() }}
           </div>
         </div>
-        <div class="col-span-3 text-base mb-2">
-          <div class="mb-1">
+        <div class="col-start-4 col-span-1 text-base mb-2 lg:mb-0">
+          <div class="text-center mb-1">
             vs.
           </div>
         </div>
-        <div class="col-span-3 text-base mb-2 lg:mb-0">
-          <div class="mb-1">
+        <div class="col-end-8 col-span-3 text-base mb-2 lg:mb-0">
+          <div class="text-left mb-1">
             <span v-if="outfits[1].tag">
               [{{ outfits[1].tag }}]
             </span>
             {{ outfits[1].name.trim() }}
           </div>
         </div>
+        <FactionSegmentBar
+          class="col-start-2 col-span-5"
+          :vs="0"
+          :nc="33"
+          :tr="33"
+          :other="33"
+          :out-of-play="0"
+          dropoff-percent="5"
+          :outfitwars="true"
+        />
+      </div>
+      <div class="self-center">
+        <object
+          :data="outfitImageUrls[1]"
+          type="image/png"
+          width="50px"
+        >
+          <img
+            :src="outfits[1].faction | factionImage"
+            :alt="outfits[1].faction"
+          />
+        </object>
       </div>
     </div>
   </NuxtLink>
@@ -45,10 +77,13 @@ import { Team } from '@/ps2alerts-constants/outfitwars/team'
 import { FactionBgClass } from '@/constants/FactionBgClass'
 import { FactionBorderClass } from '@/constants/FactionBorderClass'
 import { OutfitInterface } from '~/interfaces/OutfitInterface'
+import { Endpoints } from '~/constants/Endpoints'
+import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
 
 export default Vue.extend({
   name: 'RoundBracketEntry',
   components: {
+    FactionSegmentBar
   },
   props: {
     match: {
@@ -108,6 +143,12 @@ export default Vue.extend({
     victor(): Team {
       return this.match.result ? this.match.result.victor : null
     },
+    outfitImageUrls(): string[] {
+      return [
+        Endpoints.OUTFIT_TRACKER_OUTFIT_LOGO.replace('{outfitId}', this.outfits[0].id),
+        Endpoints.OUTFIT_TRACKER_OUTFIT_LOGO.replace('{outfitId}', this.outfits[1].id),
+      ]
+    }
   },
 })
 </script>

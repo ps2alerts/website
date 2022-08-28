@@ -89,7 +89,7 @@
                   width="50px"
                 >
                   <img
-                    :src="getFactionImage(outfit.faction)"
+                    :src="outfit.faction | factionImage"
                     :alt="outfit.faction"
                   />
                 </object>
@@ -361,9 +361,6 @@ export default Vue.extend({
     },
     getWorldImage(world: World) {
       return `/img/worlds/${worldName(world)}.png`
-    },
-    getFactionImage(faction: Faction) {
-      return `/img/factions/${faction}.png`
     },
   },
 })

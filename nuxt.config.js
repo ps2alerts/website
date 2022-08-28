@@ -100,6 +100,7 @@ export default {
     { src: '@/filters/FacilityTypeShortName', mode: 'client' },
     { src: '@/filters/FactionCircleEmoji', mode: 'client' },
     { src: '@/filters/FactionId', mode: 'client' },
+    { src: '@/filters/FactionImage', mode: 'client' },
     { src: '@/filters/FactionName', mode: 'client' },
     { src: '@/filters/FactionOrTeamName', mode: 'client' },
     { src: '@/filters/FactionShortName', mode: 'client' },
