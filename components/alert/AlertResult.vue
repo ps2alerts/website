@@ -4,10 +4,10 @@
       <div v-if="alert.ps2alertsEventType !== OUTFIT_WARS_AUG_2022">
         <h1 class="text-4xl">Alert #{{ alert.instanceId }}</h1>
       </div>
-      <div v-if="alert.ps2alertsEventType === OUTFIT_WARS_AUG_2022">
+      <div v-if="alert.ps2alertsEventType === OUTFIT_WARS_AUG_2022 && alert.outfitwars">
         <h1 class="text-4xl">
-          {{ alert.world | worldName }} {{ alert.phase | phaseName }} Round
-          {{ alert.round | owRoundByPhase(alert.phase) }}
+          {{ alert.world | worldName }} {{ alert.outfitwars.phase | phaseName }} Round
+          {{ alert.outfitwars.round | owRoundByPhase(alert.outfitwars.phase) }}
         </h1>
       </div>
     </div>
