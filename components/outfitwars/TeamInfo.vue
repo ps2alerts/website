@@ -12,12 +12,12 @@
       class="flex justify-between items-center flex-1"
     >
       <TeamLogo 
-        class="self-center place-self-center w-12 lg:w-24 3xl:w-32"
+        class="self-center place-self-center w-12 lg:w-24 2xl:w-32"
         :outfitId="alert.outfitwars.teams.red.id"
         :outfitFaction="alert.outfitwars.teams.red.faction"
       />
       <div class="relative place-self-stretch grow">
-        <div class="absolute top-0 left-2 2xl:text-xl mb-2 lg:mb-0">
+        <div class="absolute top-0 left-2 xl:text-xl 2xl:text-2xl 3xl:text-3xl mb-2 lg:mb-0">
           <div>
             <span v-if="alert.outfitwars.teams.red.tag">
               [{{ alert.outfitwars.teams.red.tag }}]
@@ -29,11 +29,11 @@
           </div>
         </div>
         <div class="absolute flex inset-0 place-content-center">
-          <div class="self-center">
+          <div class="self-center xl:text-xl 2xl:text-2xl 3xl:text-3xl">
             vs.
           </div>
         </div>
-        <div class="absolute bottom-0 right-2 text-right 3xl:text-xl mb-2 lg:mb-0">
+        <div class="absolute bottom-0 right-2 text-right xl:text-xl 2xl:text-2xl 3xl:text-3xl mb-2 lg:mb-0">
           <div class="text-xs">
             {{ alert.outfitwars.teams.blue.faction | factionName }}
           </div>
@@ -46,7 +46,7 @@
         </div>
       </div>
       <TeamLogo 
-        class="self-center place-self-center w-12 lg:w-24 3xl:w-32"
+        class="self-center place-self-center w-12 lg:w-24 2xl:w-32"
         :outfitId="alert.outfitwars.teams.blue.id"
         :outfitFaction="alert.outfitwars.teams.blue.faction"
         :badgeLeft="true"
@@ -78,7 +78,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 
 .teams-background {
-  background: linear-gradient(135deg, rgba(155, 44, 44, 0.5) 0 50.75%, black, rgba(43, 108, 176, 0.5) 51.25% 100%);
+  background: linear-gradient(150deg, rgba(155, 44, 44, 0.5) 0 51.5%, black, rgba(43, 108, 176, 0.5) 52% 100%);
 }
 
 </style>
