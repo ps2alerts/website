@@ -153,6 +153,10 @@
     &.hover:hover {
       background-color: rgba(85, 60, 154, 1);
     }
+
+    &.bg-solid {
+      background-color: rgba(85, 60, 154, 1);
+    }
   }
   .bg-nc {
     background-color: rgba(43, 108, 176, 0.5);
@@ -161,12 +165,20 @@
     &.hover:hover {
       background-color: rgba(43, 108, 176, 1);
     }
+
+    &.bg-solid {
+      background-color: rgba(43, 108, 176, 1);
+    }
   }
   .bg-tr {
     background-color: rgba(155, 44, 44, 0.5);
     transition: background-color 0.25s ease-out;
 
     &.hover:hover {
+      background-color: rgba(155, 44, 44, 1);
+    }
+
+    &.bg-solid {
       background-color: rgba(155, 44, 44, 1);
     }
   }
@@ -393,6 +405,22 @@
       &:hover {
         @apply bg-gray-600;
       }
+    }
+
+    &.TR {
+      @apply bg-red-600;
+    }
+
+    &.NC {
+      @apply bg-blue-600;
+    }
+
+    &.VS {
+      @apply bg-purple-600;
+    }
+
+    &.NSO {
+      @apply bg-gray-600;
     }
   }
 

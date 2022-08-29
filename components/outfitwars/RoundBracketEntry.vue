@@ -6,8 +6,9 @@
     }"
     :disabled="!match"
     :event="match && match.state !== 0 ? 'click' : ''"
+    
   >
-    <div class="flex gap-2 p-2 mb-2 bg-tint rounded relative hover bg-[#1e1e1e]">
+    <div class="flex gap-2 p-2 mb-2 bg-tint rounded relative hover bg-[#1e1e1e]" @click="logOutfits">
       <div class="self-center">
         <object
           :data="outfits[0].id | outfitImage"
@@ -143,5 +144,10 @@ export default Vue.extend({
       return this.match.result ? this.match.result.victor : null
     },
   },
+  methods: {
+    logOutfits() {
+      console.log(this.outfits);
+    }
+  }
 })
 </script>

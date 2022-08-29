@@ -323,8 +323,6 @@ export default Vue.extend({
 
       console.log('AlertFactionCombatMetrics.pull', this.alert.instanceId)
 
-      console.log(`Is outfit war? ${this.outfitwar}`)
-
       await new ApiRequest()
         .get<InstanceFactionCombatAggregateResponseInterface>(
           Endpoints.AGGREGATES_INSTANCE_FACTION.replace(

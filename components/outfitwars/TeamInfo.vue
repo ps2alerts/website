@@ -9,22 +9,29 @@
     </div>
     <div
       v-else
-      class="flex justify-between items-center flex-1"
+      class="flex relative justify-between items-center flex-1"
     >
+      <div class="absolute -top-4 -left-4 w-4 md:w-6 xl:w-8 2xl:w-10 rounded" :class="factionBackground(alert.outfitwars.teams.red.faction)">
+        <img
+          class="w-4/5 m-auto"
+          :src="alert.outfitwars.teams.red.faction | factionImage"
+          :alt="alert.outfitwars.teams.red.faction | factionShortName"
+        />
+      </div>
       <TeamLogo 
         class="self-center place-self-center w-12 lg:w-24 2xl:w-32"
         :outfitId="alert.outfitwars.teams.red.id"
         :outfitFaction="alert.outfitwars.teams.red.faction"
       />
       <div class="relative place-self-stretch grow">
-        <div class="absolute top-0 left-2 xl:text-xl 2xl:text-2xl 3xl:text-3xl mb-2 lg:mb-0">
-          <div>
+        <div class="absolute top-0 left-2 text-xs sm:text-[1.5vw] xl:text-xl 2xl:text-2xl mb-2 lg:mb-0">
+          <div class="leading-tight">
             <span v-if="alert.outfitwars.teams.red.tag">
               [{{ alert.outfitwars.teams.red.tag }}]
             </span>
             {{ alert.outfitwars.teams.red.name.trim() }}
           </div>
-          <div class="text-xs">
+          <div class="text-xs label" :class="alert.outfitwars.teams.red.faction | factionShortName">
             {{ alert.outfitwars.teams.red.faction | factionName }}
           </div>
         </div>
@@ -33,11 +40,11 @@
             vs.
           </div>
         </div>
-        <div class="absolute bottom-0 right-2 text-right xl:text-xl 2xl:text-2xl 3xl:text-3xl mb-2 lg:mb-0">
-          <div class="text-xs">
+        <div class="absolute bottom-0 right-2 text-right text-xs md:text-[1.5vw] xl:text-xl 2xl:text-2xl mb-2 lg:mb-0">
+          <div class="text-xs label" :class="alert.outfitwars.teams.blue.faction | factionShortName">
             {{ alert.outfitwars.teams.blue.faction | factionName }}
           </div>
-          <div>
+          <div class="leading-tight">
             <span v-if="alert.outfitwars.teams.blue.tag">
               [{{ alert.outfitwars.teams.blue.tag }}]
             </span>
@@ -51,6 +58,13 @@
         :outfitFaction="alert.outfitwars.teams.blue.faction"
         :badgeLeft="true"
       />
+      <div class="absolute -right-4 -bottom-4 w-4 md:w-6 xl:w-8 2xl:w-10 rounded" :class="factionBackground(alert.outfitwars.teams.blue.faction)">
+        <img
+          class="w-4/5 m-auto"
+          :src="alert.outfitwars.teams.blue.faction | factionImage"
+          :alt="alert.outfitwars.teams.blue.faction | factionShortName"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -59,6 +73,7 @@
 import Vue from 'vue'
 import TeamLogo from './TeamLogo.vue'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
+import { Faction } from '~/ps2alerts-constants/faction'
 
 export default Vue.extend({
   name: "TeamInfo",
@@ -72,6 +87,21 @@ export default Vue.extend({
       required: true,
     }
   },
+  methods: {
+    factionBackground(value: Faction) {
+      switch(value) {
+        case Faction.NONE:
+        case Faction.NS_OPERATIVES:
+          return 'bg-nso bg-solid';
+        case Faction.VANU_SOVEREIGNTY:
+          return 'bg-vs bg-solid';
+        case Faction.NEW_CONGLOMERATE:
+          return 'bg-nc bg-solid';
+        case Faction.TERRAN_REPUBLIC:
+          return 'bg-tr bg-solid';
+      }
+    }
+  }
 })
 </script>
 

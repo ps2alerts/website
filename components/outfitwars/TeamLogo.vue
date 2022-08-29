@@ -7,12 +7,6 @@
         :alt="outfitFaction | factionShortName"
         @error="imageUrlAlt"
       />
-      <img
-        ref="faction-badge"
-        :class="'absolute bottom-0 w-1/4 ' + (badgeLeft ? 'left-0' : 'right-0')"
-        :src="outfitFaction | factionImage"
-        :alt="outfitFaction | factionShortName"
-      />
     </div>
   </div>
 </template>
@@ -44,7 +38,6 @@ export default Vue.extend({
     imageUrlAlt(event: Event) {
       if(event.target){
         (event.target as HTMLImageElement).src = factionImage(this.outfitFaction);
-        (this.$refs["faction-badge"] as HTMLImageElement).classList.add("hidden");
       }
     },
   }
