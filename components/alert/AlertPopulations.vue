@@ -114,6 +114,7 @@ import ApiRequest from '~/api-request'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { InstancePopulationAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstancePopulationAggregateResponseInterface'
+import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 
 const commonChartOptions = {
   responsive: true,
@@ -186,8 +187,8 @@ export default Vue.extend({
       required: true,
     },
     outfitwar: {
-      type: Boolean,
-      default: false,
+      type: Object as () => InstanceOutfitWarsResponseInterface,
+      default: {},
       required: false,
     },
   },
@@ -359,7 +360,7 @@ export default Vue.extend({
       }
 
       data.forEach((row) => {
-        if (this.outfitwar) {
+        if (this.outfitwar.instanceId) {
           vsData.push(0)
           ncData.push(row.nc)
           trData.push(row.tr)
@@ -381,10 +382,10 @@ export default Vue.extend({
       const pointBorderWidth = 2
       const pointHoverBorderWidth = 4
 
-      if (this.outfitwar) {
+      if (this.outfitwar.instanceId) {
         datasets.push(
           {
-            label: 'Red Team',
+            label: this.outfitwar.outfitwars?.teams?.red?.tag ?? 'Red Team',
             borderColor: '#9b2c2c',
             data: trData,
             pointStyle: 'rect',
@@ -392,7 +393,7 @@ export default Vue.extend({
             pointHoverBorderWidth,
           },
           {
-            label: 'Blue Team',
+            label: this.outfitwar.outfitwars?.teams?.blue?.tag ?? 'Blue Team',
             borderColor: '#2b6cb0',
             data: ncData,
             pointStyle: 'triangle',

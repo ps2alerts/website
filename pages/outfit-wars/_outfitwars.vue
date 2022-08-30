@@ -65,7 +65,7 @@
           </v-tab-item>
         </v-tabs-items>
       </div>
-      <AlertPopulations :alert="alert" :outfitwar="true" />
+      <AlertPopulations :alert="alert" :outfitwar="alert" />
       <AlertCombatHistory :alert="alert" />
       <AlertBattleranks :alert="alert" />
 
