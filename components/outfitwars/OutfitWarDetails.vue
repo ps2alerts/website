@@ -8,7 +8,7 @@
             <div class="flex justify-between">
               <div class="mr-4 font-bold">Started</div>
               <div>
-                {{ alert.timeStarted | dateTimeFormat }}
+                {{ outfitwar.timeStarted | dateTimeFormat }}
               </div>
             </div>
           </td>
@@ -18,7 +18,7 @@
             <div class="flex justify-between">
               <div class="mr-4 font-bold">Ended</div>
               <div v-if="ended">
-                {{ alert.timeEnded | dateTimeFormat }}
+                {{ outfitwar.timeEnded | dateTimeFormat }}
               </div>
               <div v-if="!ended">TBD</div>
             </div>
@@ -29,7 +29,7 @@
             <div class="flex justify-between">
               <div class="mr-4 font-bold">Server</div>
               <div>
-                {{ alert.world | worldName }}
+                {{ outfitwar.world | worldName }}
               </div>
             </div>
           </td>
@@ -39,7 +39,7 @@
             <div class="flex justify-between">
               <div class="mr-4 font-bold">Continent</div>
               <div>
-                {{ alert.zone | zoneName }}
+                {{ outfitwar.zone | zoneName }}
               </div>
             </div>
           </td>
@@ -55,13 +55,13 @@
               v-bind="attrs"
               class="label"
               :class="{
-                green: alert.features && alert.features.captureHistory,
+                green: outfitwar.features && outfitwar.features.captureHistory,
               }"
               v-on="on"
               ><font-awesome-icon
                 :icon="[
                   'fas',
-                  alert.features && alert.features.captureHistory
+                  outfitwar.features && outfitwar.features.captureHistory
                     ? 'check'
                     : 'xmark',
                 ]"
@@ -78,12 +78,14 @@
             <span
               v-bind="attrs"
               class="label"
-              :class="{ green: alert.features && alert.features.xpm }"
+              :class="{ green: outfitwar.features && outfitwar.features.xpm }"
               v-on="on"
               ><font-awesome-icon
                 :icon="[
                   'fas',
-                  alert.features && alert.features.xpm ? 'check' : 'xmark',
+                  outfitwar.features && outfitwar.features.xpm
+                    ? 'check'
+                    : 'xmark',
                 ]"
                 class="mr-1"
               ></font-awesome-icon
@@ -111,7 +113,7 @@ import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfit
 export default Vue.extend({
   name: 'AlertDetails',
   props: {
-    alert: {
+    outfitwar: {
       type: Object as () => InstanceOutfitWarsResponseInterface,
       default: {},
       required: true,
@@ -119,7 +121,7 @@ export default Vue.extend({
   },
   computed: {
     ended(): boolean {
-      return this.alert.state === Ps2AlertsEventState.ENDED
+      return this.outfitwar.state === Ps2AlertsEventState.ENDED
     },
     instanceEventDetails(): MetagameDetailsInterface | null | undefined {
       return InstanceEventDetails(227)

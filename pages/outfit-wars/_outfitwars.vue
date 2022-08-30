@@ -16,7 +16,7 @@
       />
       <OutfitWarDetails
         class="col-span-12 lg:col-span-6 2xl:col-span-3 2xl:-order-3"
-        :alert="alert"
+        :outfitwar="alert"
       />
       <AlertFactionCombatMetrics
         class="col-span-12 lg:col-span-6 2xl:col-span-3 2xl:col-start-10 2xl:-order-1"
