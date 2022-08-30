@@ -2,7 +2,7 @@
   <NuxtLink
     :to="{
       name: 'outfit-wars-outfitwars',
-      params: { 'outfitwars': match.instanceId },
+      params: { outfitwars: match.instanceId },
     }"
     :disabled="match.state === 0"
     :event="match.state === 0 ? '' : 'click'"
@@ -11,31 +11,45 @@
       <div
         class="grid grid-cols-6 lg:grid-cols-12 place-items-center text-center"
       >
+        <div class="col-span-1 text-sm mb-2 lg:mb-0">
+          <div v-show="match.state !== 2">
+            <div class="mb-1">
+              {{ started }}
+            </div>
+            <div class="text-xs text-gray-400">Started</div>
+          </div>
+          <div v-show="match.state === 2">
+            <div class="mb-1">
+              {{ ended }}
+            </div>
+            <div class="text-xs text-gray-400">Ended</div>
+          </div>
+        </div>
         <div class="col-span-1 text-base mb-2 lg:mb-0">
           <div class="mb-1">
             {{ match.world | worldName }}
           </div>
           <div class="text-xs text-gray-400">Server</div>
         </div>
-        <div class="col-span-1 text-sm mb-2 lg:mb-0">
+        <div class="col-span-1 text-base mb-2 lg:mb-0">
           <div class="mb-1">
             <span v-if="match.outfitwars">
-            {{ match.outfitwars.phase | phaseName }}
+              {{ match.outfitwars.phase | phaseName }}
             </span>
-            <span v-if="!match.outfitwars">
-              Unknown!
-            </span>
+            <span v-if="!match.outfitwars"> Unknown! </span>
           </div>
           <div class="text-xs text-gray-400">Phase</div>
         </div>
         <div class="col-span-1 text-base mb-2 lg:mb-0">
           <div class="mb-1">
             <span v-if="match.outfitwars">
-              {{ match.outfitwars.round | owRoundByPhase(match.outfitwars.phase) | ordinalSuffix }}
+              {{
+                match.outfitwars.round
+                  | owRoundByPhase(match.outfitwars.phase)
+                  | ordinalSuffix
+              }}
             </span>
-            <span v-if="!match.outfitwars">
-              Unknown!
-            </span>
+            <span v-if="!match.outfitwars"> Unknown! </span>
           </div>
           <div class="text-xs text-gray-400">Round</div>
         </div>
@@ -66,10 +80,26 @@
         </div>
         <div class="col-span-1 text-base mb-2 lg:mb-0">
           <div class="mb-1">
-            <span v-if="match.outfitwars && match.outfitwars.teams && match.outfitwars.teams.red">
+            <span
+              v-if="
+                match.outfitwars &&
+                match.outfitwars.teams &&
+                match.outfitwars.teams.red
+              "
+            >
               [{{ match.outfitwars.teams.red.tag }}]
             </span>
-            <span v-if="!(match.outfitwars && match.outfitwars.teams && match.outfitwars.teams.red)"> Unknown </span>
+            <span
+              v-if="
+                !(
+                  match.outfitwars &&
+                  match.outfitwars.teams &&
+                  match.outfitwars.teams.red
+                )
+              "
+            >
+              Unknown
+            </span>
           </div>
           <div class="text-xs text-gray-400">
             Red Team
@@ -91,10 +121,26 @@
         </div>
         <div class="col-span-1 text-base mb-2 lg:mb-0">
           <div class="mb-1">
-            <span v-if="match.outfitwars && match.outfitwars.teams && match.outfitwars.teams.blue">
+            <span
+              v-if="
+                match.outfitwars &&
+                match.outfitwars.teams &&
+                match.outfitwars.teams.blue
+              "
+            >
               [{{ match.outfitwars.teams.blue.tag }}]
             </span>
-            <span v-if="!(match.outfitwars && match.outfitwars.teams && match.outfitwars.teams.blue)"> Unknown </span>
+            <span
+              v-if="
+                !(
+                  match.outfitwars &&
+                  match.outfitwars.teams &&
+                  match.outfitwars.teams.blue
+                )
+              "
+            >
+              Unknown
+            </span>
           </div>
           <div class="text-xs text-gray-400">
             Blue Team
@@ -114,13 +160,13 @@
             </span>
           </div>
         </div>
-        <div v-if="match.state === 0" class="col-span-6 lg:col-span-6 w-full">
+        <div v-if="match.state === 0" class="col-span-5 lg:col-span-5 w-full">
           <p>
-            Alert FAILED to start recording! This is likely an issue with
+            Match FAILED to start recording! This is likely an issue with
             PS2Alerts unable to communicate to Census properly.
           </p>
         </div>
-        <div v-if="match.result" class="col-span-6 lg:col-span-6 w-full">
+        <div v-if="match.result" class="col-span-5 lg:col-span-5 w-full">
           <FactionSegmentBar
             :vs="0"
             :nc="match.result.blue"
