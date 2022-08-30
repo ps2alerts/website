@@ -12,7 +12,7 @@
       />
       <TeamInfo
         class="col-span-12 2xl:col-span-6 2xl:-order-2"
-        :alert="alert"
+        :outfitwar="alert"
       />
       <OutfitWarDetails
         class="col-span-12 lg:col-span-6 2xl:col-span-3 2xl:-order-3"
