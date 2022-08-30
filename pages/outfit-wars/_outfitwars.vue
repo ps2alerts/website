@@ -118,7 +118,7 @@
           </v-tab-item>
           <v-tab-item :eager="eager" value="outfits">
             <section class="col-span-12 card relative mb-4">
-              <AlertOutfitMetrics :alert="alert" />
+              <AlertOutfitMetrics :alert="alert" :outfitwar="alert" />
             </section>
           </v-tab-item>
           <v-tab-item :eager="eager" value="weapons">

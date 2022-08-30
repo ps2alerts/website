@@ -10,7 +10,7 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded" class="grid grid-cols-12">
-      <div class="col-span-12 mb-2 flex justify-center">
+      <div v-if="!isOutfitWar" class="col-span-12 mb-2 flex justify-center">
         <div class="pr-2 py-2">Outfit Counts:</div>
         <div
           v-for="(count, index) in counts"
@@ -74,7 +74,7 @@
             >
           </p>
         </div>
-        <div class="mb-2">
+        <div v-if="!isOutfitWar" class="mb-2">
           <input
             v-model="filter"
             class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
@@ -159,6 +159,7 @@ import {
 import { DataTableConfig } from '@/constants/DataTableConfig'
 import { AlertOutfitTableDataInterface } from '~/interfaces/alert/AlertOutfitTableDataInterface'
 import timeText from '~/utilities/timeText'
+import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 
 export default Vue.extend({
   name: 'AlertOutfitMetrics',
@@ -167,6 +168,11 @@ export default Vue.extend({
       type: Object as () => InstanceTerritoryControlResponseInterface,
       default: {},
       required: true,
+    },
+    outfitwar: {
+      type: Object as () => InstanceOutfitWarsResponseInterface,
+      default: {},
+      required: false,
     },
   },
   data() {
@@ -210,6 +216,9 @@ export default Vue.extend({
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
     },
+    isOutfitWar(): boolean {
+      return !!this.outfitwar?.instanceId
+    },
   },
   watch: {
     'alert.state'() {
@@ -217,6 +226,9 @@ export default Vue.extend({
         this.clearTimers()
         this.pull()
       }
+    },
+    expanded() {
+      console.log('expanded', this.expanded)
     },
   },
   beforeDestroy() {
