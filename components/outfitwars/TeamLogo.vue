@@ -3,6 +3,7 @@
     <div class="aspect-square relative place-items-center">
       <img
         class="absolute inset-0 m-auto"
+        :class="loser ? 'grayscale' : ''"
         :src="outfitId | outfitImage"
         :alt="outfitFaction | factionShortName"
         @error="imageUrlAlt"
@@ -25,11 +26,15 @@ export default Vue.extend({
       required: true,
     },
     outfitFaction: {
-      type: Object as () => Faction,
+      type: Number,
       default: Faction.NONE,
       required: true,
     },
     badgeLeft: {
+      type: Boolean,
+      default: false,
+    },
+    loser: {
       type: Boolean,
       default: false,
     }

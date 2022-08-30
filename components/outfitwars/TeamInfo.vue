@@ -1,6 +1,6 @@
 <template>
-  <div class="card flex flex-col teams-background">
-    <div class="tag section">Team Info</div>
+  <div class="card flex flex-col" :class="backgroundClass">
+   <div class="tag section">Team Info</div>
     <div 
       v-if="!(alert.outfitwars && alert.outfitwars.teams && alert.outfitwars.teams.red && alert.outfitwars.teams.blue)"
       class="text-center flex-1"
@@ -22,6 +22,7 @@
         class="self-center place-self-center w-12 lg:w-24 2xl:w-32"
         :outfitId="alert.outfitwars.teams.red.id"
         :outfitFaction="alert.outfitwars.teams.red.faction"
+        :loser="alert.result && alert.result.victor === 2"
       />
       <div class="relative place-self-stretch grow">
         <div class="absolute top-0 left-2 text-xs sm:text-[1.5vw] xl:text-xl 2xl:text-2xl mb-2 lg:mb-0">
@@ -57,6 +58,7 @@
         :outfitId="alert.outfitwars.teams.blue.id"
         :outfitFaction="alert.outfitwars.teams.blue.faction"
         :badgeLeft="true"
+        :loser="alert.result && alert.result.victor === 3"
       />
       <div class="absolute -right-4 -bottom-4 w-4 md:w-6 xl:w-8 2xl:w-10 rounded" :class="factionBackground(alert.outfitwars.teams.blue.faction)">
         <img
@@ -74,6 +76,7 @@ import Vue from 'vue'
 import TeamLogo from './TeamLogo.vue'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Faction } from '~/ps2alerts-constants/faction'
+import { Team } from '~/ps2alerts-constants/outfitwars/team'
 
 export default Vue.extend({
   name: "TeamInfo",
@@ -101,6 +104,17 @@ export default Vue.extend({
           return 'bg-tr bg-solid';
       }
     }
+  },
+  computed: {
+    backgroundClass(){
+      if(this.alert.result?.victor === Team.RED) {
+        return "teams-background winner-red";
+      }
+      else if(this.alert.result?.victor === Team.BLUE) {
+        return "teams-background winner-blue";
+      }
+      return "teams-background";
+    }
   }
 })
 </script>
@@ -109,6 +123,14 @@ export default Vue.extend({
 
 .teams-background {
   background: linear-gradient(150deg, rgba(155, 44, 44, 0.5) 0 51.5%, black, rgba(43, 108, 176, 0.5) 52% 100%);
+
+  &.winner-red {
+    background: linear-gradient(150deg, rgba(155, 44, 44, 0.5) 0 51.25%, gold, black, rgba(43, 108, 176, 0.5) 52.25% 100%);;
+  }
+
+  &.winner-blue {
+    background: linear-gradient(150deg, rgba(155, 44, 44, 0.5) 0 51.25%, black, gold, rgba(43, 108, 176, 0.5) 52.25% 100%);;
+  }
 }
 
 </style>

@@ -1,10 +1,10 @@
 <template>
   <div class="col-span-12">
     <div class="text-center">
-      <div v-if="alert.ps2alertsEventType !== OUTFIT_WARS_AUG_2022">
+      <div v-if="alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022">
         <h1 class="text-4xl">Alert #{{ alert.instanceId }}</h1>
       </div>
-      <div v-if="alert.ps2alertsEventType === OUTFIT_WARS_AUG_2022 && alert.outfitwars">
+      <div v-if="alert.ps2AlertsEventType === OUTFIT_WARS_AUG_2022 && alert.outfitwars">
         <h1 class="text-4xl">
           {{ alert.world | worldName }} {{ alert.outfitwars.phase | phaseName }} Round
           {{ alert.outfitwars.round | owRoundByPhase(alert.outfitwars.phase) }}
@@ -65,17 +65,17 @@
       <FactionSegmentBar
         v-else
         :vs="
-          alert.ps2alertsEventType !== OUTFIT_WARS_AUG_2022
+          alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022
             ? alert.result.vs
             : 0
         "
         :nc="
-          alert.ps2alertsEventType !== OUTFIT_WARS_AUG_2022
+          alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022
             ? alert.result.nc
             : alert.result.blue
         "
         :tr="
-          alert.ps2alertsEventType !== OUTFIT_WARS_AUG_2022
+          alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022
             ? alert.result.tr
             : alert.result.red
         "
@@ -122,10 +122,13 @@ export default Vue.extend({
       CHAMPIONSHIPS: Phase.CHAMPIONSHIPS,
     }
   },
+  mounted() {
+    console.log(this.alert);
+  },
   computed: {
     victorText(): string {
       const isOutfitWars =
-        this.alert.ps2alertsEventType ===
+        this.alert.ps2AlertsEventType ===
         Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
       return this.alert.state === Ps2AlertsEventState.STARTED
         ? 'In progress...'
@@ -134,7 +137,7 @@ export default Vue.extend({
         : `${
             factionOrTeamName(
               this.alert.result?.victor,
-              this.alert.ps2alertsEventType
+              this.alert.ps2AlertsEventType
             ) + (isOutfitWars ? ' Team' : '')
           } victory!`
     },

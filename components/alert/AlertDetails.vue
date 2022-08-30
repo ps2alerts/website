@@ -73,7 +73,7 @@
             </div>
           </td>
         </tr>
-        <tr v-if="alert.ps2alertsEventType !== OUTFIT_WARS_AUG_2022 && instanceEventDetails">
+        <tr v-if="alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022 && instanceEventDetails">
           <td class="px-2 py-1 md:py-2 whitespace-nowrap">
             <div class="flex justify-between">
               <div class="mr-4 font-bold">Triggered by</div>

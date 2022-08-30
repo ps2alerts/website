@@ -19,5 +19,5 @@ export interface InstanceOutfitWarsResponseInterface {
   mapVersion?: string
   result: OutfitwarsTerritoryResultInterface
   features?: PS2AlertsInstanceFeaturesInterface
-  ps2alertsEventType?: Ps2AlertsEventType
+  ps2AlertsEventType?: Ps2AlertsEventType
 }

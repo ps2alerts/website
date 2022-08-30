@@ -20,5 +20,5 @@ export interface InstanceTerritoryControlResponseInterface {
   bracket: Bracket
   features?: PS2AlertsInstanceFeaturesInterface
   mapVersion?: string
-  ps2alertsEventType?: Ps2AlertsEventType
+  ps2AlertsEventType?: Ps2AlertsEventType
 }

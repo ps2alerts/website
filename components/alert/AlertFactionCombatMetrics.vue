@@ -262,7 +262,7 @@ export default Vue.extend({
       updateCountdownInterval: undefined as undefined | number,
       interval: undefined as undefined | number,
       data: {} as InstanceFactionCombatAggregateResponseInterface,
-      outfitwar: this.alert.ps2alertsEventType === Ps2AlertsEventType.OUTFIT_WARS_AUG_2022,
+      outfitwar: this.alert.ps2AlertsEventType === Ps2AlertsEventType.OUTFIT_WARS_AUG_2022,
     }
   },
   computed: {

@@ -272,26 +272,19 @@ export default Vue.extend({
           continue
         }
         this.seenOutfits.push(record.outfit.id)
-        const position = record.rankingParameters.Gold
-          ? 1
-          : record.rankingParameters.Silver
-          ? 2
-          : record.rankingParameters.Bronze
-          ? 3
-          : 0
 
         const outfitImageUrl = Endpoints.OUTFIT_TRACKER_OUTFIT_LOGO.replace(
           '{outfitId}',
           record.outfit.id
         )
 
-        const score = record.rankingParameters.TotalScore ?? 0
-        const wins = record.rankingParameters.VictoryPoints ?? 0
-        const defeats = score - wins
+        const score = parseInt(record.rankingParameters.TotalScore)
+        const wins = parseInt(record.rankingParameters.Wins)
+        const defeats = parseInt(record.rankingParameters.Losses)
 
         let metricsString = ''
 
-        if (record.rankingParameters.MatchesPlayed > 0) {
+        if (parseInt(record.rankingParameters.MatchesPlayed) > 0) {
           metricsString = `<b>${score} points</b> <br>${wins} wins | ${defeats} defeats`
         } else {
           metricsString = 'Not yet played a match'
@@ -309,12 +302,12 @@ export default Vue.extend({
           round: record.roundId,
           phase: getOutfitWarPhase(parseInt(record.roundId, 10)),
           rankings: {
-            totalScore: record.rankingParameters.TotalScore,
-            played: record.rankingParameters.MatchesPlayed,
-            points: record.rankingParameters.TotalScore,
-            position,
-            factionRank: record.rankingParameters.FactionRank,
-            globalRank: record.rankingParameters.GlobalRank,
+            totalScore: parseInt(record.rankingParameters.TotalScore),
+            played: parseInt(record.rankingParameters.MatchesPlayed),
+            points: parseInt(record.rankingParameters.TotalScore),
+            position: parseInt(record.rankingParameters.GlobalRank),
+            factionRank: parseInt(record.rankingParameters.FactionRank),
+            globalRank: parseInt(record.rankingParameters.GlobalRank),
           },
           outfitImageUrl,
           metricsString,

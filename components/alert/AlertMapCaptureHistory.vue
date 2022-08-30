@@ -280,8 +280,8 @@ export default Vue.extend({
         this.alert.instanceId ? this.alert.instanceId.toString() : 'whatever'
       )
       if (
-        this.alert.ps2alertsEventType &&
-        this.alert.ps2alertsEventType ===
+        this.alert.ps2AlertsEventType &&
+        this.alert.ps2AlertsEventType ===
           Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
       ) {
         endpoint = ps2AlertsApiEndpoints.outfitwarsInstanceFacility.replace(
@@ -323,7 +323,7 @@ export default Vue.extend({
           }
 
           const isOutfitWars =
-            this.alert.ps2alertsEventType ===
+            this.alert.ps2AlertsEventType ===
             Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
           if (isOutfitWars && capture.mapControl) {
             ;(capture.mapControl as MapControlInterface).tr = (
