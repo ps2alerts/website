@@ -281,10 +281,6 @@ export default Vue.extend({
     this.reset()
     this.init()
   },
-  mounted() {
-    this.buildCollection()
-    this.buildCollection(true)
-  },
   methods: {
     reset() {
       this.loaded = false
@@ -363,56 +359,97 @@ export default Vue.extend({
       }
 
       data.forEach((row) => {
-        times.push(moment(row.timestamp).format('HH:mm'))
-        vsData.push(row.vs)
-        ncData.push(row.nc)
-        trData.push(row.tr)
-        if (!avg) {
-          nsoData.push(row.nso)
+        if (this.outfitwar) {
+          vsData.push(0)
+          ncData.push(row.nc)
+          trData.push(row.tr)
+          if (!avg) {
+            nsoData.push(0)
+          }
+        } else {
+          vsData.push(row.vs)
+          ncData.push(row.nc)
+          trData.push(row.tr)
+          if (!avg) {
+            nsoData.push(row.nso)
+          }
         }
+        times.push(moment(row.timestamp).format('HH:mm'))
       })
 
-      const collection = {
-        labels: times,
-        datasets: [
+      const datasets = []
+      const pointBorderWidth = 2
+      const pointHoverBorderWidth = 4
+
+      if (this.outfitwar) {
+        datasets.push(
+          {
+            label: 'Red Team',
+            borderColor: '#9b2c2c',
+            data: trData,
+            pointStyle: 'rect',
+            pointBorderWidth,
+            pointHoverBorderWidth,
+          },
+          {
+            label: 'Blue Team',
+            borderColor: '#2b6cb0',
+            data: ncData,
+            pointStyle: 'triangle',
+            pointBorderWidth,
+            pointHoverBorderWidth,
+          }
+        )
+      } else {
+        datasets.push(
           {
             label: 'VS',
             borderColor: '#6B46C1',
             data: vsData,
             pointStyle: 'circle',
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
+            pointBorderWidth,
+            pointHoverBorderWidth,
           },
           {
             label: 'TR',
             borderColor: '#9b2c2c',
             data: trData,
             pointStyle: 'rect',
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
+            pointBorderWidth,
+            pointHoverBorderWidth,
           },
           {
             label: 'NC',
             borderColor: '#2b6cb0',
             data: ncData,
             pointStyle: 'triangle',
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
-          },
-        ],
+            pointBorderWidth,
+            pointHoverBorderWidth,
+          }
+        )
       }
 
-      if (avg) {
-        this.dataAvgCollection = collection
-      } else {
+      console.log('ncData', ncData)
+
+      const collection = {
+        labels: times,
+        datasets,
+      }
+
+      if (!avg && !this.outfitwar) {
         collection.datasets.push({
           label: 'NSO',
           borderColor: '#4a5568',
           data: nsoData,
           pointStyle: 'circle',
-          pointBorderWidth: 2,
-          pointHoverBorderWidth: 4,
+          pointBorderWidth,
+          pointHoverBorderWidth,
         })
+      }
+
+      if (avg) {
+        this.dataAvgCollection = collection
+      } else {
         this.dataCollection = collection
       }
     },
