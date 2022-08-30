@@ -430,8 +430,6 @@ export default Vue.extend({
         )
       }
 
-      console.log('ncData', ncData)
-
       const collection = {
         labels: times,
         datasets,
