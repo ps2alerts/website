@@ -21,6 +21,7 @@
       <AlertFactionCombatMetrics
         class="col-span-12 lg:col-span-6 2xl:col-span-3 2xl:col-start-10 2xl:-order-1"
         :alert="alert"
+        :outfitwar="alert"
       />
       <!--<AlertFactionVsFaction :alert="alert" />-->
       <div class="col-span-full md:col-span-4 md:col-start-5">
