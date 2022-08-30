@@ -34,6 +34,7 @@
           Numbers
         </button>
         <button
+          v-if="!outfitwar"
           class="btn btn-sm"
           :class="{ 'btn-active': mode === 'average' }"
           @click="updateMode('average')"
@@ -77,7 +78,7 @@
           <h3>Data is gathered once a minute</h3>
         </div>
       </div>
-      <div v-show="mode === 'average'" class="text-center">
+      <div v-show="mode === 'average'" v-if="!outfitwar" class="text-center">
         <line-chart
           v-if="avgData.length"
           :chart-data="dataAvgCollection"
@@ -183,6 +184,11 @@ export default Vue.extend({
       type: Object as () => InstanceTerritoryControlResponseInterface,
       default: {},
       required: true,
+    },
+    outfitwar: {
+      type: Boolean,
+      default: false,
+      required: false,
     },
   },
   data() {

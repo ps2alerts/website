@@ -10,16 +10,16 @@
         :update-countdown-percent="updateCountdownPercent"
         class="2xl:order-first"
       />
-      <TeamInfo 
+      <TeamInfo
         class="col-span-12 2xl:col-span-6 2xl:-order-2"
         :alert="alert"
       />
-      <OutfitWarDetails 
+      <OutfitWarDetails
         class="col-span-12 lg:col-span-6 2xl:col-span-3 2xl:-order-3"
-        :alert="alert" 
+        :alert="alert"
       />
       <AlertFactionCombatMetrics
-        class="col-span-12 lg:col-span-6 2xl:col-span-3 2xl:col-start-10 2xl:-order-1" 
+        class="col-span-12 lg:col-span-6 2xl:col-span-3 2xl:col-start-10 2xl:-order-1"
         :alert="alert"
       />
       <!--<AlertFactionVsFaction :alert="alert" />-->
@@ -65,7 +65,7 @@
           </v-tab-item>
         </v-tabs-items>
       </div>
-      <AlertPopulations :alert="alert" />
+      <AlertPopulations :alert="alert" :outfitwar="true" />
       <AlertCombatHistory :alert="alert" />
       <AlertBattleranks :alert="alert" />
 
@@ -149,9 +149,7 @@ import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { ps2AlertsApiEndpoints } from '@/ps2alerts-constants/ps2AlertsApiEndpoints'
 import { CensusEndpoints, Endpoints } from '@/constants/Endpoints'
 import AlertResult from '@/components/alert/AlertResult.vue'
-import AlertDetails from '@/components/alert/AlertDetails.vue'
 import AlertFactionCombatMetrics from '@/components/alert/AlertFactionCombatMetrics.vue'
-import AlertFactionVsFaction from '@/components/alert/AlertFactionVsFaction.vue'
 import AlertMap from '@/components/alert/AlertMap.vue'
 import AlertCharacterMetrics from '@/components/alert/AlertCharacterMetrics.vue'
 import AlertOutfitMetrics from '@/components/alert/AlertOutfitMetrics.vue'
@@ -176,13 +174,10 @@ export default Vue.extend({
   name: 'Alert',
   components: {
     AlertResult,
-    AlertDetails,
     AlertFactionCombatMetrics,
-    AlertFactionVsFaction,
     AlertPopulations,
     AlertCombatHistory,
     AlertMap,
-    // AlertMapCaptureHistory,
     AlertBattleranks,
     AlertCharacterMetrics,
     AlertOutfitMetrics,
