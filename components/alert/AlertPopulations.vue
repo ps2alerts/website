@@ -266,6 +266,9 @@ export default Vue.extend({
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
     },
+    isOutfitWar(): boolean {
+      return !!this.outfitwar?.instanceId
+    },
   },
   watch: {
     'alert.state'() {
@@ -360,7 +363,7 @@ export default Vue.extend({
       }
 
       data.forEach((row) => {
-        if (this.outfitwar.instanceId) {
+        if (this.isOutfitWar) {
           vsData.push(0)
           ncData.push(row.nc)
           trData.push(row.tr)
@@ -382,7 +385,7 @@ export default Vue.extend({
       const pointBorderWidth = 2
       const pointHoverBorderWidth = 4
 
-      if (this.outfitwar.instanceId) {
+      if (this.isOutfitWar) {
         datasets.push(
           {
             label: this.outfitwar.outfitwars?.teams?.red?.tag ?? 'Red Team',
@@ -435,7 +438,7 @@ export default Vue.extend({
         datasets,
       }
 
-      if (!avg && !this.outfitwar) {
+      if (!avg && !this.isOutfitWar) {
         collection.datasets.push({
           label: 'NSO',
           borderColor: '#4a5568',
