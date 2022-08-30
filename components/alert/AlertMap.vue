@@ -307,7 +307,7 @@ import { MAP_FACTION_COLORS } from '@/constants/FactionMapColors'
 import { Zone, zoneToWarpgateArray } from '@/ps2alerts-constants/zone'
 import ApiRequest from '@/api-request'
 import MapRegionDataRequest from '@/libraries/MapRegionDataRequest'
-import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
+import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceFacilityControlEntriesResponseInterface } from '~/interfaces/instance-entries/InstanceFacilityControlEntriesResponseInterface'
 import { AssetsBaseUrl, Endpoints } from '@/constants/Endpoints'
 import zoneNameFilter from '~/filters/ZoneName'
@@ -320,7 +320,7 @@ import factionCircleEmoji from '~/filters/FactionCircleEmoji'
 import { InstanceOutfitAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface'
 import { MapControlInterface } from '~/interfaces/instance-entries/MapControlInterface'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
-import { Ps2alertsEventType } from '~/ps2alerts-constants/ps2alertsEventType'
+import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 import { OutfitwarsTerritoryResultInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsTerritoryResultInterface'
 
@@ -412,7 +412,7 @@ export default Vue.extend({
   },
   watch: {
     'alert.state'() {
-      if (this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.alert.state === Ps2AlertsEventState.ENDED) {
         this.clearTimers()
         this.pull()
       }
@@ -444,7 +444,7 @@ export default Vue.extend({
       clearInterval(this.updateCountdownInterval)
     },
     setTimers() {
-      if (this.alert.state === Ps2alertsEventState.STARTED) {
+      if (this.alert.state === Ps2AlertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
           return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
         }, 1000)
@@ -1108,7 +1108,7 @@ export default Vue.extend({
       })
     },
     async pull(): Promise<void> {
-      if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.loaded && this.alert.state === Ps2AlertsEventState.ENDED) {
         return
       }
 
@@ -1119,7 +1119,7 @@ export default Vue.extend({
       if (
         this.alert.ps2alertsEventType &&
         this.alert.ps2alertsEventType ===
-          Ps2alertsEventType.OUTFIT_WARS_AUG_2022
+          Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
       ) {
         endpoint = ps2AlertsApiEndpoints.outfitwarsInstanceFacility.replace(
           '{instanceId}',
@@ -1141,7 +1141,7 @@ export default Vue.extend({
           for (let facilityControl of result) {
             if (
               this.alert.ps2alertsEventType ===
-                Ps2alertsEventType.OUTFIT_WARS_AUG_2022 &&
+                Ps2AlertsEventType.OUTFIT_WARS_AUG_2022 &&
               facilityControl.mapControl
             ) {
               (facilityControl.mapControl as MapControlInterface).tr = (facilityControl.mapControl as OutfitwarsTerritoryResultInterface).red;

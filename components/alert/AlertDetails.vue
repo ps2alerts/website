@@ -143,11 +143,11 @@
 <script lang="ts">
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
-import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
+import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceEventDetails } from '@/constants/InstanceEventDetails'
 import { MetagameDetailsInterface } from '@/interfaces/MetagameDetailsInterface'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
-import { Ps2alertsEventType } from '~/ps2alerts-constants/ps2alertsEventType'
+import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 
 export default Vue.extend({
   name: 'AlertDetails',
@@ -160,7 +160,7 @@ export default Vue.extend({
   },
   computed: {
     ended(): boolean {
-      return this.alert.state === Ps2alertsEventState.ENDED
+      return this.alert.state === Ps2AlertsEventState.ENDED
     },
     instanceEventDetails(): MetagameDetailsInterface | null | undefined {
       return InstanceEventDetails(this.alert.censusMetagameEventType || 0)
@@ -168,7 +168,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      OUTFIT_WARS_AUG_2022: Ps2alertsEventType.OUTFIT_WARS_AUG_2022,
+      OUTFIT_WARS_AUG_2022: Ps2AlertsEventType.OUTFIT_WARS_AUG_2022,
     }
   }
 })

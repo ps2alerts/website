@@ -89,10 +89,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import FactionSegmentBar from '@/components/common/FactionSegmentBar.vue'
-import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
+import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import { FactionBgClass } from '@/constants/FactionBgClass'
-import { Ps2alertsEventType } from '~/ps2alerts-constants/ps2alertsEventType'
+import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Phase } from '~/ps2alerts-constants/outfitwars/phase'
 import factionOrTeamName from '~/filters/FactionOrTeamName'
@@ -118,7 +118,7 @@ export default Vue.extend({
   data() {
     return {
       error: null,
-      OUTFIT_WARS_AUG_2022: Ps2alertsEventType.OUTFIT_WARS_AUG_2022,
+      OUTFIT_WARS_AUG_2022: Ps2AlertsEventType.OUTFIT_WARS_AUG_2022,
       CHAMPIONSHIPS: Phase.CHAMPIONSHIPS,
     }
   },
@@ -126,8 +126,8 @@ export default Vue.extend({
     victorText(): string {
       const isOutfitWars =
         this.alert.ps2alertsEventType ===
-        Ps2alertsEventType.OUTFIT_WARS_AUG_2022
-      return this.alert.state === Ps2alertsEventState.STARTED
+        Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+      return this.alert.state === Ps2AlertsEventState.STARTED
         ? 'In progress...'
         : this.alert.result?.draw === true
         ? 'Draw!'
@@ -143,7 +143,7 @@ export default Vue.extend({
         return {}
       }
       return {
-        'bg-tint': this.alert.state !== Ps2alertsEventState.ENDED,
+        'bg-tint': this.alert.state !== Ps2AlertsEventState.ENDED,
         ...FactionBgClass(this.alert.result.victor),
       }
     },
