@@ -113,7 +113,7 @@
         <v-tabs-items v-model="metricsTab">
           <v-tab-item :eager="eager" value="players">
             <section class="col-span-12 card relative mb-4">
-              <AlertCharacterMetrics :alert="alert" />
+              <AlertCharacterMetrics :alert="alert" :outfitwar="alert" />
             </section>
           </v-tab-item>
           <v-tab-item :eager="eager" value="outfits">

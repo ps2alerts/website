@@ -12,14 +12,15 @@
     <div v-if="loaded" class="grid grid-cols-12">
       <div class="col-span-full mb-2 flex flex-wrap justify-center">
         <div class="p-2">Player Counts</div>
-        <div
-          v-for="(count, index) in counts"
-          :key="index"
-          :class="factionClass(parseInt(index, 10))"
-          class="p-2"
-        >
-          <span v-if="index === 'total'">= </span>
-          {{ count || 0 }}
+        <div v-for="(count, index) in counts" :key="index">
+          <div
+            v-if="displayCount(parseInt(index, 10))"
+            :class="factionClass(parseInt(index, 10))"
+            class="p-2"
+          >
+            <span v-if="index === 'total'">= </span>
+            <span>{{ count || 0 }}</span>
+          </div>
         </div>
       </div>
       <div class="col-span-12">
@@ -117,6 +118,7 @@ import { InstanceTerritoryControlResponseInterface } from '~/interfaces/Instance
 import { AlertCharacterTableDataInterface } from '~/interfaces/alert/AlertCharacterTableDataInterface'
 import { DataTableConfig } from '@/constants/DataTableConfig'
 import timeText from '~/utilities/timeText'
+import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 
 export default Vue.extend({
   name: 'AlertCharacterMetrics',
@@ -125,6 +127,11 @@ export default Vue.extend({
       type: Object as () => InstanceTerritoryControlResponseInterface,
       default: {},
       required: true,
+    },
+    outfitwar: {
+      type: Object as () => InstanceOutfitWarsResponseInterface,
+      default: {},
+      required: false,
     },
   },
   data() {
@@ -167,6 +174,9 @@ export default Vue.extend({
     },
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
+    },
+    isOutfitWar(): boolean {
+      return !!this.outfitwar?.instanceId
     },
   },
   watch: {
@@ -437,6 +447,16 @@ export default Vue.extend({
       })
 
       return newData
+    },
+    displayCount(faction: Faction): boolean {
+      if (!this.isOutfitWar) {
+        return true
+      }
+
+      return !(
+        faction === Faction.VANU_SOVEREIGNTY ||
+        faction === Faction.NS_OPERATIVES
+      )
     },
   },
 })
