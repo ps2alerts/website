@@ -238,7 +238,7 @@
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
-import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
+import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceFactionCombatAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceFactionCombatAggregateResponseInterface'
 import { Endpoints } from '@/constants/Endpoints'
 
@@ -269,7 +269,7 @@ export default Vue.extend({
   },
   watch: {
     'alert.state'() {
-      if (this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.alert.state === Ps2AlertsEventState.ENDED) {
         this.clearTimers()
         this.pull()
       }
@@ -293,7 +293,7 @@ export default Vue.extend({
     },
     init(): void {
       this.pull()
-      if (this.alert.state === Ps2alertsEventState.STARTED) {
+      if (this.alert.state === Ps2AlertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
           return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
         }, 1000)
@@ -304,7 +304,7 @@ export default Vue.extend({
       }
     },
     async pull(): Promise<void> {
-      if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.loaded && this.alert.state === Ps2AlertsEventState.ENDED) {
         return
       }
 

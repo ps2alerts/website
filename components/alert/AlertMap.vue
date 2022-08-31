@@ -157,7 +157,9 @@
         ></v-slider>
       </div>
       <!-- Playback button for general sizes -->
-      <div class="hidden md:col-start-1 md:col-span-3 md:flex justify-center items-center">
+      <div
+        class="hidden md:col-start-1 md:col-span-3 md:flex justify-center items-center"
+      >
         <div v-if="loaded" class="btn-group mr-2">
           <button
             class="btn btn-sm px-4 xl:px-2"
@@ -236,7 +238,9 @@
       </div>
 
       <!-- Playback button for phones -->
-      <div class="flex md:hidden col-start-2 w-1/2 col-span-3 justify-center items-center">
+      <div
+        class="flex md:hidden col-start-2 w-1/2 col-span-3 justify-center items-center"
+      >
         <div v-if="loaded" class="btn-group mr-2">
           <button
             class="btn btn-sm px-4 xl:px-2"
@@ -276,7 +280,9 @@
       </div>
 
       <!-- Playback speed -->
-      <div class="col-start-5 col-span-full mt-5 md:col-start-10 md:col-span-3 md:mt-0">
+      <div
+        class="col-start-5 col-span-full mt-5 md:col-start-10 md:col-span-3 md:mt-0"
+      >
         <span>Playback speed: {{ (playback.delay / 1000).toFixed(2) }}s</span>
         <v-slider
           v-model="playback.delay"
@@ -301,7 +307,7 @@ import { MAP_FACTION_COLORS } from '@/constants/FactionMapColors'
 import { zoneToWarpgateArray } from '@/ps2alerts-constants/zone'
 import ApiRequest from '@/api-request'
 import MapRegionDataRequest from '@/libraries/MapRegionDataRequest'
-import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
+import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceFacilityControlEntriesResponseInterface } from '~/interfaces/instance-entries/InstanceFacilityControlEntriesResponseInterface'
 import { AssetsBaseUrl, Endpoints } from '@/constants/Endpoints'
 import zoneNameFilter from '~/filters/ZoneName'
@@ -403,7 +409,7 @@ export default Vue.extend({
   },
   watch: {
     'alert.state'() {
-      if (this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.alert.state === Ps2AlertsEventState.ENDED) {
         this.clearTimers()
         this.pull()
       }
@@ -435,7 +441,7 @@ export default Vue.extend({
       clearInterval(this.updateCountdownInterval)
     },
     setTimers() {
-      if (this.alert.state === Ps2alertsEventState.STARTED) {
+      if (this.alert.state === Ps2AlertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
           return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
         }, 1000)
@@ -1092,7 +1098,7 @@ export default Vue.extend({
       })
     },
     async pull(): Promise<void> {
-      if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.loaded && this.alert.state === Ps2AlertsEventState.ENDED) {
         return
       }
 

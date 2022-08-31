@@ -143,7 +143,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
-import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
+import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceEventDetails } from '@/constants/InstanceEventDetails'
 import { MetagameDetailsInterface } from '@/interfaces/MetagameDetailsInterface'
 
@@ -158,7 +158,7 @@ export default Vue.extend({
   },
   computed: {
     ended(): boolean {
-      return this.alert.state === Ps2alertsEventState.ENDED
+      return this.alert.state === Ps2AlertsEventState.ENDED
     },
     instanceEventDetails(): MetagameDetailsInterface | null | undefined {
       return InstanceEventDetails(this.alert.censusMetagameEventType || 0)

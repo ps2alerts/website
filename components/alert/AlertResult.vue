@@ -69,7 +69,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import FactionSegmentBar from '@/components/common/FactionSegmentBar.vue'
-import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
+import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import factionName from '@/filters/FactionName'
 import { FactionBgClass } from '@/constants/FactionBgClass'
@@ -98,7 +98,7 @@ export default Vue.extend({
   },
   computed: {
     victorText(): string {
-      return this.alert.state === Ps2alertsEventState.STARTED
+      return this.alert.state === Ps2AlertsEventState.STARTED
         ? 'In progress...'
         : this.alert.result?.draw === true
         ? 'Draw!'
@@ -109,7 +109,7 @@ export default Vue.extend({
         return {}
       }
       return {
-        'bg-tint': this.alert.state !== Ps2alertsEventState.ENDED,
+        'bg-tint': this.alert.state !== Ps2AlertsEventState.ENDED,
         ...FactionBgClass(this.alert.result.victor),
       }
     },
