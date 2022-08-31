@@ -47,6 +47,12 @@
           >
             {{ outfitwar.outfitwars.teams.red.faction | factionName }}
           </div>
+          <div
+            class="text-xs label green"
+            v-if="outfitwar.result && outfitwar.result.victor === 3"
+          >
+            Winner!
+          </div>
         </div>
         <div class="absolute flex inset-0 place-content-center">
           <div class="self-center xl:text-xl 2xl:text-2xl 3xl:text-3xl">
@@ -56,6 +62,12 @@
         <div
           class="absolute bottom-0 right-2 text-right text-xs md:text-[1.5vw] xl:text-xl 2xl:text-2xl mb-2 lg:mb-0"
         >
+          <div
+            class="text-xs label green"
+            v-if="outfitwar.result && outfitwar.result.victor === 2"
+          >
+            Winner!
+          </div>
           <div
             class="text-xs label"
             :class="outfitwar.outfitwars.teams.blue.faction | factionShortName"
@@ -150,20 +162,20 @@ export default Vue.extend({
   &.winner-red {
     background: linear-gradient(
       150deg,
-      rgba(155, 44, 44, 0.5) 0 51.25%,
-      gold,
+      rgba(155, 44, 44, 0.9) 0 51.5%,
       black,
-      rgba(43, 108, 176, 0.5) 52.25% 100%
+      rgba(155, 44, 44, 0.2),
+      rgba(43, 108, 176, 0.5) 52.75% 100%
     );
   }
 
   &.winner-blue {
     background: linear-gradient(
       150deg,
-      rgba(155, 44, 44, 0.5) 0 51.25%,
+      rgba(155, 44, 44, 0.5) 0 50.75%,
+      rgba(43, 108, 176, 0.2),
       black,
-      gold,
-      rgba(43, 108, 176, 0.5) 52.25% 100%
+      rgba(43, 108, 176, 0.9) 52% 100%
     );
   }
 }

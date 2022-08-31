@@ -5,14 +5,14 @@
         <h1 class="text-4xl">Alert #{{ alert.instanceId }}</h1>
       </div>
       <div v-if="alert.ps2AlertsEventType === OUTFIT_WARS_AUG_2022 && alert.outfitwars">
-        <h1 class="text-4xl">
+        <h1 class="text-3xl">
           {{ alert.world | worldName }} {{ alert.outfitwars.phase | phaseName }} Round
           {{ alert.outfitwars.round | owRoundByPhase(alert.outfitwars.phase) }}
         </h1>
       </div>
     </div>
     <div v-if="alert.state === 2" class="mb-2 text-center">
-      <h2 class="text-2xl">
+      <h2 class="text-4xl">
         {{ victorText }}
         <v-tooltip v-if="alert.result && alert.result.draw === true" bottom>
           <template #activator="{ on, attrs }">
@@ -81,6 +81,7 @@
         "
         :other="alert.result.cutoff"
         :out-of-play="alert.result.outOfPlay"
+        :outfitwars="alert.ps2AlertsEventType === OUTFIT_WARS_AUG_2022"
       />
     </div>
   </div>
@@ -96,6 +97,7 @@ import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Phase } from '~/ps2alerts-constants/outfitwars/phase'
 import factionOrTeamName from '~/filters/FactionOrTeamName'
+import { Team } from '~/ps2alerts-constants/outfitwars/team'
 
 export default Vue.extend({
   name: 'AlertResult',
@@ -130,6 +132,12 @@ export default Vue.extend({
       const isOutfitWars =
         this.alert.ps2AlertsEventType ===
         Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+      if(isOutfitWars && this.alert.result?.victor === Team.RED && this.alert.outfitwars?.teams?.red) {
+        return `${this.alert.outfitwars.teams.red.name.trim()} wins!`
+      }
+      else if(isOutfitWars && this.alert.result?.victor === Team.BLUE && this.alert.outfitwars?.teams?.blue) {
+        return `${this.alert.outfitwars.teams.blue.name.trim()} wins!`
+      }
       return this.alert.state === Ps2AlertsEventState.STARTED
         ? 'In progress...'
         : this.alert.result?.draw === true

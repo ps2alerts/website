@@ -3,7 +3,7 @@
     <div class="aspect-square relative place-items-center">
       <img
         class="absolute inset-0 m-auto"
-        :class="loser ? 'grayscale' : ''"
+        :class="loser ? 'grayscale opacity-40' : ''"
         :src="outfitId | outfitImage"
         :alt="outfitFaction | factionShortName"
         @error="imageUrlAlt"
