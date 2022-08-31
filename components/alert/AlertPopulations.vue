@@ -34,7 +34,7 @@
           Numbers
         </button>
         <button
-          v-if="!outfitwar"
+          v-if="!isOutfitWar"
           class="btn btn-sm"
           :class="{ 'btn-active': mode === 'average' }"
           @click="updateMode('average')"
@@ -78,7 +78,7 @@
           <h3>Data is gathered once a minute</h3>
         </div>
       </div>
-      <div v-show="mode === 'average'" v-if="!outfitwar" class="text-center">
+      <div v-show="mode === 'average'" v-if="!isOutfitWar" class="text-center">
         <line-chart
           v-if="avgData.length"
           :chart-data="dataAvgCollection"
@@ -92,7 +92,7 @@
           class="w-full flex flex-col flex-wrap justify-center items-center"
         >
           <h1>
-            Awating data...
+            Awaiting data...
             <font-awesome-icon
               :icon="['fa', 'sync']"
               class="animate-spin"
