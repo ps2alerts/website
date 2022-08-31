@@ -50,7 +50,7 @@ export default Vue.extend({
         'Feeding the VS victim complex',
         'Feeding the NC victim complex',
         'Fueling the TR victim complex',
-        'Still waiting on NSO team_id...',
+        'Team ID: Making robots first class API citizens since August 2022',
         'Zergfits OP',
         'Proving VS is OP',
         'NC Millah stronk matey,,,,,,',
@@ -60,6 +60,7 @@ export default Vue.extend({
         'RIP ANT Cloak',
         'Pew pew!',
         'An salty OS a day keeps the doctor away',
+        'Dervish. The one true flying waffle.'
       ],
       version: this.$config.version,
       lastVersionViewed: null,
