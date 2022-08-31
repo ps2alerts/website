@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import { Phase } from '@/ps2alerts-constants/outfitwars/phase'
 
-const phaseName = Vue.filter('phaseName', (value: Phase) => {
+const phaseName = Vue.filter('phaseName', (value: Phase, plural: boolean = true) => {
   switch (value) {
     case Phase.QUALIFIERS:
-      return 'Qualifiers'
+      return plural ? 'Qualifiers' : 'Qualifier'
     case Phase.PLAYOFFS:
-      return 'Playoffs'
+      return plural ? 'Playoffs' : 'Playoff'
     case Phase.CHAMPIONSHIPS:
-      return 'Championships'
+      return plural ? 'Championships' : 'Championship'
     default:
       return 'UNKNOWN!'
   }
