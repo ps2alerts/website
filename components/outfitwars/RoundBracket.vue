@@ -3,7 +3,8 @@
     <RoundBracketEntry 
       v-for="(rankingPair, index) in rankingPairs"
       :key="index"
-      :outfits="rankingPair"
+      :rankings="rankingPair"
+      :match="rankingPairInstance(rankingPair)"
     />
   </div>
 </template>
@@ -11,9 +12,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import RoundBracketEntry from '~/components/outfitwars/RoundBracketEntry.vue'
-import { OutfitwarsRankingInterface, OutfitwarsOutfitDataInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsRankingInterface'
-import { pcWorldArray, WorldPC, World } from '~/ps2alerts-constants/world'
+import { OutfitwarsRankingInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsRankingInterface'
+import { pcWorldArray, WorldPC } from '~/ps2alerts-constants/world'
 import { PropValidator } from 'vue/types/options'
+import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 
 export default Vue.extend({
     name: 'RoundBracket',
@@ -40,15 +42,29 @@ export default Vue.extend({
               return true
             },
             required: true
-        } as PropValidator<OutfitwarsRankingInterface[]>
+        } as PropValidator<OutfitwarsRankingInterface[]>,
+        instances: {
+          type: Object as () => Map<string, InstanceOutfitWarsResponseInterface>,
+          required: true
+        }
     },
     data() {
       return {
-        pairs: [] as OutfitwarsOutfitDataInterface[][]
+        pairs: [] as OutfitwarsRankingInterface[][]
+      }
+    },
+    methods: {
+      rankingPairInstance(pair: OutfitwarsRankingInterface[]): InstanceOutfitWarsResponseInterface | null {
+        const instanceId = pair[0].instanceId !== null 
+                ? pair[0].instanceId 
+                : pair[1].instanceId !== null 
+                  ? pair[1].instanceId 
+                  : '';
+        return this.instances.get(instanceId) ?? null;
       }
     },
     computed: {
-      rankingPairs(): OutfitwarsOutfitDataInterface[][] {
+      rankingPairs(): OutfitwarsRankingInterface[][] {
         if(this.pairs.length !== 0) {
           return this.pairs
         }
@@ -63,7 +79,7 @@ export default Vue.extend({
           }
         })
         for(let i = 0; (i + 1) < sortedRankings.length; i += 2) {
-          this.pairs.push([sortedRankings[i].outfit, sortedRankings[i+1].outfit])
+          this.pairs.push([sortedRankings[i], sortedRankings[i+1]])
         }
         return this.pairs;
       }

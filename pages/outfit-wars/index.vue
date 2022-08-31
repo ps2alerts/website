@@ -123,6 +123,7 @@
               :rankings="rawData"
               :round="round"
               :server="world"
+              :instances="instanceMap"
             />
           </div>
         </div>
@@ -151,6 +152,8 @@ import { OutfitwarsRankingInterface } from '~/ps2alerts-constants/interfaces/Out
 import { getOutfitWarPhase } from '~/ps2alerts-constants/outfitwars/utils'
 import worldName from '~/filters/WorldName'
 import TimeRemainingFromDuration from '~/utilities/timeRemainingFromDuration'
+import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
+import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 
 interface RankingInterface {
   totalScore: number
@@ -198,7 +201,8 @@ export default Vue.extend({
       >(),
       totalOutfits: 0,
       rawData: [] as OutfitwarsRankingInterface[],
-      seenOutfits: [] as string[]
+      seenOutfits: [] as string[],
+      instanceMap: new Map() as Map<string, InstanceOutfitWarsResponseInterface>
     }
   },
   head(): object {
@@ -257,17 +261,26 @@ export default Vue.extend({
 
       await new ApiRequest()
         .get<OutfitwarsRankingInterface[]>(Endpoints.OW_RANKINGS_ALL)
-        .then((result) => {
+        .then(async (result) => {
           console.log('result', result)
-          this.parse(result)
+          await this.parse(result)
         })
         .catch((e) => {
           this.error = e.message
         })
     },
-    parse(data: OutfitwarsRankingInterface[]) {
+    async parse(data: OutfitwarsRankingInterface[]) {
       this.rawData = data;
       for (const record of data) {
+        if(record.instanceId) {
+          this.instanceMap.set(
+            record.instanceId, 
+            await new ApiRequest().get<InstanceOutfitWarsResponseInterface>(
+                ps2AlertsApiEndpoints.outfitwarsInstance
+                  .replace('{instanceId}', record.instanceId)
+              )
+          );
+        }
         if(this.seenOutfits.includes(record.outfit.id)) {
           continue
         }
