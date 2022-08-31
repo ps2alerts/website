@@ -133,10 +133,10 @@ export default Vue.extend({
         this.alert.ps2AlertsEventType ===
         Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
       if(isOutfitWars && this.alert.result?.victor === Team.RED && this.alert.outfitwars?.teams?.red) {
-        return `${this.alert.outfitwars.teams.red.name.trim()} wins!`
+        return `[${this.alert.outfitwars.teams.red.tag}] ${this.alert.outfitwars.teams.red.name.trim()} wins!`
       }
       else if(isOutfitWars && this.alert.result?.victor === Team.BLUE && this.alert.outfitwars?.teams?.blue) {
-        return `${this.alert.outfitwars.teams.blue.name.trim()} wins!`
+        return `[${this.alert.outfitwars.teams.blue.tag}] ${this.alert.outfitwars.teams.blue.name.trim()} wins!`
       }
       return this.alert.state === Ps2AlertsEventState.STARTED
         ? 'In progress...'
