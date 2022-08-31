@@ -5,24 +5,28 @@
     class="grid grid-cols-12 gap-2 text-center relative"
   >
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
-    <div class="flex flex-col relative col-span-12 md:col-span-4 md:col-start-5 content-center justify-end aspect-square">
+    <div
+      class="flex flex-col relative col-span-12 md:col-span-4 md:col-start-5 content-center justify-end aspect-square"
+    >
       <img
         src="/img/outfitwars-nexus.png"
         alt="Outfitwars Logo"
         class="absolute rounded-xl w-full inset-0 -z-50"
       />
-      <div class="mb-2" v-if="timeRemaining > 0">
-        <h1 class="text-subtitle rounded-md py-2 px-4 inline-block bg-gray-700 border-yellow-500 border">
+      <div v-if="timeRemaining > 0" class="mb-2">
+        <h1
+          class="text-subtitle rounded-md py-2 px-4 inline-block bg-gray-700 border-yellow-500 border"
+        >
           <remaining-time :time-remaining="timeRemaining"></remaining-time>
         </h1>
         <p class="text-base">
-          Until the season begins<br/>(including 20 min prep time)
+          Until the season begins<br />(including 20 min prep time)
         </p>
       </div>
     </div>
-    <div class="col-span-12">      
-      <div class="grid grid-cols-4 gap-2 text-center" v-if="loaded">
-        <div class="col-span-4" >
+    <div class="col-span-12">
+      <div v-if="loaded" class="grid grid-cols-4 gap-2 text-center">
+        <div class="col-span-4">
           This season, <b>{{ totalOutfits }}</b> outfits are battling on Nexus
         </div>
         <div class="col-span-4">
@@ -195,7 +199,7 @@ export default Vue.extend({
   name: 'OutfitWarsRankings',
   components: {
     MetaHead,
-    RoundBracket
+    RoundBracket,
   },
   data() {
     return {
@@ -210,7 +214,10 @@ export default Vue.extend({
       worlds: [World.COBALT, World.CONNERY, World.EMERALD, World.MILLER],
       currentWorldRankingsMap: new Map<World, ParsedOutfitDataInterface[]>(),
       rawData: [] as OutfitwarsRankingInterface[],
-      instanceMap: new Map() as Map<string, InstanceOutfitWarsResponseInterface>,
+      instanceMap: new Map() as Map<
+        string,
+        InstanceOutfitWarsResponseInterface
+      >,
       factionCount: [0, 0, 0, 0, 0] as number[],
     }
   },
@@ -233,18 +240,19 @@ export default Vue.extend({
       ],
     }
   },
-  created() {
-    this.init()
-  },
   computed: {
     rounds(): number[] {
       console.log(`Rounds: loaded = ${this.loaded}`)
-      if(!this.loaded) {
+      if (!this.loaded) {
         return [1]
       }
-      let rounds: number[] = []
+      const rounds: number[] = []
       for (const ranking of this.rawData) {
-        if(!rounds.includes(ranking.round) && ranking.round > 0 && ranking.round < 8) {
+        if (
+          !rounds.includes(ranking.round) &&
+          ranking.round > 0 &&
+          ranking.round < 8
+        ) {
           rounds.push(ranking.round)
         }
       }
@@ -253,23 +261,26 @@ export default Vue.extend({
       return rounds
     },
     totalOutfits(): number {
-      let value = 0;
-      for(const world of this.worlds) {
-        value += this.worldRankings(world).length;
+      let value = 0
+      for (const world of this.worlds) {
+        value += this.worldRankings(world).length
       }
-      return value;
+      return value
     },
     totalOutfitsByFaction(): number[] {
-      if(!this.factionCount.every((value) => value === 0)) {
-        return this.factionCount;
+      if (!this.factionCount.every((value) => value === 0)) {
+        return this.factionCount
       }
-      for(const world of this.worlds) {
-        for(const outfit of this.worldRankings(world)) {
-          this.factionCount[outfit.faction]++;
+      for (const world of this.worlds) {
+        for (const outfit of this.worldRankings(world)) {
+          this.factionCount[outfit.faction]++
         }
       }
-      return this.factionCount;
-    }
+      return this.factionCount
+    },
+  },
+  created() {
+    this.init()
   },
   methods: {
     async init() {
@@ -297,16 +308,18 @@ export default Vue.extend({
         })
     },
     async parse(data: OutfitwarsRankingInterface[]) {
-      this.rawData = data;
+      this.rawData = data
       for (const record of data) {
-        if(record.instanceId) {
+        if (record.instanceId) {
           this.instanceMap.set(
-            record.instanceId, 
+            record.instanceId,
             await new ApiRequest().get<InstanceOutfitWarsResponseInterface>(
-                ps2AlertsApiEndpoints.outfitwarsInstance
-                  .replace('{instanceId}', record.instanceId)
+              ps2AlertsApiEndpoints.outfitwarsInstance.replace(
+                '{instanceId}',
+                record.instanceId
               )
-          );
+            )
+          )
         }
 
         const outfitImageUrl = Endpoints.OUTFIT_TRACKER_OUTFIT_LOGO.replace(
@@ -356,28 +369,27 @@ export default Vue.extend({
 
         // If doesn't already exist, create the array now
         if (!currentWorldRankings) {
-          this.currentWorldRankingsMap.set(
-            parsedOutfitData.world,
-            [parsedOutfitData]
-          )
+          this.currentWorldRankingsMap.set(parsedOutfitData.world, [
+            parsedOutfitData,
+          ])
         } else {
           // Otherwise just add to the current array
           const index = currentWorldRankings.findIndex((value) => {
-            return value.id === parsedOutfitData.id;
+            return value.id === parsedOutfitData.id
           })
-          if(index === -1) {
-            currentWorldRankings.push(parsedOutfitData);
+          if (index === -1) {
+            currentWorldRankings.push(parsedOutfitData)
           } else {
-            currentWorldRankings[index] = parsedOutfitData;
+            currentWorldRankings[index] = parsedOutfitData
           }
         }
       }
       console.log('world rankings', this.currentWorldRankingsMap)
 
-      for(const world of this.worlds) {
+      for (const world of this.worlds) {
         this.worldRankings(world).sort((a, b) => {
-          return b.rankings.globalRank - a.rankings.globalRank;
-        });
+          return b.rankings.globalRank - a.rankings.globalRank
+        })
       }
 
       this.loaded = true
@@ -387,8 +399,8 @@ export default Vue.extend({
       return `/img/worlds/${worldName(world)}.png`
     },
     worldRankings(world: World): ParsedOutfitDataInterface[] {
-      return this.currentWorldRankingsMap.get(world) ?? [];
-    }
+      return this.currentWorldRankingsMap.get(world) ?? []
+    },
   },
 })
 </script>
