@@ -209,7 +209,7 @@ export default Vue.extend({
       loaded: false,
       error: '',
       now: parseInt(moment().tz('UTC').format('X'), 10),
-      end: parseInt(moment.tz('2022-09-03 18:20:00', 'UTC').format('X'), 10),
+      end: parseInt(moment.tz('2022-09-02 18:20:00', 'UTC').format('X'), 10),
       timeRemaining: 0,
       worlds: [World.COBALT, World.CONNERY, World.EMERALD, World.MILLER],
       currentWorldRankingsMap: new Map<World, ParsedOutfitDataInterface[]>(),
