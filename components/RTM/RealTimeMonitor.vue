@@ -28,9 +28,9 @@
         </button>
       </div>
       <div v-show="drawerOpen" class="pb-2">
-        <p v-if="loading" class="my-2">Loading...</p>
-        <p v-if="error" class="my-2">ERROR: {{ error }}</p>
-        <p v-show="!loading && actives.length === 0 && !error" class="my-2">
+        <p v-if="loading" class="mt-2">Loading...</p>
+        <p v-if="error" class="mt-2">ERROR: {{ error }}</p>
+        <p v-show="!loading && actives.length === 0 && !error" class="mt-2">
           There are no alerts currently running!
         </p>
         <div v-show="actives.length > 0">
@@ -72,25 +72,27 @@
             />
           </p>
         </div>
-        <div v-for="world in worlds" :key="world">
-          <div class="tag section" v-if="outfitWarsByWorld(world).length > 0">{{ world | worldName }} - {{ outfitWarsByWorld(world).length }} Active {{ outfitWarsByWorld(world)[0].outfitwars.phase | phaseName(false) }} {{ outfitWarWord(world) }}</div>
-          <div v-show="outfitWarsByWorld(world).length > 0">
-            <div
-              v-for="outfitwar in outfitWarsByWorld(world)"
-              :key="outfitwar.instanceId"
-              class="p-1 border-b border-gray-500 border-no-bottom"
-            >
-              <RealTimeAlert
-                :world="outfitwar.world"
-                :zone="outfitwar.zone"
-                :time-started="outfitwar.timeStarted"
-                :duration="outfitwar.duration"
-                :result="outfitwar.result"
-                :instance-id="outfitwar.instanceId"
-                :pops="getPops(outfitwar.instanceId)"
-                :is-percentage="showPopPercent"
-                :outfitwars="outfitwar.outfitwars"
-              />
+        <div class="mt-2" v-if="outfitWars().length > 0">
+          <div v-for="world in worlds" :key="world">
+            <div class="tag section" v-if="outfitWarsByWorld(world).length > 0">{{ world | worldName }} - {{ outfitWarsByWorld(world).length }} Active {{ outfitWarsByWorld(world)[0].outfitwars.phase | phaseName(false) }} {{ outfitWarWord(world) }}</div>
+            <div v-show="outfitWarsByWorld(world).length > 0">
+              <div
+                v-for="outfitwar in outfitWarsByWorld(world)"
+                :key="outfitwar.instanceId"
+                class="p-1 border-b border-gray-500 border-no-bottom"
+              >
+                <RealTimeAlert
+                  :world="outfitwar.world"
+                  :zone="outfitwar.zone"
+                  :time-started="outfitwar.timeStarted"
+                  :duration="outfitwar.duration"
+                  :result="outfitwar.result"
+                  :instance-id="outfitwar.instanceId"
+                  :pops="getPops(outfitwar.instanceId)"
+                  :is-percentage="showPopPercent"
+                  :outfitwars="outfitwar.outfitwars"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -239,6 +241,13 @@ export default Vue.extend({
       const result = this.owactivesByWorld.get(world);
       if(!result) {
         return []
+      }
+      return result;
+    },
+    outfitWars(): InstanceOutfitWarsResponseInterface[] {
+      const result = []
+      for(const world of this.worlds) {
+        result.unshift(...this.outfitWarsByWorld(world))
       }
       return result;
     },
