@@ -43,12 +43,16 @@
             {{ rankings[1].outfit.name.trim() }}
           </div>
         </div>
-        <FactionSegmentBar
+        <!-- Using borders here for alignment - the FactionSegment bar is 1px taller than the Awaiting match text otherwise -->
+        <div class="text-gray-500 col-start-3 col-span-3 border-b border-[#1e1e1e] rounded" v-if="!(match && match.result)">
+          <span>Awaiting match...</span>
+        </div>
+        <FactionSegmentBar v-else-if="(match && match.result)"
           class="col-start-2 col-span-5"
           :vs="0"
-          :nc="(match && match.result) ? match.result.blue : 33"
-          :tr="(match && match.result) ? match.result.red : 33"
-          :other="(match && match.result) ? match.result.cutoff : 33"
+          :nc="match.result.blue"
+          :tr="match.result.red"
+          :other="match.result.cutoff"
           :out-of-play="0"
           dropoff-percent="5"
           :outfitwars="true"

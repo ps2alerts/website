@@ -1,5 +1,16 @@
 <template>
-  <div class="grid grid-cols-1 w-fit">
+  <div class="flex flex-col justify-between w-fit grow">
+    <div class="my-4" v-if="rankingPairs.length > 0">
+      <div class="text-xl">
+        {{ phase | phaseName }}
+      </div>
+      <div class="text-xs" v-if="phase !== CHAMPIONSHIPS">
+        Round {{ round | owRoundByPhase(phase) }}
+      </div>
+      <div class="text-xs" v-else>
+        Final
+      </div>
+    </div>
     <RoundBracketEntry 
       v-for="(rankingPair, index) in rankingPairs"
       :key="index"
@@ -16,6 +27,7 @@ import { OutfitwarsRankingInterface } from '~/ps2alerts-constants/interfaces/Out
 import { pcWorldArray, WorldPC } from '~/ps2alerts-constants/world'
 import { PropValidator } from 'vue/types/options'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
+import { Phase } from '~/ps2alerts-constants/outfitwars/phase'
 
 export default Vue.extend({
     name: 'RoundBracket',
@@ -50,7 +62,8 @@ export default Vue.extend({
     },
     data() {
       return {
-        pairs: [] as OutfitwarsRankingInterface[][]
+        pairs: [] as OutfitwarsRankingInterface[][],
+        CHAMPIONSHIPS: Phase.CHAMPIONSHIPS,
       }
     },
     methods: {
@@ -79,9 +92,24 @@ export default Vue.extend({
           }
         })
         for(let i = 0; (i + 1) < sortedRankings.length; i += 2) {
+          if(this.round === 5 && i === 8) {
+            break;
+          }
+          if(this.round > 5 && i === 4) {
+            break;
+          }
           this.pairs.push([sortedRankings[i], sortedRankings[i+1]])
         }
         return this.pairs;
+      },
+      phase(): Phase {
+        if(this.round < 5) {
+          return Phase.QUALIFIERS;
+        } else if(this.round < 7) {
+          return Phase.PLAYOFFS;
+        } else {
+          return Phase.CHAMPIONSHIPS;
+        }
       }
     }
 })

@@ -5,26 +5,40 @@
     class="grid grid-cols-12 gap-2 text-center relative"
   >
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
-    <div class="col-span-12 md:col-span-4">
+    <div class="flex flex-col relative col-span-12 md:col-span-4 md:col-start-5 content-center justify-end aspect-square">
       <img
         src="/img/outfitwars-nexus.png"
         alt="Outfitwars Logo"
-        class="rounded-xl w-full"
+        class="absolute rounded-xl w-full inset-0 -z-50"
       />
+      <div class="mb-2" v-if="timeRemaining > 0">
+        <h1 class="text-subtitle rounded-md py-2 px-4 inline-block bg-gray-700 border-yellow-500 border">
+          <remaining-time :time-remaining="timeRemaining"></remaining-time>
+        </h1>
+        <p class="text-base">
+          Until the season begins<br/>(including 20 min prep time)
+        </p>
+      </div>
     </div>
-    <div class="col-span-12 md:col-span-8">
-      <h1 class="text-title">Outfit Wars 2022</h1>
-      <h1 class="text-subtitle">
-        <remaining-time :time-remaining="timeRemaining"></remaining-time>
-      </h1>
-      <p class="text-xl">
-        Until the season begins (including 20 min prep time)
-      </p>
-      <div class="grid grid-cols-4 gap-2 text-center">
-        <div class="col-span-2">
+    <div class="col-span-12">      
+      <div class="grid grid-cols-4 gap-2 text-center" v-if="loaded">
+        <div class="col-span-4" >
           This season, <b>{{ totalOutfits }}</b> outfits are battling on Nexus
         </div>
-        <div class="col-span-2">bar</div>
+        <div class="col-span-4">
+          <FactionSegmentBar
+            :vs="totalOutfitsByFaction[1]"
+            :nc="totalOutfitsByFaction[2]"
+            :tr="totalOutfitsByFaction[3]"
+            :other="totalOutfitsByFaction[4]"
+            :out-of-play="0"
+            dropoff-percent="5"
+            no-leader-highlight="true"
+            :is-percentage="false"
+            other-segment-text="NSO"
+            numeral="0,0"
+          />
+        </div>
       </div>
     </div>
     <div class="col-span-12 pt-2 mt-2 border-t border-t-gray-500">
@@ -74,13 +88,13 @@
             <div class="py-4 bg-tint">
               <p class="text-2xl text-center">{{ world | worldName }}</p>
               <p v-if="currentWorldRankingsMap.has(world)" class="text-sm">
-                {{ currentWorldRankingsMap.get(world).size }} outfits signed up
+                {{ worldRankings(world).length }} outfits signed up
               </p>
             </div>
 
             <v-list subheader>
               <v-list-item
-                v-for="outfit in currentWorldRankingsMap.get(world)"
+                v-for="outfit in worldRankings(world)"
                 :key="outfit.id"
               >
                 <object
@@ -111,14 +125,13 @@
         </div>
         <div
           v-if="loaded"
-          class="flex p-2 gap-y-2 gap-x-4 overflow-x-auto col-span-12 md:col-span-9 bg-tint rounded border border-gray-900"
+          class="flex p-2 gap-y-2 gap-x-4 overflow-x-auto col-span-12 md:col-span-9 bg-tint rounded border border-gray-900 snap-x"
         >
           <div
             v-for="(round, index) in rounds"
             :key="index"
-            class="col-span-1 flex-shrink-0 "
+            class="col-span-1 flex-shrink-0"
           >
-            Round {{ round }}
             <RoundBracket
               :rankings="rawData"
               :round="round"
@@ -158,8 +171,9 @@ import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoin
 interface RankingInterface {
   totalScore: number
   played: number
-  points: number
-  position: number
+  wins: number
+  losses: number
+  tiebreaker: number
   factionRank: number
   globalRank: number
 }
@@ -170,7 +184,7 @@ interface ParsedOutfitDataInterface {
   tag: string | null
   faction: Faction
   world: World
-  round: string
+  round: number
   phase: Phase
   rankings: RankingInterface
   outfitImageUrl: string
@@ -194,15 +208,10 @@ export default Vue.extend({
       end: parseInt(moment.tz('2022-09-03 18:20:00', 'UTC').format('X'), 10),
       timeRemaining: 0,
       worlds: [World.COBALT, World.CONNERY, World.EMERALD, World.MILLER],
-      currentWorldRankingsMap: new Map<World, Set<ParsedOutfitDataInterface>>(),
-      currentFactionRankingsMap: new Map<
-        Faction,
-        Set<ParsedOutfitDataInterface>
-      >(),
-      totalOutfits: 0,
+      currentWorldRankingsMap: new Map<World, ParsedOutfitDataInterface[]>(),
       rawData: [] as OutfitwarsRankingInterface[],
-      seenOutfits: [] as string[],
-      instanceMap: new Map() as Map<string, InstanceOutfitWarsResponseInterface>
+      instanceMap: new Map() as Map<string, InstanceOutfitWarsResponseInterface>,
+      factionCount: [0, 0, 0, 0, 0] as number[],
     }
   },
   head(): object {
@@ -235,13 +244,31 @@ export default Vue.extend({
       }
       let rounds: number[] = []
       for (const ranking of this.rawData) {
-        if(!rounds.includes(ranking.round)) {
+        if(!rounds.includes(ranking.round) && ranking.round > 0 && ranking.round < 8) {
           rounds.push(ranking.round)
         }
       }
       rounds.sort()
       console.log(`Rounds: ${JSON.stringify(rounds)}`)
       return rounds
+    },
+    totalOutfits(): number {
+      let value = 0;
+      for(const world of this.worlds) {
+        value += this.worldRankings(world).length;
+      }
+      return value;
+    },
+    totalOutfitsByFaction(): number[] {
+      if(!this.factionCount.every((value) => value === 0)) {
+        return this.factionCount;
+      }
+      for(const world of this.worlds) {
+        for(const outfit of this.worldRankings(world)) {
+          this.factionCount[outfit.faction]++;
+        }
+      }
+      return this.factionCount;
     }
   },
   methods: {
@@ -281,10 +308,6 @@ export default Vue.extend({
               )
           );
         }
-        if(this.seenOutfits.includes(record.outfit.id)) {
-          continue
-        }
-        this.seenOutfits.push(record.outfit.id)
 
         const outfitImageUrl = Endpoints.OUTFIT_TRACKER_OUTFIT_LOGO.replace(
           '{outfitId}',
@@ -312,13 +335,14 @@ export default Vue.extend({
           tag: record.outfit.tag ?? null,
           faction: record.outfit.faction,
           world: record.world,
-          round: record.roundId,
-          phase: getOutfitWarPhase(parseInt(record.roundId, 10)),
+          round: record.round,
+          phase: getOutfitWarPhase(record.round),
           rankings: {
             totalScore: parseInt(record.rankingParameters.TotalScore),
             played: parseInt(record.rankingParameters.MatchesPlayed),
-            points: parseInt(record.rankingParameters.TotalScore),
-            position: parseInt(record.rankingParameters.GlobalRank),
+            wins: parseInt(record.rankingParameters.Wins),
+            losses: parseInt(record.rankingParameters.Losses),
+            tiebreaker: parseInt(record.rankingParameters.TiebreakerPoints),
             factionRank: parseInt(record.rankingParameters.FactionRank),
             globalRank: parseInt(record.rankingParameters.GlobalRank),
           },
@@ -327,40 +351,34 @@ export default Vue.extend({
         }
 
         // Create world rankings data
-        const currentWorldRankings: Set<ParsedOutfitDataInterface> | undefined =
+        const currentWorldRankings: ParsedOutfitDataInterface[] | undefined =
           this.currentWorldRankingsMap.get(parsedOutfitData.world)
 
-        // If doesn't already exist, create the set now
+        // If doesn't already exist, create the array now
         if (!currentWorldRankings) {
           this.currentWorldRankingsMap.set(
             parsedOutfitData.world,
-            new Set([parsedOutfitData])
+            [parsedOutfitData]
           )
         } else {
-          // Otherwise just add to the current set
-          currentWorldRankings.add(parsedOutfitData)
-        }
-
-        // Create faction rankings data
-        const currentFactionRankings:
-          | Set<ParsedOutfitDataInterface>
-          | undefined = this.currentFactionRankingsMap.get(
-          parsedOutfitData.faction
-        )
-
-        // If doesn't already exist, create the set now
-        if (!currentFactionRankings) {
-          this.currentFactionRankingsMap.set(
-            parsedOutfitData.faction,
-            new Set([parsedOutfitData])
-          )
-        } else {
-          // Otherwise just add to the current set
-          currentFactionRankings.add(parsedOutfitData)
+          // Otherwise just add to the current array
+          const index = currentWorldRankings.findIndex((value) => {
+            return value.id === parsedOutfitData.id;
+          })
+          if(index === -1) {
+            currentWorldRankings.push(parsedOutfitData);
+          } else {
+            currentWorldRankings[index] = parsedOutfitData;
+          }
         }
       }
       console.log('world rankings', this.currentWorldRankingsMap)
-      console.log('faction rankings', this.currentFactionRankingsMap)
+
+      for(const world of this.worlds) {
+        this.worldRankings(world).sort((a, b) => {
+          return b.rankings.globalRank - a.rankings.globalRank;
+        });
+      }
 
       this.loaded = true
       this.loading = false
@@ -368,6 +386,9 @@ export default Vue.extend({
     getWorldImage(world: World) {
       return `/img/worlds/${worldName(world)}.png`
     },
+    worldRankings(world: World): ParsedOutfitDataInterface[] {
+      return this.currentWorldRankingsMap.get(world) ?? [];
+    }
   },
 })
 </script>
