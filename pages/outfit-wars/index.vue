@@ -303,7 +303,7 @@ export default Vue.extend({
     totalOutfits(): number {
       let value = 0
       for (const world of this.worlds) {
-        value += this.worldRankings(world).length
+        value += this.worldRankings(world, true).length
       }
       return value
     },
@@ -448,7 +448,7 @@ export default Vue.extend({
       }
 
       for (const world of this.worlds) {
-        for (const outfit of this.worldRankings(world)) {
+        for (const outfit of this.worldRankings(world, true)) {
           this.factionCount[outfit.faction]++
         }
       }
@@ -463,7 +463,7 @@ export default Vue.extend({
           tr: 0,
         })
         const worldStatMap = statMap.get(world)
-        for (const outfit of this.worldRankings(world)) {
+        for (const outfit of this.worldRankings(world, true)) {
           const faction: string = factionShortName(outfit.faction).toLowerCase()
 
           // @ts-ignore cos fuck you TS, it's always set
@@ -473,7 +473,7 @@ export default Vue.extend({
 
       this.factionCountByWorld = statMap
     },
-    getTabValue(world: World, href: boolean) {
+    getTabValue(world: World, href: boolean = false) {
       const append = href ? '#' : ''
       return `${append}${worldName(world)}-bracket`
     },
