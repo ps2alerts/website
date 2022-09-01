@@ -212,7 +212,7 @@ export default Vue.extend({
             this.alert.instanceId
               ? this.alert.instanceId.toString()
               : 'whatever'
-          ),
+          ) + `?ps2AlertsEventType=${this.alert.ps2AlertsEventType}`,
           { sortBy: 'timestamp', order: 'asc' }
         )
         .then((result) => {
