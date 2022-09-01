@@ -5,46 +5,75 @@
     class="grid grid-cols-12 gap-2 text-center relative"
   >
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
-    <div
-      class="flex flex-col relative col-span-12 md:col-span-4 md:col-start-5 content-center justify-end aspect-square"
-    >
-      <img
-        src="/img/outfitwars-nexus.png"
-        alt="Outfitwars Logo"
-        class="absolute rounded-xl w-full inset-0 -z-50"
-      />
-      <div v-if="timeRemaining > 0" class="mb-2">
-        <h1
-          class="text-subtitle rounded-md py-2 px-4 inline-block bg-gray-700 border-yellow-500 border"
-        >
-          <remaining-time :time-remaining="timeRemaining"></remaining-time>
-        </h1>
-        <p class="text-base">
-          Until the season begins<br />(including 20 min prep time)
-        </p>
+    <div class="col-span-12 lg:col-span-9 lg:col-start-3">
+      <div class="grid grid-cols-12 gap-2 text-center relative">
+        <div class="col-span-12 lg:col-span-4">
+          <div
+            class="flex flex-col relative col-span-12 lg:col-span-4 lg:col-start-5 content-center justify-end aspect-square"
+          >
+            <img
+              src="/img/outfitwars-nexus.png"
+              alt="Outfitwars Logo"
+              class="absolute rounded-xl w-full inset-0 -z-50"
+            />
+            <div v-if="timeRemaining > 0" class="mb-2">
+              <h1
+                class="text-subtitle rounded-md py-2 px-4 inline-block bg-gray-700 border-yellow-500 border"
+              >
+                <remaining-time
+                  :time-remaining="timeRemaining"
+                ></remaining-time>
+              </h1>
+              <p class="text-base">
+                Until the season begins<br />(including 20 min prep time)
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-12 lg:col-span-6">
+          <div v-if="loaded">
+            <p class="text-2xl my-2">
+              Welcome to Outfit Wars soldier! Saddle up and add some extra snow
+              boots to your gear, you're shipping off to Nexus!
+            </p>
+            <p class="mb-2">
+              This year's event will consist of 4 qualifier rounds, 3 play-offs
+              then finally the championships to determine the podium finishes.
+            </p>
+            <p class="mb-2">
+              This season, <b>{{ totalOutfits }}</b> outfits are battling on
+              Nexus
+            </p>
+            <FactionSegmentBar
+              class="mb-2"
+              :vs="totalOutfitsByFaction[1]"
+              :nc="totalOutfitsByFaction[2]"
+              :tr="totalOutfitsByFaction[3]"
+              :other="totalOutfitsByFaction[4]"
+              :out-of-play="0"
+              dropoff-percent="5"
+              no-leader-highlight="true"
+              :is-percentage="false"
+              other-segment-text="NSO"
+              numeral="0,0"
+            />
+            <p class="text-sm">
+              Massive thanks to [UN17] RiderAnton for
+              <a
+                href="https://github.com/ps2alerts/website/pull/484"
+                target="_blank"
+                class="text-red-600"
+                >his huge contributions</a
+              >
+              to this new section of PS2Alerts, these stats would not be here
+              without him!
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-span-12">
-      <div v-if="loaded" class="grid grid-cols-4 gap-2 text-center">
-        <div class="col-span-4">
-          This season, <b>{{ totalOutfits }}</b> outfits are battling on Nexus
-        </div>
-        <div class="col-span-4">
-          <FactionSegmentBar
-            :vs="totalOutfitsByFaction[1]"
-            :nc="totalOutfitsByFaction[2]"
-            :tr="totalOutfitsByFaction[3]"
-            :other="totalOutfitsByFaction[4]"
-            :out-of-play="0"
-            dropoff-percent="5"
-            no-leader-highlight="true"
-            :is-percentage="false"
-            other-segment-text="NSO"
-            numeral="0,0"
-          />
-        </div>
-      </div>
-    </div>
+
     <div class="col-span-12 pt-2 mt-2 border-t border-t-gray-500">
       <h1 class="text-title text-center">Rankings &amp; Brackets</h1>
       <p>
