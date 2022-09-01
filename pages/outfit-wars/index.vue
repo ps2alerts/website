@@ -146,7 +146,10 @@
               </object>
 
               <v-list-item-content>
-                <v-list-item-title v-text="outfit.name"></v-list-item-title>
+                <v-list-item-title
+                  :class="formatOutfitFaction(outfit.faction)"
+                  v-text="outfit.name"
+                ></v-list-item-title>
                 <v-list-item-subtitle v-html="outfit.metricsString">
                 </v-list-item-subtitle>
               </v-list-item-content>
@@ -224,6 +227,8 @@ import TimeRemainingFromDuration from '~/utilities/timeRemainingFromDuration'
 import { ParsedOutfitDataInterface } from '~/interfaces/ParsedOutfitDataInterface'
 import factionShortName from '~/filters/FactionShortName'
 import { FactionNumbersInterface } from '~/ps2alerts-constants/interfaces/FactionNumbersInterface'
+import { Faction } from '~/ps2alerts-constants/faction'
+import { FactionTextClass } from '~/constants/FactionTextClass'
 
 export default Vue.extend({
   name: 'OutfitWarsRankings',
@@ -471,6 +476,9 @@ export default Vue.extend({
     getTabValue(world: World, href: boolean) {
       const append = href ? '#' : ''
       return `${append}${worldName(world)}-bracket`
+    },
+    formatOutfitFaction(faction: Faction): object {
+      return FactionTextClass(faction)
     },
   },
 })

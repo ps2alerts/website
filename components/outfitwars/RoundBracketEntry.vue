@@ -24,7 +24,10 @@
       </div>
       <div class="grid grid-cols-7 gap-2 justify-center grow">
         <div class="col-start-1 col-span-3 text-base mb-2 lg:mb-0">
-          <div class="text-right mb-1">
+          <div
+            class="text-right mb-1"
+            :class="formatOutfitFaction(rankings[0].faction)"
+          >
             {{ formatOutfitName(rankings[0].name.trim()) }}
           </div>
         </div>
@@ -32,7 +35,10 @@
           <div class="text-center mb-1">vs.</div>
         </div>
         <div class="col-end-8 col-span-3 text-base mb-2 lg:mb-0">
-          <div class="text-left mb-1">
+          <div
+            class="text-left mb-1"
+            :class="formatOutfitFaction(rankings[1].faction)"
+          >
             {{ formatOutfitName(rankings[1].name.trim()) }}
           </div>
         </div>
@@ -87,6 +93,8 @@ import { ParsedOutfitDataInterface } from '~/interfaces/ParsedOutfitDataInterfac
 import ApiRequest from '~/api-request'
 import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 import { Ps2AlertsEventState } from '~/ps2alerts-constants/ps2AlertsEventState'
+import { Faction } from '~/ps2alerts-constants/faction'
+import { FactionTextClass } from '~/constants/FactionTextClass'
 
 export default Vue.extend({
   name: 'RoundBracketEntry',
@@ -192,6 +200,9 @@ export default Vue.extend({
       return length > maxLength
         ? `${string.substring(0, maxLength)}...`
         : string
+    },
+    formatOutfitFaction(faction: Faction): object {
+      return FactionTextClass(faction)
     },
     getUserTime(datetime: Date): string {
       const locale = Intl.NumberFormat().resolvedOptions().locale
