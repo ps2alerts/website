@@ -37,38 +37,37 @@
               Welcome to Outfit Wars soldier! Saddle up and add some extra snow
               boots to your gear, you're shipping off to Nexus!
             </p>
-            <p class="mb-2">
-              This year's event will consist of 4 qualifier rounds, 2 play-offs
-              then finally the championships to determine the podium finishes.
-            </p>
-            <p class="mb-2">
-              This season, <b>{{ totalOutfits }}</b> outfits are battling on
-              Nexus
-            </p>
-            <FactionSegmentBar
-              class="mb-2"
-              :vs="totalOutfitsByFaction[1]"
-              :nc="totalOutfitsByFaction[2]"
-              :tr="totalOutfitsByFaction[3]"
-              :other="totalOutfitsByFaction[4]"
-              :out-of-play="0"
-              dropoff-percent="5"
-              :no-leader-highlight="true"
-              :is-percentage="false"
-              other-segment-text="NSO"
-              numeral="0,0"
-            />
-            <p class="text-sm">
-              Massive thanks to [UN17] RiderAnton for
-              <a
-                href="https://github.com/ps2alerts/website/pull/484"
-                target="_blank"
-                class="text-red-600"
-                >his huge contributions</a
-              >
-              to this new section of PS2Alerts, these stats would not be here
-              without him!
-            </p>
+            <div class="mx-4">
+              <p class="mb-2">
+                This year's event will consist of 4 qualifier rounds, 2
+                play-offs then finally the championships to determine the podium
+                finishes.
+              </p>
+              <p class="mb-2">
+                This season, <b>{{ totalOutfits }}</b> outfits
+                <span>
+                  (
+                  <span class="vs">{{ factionCount[1] }}</span>
+                  /
+                  <span class="tr">{{ factionCount[3] }}</span>
+                  /
+                  <span class="nc">{{ factionCount[2] }}</span>
+                  )
+                </span>
+                are battling on Nexus!
+              </p>
+              <p class="text-sm">
+                Massive thanks to [UN17] RiderAnton for
+                <a
+                  href="https://github.com/ps2alerts/website/pull/484"
+                  target="_blank"
+                  class="text-red-600"
+                  >his huge contributions</a
+                >
+                to this new section of PS2Alerts, these stats would not be here
+                without him!
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -85,6 +84,9 @@
           class="text-red-600"
           >Upload it to Outfit Tracker!</a
         >
+      </p>
+      <p class="text-xs mb-2">
+        Shoutout to [VODE] MidddNC for providing access to logos!
       </p>
     </div>
     <div class="col-span-12">
@@ -122,6 +124,21 @@
               <p class="text-2xl text-center">{{ world | worldName }}</p>
               <p v-if="currentWorldRankingsMap.has(world)" class="text-sm">
                 {{ worldRankings(world, true).length }} outfits signed up
+                <span>
+                  (
+                  <span class="vs">{{
+                    factionCountByWorld.get(world).vs
+                  }}</span>
+                  /
+                  <span class="tr">{{
+                    factionCountByWorld.get(world).tr
+                  }}</span>
+                  /
+                  <span class="nc">{{
+                    factionCountByWorld.get(world).nc
+                  }}</span>
+                  )
+                </span>
               </p>
             </div>
 
@@ -192,12 +209,12 @@ import { World } from '~/ps2alerts-constants/world'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
 import { OutfitwarsRankingInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsRankingInterface'
-import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 import { getOutfitWarPhase } from '~/ps2alerts-constants/outfitwars/utils'
 import worldName from '~/filters/WorldName'
 import TimeRemainingFromDuration from '~/utilities/timeRemainingFromDuration'
-import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { ParsedOutfitDataInterface } from '~/interfaces/ParsedOutfitDataInterface'
+import factionShortName from '~/filters/FactionShortName'
+import { FactionNumbersInterface } from '~/ps2alerts-constants/interfaces/FactionNumbersInterface'
 
 export default Vue.extend({
   name: 'OutfitWarsRankings',
@@ -218,6 +235,7 @@ export default Vue.extend({
       worlds: [World.COBALT, World.CONNERY, World.EMERALD, World.MILLER],
       currentWorldRankingsMap: new Map<World, ParsedOutfitDataInterface[]>(),
       factionCount: [0, 0, 0, 0, 0] as number[],
+      factionCountByWorld: new Map<World, FactionNumbersInterface>(),
     }
   },
   head(): object {
@@ -260,12 +278,12 @@ export default Vue.extend({
       return rounds
     },
     allRankings(): ParsedOutfitDataInterface[] {
-      const toReturn = [];
-      for(const world of this.worlds) {
-        const worldRanks = this.worldRankings(world);
-        toReturn.unshift(...worldRanks);
+      const toReturn = []
+      for (const world of this.worlds) {
+        const worldRanks = this.worldRankings(world)
+        toReturn.unshift(...worldRanks)
       }
-      return toReturn;
+      return toReturn
     },
     totalOutfits(): number {
       let value = 0
@@ -273,17 +291,6 @@ export default Vue.extend({
         value += this.worldRankings(world).length
       }
       return value
-    },
-    totalOutfitsByFaction(): number[] {
-      if (!this.factionCount.every((value) => value === 0)) {
-        return this.factionCount
-      }
-      for (const world of this.worlds) {
-        for (const outfit of this.worldRankings(world)) {
-          this.factionCount[outfit.faction]++
-        }
-      }
-      return this.factionCount
     },
   },
   created() {
@@ -314,7 +321,7 @@ export default Vue.extend({
           this.error = e.message
         })
     },
-    async parse(data: OutfitwarsRankingInterface[]) {
+    parse(data: OutfitwarsRankingInterface[]) {
       for (const record of data) {
         const outfitImageUrl = Endpoints.OUTFIT_TRACKER_OUTFIT_LOGO.replace(
           '{outfitId}',
@@ -328,7 +335,9 @@ export default Vue.extend({
         let metricsString = ''
 
         if (parseInt(record.rankingParameters.MatchesPlayed) > 0) {
-          metricsString = `<b>${score} points</b> <br>${wins} ${wins !== 1 ? 'wins' : 'win'} | ${defeats} ${defeats !== 1 ? 'defeats' : 'defeat'}`
+          metricsString = `<b>${score} points</b> <br>${wins} ${
+            wins !== 1 ? 'wins' : 'win'
+          } | ${defeats} ${defeats !== 1 ? 'defeats' : 'defeat'}`
         } else {
           metricsString = 'Not yet played a match'
         }
@@ -356,7 +365,7 @@ export default Vue.extend({
           },
           outfitImageUrl,
           metricsString,
-          instanceId: record.instanceId
+          instanceId: record.instanceId,
         }
 
         // Create world rankings data
@@ -371,7 +380,10 @@ export default Vue.extend({
         } else {
           // Otherwise just add to the current array
           const index = currentWorldRankings.findIndex((value) => {
-            return value.id === parsedOutfitData.id && value.round === parsedOutfitData.round
+            return (
+              value.id === parsedOutfitData.id &&
+              value.round === parsedOutfitData.round
+            )
           })
           if (index === -1) {
             currentWorldRankings.push(parsedOutfitData)
@@ -387,25 +399,64 @@ export default Vue.extend({
           return b.rankings.globalRank - a.rankings.globalRank
         })
       }
-      
+
+      // Generate some stats
+      this.totalOutfitsByFaction()
+      this.totalOutfitsByFactionByWorld()
+
       this.loaded = true
       this.loading = false
     },
     getWorldImage(world: World) {
       return `/img/worlds/${worldName(world)}.png`
     },
-    worldRankings(world: World, mostRecent: boolean = false): ParsedOutfitDataInterface[] {
-      let toReturn = this.currentWorldRankingsMap.get(world) ?? [];
-      if(mostRecent) {
-        let round = 0;
+    worldRankings(
+      world: World,
+      mostRecent: boolean = false
+    ): ParsedOutfitDataInterface[] {
+      let toReturn = this.currentWorldRankingsMap.get(world) ?? []
+      if (mostRecent) {
+        let round = 0
         toReturn.forEach((value) => {
-          if(value.round > round) {
-            round = value.round;
+          if (value.round > round) {
+            round = value.round
           }
-        });
-        toReturn = toReturn.filter((value) => value.round == round);
+        })
+        toReturn = toReturn.filter((value) => value.round === round)
       }
-      return toReturn;
+      return toReturn
+    },
+
+    totalOutfitsByFaction(): void {
+      if (!this.factionCount.every((value) => value === 0)) {
+        return
+      }
+
+      for (const world of this.worlds) {
+        for (const outfit of this.worldRankings(world)) {
+          this.factionCount[outfit.faction]++
+        }
+      }
+    },
+    totalOutfitsByFactionByWorld(): void {
+      const statMap = new Map<World, FactionNumbersInterface>()
+
+      for (const world of this.worlds) {
+        statMap.set(world, {
+          vs: 0,
+          nc: 0,
+          tr: 0,
+        })
+        const worldStatMap = statMap.get(world)
+        for (const outfit of this.worldRankings(world)) {
+          const faction: string = factionShortName(outfit.faction).toLowerCase()
+
+          // @ts-ignore cos fuck you TS, it's always set
+          worldStatMap[faction] = worldStatMap[faction] + 1
+        }
+      }
+
+      this.factionCountByWorld = statMap
     },
   },
 })

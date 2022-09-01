@@ -103,11 +103,11 @@ export default Vue.extend({
         for (const entry of value) {
           // each outfit must have an id, name, faction, world, and leader
           if (
-            entry.id === undefined ||
-            entry.name === undefined ||
-            entry.faction === undefined ||
-            entry.world === undefined ||
-            entry.matchStartTime === undefined
+            !entry.id ||
+            !entry.name ||
+            !entry.faction ||
+            !entry.world ||
+            !entry.matchStartTime
           ) {
             return false
           }
