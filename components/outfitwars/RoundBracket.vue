@@ -62,8 +62,6 @@ export default Vue.extend({
     },
     computed: {
       rankingPairs(): ParsedOutfitDataInterface[][] {
-        console.log(this.round);
-        console.log(this.rankings);
         if(this.pairs.length !== 0) {
           return this.pairs
         }
