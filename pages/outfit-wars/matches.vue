@@ -181,7 +181,16 @@ export default Vue.extend({
       }
       if (this.selectedWorld > 0) filter.world = this.selectedWorld
       if (this.selectedPhase > 0) filter.phase = this.selectedPhase
-      if (this.selectedRound > 0) filter.round = this.selectedRound
+      if (this.selectedRound > 0) {
+        if(filter.phase === Phase.PLAYOFFS && this.selectedRound > 2) {
+          this.selectedRound = 2;
+        }
+        filter.round = this.selectedRound
+        filter.round += filter.phase === Phase.PLAYOFFS ? 4 : 0;
+        if(filter.phase === Phase.CHAMPIONSHIPS) {
+          filter.round = undefined;
+        }
+      }
       if (this.selectedVictor !== Team.NONE) filter.victor = this.selectedVictor
       // if (
       //   this.selectedDateFrom !== this.dateNow &&
@@ -190,7 +199,6 @@ export default Vue.extend({
       //   filter.timeStartedFrom = this.selectedDateFrom.format('x')
       //   filter.timeStartedTo = this.selectedDateTo.format('x')
       // }
-
       return filter
     },
     updateCountdownPercent(): number {
