@@ -6,8 +6,16 @@
   >
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
     <div class="col-span-12">
-      <h1 class="text-title">Statistics</h1>
-      <p>General Kenobi</p>
+      <h1 class="text-title">Outfit Wars Statistics</h1>
+      <p>
+        This page is still being developed and was not a priority for Outfit
+        Wars launch since there would be no stats to show until matches were
+        played. This page will be brought online soon!
+      </p>
+      <p>
+        For now, you can still visit per-match statistics, check out the Matches
+        section to find the match you played!
+      </p>
     </div>
   </section>
 </template>
