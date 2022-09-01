@@ -3,14 +3,11 @@
     <div
       class="bg-gray-700 border-yellow-500 border w-full p-4 my-4 text-center rounded"
     >
-      <p class="text-2xl font-bold">
-        <remaining-time :time-remaining="timeRemaining"></remaining-time>
-      </p>
-      <p>
+      <p class="text-subtitle">
         <!--        <font-awesome-icon-->
         <!--          :icon="['fas', 'exclamation-triangle']"-->
         <!--        ></font-awesome-icon>-->
-        <b>Full Outfit Wars statistics is coming!</b>
+        <b>Outfit Wars 2022 has arrived!</b>
         <!--        <font-awesome-icon-->
         <!--          :icon="['fas', 'exclamation-triangle']"-->
         <!--        ></font-awesome-icon>-->
@@ -18,10 +15,11 @@
       <!--      <p class="text-sm">Updated: 14-Jul-22 08:10 UTC</p>-->
 
       <p>
-        PS2Alerts is going to fully support statistics collection on all Outfit
-        Wars matches!
+        PS2Alerts fully supports all Outfit Wars stats!
         <NuxtLink to="/outfit-wars">
-          <span class="label bg-red-600 hover:bg-red-500">More info</span>
+          <span class="label bg-red-600 hover:bg-red-500"
+            >Click here to visit the OW section</span
+          >
         </NuxtLink>
       </p>
     </div>

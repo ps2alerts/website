@@ -7,14 +7,18 @@
       :disabled="disabled"
     >
       <option :value="ANY">Any</option>
-      <option :value="CERES">{{ CERES | worldName }} (PS4 EU)</option>
-      <option :value="COBALT">{{ COBALT | worldName }}</option>
-      <option :value="CONNERY">{{ CONNERY | worldName }}</option>
-      <option :value="EMERALD">{{ EMERALD | worldName }}</option>
-      <option :value="GENUDINE">{{ GENUDINE | worldName }} (PS4 US)</option>
-      <option :value="JAEGER">{{ JAEGER | worldName }} (PC Events)</option>
-      <option :value="MILLER">{{ MILLER | worldName }}</option>
-      <option :value="SOLTECH">{{ SOLTECH | worldName }}</option>
+      <option v-for="world in options" :key="world" :value="world">
+        {{ world | worldName
+        }}{{
+          world === CERES
+            ? ' (PS4 EU)'
+            : world === GENUDINE
+            ? ' (PS4 US)'
+            : world === JAEGER
+            ? ' (PC Events)'
+            : ''
+        }}
+      </option>
     </select>
     <label
       class="text-center text-sm"
@@ -27,7 +31,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { World } from '@/ps2alerts-constants/world'
+import { World, pcWorldArray, worldArray } from '@/ps2alerts-constants/world'
+import worldNameFilter from '~/filters/WorldName'
 
 export default Vue.extend({
   name: 'FilterWorld',
@@ -37,6 +42,11 @@ export default Vue.extend({
       default: 0,
     },
     disabled: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    outfitWars: {
       type: Boolean,
       default: false,
       required: false,
@@ -55,6 +65,25 @@ export default Vue.extend({
       MILLER: World.MILLER,
       SOLTECH: World.SOLTECH,
     }
+  },
+  computed: {
+    options() {
+      if (this.outfitWars) {
+        const owWorlds = pcWorldArray
+        owWorlds.splice(4, 1)
+        owWorlds.sort((a: number, b: number) => {
+          const nameA: string = worldNameFilter(a)
+          const nameB: string = worldNameFilter(b)
+          return nameA.localeCompare(nameB)
+        })
+        return owWorlds
+      }
+      return worldArray.sort((a: number, b: number) => {
+        const nameA: string = worldNameFilter(a)
+        const nameB: string = worldNameFilter(b)
+        return nameA.localeCompare(nameB)
+      })
+    },
   },
   watch: {
     worldFilter(world: World | '0'): void {

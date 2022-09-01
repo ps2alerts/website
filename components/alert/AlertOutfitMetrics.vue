@@ -10,7 +10,7 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded" class="grid grid-cols-12">
-      <div class="col-span-12 mb-2 flex justify-center">
+      <div v-if="!isOutfitWar" class="col-span-12 mb-2 flex justify-center">
         <div class="pr-2 py-2">Outfit Counts:</div>
         <div
           v-for="(count, index) in counts"
@@ -74,7 +74,7 @@
             >
           </p>
         </div>
-        <div class="mb-2">
+        <div v-if="!isOutfitWar" class="mb-2">
           <input
             v-model="filter"
             class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
@@ -148,7 +148,7 @@
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
-import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
+import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceOutfitAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface'
 import { Faction } from '@/ps2alerts-constants/faction'
@@ -159,6 +159,7 @@ import {
 import { DataTableConfig } from '@/constants/DataTableConfig'
 import { AlertOutfitTableDataInterface } from '~/interfaces/alert/AlertOutfitTableDataInterface'
 import timeText from '~/utilities/timeText'
+import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 
 export default Vue.extend({
   name: 'AlertOutfitMetrics',
@@ -167,6 +168,11 @@ export default Vue.extend({
       type: Object as () => InstanceTerritoryControlResponseInterface,
       default: {},
       required: true,
+    },
+    outfitwar: {
+      type: Object as () => InstanceOutfitWarsResponseInterface,
+      default: {},
+      required: false,
     },
   },
   data() {
@@ -210,13 +216,19 @@ export default Vue.extend({
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
     },
+    isOutfitWar(): boolean {
+      return !!this.outfitwar?.instanceId
+    },
   },
   watch: {
     'alert.state'() {
-      if (this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.alert.state === Ps2AlertsEventState.ENDED) {
         this.clearTimers()
         this.pull()
       }
+    },
+    expanded() {
+      console.log('expanded', this.expanded)
     },
   },
   beforeDestroy() {
@@ -239,7 +251,7 @@ export default Vue.extend({
     init(): void {
       this.setupTableHeaders()
       this.pull()
-      if (this.alert.state === Ps2alertsEventState.STARTED) {
+      if (this.alert.state === Ps2AlertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
           return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
         }, 1000)
@@ -383,7 +395,7 @@ export default Vue.extend({
       this.headers = tableHeaders
     },
     async pull(): Promise<void> {
-      if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.loaded && this.alert.state === Ps2AlertsEventState.ENDED) {
         return
       }
 
@@ -396,7 +408,7 @@ export default Vue.extend({
             this.alert.instanceId
               ? this.alert.instanceId.toString()
               : 'whatever'
-          )
+          ) + `?ps2AlertsEventType=${this.alert.ps2AlertsEventType}`
         )
         .then((result) => {
           this.data = this.transformData(result)

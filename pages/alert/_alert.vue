@@ -9,8 +9,8 @@
         :alert="alert"
         :update-countdown-percent="updateCountdownPercent"
       />
-      <AlertDetails :alert="alert" />
-      <AlertFactionCombatMetrics :alert="alert" />
+      <AlertDetails class="col-span-12 lg:col-span-6 2xl:col-span-3" :alert="alert" />
+      <AlertFactionCombatMetrics class="col-span-12 lg:col-span-6 2xl:col-span-3" :alert="alert" />
       <AlertFactionVsFaction :alert="alert" />
       <div class="col-span-full md:col-span-4 md:col-start-5">
         <v-tabs v-model="mapsTab" center-active dark fixed-tabs class="mt-2">
@@ -135,7 +135,7 @@
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import ApiRequest from '@/api-request'
-import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
+import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { CensusEndpoints, Endpoints } from '@/constants/Endpoints'
 import AlertResult from '@/components/alert/AlertResult.vue'
 import AlertDetails from '@/components/alert/AlertDetails.vue'
@@ -235,7 +235,7 @@ export default Vue.extend({
   },
   watch: {
     'alert.state'() {
-      if (this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.alert.state === Ps2AlertsEventState.ENDED) {
         this.clearTimers()
       }
     },
@@ -268,7 +268,7 @@ export default Vue.extend({
         this.alertFacilityDataReady = true
       }
 
-      if (this.alert.state === Ps2alertsEventState.STARTED) {
+      if (this.alert.state === Ps2AlertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
           return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
         }, 1000)
@@ -281,7 +281,7 @@ export default Vue.extend({
       this.updateMeta()
     },
     async pull(instanceId: string): Promise<void> {
-      if (this.alert && this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.alert && this.alert.state === Ps2AlertsEventState.ENDED) {
         return
       }
 

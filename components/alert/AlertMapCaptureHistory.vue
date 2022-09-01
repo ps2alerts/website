@@ -94,7 +94,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
-import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
+import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceFacilityControlEntriesResponseInterface } from '~/interfaces/instance-entries/InstanceFacilityControlEntriesResponseInterface'
@@ -105,6 +105,11 @@ import { Zone } from '@/ps2alerts-constants/zone'
 import factionShortName from '~/filters/FactionShortName'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { InstanceOutfitAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceOutfitAggregateResponseInterface'
+import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
+import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
+import { OutfitwarsTerritoryResultInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsTerritoryResultInterface'
+import { MapControlInterface } from '~/interfaces/instance-entries/MapControlInterface'
+import teamName from '~/filters/TeamName'
 
 export default Vue.extend({
   name: 'AlertMapCaptureHistory',
@@ -193,7 +198,7 @@ export default Vue.extend({
   },
   watch: {
     'alert.state'() {
-      if (this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.alert.state === Ps2AlertsEventState.ENDED) {
         this.clearTimers()
         this.pull()
       }
@@ -244,7 +249,7 @@ export default Vue.extend({
     },
     init(): void {
       this.pull()
-      if (this.alert.state === Ps2alertsEventState.STARTED) {
+      if (this.alert.state === Ps2AlertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
           return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
         }, 1000)
@@ -255,7 +260,7 @@ export default Vue.extend({
       }
     },
     async pull(): Promise<void> {
-      if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.loaded && this.alert.state === Ps2AlertsEventState.ENDED) {
         return
       }
 
@@ -270,14 +275,24 @@ export default Vue.extend({
 
       console.log('AlertMapCaptureHistory.pull', this.alert.instanceId)
 
+      let endpoint = Endpoints.INSTANCE_FACILITY_CONTROL_ENTRIES.replace(
+        '{instance}',
+        this.alert.instanceId ? this.alert.instanceId.toString() : 'whatever'
+      )
+      if (
+        this.alert.ps2AlertsEventType &&
+        this.alert.ps2AlertsEventType ===
+          Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+      ) {
+        endpoint = ps2AlertsApiEndpoints.outfitwarsInstanceFacility.replace(
+          '{instanceId}',
+          this.alert.instanceId ? this.alert.instanceId.toString() : 'whatever'
+        )
+      }
+
       await new ApiRequest()
         .get<InstanceFacilityControlEntriesResponseInterface[]>(
-          Endpoints.INSTANCE_FACILITY_CONTROL_ENTRIES.replace(
-            '{instance}',
-            this.alert.instanceId
-              ? this.alert.instanceId.toString()
-              : 'whatever'
-          )
+          `${endpoint}?sortBy=timestamp&order=desc`
         )
         .then((result) => {
           const processedData = this.transformData(result)
@@ -307,11 +322,28 @@ export default Vue.extend({
             return
           }
 
+          const isOutfitWars =
+            this.alert.ps2AlertsEventType ===
+            Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+          if (isOutfitWars && capture.mapControl) {
+            ;(capture.mapControl as MapControlInterface).tr = (
+              capture.mapControl as OutfitwarsTerritoryResultInterface
+            ).red
+            ;(capture.mapControl as MapControlInterface).nc = (
+              capture.mapControl as OutfitwarsTerritoryResultInterface
+            ).blue
+            ;(capture.mapControl as MapControlInterface).vs = 0
+          }
+
           const tempData: InstanceMapCaptureHistoryInterface = Object.assign(
             capture,
             {
-              factionWinner: factionShortName(capture.newFaction),
-              factionLooser: factionShortName(capture.oldFaction),
+              factionWinner: isOutfitWars
+                ? teamName(capture.newFaction)
+                : factionShortName(capture.newFaction),
+              factionLooser: isOutfitWars
+                ? teamName(capture.oldFaction)
+                : factionShortName(capture.oldFaction),
               facilityData: this.facilityData.get(capture.facility)
                 ?.facility ?? {
                 name: 'Awaiting Data...',

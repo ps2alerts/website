@@ -23,11 +23,12 @@
 import Vue from 'vue'
 import BarChart from '../BarChart.js'
 import ApiRequest from '@/api-request'
-import { Ps2alertsEventState } from '@/ps2alerts-constants/ps2alertsEventState'
+import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceCharacterAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceCharacterAggregateResponseInterface'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { Faction } from '@/ps2alerts-constants/faction'
+import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 
 interface BattlerankDistributionDataInterface {
   // Faction
@@ -47,6 +48,11 @@ export default Vue.extend({
       type: Object as () => InstanceTerritoryControlResponseInterface,
       default: {},
       required: true,
+    },
+    outfitwar: {
+      type: Object as () => InstanceOutfitWarsResponseInterface,
+      default: {},
+      required: false,
     },
   },
   data() {
@@ -143,10 +149,13 @@ export default Vue.extend({
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
     },
+    isOutfitWar(): boolean {
+      return !!this.outfitwar?.instanceId
+    },
   },
   watch: {
     'alert.state'() {
-      if (this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.alert.state === Ps2AlertsEventState.ENDED) {
         this.clearTimers()
         this.pull()
       }
@@ -171,7 +180,7 @@ export default Vue.extend({
     init(): void {
       this.pull()
 
-      if (this.alert.state === Ps2alertsEventState.STARTED) {
+      if (this.alert.state === Ps2AlertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
           return this.updateCountdown >= 0 ? this.updateCountdown-- : 0
         }, 1000)
@@ -182,7 +191,7 @@ export default Vue.extend({
       }
     },
     async pull(): Promise<void> {
-      if (this.loaded && this.alert.state === Ps2alertsEventState.ENDED) {
+      if (this.loaded && this.alert.state === Ps2AlertsEventState.ENDED) {
         return
       }
 
@@ -195,7 +204,7 @@ export default Vue.extend({
             this.alert.instanceId
               ? this.alert.instanceId.toString()
               : 'whatever'
-          )
+          ) + `?ps2AlertsEventType=${this.alert.ps2AlertsEventType}`
         )
         .then((result) => {
           this.data = result
@@ -255,34 +264,57 @@ export default Vue.extend({
       }
       const battleranks: number[] = [...Array(limit).keys()]
 
-      this.dataCollection = {
-        labels: battleranks,
-        datasets: [
+      const datasets = []
+      let borderWidth = 4
+
+      if (this.isOutfitWar) {
+        borderWidth = 8
+        datasets.push(
+          {
+            label: this.outfitwar.outfitwars?.teams?.red?.tag ?? 'Red Team',
+            backgroundColor: '#9b2c2c',
+            data: factionBattlerankData[3],
+            borderWidth,
+          },
+          {
+            label: this.outfitwar.outfitwars?.teams?.blue?.tag ?? 'Blue Team',
+            backgroundColor: '#2b6cb0',
+            data: factionBattlerankData[2],
+            borderWidth,
+          }
+        )
+      } else {
+        datasets.push(
           {
             label: 'VS',
             backgroundColor: '#6B46C1',
             data: factionBattlerankData[1],
-            borderWidth: 4,
+            borderWidth,
           },
           {
             label: 'TR',
             backgroundColor: '#9b2c2c',
             data: factionBattlerankData[3],
-            borderWidth: 4,
+            borderWidth,
           },
           {
             label: 'NC',
             backgroundColor: '#2b6cb0',
             data: factionBattlerankData[2],
-            borderWidth: 4,
+            borderWidth,
           },
           {
             label: 'NSO',
             backgroundColor: '#64748B',
             data: factionBattlerankData[4],
-            borderWidth: 4,
-          },
-        ],
+            borderWidth,
+          }
+        )
+      }
+
+      this.dataCollection = {
+        labels: battleranks,
+        datasets,
       }
     },
     updateMode(mode: string): void {
