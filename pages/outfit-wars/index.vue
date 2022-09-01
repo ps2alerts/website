@@ -5,7 +5,7 @@
     class="grid grid-cols-12 gap-2 text-center relative"
   >
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
-    <div class="col-span-12 lg:col-span-9 lg:col-start-3">
+    <div class="col-span-12 xl:col-span-8 xl:col-start-3">
       <div class="grid grid-cols-12 gap-2 text-center relative">
         <div class="col-span-12 lg:col-span-4">
           <div
@@ -31,7 +31,7 @@
           </div>
         </div>
 
-        <div class="col-span-12 lg:col-span-6">
+        <div class="col-span-12 xl:col-span-8">
           <div v-if="loaded">
             <p class="text-2xl my-2">
               Welcome to Outfit Wars soldier! Saddle up and add some extra snow
