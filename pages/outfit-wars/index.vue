@@ -74,7 +74,7 @@
     </div>
 
     <div class="col-span-12 pt-2 mt-2 border-t border-t-gray-500">
-      <h1 class="text-title text-center">Rankings &amp; Brackets</h1>
+      <h1 class="text-title text-center">Rankings</h1>
       <p>
         <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
         Is your outfit logo missing?
@@ -89,114 +89,123 @@
         Shoutout to [VODE] MidddNC for providing access to logos!
       </p>
     </div>
-    <div class="col-span-12">
-      <a
-        v-for="world in worlds"
-        :key="world"
-        class="btn mx-1"
-        :href="'#world-' + world"
-        >{{ world | worldName }}</a
-      >
-    </div>
+    <!-- Server outfit lists -->
     <div
-      v-for="world in worlds"
-      :id="'world-' + world"
-      :key="world"
-      class="col-span-12 mb-4 pb-4 border-b border-b-gray-500"
+      class="col-span-12 grid grid-cols-12 gap-2 pb-4 border-b border-b-gray-500"
     >
-      <div class="grid grid-cols-12 gap-2">
-        <div class="col-span-12 md:col-span-3">
-          <img
-            alt="Server Logo"
-            :src="getWorldImage(world)"
-            class="mx-auto my-4 max-h-60"
-          />
+      <div
+        v-for="world in worlds"
+        :id="'world-' + world"
+        :key="world"
+        class="col-span-12 lg:col-span-3"
+      >
+        <img
+          alt="Server Logo"
+          :src="getWorldImage(world)"
+          class="mx-auto my-4 max-h-60"
+        />
 
-          <v-card v-if="!loaded" max-width="600" class="mx-auto bg-tint" dark>
-            <div class="py-4 bg-tint">
-              <p class="text-2xl text-center">{{ world | worldName }}</p>
-              <p class="text-sm text-center">Loading...</p>
-            </div>
-          </v-card>
-
-          <v-card v-if="loaded" max-width="600" class="mx-auto" dark>
-            <div class="py-4 bg-tint">
-              <p class="text-2xl text-center">{{ world | worldName }}</p>
-              <p v-if="currentWorldRankingsMap.has(world)" class="text-sm">
-                {{ worldRankings(world, true).length }} outfits signed up
-                <span>
-                  (
-                  <span class="vs">{{
-                    factionCountByWorld.get(world).vs
-                  }}</span>
-                  /
-                  <span class="tr">{{
-                    factionCountByWorld.get(world).tr
-                  }}</span>
-                  /
-                  <span class="nc">{{
-                    factionCountByWorld.get(world).nc
-                  }}</span>
-                  )
-                </span>
-              </p>
-            </div>
-
-            <v-list subheader>
-              <v-list-item
-                v-for="outfit in worldRankings(world, true)"
-                :key="outfit.id"
-              >
-                <object
-                  :data="outfit.outfitImageUrl"
-                  type="image/png"
-                  width="50px"
-                >
-                  <img
-                    :src="outfit.faction | factionImage"
-                    :alt="outfit.faction"
-                  />
-                </object>
-
-                <v-list-item-content>
-                  <v-list-item-title v-text="outfit.name"></v-list-item-title>
-                  <v-list-item-subtitle v-html="outfit.metricsString">
-                  </v-list-item-subtitle>
-                </v-list-item-content>
-
-                <v-list-item-action>
-                  <v-btn icon>
-                    <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-                  </v-btn>
-                </v-list-item-action>
-              </v-list-item>
-            </v-list>
-          </v-card>
-        </div>
-        <div
-          v-if="loaded"
-          class="flex p-2 gap-y-2 gap-x-4 overflow-x-auto col-span-12 md:col-span-9 bg-tint rounded border border-gray-900 snap-x"
-        >
-          <div
-            v-for="(round, index) in rounds"
-            :key="index"
-            class="col-span-1 flex-shrink-0"
-          >
-            <RoundBracket
-              :rankings="worldRankings(world)"
-              :round="round"
-              :server="world"
-            />
+        <v-card v-if="!loaded" max-width="600" class="mx-auto bg-tint" dark>
+          <div class="py-4 bg-tint">
+            <p class="text-2xl text-center">{{ world | worldName }}</p>
+            <p class="text-sm text-center">Loading...</p>
           </div>
-        </div>
-        <div
-          v-if="!loaded"
-          class="col-span-12 md:col-span-9 bg-tint rounded border border-gray-900"
-        >
-          Loading...
-        </div>
+        </v-card>
+
+        <v-card v-if="loaded" max-width="600" class="mx-auto" dark>
+          <div class="py-4 bg-tint">
+            <p class="text-2xl text-center">{{ world | worldName }}</p>
+            <p v-if="currentWorldRankingsMap.has(world)" class="text-sm">
+              {{ worldRankings(world, true).length }} outfits signed up
+              <span>
+                (
+                <span class="vs">{{ factionCountByWorld.get(world).vs }}</span>
+                /
+                <span class="tr">{{ factionCountByWorld.get(world).tr }}</span>
+                /
+                <span class="nc">{{ factionCountByWorld.get(world).nc }}</span>
+                )
+              </span>
+            </p>
+          </div>
+
+          <v-list subheader max-height="400" class="overflow-y-auto">
+            <v-list-item
+              v-for="outfit in worldRankings(world, true)"
+              :key="outfit.id"
+            >
+              <object
+                :data="outfit.outfitImageUrl"
+                type="image/png"
+                width="50px"
+              >
+                <img
+                  :src="outfit.faction | factionImage"
+                  :alt="outfit.faction"
+                />
+              </object>
+
+              <v-list-item-content>
+                <v-list-item-title v-text="outfit.name"></v-list-item-title>
+                <v-list-item-subtitle v-html="outfit.metricsString">
+                </v-list-item-subtitle>
+              </v-list-item-content>
+
+              <v-list-item-action>
+                <v-btn icon>
+                  <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
+                </v-btn>
+              </v-list-item-action>
+            </v-list-item>
+          </v-list>
+        </v-card>
       </div>
     </div>
+    <!-- server outfit lists end -->
+
+    <!-- brackets -->
+    <div v-if="loaded" class="col-span-12">
+      <h1 class="text-title text-center">Brackets</h1>
+      <v-tabs v-model="activeBracketTab" centered grow dark show-arrows>
+        <v-tabs-slider></v-tabs-slider>
+
+        <v-tab
+          v-for="world in worlds"
+          :key="world"
+          :href="getTabValue(world, true)"
+        >
+          {{ world | worldName }} Brackets
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items v-model="activeBracketTab">
+        <v-tab-item
+          v-for="world in worlds"
+          :key="world + '-tab'"
+          :eager="true"
+          :value="getTabValue(world)"
+        >
+          <section class="col-span-12 relative mb-4">
+            <div
+              class="flex p-2 gap-y-2 gap-x-4 overflow-x-auto col-span-12 md:col-span-9 bg-tint rounded border border-gray-900 snap-x"
+            >
+              <div
+                v-for="(round, index) in rounds"
+                :key="index"
+                class="col-span-1 flex-shrink-0"
+              >
+                <RoundBracket
+                  :rankings="worldRankings(world)"
+                  :round="round"
+                  :server="world"
+                />
+              </div>
+            </div>
+          </section>
+        </v-tab-item>
+      </v-tabs-items>
+    </div>
+    <!-- brackets end -->
   </section>
 </template>
 
@@ -236,6 +245,7 @@ export default Vue.extend({
       currentWorldRankingsMap: new Map<World, ParsedOutfitDataInterface[]>(),
       factionCount: [0, 0, 0, 0, 0] as number[],
       factionCountByWorld: new Map<World, FactionNumbersInterface>(),
+      activeBracketTab: 0,
     }
   },
   head(): object {
@@ -457,6 +467,10 @@ export default Vue.extend({
       }
 
       this.factionCountByWorld = statMap
+    },
+    getTabValue(world: World, href: boolean) {
+      const append = href ? '#' : ''
+      return `${append}${worldName(world)}-bracket`
     },
   },
 })

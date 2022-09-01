@@ -123,7 +123,7 @@ const subTabs: TabInterface[] = [
 const outfitWarsTabs: TabInterface[] = [
   {
     id: 1,
-    name: 'Rankings',
+    name: 'Rankings & Brackets',
     route: '/outfit-wars',
     icon: ['fas', 'code-fork'],
     iconClass: { '-rotate-90': true },
