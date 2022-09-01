@@ -31,7 +31,7 @@
           </div>
         </div>
 
-        <div class="col-span-12 xl:col-span-8">
+        <div class="col-span-12 lg:col-span-8">
           <div v-if="loaded">
             <p class="text-2xl my-2">
               Welcome to Outfit Wars soldier! Saddle up and add some extra snow
@@ -97,7 +97,7 @@
         v-for="world in worlds"
         :id="'world-' + world"
         :key="world"
-        class="col-span-12 lg:col-span-3"
+        class="col-span-12 xl:col-span-3 lg:col-span-6"
       >
         <img
           alt="Server Logo"
