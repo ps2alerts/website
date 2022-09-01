@@ -15,7 +15,6 @@
       v-for="(rankingPair, index) in rankingPairs"
       :key="index"
       :rankings="rankingPair"
-      :match="rankingPairInstance(rankingPair)"
     />
   </div>
 </template>
@@ -23,11 +22,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import RoundBracketEntry from '~/components/outfitwars/RoundBracketEntry.vue'
-import { OutfitwarsRankingInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsRankingInterface'
 import { pcWorldArray, WorldPC } from '~/ps2alerts-constants/world'
 import { PropValidator } from 'vue/types/options'
-import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Phase } from '~/ps2alerts-constants/outfitwars/phase'
+import { ParsedOutfitDataInterface } from '~/interfaces/ParsedOutfitDataInterface'
 
 export default Vue.extend({
     name: 'RoundBracket',
@@ -47,44 +45,32 @@ export default Vue.extend({
             required: true
         },
         rankings: {
-            validator(value: OutfitwarsRankingInterface[]) {
+            validator(value: ParsedOutfitDataInterface[]) {
               if(value.length % 2 === 1) {
                 return false
               }
               return true
             },
             required: true
-        } as PropValidator<OutfitwarsRankingInterface[]>,
-        instances: {
-          type: Object as () => Map<string, InstanceOutfitWarsResponseInterface>,
-          required: true
-        }
+        } as PropValidator<ParsedOutfitDataInterface[]>,
     },
     data() {
       return {
-        pairs: [] as OutfitwarsRankingInterface[][],
+        pairs: [] as ParsedOutfitDataInterface[][],
         CHAMPIONSHIPS: Phase.CHAMPIONSHIPS,
       }
     },
-    methods: {
-      rankingPairInstance(pair: OutfitwarsRankingInterface[]): InstanceOutfitWarsResponseInterface | null {
-        const instanceId = pair[0].instanceId !== null 
-                ? pair[0].instanceId 
-                : pair[1].instanceId !== null 
-                  ? pair[1].instanceId 
-                  : '';
-        return this.instances.get(instanceId) ?? null;
-      }
-    },
     computed: {
-      rankingPairs(): OutfitwarsRankingInterface[][] {
+      rankingPairs(): ParsedOutfitDataInterface[][] {
+        console.log(this.round);
+        console.log(this.rankings);
         if(this.pairs.length !== 0) {
           return this.pairs
         }
         const sortedRankings = this.rankings.filter((ranking) => {
           return ranking.round === this.round && ranking.world.valueOf() === this.server.valueOf();
         }).sort((a, b) => {
-          if(a.rankingParameters.GlobalRank > b.rankingParameters.GlobalRank) {
+          if(a.rankings.globalRank > b.rankings.globalRank) {
             return -1
           } else {
             // GlobalRank will not be tied

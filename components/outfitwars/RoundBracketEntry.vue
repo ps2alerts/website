@@ -11,23 +11,20 @@
     <div class="flex gap-2 p-2 mb-2 bg-tint rounded relative hover bg-[#1e1e1e]">
       <div class="self-center">
         <object
-          :data="rankings[0].outfit.id | outfitImage"
+          :data="rankings[0].id | outfitImage"
           type="image/png"
           width="50px"
         >
           <img
-            :src="rankings[0].outfit.faction | factionImage"
-            :alt="rankings[0].outfit.faction"
+            :src="rankings[0].faction | factionImage"
+            :alt="rankings[0].faction"
           />
         </object>
       </div>
       <div class="grid grid-cols-7 gap-2 justify-center grow">
         <div class="col-start-1 col-span-3 text-base mb-2 lg:mb-0">
           <div class="text-right mb-1">
-            <span v-if="rankings[0].outfit.tag">
-              [{{ rankings[0].outfit.tag }}]
-            </span>
-            {{ rankings[0].outfit.name.trim() }}
+            {{ rankings[0].name.trim() }}
           </div>
         </div>
         <div class="col-start-4 col-span-1 text-base mb-2 lg:mb-0">
@@ -37,15 +34,12 @@
         </div>
         <div class="col-end-8 col-span-3 text-base mb-2 lg:mb-0">
           <div class="text-left mb-1">
-            <span v-if="rankings[1].outfit.tag">
-              [{{ rankings[1].outfit.tag }}]
-            </span>
-            {{ rankings[1].outfit.name.trim() }}
+            {{ rankings[1].name.trim() }}
           </div>
         </div>
         <!-- Using borders here for alignment - the FactionSegment bar is 1px taller than the Awaiting match text otherwise -->
         <div class="text-gray-500 col-start-3 col-span-3 border-b border-[#1e1e1e] rounded" v-if="!(match && match.result)">
-          <span>Awaiting match...</span>
+          <span>Match starts {{getUserTime(rankings[0].matchStartTime)}}</span>
         </div>
         <FactionSegmentBar v-else-if="(match && match.result)"
           class="col-start-2 col-span-5"
@@ -60,13 +54,13 @@
       </div>
       <div class="self-center">
         <object
-          :data="rankings[1].outfit.id | outfitImage"
+          :data="rankings[1].id | outfitImage"
           type="image/png"
           width="50px"
         >
           <img
-            :src="rankings[1].outfit.faction | factionImage"
-            :alt="rankings[1].outfit.faction"
+            :src="rankings[1].faction | factionImage"
+            :alt="rankings[1].faction"
           />
         </object>
       </div>
@@ -83,7 +77,11 @@ import { FactionBgClass } from '@/constants/FactionBgClass'
 import { FactionBorderClass } from '@/constants/FactionBorderClass'
 import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
-import { OutfitwarsRankingInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsRankingInterface'
+import { ParsedOutfitDataInterface } from '~/interfaces/ParsedOutfitDataInterface'
+import ApiRequest from '~/api-request'
+import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
+import { PropValidator } from 'vue/types/options'
+import { Ps2AlertsEventState } from '~/ps2alerts-constants/ps2AlertsEventState'
 
 export default Vue.extend({
   name: 'RoundBracketEntry',
@@ -91,24 +89,20 @@ export default Vue.extend({
     FactionSegmentBar
   },
   props: {
-    match: {
-      type: Object as () => InstanceOutfitWarsResponseInterface,
-      required: false,
-    },
     rankings: {
       // Array of OutfitInterface
-      validator(value: OutfitwarsRankingInterface[]) {
+      validator(value: ParsedOutfitDataInterface[]) {
         if (value.length !== 2) {
           return false
         }
-        for (const ranking of value) {
+        for (const entry of value) {
           // each outfit must have an id, name, faction, world, and leader
           if (
-            ranking.outfit.id === undefined 
-            || ranking.outfit.name  === undefined 
-            || ranking.outfit.faction  === undefined 
-            || ranking.outfit.world  === undefined 
-            || ranking.outfit.leader === undefined
+            entry.id === undefined 
+            || entry.name  === undefined 
+            || entry.faction  === undefined 
+            || entry.world  === undefined
+            || entry.matchStartTime === undefined
           ) {
             return false;
           }
@@ -116,14 +110,21 @@ export default Vue.extend({
         return true;
       },
       required: true
+    } as PropValidator<ParsedOutfitDataInterface[]>
+  },
+  data() {
+    return {
+      match: undefined as InstanceOutfitWarsResponseInterface | undefined,
+      updateRate: 10000,
+      updateInterval: undefined as number | undefined
     }
   },
   computed: {
     started(): string {
-      return moment(this.match.timeStarted).format(DATE_TIME_FORMAT_SHORT)
+      return moment(this.match?.timeStarted).format(DATE_TIME_FORMAT_SHORT)
     },
     ended(): string {
-      return moment(this.match.timeEnded).format(DATE_TIME_FORMAT_SHORT)
+      return moment(this.match?.timeEnded).format(DATE_TIME_FORMAT_SHORT)
     },
     victorClass(): object {
       if (!this.match || this.match.state === 0) {
@@ -141,8 +142,53 @@ export default Vue.extend({
       }
     },
     victor(): Team | null {
-      return this.match.result ? this.match.result.victor : null
-    },
+      return this.match?.result ? this.match.result.victor : null
+    }
   },
+  watch: {
+    rankings: {
+      handler() {
+        if(this.rankings[0].instanceId || this.rankings[1].instanceId) {
+          this.pull();
+        }
+      },
+      deep: true
+    }
+  },
+  created() {
+    this.pull();
+    this.updateInterval = window.setInterval(() => {
+      this.pull()
+    }, this.updateRate)
+  },
+  methods: {
+    async pull() {
+      const instanceId = this.rankings[0].instanceId ?? this.rankings[1].instanceId;
+      if(instanceId) {
+        this.match = await new ApiRequest().get<InstanceOutfitWarsResponseInterface>(
+          ps2AlertsApiEndpoints.outfitwarsInstance.replace(
+            '{instanceId}',
+            instanceId
+          )
+        )
+        if(this.match.state === Ps2AlertsEventState.ENDED) {
+          window.clearInterval(this.updateInterval);
+        }
+      }
+    },
+    getUserTime(datetime: Date): string {
+      const locale = Intl.NumberFormat().resolvedOptions().locale;
+      try {
+        return new Intl.DateTimeFormat(locale, {
+          dateStyle: "short",
+          timeStyle: "short",
+        }).format(datetime);
+      } catch (err) {
+        console.error(err);
+        console.error(JSON.stringify(datetime));
+        return datetime.toLocaleString(locale);
+      }
+    },
+  }
 })
 </script>

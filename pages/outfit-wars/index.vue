@@ -38,7 +38,7 @@
               boots to your gear, you're shipping off to Nexus!
             </p>
             <p class="mb-2">
-              This year's event will consist of 4 qualifier rounds, 3 play-offs
+              This year's event will consist of 4 qualifier rounds, 2 play-offs
               then finally the championships to determine the podium finishes.
             </p>
             <p class="mb-2">
@@ -53,7 +53,7 @@
               :other="totalOutfitsByFaction[4]"
               :out-of-play="0"
               dropoff-percent="5"
-              no-leader-highlight="true"
+              :no-leader-highlight="true"
               :is-percentage="false"
               other-segment-text="NSO"
               numeral="0,0"
@@ -121,13 +121,13 @@
             <div class="py-4 bg-tint">
               <p class="text-2xl text-center">{{ world | worldName }}</p>
               <p v-if="currentWorldRankingsMap.has(world)" class="text-sm">
-                {{ worldRankings(world).length }} outfits signed up
+                {{ worldRankings(world, true).length }} outfits signed up
               </p>
             </div>
 
             <v-list subheader>
               <v-list-item
-                v-for="outfit in worldRankings(world)"
+                v-for="outfit in worldRankings(world, true)"
                 :key="outfit.id"
               >
                 <object
@@ -166,10 +166,9 @@
             class="col-span-1 flex-shrink-0"
           >
             <RoundBracket
-              :rankings="rawData"
+              :rankings="worldRankings(world)"
               :round="round"
               :server="world"
-              :instances="instanceMap"
             />
           </div>
         </div>
@@ -192,37 +191,13 @@ import RoundBracket from '~/components/outfitwars/RoundBracket.vue'
 import { World } from '~/ps2alerts-constants/world'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
-import { Faction } from '~/ps2alerts-constants/faction'
-import { Phase } from '~/ps2alerts-constants/outfitwars/phase'
 import { OutfitwarsRankingInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsRankingInterface'
+import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 import { getOutfitWarPhase } from '~/ps2alerts-constants/outfitwars/utils'
 import worldName from '~/filters/WorldName'
 import TimeRemainingFromDuration from '~/utilities/timeRemainingFromDuration'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
-import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
-
-interface RankingInterface {
-  totalScore: number
-  played: number
-  wins: number
-  losses: number
-  tiebreaker: number
-  factionRank: number
-  globalRank: number
-}
-
-interface ParsedOutfitDataInterface {
-  id: string
-  name: string
-  tag: string | null
-  faction: Faction
-  world: World
-  round: number
-  phase: Phase
-  rankings: RankingInterface
-  outfitImageUrl: string
-  metricsString: string
-}
+import { ParsedOutfitDataInterface } from '~/interfaces/ParsedOutfitDataInterface'
 
 export default Vue.extend({
   name: 'OutfitWarsRankings',
@@ -242,11 +217,6 @@ export default Vue.extend({
       timeRemaining: 0,
       worlds: [World.COBALT, World.CONNERY, World.EMERALD, World.MILLER],
       currentWorldRankingsMap: new Map<World, ParsedOutfitDataInterface[]>(),
-      rawData: [] as OutfitwarsRankingInterface[],
-      instanceMap: new Map() as Map<
-        string,
-        InstanceOutfitWarsResponseInterface
-      >,
       factionCount: [0, 0, 0, 0, 0] as number[],
     }
   },
@@ -276,7 +246,7 @@ export default Vue.extend({
         return [1]
       }
       const rounds: number[] = []
-      for (const ranking of this.rawData) {
+      for (const ranking of this.allRankings) {
         if (
           !rounds.includes(ranking.round) &&
           ranking.round > 0 &&
@@ -288,6 +258,14 @@ export default Vue.extend({
       rounds.sort()
       console.log(`Rounds: ${JSON.stringify(rounds)}`)
       return rounds
+    },
+    allRankings(): ParsedOutfitDataInterface[] {
+      const toReturn = [];
+      for(const world of this.worlds) {
+        const worldRanks = this.worldRankings(world);
+        toReturn.unshift(...worldRanks);
+      }
+      return toReturn;
     },
     totalOutfits(): number {
       let value = 0
@@ -337,33 +315,20 @@ export default Vue.extend({
         })
     },
     async parse(data: OutfitwarsRankingInterface[]) {
-      this.rawData = data
       for (const record of data) {
-        if (record.instanceId) {
-          this.instanceMap.set(
-            record.instanceId,
-            await new ApiRequest().get<InstanceOutfitWarsResponseInterface>(
-              ps2AlertsApiEndpoints.outfitwarsInstance.replace(
-                '{instanceId}',
-                record.instanceId
-              )
-            )
-          )
-        }
-
         const outfitImageUrl = Endpoints.OUTFIT_TRACKER_OUTFIT_LOGO.replace(
           '{outfitId}',
           record.outfit.id
         )
 
-        const score = parseInt(record.rankingParameters.TotalScore)
+        const score = parseInt(record.rankingParameters.TiebreakerPoints)
         const wins = parseInt(record.rankingParameters.Wins)
         const defeats = parseInt(record.rankingParameters.Losses)
 
         let metricsString = ''
 
         if (parseInt(record.rankingParameters.MatchesPlayed) > 0) {
-          metricsString = `<b>${score} points</b> <br>${wins} wins | ${defeats} defeats`
+          metricsString = `<b>${score} points</b> <br>${wins} ${wins !== 1 ? 'wins' : 'win'} | ${defeats} ${defeats !== 1 ? 'defeats' : 'defeat'}`
         } else {
           metricsString = 'Not yet played a match'
         }
@@ -374,6 +339,7 @@ export default Vue.extend({
         const parsedOutfitData: ParsedOutfitDataInterface = {
           id: record.outfit.id,
           name: `${outfitTagFormatted}${record.outfit.name}`,
+          matchStartTime: new Date(record.startTime),
           tag: record.outfit.tag ?? null,
           faction: record.outfit.faction,
           world: record.world,
@@ -390,6 +356,7 @@ export default Vue.extend({
           },
           outfitImageUrl,
           metricsString,
+          instanceId: record.instanceId
         }
 
         // Create world rankings data
@@ -404,7 +371,7 @@ export default Vue.extend({
         } else {
           // Otherwise just add to the current array
           const index = currentWorldRankings.findIndex((value) => {
-            return value.id === parsedOutfitData.id
+            return value.id === parsedOutfitData.id && value.round === parsedOutfitData.round
           })
           if (index === -1) {
             currentWorldRankings.push(parsedOutfitData)
@@ -420,15 +387,25 @@ export default Vue.extend({
           return b.rankings.globalRank - a.rankings.globalRank
         })
       }
-
+      
       this.loaded = true
       this.loading = false
     },
     getWorldImage(world: World) {
       return `/img/worlds/${worldName(world)}.png`
     },
-    worldRankings(world: World): ParsedOutfitDataInterface[] {
-      return this.currentWorldRankingsMap.get(world) ?? []
+    worldRankings(world: World, mostRecent: boolean = false): ParsedOutfitDataInterface[] {
+      let toReturn = this.currentWorldRankingsMap.get(world) ?? [];
+      if(mostRecent) {
+        let round = 0;
+        toReturn.forEach((value) => {
+          if(value.round > round) {
+            round = value.round;
+          }
+        });
+        toReturn = toReturn.filter((value) => value.round == round);
+      }
+      return toReturn;
     },
   },
 })
