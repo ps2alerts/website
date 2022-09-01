@@ -25,7 +25,7 @@
       <div class="grid grid-cols-7 gap-2 justify-center grow">
         <div class="col-start-1 col-span-3 text-base mb-2 lg:mb-0">
           <div class="text-right mb-1">
-            {{ rankings[0].name.trim() }}
+            {{ formatOutfitName(rankings[0].name.trim()) }}
           </div>
         </div>
         <div class="col-start-4 col-span-1 text-base mb-2 lg:mb-0">
@@ -33,13 +33,13 @@
         </div>
         <div class="col-end-8 col-span-3 text-base mb-2 lg:mb-0">
           <div class="text-left mb-1">
-            {{ rankings[1].name.trim() }}
+            {{ formatOutfitName(rankings[1].name.trim()) }}
           </div>
         </div>
         <!-- Using borders here for alignment - the FactionSegment bar is 1px taller than the Awaiting match text otherwise -->
         <div
           v-if="!(match && match.result)"
-          class="text-gray-500 col-start-3 col-span-3 border-b border-[#1e1e1e] rounded"
+          class="text-gray-500 col-start-3 col-span-3"
         >
           <span
             >Match starts {{ getUserTime(rankings[0].matchStartTime) }}</span
@@ -185,6 +185,13 @@ export default Vue.extend({
           window.clearInterval(this.updateInterval)
         }
       }
+    },
+    formatOutfitName(string: string): string {
+      const length = string.length
+      const maxLength = 30
+      return length > maxLength
+        ? `${string.substring(0, maxLength)}...`
+        : string
     },
     getUserTime(datetime: Date): string {
       const locale = Intl.NumberFormat().resolvedOptions().locale

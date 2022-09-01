@@ -113,7 +113,7 @@
         </v-card>
 
         <v-card v-if="loaded" max-width="600" class="mx-auto" dark>
-          <div class="py-4 bg-tint">
+          <div class="py-2 bg-tint">
             <p class="text-2xl text-center">{{ world | worldName }}</p>
             <p v-if="currentWorldRankingsMap.has(world)" class="text-sm">
               {{ worldRankings(world, true).length }} outfits signed up
@@ -164,7 +164,7 @@
     <!-- server outfit lists end -->
 
     <!-- brackets -->
-    <div v-if="loaded" class="col-span-12">
+    <div v-if="loaded" class="col-span-12 mb-2">
       <h1 class="text-title text-center">Brackets</h1>
       <v-tabs v-model="activeBracketTab" centered grow dark show-arrows>
         <v-tabs-slider></v-tabs-slider>
@@ -185,9 +185,9 @@
           :eager="true"
           :value="getTabValue(world)"
         >
-          <section class="col-span-12 relative mb-4">
+          <section class="col-span-12 relative">
             <div
-              class="flex p-2 gap-y-2 gap-x-4 overflow-x-auto col-span-12 md:col-span-9 bg-tint rounded border border-gray-900 snap-x"
+              class="flex p-2 pb-0 gap-x-2 overflow-x-auto col-span-12 bg-tint rounded border border-gray-900 snap-x"
             >
               <div
                 v-for="(round, index) in rounds"

@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col justify-between w-fit grow">
-    <div v-if="rankingPairs.length > 0" class="my-4">
+    <div v-if="rankingPairs.length > 0" class="mb-2">
       <div class="text-xl">
         {{ phase | phaseName }}
       </div>
