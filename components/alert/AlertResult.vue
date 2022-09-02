@@ -136,11 +136,8 @@ export default Vue.extend({
   },
   computed: {
     victorText(): string {
-      const isOutfitWars =
-        this.alert.ps2AlertsEventType ===
-        Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
       if (
-        isOutfitWars &&
+        this.isOutfitWar &&
         this.alert.result?.victor === Team.RED &&
         this.alert.outfitwars?.teams?.red
       ) {
@@ -148,7 +145,7 @@ export default Vue.extend({
           this.alert.outfitwars.teams.red.tag
         }] ${this.alert.outfitwars.teams.red.name.trim()} wins!`
       } else if (
-        isOutfitWars &&
+        this.isOutfitWar &&
         this.alert.result?.victor === Team.BLUE &&
         this.alert.outfitwars?.teams?.blue
       ) {
@@ -164,7 +161,7 @@ export default Vue.extend({
             factionOrTeamName(
               this.alert.result?.victor,
               this.alert.ps2AlertsEventType
-            ) + (isOutfitWars ? ' Team' : '')
+            ) + (this.isOutfitWar ? ' Team' : '')
           } victory!`
     },
     victorClass(): object {
@@ -177,7 +174,10 @@ export default Vue.extend({
       }
     },
     isOutfitWar(): boolean {
-      return !!this.outfitwar?.instanceId
+      return (
+        this.outfitwar?.ps2AlertsEventType ===
+        Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+      )
     },
   },
   mounted() {

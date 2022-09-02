@@ -29,6 +29,7 @@ import { InstanceCharacterAggregateResponseInterface } from '@/interfaces/aggreg
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { Faction } from '@/ps2alerts-constants/faction'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
+import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 
 interface BattlerankDistributionDataInterface {
   // Faction
@@ -150,7 +151,10 @@ export default Vue.extend({
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
     },
     isOutfitWar(): boolean {
-      return !!this.outfitwar?.instanceId
+      return (
+        this.outfitwar?.ps2AlertsEventType ===
+        Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+      )
     },
   },
   watch: {
@@ -250,10 +254,16 @@ export default Vue.extend({
           return
         }
 
-        if(this.isOutfitWar && this.outfitwar.outfitwars?.teams?.red && this.outfitwar.outfitwars.teams.blue && character.character.outfit){
+        if (
+          this.isOutfitWar &&
+          this.outfitwar.outfitwars?.teams?.red &&
+          this.outfitwar.outfitwars.teams.blue &&
+          character.character.outfit
+        ) {
           factionBattlerankData[
-            character.character.outfit.id === this.outfitwar.outfitwars.teams.red.id 
-              ? Faction.TERRAN_REPUBLIC 
+            character.character.outfit.id ===
+            this.outfitwar.outfitwars.teams.red.id
+              ? Faction.TERRAN_REPUBLIC
               : Faction.NEW_CONGLOMERATE
           ][battlerank]++
         } else {

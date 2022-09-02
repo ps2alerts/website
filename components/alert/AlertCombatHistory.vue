@@ -73,6 +73,7 @@ import { Endpoints } from '@/constants/Endpoints'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { InstanceCombatHistoryAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceCombatHistoryAggregateResponseInterface'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
+import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 
 export default Vue.extend({
   name: 'AlertPopulations',
@@ -153,7 +154,10 @@ export default Vue.extend({
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
     },
     isOutfitWar(): boolean {
-      return !!this.outfitwar?.instanceId
+      return (
+        this.outfitwar?.ps2AlertsEventType ===
+        Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+      )
     },
   },
   watch: {

@@ -154,7 +154,11 @@ export default Vue.extend({
     counts(): { 1: number; 2: number; 3: number; 4: number; total: number } {
       const counts = { 1: 0, 2: 0, 3: 0, 4: 0, total: 0 }
       this.data.forEach((character) => {
-        if(this.isOutfitWar && this.outfitwar.outfitwars?.teams?.red && this.outfitwar.outfitwars.teams.blue) {
+        if (
+          this.isOutfitWar &&
+          this.outfitwar.outfitwars?.teams?.red &&
+          this.outfitwar.outfitwars.teams.blue
+        ) {
           switch (character.character.outfit?.id) {
             case this.outfitwar.outfitwars.teams.red.id:
               counts[Faction.TERRAN_REPUBLIC]++
@@ -163,8 +167,7 @@ export default Vue.extend({
               counts[Faction.NEW_CONGLOMERATE]++
               break
           }
-        }
-        else {
+        } else {
           switch (character.character.faction) {
             case Faction.VANU_SOVEREIGNTY:
               counts[Faction.VANU_SOVEREIGNTY]++
@@ -189,7 +192,10 @@ export default Vue.extend({
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
     },
     isOutfitWar(): boolean {
-      return !!this.outfitwar?.instanceId
+      return (
+        this.outfitwar?.ps2AlertsEventType ===
+        Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+      )
     },
   },
   watch: {
@@ -386,10 +392,19 @@ export default Vue.extend({
       return FactionBgClass(faction)
     },
     tableItemClass(item: AlertCharacterTableDataInterface): string {
-      if(this.isOutfitWar && this.outfitwar.outfitwars?.teams?.red && this.outfitwar.outfitwars.teams.blue && item.character.outfit) {
-        if(item.character.outfit.id === this.outfitwar.outfitwars.teams.red.id) {
+      if (
+        this.isOutfitWar &&
+        this.outfitwar.outfitwars?.teams?.red &&
+        this.outfitwar.outfitwars.teams.blue &&
+        item.character.outfit
+      ) {
+        if (
+          item.character.outfit.id === this.outfitwar.outfitwars.teams.red.id
+        ) {
           return FactionBgClassString(Faction.TERRAN_REPUBLIC)
-        } else if(item.character.outfit.id === this.outfitwar.outfitwars.teams.blue.id) {
+        } else if (
+          item.character.outfit.id === this.outfitwar.outfitwars.teams.blue.id
+        ) {
           return FactionBgClassString(Faction.NEW_CONGLOMERATE)
         } else {
           return FactionBgClassString(Faction.NS_OPERATIVES)
