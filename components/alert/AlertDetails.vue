@@ -1,5 +1,5 @@
 <template>
-  <div class="col-span-12 lg:col-span-6 2xl:col-span-3 card">
+  <div class="card">
     <div class="tag section">General Info</div>
     <table class="min-w-full">
       <tbody class="divide-y divide-gray-200">
@@ -73,7 +73,7 @@
             </div>
           </td>
         </tr>
-        <tr>
+        <tr v-if="alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022 && instanceEventDetails">
           <td class="px-2 py-1 md:py-2 whitespace-nowrap">
             <div class="flex justify-between">
               <div class="mr-4 font-bold">Triggered by</div>
@@ -146,12 +146,14 @@ import { InstanceTerritoryControlResponseInterface } from '@/interfaces/Instance
 import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceEventDetails } from '@/constants/InstanceEventDetails'
 import { MetagameDetailsInterface } from '@/interfaces/MetagameDetailsInterface'
+import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
+import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 
 export default Vue.extend({
   name: 'AlertDetails',
   props: {
     alert: {
-      type: Object as () => InstanceTerritoryControlResponseInterface,
+      type: Object as () => InstanceTerritoryControlResponseInterface & InstanceOutfitWarsResponseInterface,
       default: {},
       required: true,
     },
@@ -164,5 +166,10 @@ export default Vue.extend({
       return InstanceEventDetails(this.alert.censusMetagameEventType || 0)
     },
   },
+  data() {
+    return {
+      OUTFIT_WARS_AUG_2022: Ps2AlertsEventType.OUTFIT_WARS_AUG_2022,
+    }
+  }
 })
 </script>

@@ -1,12 +1,20 @@
 <template>
   <div class="col-span-12">
     <div class="text-center">
-      <h1 class="text-4xl">Alert #{{ alert.instanceId }}</h1>
+      <div v-if="alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022">
+        <h1 class="text-4xl">Alert #{{ alert.instanceId }}</h1>
+      </div>
+      <div v-if="alert.ps2AlertsEventType === OUTFIT_WARS_AUG_2022 && alert.outfitwars">
+        <h1 class="text-3xl">
+          {{ alert.world | worldName }} {{ alert.outfitwars.phase | phaseName }} Round
+          {{ alert.outfitwars.round | owRoundByPhase(alert.outfitwars.phase) }}
+        </h1>
+      </div>
     </div>
     <div v-if="alert.state === 2" class="mb-2 text-center">
-      <h2 class="text-2xl">
+      <h2 class="text-4xl">
         {{ victorText }}
-        <v-tooltip v-if="alert.result.draw === true" bottom>
+        <v-tooltip v-if="alert.result && alert.result.draw === true" bottom>
           <template #activator="{ on, attrs }">
             <font-awesome-icon
               :icon="['fas', 'info-circle']"
@@ -30,7 +38,7 @@
     <div class="rounded px-4 py-4 bg-tint relative" :class="victorClass">
       <div class="tag section">
         Result
-        <span v-if="alert.result.perBasePercentage"
+        <span v-if="alert.result && alert.result.perBasePercentage"
           >({{ alert.result.perBasePercentage.toFixed(1) }}% per base)
           <v-tooltip bottom>
             <template #activator="{ on, attrs }">
@@ -56,11 +64,24 @@
       </div>
       <FactionSegmentBar
         v-else
-        :vs="alert.result.vs"
-        :nc="alert.result.nc"
-        :tr="alert.result.tr"
+        :vs="
+          alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022
+            ? alert.result.vs
+            : 0
+        "
+        :nc="
+          alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022
+            ? alert.result.nc
+            : alert.result.blue
+        "
+        :tr="
+          alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022
+            ? alert.result.tr
+            : alert.result.red
+        "
         :other="alert.result.cutoff"
         :out-of-play="alert.result.outOfPlay"
+        :outfitwars="alert.ps2AlertsEventType === OUTFIT_WARS_AUG_2022"
       />
     </div>
   </div>
@@ -71,8 +92,12 @@ import Vue from 'vue'
 import FactionSegmentBar from '@/components/common/FactionSegmentBar.vue'
 import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
-import factionName from '@/filters/FactionName'
 import { FactionBgClass } from '@/constants/FactionBgClass'
+import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
+import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
+import { Phase } from '~/ps2alerts-constants/outfitwars/phase'
+import factionOrTeamName from '~/filters/FactionOrTeamName'
+import { Team } from '~/ps2alerts-constants/outfitwars/team'
 
 export default Vue.extend({
   name: 'AlertResult',
@@ -81,7 +106,8 @@ export default Vue.extend({
   },
   props: {
     alert: {
-      type: Object as () => InstanceTerritoryControlResponseInterface,
+      type: Object as () => InstanceTerritoryControlResponseInterface &
+        InstanceOutfitWarsResponseInterface,
       default: {},
       required: true,
     },
@@ -94,15 +120,31 @@ export default Vue.extend({
   data() {
     return {
       error: null,
+      OUTFIT_WARS_AUG_2022: Ps2AlertsEventType.OUTFIT_WARS_AUG_2022,
+      CHAMPIONSHIPS: Phase.CHAMPIONSHIPS,
     }
   },
   computed: {
     victorText(): string {
+      const isOutfitWars =
+        this.alert.ps2AlertsEventType ===
+        Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+      if (isOutfitWars && this.alert.result?.victor === Team.RED && this.alert.outfitwars?.teams?.red) {
+        return `[${this.alert.outfitwars.teams.red.tag}] ${this.alert.outfitwars.teams.red.name.trim()} wins!`
+      }
+      else if (isOutfitWars && this.alert.result?.victor === Team.BLUE && this.alert.outfitwars?.teams?.blue) {
+        return `[${this.alert.outfitwars.teams.blue.tag}] ${this.alert.outfitwars.teams.blue.name.trim()} wins!`
+      }
       return this.alert.state === Ps2AlertsEventState.STARTED
         ? 'In progress...'
         : this.alert.result?.draw === true
         ? 'Draw!'
-        : `${factionName(this.alert.result?.victor)} victory!`
+        : `${
+            factionOrTeamName(
+              this.alert.result?.victor,
+              this.alert.ps2AlertsEventType
+            ) + (isOutfitWars ? ' Team' : '')
+          } victory!`
     },
     victorClass(): object {
       if (!this.alert.result || !this.alert.result.victor) {

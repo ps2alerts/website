@@ -153,6 +153,10 @@
     &.hover:hover {
       background-color: rgba(85, 60, 154, 1);
     }
+
+    &.bg-solid {
+      background-color: rgba(85, 60, 154, 1);
+    }
   }
   .bg-nc {
     background-color: rgba(43, 108, 176, 0.5);
@@ -161,12 +165,20 @@
     &.hover:hover {
       background-color: rgba(43, 108, 176, 1);
     }
+
+    &.bg-solid {
+      background-color: rgba(43, 108, 176, 1);
+    }
   }
   .bg-tr {
     background-color: rgba(155, 44, 44, 0.5);
     transition: background-color 0.25s ease-out;
 
     &.hover:hover {
+      background-color: rgba(155, 44, 44, 1);
+    }
+
+    &.bg-solid {
       background-color: rgba(155, 44, 44, 1);
     }
   }
@@ -242,7 +254,7 @@
     }
 
     .fade-in {
-      animation: fadeInOpacity 0.5s ease-out
+      animation: fadeInOpacity 0.5s ease-out;
     }
 
     .fade-out {
@@ -394,6 +406,22 @@
         @apply bg-gray-600;
       }
     }
+
+    &.TR {
+      @apply bg-red-600;
+    }
+
+    &.NC {
+      @apply bg-blue-600;
+    }
+
+    &.VS {
+      @apply bg-purple-600;
+    }
+
+    &.NSO {
+      @apply bg-gray-600;
+    }
   }
 
   .card {
@@ -411,17 +439,20 @@
 
     &.skeleton {
       .faction-bar-segment {
-        .border-vs, .border-nc, .border-tr, .border-other {
-          border: transparent
+        .border-vs,
+        .border-nc,
+        .border-tr,
+        .border-other {
+          border: transparent;
         }
         .vs {
-          background-color: #403845
+          background-color: #403845;
         }
         .nc {
-          background-color: #2d3e50
+          background-color: #2d3e50;
         }
         .tr {
-          background-color: #442e2e
+          background-color: #442e2e;
         }
       }
     }
@@ -702,12 +733,19 @@
 
   nav {
     .theme--dark {
+
       &.v-tabs > .v-tabs-bar {
         background-color: #9b2c2c !important;
-      }
 
-      .v-tab--active {
-        background-color: lighten(#9b2c2c, 10) !important;
+        .v-tab:not(.v-tab--active) {
+          &.ow-tab {
+            background: radial-gradient(circle at 50%, #9b2c2c, #9b2c2c 50%, #ff0000 100%, #333 100%);
+          }
+        }
+
+        .v-tab--active {
+          background-color: lighten(#9b2c2c, 10) !important;
+        }
       }
     }
 
@@ -725,8 +763,20 @@
       &.v-tabs > .v-tabs-bar {
         background-color: #38444a !important;
       }
+
+      .v-tab:not(.v-tab--active) {
+        &.ow-subtab {
+          border-bottom: red 2px solid;
+        }
+      }
+
       .v-tab--active {
         background-color: inherit !important; // Aka do nothing
+
+        &.ow-subtab {
+          border-bottom: red 2px solid;
+          background-color: #600606 !important;
+        }
       }
     }
   }

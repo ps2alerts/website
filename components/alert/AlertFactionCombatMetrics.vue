@@ -1,8 +1,8 @@
 <template>
-  <div
-    class="col-span-12 lg:col-span-6 2xl:col-span-3 card relative items-center"
-  >
-    <div class="tag section">Faction Combat Metrics</div>
+  <div class="card relative items-center">
+    <div class="tag section">
+      {{ !isOutfitWar ? 'Faction' : 'Team' }} Combat Metrics
+    </div>
     <CountdownSpinner
       v-if="alert.state === 1"
       :percent="updateCountdownPercent"
@@ -16,16 +16,20 @@
         <thead>
           <tr class="font-bold text-base">
             <td class="text-left">Metric</td>
-            <td class="bg-vs px-4">VS</td>
-            <td class="bg-tr px-4">TR</td>
-            <td class="bg-nc px-4">NC</td>
-            <td class="bg-nso px-4">NSO</td>
+            <td v-if="!isOutfitWar" class="bg-vs px-4">VS</td>
+            <td class="bg-tr px-4">
+              {{ !isOutfitWar ? 'TR' : redTeamName }}
+            </td>
+            <td class="bg-nc px-4">
+              {{ !isOutfitWar ? 'NC' : blueTeamName }}
+            </td>
+            <td v-if="!isOutfitWar" class="bg-nso px-4">NSO</td>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td class="text-left">Kills</td>
-            <td class="bg-vs">
+            <td v-if="!isOutfitWar" class="bg-vs">
               <span v-if="data.vs">{{ data.vs.kills || 0 }}</span>
             </td>
             <td class="bg-tr">
@@ -34,7 +38,7 @@
             <td class="bg-nc">
               <span v-if="data.nc">{{ data.nc.kills || 0 }}</span>
             </td>
-            <td class="bg-nso">
+            <td v-if="!isOutfitWar" class="bg-nso">
               <span v-if="data.nso"
                 >{{ data.nso.kills || 0 }}<sup>*1</sup></span
               >
@@ -42,7 +46,7 @@
           </tr>
           <tr>
             <td class="text-left">Deaths</td>
-            <td class="bg-vs">
+            <td v-if="!isOutfitWar" class="bg-vs">
               <span v-if="data.vs">{{ data.vs.deaths || 0 }}</span>
             </td>
             <td class="bg-tr">
@@ -51,13 +55,13 @@
             <td class="bg-nc">
               <span v-if="data.nc">{{ data.nc.deaths || 0 }}</span>
             </td>
-            <td class="bg-nso">
+            <td v-if="!isOutfitWar" class="bg-nso">
               <span v-if="data.nso">{{ data.nso.deaths || 0 }}</span>
             </td>
           </tr>
           <tr>
             <td class="text-left">K/D</td>
-            <td class="bg-vs">
+            <td v-if="!isOutfitWar" class="bg-vs">
               <span v-if="data.vs">
                 {{
                   data.vs.kills && data.vs.deaths
@@ -84,7 +88,7 @@
                 }}
               </span>
             </td>
-            <td class="bg-nso">
+            <td v-if="!isOutfitWar" class="bg-nso">
               <span v-if="data.nso">
                 {{
                   data.nso.kills && data.nso.deaths
@@ -96,7 +100,7 @@
           </tr>
           <tr>
             <td class="text-left">Teamkills</td>
-            <td class="bg-vs">
+            <td v-if="!isOutfitWar" class="bg-vs">
               <span v-if="data.vs">{{ data.vs.teamKills || 0 }}</span>
             </td>
             <td class="bg-tr">
@@ -105,7 +109,7 @@
             <td class="bg-nc">
               <span v-if="data.nc">{{ data.nc.teamKills || 0 }}</span>
             </td>
-            <td class="bg-nso">
+            <td v-if="!isOutfitWar" class="bg-nso">
               <span v-if="data.nso"
                 >{{ data.nso.teamKills || 0 }}<sup>*2</sup>
               </span>
@@ -113,7 +117,7 @@
           </tr>
           <tr>
             <td class="text-left">TK %</td>
-            <td class="bg-vs">
+            <td v-if="!isOutfitWar" class="bg-vs">
               <span v-if="data.vs"
                 >{{
                   data.vs.teamKills && data.vs.deaths
@@ -140,7 +144,7 @@
                 }}%</span
               >
             </td>
-            <td class="bg-nso">
+            <td v-if="!isOutfitWar" class="bg-nso">
               <span v-if="data.nso"
                 >{{
                   data.nso.teamKills && data.nso.deaths
@@ -152,7 +156,7 @@
           </tr>
           <tr>
             <td class="text-left">Suicides</td>
-            <td class="bg-vs">
+            <td v-if="!isOutfitWar" class="bg-vs">
               <span v-if="data.vs">{{ data.vs.suicides || 0 }}</span>
             </td>
             <td class="bg-tr">
@@ -161,13 +165,13 @@
             <td class="bg-nc">
               <span v-if="data.nc">{{ data.nc.suicides || 0 }}</span>
             </td>
-            <td class="bg-nso">
+            <td v-if="!isOutfitWar" class="bg-nso">
               <span v-if="data.nso">{{ data.nso.suicides || 0 }}</span>
             </td>
           </tr>
           <tr>
             <td class="text-left">Headshots</td>
-            <td class="bg-vs">
+            <td v-if="!isOutfitWar" class="bg-vs">
               <span v-if="data.vs">{{ data.vs.headshots || 0 }}</span>
             </td>
             <td class="bg-tr">
@@ -176,13 +180,13 @@
             <td class="bg-nc">
               <span v-if="data.nc">{{ data.nc.headshots || 0 }}</span>
             </td>
-            <td class="bg-nso">
+            <td v-if="!isOutfitWar" class="bg-nso">
               <span v-if="data.nso">{{ data.nso.headshots || 0 }}</span>
             </td>
           </tr>
           <tr>
             <td class="text-left">HSR</td>
-            <td class="bg-vs">
+            <td v-if="!isOutfitWar" class="bg-vs">
               <span v-if="data.vs">
                 {{
                   data.vs.headshots && data.vs.kills
@@ -209,7 +213,7 @@
                 }}%
               </span>
             </td>
-            <td class="bg-nso">
+            <td v-if="!isOutfitWar" class="bg-nso">
               <span v-if="data.nso">
                 {{
                   data.nso.headshots && data.nso.kills
@@ -221,7 +225,16 @@
           </tr>
         </tbody>
       </table>
-      <div class="col-span-12 text-xs text-gray-400 text-left">
+
+      <p v-if="!isOutfitWar" class="text-xs">
+        We are aware NSO stats here are "broken" (they're actually mixed in with
+        the factions now and need splitting out). This will be fixed in the near
+        future!
+      </p>
+      <div
+        v-if="!isOutfitWar"
+        class="col-span-12 text-xs text-gray-400 text-left"
+      >
         <p>*1 does not include NSO vs NSO kills.</p>
         <p>
           *2 NSO Teamkills represent NSO vs NSO. It is currently not possible to
@@ -237,6 +250,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
+import { InstanceOutfitWarsResponseInterface } from '@/interfaces/InstanceOutfitWarsResponseInterface'
 import ApiRequest from '@/api-request'
 import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceFactionCombatAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceFactionCombatAggregateResponseInterface'
@@ -249,6 +263,11 @@ export default Vue.extend({
       type: Object as () => InstanceTerritoryControlResponseInterface,
       default: {},
       required: true,
+    },
+    outfitwar: {
+      type: Object as () => InstanceOutfitWarsResponseInterface,
+      default: {},
+      required: false,
     },
   },
   data() {
@@ -265,6 +284,15 @@ export default Vue.extend({
   computed: {
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
+    },
+    redTeamName(): string {
+      return this.outfitwar.outfitwars?.teams?.red?.tag ?? 'Red'
+    },
+    blueTeamName(): string {
+      return this.outfitwar.outfitwars?.teams?.blue?.tag ?? 'Blue'
+    },
+    isOutfitWar(): boolean {
+      return !!this.outfitwar?.instanceId
     },
   },
   watch: {
@@ -317,7 +345,7 @@ export default Vue.extend({
             this.alert.instanceId
               ? this.alert.instanceId.toString()
               : 'whatever'
-          )
+          ) + `?ps2AlertsEventType=${this.alert.ps2AlertsEventType}`
         )
         .then((result) => {
           this.data = result

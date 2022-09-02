@@ -72,6 +72,7 @@ import ApiRequest from '~/api-request'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { InstanceCombatHistoryAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceCombatHistoryAggregateResponseInterface'
+import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 
 export default Vue.extend({
   name: 'AlertPopulations',
@@ -83,6 +84,11 @@ export default Vue.extend({
       type: Object as () => InstanceTerritoryControlResponseInterface,
       default: {},
       required: true,
+    },
+    outfitwar: {
+      type: Object as () => InstanceOutfitWarsResponseInterface,
+      default: {},
+      required: false,
     },
   },
   data() {
@@ -146,6 +152,9 @@ export default Vue.extend({
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
     },
+    isOutfitWar(): boolean {
+      return !!this.outfitwar?.instanceId
+    },
   },
   watch: {
     'alert.state'() {
@@ -203,7 +212,7 @@ export default Vue.extend({
             this.alert.instanceId
               ? this.alert.instanceId.toString()
               : 'whatever'
-          ),
+          ) + `?ps2AlertsEventType=${this.alert.ps2AlertsEventType}`,
           { sortBy: 'timestamp', order: 'asc' }
         )
         .then((result) => {
@@ -227,6 +236,7 @@ export default Vue.extend({
         this.data.forEach(
           (row: InstanceCombatHistoryAggregateResponseInterface) => {
             times.push(moment(row.timestamp).format('HH:mm'))
+
             vsData.push(
               /* @ts-ignore */
               row.vs ? (row.vs.kills / row.vs.deaths).toFixed(2) ?? 0 : 0
@@ -261,32 +271,54 @@ export default Vue.extend({
         )
       }
 
-      this.dataCollection = {
-        labels: times,
-        datasets: [
+      const datasets = []
+      const pointBorderWidth = 2
+      const pointHoverBorderWidth = 4
+
+      if (this.isOutfitWar) {
+        datasets.push(
+          {
+            label: this.outfitwar.outfitwars?.teams?.red?.tag ?? 'Red Team',
+            borderColor: '#9b2c2c',
+            data: trData,
+            pointStyle: 'rect',
+            pointBorderWidth,
+            pointHoverBorderWidth,
+          },
+          {
+            label: this.outfitwar.outfitwars?.teams?.blue?.tag ?? 'Blue Team',
+            borderColor: '#2b6cb0',
+            data: ncData,
+            pointStyle: 'triangle',
+            pointBorderWidth,
+            pointHoverBorderWidth,
+          }
+        )
+      } else {
+        datasets.push(
           {
             label: 'VS',
             borderColor: '#6B46C1',
             data: vsData,
             pointStyle: 'circle',
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
+            pointBorderWidth,
+            pointHoverBorderWidth,
           },
           {
             label: 'TR',
             borderColor: '#9b2c2c',
             data: trData,
             pointStyle: 'rect',
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
+            pointBorderWidth,
+            pointHoverBorderWidth,
           },
           {
             label: 'NC',
             borderColor: '#2b6cb0',
             data: ncData,
             pointStyle: 'triangle',
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
+            pointBorderWidth,
+            pointHoverBorderWidth,
           },
           {
             label: 'NSO',
@@ -294,8 +326,13 @@ export default Vue.extend({
             data: nsoData,
             pointBorderWidth: 2,
             pointHoverBorderWidth: 4,
-          },
-        ],
+          }
+        )
+      }
+
+      this.dataCollection = {
+        labels: times,
+        datasets,
       }
     },
     updateMode(mode: string) {

@@ -72,6 +72,30 @@
             />
           </p>
         </div>
+        <div class="mt-2" v-if="outfitWars().length > 0">
+          <div v-for="world in worlds" :key="world">
+            <div class="tag section" v-if="outfitWarsByWorld(world).length > 0">{{ world | worldName }} - {{ outfitWarsByWorld(world).length }} Active {{ outfitWarsByWorld(world)[0].outfitwars.phase | phaseName(false) }} {{ outfitWarWord(world) }}</div>
+            <div v-show="outfitWarsByWorld(world).length > 0">
+              <div
+                v-for="outfitwar in outfitWarsByWorld(world)"
+                :key="outfitwar.instanceId"
+                class="p-1 border-b border-gray-500 border-no-bottom"
+              >
+                <RealTimeAlert
+                  :world="outfitwar.world"
+                  :zone="outfitwar.zone"
+                  :time-started="outfitwar.timeStarted"
+                  :duration="outfitwar.duration"
+                  :result="outfitwar.result"
+                  :instance-id="outfitwar.instanceId"
+                  :pops="getPops(outfitwar.instanceId)"
+                  :is-percentage="showPopPercent"
+                  :outfitwars="outfitwar.outfitwars"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -83,10 +107,13 @@ import Vue from 'vue'
 import moment from 'moment-timezone'
 import ApiRequest from '@/api-request'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
+import { InstanceOutfitWarsResponseInterface } from '@/interfaces/InstanceOutfitWarsResponseInterface'
 import { InstancePopulationAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstancePopulationAggregateResponseInterface'
 import { TIME_FORMAT } from '@/constants/Time'
 import { Endpoints } from '@/constants/Endpoints'
 import RealTimeAlert from '~/components/RTM/RealTimeAlert.vue'
+import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
+import { World } from '~/ps2alerts-constants/world'
 
 export default Vue.extend({
   name: 'RealTimeMonitor',
@@ -105,6 +132,7 @@ export default Vue.extend({
       updatePopsCountdown: 0,
       updatePopsCountdownInterval: undefined as undefined | number,
       actives: [] as InstanceTerritoryControlResponseInterface[],
+      owactivesByWorld: new Map<World, InstanceOutfitWarsResponseInterface[]>(),
       populations: new Map<
         string,
         InstancePopulationAggregateResponseInterface
@@ -127,6 +155,9 @@ export default Vue.extend({
     alertWord(): string {
       return this.actives.length !== 1 ? 'Alerts' : 'Alert'
     },
+    worlds(): World[] {
+      return [World.COBALT, World.CONNERY, World.EMERALD, World.MILLER];
+    }
   },
   watch: {
     $route: 'activeAlerts',
@@ -135,6 +166,7 @@ export default Vue.extend({
   async created() {
     // TEMP polling until real time websocket is implemented
     await this.activeAlerts()
+    await this.activeOutfitWars()
     await this.alertPops()
 
     this.updateTerritoryCountdownInterval = window.setInterval(() => {
@@ -150,6 +182,7 @@ export default Vue.extend({
     setInterval(() => {
       this.error = null
       this.activeAlerts()
+      this.activeOutfitWars()
     }, this.updateTerritoryRate)
     setInterval(() => {
       this.alertPops()
@@ -172,6 +205,51 @@ export default Vue.extend({
           this.loading = false
           this.error = e.message
         })
+    },
+    async activeOutfitWars(): Promise<void> {
+      await new ApiRequest()
+        .get<InstanceOutfitWarsResponseInterface[]>(
+          ps2AlertsApiEndpoints.outfitwarsActive,
+          { sortBy: 'timeStarted' }
+        )
+        .then((result) => {
+          this.loading = false
+          this.error = null
+          for(const world of this.worlds){
+            this.owactivesByWorld.set(world, [])
+          }
+        
+          for(const outfitwar of result) {
+            const worldArray = this.owactivesByWorld.get(outfitwar.world)
+            if(worldArray === undefined){
+              console.error("World array undefined?");
+              continue
+            }
+            worldArray.push(outfitwar);
+            this.owactivesByWorld.set(outfitwar.world, worldArray);
+          }
+        })
+        .catch((e) => {
+          this.loading = false
+          this.error = e.message
+        })
+    },
+    outfitWarWord(world: World): string {
+      return this.owactivesByWorld.get(world)?.length !== 1 ? 'Matches' : 'Match'
+    },
+    outfitWarsByWorld(world: World): InstanceOutfitWarsResponseInterface[] {
+      const result = this.owactivesByWorld.get(world);
+      if(!result) {
+        return []
+      }
+      return result;
+    },
+    outfitWars(): InstanceOutfitWarsResponseInterface[] {
+      const result = []
+      for(const world of this.worlds) {
+        result.unshift(...this.outfitWarsByWorld(world))
+      }
+      return result;
     },
     alertPops() {
       if (!this.actives) {

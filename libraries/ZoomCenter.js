@@ -4,6 +4,7 @@ export const ZoomCenter = Control.Zoom.extend({
   options: {
     zoomCenterText: '<i class="fa-solid fa-arrows-to-dot"></i>',
     zoomCenterTitle: 'Center View',
+    zoomCenterLevel: 2,
   },
 
   _zoomInButton: undefined,
@@ -49,7 +50,7 @@ export const ZoomCenter = Control.Zoom.extend({
 
   _zoomCenter(_) {
     if (!this._disabled) {
-      this._map.setView([-128, 128], 2)
+      this._map.setView([-128, 128], this.options.zoomCenterLevel)
     }
   },
 })

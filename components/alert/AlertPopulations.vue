@@ -34,6 +34,7 @@
           Numbers
         </button>
         <button
+          v-if="!isOutfitWar"
           class="btn btn-sm"
           :class="{ 'btn-active': mode === 'average' }"
           @click="updateMode('average')"
@@ -77,7 +78,7 @@
           <h3>Data is gathered once a minute</h3>
         </div>
       </div>
-      <div v-show="mode === 'average'" class="text-center">
+      <div v-show="mode === 'average'" v-if="!isOutfitWar" class="text-center">
         <line-chart
           v-if="avgData.length"
           :chart-data="dataAvgCollection"
@@ -91,7 +92,7 @@
           class="w-full flex flex-col flex-wrap justify-center items-center"
         >
           <h1>
-            Awating data...
+            Awaiting data...
             <font-awesome-icon
               :icon="['fa', 'sync']"
               class="animate-spin"
@@ -113,6 +114,7 @@ import ApiRequest from '~/api-request'
 import { Endpoints } from '@/constants/Endpoints'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { InstancePopulationAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstancePopulationAggregateResponseInterface'
+import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 
 const commonChartOptions = {
   responsive: true,
@@ -183,6 +185,11 @@ export default Vue.extend({
       type: Object as () => InstanceTerritoryControlResponseInterface,
       default: {},
       required: true,
+    },
+    outfitwar: {
+      type: Object as () => InstanceOutfitWarsResponseInterface,
+      default: {},
+      required: false,
     },
   },
   data() {
@@ -259,6 +266,9 @@ export default Vue.extend({
     updateCountdownPercent(): number {
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
     },
+    isOutfitWar(): boolean {
+      return !!this.outfitwar?.instanceId
+    },
   },
   watch: {
     'alert.state'() {
@@ -274,10 +284,6 @@ export default Vue.extend({
   created() {
     this.reset()
     this.init()
-  },
-  mounted() {
-    this.buildCollection()
-    this.buildCollection(true)
   },
   methods: {
     reset() {
@@ -316,7 +322,7 @@ export default Vue.extend({
             this.alert.instanceId
               ? this.alert.instanceId.toString()
               : 'whatever'
-          )
+          ) + `?ps2AlertsEventType=${this.alert.ps2AlertsEventType}`
         )
       )
       promises.push(
@@ -357,56 +363,95 @@ export default Vue.extend({
       }
 
       data.forEach((row) => {
-        times.push(moment(row.timestamp).format('HH:mm'))
-        vsData.push(row.vs)
-        ncData.push(row.nc)
-        trData.push(row.tr)
-        if (!avg) {
-          nsoData.push(row.nso)
+        if (this.isOutfitWar) {
+          vsData.push(0)
+          ncData.push(row.nc)
+          trData.push(row.tr)
+          if (!avg) {
+            nsoData.push(0)
+          }
+        } else {
+          vsData.push(row.vs)
+          ncData.push(row.nc)
+          trData.push(row.tr)
+          if (!avg) {
+            nsoData.push(row.nso)
+          }
         }
+        times.push(moment(row.timestamp).format('HH:mm'))
       })
 
-      const collection = {
-        labels: times,
-        datasets: [
+      const datasets = []
+      const pointBorderWidth = 2
+      const pointHoverBorderWidth = 4
+
+      if (this.isOutfitWar) {
+        datasets.push(
+          {
+            label: this.outfitwar.outfitwars?.teams?.red?.tag ?? 'Red Team',
+            borderColor: '#9b2c2c',
+            data: trData,
+            pointStyle: 'rect',
+            pointBorderWidth,
+            pointHoverBorderWidth,
+          },
+          {
+            label: this.outfitwar.outfitwars?.teams?.blue?.tag ?? 'Blue Team',
+            borderColor: '#2b6cb0',
+            data: ncData,
+            pointStyle: 'triangle',
+            pointBorderWidth,
+            pointHoverBorderWidth,
+          }
+        )
+      } else {
+        datasets.push(
           {
             label: 'VS',
             borderColor: '#6B46C1',
             data: vsData,
             pointStyle: 'circle',
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
+            pointBorderWidth,
+            pointHoverBorderWidth,
           },
           {
             label: 'TR',
             borderColor: '#9b2c2c',
             data: trData,
             pointStyle: 'rect',
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
+            pointBorderWidth,
+            pointHoverBorderWidth,
           },
           {
             label: 'NC',
             borderColor: '#2b6cb0',
             data: ncData,
             pointStyle: 'triangle',
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
-          },
-        ],
+            pointBorderWidth,
+            pointHoverBorderWidth,
+          }
+        )
       }
 
-      if (avg) {
-        this.dataAvgCollection = collection
-      } else {
+      const collection = {
+        labels: times,
+        datasets,
+      }
+
+      if (!avg && !this.isOutfitWar) {
         collection.datasets.push({
           label: 'NSO',
           borderColor: '#4a5568',
           data: nsoData,
           pointStyle: 'circle',
-          pointBorderWidth: 2,
-          pointHoverBorderWidth: 4,
+          pointBorderWidth,
+          pointHoverBorderWidth,
         })
+      }
+
+      if (avg) {
+        this.dataAvgCollection = collection
+      } else {
         this.dataCollection = collection
       }
     },

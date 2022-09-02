@@ -9,8 +9,8 @@
         :alert="alert"
         :update-countdown-percent="updateCountdownPercent"
       />
-      <AlertDetails :alert="alert" />
-      <AlertFactionCombatMetrics :alert="alert" />
+      <AlertDetails class="col-span-12 lg:col-span-6 2xl:col-span-3" :alert="alert" />
+      <AlertFactionCombatMetrics class="col-span-12 lg:col-span-6 2xl:col-span-3" :alert="alert" />
       <AlertFactionVsFaction :alert="alert" />
       <div class="col-span-full md:col-span-4 md:col-start-5">
         <v-tabs v-model="mapsTab" center-active dark fixed-tabs class="mt-2">

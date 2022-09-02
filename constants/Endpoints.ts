@@ -1,3 +1,5 @@
+// TODO: Migrate this to constants and rename references
+
 export const AssetsBaseUrl = 'https://assets.ps2alerts.com'
 
 export const Endpoints = {
@@ -65,14 +67,21 @@ export const Endpoints = {
   CENSUS_OSHUR_HEX_DATA: '/census/oshur-hex',
   CENSUS_CONTINENT_HEX_DATA: '/census/regions/{zone}/{version}',
 
-  INSTANCE_FACILITY_CONTROL_ENTRIES:
-    '/instance-entries/{instance}/facility?sortBy=timestamp&order=desc',
+  INSTANCE_FACILITY_CONTROL_ENTRIES: '/instance-entries/{instance}/facility',
   INSTANCE_FACILITY_CONTROL_ENTRIES_FACILITY:
     '/instance-entries/{instance}/facility/{facility}',
 
   INSTANCE: '/instances/{instance}',
   INSTANCES_ACTIVE: '/instances/active',
   INSTANCES_TERRITORY_CONTROL: '/instances/territory-control',
+
+  // Outfitwars
+  OW_RANKINGS_ALL: '/outfit-wars/rankings?sortBy=order&order=asc',
+  OW_RANKINGS_WORLD: '/outfit-wars/rankings/{world}',
+
+  // 3rd party
+  OUTFIT_TRACKER_OUTFIT_LOGO:
+    'https://outfit-tracker.com/outfit-logo/{outfitId}.png',
 }
 
 export const CensusEndpoints = {

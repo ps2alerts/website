@@ -13,6 +13,8 @@ const zoneNameFilter = Vue.filter('zoneName', (value: Zone) => {
       return 'Esamir'
     case Zone.OSHUR:
       return 'Oshur'
+    case Zone.NEXUS:
+      return 'Nexus'
     default:
       return 'UNKNOWN!'
   }

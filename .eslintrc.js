@@ -21,4 +21,7 @@ module.exports = {
     'import/named': 'warn',
   },
   plugins: ['prettier'],
+  ignorePatterns: [
+    './ps2alerts-constants/**'
+  ]
 }

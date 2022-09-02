@@ -11,7 +11,8 @@
     "lint:js": "eslint --ext \".js,.ts,.vue\" --ignore-path .gitignore .",
     "lint:check": "prettier --check .",
     "lint": "yarn lint:js && yarn lint:check",
-    "lintfix": "prettier --write --list-different . && yarn lint:js --fix"
+    "lintfix": "prettier --write --list-different . && yarn lint:js --fix",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
@@ -62,11 +63,18 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.2.0",
     "fibers": "^5.0.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
     "node-sass": "^7.0.1",
     "postcss": "^8.4.12",
     "postcss-extend-rule": "^4.0.0",
     "prettier": "^2.6.1",
     "sass": "^1.54.3",
     "sass-loader": "10"
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "eslint --fix"
+    ]
   }
 }
