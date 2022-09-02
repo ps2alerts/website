@@ -561,32 +561,32 @@ export default Vue.extend({
       return FactionTextClass(faction)
     },
     roundClasses(round: number) {
-      const roundCounts = new Map<number, number>();
-      for(const ranking of this.allRankings) {
-        if(!roundCounts.has(ranking.round)) {
+      const roundCounts = new Map<number, number>()
+      for (const ranking of this.allRankings) {
+        if (!roundCounts.has(ranking.round)) {
           roundCounts.set(ranking.round, 1)
         } else {
-          const current = roundCounts.get(ranking.round);
-          if(current !== undefined)
-            roundCounts.set(ranking.round, current + 1)
+          const current = roundCounts.get(ranking.round)
+          if (current !== undefined) roundCounts.set(ranking.round, current + 1)
         }
       }
-      const roundList: number[][] = [];
-      for(const round of this.rounds) {
-        const count = roundCounts.get(round) ?? 0;
+      const roundList: number[][] = []
+      for (const round of this.rounds) {
+        const count = roundCounts.get(round) ?? 0
         roundList.push([round, count])
       }
       roundList.sort((a, b) => {
-        if(a[1] > b[1]) {
-          return -1;
+        if (a[1] > b[1]) {
+          return -1
         } else if (a[1] === b[1]) {
-          return a[0] > b[0] ? -1 : 1;
+          return a[0] > b[0] ? -1 : 1
         } else {
-          return 1;
+          return 1
         }
       })
-      console.log(roundList);
-      const currentRound = roundList[0][0];
+
+      const currentRound = roundList[0][0]
+
       // If now
       if (round === currentRound) {
         return {
