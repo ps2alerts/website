@@ -517,6 +517,11 @@ export default Vue.extend({
 
       for (const world of this.worlds) {
         this.worldRankings(world).sort((a, b) => {
+          if((a.rankings.totalScore !== 0 && a.rankings.totalScore !== undefined) 
+              || (b.rankings.totalScore !== 0 && b.rankings.totalScore !== undefined)
+          ) {
+            return b.rankings.totalScore - a.rankings.totalScore
+          }
           return b.rankings.globalRank - a.rankings.globalRank
         })
       }
@@ -533,17 +538,36 @@ export default Vue.extend({
     },
     worldRankings(
       world: World,
-      mostRecent: boolean = false
+      currentOrUpdatingRound: boolean = false
     ): ParsedOutfitDataInterface[] {
-      let toReturn = this.currentWorldRankingsMap.get(world) ?? []
-      if (mostRecent) {
-        let round = 0
-        toReturn.forEach((value) => {
-          if (value.round > round) {
-            round = value.round
+      const worldRankings = this.currentWorldRankingsMap.get(world) ?? []
+      let toReturn: ParsedOutfitDataInterface[] = [];
+      if (currentOrUpdatingRound) {
+        const outfits = new Map<string, ParsedOutfitDataInterface>()
+        const ids: string[] = []
+        for(const ranking of worldRankings) {
+          if(!outfits.has(ranking.id)) {
+            // First time seeing the outfit, add it to the map
+            outfits.set(ranking.id, ranking);
+            ids.push(ranking.id) // this should stay sorted
+          } else if(outfits.get(ranking.id).round < ranking.round) {
+            // we've seen this outfit before, but the round in the map is from an earlier round, update
+            outfits.set(ranking.id, ranking);
+          } else {
+            // Do nothing when we've seen the outfit before and this ranking is an older round
           }
-        })
-        toReturn = toReturn.filter((value) => value.round === round)
+        }
+        for(const id of ids) {
+          const record = outfits.get(id)
+          if(record === undefined) {
+            // eslint.......
+            console.error("Somehow this data we set just now is now undefined?")
+            continue
+          }
+          toReturn.push(record)
+        }
+      } else {
+        toReturn = worldRankings;
       }
       return toReturn
     },
@@ -586,7 +610,7 @@ export default Vue.extend({
     formatOutfitFaction(faction: Faction): object {
       return FactionTextClass(faction)
     },
-    roundClasses(round: number) {
+    getCurrentRound(): number {
       const roundCounts = new Map<number, number>()
       for (const ranking of this.allRankings) {
         if (!roundCounts.has(ranking.round)) {
@@ -611,7 +635,10 @@ export default Vue.extend({
         }
       })
 
-      const currentRound = roundList[0][0]
+      return roundList[0][0]
+    },
+    roundClasses(round: number) {
+      const currentRound = this.getCurrentRound();
 
       // If now
       if (round === currentRound) {
