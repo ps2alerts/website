@@ -97,8 +97,8 @@
                 {{ regionName(captureIndex) }}
               </div>
               <div class="px-2 pb-4 text-sm">
-                {{ capturingOutfitTag(captureIndex) }} captured from the
-                {{ controlData(captureIndex).loser }}
+                {{ capturingOutfitTag(captureIndex) }} captured from
+                {{ losingFactionOrOutfitTag(captureIndex) }}
               </div>
               <div>
                 <FactionSegmentBar
@@ -109,6 +109,7 @@
                   :other="mapControlData(captureIndex).cutoff"
                   :out-of-play="mapControlData(captureIndex).outOfPlay"
                   dropoff-percent="15"
+                  :outfitwars="alert.ps2AlertsEventType === OUTFIT_WARS_2022"
                 ></FactionSegmentBar>
                 <span
                   v-if="
@@ -231,6 +232,7 @@
               :out-of-play="
                 mapControlData(captureIndices[sliderVal - 1]).outOfPlay
               "
+              :outfitwars="alert.ps2AlertsEventType === OUTFIT_WARS_2022"
               dropoff-percent="15"
             ></FactionSegmentBar>
           </div>
@@ -323,19 +325,22 @@ import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 import { OutfitwarsTerritoryResultInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsTerritoryResultInterface'
+import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
+import { Team } from '~/ps2alerts-constants/outfitwars/team'
 
 export default Vue.extend({
   name: 'AlertMap',
   components: { RemainingTime },
   props: {
     alert: {
-      type: Object as () => InstanceTerritoryControlResponseInterface,
+      type: Object as () => InstanceTerritoryControlResponseInterface & InstanceOutfitWarsResponseInterface,
       default: {},
       required: true,
     },
   },
   data() {
     return {
+      OUTFIT_WARS_2022: Ps2AlertsEventType.OUTFIT_WARS_AUG_2022,
       error: null,
       loaded: false,
       updateRate: 10000,
@@ -545,7 +550,7 @@ export default Vue.extend({
       const reverseIndex = this.historyCache.length - captureIndex - 1
       const controlEvent = this.historyCache[reverseIndex]
       const outfitId = controlEvent.outfitCaptured
-      if (outfitId) {
+      if (outfitId && this.alert.ps2AlertsEventType !== Ps2AlertsEventType.OUTFIT_WARS_AUG_2022) {
         const outfitAggregate = this.outfitData.get(outfitId)
         if (outfitAggregate && outfitAggregate.outfit.tag) {
           // Nested if so that it will drop out of the if statements to return the faction name
@@ -555,11 +560,46 @@ export default Vue.extend({
           }
         } else if (outfitAggregate && outfitAggregate.outfit.name) {
           return outfitAggregate.outfit.name
-        } else {
-          return factionShortName(controlEvent.newFaction)
         }
       }
+      else if (
+        this.alert.ps2AlertsEventType === Ps2AlertsEventType.OUTFIT_WARS_AUG_2022 
+        && this.alert.outfitwars?.teams?.red?.tag 
+        && this.alert.outfitwars?.teams?.blue?.tag
+      ) {
+        return controlEvent.newFaction.valueOf() === Team.RED 
+            ? `[${this.alert.outfitwars.teams.red.tag}]` 
+            : `[${this.alert.outfitwars.teams.blue.tag}]`
+      }
+      else if (
+        this.alert.ps2AlertsEventType === Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+      ) {
+        return controlEvent.newFaction.valueOf() === Team.RED
+          ? 'Red Team'
+          : 'Blue Team'
+      }
       return factionShortName(controlEvent.newFaction)
+    },
+    losingFactionOrOutfitTag(captureIndex: number): string {
+      const reverseIndex = this.historyCache.length - captureIndex - 1
+      const controlEvent = this.historyCache[reverseIndex]
+      if(this.alert.ps2AlertsEventType === Ps2AlertsEventType.OUTFIT_WARS_AUG_2022 
+        && this.alert.outfitwars?.teams?.red?.tag 
+        && this.alert.outfitwars?.teams?.blue?.tag
+      ) {
+        return controlEvent.oldFaction.valueOf() === Team.RED 
+            ? `[${this.alert.outfitwars.teams.red.tag}]` 
+            : controlEvent.oldFaction.valueOf() === Team.BLUE 
+              ? `[${this.alert.outfitwars.teams.blue.tag}]` 
+              : 'Neutral'
+      } else if(this.alert.ps2AlertsEventType === Ps2AlertsEventType.OUTFIT_WARS_AUG_2022) {
+        return controlEvent.oldFaction.valueOf() === Team.RED
+          ? 'Red Team'
+          : controlEvent.oldFaction.valueOf() === Team.BLUE 
+              ? 'Blue Team' 
+              : 'Neutral'
+      }
+      return `the ${this.controlData(captureIndex).loser}`;
     },
     controlData(
       captureIndex: number

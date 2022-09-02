@@ -250,7 +250,15 @@ export default Vue.extend({
           return
         }
 
-        factionBattlerankData[faction][battlerank]++
+        if(this.isOutfitWar && this.outfitwar.outfitwars?.teams?.red && this.outfitwar.outfitwars.teams.blue && character.character.outfit){
+          factionBattlerankData[
+            character.character.outfit.id === this.outfitwar.outfitwars.teams.red.id 
+              ? Faction.TERRAN_REPUBLIC 
+              : Faction.NEW_CONGLOMERATE
+          ][battlerank]++
+        } else {
+          factionBattlerankData[faction][battlerank]++
+        }
 
         if (Number.isSafeInteger(battlerank)) {
           maxBR = Math.max(maxBR, battlerank)

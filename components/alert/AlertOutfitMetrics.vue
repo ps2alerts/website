@@ -423,6 +423,15 @@ export default Vue.extend({
       return FactionBgClass(faction)
     },
     tableItemClass(item: AlertOutfitTableDataInterface): string {
+      if(this.isOutfitWar && this.outfitwar.outfitwars?.teams?.red && this.outfitwar.outfitwars.teams.blue) {
+        return FactionBgClassString(
+          item.outfit.id === this.outfitwar.outfitwars.teams.red.id 
+            ? Faction.TERRAN_REPUBLIC 
+            : item.outfit.id === this.outfitwar.outfitwars.teams.blue.id 
+              ? Faction.NEW_CONGLOMERATE
+              : Faction.NONE
+        )
+      }
       return FactionBgClassString(item.outfit.faction)
     },
     transformData(

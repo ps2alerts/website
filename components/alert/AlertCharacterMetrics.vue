@@ -119,6 +119,7 @@ import { AlertCharacterTableDataInterface } from '~/interfaces/alert/AlertCharac
 import { DataTableConfig } from '@/constants/DataTableConfig'
 import timeText from '~/utilities/timeText'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
+import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 
 export default Vue.extend({
   name: 'AlertCharacterMetrics',
@@ -153,19 +154,31 @@ export default Vue.extend({
     counts(): { 1: number; 2: number; 3: number; 4: number; total: number } {
       const counts = { 1: 0, 2: 0, 3: 0, 4: 0, total: 0 }
       this.data.forEach((character) => {
-        switch (character.character.faction) {
-          case Faction.VANU_SOVEREIGNTY:
-            counts[Faction.VANU_SOVEREIGNTY]++
-            break
-          case Faction.NEW_CONGLOMERATE:
-            counts[Faction.NEW_CONGLOMERATE]++
-            break
-          case Faction.TERRAN_REPUBLIC:
-            counts[Faction.TERRAN_REPUBLIC]++
-            break
-          case Faction.NS_OPERATIVES:
-            counts[Faction.NS_OPERATIVES]++
-            break
+        if(this.isOutfitWar && this.outfitwar.outfitwars?.teams?.red && this.outfitwar.outfitwars.teams.blue) {
+          switch (character.character.outfit?.id) {
+            case this.outfitwar.outfitwars.teams.red.id:
+              counts[Faction.TERRAN_REPUBLIC]++
+              break
+            case this.outfitwar.outfitwars.teams.blue.id:
+              counts[Faction.NEW_CONGLOMERATE]++
+              break
+          }
+        }
+        else {
+          switch (character.character.faction) {
+            case Faction.VANU_SOVEREIGNTY:
+              counts[Faction.VANU_SOVEREIGNTY]++
+              break
+            case Faction.NEW_CONGLOMERATE:
+              counts[Faction.NEW_CONGLOMERATE]++
+              break
+            case Faction.TERRAN_REPUBLIC:
+              counts[Faction.TERRAN_REPUBLIC]++
+              break
+            case Faction.NS_OPERATIVES:
+              counts[Faction.NS_OPERATIVES]++
+              break
+          }
         }
         counts.total++
       })
@@ -373,6 +386,15 @@ export default Vue.extend({
       return FactionBgClass(faction)
     },
     tableItemClass(item: AlertCharacterTableDataInterface): string {
+      if(this.isOutfitWar && this.outfitwar.outfitwars?.teams?.red && this.outfitwar.outfitwars.teams.blue && item.character.outfit) {
+        if(item.character.outfit.id === this.outfitwar.outfitwars.teams.red.id) {
+          return FactionBgClassString(Faction.TERRAN_REPUBLIC)
+        } else if(item.character.outfit.id === this.outfitwar.outfitwars.teams.blue.id) {
+          return FactionBgClassString(Faction.NEW_CONGLOMERATE)
+        } else {
+          return FactionBgClassString(Faction.NS_OPERATIVES)
+        }
+      }
       return FactionBgClassString(item.character.faction)
     },
     transformData(
