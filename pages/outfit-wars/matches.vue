@@ -40,7 +40,7 @@
       <FilterVictor
         :victor-filter="selectedVictor"
         :disabled="loading"
-        :outfitWars="true"
+        :outfit-wars="true"
         @victor-changed="updateVictor"
       />
     </div>
@@ -62,24 +62,24 @@
     </div>
     <div class="col-span-12 lg:col-span-4 lg:col-start-5">
       <div class="mb-2">
-          <input
-            id="outfit-name"
-            v-model="outfitTagOrNameFilter"
-            class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
-            type="text"
-            placeholder="Outfit Tag or Name..."
-            aria-label="Outfit Tag"
-            @keydown="$event.stopImmediatePropagation()"
-            @blur="filterResults"
-            v-on:keyup.enter="filterResults"
-          />
-          <label
-            class="text-center text-sm"
-            for="outfit-name"
-            :class="{ 'text-gray-600': loading }"
-            >Outfit Name</label
-          >
-        </div>
+        <input
+          id="outfit-name"
+          v-model="outfitTagOrNameFilter"
+          class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
+          type="text"
+          placeholder="Outfit Tag or Name..."
+          aria-label="Outfit Tag"
+          @keydown="$event.stopImmediatePropagation()"
+          @blur="filterResults"
+          @keyup.enter="filterResults"
+        />
+        <label
+          class="text-center text-sm"
+          for="outfit-name"
+          :class="{ 'text-gray-600': loading }"
+          >Outfit Name</label
+        >
+      </div>
     </div>
     <div class="col-span-12 text-center">
       <button
@@ -91,7 +91,18 @@
       </button>
     </div>
     <div
-      v-show="!loaded || loading"
+      v-if="matches.length === 0 && loaded && filtered === false"
+      class="col-span-12 text-center mb-2"
+    >
+      <h1 class="mb-2">No matches yet!</h1>
+      <p>Come back once a match has started!</p>
+    </div>
+    <div
+      v-show="
+        !loaded ||
+        loading ||
+        (matches.length === 0 && loaded && filtered === false)
+      "
       class="col-span-12 h-full items-center justify-center"
       :class="{ 'mt-7': !loaded }"
     >
@@ -181,9 +192,9 @@ export default Vue.extend({
       selectedPhase: 0,
       selectedRound: 0,
       selectedWorld: 0,
-      outfitTagOrNameFilter: 
-        typeof this.$route.query.outfitName === "string" 
-          ? this.$route.query.outfitName 
+      outfitTagOrNameFilter:
+        typeof this.$route.query.outfitName === 'string'
+          ? this.$route.query.outfitName
           : '',
       loading: false,
       loaded: false,
@@ -228,19 +239,22 @@ export default Vue.extend({
       if (this.selectedWorld > 0) filter.world = this.selectedWorld
       if (this.selectedPhase > 0) filter.phase = this.selectedPhase
       if (this.selectedRound > 0) {
-        if(filter.phase === Phase.PLAYOFFS && this.selectedRound > 2) {
-          this.selectedRound = 2;
+        if (filter.phase === Phase.PLAYOFFS && this.selectedRound > 2) {
+          this.selectedRound = 2
         }
         filter.round = this.selectedRound
-        filter.round += filter.phase === Phase.PLAYOFFS ? 4 : 0;
-        if(filter.phase === Phase.CHAMPIONSHIPS) {
-          filter.round = undefined;
+        filter.round += filter.phase === Phase.PLAYOFFS ? 4 : 0
+        if (filter.phase === Phase.CHAMPIONSHIPS) {
+          filter.round = undefined
         }
       }
       if (this.selectedVictor !== Team.NONE) filter.victor = this.selectedVictor
-      if (this.selectedRedFaction !== Faction.NONE) filter.redTeamFaction = this.selectedRedFaction
-      if (this.selectedBlueFaction !== Faction.NONE) filter.blueTeamFaction = this.selectedBlueFaction
-      if (this.outfitTagOrNameFilter !== '') filter.outfitNameOrTag = this.outfitTagOrNameFilter
+      if (this.selectedRedFaction !== Faction.NONE)
+        filter.redTeamFaction = this.selectedRedFaction
+      if (this.selectedBlueFaction !== Faction.NONE)
+        filter.blueTeamFaction = this.selectedBlueFaction
+      if (this.outfitTagOrNameFilter !== '')
+        filter.outfitNameOrTag = this.outfitTagOrNameFilter
       // if (
       //   this.selectedDateFrom !== this.dateNow &&
       //   this.selectedDateTo !== this.dateNow
