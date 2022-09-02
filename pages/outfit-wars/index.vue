@@ -448,16 +448,26 @@ export default Vue.extend({
           record.outfit.id
         )
 
-        const score = parseInt(record.rankingParameters.TiebreakerPoints)
-        const wins = parseInt(record.rankingParameters.Wins)
-        const defeats = parseInt(record.rankingParameters.Losses)
+        let score = parseInt(record.rankingParameters.TiebreakerPoints, 10)
+        let wins = parseInt(record.rankingParameters.Wins, 10)
+        let defeats = parseInt(record.rankingParameters.Losses, 10)
+
+        if (isNaN(score)) {
+          score = 0
+        }
+        if (isNaN(wins)) {
+          wins = 0
+        }
+        if (isNaN(defeats)) {
+          defeats = 0
+        }
 
         let metricsString = ''
 
         if (parseInt(record.rankingParameters.MatchesPlayed) > 0) {
-          metricsString = `<b>${score || '???'} points</b> <br>${wins || '?'} ${
+          metricsString = `<b>${score} points</b> <br>${wins} ${
             wins !== 1 ? 'wins' : 'win'
-          } | ${defeats || '?'} ${defeats !== 1 ? 'defeats' : 'defeat'}`
+          } | ${defeats} ${defeats !== 1 ? 'defeats' : 'defeat'}`
         } else {
           metricsString = 'Not yet played a match'
         }
