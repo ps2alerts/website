@@ -71,9 +71,11 @@
       </div>
     </div>
 
-    <div class="col-span-12 border-t border-t-gray-500"></div>
+    <div class="col-span-12 border-t border-t-gray-500">
+      <span class="grayscale hidden"></span>
+    </div>
     <div class="col-span-12 lg:col-span-8 lg:col-start-3">
-      <div class="grid grid-cols-7 text-center">
+      <div class="grid grid-cols-7 text-center my-4">
         <div class="col-span-4 grid grid-cols-4 border-r border-r-gray-600">
           <div
             class="col-span-4 text-center"
@@ -244,7 +246,7 @@
     <!-- server outfit lists end -->
 
     <!-- brackets -->
-    <div v-if="loaded" class="col-span-12 mb-2">
+    <div v-if="loaded" class="col-span-12 mb-4">
       <h1 class="text-title text-center">Brackets</h1>
       <v-tabs v-model="activeBracketTab" centered grow dark show-arrows>
         <v-tabs-slider></v-tabs-slider>

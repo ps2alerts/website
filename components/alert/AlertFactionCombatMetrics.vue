@@ -255,6 +255,7 @@ import ApiRequest from '@/api-request'
 import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceFactionCombatAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceFactionCombatAggregateResponseInterface'
 import { Endpoints } from '@/constants/Endpoints'
+import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 
 export default Vue.extend({
   name: 'AlertFactionCombat',
@@ -292,7 +293,10 @@ export default Vue.extend({
       return this.outfitwar.outfitwars?.teams?.blue?.tag ?? 'Blue'
     },
     isOutfitWar(): boolean {
-      return !!this.outfitwar?.instanceId
+      return (
+        this.outfitwar?.ps2AlertsEventType ===
+        Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+      )
     },
   },
   watch: {

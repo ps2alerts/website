@@ -7,6 +7,7 @@
     <div v-if="loaded" class="grid grid-cols-12 gap-2">
       <AlertResult
         :alert="alert"
+        :outfitwar="alert"
         :update-countdown-percent="updateCountdownPercent"
         class="2xl:order-first"
       />
