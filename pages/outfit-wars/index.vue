@@ -274,6 +274,14 @@
     <!-- brackets -->
     <div v-if="loaded" class="col-span-12 mb-4">
       <h1 class="text-title text-center">Brackets</h1>
+      <div
+        class="bg-red-700 border-red-500 border p-4 my-4 text-center rounded"
+      >
+        <p>
+          Round 2 showing up in brackets for outfits who have played matches is
+          a bug as we don't know their line-ups yet. This will be fixed soon.
+        </p>
+      </div>
       <v-tabs v-model="activeBracketTab" centered grow dark show-arrows>
         <v-tabs-slider></v-tabs-slider>
 
