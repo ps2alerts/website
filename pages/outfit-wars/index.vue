@@ -147,6 +147,13 @@
 
     <div class="col-span-12 pt-2 border-t border-t-gray-500">
       <h1 class="text-title text-center">Rankings</h1>
+
+      <div
+        class="bg-amber-700 border-red-500 border w-full p-4 my-4 text-center rounded"
+      >
+        There are currently issues with the display of rankings and brackets, as
+        our data source is currently corrupted. This will be fixed soon.
+      </div>
       <p>
         <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
         Is your outfit logo missing?
