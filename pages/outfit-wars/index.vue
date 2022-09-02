@@ -149,10 +149,18 @@
       <h1 class="text-title text-center">Rankings</h1>
 
       <div
-        class="bg-amber-700 border-red-500 border w-full p-4 my-4 text-center rounded"
+        class="bg-red-700 border-red-500 border w-full p-4 my-4 text-center rounded"
       >
+        <p class="mb-2"></p>
         There are currently issues with the display of rankings and brackets, as
-        our data source is currently corrupted. This will be fixed soon.
+        our data source is currently corrupted. This will be fixed soon. For
+        more promptly updates please check
+        <a
+          class="text-amber-500"
+          href="https://discord.com/channels/708061542649954315/736217815870079018"
+          >the announcements channel on the PS2A Discord</a
+        >.
+        <p class="text-sm">Updated 20:45 UTC</p>
       </div>
       <p>
         <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
