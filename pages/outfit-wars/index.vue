@@ -160,6 +160,12 @@
       <p class="text-xs mb-2">
         Shoutout to [VODE] MidddNC for providing access to logos!
       </p>
+      <p class="text-sm mb-2">
+        <font-awesome-icon icon="['fas', 'info']"></font-awesome-icon>
+        <b>Where's SolTech?</b> Unfortunately data events from SolTech has been
+        broken since around March. <br />We will unfortunately not be supporting
+        SolTech this season.
+      </p>
     </div>
     <!-- Server outfit lists -->
     <div
@@ -233,10 +239,12 @@
                 </v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
-                <NuxtLink :to="'/outfit-wars/matches?outfitName=' + outfit.name">
-                <v-btn icon>
-                  <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-                </v-btn>
+                <NuxtLink
+                  :to="'/outfit-wars/matches?outfitName=' + outfit.name"
+                >
+                  <v-btn icon>
+                    <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
+                  </v-btn>
                 </NuxtLink>
               </v-list-item-action>
             </v-list-item>
