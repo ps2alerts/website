@@ -84,25 +84,25 @@
             Qualifiers
           </div>
           <div
-            class="p-2 mx-0.5 rounded-xl col-span-1"
+            class="p-2 mx-0.5 rounded-xl col-span-1 border"
             :class="loaded ? roundClasses(1) : ''"
           >
             1
           </div>
           <div
-            class="p-2 mx-0.5 rounded-xl col-span-1"
+            class="p-2 mx-0.5 rounded-xl col-span-1 border"
             :class="loaded ? roundClasses(2) : ''"
           >
             2
           </div>
           <div
-            class="p-2 mx-0.5 rounded-xl col-span-1"
+            class="p-2 mx-0.5 rounded-xl col-span-1 border"
             :class="loaded ? roundClasses(3) : ''"
           >
             3
           </div>
           <div
-            class="p-2 mx-0.5 rounded-xl col-span-1"
+            class="p-2 mx-0.5 rounded-xl col-span-1 border"
             :class="loaded ? roundClasses(4) : ''"
           >
             4
@@ -116,13 +116,13 @@
             Playoffs
           </div>
           <div
-            class="p-2 mx-0.5 rounded-xl col-span-1"
+            class="p-2 mx-0.5 rounded-xl col-span-1 border"
             :class="loaded ? roundClasses(5) : ''"
           >
             5
           </div>
           <div
-            class="p-2 mx-0.5 rounded-xl col-span-1"
+            class="p-2 mx-0.5 rounded-xl col-span-1 border"
             :class="loaded ? roundClasses(6) : ''"
           >
             6
@@ -585,19 +585,23 @@ export default Vue.extend({
         }
       })
 
-      const currentRound = roundList[0][0]
+      // const currentRound = roundList[0][0]
+
+      const currentRound = 4
 
       // If now
       if (round === currentRound) {
         return {
           'animate-pulse': true,
           'bg-cyan-700': true,
+          'border-cyan-400': true,
         }
       }
       // If in the past
       if (round < currentRound) {
         return {
           'bg-cyan-900': true,
+          'border-cyan-600': true,
         }
       }
 
@@ -605,6 +609,7 @@ export default Vue.extend({
       if (round > currentRound) {
         return {
           'bg-gray-700': true,
+          'border-gray-600': true,
         }
       }
     },
