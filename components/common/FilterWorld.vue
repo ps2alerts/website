@@ -70,7 +70,7 @@ export default Vue.extend({
     options() {
       if (this.outfitWars) {
         const owWorlds = pcWorldArray
-        owWorlds.splice(4, 1)
+        owWorlds.splice(4, 2)
         owWorlds.sort((a: number, b: number) => {
           const nameA: string = worldNameFilter(a)
           const nameB: string = worldNameFilter(b)

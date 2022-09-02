@@ -40,9 +40,46 @@
       <FilterVictor
         :victor-filter="selectedVictor"
         :disabled="loading"
-        :outfit-wars="true"
+        :outfitWars="true"
         @victor-changed="updateVictor"
       />
+    </div>
+    <div class="col-span-6 lg:col-span-3 lg:col-start-4">
+      <FilterFaction
+        :faction-filter="selectedRedFaction"
+        :disabled="loading"
+        label="Red Team Faction"
+        @faction-changed="updateRedFaction"
+      />
+    </div>
+    <div class="col-span-6 lg:col-span-3 lg:col-start-7">
+      <FilterFaction
+        :faction-filter="selectedBlueFaction"
+        :disabled="loading"
+        label="Blue Team Faction"
+        @faction-changed="updateBlueFaction"
+      />
+    </div>
+    <div class="col-span-12 lg:col-span-4 lg:col-start-5">
+      <div class="mb-2">
+          <input
+            id="outfit-name"
+            v-model="outfitTagOrNameFilter"
+            class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
+            type="text"
+            placeholder="Outfit Tag or Name..."
+            aria-label="Outfit Tag"
+            @keydown="$event.stopImmediatePropagation()"
+            @blur="filterResults"
+            v-on:keyup.enter="filterResults"
+          />
+          <label
+            class="text-center text-sm"
+            for="outfit-name"
+            :class="{ 'text-gray-600': loading }"
+            >Outfit Name</label
+          >
+        </div>
     </div>
     <div class="col-span-12 text-center">
       <button
@@ -105,6 +142,7 @@ import Vue from 'vue'
 import MetaHead from '~/components/MetaHead.vue'
 import FilterPhase from '~/components/common/FilterPhase.vue'
 import FilterRound from '~/components/common/FilterRound.vue'
+import FilterFaction from '~/components/common/FilterFaction.vue'
 import FilterVictor from '~/components/common/FilterVictor.vue'
 import FilterWorld from '~/components/common/FilterWorld.vue'
 import { World } from '@/ps2alerts-constants/world'
@@ -114,11 +152,13 @@ import ApiRequest from '~/api-request'
 import { OutfitWarsParamsInterface } from '~/interfaces/OutfitWarsParamsInterface'
 import { Team } from '~/ps2alerts-constants/outfitwars/team'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
+import { Faction } from '~/ps2alerts-constants/faction'
 
 export default Vue.extend({
   name: 'OutfitWarsMatches',
   components: {
     MetaHead,
+    FilterFaction,
     FilterPhase,
     FilterRound,
     FilterVictor,
@@ -136,9 +176,12 @@ export default Vue.extend({
       maximumFilteredLength: 300,
       maximumUnfilteredLength: 100,
       selectedVictor: 0,
+      selectedRedFaction: 0,
+      selectedBlueFaction: 0,
       selectedPhase: 0,
       selectedRound: 0,
       selectedWorld: 0,
+      outfitTagOrNameFilter: '',
       loading: false,
       loaded: false,
       filtered: false,
@@ -192,6 +235,9 @@ export default Vue.extend({
         }
       }
       if (this.selectedVictor !== Team.NONE) filter.victor = this.selectedVictor
+      if (this.selectedRedFaction !== Faction.NONE) filter.redTeamFaction = this.selectedRedFaction
+      if (this.selectedBlueFaction !== Faction.NONE) filter.blueTeamFaction = this.selectedBlueFaction
+      if (this.outfitTagOrNameFilter !== '') filter.outfitNameOrTag = this.outfitTagOrNameFilter
       // if (
       //   this.selectedDateFrom !== this.dateNow &&
       //   this.selectedDateTo !== this.dateNow
@@ -301,8 +347,16 @@ export default Vue.extend({
       this.selectedRound = round
       this.filterResults()
     },
-    updateVictor(victor: number): void {
-      this.selectedVictor = victor
+    updateVictor(faction: number): void {
+      this.selectedVictor = faction
+      this.filterResults()
+    },
+    updateRedFaction(faction: number): void {
+      this.selectedRedFaction = faction
+      this.filterResults()
+    },
+    updateBlueFaction(faction: number): void {
+      this.selectedBlueFaction = faction
       this.filterResults()
     },
     async filterResults(force = false): Promise<void> {
@@ -319,6 +373,9 @@ export default Vue.extend({
       this.selectedPhase = Phase.ANY
       this.selectedRound = 0
       this.selectedVictor = Team.NONE
+      this.selectedRedFaction = Faction.NONE
+      this.selectedBlueFaction = Faction.NONE
+      this.outfitTagOrNameFilter = ''
       // this.selectedDateFrom = now
       // this.selectedDateTo = now
       // this.dateNow = now
