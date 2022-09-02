@@ -69,7 +69,7 @@
           class="w-full flex flex-col justify-center items-center flex-wrap"
         >
           <h1>
-            Awating data...
+            Awaiting data...
             <font-awesome-icon
               :icon="['fa', 'sync']"
               class="animate-spin"
