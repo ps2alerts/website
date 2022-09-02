@@ -8,7 +8,7 @@
     :event="match && match.state !== 0 ? 'click' : ''"
   >
     <div
-      class="flex gap-2 p-2 mb-2 bg-tint rounded relative hover bg-[#1e1e1e]"
+      class="flex gap-2 p-2 mb-2 border border-gray-600 hover:border-gray-400 bg-tint rounded relative hover bg-[#1e1e1e]"
     >
       <div class="self-center">
         <object
