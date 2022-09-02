@@ -244,7 +244,7 @@
     <!-- server outfit lists end -->
 
     <!-- brackets -->
-    <div v-if="loaded" class="col-span-12 mb-2">
+    <div v-if="loaded" class="col-span-12 mb-4">
       <h1 class="text-title text-center">Brackets</h1>
       <v-tabs v-model="activeBracketTab" centered grow dark show-arrows>
         <v-tabs-slider></v-tabs-slider>
