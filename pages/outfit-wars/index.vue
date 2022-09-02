@@ -85,25 +85,25 @@
           </div>
           <div
             class="p-2 mx-0.5 rounded-xl col-span-1"
-            :class="roundClasses(1)"
+            :class="loaded ? roundClasses(1) : ''"
           >
             1
           </div>
           <div
             class="p-2 mx-0.5 rounded-xl col-span-1"
-            :class="roundClasses(2)"
+            :class="loaded ? roundClasses(2) : ''"
           >
             2
           </div>
           <div
             class="p-2 mx-0.5 rounded-xl col-span-1"
-            :class="roundClasses(3)"
+            :class="loaded ? roundClasses(3) : ''"
           >
             3
           </div>
           <div
             class="p-2 mx-0.5 rounded-xl col-span-1"
-            :class="roundClasses(4)"
+            :class="loaded ? roundClasses(4) : ''"
           >
             4
           </div>
@@ -117,13 +117,13 @@
           </div>
           <div
             class="p-2 mx-0.5 rounded-xl col-span-1"
-            :class="roundClasses(5)"
+            :class="loaded ? roundClasses(5) : ''"
           >
             5
           </div>
           <div
             class="p-2 mx-0.5 rounded-xl col-span-1"
-            :class="roundClasses(6)"
+            :class="loaded ? roundClasses(6) : ''"
           >
             6
           </div>
@@ -137,7 +137,7 @@
           </div>
           <div
             class="p-2 mx-0.5 rounded-xl col-span-1"
-            :class="roundClasses(7)"
+            :class="loaded ? roundClasses(7) : ''"
           >
             7
           </div>
@@ -561,7 +561,32 @@ export default Vue.extend({
       return FactionTextClass(faction)
     },
     roundClasses(round: number) {
-      const currentRound = this.rounds.length
+      const roundCounts = new Map<number, number>();
+      for(const ranking of this.allRankings) {
+        if(!roundCounts.has(ranking.round)) {
+          roundCounts.set(ranking.round, 1)
+        } else {
+          const current = roundCounts.get(ranking.round);
+          if(current !== undefined)
+            roundCounts.set(ranking.round, current + 1)
+        }
+      }
+      const roundList: number[][] = [];
+      for(const round of this.rounds) {
+        const count = roundCounts.get(round) ?? 0;
+        roundList.push([round, count])
+      }
+      roundList.sort((a, b) => {
+        if(a[1] > b[1]) {
+          return -1;
+        } else if (a[1] === b[1]) {
+          return a[0] > b[0] ? -1 : 1;
+        } else {
+          return 1;
+        }
+      })
+      console.log(roundList);
+      const currentRound = roundList[0][0];
       // If now
       if (round === currentRound) {
         return {
