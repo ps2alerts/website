@@ -37,24 +37,22 @@
               Welcome to Outfit Wars soldier! Saddle up and add some extra snow
               boots to your gear, you're shipping off to Nexus!
             </p>
-            <div class="mx-4">
+            <div class="mx-4 mb-2">
               <p class="mb-2">
                 This year's event will consist of 4 qualifier rounds, 2
                 play-offs then finally the championships to determine the podium
                 finishes.
               </p>
               <p class="mb-2">
-                This season, <b>{{ totalOutfits }}</b> outfits
-                <span>
-                  (
-                  <span class="vs">{{ factionCount[1] }}</span>
+                This season, <b>{{ totalOutfits }}</b> outfits (<span>
+                  <span class="vs rounded-lg p-0.5">{{ factionCount[1] }}</span>
                   /
-                  <span class="tr">{{ factionCount[3] }}</span>
+                  <span class="tr rounded-lg p-0.5">{{ factionCount[3] }}</span>
                   /
-                  <span class="nc">{{ factionCount[2] }}</span>
-                  )
-                </span>
-                are battling on Nexus!
+                  <span class="nc rounded-lg p-0.5">{{
+                    factionCount[2]
+                  }}</span> </span
+                >) are battling on Nexus!
               </p>
               <p class="text-sm">
                 Massive thanks to [UN17] RiderAnton for
@@ -73,7 +71,79 @@
       </div>
     </div>
 
-    <div class="col-span-12 pt-2 mt-2 border-t border-t-gray-500">
+    <div class="col-span-12 border-t border-t-gray-500"></div>
+    <div class="col-span-12 lg:col-span-8 lg:col-start-3">
+      <div class="grid grid-cols-7 text-center">
+        <div class="col-span-4 grid grid-cols-4 border-r border-r-gray-600">
+          <div
+            class="col-span-4 text-center"
+            :class="roundTextClass('qualifiers')"
+          >
+            Qualifiers
+          </div>
+          <div
+            class="p-2 mx-0.5 rounded-xl col-span-1"
+            :class="roundClasses(1)"
+          >
+            1
+          </div>
+          <div
+            class="p-2 mx-0.5 rounded-xl col-span-1"
+            :class="roundClasses(2)"
+          >
+            2
+          </div>
+          <div
+            class="p-2 mx-0.5 rounded-xl col-span-1"
+            :class="roundClasses(3)"
+          >
+            3
+          </div>
+          <div
+            class="p-2 mx-0.5 rounded-xl col-span-1"
+            :class="roundClasses(4)"
+          >
+            4
+          </div>
+        </div>
+        <div class="col-span-2 grid grid-cols-2 border-r border-r-gray-600">
+          <div
+            class="col-span-2 text-center"
+            :class="roundTextClass('playoffs')"
+          >
+            Playoffs
+          </div>
+          <div
+            class="p-2 mx-0.5 rounded-xl col-span-1"
+            :class="roundClasses(5)"
+          >
+            5
+          </div>
+          <div
+            class="p-2 mx-0.5 rounded-xl col-span-1"
+            :class="roundClasses(6)"
+          >
+            6
+          </div>
+        </div>
+        <div class="col-span-1 grid grid-cols-1">
+          <div
+            class="col-span-2 text-center"
+            :class="roundTextClass('championships')"
+          >
+            Finals
+          </div>
+          <div
+            class="p-2 mx-0.5 rounded-xl col-span-1"
+            :class="roundClasses(7)"
+          >
+            7
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-span-12 pt-2 border-t border-t-gray-500">
       <h1 class="text-title text-center">Rankings</h1>
       <p>
         <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
@@ -116,24 +186,31 @@
           <div class="py-2 bg-tint">
             <p class="text-2xl text-center">{{ world | worldName }}</p>
             <p v-if="currentWorldRankingsMap.has(world)" class="text-sm">
-              {{ worldRankings(world, true).length }} outfits signed up
-              <span>
-                (
-                <span class="vs">{{ factionCountByWorld.get(world).vs }}</span>
+              {{ worldRankings(world, true).length }} outfits signed up (<span>
+                <span class="vs rounded-lg p-0.5">{{
+                  factionCountByWorld.get(world).vs
+                }}</span>
                 /
-                <span class="tr">{{ factionCountByWorld.get(world).tr }}</span>
+                <span class="tr rounded-lg p-0.5">{{
+                  factionCountByWorld.get(world).tr
+                }}</span>
                 /
-                <span class="nc">{{ factionCountByWorld.get(world).nc }}</span>
-                )
-              </span>
+                <span class="nc rounded-lg p-0.5">{{
+                  factionCountByWorld.get(world).nc
+                }}</span> </span
+              >)
             </p>
           </div>
 
           <v-list subheader max-height="400" class="overflow-y-auto">
             <v-list-item
-              v-for="outfit in worldRankings(world, true)"
+              v-for="(outfit, index) in worldRankings(world, true)"
               :key="outfit.id"
+              class="border-b border-b-gray-600"
             >
+              <div class="mr-2 bg-gray-500 px-2 rounded-xl">
+                {{ index + 1 }}
+              </div>
               <object
                 :data="outfit.outfitImageUrl"
                 type="image/png"
@@ -154,11 +231,11 @@
                 </v-list-item-subtitle>
               </v-list-item-content>
 
-              <v-list-item-action>
-                <v-btn icon>
-                  <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-                </v-btn>
-              </v-list-item-action>
+              <!--              <v-list-item-action>-->
+              <!--                <v-btn icon>-->
+              <!--                  <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>-->
+              <!--                </v-btn>-->
+              <!--              </v-list-item-action>-->
             </v-list-item>
           </v-list>
         </v-card>
@@ -479,6 +556,43 @@ export default Vue.extend({
     },
     formatOutfitFaction(faction: Faction): object {
       return FactionTextClass(faction)
+    },
+    roundClasses(round: number) {
+      const currentRound = this.rounds.length
+      // If now
+      if (round === currentRound) {
+        return {
+          'animate-pulse': true,
+          'bg-cyan-700': true,
+        }
+      }
+      // If in the past
+      if (round < currentRound) {
+        return {
+          'bg-cyan-900': true,
+        }
+      }
+
+      // If in the future
+      if (round > currentRound) {
+        return {
+          'bg-cyan-900': true,
+          grayscale: true,
+        }
+      }
+    },
+    roundTextClass(phase: string) {
+      const currentRound = this.rounds.length
+
+      if (currentRound <= 4 && phase === 'qualifiers') {
+        return { 'font-bold': true }
+      }
+      if (currentRound < 7 && phase === 'playoffs') {
+        return { 'font-bold': true }
+      }
+      if (currentRound === 7 && phase === 'championships') {
+        return { 'font-bold': true }
+      }
     },
   },
 })

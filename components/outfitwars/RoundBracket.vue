@@ -4,7 +4,7 @@
       <div class="text-xl">
         {{ phase | phaseName }}
       </div>
-      <div v-if="phase !== CHAMPIONSHIPS" class="text-xs">
+      <div v-if="phase !== CHAMPIONSHIPS" class="text-sm">
         Round {{ round | owRoundByPhase(phase) }}
       </div>
       <div v-else class="text-xs">Final</div>
