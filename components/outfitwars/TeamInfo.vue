@@ -15,16 +15,16 @@
       Waiting for the first combat event...
     </div>
     <div v-else class="flex relative justify-between items-center flex-1">
-      <div
-        class="absolute -top-4 -left-4 w-4 md:w-6 xl:w-8 2xl:w-10 rounded"
-        :class="factionBackground(outfitwar.outfitwars.teams.red.faction)"
-      >
-        <img
-          class="w-4/5 m-auto"
-          :src="outfitwar.outfitwars.teams.red.faction | factionImage"
-          :alt="outfitwar.outfitwars.teams.red.faction | factionShortName"
-        />
-      </div>
+      <!--      <div-->
+      <!--        class="absolute -top-4 -left-4 w-4 md:w-6 xl:w-8 2xl:w-10 rounded"-->
+      <!--        :class="factionBackground(outfitwar.outfitwars.teams.red.faction)"-->
+      <!--      >-->
+      <!--        <img-->
+      <!--          class="w-4/5 m-auto"-->
+      <!--          :src="outfitwar.outfitwars.teams.red.faction | factionImage"-->
+      <!--          :alt="outfitwar.outfitwars.teams.red.faction | factionShortName"-->
+      <!--        />-->
+      <!--      </div>-->
       <TeamLogo
         class="self-center place-self-center w-12 lg:w-24 2xl:w-32"
         :outfit-id="outfitwar.outfitwars.teams.red.id"
@@ -48,23 +48,21 @@
             {{ outfitwar.outfitwars.teams.red.faction | factionName }}
           </div>
           <div
-            class="text-xs label green"
             v-if="outfitwar.result && outfitwar.result.victor === 3"
+            class="text-xs label green"
           >
             Winner!
           </div>
         </div>
         <div class="absolute flex inset-0 place-content-center">
-          <div class="self-center xl:text-xl 2xl:text-2xl 3xl:text-3xl">
-            vs.
-          </div>
+          <div class="self-center xl:text-xl 2xl:text-2xl 3xl:text-3xl">vs</div>
         </div>
         <div
           class="absolute bottom-0 right-2 text-right text-xs md:text-[1.5vw] xl:text-xl 2xl:text-2xl mb-2 lg:mb-0"
         >
           <div
-            class="text-xs label green"
             v-if="outfitwar.result && outfitwar.result.victor === 2"
+            class="text-xs label green"
           >
             Winner!
           </div>
@@ -89,16 +87,16 @@
         :badge-left="true"
         :loser="outfitwar.result && outfitwar.result.victor === 3"
       />
-      <div
-        class="absolute -right-4 -bottom-4 w-4 md:w-6 xl:w-8 2xl:w-10 rounded"
-        :class="factionBackground(outfitwar.outfitwars.teams.blue.faction)"
-      >
-        <img
-          class="w-4/5 m-auto"
-          :src="outfitwar.outfitwars.teams.blue.faction | factionImage"
-          :alt="outfitwar.outfitwars.teams.blue.faction | factionShortName"
-        />
-      </div>
+      <!--      <div-->
+      <!--        class="absolute -right-4 -bottom-4 w-4 md:w-6 xl:w-8 2xl:w-10 rounded"-->
+      <!--        :class="factionBackground(outfitwar.outfitwars.teams.blue.faction)"-->
+      <!--      >-->
+      <!--        <img-->
+      <!--          class="w-4/5 m-auto"-->
+      <!--          :src="outfitwar.outfitwars.teams.blue.faction | factionImage"-->
+      <!--          :alt="outfitwar.outfitwars.teams.blue.faction | factionShortName"-->
+      <!--        />-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
