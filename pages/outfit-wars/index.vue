@@ -71,9 +71,11 @@
       </div>
     </div>
 
-    <div class="col-span-12 border-t border-t-gray-500"></div>
+    <div class="col-span-12 border-t border-t-gray-500">
+      <span class="grayscale hidden"></span>
+    </div>
     <div class="col-span-12 lg:col-span-8 lg:col-start-3">
-      <div class="grid grid-cols-7 text-center">
+      <div class="grid grid-cols-7 text-center my-4">
         <div class="col-span-4 grid grid-cols-4 border-r border-r-gray-600">
           <div
             class="col-span-4 text-center"

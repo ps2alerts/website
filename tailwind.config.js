@@ -10,7 +10,7 @@ module.exports = {
     'constants/**/*.ts',
     'filters/**/*.ts',
   ],
-  safelist: ['.nuxt-link-exact-active', '.grayscale'],
+  safelist: ['.nuxt-link-exact-active'],
   prefix: '',
   important: false,
   separator: ':',
