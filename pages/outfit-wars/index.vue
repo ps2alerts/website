@@ -517,8 +517,10 @@ export default Vue.extend({
 
       for (const world of this.worlds) {
         this.worldRankings(world).sort((a, b) => {
-          if((a.rankings.totalScore !== 0 && a.rankings.totalScore !== undefined) 
-              || (b.rankings.totalScore !== 0 && b.rankings.totalScore !== undefined)
+          if (
+            (a.rankings.totalScore !== 0 &&
+              a.rankings.totalScore !== undefined) ||
+            (b.rankings.totalScore !== 0 && b.rankings.totalScore !== undefined)
           ) {
             return b.rankings.totalScore - a.rankings.totalScore
           }
@@ -541,33 +543,36 @@ export default Vue.extend({
       currentOrUpdatingRound: boolean = false
     ): ParsedOutfitDataInterface[] {
       const worldRankings = this.currentWorldRankingsMap.get(world) ?? []
-      let toReturn: ParsedOutfitDataInterface[] = [];
+      let toReturn: ParsedOutfitDataInterface[] = []
       if (currentOrUpdatingRound) {
         const outfits = new Map<string, ParsedOutfitDataInterface>()
         const ids: string[] = []
-        for(const ranking of worldRankings) {
-          if(!outfits.has(ranking.id)) {
+        for (const ranking of worldRankings) {
+          const outfitExists = outfits.has(ranking.id)
+
+          if (!outfitExists) {
             // First time seeing the outfit, add it to the map
-            outfits.set(ranking.id, ranking);
+            outfits.set(ranking.id, ranking)
             ids.push(ranking.id) // this should stay sorted
-          } else if(outfits.get(ranking.id).round < ranking.round) {
-            // we've seen this outfit before, but the round in the map is from an earlier round, update
-            outfits.set(ranking.id, ranking);
           } else {
-            // Do nothing when we've seen the outfit before and this ranking is an older round
+            const outfit = outfits.get(ranking.id)
+            if (outfit && outfit.round < ranking.round) {
+              // we've seen this outfit before, but the round in the map is from an earlier round, update
+              outfits.set(ranking.id, ranking)
+            }
           }
         }
-        for(const id of ids) {
+        for (const id of ids) {
           const record = outfits.get(id)
-          if(record === undefined) {
+          if (record === undefined) {
             // eslint.......
-            console.error("Somehow this data we set just now is now undefined?")
+            console.error('Somehow this data we set just now is now undefined?')
             continue
           }
           toReturn.push(record)
         }
       } else {
-        toReturn = worldRankings;
+        toReturn = worldRankings
       }
       return toReturn
     },
@@ -638,7 +643,7 @@ export default Vue.extend({
       return roundList[0][0]
     },
     roundClasses(round: number) {
-      const currentRound = this.getCurrentRound();
+      const currentRound = this.getCurrentRound()
 
       // If now
       if (round === currentRound) {
