@@ -232,12 +232,13 @@
                 <v-list-item-subtitle v-html="outfit.metricsString">
                 </v-list-item-subtitle>
               </v-list-item-content>
-
-              <!--              <v-list-item-action>-->
-              <!--                <v-btn icon>-->
-              <!--                  <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>-->
-              <!--                </v-btn>-->
-              <!--              </v-list-item-action>-->
+              <v-list-item-action>
+                <NuxtLink :to="'/outfit-wars/matches?outfitName=' + outfit.name">
+                <v-btn icon>
+                  <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
+                </v-btn>
+                </NuxtLink>
+              </v-list-item-action>
             </v-list-item>
           </v-list>
         </v-card>
