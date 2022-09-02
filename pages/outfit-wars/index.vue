@@ -585,9 +585,7 @@ export default Vue.extend({
         }
       })
 
-      // const currentRound = roundList[0][0]
-
-      const currentRound = 4
+      const currentRound = roundList[0][0]
 
       // If now
       if (round === currentRound) {
