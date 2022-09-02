@@ -81,7 +81,7 @@
             class="col-span-4 text-center"
             :class="roundTextClass('qualifiers')"
           >
-            Qualifiers
+            > Qualifiers
           </div>
           <div
             class="p-2 mx-0.5 rounded-xl col-span-1"
@@ -133,7 +133,7 @@
             class="col-span-2 text-center"
             :class="roundTextClass('championships')"
           >
-            Finals
+            > Finals
           </div>
           <div
             class="p-2 mx-0.5 rounded-xl col-span-1"
@@ -615,7 +615,7 @@ export default Vue.extend({
       if (currentRound <= 4 && phase === 'qualifiers') {
         return { 'font-bold': true }
       }
-      if (currentRound < 7 && phase === 'playoffs') {
+      if (currentRound > 4 && phase === 'playoffs') {
         return { 'font-bold': true }
       }
       if (currentRound === 7 && phase === 'championships') {
