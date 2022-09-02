@@ -181,7 +181,10 @@ export default Vue.extend({
       selectedPhase: 0,
       selectedRound: 0,
       selectedWorld: 0,
-      outfitTagOrNameFilter: '',
+      outfitTagOrNameFilter: 
+        typeof this.$route.query.outfitName === "string" 
+          ? this.$route.query.outfitName 
+          : '',
       loading: false,
       loaded: false,
       filtered: false,
