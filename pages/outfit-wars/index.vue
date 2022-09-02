@@ -216,8 +216,10 @@
               :key="outfit.id"
               class="border-b border-b-gray-600"
             >
-              <div class="mr-2 bg-gray-500 px-2 rounded-xl">
-                {{ index + 1 }}
+              <div class="w-10 text-center mr-2">
+                <div class="bg-gray-500 px-2 rounded-xl m-auto w-min">
+                  {{ index + 1 }}
+                </div>
               </div>
               <object
                 :data="outfit.outfitImageUrl"
