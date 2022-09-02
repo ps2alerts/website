@@ -4,9 +4,14 @@
       <div v-if="alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022">
         <h1 class="text-4xl">Alert #{{ alert.instanceId }}</h1>
       </div>
-      <div v-if="alert.ps2AlertsEventType === OUTFIT_WARS_AUG_2022 && alert.outfitwars">
+      <div
+        v-if="
+          alert.ps2AlertsEventType === OUTFIT_WARS_AUG_2022 && alert.outfitwars
+        "
+      >
         <h1 class="text-3xl">
-          {{ alert.world | worldName }} {{ alert.outfitwars.phase | phaseName }} Round
+          {{ alert.world | worldName }}
+          {{ alert.outfitwars.phase | phaseName }} Round
           {{ alert.outfitwars.round | owRoundByPhase(alert.outfitwars.phase) }}
         </h1>
       </div>
@@ -111,6 +116,11 @@ export default Vue.extend({
       default: {},
       required: true,
     },
+    outfitwar: {
+      type: Object as () => InstanceOutfitWarsResponseInterface,
+      default: {},
+      required: false,
+    },
     updateCountdownPercent: {
       type: Number,
       default: 0,
@@ -124,19 +134,27 @@ export default Vue.extend({
       CHAMPIONSHIPS: Phase.CHAMPIONSHIPS,
     }
   },
-  mounted() {
-    console.log(this.alert);
-  },
   computed: {
     victorText(): string {
       const isOutfitWars =
         this.alert.ps2AlertsEventType ===
         Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
-      if(isOutfitWars && this.alert.result?.victor === Team.RED && this.alert.outfitwars?.teams?.red) {
-        return `[${this.alert.outfitwars.teams.red.tag}] ${this.alert.outfitwars.teams.red.name.trim()} wins!`
-      }
-      else if(isOutfitWars && this.alert.result?.victor === Team.BLUE && this.alert.outfitwars?.teams?.blue) {
-        return `[${this.alert.outfitwars.teams.blue.tag}] ${this.alert.outfitwars.teams.blue.name.trim()} wins!`
+      if (
+        isOutfitWars &&
+        this.alert.result?.victor === Team.RED &&
+        this.alert.outfitwars?.teams?.red
+      ) {
+        return `[${
+          this.alert.outfitwars.teams.red.tag
+        }] ${this.alert.outfitwars.teams.red.name.trim()} wins!`
+      } else if (
+        isOutfitWars &&
+        this.alert.result?.victor === Team.BLUE &&
+        this.alert.outfitwars?.teams?.blue
+      ) {
+        return `[${
+          this.alert.outfitwars.teams.blue.tag
+        }] ${this.alert.outfitwars.teams.blue.name.trim()} wins!`
       }
       return this.alert.state === Ps2AlertsEventState.STARTED
         ? 'In progress...'
@@ -158,6 +176,12 @@ export default Vue.extend({
         ...FactionBgClass(this.alert.result.victor),
       }
     },
+    isOutfitWar(): boolean {
+      return !!this.outfitwar?.instanceId
+    },
+  },
+  mounted() {
+    console.log(this.alert)
   },
 })
 </script>
