@@ -32,7 +32,7 @@
         </div>
 
         <div class="col-span-12 lg:col-span-8">
-          <div v-if="loaded">
+          <div v-if="loaded" class="flex flex-col h-full justify-center">
             <p class="text-2xl my-2">
               Welcome to Outfit Wars soldier! Saddle up and add some extra snow
               boots to your gear, you're shipping off to Nexus!
