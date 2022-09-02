@@ -604,8 +604,7 @@ export default Vue.extend({
       // If in the future
       if (round > currentRound) {
         return {
-          'bg-cyan-900': true,
-          grayscale: true,
+          'bg-gray-700': true,
         }
       }
     },
