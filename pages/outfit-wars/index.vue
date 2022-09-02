@@ -136,7 +136,7 @@
             Finals
           </div>
           <div
-            class="p-2 mx-0.5 rounded-xl col-span-1"
+            class="p-2 mx-0.5 rounded-xl col-span-1 border"
             :class="loaded ? roundClasses(7) : ''"
           >
             7
