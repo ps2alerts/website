@@ -151,16 +151,10 @@
       <div
         class="bg-red-700 border-red-500 border w-full p-4 my-4 text-center rounded"
       >
-        <p class="mb-2"></p>
-        Cobalt's scorings are currently not working in game, so our scores for
-        Cobalt will not update. This fault currently sits with RPG to fix.<br />
-        For further updates, please visit the
-        <a
-          class="text-amber-500"
-          href="https://discord.com/channels/708061542649954315/736217815870079018"
-          >the announcements channel on the PS2A Discord</a
-        >.
-        <p class="text-sm">Updated 2nd Sep 22:15 UTC</p>
+        Cobalt's scorings in game are currently broken, the scores below were
+        calculated from the datasource we use for the points and was manually
+        fixed. They are subject to change, take with a pinch of salt!
+        <p class="text-sm">Updated 2nd Sep 22:57 UTC</p>
       </div>
       <p>
         <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
