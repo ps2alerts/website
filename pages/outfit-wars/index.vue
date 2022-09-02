@@ -81,7 +81,7 @@
             class="col-span-4 text-center"
             :class="roundTextClass('qualifiers')"
           >
-            > Qualifiers
+            Qualifiers
           </div>
           <div
             class="p-2 mx-0.5 rounded-xl col-span-1"
@@ -133,7 +133,7 @@
             class="col-span-2 text-center"
             :class="roundTextClass('championships')"
           >
-            > Finals
+            Finals
           </div>
           <div
             class="p-2 mx-0.5 rounded-xl col-span-1"
