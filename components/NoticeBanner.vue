@@ -15,10 +15,11 @@
       <!--      <p class="text-sm">Updated: 14-Jul-22 08:10 UTC</p>-->
 
       <p>
-        PS2Alerts fully supports all Outfit Wars stats!
+        Full Outfit Wars tournament, match history and tournament wide
+        statistics is being collected!
         <NuxtLink to="/outfit-wars">
           <span class="label bg-red-600 hover:bg-red-500"
-            >Click here to visit the OW section</span
+            >Visit the OW section</span
           >
         </NuxtLink>
       </p>

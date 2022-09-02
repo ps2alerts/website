@@ -399,6 +399,14 @@
       }
     }
 
+    &.amber {
+      @apply bg-amber-600;
+
+      &:hover {
+        @apply bg-amber-500;
+      }
+    }
+
     &.gray {
       @apply bg-gray-500;
 

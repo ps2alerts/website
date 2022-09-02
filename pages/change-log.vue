@@ -4,7 +4,7 @@
     <div class="col-span-12 xl:col-span-10 xl:col-start-2">
       <div class="text-center h-full">
         <h1 class="text-title">Change Log</h1>
-        <p class="mt-1">Last updated: 2nd June 2022</p>
+        <p class="mt-1">Last updated: {{ posts[0].date }}</p>
         <v-expansion-panels
           v-model="panel"
           accordion
@@ -69,12 +69,44 @@ export default Vue.extend({
       pageTitle: 'Change Log',
       pageDesc: "See what's recently been released for PS2Alerts!",
       version: this.$config.version,
-      panel: [0, 1],
+      panel: [0],
       posts: [
         {
+          id: 14,
+          title: `v4.3.0 - Outfit Wars`,
+          date: '02/Sep/2022',
+          type: 'major-update',
+          body: `
+            <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+              <div>
+                <div class="text-center mb-4">
+                   <img
+                      src="/img/outfitwars-nexus.png"
+                      alt="Outfitwars Logo"
+                      class="inline-block mx-a rounded-xl w-72"
+                    />
+                  <h2 class="text-subtitle">Outfit Wars support has arrived!</h2>
+                  <p>Status: <span class="label amber">BETA / WIP</span></p>
+                  <a href="/outfit-wars" class="btn btn-lg hover:bg-red-500">Visit the OW section!</a>
+                </div>
+                <p>
+                    Welcome to Outfit Wars! In this release, PS2Alerts provides full support of statistics for Outfit Wars matches as well as the tournament overall. The section is split into 3, each providing different information about Outfit Wars.
+                </p>
+                <p>A massive shoutout must go to [UN17] RiderAnton for his huge contributions to this new set of features to PS2Alerts, without him the section would not be anywhere close as detailed nor possibly even working for OW release.</p>
+                <h2 class="text-subtitle">Rankings & Brackets</h2>
+                <p>The Rankings & Brackets page brings us an overview of the Outfit War in general, along with statistics on how many matches outfits have won / lost, and an estimation of their scorings and rank. You are able to click on the arrows for any outfit listed and view all of their matches.</p>
+                <p>Additionally we have shown a breakdown of the brackets, with full history of who fought whom alongside the result and a link to the match statistics.</p>
+                <h2 class="text-subtitle">Matches List</h2>
+                <p>Fairly self-explanatory, this is where all the matches for each outfit war will be listed. You're able to filter by Outfit, Team Faction (e.g. search for when VS was on the red / blue team), round, phase (e.g. all matches in Qualifiers) etc.</p>
+                <h2 class="text-subtitle">Statistics (WIP)</h2>
+                <p>While not fully ready for launch just yet, the Statistics section will show the overall stats for outfit wars, alongside outfit, player, weapon and vehicle specific statistics on a tournament level, also broken down by server. This will be released early next week as there will be no statistics to show off yet!</p>
+              </div>
+            </div>`,
+        },
+        {
           id: 13,
-          title: `v4.2.0 - the CALM release`,
-          date: '22/Jul/2022',
+          title: `v4.2.0 - Collect All Lost Messages (CALM) release`,
+          date: '22nd July 2022',
           type: 'major-update',
           body: `
             <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
@@ -135,9 +167,9 @@ export default Vue.extend({
         },
         {
           id: 12,
-          title: `v4.2.0-alpha-1 - XPM / XPM-PP Metrics, Facility Capture / Defences participation stats & Alert timer de-sync fix`,
-          date: 'TBA',
-          type: 'wip',
+          title: `v4.2.0-alpha-1 - XPM / XPM-PP Metrics`,
+          date: '14th July 2022',
+          type: 'minor-update',
           body: `
             <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
               <div>
@@ -152,7 +184,7 @@ export default Vue.extend({
               </div>
               <div>
                 <h2 class="text-xl">Player &amp; Outfit Facility Capture / Defences participation stats</h2>
-                <p>Status: <span class="label gray">WIP (initial phase)</span></p>
+                <p>Status: <span class="label red">Delayed until v4.4</span></p>
                 <p>With this update, we will bring an expansion to the Capture History system where each capture will show all players (and thus, outfits) present at the Capture / Defense of a base, along with rough population calculations. <b>Note</b>, there is a heavy caveat here that the data we receive is literally a snapshot of the base at the time, e.g. if some people have left the base ahead of the capture / defence of said base, they will not be registered.</p>
                 <p>In addition to showing the players on the Capture History, the facilities the player has been involved capturing will show up on the player's entry in the Player section. Outfits will also have their bases they were involved in capturing listed under their row in the Outfit section on each alert as well, along with the percentage of players present both on a same-faction and all outfits level.</p>
                 <p>Full list of additions can be see on the <a href="https://github.com/ps2alerts/website/issues/418" class="text-red-500">GitHub feature request.</a></p>
