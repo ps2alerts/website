@@ -22,24 +22,24 @@
           />
         </object>
       </div>
-      <div class="grid grid-cols-7 gap-2 justify-center grow">
+      <div class="grid grid-cols-7 gap-x-1 gap-y-2 justify-center grow">
         <div class="col-start-1 col-span-3 text-base mb-2 lg:mb-0">
           <div
             class="text-right mb-1"
             :class="formatOutfitFaction(rankings[0].faction)"
           >
-            {{ formatOutfitName(rankings[0].name.trim()) }}
+            {{ formatOutfitName(rankings[0].displayName.trim()) }}
           </div>
         </div>
         <div class="col-start-4 col-span-1 text-base mb-2 lg:mb-0">
-          <div class="text-center mb-1">vs.</div>
+          <div class="text-center mb-1">vs</div>
         </div>
         <div class="col-end-8 col-span-3 text-base mb-2 lg:mb-0">
           <div
             class="text-left mb-1"
             :class="formatOutfitFaction(rankings[1].faction)"
           >
-            {{ formatOutfitName(rankings[1].name.trim()) }}
+            {{ formatOutfitName(rankings[1].displayName.trim()) }}
           </div>
         </div>
         <!-- Using borders here for alignment - the FactionSegment bar is 1px taller than the Awaiting match text otherwise -->

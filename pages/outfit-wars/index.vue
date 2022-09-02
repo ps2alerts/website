@@ -225,7 +225,7 @@
               <v-list-item-content>
                 <v-list-item-title
                   :class="formatOutfitFaction(outfit.faction)"
-                  v-text="outfit.name"
+                  v-text="outfit.displayName"
                 ></v-list-item-title>
                 <v-list-item-subtitle v-html="outfit.metricsString">
                 </v-list-item-subtitle>
@@ -439,7 +439,8 @@ export default Vue.extend({
 
         const parsedOutfitData: ParsedOutfitDataInterface = {
           id: record.outfit.id,
-          name: `${outfitTagFormatted}${record.outfit.name}`,
+          displayName: `${outfitTagFormatted}${record.outfit.name}`,
+          name: record.outfit.name,
           matchStartTime: new Date(record.startTime),
           tag: record.outfit.tag ?? null,
           faction: record.outfit.faction,

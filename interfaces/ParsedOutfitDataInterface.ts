@@ -15,6 +15,7 @@ export interface RankingInterface {
 export interface ParsedOutfitDataInterface {
   id: string
   matchStartTime: Date
+  displayName: string
   name: string
   tag: string | null
   faction: Faction
