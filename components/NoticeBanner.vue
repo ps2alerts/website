@@ -15,8 +15,8 @@
       <!--      <p class="text-sm">Updated: 14-Jul-22 08:10 UTC</p>-->
 
       <p>
-        Full Outfit Wars tournament, match history and tournament wide
-        statistics is being collected!
+        Full Outfit Wars rankings, match history and tournament wide statistics
+        is being collected!
         <NuxtLink to="/outfit-wars">
           <span class="label bg-red-600 hover:bg-red-500"
             >Visit the OW section</span
