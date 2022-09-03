@@ -246,21 +246,17 @@
               :key="outfit.id"
               class="border-b border-b-gray-600 h-20"
             >
-              <div class="w-10 text-center mr-2">
+              <div class="w-10 text-center">
                 <div class="bg-gray-500 px-2 rounded-xl m-auto w-min">
                   {{ index + 1 }}
                 </div>
               </div>
-              <object
-                :data="outfit.outfitImageUrl"
-                type="image/png"
-                width="50px"
-              >
-                <img
-                  :src="outfit.faction | factionImage"
-                  :alt="outfit.faction"
-                />
-              </object>
+              <TeamLogo
+                class="self-center place-self-center w-12 mx-1"
+                :outfit-id="outfit.id"
+                :outfit-faction="outfit.faction"
+                rounding="rounded"
+              />
 
               <v-list-item-content>
                 <v-list-item-title

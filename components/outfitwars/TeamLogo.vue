@@ -2,8 +2,8 @@
   <div>
     <div class="aspect-square relative place-items-center">
       <img
-        class="absolute inset-0 m-auto rounded-lg"
-        :class="loser ? 'grayscale opacity-40' : ''"
+        class="absolute inset-0 m-auto"
+        :class="loser ? rounding + ' grayscale opacity-40' : rounding"
         :src="outfitId | outfitImage"
         :alt="outfitFaction | factionShortName"
         @error="imageUrlAlt"
@@ -13,7 +13,7 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import { Faction } from '../../ps2alerts-constants/faction'
+import { Faction } from '~/ps2alerts-constants/faction'
 import factionImage from '~/filters/FactionImage'
 
 export default Vue.extend({
@@ -37,6 +37,11 @@ export default Vue.extend({
     loser: {
       type: Boolean,
       default: false,
+      required: false,
+    },
+    rounding: {
+      type: String,
+      default: 'rounded-lg',
       required: false,
     },
   },

@@ -16,6 +16,7 @@
           class="self-center place-self-center w-12"
           :outfit-id="rankings[0].id"
           :outfit-faction="rankings[0].faction"
+          rounding="rounded"
         />
         <span :class="getLabelClass(rankings[0].faction)">{{
           rankings[0].faction | factionShortName
@@ -69,6 +70,7 @@
           class="self-center place-self-center w-12"
           :outfit-id="rankings[1].id"
           :outfit-faction="rankings[1].faction"
+          rounding="rounded"
         />
         <span :class="getLabelClass(rankings[1].faction)">{{
           rankings[1].faction | factionShortName
