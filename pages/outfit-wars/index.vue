@@ -169,10 +169,9 @@
       <div
         class="bg-red-700 border-red-500 border w-full p-4 my-4 text-center rounded"
       >
-        Cobalt's woes continue, number of matches / scores remain inaccurate.
-        Each outfit who played today was granted an extra loss, we expect the
-        developers will be making manual corrections in due course.
-        <p class="text-sm">Updated 3rd Sep 06:00 UTC</p>
+        Cobalt's matches are currently not tracking correctly. We are
+        investigating the issue. Cobalt's scores also continue to be scuffed.
+        <p class="text-sm">Updated 3rd Sep 18:43 UTC</p>
       </div>
       <p>
         <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
@@ -240,7 +239,11 @@
             </p>
           </div>
 
-          <v-list subheader max-height="500" class="overflow-y-auto">
+          <v-list
+            subheader
+            max-height="500"
+            class="overflow-y-auto scrollbar-thin"
+          >
             <v-list-item
               v-for="(outfit, index) in worldRankings(world, true)"
               :key="outfit.id"
