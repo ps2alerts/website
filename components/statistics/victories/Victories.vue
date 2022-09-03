@@ -35,8 +35,9 @@ import ApiRequest from '~/api-request'
 import { Endpoints } from '@/constants/Endpoints'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import VictoriesCounts from '~/components/statistics/victories/VictoriesCounts.vue'
-import { Bracket } from '@/ps2alerts-constants/bracket'
+import { Bracket, ps2alertsBracketArray } from '@/ps2alerts-constants/bracket'
 import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
+import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 
 export default Vue.extend({
   name: 'Victories',
@@ -76,6 +77,7 @@ export default Vue.extend({
         filter.dateFrom = this.filter.dateFrom.startOf('day').format('x')
         filter.dateTo = this.filter.dateTo.startOf('day').format('x')
       }
+      filter.ps2AlertsEventType = Ps2AlertsEventType.LIVE_METAGAME
       return filter
     },
     updateCountdownPercent(): number {
@@ -98,7 +100,6 @@ export default Vue.extend({
       return count
     },
     beginningDate(): string {
-      console.log(this.filter.dateFrom)
       return this.filter.dateFrom
         ? this.filter.dateFrom.format('Do MMM YYYY')
         : '4th Jan 2021'
@@ -142,13 +143,26 @@ export default Vue.extend({
       console.log('VictoryStatistics.pull', this.apiFilter)
       this.loading = true
 
-      await new ApiRequest()
-        .get<GlobalVictoriesAggregateResponseInterface[]>(
-          Endpoints.AGGREGATES_GLOBAL_VICTORIES,
-          this.apiFilter
+      const promises: Promise<GlobalVictoriesAggregateResponseInterface[]>[] =
+        []
+
+      ps2alertsBracketArray.slice(1).forEach((bracket) => {
+        const filter = JSON.parse(JSON.stringify(this.filter)) // Cheaty way to clone an object
+        filter.bracket = bracket
+        promises.push(
+          new ApiRequest().get<GlobalVictoriesAggregateResponseInterface[]>(
+            Endpoints.AGGREGATES_GLOBAL_VICTORIES,
+            filter
+          )
         )
-        .then((result) => {
-          this.data = result
+      })
+
+      // Request each bracket's data then merge into a singular array
+      await Promise.all(promises)
+        .then((results) => {
+          results.forEach((bracketResult) => {
+            this.data = this.data.concat(bracketResult)
+          })
           this.loaded = true
           this.loading = false
 
