@@ -160,10 +160,10 @@
       <div
         class="bg-red-700 border-red-500 border w-full p-4 my-4 text-center rounded"
       >
-        Cobalt's scorings in game are currently broken, the scores below were
-        calculated from the datasource we use for the points and was manually
-        fixed. They are subject to change, take with a pinch of salt!
-        <p class="text-sm">Updated 2nd Sep 22:57 UTC</p>
+        Cobalt's woes continue, number of matches / scores remain inaccurate.
+        Each outfit who played today was granted an extra victory, we expect the
+        developers will be making manual corrections in due course.
+        <p class="text-sm">Updated 3rd Sep 02:00 UTC</p>
       </div>
       <p>
         <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
@@ -184,6 +184,7 @@
         broken since around March. <br />We will unfortunately not be supporting
         SolTech this season.
       </p>
+      <p class="text-sm mb-2">Rankings take up to 30 minutes to update.</p>
     </div>
     <!-- Server outfit lists -->
     <div
