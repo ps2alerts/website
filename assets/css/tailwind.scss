@@ -788,4 +788,13 @@
       }
     }
   }
+
+  .scrollbar-thin {
+    --scrollbar-foreground: rgb(48, 58, 64);
+    --scrollbar-background: rgba(55, 65, 81, 0);
+    --radius: 10px;
+    --size: 10px;
+    scrollbar-color: var(--scrollbar-foreground) var(--scrollbar-background);
+    scrollbar-width: thin;
+  }
 }
