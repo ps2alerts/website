@@ -531,6 +531,7 @@ export default Vue.extend({
               value.round === parsedOutfitData.round
             )
           })
+
           if (index === -1) {
             currentWorldRankings.push(parsedOutfitData)
           } else {
@@ -549,6 +550,7 @@ export default Vue.extend({
           ) {
             return b.rankings.totalScore - a.rankings.totalScore
           }
+
           return b.rankings.globalRank - a.rankings.globalRank
         })
       }
@@ -569,6 +571,7 @@ export default Vue.extend({
     ): ParsedOutfitDataInterface[] {
       const worldRankings = this.currentWorldRankingsMap.get(world) ?? []
       let toReturn: ParsedOutfitDataInterface[] = []
+
       if (currentOrUpdatingRound) {
         const outfits = new Map<string, ParsedOutfitDataInterface>()
         const ids: string[] = []
@@ -581,12 +584,14 @@ export default Vue.extend({
             ids.push(ranking.id) // this should stay sorted
           } else {
             const outfit = outfits.get(ranking.id)
+
             if (outfit && outfit.round < ranking.round) {
               // we've seen this outfit before, but the round in the map is from an earlier round, update
               outfits.set(ranking.id, ranking)
             }
           }
         }
+
         for (const id of ids) {
           const record = outfits.get(id)
           if (record === undefined) {

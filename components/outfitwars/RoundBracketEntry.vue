@@ -8,7 +8,8 @@
     :event="match && match.state !== 0 ? 'click' : ''"
   >
     <div
-      class="flex gap-2 p-2 mb-2 border border-gray-600 hover:border-gray-400 bg-tint rounded relative hover bg-[#1e1e1e]"
+      class="flex gap-2 p-2 mb-2 border border-gray-600 hover:border-gray-400 bg-tint rounded relative hover"
+      :class="getBackgroundColour()"
     >
       <div class="self-center">
         <object
@@ -21,12 +22,17 @@
             :alt="rankings[0].faction"
           />
         </object>
+        <span :class="getLabelClass(rankings[0].faction)">{{
+          rankings[0].faction | factionShortName
+        }}</span>
       </div>
-      <div class="grid grid-cols-7 gap-x-1 gap-y-2 justify-center grow">
+      <div
+        class="grid grid-cols-7 gap-x-1 gap-y-2 justify-center content-center grow"
+      >
         <div class="col-start-1 col-span-3 text-base mb-2 lg:mb-0">
           <div
             class="text-right mb-1"
-            :class="formatOutfitFaction(rankings[0].faction)"
+            :class="formatOutfitFaction(getTeamFaction(rankings[0].outfit_id))"
           >
             {{ formatOutfitName(rankings[0].displayName.trim()) }}
           </div>
@@ -37,7 +43,7 @@
         <div class="col-end-8 col-span-3 text-base mb-2 lg:mb-0">
           <div
             class="text-left mb-1"
-            :class="formatOutfitFaction(rankings[1].faction)"
+            :class="formatOutfitFaction(getTeamFaction(rankings[1].outfit_id))"
           >
             {{ formatOutfitName(rankings[1].displayName.trim()) }}
           </div>
@@ -74,6 +80,9 @@
             :alt="rankings[1].faction"
           />
         </object>
+        <span :class="getLabelClass(rankings[1].faction)">{{
+          rankings[1].faction | factionShortName
+        }}</span>
       </div>
     </div>
   </NuxtLink>
@@ -85,7 +94,11 @@ import moment from 'moment-timezone'
 import { PropValidator } from 'vue/types/options'
 import { DATE_TIME_FORMAT_SHORT } from '@/constants/Time'
 import { Team } from '@/ps2alerts-constants/outfitwars/team'
-import { FactionBgClass } from '@/constants/FactionBgClass'
+import {
+  FactionBgClass,
+  FactionBgClassString,
+  TeamToFaction,
+} from '@/constants/FactionBgClass'
 import { FactionBorderClass } from '@/constants/FactionBorderClass'
 import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
@@ -95,6 +108,7 @@ import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoin
 import { Ps2AlertsEventState } from '~/ps2alerts-constants/ps2AlertsEventState'
 import { Faction } from '~/ps2alerts-constants/faction'
 import { FactionTextClass } from '~/constants/FactionTextClass'
+import factionShortName from '~/filters/FactionShortName'
 
 export default Vue.extend({
   name: 'RoundBracketEntry',
@@ -216,6 +230,35 @@ export default Vue.extend({
         console.error(JSON.stringify(datetime))
         return datetime.toLocaleString(locale)
       }
+    },
+    getBackgroundColour(): object {
+      if (!this.match?.result.victor) {
+        return { 'bg-[#1e1e1e]': true }
+      }
+
+      const victorFaction = TeamToFaction(this.match?.result.victor)
+      const bgClass = FactionBgClassString(victorFaction)
+      return {
+        [bgClass]: true,
+      }
+    },
+    getLabelClass(faction: Faction): object {
+      const factionSmall = factionShortName(faction)
+      console.log(factionSmall)
+      return {
+        label: true,
+        [factionSmall]: true,
+      }
+    },
+    getTeamFaction(outfitId: string): Faction {
+      // If no match has happened yet, we don't know what the instance will be
+      if (!this.match?.instanceId) {
+        return Faction.NONE
+      }
+
+      return this.match?.outfitwars.teams?.red?.id === outfitId
+        ? Faction.TERRAN_REPUBLIC
+        : Faction.NEW_CONGLOMERATE
     },
   },
 })

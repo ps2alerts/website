@@ -1,4 +1,5 @@
 import { Faction } from '@/ps2alerts-constants/faction'
+import { Team } from '~/ps2alerts-constants/outfitwars/team'
 
 export const FactionBgClass = (faction: Faction) => {
   return {
@@ -24,4 +25,12 @@ export const FactionBgClassString = (faction: Faction | undefined): string => {
     case Faction.NS_OPERATIVES:
       return 'bg-nso'
   }
+}
+
+export const TeamToFaction = (team: Team | null | undefined): Faction => {
+  return team === Team.BLUE
+    ? Faction.NEW_CONGLOMERATE
+    : team === Team.RED
+    ? Faction.TERRAN_REPUBLIC
+    : Faction.NONE
 }
