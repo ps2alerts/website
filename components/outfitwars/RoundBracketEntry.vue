@@ -245,7 +245,7 @@ export default Vue.extend({
     },
     getLabelClass(faction: Faction): object {
       const factionSmall = factionShortName(faction)
-      console.log(factionSmall)
+      // console.log(factionSmall)
       return {
         label: true,
         [factionSmall]: true,
