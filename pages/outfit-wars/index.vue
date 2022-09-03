@@ -161,9 +161,9 @@
         class="bg-red-700 border-red-500 border w-full p-4 my-4 text-center rounded"
       >
         Cobalt's woes continue, number of matches / scores remain inaccurate.
-        Each outfit who played today was granted an extra victory, we expect the
+        Each outfit who played today was granted an extra loss, we expect the
         developers will be making manual corrections in due course.
-        <p class="text-sm">Updated 3rd Sep 02:00 UTC</p>
+        <p class="text-sm">Updated 3rd Sep 06:00 UTC</p>
       </div>
       <p>
         <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
@@ -278,14 +278,6 @@
     <!-- brackets -->
     <div v-if="loaded" class="col-span-12 mb-4">
       <h1 class="text-title text-center">Brackets</h1>
-      <div
-        class="bg-red-700 border-red-500 border p-4 my-4 text-center rounded"
-      >
-        <p>
-          Round 2 showing up in brackets for outfits who have played matches is
-          a bug as we don't know their line-ups yet. This will be fixed soon.
-        </p>
-      </div>
       <v-tabs v-model="activeBracketTab" centered grow dark show-arrows>
         <v-tabs-slider></v-tabs-slider>
 
@@ -395,12 +387,14 @@ export default Vue.extend({
       if (!this.loaded) {
         return [1]
       }
+      const currentRound = this.getCurrentRound()
       const rounds: number[] = []
       for (const ranking of this.allRankings) {
         if (
           !rounds.includes(ranking.round) &&
           ranking.round > 0 &&
-          ranking.round < 8
+          ranking.round < 8 &&
+          ranking.round <= currentRound
         ) {
           rounds.push(ranking.round)
         }
@@ -648,7 +642,7 @@ export default Vue.extend({
         }
       }
       const roundList: number[][] = []
-      for (const round of this.rounds) {
+      for (const round of [1, 2, 3, 4, 5, 6, 7, 8]) {
         const count = roundCounts.get(round) ?? 0
         roundList.push([round, count])
       }
