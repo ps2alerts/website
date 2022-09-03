@@ -68,6 +68,11 @@ export default Vue.extend({
           )
         })
         .sort((a, b) => {
+          if(a.rankings.totalScore !== 0 || b.rankings.totalScore !== 0){
+            return b.rankings.totalScore < a.rankings.totalScore 
+              ? -1 
+              : 1
+          }
           if (a.rankings.globalRank > b.rankings.globalRank) {
             return -1
           } else {
