@@ -8,20 +8,15 @@
     :event="match && match.state !== 0 ? 'click' : ''"
   >
     <div
-      class="flex gap-2 p-2 mb-2 border border-gray-600 hover:border-gray-400 bg-tint rounded relative hover"
+      class="flex gap-2 p-2 mb-2 border bg-tint rounded relative hover"
       :class="getBackgroundColour()"
     >
       <div class="self-center">
-        <object
-          :data="rankings[0].id | outfitImage"
-          type="image/png"
-          width="50px"
-        >
-          <img
-            :src="rankings[0].faction | factionImage"
-            :alt="rankings[0].faction"
-          />
-        </object>
+        <TeamLogo
+          class="self-center place-self-center w-12"
+          :outfit-id="rankings[0].id"
+          :outfit-faction="rankings[0].faction"
+        />
         <span :class="getLabelClass(rankings[0].faction)">{{
           rankings[0].faction | factionShortName
         }}</span>
@@ -31,7 +26,7 @@
       >
         <div class="col-start-1 col-span-3 text-base mb-2 lg:mb-0">
           <div
-            class="text-right mb-1"
+            class="text-right mb-1 font-semibold"
             :class="formatOutfitFaction(getTeamFaction(rankings[0].id))"
           >
             {{ formatOutfitName(rankings[0].displayName.trim()) }}
@@ -42,7 +37,7 @@
         </div>
         <div class="col-end-8 col-span-3 text-base mb-2 lg:mb-0">
           <div
-            class="text-left mb-1"
+            class="text-left mb-1 font-semibold"
             :class="formatOutfitFaction(getTeamFaction(rankings[1].id))"
           >
             {{ formatOutfitName(rankings[1].displayName.trim()) }}
@@ -70,16 +65,11 @@
         />
       </div>
       <div class="self-center">
-        <object
-          :data="rankings[1].id | outfitImage"
-          type="image/png"
-          width="50px"
-        >
-          <img
-            :src="rankings[1].faction | factionImage"
-            :alt="rankings[1].faction"
-          />
-        </object>
+        <TeamLogo
+          class="self-center place-self-center w-12"
+          :outfit-id="rankings[1].id"
+          :outfit-faction="rankings[1].faction"
+        />
         <span :class="getLabelClass(rankings[1].faction)">{{
           rankings[1].faction | factionShortName
         }}</span>
@@ -99,7 +89,10 @@ import {
   FactionBgClassString,
   TeamToFaction,
 } from '@/constants/FactionBgClass'
-import { FactionBorderClass } from '@/constants/FactionBorderClass'
+import {
+  FactionBorderClass,
+  FactionBorderClassString,
+} from '@/constants/FactionBorderClass'
 import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { ParsedOutfitDataInterface } from '~/interfaces/ParsedOutfitDataInterface'
@@ -233,13 +226,19 @@ export default Vue.extend({
     },
     getBackgroundColour(): object {
       if (!this.match?.result.victor) {
-        return { 'bg-[#1e1e1e]': true }
+        return {
+          'bg-[#1e1e1e]': true,
+          'border-gray-600': true,
+          'hover:border-gray-400': true,
+        }
       }
 
       const victorFaction = TeamToFaction(this.match?.result.victor)
       const bgClass = FactionBgClassString(victorFaction)
+      const borderClass = FactionBorderClassString(victorFaction)
       return {
         [bgClass]: true,
+        [borderClass]: true,
       }
     },
     getLabelClass(faction: Faction): object {
@@ -255,8 +254,6 @@ export default Vue.extend({
       if (!this.match?.instanceId) {
         return Faction.NONE
       }
-
-      console.log(outfitId, this.match.outfitwars.teams.red.id)
 
       return this.match?.outfitwars.teams?.red?.id === outfitId
         ? Faction.TERRAN_REPUBLIC

@@ -2,7 +2,7 @@
   <div>
     <div class="aspect-square relative place-items-center">
       <img
-        class="absolute inset-0 m-auto"
+        class="absolute inset-0 m-auto rounded-lg"
         :class="loser ? 'grayscale opacity-40' : ''"
         :src="outfitId | outfitImage"
         :alt="outfitFaction | factionShortName"
@@ -13,16 +13,16 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import factionImage from '~/filters/FactionImage';
 import { Faction } from '../../ps2alerts-constants/faction'
+import factionImage from '~/filters/FactionImage'
 
 export default Vue.extend({
-  name: "TeamLogo",
+  name: 'TeamLogo',
   components: {},
   props: {
     outfitId: {
       type: String,
-      default: "",
+      default: '',
       required: true,
     },
     outfitFaction: {
@@ -37,14 +37,17 @@ export default Vue.extend({
     loser: {
       type: Boolean,
       default: false,
-    }
+      required: false,
+    },
   },
   methods: {
     imageUrlAlt(event: Event) {
-      if(event.target){
-        (event.target as HTMLImageElement).src = factionImage(this.outfitFaction);
+      if (event.target) {
+        ;(event.target as HTMLImageElement).src = factionImage(
+          this.outfitFaction
+        )
       }
     },
-  }
+  },
 })
 </script>
