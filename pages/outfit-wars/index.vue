@@ -74,6 +74,15 @@
                 ></font-awesome-icon>
                 Streaming Schedule</a
               >
+              <a
+                href="https://docs.google.com/spreadsheets/d/1qed2uEkCqTUdYsy0vST7Kl8pzFoZZuoziJrcEv3EHLs"
+                target="_blank"
+                class="btn"
+                ><font-awesome-icon
+                  :icon="['fa', 'file-video']"
+                ></font-awesome-icon>
+                VOD List</a
+              >
             </div>
           </div>
         </div>
