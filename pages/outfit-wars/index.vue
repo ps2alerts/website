@@ -185,7 +185,9 @@
         >
       </p>
       <p class="text-xs mb-2">
-        Shoutout to [VODE] MidddNC for providing access to logos!
+        To add, search your outfit tag, press "update this page", go through the
+        claim process and upload the logo.<br />Shoutout to [VODE] MidddNC for
+        providing access to logos!
       </p>
       <p class="text-sm mb-2">
         <font-awesome-icon icon="['fas', 'info']"></font-awesome-icon>
@@ -193,7 +195,7 @@
         broken since around March. <br />We will unfortunately not be supporting
         SolTech this season.
       </p>
-      <p class="text-sm mb-2">Rankings take up to 30 minutes to update.</p>
+      <p class="text-sm mb-2">Rankings updated every 30 minutes</p>
     </div>
     <!-- Server outfit lists -->
     <div
@@ -238,11 +240,11 @@
             </p>
           </div>
 
-          <v-list subheader max-height="400" class="overflow-y-auto">
+          <v-list subheader max-height="500" class="overflow-y-auto">
             <v-list-item
               v-for="(outfit, index) in worldRankings(world, true)"
               :key="outfit.id"
-              class="border-b border-b-gray-600"
+              class="border-b border-b-gray-600 h-20"
             >
               <div class="w-10 text-center mr-2">
                 <div class="bg-gray-500 px-2 rounded-xl m-auto w-min">
