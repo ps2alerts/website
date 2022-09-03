@@ -54,7 +54,7 @@
                   }}</span> </span
                 >) are battling on Nexus!
               </p>
-              <p class="text-sm">
+              <p class="text-sm mb-2">
                 Massive thanks to [UN17] RiderAnton for
                 <a
                   href="https://github.com/ps2alerts/website/pull/484"
@@ -65,6 +65,15 @@
                 to this new section of PS2Alerts, these stats would not be here
                 without him!
               </p>
+              <a
+                href="https://docs.google.com/spreadsheets/d/1XjGWWftBoK9mcONNAoMGZhH6qLW6VlP2iKrQtilZmtw/"
+                target="_blank"
+                class="btn"
+                ><font-awesome-icon
+                  :icon="['fa', 'video-camera']"
+                ></font-awesome-icon>
+                Streaming Schedule</a
+              >
             </div>
           </div>
         </div>
