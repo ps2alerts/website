@@ -285,7 +285,25 @@
     <!-- brackets -->
     <div v-if="loaded" class="col-span-12 mb-4">
       <h1 class="text-title text-center">Brackets</h1>
-      <v-tabs v-model="activeBracketTab" centered grow dark show-arrows>
+      <div class="visible md:hidden mb-2">
+        <button
+          v-for="world in worlds"
+          :key="world"
+          class="btn mx-1"
+          :class="activeBracketTabCheck(world)"
+          @click="changeBracketWorld(world)"
+        >
+          {{ world | worldName }}
+        </button>
+      </div>
+      <v-tabs
+        v-model="activeBracketTab"
+        centered
+        grow
+        dark
+        show-arrows
+        class="hidden md:block"
+      >
         <v-tabs-slider></v-tabs-slider>
 
         <v-tab
@@ -366,7 +384,7 @@ export default Vue.extend({
       currentWorldRankingsMap: new Map<World, ParsedOutfitDataInterface[]>(),
       factionCount: [0, 0, 0, 0, 0] as number[],
       factionCountByWorld: new Map<World, FactionNumbersInterface>(),
-      activeBracketTab: 0,
+      activeBracketTab: 'Cobalt-bracket',
     }
   },
   head(): object {
@@ -709,6 +727,16 @@ export default Vue.extend({
       if (currentRound === 7 && phase === 'championships') {
         return { 'font-bold': true }
       }
+    },
+    changeBracketWorld(world: World): void {
+      this.activeBracketTab = `${worldName(world)}-bracket`
+    },
+    activeBracketTabCheck(world: World): object {
+      return this.activeBracketTab === `${worldName(world)}-bracket`
+        ? {
+            'btn-active': true,
+          }
+        : {}
     },
   },
 })
