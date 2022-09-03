@@ -202,8 +202,7 @@ export default Vue.extend({
   data() {
     return {
       pageTitle: 'Outfit War Result',
-      pageDesc:
-        'Per alert results of each Alert ever triggered in Planetside 2.',
+      pageDesc: 'Outfit Wars match statistics',
       error: null,
       loaded: false,
       updateRate: 5000,
