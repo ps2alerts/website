@@ -32,7 +32,7 @@
         <div class="col-start-1 col-span-3 text-base mb-2 lg:mb-0">
           <div
             class="text-right mb-1"
-            :class="formatOutfitFaction(getTeamFaction(rankings[0].outfit_id))"
+            :class="formatOutfitFaction(getTeamFaction(rankings[0].id))"
           >
             {{ formatOutfitName(rankings[0].displayName.trim()) }}
           </div>
@@ -43,7 +43,7 @@
         <div class="col-end-8 col-span-3 text-base mb-2 lg:mb-0">
           <div
             class="text-left mb-1"
-            :class="formatOutfitFaction(getTeamFaction(rankings[1].outfit_id))"
+            :class="formatOutfitFaction(getTeamFaction(rankings[1].id))"
           >
             {{ formatOutfitName(rankings[1].displayName.trim()) }}
           </div>
@@ -255,6 +255,8 @@ export default Vue.extend({
       if (!this.match?.instanceId) {
         return Faction.NONE
       }
+
+      console.log(outfitId, this.match.outfitwars.teams.red.id)
 
       return this.match?.outfitwars.teams?.red?.id === outfitId
         ? Faction.TERRAN_REPUBLIC
