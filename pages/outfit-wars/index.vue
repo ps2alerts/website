@@ -318,7 +318,7 @@
         </v-tab>
       </v-tabs>
 
-      <v-tabs-items v-model="activeBracketTab">
+      <v-tabs-items v-model="activeBracketTab" touchless>
         <v-tab-item
           v-for="world in worlds"
           :key="world + '-tab'"
@@ -366,6 +366,7 @@ import factionShortName from '~/filters/FactionShortName'
 import { FactionNumbersInterface } from '~/ps2alerts-constants/interfaces/FactionNumbersInterface'
 import { Faction } from '~/ps2alerts-constants/faction'
 import { FactionTextClass } from '~/constants/FactionTextClass'
+import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 
 export default Vue.extend({
   name: 'OutfitWarsRankings',
@@ -384,6 +385,7 @@ export default Vue.extend({
       end: parseInt(moment.tz('2022-09-02 18:20:00', 'UTC').format('X'), 10),
       timeRemaining: 0,
       worlds: [World.COBALT, World.CONNERY, World.EMERALD, World.MILLER],
+      worldRounds: [] as number[],
       currentWorldRankingsMap: new Map<World, ParsedOutfitDataInterface[]>(),
       factionCount: [0, 0, 0, 0, 0] as number[],
       factionCountByWorld: new Map<World, FactionNumbersInterface>(),
@@ -415,8 +417,8 @@ export default Vue.extend({
       if (!this.loaded) {
         return [1]
       }
-      const currentRound = this.getCurrentRound()
       const rounds: number[] = []
+      const currentRound = this.getCurrentRound()
       for (const ranking of this.allRankings) {
         if (
           !rounds.includes(ranking.round) &&
@@ -464,12 +466,29 @@ export default Vue.extend({
       }
 
       console.log('OutfitwarsRankings.pull')
+      const currentRoundRequests = []
+      for (const world of this.worlds) {
+        currentRoundRequests.push(
+          new ApiRequest().get<number>(
+            ps2AlertsApiEndpoints.outfitwarsCurrentRoundByWorld.replace(
+              '{world}',
+              world.toString()
+            )
+          )
+        )
+      }
+
+      await Promise.all(currentRoundRequests).then((result) => {
+        this.worldRounds = result
+      })
+
+      console.log(this.worldRounds)
 
       await new ApiRequest()
         .get<OutfitwarsRankingInterface[]>(Endpoints.OW_RANKINGS_ALL)
-        .then(async (result) => {
+        .then((result) => {
           console.log('result', result)
-          await this.parse(result)
+          this.parse(result)
         })
         .catch((e) => {
           this.error = e.message
@@ -594,6 +613,7 @@ export default Vue.extend({
       if (currentOrUpdatingRound) {
         const outfits = new Map<string, ParsedOutfitDataInterface>()
         const ids: string[] = []
+
         for (const ranking of worldRankings) {
           const outfitExists = outfits.has(ranking.id)
 
@@ -613,6 +633,7 @@ export default Vue.extend({
 
         for (const id of ids) {
           const record = outfits.get(id)
+
           if (record === undefined) {
             // eslint.......
             console.error('Somehow this data we set just now is now undefined?')
@@ -623,6 +644,7 @@ export default Vue.extend({
       } else {
         toReturn = worldRankings
       }
+
       return toReturn
     },
 
@@ -647,6 +669,7 @@ export default Vue.extend({
           tr: 0,
         })
         const worldStatMap = statMap.get(world)
+
         for (const outfit of this.worldRankings(world, true)) {
           const faction: string = factionShortName(outfit.faction).toLowerCase()
 
@@ -665,31 +688,7 @@ export default Vue.extend({
       return FactionTextClass(faction)
     },
     getCurrentRound(): number {
-      const roundCounts = new Map<number, number>()
-      for (const ranking of this.allRankings) {
-        if (!roundCounts.has(ranking.round)) {
-          roundCounts.set(ranking.round, 1)
-        } else {
-          const current = roundCounts.get(ranking.round)
-          if (current !== undefined) roundCounts.set(ranking.round, current + 1)
-        }
-      }
-      const roundList: number[][] = []
-      for (const round of [1, 2, 3, 4, 5, 6, 7, 8]) {
-        const count = roundCounts.get(round) ?? 0
-        roundList.push([round, count])
-      }
-      roundList.sort((a, b) => {
-        if (a[1] > b[1]) {
-          return -1
-        } else if (a[1] === b[1]) {
-          return a[0] > b[0] ? -1 : 1
-        } else {
-          return 1
-        }
-      })
-
-      return roundList[0][0]
+      return Math.min(...this.worldRounds)
     },
     roundClasses(round: number) {
       const currentRound = this.getCurrentRound()
