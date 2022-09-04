@@ -466,21 +466,27 @@ export default Vue.extend({
       }
 
       console.log('OutfitwarsRankings.pull')
-      const currentRoundRequests = [];
-      for(const world of this.worlds) {
-        currentRoundRequests.push(new ApiRequest()
-          .get<number>(ps2AlertsApiEndpoints.outfitwarsCurrentRoundByWorld.replace('{world}', world.toString())))
+      const currentRoundRequests = []
+      for (const world of this.worlds) {
+        currentRoundRequests.push(
+          new ApiRequest().get<number>(
+            ps2AlertsApiEndpoints.outfitwarsCurrentRoundByWorld.replace(
+              '{world}',
+              world.toString()
+            )
+          )
+        )
       }
 
       await Promise.all(currentRoundRequests).then((result) => {
-        this.worldRounds = result;
+        this.worldRounds = result
       })
 
-      console.log(this.worldRounds);
+      console.log(this.worldRounds)
 
       await new ApiRequest()
         .get<OutfitwarsRankingInterface[]>(Endpoints.OW_RANKINGS_ALL)
-        .then(async (result) => {
+        .then((result) => {
           console.log('result', result)
           this.parse(result)
         })
@@ -607,6 +613,7 @@ export default Vue.extend({
       if (currentOrUpdatingRound) {
         const outfits = new Map<string, ParsedOutfitDataInterface>()
         const ids: string[] = []
+
         for (const ranking of worldRankings) {
           const outfitExists = outfits.has(ranking.id)
 
@@ -626,6 +633,7 @@ export default Vue.extend({
 
         for (const id of ids) {
           const record = outfits.get(id)
+
           if (record === undefined) {
             // eslint.......
             console.error('Somehow this data we set just now is now undefined?')
@@ -636,6 +644,7 @@ export default Vue.extend({
       } else {
         toReturn = worldRankings
       }
+
       return toReturn
     },
 
@@ -660,6 +669,7 @@ export default Vue.extend({
           tr: 0,
         })
         const worldStatMap = statMap.get(world)
+
         for (const outfit of this.worldRankings(world, true)) {
           const faction: string = factionShortName(outfit.faction).toLowerCase()
 

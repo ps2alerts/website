@@ -160,9 +160,13 @@ export default Vue.extend({
       // Request each bracket's data then merge into a singular array
       await Promise.all(promises)
         .then((results) => {
+          let newData: GlobalVictoriesAggregateResponseInterface[] = []
+
           results.forEach((bracketResult) => {
-            this.data = this.data.concat(bracketResult)
+            newData = newData.concat(bracketResult)
           })
+
+          this.data = newData
           this.loaded = true
           this.loading = false
 
