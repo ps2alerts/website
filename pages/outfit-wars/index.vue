@@ -318,7 +318,7 @@
         </v-tab>
       </v-tabs>
 
-      <v-tabs-items v-model="activeBracketTab">
+      <v-tabs-items v-model="activeBracketTab" touchless>
         <v-tab-item
           v-for="world in worlds"
           :key="world + '-tab'"
