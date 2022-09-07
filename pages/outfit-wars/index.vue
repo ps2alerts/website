@@ -167,11 +167,12 @@
       <h1 class="text-title text-center">Rankings</h1>
 
       <div
-        class="bg-red-700 border-red-500 border w-full p-4 my-4 text-center rounded"
+        class="bg-gray-700 border-gray-500 border w-full p-4 my-4 text-center rounded"
       >
-        Cobalt's matches are currently not tracking correctly. We are
-        investigating the issue. Cobalt's scores also continue to be scuffed.
-        <p class="text-sm">Updated 3rd Sep 18:43 UTC</p>
+        <p class="mb-2">
+          The Dev team is actively looking into the first round of Cobalt matches, which are being displayed with additional losses. Additionally, the armory issue where crafting is not possible for certain outfits is being looked into.
+        </p>
+        <p class="text-xs">Updated 7th Sep 22:27 UTC</p>
       </div>
       <p>
         <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
