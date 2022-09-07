@@ -69,8 +69,37 @@ export default Vue.extend({
       pageTitle: 'Change Log',
       pageDesc: "See what's recently been released for PS2Alerts!",
       version: this.$config.version,
-      panel: [0],
+      panel: [0, 1],
       posts: [
+        {
+          id: 15,
+          title: `v4.3.1 - Outfit Wars release patches`,
+          date: '03/Sep/2022',
+          type: 'minor-update',
+          body: `
+            <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+              <div>
+                <p>A number of fixes have been released for the Outfit Wars section, as well as fixing some bugs in other areas of the website.</p>
+                <ul>
+                  <li>Brackets no longer display future rounds, we don't have crystal balls after all.</li>
+                  <li>Bracket matches have been adjusted to properly show teams and how the outfits were assigned them. It also now shows properly the winner of the match, along with the faction they played as.</li>
+                  <li>Rankings section has received some visual improvements, improving logo layouts and spacing.</li>
+                  <li>Cobalt's scores have been adjusted manually due to a bug from DBG, however match counts are still incorrect.</li>
+                  <li>Victory statistics on the home page for normal alerts were reporting no data.</li>
+                </ul>
+                <p>Below are the current known issues:</p>
+                <ul>
+                  <li>Cobalt wins / defeats are inaccurate, scores however are accurate.</li>
+                  <li>XPM metrics are not working.</li>
+                  <li>Some team assignment bugs were fixed, however there are still occasions outfits won't be assigned to the correct team. We're continuing to monitor.</li>
+                  <li>Vehicle statistics are still not working, we're looking into this actively.</li>
+                  <li>Population information for matches with numbers 2, 4, 6 and 8 in their identifiers (which is mostly first rounds) will report Indar, Hossin, Amerish and Esamir populations in addition to Nexus.</li>
+                  <li>Nexus is reporting populations of matches that are the same match ID as them, across different servers.</li>
+                  <li>Team info on match pages on mobile is super scuffed.</li>
+                </ul>
+              </div>
+            </div>`,
+        },
         {
           id: 14,
           title: `v4.3.0 - Outfit Wars`,
