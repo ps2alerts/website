@@ -237,10 +237,7 @@
       >
         <p>*1 does not include NSO vs NSO kills.</p>
         <p>
-          *2 NSO Teamkills represent NSO vs NSO. It is currently not possible to
-          track what faction NSO's are on via the API without some
-          <b>major</b> hacking. Go pester Wrel about it, they're well aware we
-          API devs want it!
+          *2 up until 31st August 2022, team ID was not available thus we were unable to determine NSO vs NSO faction kills, so they show up as teamkills.
         </p>
       </div>
     </div>
