@@ -167,12 +167,12 @@
       <h1 class="text-title text-center">Rankings</h1>
 
       <div
-        class="bg-gray-700 border-gray-500 border w-full p-4 my-4 text-center rounded"
+        class="bg-red-700 border-red-500 border w-full p-4 my-4 text-center rounded"
       >
         <p class="mb-2">
-          The Dev team is actively looking into the first round of Cobalt matches, which are being displayed with additional losses. Additionally, the armory issue where crafting is not possible for certain outfits is being looked into.
+          We are aware that Cobalt and Miller are missing statistics for Friday's matches. This was due to an unexpected reset of a certain identifier due to server restarts. This issue will not occur for future matches and has already been fixed.<br>We are working on creating a re-play system where those statistics will be eventually back-filled. More on this soon.
         </p>
-        <p class="text-xs">Updated 7th Sep 22:27 UTC</p>
+        <p class="text-xs">Updated 9th Sep 19:40 UTC</p>
       </div>
       <p>
         <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
