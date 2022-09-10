@@ -169,7 +169,7 @@
         class="bg-red-700 border-red-500 border w-full p-4 my-4 text-center rounded"
       >
         <p class="mb-2">
-          We are aware that Cobalt and Miller are missing statistics for Friday's matches. This was due to an unexpected reset of a certain identifier due to server restarts. This issue will not occur for future matches and has already been fixed.<br>We are working on creating a re-play system where those statistics will be eventually back-filled. More on this soon. <a href="https://www.reddit.com/r/Planetside/comments/xa4s3x/outfit_wars_ps2alerts_is_aware_of_missing_stats/" class="text-white" target="_blank">Further details here</a>. This issue will not affect rankings.
+          We are aware that Cobalt and Miller are missing statistics for Friday's matches. This was due to an unexpected reset of a certain identifier due to server restarts. This issue will not occur for future matches and has already been fixed.<br>We are working on creating a re-play system where those statistics will be eventually back-filled.<br>This issue will not affect rankings.<br> <a href="https://www.reddit.com/r/Planetside/comments/xa4s3x/outfit_wars_ps2alerts_is_aware_of_missing_stats/" class="text-amber-500" target="_blank">Further details here</a>.
         </p>
         <p class="text-xs">Updated 9th Sep 19:58 UTC</p>
       </div>
