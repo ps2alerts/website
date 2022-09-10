@@ -50,27 +50,6 @@
               :is-percentage="showPopPercent"
             />
           </div>
-          <p class="text-xs text-gray-400 mt-2">
-            Hover / tap over population bars to see pop numbers<br />
-            Non NSO players only
-            <v-tooltip bottom>
-              <template #activator="{ on, attrs }">
-                <font-awesome-icon
-                  :icon="['fas', 'info-circle']"
-                  v-bind="attrs"
-                  v-on="on"
-                ></font-awesome-icon>
-              </template>
-              The game's API does not give us the ability to understand what
-              faction NSO are playing for. </v-tooltip
-            ><br />
-            Pops updated: <b>{{ popsLastUpdated }}</b>
-            <CountdownSpinner
-              :percent="updatePopsCountdownPercentage"
-              :update-rate="updatePopsRate"
-              :inline="true"
-            />
-          </p>
         </div>
         <div class="mt-2" v-if="outfitWars().length > 0">
           <div v-for="world in worlds" :key="world">
@@ -94,6 +73,29 @@
                 />
               </div>
             </div>
+          </div>
+          <div v-show="actives.length > 0 || outfitWars().length > 0">
+            <p class="text-xs text-gray-400 mt-2">
+              Hover / tap over population bars to see pop numbers<br />
+              Non NSO players only
+              <v-tooltip bottom>
+                <template #activator="{ on, attrs }">
+                  <font-awesome-icon
+                    :icon="['fas', 'info-circle']"
+                    v-bind="attrs"
+                    v-on="on"
+                  ></font-awesome-icon>
+                </template>
+                The game's API does not give us the ability to understand what
+                faction NSO are playing for. </v-tooltip
+              ><br />
+              Pops updated: <b>{{ popsLastUpdated }}</b>
+              <CountdownSpinner
+                :percent="updatePopsCountdownPercentage"
+                :update-rate="updatePopsRate"
+                :inline="true"
+              />
+            </p>
           </div>
         </div>
       </div>
@@ -218,7 +220,7 @@ export default Vue.extend({
           for(const world of this.worlds){
             this.owactivesByWorld.set(world, [])
           }
-        
+
           for(const outfitwar of result) {
             const worldArray = this.owactivesByWorld.get(outfitwar.world)
             if(worldArray === undefined){
