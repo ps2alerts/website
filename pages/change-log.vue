@@ -69,12 +69,39 @@ export default Vue.extend({
       pageTitle: 'Change Log',
       pageDesc: "See what's recently been released for PS2Alerts!",
       version: this.$config.version,
-      panel: [0, 1],
+      panel: [0, 1, 2],
       posts: [
         {
           id: 15,
+          title: `v4.3.2 - Vehicle Combat Data reinstated & Outfit Wars fixes`,
+          date: '10th September 2022',
+          type: 'minor-update',
+          body: `
+            <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+              <div>
+                <p>More fixes have been released to support Outfit Wars and other parts of the site:</p>
+                <ul>
+                  <li>Vehicle statistics have been reinstated. This was disabled globally (OW and alerts) due to a bug introduced that increased processing lag by 14-40x, as we were querying for characters that didn't exist.</li>
+                  <li>OW: Cobalt's rankings have been fixed. Thanks RPG!</li>
+                  <li>OW: Population graphs have been improved and no longer show pops from normal continents and other matches. However, there are still certain scenarios where issues occur, and is still being looked into.</li>
+                  <li>OW: XPM metrics are now working. This unfortunately won't be backdated.</li>
+                  <li>OW: All teams now have logos thanks to some "diplomatic persistence"!</li>
+                  <li>OW: Measures have been put in place to prevent wonky game data from messing with the rankings in a weird way. They should be quite accurate now.</li>
+                </ul>
+                <p>Below are the current known issues:</p>
+                <ul>
+                  <li>OW: Team info on match pages on mobile is super scuffed.</li>
+                  <li>OW: Cobalt and Miller's matches on Friday 9th are missing statistics. We are working on tooling to backfill this data.</li>
+                  <li>OW: Matches with VS teams and same faction matches make the population history graph go super weird.</li>
+                  <li>OW: It's still quite confusing to understand when the rankings were last updated and when their next update is due. We'll be adding in a timer till next update soon.</li>
+                </ul>
+              </div>
+            </div>`,
+        },
+        {
+          id: 15,
           title: `v4.3.1 - Outfit Wars release patches`,
-          date: '03/Sep/2022',
+          date: '3rd September 2022',
           type: 'minor-update',
           body: `
             <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
@@ -103,7 +130,7 @@ export default Vue.extend({
         {
           id: 14,
           title: `v4.3.0 - Outfit Wars`,
-          date: '02/Sep/2022',
+          date: '2nd September 2022',
           type: 'major-update',
           body: `
             <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
