@@ -54,7 +54,6 @@
           </v-tooltip>
         </button>
       </div>
-
       <div v-show="mode === 'number'">
         <line-chart
           v-if="data.length"

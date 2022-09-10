@@ -67,6 +67,9 @@
           </v-tab-item>
         </v-tabs-items>
       </div>
+      <div class="col-span-12">
+        <div class="bg-red-700 border-red-500 border w-full p-4 mt-2 text-center rounded text-sm">If a OW team's home faction is VS or is a same faction fight, population history graphs are currently wonky. This is being looked into.</div>
+      </div>
       <AlertPopulations :alert="alert" :outfitwar="alert" />
       <AlertCombatHistory :alert="alert" :outfitwar="alert" />
       <AlertBattleranks :alert="alert" :outfitwar="alert" />
