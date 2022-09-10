@@ -73,6 +73,19 @@ export default Vue.extend({
       posts: [
         {
           id: 15,
+          title: `v4.3.3 - SolTech added to rankings`,
+          date: '10th September 2022',
+          type: 'minor-update',
+          body: `
+            <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+              <div>
+                <h1 class="text-3xl">SolTech rankings have been added!</h1>
+                <p>The API developers are receiving partial data from SolTech, so we have chosen to add SolTech to the rankings assuming daybreak are working on restoring full data services to the server. You will now find the SolTech rankings on the rankings page. <b>However</b>, match statistics are not yet supported until DBG fully fix the issues.</p>
+              </div>
+            </div>`,
+        },
+        {
+          id: 15,
           title: `v4.3.2 - Vehicle Combat Data reinstated & Outfit Wars fixes`,
           date: '10th September 2022',
           type: 'minor-update',
