@@ -12,6 +12,14 @@
         :update-rate="updateRate"
         :class="{ 'opacity-50': filtered }"
       />
+      <div
+        class="bg-gray-700 border-gray-500 border p-4 my-4 text-center rounded"
+      >
+        <p class="mb-2">
+          Currently, SolTech matches are not yet supported, despite the server showing up in the rankings. The developers are working on fixing data streaming issues. Until they do this, we cannot support SolTech stats.
+        </p>
+        <p class="text-xs">Updated 10th Sep 17:10 UTC</p>
+      </div>
     </div>
     <div class="col-span-6 lg:col-span-2 lg:col-start-3">
       <FilterWorld
