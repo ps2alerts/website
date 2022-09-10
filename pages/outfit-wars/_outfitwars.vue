@@ -72,6 +72,14 @@
       <AlertBattleranks :alert="alert" :outfitwar="alert" />
 
       <div class="col-span-12">
+        <div
+          class="bg-green-700 border-green-500 border w-full p-2 my-2 text-center rounded"
+        >
+          <p class="mb-2">
+            Outfit Wars now supports vehicle statistics!
+          </p>
+          <p class="text-xs">Added to matches after 10th Sep 04:02 UTC</p>
+        </div>
         <v-tabs
           v-model="metricsTab"
           center-active
