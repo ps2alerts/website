@@ -689,6 +689,10 @@
   .theme--dark {
     &.v-tabs > .v-tabs-bar {
       background-color: #9b2c2c !important;
+
+      .v-tab--disabled {
+        background-color: #000 !important;
+      }
     }
 
     &.v-tabs-items {

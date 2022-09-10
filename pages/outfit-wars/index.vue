@@ -190,9 +190,7 @@
       </p>
       <p class="text-sm mb-2">
         <font-awesome-icon icon="['fas', 'info']"></font-awesome-icon>
-        <b>Where's SolTech?</b> Unfortunately data events from SolTech has been
-        broken since around March. <br />We will unfortunately not be supporting
-        SolTech this season.
+        SolTech's rankings have been added to this rankings page, however their match statistics are not yet supported as RPG / DBG haven't yet fully fixed the missing data streams for the server.
       </p>
       <p class="text-sm mb-2">Rankings updated every 30 minutes</p>
     </div>
@@ -204,7 +202,8 @@
         v-for="world in worlds"
         :id="'world-' + world"
         :key="world"
-        class="col-span-12 xl:col-span-3 lg:col-span-6"
+        class="col-span-12 xl:col-span-4 lg:col-span-6"
+        :class="world === 10 ? {'xl:col-start-3': true} : {}"
       >
         <img
           alt="Server Logo"
@@ -239,47 +238,47 @@
             </p>
           </div>
 
-          <v-list
-            subheader
-            max-height="500"
+          <div
             class="overflow-y-auto scrollbar-thin"
+            style="max-height: 600px"
           >
-            <v-list-item
+            <div
               v-for="(outfit, index) in worldRankings(world, true)"
               :key="outfit.id"
-              class="border-b border-b-gray-600 h-20"
+              class="border-b border-b-gray-600 grid grid-cols-12"
+              :class="index === 7 || index === worldRankings(world, true).length - 1 ? {'border-b-0': true} : {}"
             >
-              <div class="w-10 text-center">
-                <div class="bg-gray-500 px-2 rounded-xl m-auto w-min">
-                  {{ index + 1 }}
+              <div class="col-span-12 border border-y-red-500 border-y-2 border-x-0 py-2 text-xs" v-if="index === 8">Qualifier cutoff</div>
+              <div class="col-span-12 grid grid-cols-12 gap-x-2 py-2 px-2 content-center h-24">
+                <div class="col-span-1 text-center flex">
+                  <div class="bg-gray-500 px-2 rounded-xl m-auto w-min">
+                    {{ index + 1 }}
+                  </div>
+                </div>
+                <TeamLogo
+                  class="col-span-2 self-center"
+                  :outfit-id="outfit.id"
+                  :outfit-faction="outfit.faction"
+                  rounding="rounded"
+                />
+
+                <div class="col-span-7">
+                  <p :class="formatOutfitFaction(outfit.faction)">
+                    {{ outfit.displayName }}
+                  </p>
+                  <p v-html="outfit.metricsString"></p>
+                </div>
+                <div class="col-span-2 flex text-right" v-if="world !== 40">
+                  <NuxtLink
+                    :to="'/outfit-wars/matches?outfitName=' + outfit.name"
+                    class="m-auto"
+                  >
+                    <font-awesome-icon :icon="['fas', 'arrow-right']"></font-awesome-icon>
+                  </NuxtLink>
                 </div>
               </div>
-              <TeamLogo
-                class="self-center place-self-center w-12 mx-1"
-                :outfit-id="outfit.id"
-                :outfit-faction="outfit.faction"
-                rounding="rounded"
-              />
-
-              <v-list-item-content>
-                <v-list-item-title
-                  :class="formatOutfitFaction(outfit.faction)"
-                  v-text="outfit.displayName"
-                ></v-list-item-title>
-                <v-list-item-subtitle v-html="outfit.metricsString">
-                </v-list-item-subtitle>
-              </v-list-item-content>
-              <v-list-item-action>
-                <NuxtLink
-                  :to="'/outfit-wars/matches?outfitName=' + outfit.name"
-                >
-                  <v-btn icon>
-                    <v-icon color="grey lighten-1">mdi-arrow-right</v-icon>
-                  </v-btn>
-                </NuxtLink>
-              </v-list-item-action>
-            </v-list-item>
-          </v-list>
+            </div>
+          </div>
         </v-card>
       </div>
     </div>
@@ -295,6 +294,7 @@
           class="btn mx-1"
           :class="activeBracketTabCheck(world)"
           @click="changeBracketWorld(world)"
+          :disabled="disabledTabCheck(world)"
         >
           {{ world | worldName }}
         </button>
@@ -313,6 +313,7 @@
           v-for="world in worlds"
           :key="world"
           :href="getTabValue(world, true)"
+          :disabled="disabledTabCheck(world)"
         >
           {{ world | worldName }} Brackets
         </v-tab>
@@ -384,7 +385,7 @@ export default Vue.extend({
       now: parseInt(moment().tz('UTC').format('X'), 10),
       end: parseInt(moment.tz('2022-09-02 18:20:00', 'UTC').format('X'), 10),
       timeRemaining: 0,
-      worlds: [World.COBALT, World.CONNERY, World.EMERALD, World.MILLER],
+      worlds: [World.COBALT, World.CONNERY, World.EMERALD, World.MILLER, World.SOLTECH],
       worldRounds: [] as number[],
       currentWorldRankingsMap: new Map<World, ParsedOutfitDataInterface[]>(),
       factionCount: [0, 0, 0, 0, 0] as number[],
@@ -735,11 +736,12 @@ export default Vue.extend({
     },
     activeBracketTabCheck(world: World): object {
       return this.activeBracketTab === `${worldName(world)}-bracket`
-        ? {
-            'btn-active': true,
-          }
+        ? { 'btn-active': true }
         : {}
     },
+    disabledTabCheck(world: World): boolean {
+      return world === World.SOLTECH
+    }
   },
 })
 </script>
