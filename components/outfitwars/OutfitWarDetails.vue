@@ -27,6 +27,16 @@
         <tr>
           <td class="px-2 py-1 md:py-2 whitespace-nowrap">
             <div class="flex justify-between">
+              <div class="mr-4 font-bold">Duration</div>
+              <div>
+                {{ duration }}
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="px-2 py-1 md:py-2 whitespace-nowrap">
+            <div class="flex justify-between">
               <div class="mr-4 font-bold">Server</div>
               <div>
                 {{ outfitwar.world | worldName }}
@@ -109,6 +119,7 @@ import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceEventDetails } from '@/constants/InstanceEventDetails'
 import { MetagameDetailsInterface } from '@/interfaces/MetagameDetailsInterface'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
+import moment from 'moment'
 
 export default Vue.extend({
   name: 'AlertDetails',
@@ -122,6 +133,21 @@ export default Vue.extend({
   computed: {
     ended(): boolean {
       return this.outfitwar.state === Ps2AlertsEventState.ENDED
+    },
+    duration(): string {
+      if (this.outfitwar.state !== Ps2AlertsEventState.ENDED) {
+        return 'TBA'
+      }
+
+      if (!this.outfitwar.timeEnded || !this.outfitwar.timeStarted) {
+        return 'TBA'
+      }
+
+      const start = moment.tz(this.outfitwar.timeStarted, 'UTC')
+      const end = moment.tz(this.outfitwar.timeEnded, 'UTC')
+      const diff = end.diff(start);
+
+      return moment.utc(diff).format("mm:ss")
     },
     instanceEventDetails(): MetagameDetailsInterface | null | undefined {
       return InstanceEventDetails(227)
