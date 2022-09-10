@@ -202,8 +202,8 @@
         v-for="world in worlds"
         :id="'world-' + world"
         :key="world"
-        class="col-span-12 xl:col-span-4 lg:col-span-6"
-        :class="world === 10 ? {'xl:col-start-3': true} : {}"
+        class="col-span-12 3xl:col-span-3 xl:col-span-4 md:col-span-6"
+        :class="world === 10 ? {'xl:col-start-3': true} : world === 40 ? {'3xl:col-start-5': true} : {}"
       >
         <img
           alt="Server Logo"
@@ -249,14 +249,14 @@
               :class="index === 7 || index === worldRankings(world, true).length - 1 ? {'border-b-0': true} : {}"
             >
               <div class="col-span-12 border border-y-red-500 border-y-2 border-x-0 py-2 text-xs" v-if="index === 8">Qualifier cutoff</div>
-              <div class="col-span-12 grid grid-cols-12 gap-x-2 py-2 px-2 content-center h-24">
+              <div class="col-span-12 grid grid-cols-12 gap-x-2 p-2 content-center h-24">
                 <div class="col-span-1 text-center flex">
                   <div class="bg-gray-500 px-2 rounded-xl m-auto w-min">
                     {{ index + 1 }}
                   </div>
                 </div>
                 <TeamLogo
-                  class="col-span-2 self-center"
+                  class="col-span-2 self-center object-contain p-1"
                   :outfit-id="outfit.id"
                   :outfit-faction="outfit.faction"
                   rounding="rounded"
