@@ -271,7 +271,7 @@
                 <div class="col-span-2 flex text-right" v-if="world !== 40">
                   <NuxtLink
                     :to="'/outfit-wars/matches?outfitName=' + outfit.name"
-                    class="m-auto"
+                    class="m-auto p-2 hover:bg-gray-500 rounded-lg transition-colors"
                   >
                     <font-awesome-icon :icon="['fas', 'arrow-right']"></font-awesome-icon>
                   </NuxtLink>
