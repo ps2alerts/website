@@ -10,16 +10,17 @@
     <div
       class="flex gap-2 p-2 mb-2 border bg-tint rounded relative hover text-xs sm:text-base"
       :class="getBackgroundColour()"
+      v-if="loaded"
     >
       <div class="self-center">
         <TeamLogo
           class="self-center place-self-center w-12"
-          :outfit-id="rankings[0].id"
-          :outfit-faction="rankings[0].faction"
+          :outfit-id="redData.id"
+          :outfit-faction="redData.faction"
           rounding="rounded"
         />
-        <span :class="getLabelClass(rankings[0].faction)">{{
-          rankings[0].faction | factionShortName
+        <span :class="getLabelClass(redData.faction)">{{
+          redData.faction | factionShortName
         }}</span>
       </div>
       <div
@@ -28,9 +29,11 @@
         <div class="flex items-center align-middle justify-end col-start-1 col-span-3 mb-2 lg:mb-0">
           <div
             class="text-right mb-1 font-semibold"
-            :class="formatOutfitFaction(getTeamFaction(rankings[0].id))"
+            :class="formatOutfitFaction(getTeamFaction(redData.id))"
           >
-            {{ formatOutfitName(rankings[0].displayName.trim()) }}
+            <span v-if="victor === 3" class="font-bold">{{ formatOutfitName(redData.displayName.trim()) }}</span>
+            <span v-else-if="victor" class="line-through">{{ formatOutfitName(redData.displayName.trim()) }}</span>
+            <span v-else>{{ formatOutfitName(redData.displayName.trim()) }}</span>
           </div>
         </div>
         <div class="flex items-center align-middle justify-center col-start-4 col-span-1 mb-2 lg:mb-0">
@@ -39,9 +42,11 @@
         <div class="flex items-center align-middle justify-start col-end-8 col-span-3 mb-2 lg:mb-0">
           <div
             class="text-left mb-1 font-semibold"
-            :class="formatOutfitFaction(getTeamFaction(rankings[1].id))"
+            :class="formatOutfitFaction(getTeamFaction(blueData.id))"
           >
-            {{ formatOutfitName(rankings[1].displayName.trim()) }}
+            <span v-if="victor === 2" class="font-bold">{{ formatOutfitName(blueData.displayName.trim()) }}</span>
+            <span v-else-if="victor" class="line-through">{{ formatOutfitName(blueData.displayName.trim()) }}</span>
+            <span v-else>{{ formatOutfitName(blueData.displayName.trim()) }}</span>
           </div>
         </div>
         <!-- Using borders here for alignment - the FactionSegment bar is 1px taller than the Awaiting match text otherwise -->
@@ -50,7 +55,7 @@
           class="text-gray-500 col-start-3 col-span-3"
         >
           <span
-            >Match starts {{ getUserTime(rankings[0].matchStartTime) }}</span
+            >Match starts {{ getUserTime(blueData.matchStartTime) }}</span
           >
         </div>
         <FactionSegmentBar
@@ -68,12 +73,12 @@
       <div class="self-center">
         <TeamLogo
           class="self-center place-self-center w-12"
-          :outfit-id="rankings[1].id"
-          :outfit-faction="rankings[1].faction"
+          :outfit-id="blueData.id"
+          :outfit-faction="blueData.faction"
           rounding="rounded"
         />
-        <span :class="getLabelClass(rankings[1].faction)">{{
-          rankings[1].faction | factionShortName
+        <span :class="getLabelClass(blueData.faction)">{{
+          blueData.faction | factionShortName
         }}</span>
       </div>
     </div>
@@ -83,26 +88,19 @@
 <script lang="ts">
 import Vue from 'vue'
 import moment from 'moment-timezone'
-import { PropValidator } from 'vue/types/options'
-import { DATE_TIME_FORMAT_SHORT } from '@/constants/Time'
-import { Team } from '@/ps2alerts-constants/outfitwars/team'
-import {
-  FactionBgClass,
-  FactionBgClassString,
-  TeamToFaction,
-} from '@/constants/FactionBgClass'
-import {
-  FactionBorderClass,
-  FactionBorderClassString,
-} from '@/constants/FactionBorderClass'
+import {PropValidator} from 'vue/types/options'
+import {DATE_TIME_FORMAT_SHORT} from '@/constants/Time'
+import {Team} from '@/ps2alerts-constants/outfitwars/team'
+import {FactionBgClass, FactionBgClassString, TeamToFaction,} from '@/constants/FactionBgClass'
+import {FactionBorderClass, FactionBorderClassString,} from '@/constants/FactionBorderClass'
 import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
-import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
-import { ParsedOutfitDataInterface } from '~/interfaces/ParsedOutfitDataInterface'
+import {InstanceOutfitWarsResponseInterface} from '~/interfaces/InstanceOutfitWarsResponseInterface'
+import {ParsedOutfitDataInterface} from '~/interfaces/ParsedOutfitDataInterface'
 import ApiRequest from '~/api-request'
-import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
-import { Ps2AlertsEventState } from '~/ps2alerts-constants/ps2AlertsEventState'
-import { Faction } from '~/ps2alerts-constants/faction'
-import { FactionTextClass } from '~/constants/FactionTextClass'
+import {ps2AlertsApiEndpoints} from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
+import {Ps2AlertsEventState} from '~/ps2alerts-constants/ps2AlertsEventState'
+import {Faction} from '~/ps2alerts-constants/faction'
+import {FactionTextClass} from '~/constants/FactionTextClass'
 import factionShortName from '~/filters/FactionShortName'
 
 export default Vue.extend({
@@ -139,6 +137,9 @@ export default Vue.extend({
       match: undefined as InstanceOutfitWarsResponseInterface | undefined,
       updateRate: 10000,
       updateInterval: undefined as number | undefined,
+      redData: undefined as ParsedOutfitDataInterface | undefined,
+      blueData: undefined as ParsedOutfitDataInterface | undefined,
+      loaded: false
     }
   },
   computed: {
@@ -181,10 +182,13 @@ export default Vue.extend({
     this.init()
   },
   methods: {
-    init() {
-      this.pull()
+    async init() {
+      await this.pull()
+      this.assignTeamData()
+      this.loaded = true;
       this.updateInterval = window.setInterval(() => {
         this.pull()
+        this.assignTeamData()
       }, this.updateRate)
     },
     async pull() {
@@ -261,6 +265,25 @@ export default Vue.extend({
         ? Faction.TERRAN_REPUBLIC
         : Faction.NEW_CONGLOMERATE
     },
+    // Filters the data by the team to ensure we always have a red vs blue display
+    assignTeamData(): void {
+      // If we don't have the match yet (match in the future), assign using available ranking data
+      if (!this.match?.instanceId) {
+        this.blueData = this.rankings[0];
+        this.redData = this.rankings[1];
+        return;
+      }
+
+      let blueData =  this.rankings.filter((outfit) => {
+        return outfit.id === this.match?.outfitwars.teams?.blue?.id
+      })
+      let redData =  this.rankings.filter((outfit) => {
+        return outfit.id === this.match?.outfitwars.teams?.red?.id
+      })
+
+      this.blueData = blueData[0];
+      this.redData = redData[0]
+    }
   },
 })
 </script>

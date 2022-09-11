@@ -11,6 +11,7 @@
     </div>
     <RoundBracketEntry
       v-for="(rankingPair, index) in rankingPairs"
+      v-if="rankingPair[0].world !== 40"
       :key="index"
       :rankings="rankingPair"
     />
