@@ -136,11 +136,11 @@ export default Vue.extend({
     },
     duration(): string {
       if (this.outfitwar.state !== Ps2AlertsEventState.ENDED) {
-        return 'TBA'
+        return 'TBD'
       }
 
       if (!this.outfitwar.timeEnded || !this.outfitwar.timeStarted) {
-        return 'TBA'
+        return 'TBD'
       }
 
       const start = moment.tz(this.outfitwar.timeStarted, 'UTC')
