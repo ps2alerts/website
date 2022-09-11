@@ -14,6 +14,7 @@
       v-if="rankingPair[0].world !== 40"
       :key="index"
       :rankings="rankingPair"
+      :current-round="currentRound"
     />
   </div>
 </template>
@@ -40,6 +41,10 @@ export default Vue.extend({
       required: true,
     } as PropValidator<WorldPC>,
     round: {
+      type: Number,
+      required: true,
+    },
+    currentRound: {
       type: Number,
       required: true,
     },

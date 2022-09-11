@@ -339,6 +339,7 @@
                 <RoundBracket
                   :rankings="worldRankings(world)"
                   :round="round"
+                  :current-round="rounds.length"
                   :server="world"
                 />
               </div>

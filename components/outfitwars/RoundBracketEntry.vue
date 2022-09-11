@@ -54,8 +54,7 @@
           v-if="!(match && match.result)"
           class="text-gray-500 col-start-3 col-span-3"
         >
-          <span
-            >Match starts {{ getUserTime(blueData.matchStartTime) }}</span
+          <span>{{ getUserTime(blueData.matchStartTime) }}</span
           >
         </div>
         <FactionSegmentBar
@@ -131,6 +130,10 @@ export default Vue.extend({
       },
       required: true,
     } as PropValidator<ParsedOutfitDataInterface[]>,
+    currentRound: {
+      type: Number,
+      required: true
+    }
   },
   data() {
     return {
@@ -218,17 +221,29 @@ export default Vue.extend({
       return FactionTextClass(faction)
     },
     getUserTime(datetime: Date): string {
+      // If match time is in the past which is a common occurrence for the future matches until we get official data, display TBA
+      const now = new Date();
+
+      if (datetime.getTime() < now.getTime() && this.rankings[0].round === this.currentRound) {
+        return 'Not yet scheduled'
+      }
+
+      let stringToReturn = '';
+
       const locale = Intl.NumberFormat().resolvedOptions().locale
       try {
-        return new Intl.DateTimeFormat(locale, {
+        const timeString = new Intl.DateTimeFormat(locale, {
           dateStyle: 'short',
           timeStyle: 'short',
         }).format(datetime)
+        stringToReturn = `Match starts: ${timeString}`
       } catch (err) {
         console.error(err)
         console.error(JSON.stringify(datetime))
-        return datetime.toLocaleString(locale)
+        stringToReturn = `Match starts: ${datetime.toLocaleString(locale)}`
       }
+
+      return stringToReturn
     },
     getBackgroundColour(): object {
       if (!this.match?.result.victor) {
