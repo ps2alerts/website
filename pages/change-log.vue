@@ -69,10 +69,41 @@ export default Vue.extend({
       pageTitle: 'Change Log',
       pageDesc: "See what's recently been released for PS2Alerts!",
       version: this.$config.version,
-      panel: [0, 1, 2],
+      panel: [0, 1, 2, 3, 4],
       posts: [
         {
-          id: 15,
+          id: 18,
+          title: `v4.3.4 - Various cosmetic changes`,
+          date: '11th September 2022',
+          type: 'minor-update',
+          body: `
+            <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+              <div>
+                <p>Various tweaks and polish have been applied to the site, making your experience better!</p>
+                <p class="text-xl font-bold">Match pages</p>
+                <ul>
+                    <li>Added match durations to the match pages, this was a streamer requested feature.</li>
+                    <li>Optimised the colours of the Team Info "versus" banner, where the winner is a lot more obvious.</li>
+                </ul>
+                <p class="text-xl font-bold">Rankings & Brackets page</p>
+                <ul>
+                    <li>Changed bracket view to be vertically scrolling rather than horizontal.</li>
+                    <li>Bracket match entries are now always Red vs Blue, matching the territory bars. We've also added a strikethrough to the loser of matches to better highlight at a glance who won / lost.</li>
+                    <li>Added better handling of upcoming matches. Every Sunday there's a period where we know what the lineups are, but we don't know the match times, which was previously showing a date in the past which was very confusing.</li>
+                </ul>
+                <p class="text-xl font-bold">Known issues</p>
+                <p>We're tracking the following known issues:</p>
+                <ul>
+                    <li>Missing a total of 8 matches of data (4 on Cobalt and 4 on Miller). We are getting closer with our backfill tooling for these matches and will be the next focus.</li>
+                    <li>Populations are still scuffed for any matches involving VS, or any same faction matches.</li>
+                    <li>Mobile view for Team Info is still wonky (low priority considering 18% of traffic is mobile)</li>
+                    <li>Occasionally people see the wrong version of the website due to caching issues. This is extraordinarily hard to fix. If you suspect you're on the wrong version, simply just hard refresh by pressing Shift + R or some other combination of it.</li>
+                </ul>
+              </div>
+            </div>`,
+        },
+        {
+          id: 17,
           title: `v4.3.3 - SolTech added to rankings`,
           date: '10th September 2022',
           type: 'minor-update',
@@ -86,7 +117,7 @@ export default Vue.extend({
             </div>`,
         },
         {
-          id: 15,
+          id: 16,
           title: `v4.3.2 - Vehicle Combat Data reinstated & Outfit Wars fixes`,
           date: '10th September 2022',
           type: 'minor-update',
