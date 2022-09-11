@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-between w-fit grow">
+  <div class="w-full xl:w-2/3 3xl:max-w-4xl m-auto px-2">
     <div v-if="rankingPairs.length > 0" class="mb-2">
       <div class="text-xl">
         {{ phase | phaseName }}
@@ -7,7 +7,7 @@
       <div v-if="phase !== CHAMPIONSHIPS" class="text-sm">
         Round {{ round | owRoundByPhase(phase) }}
       </div>
-      <div v-else class="text-xs">Final</div>
+      <div v-else class="text-sm">Final</div>
     </div>
     <RoundBracketEntry
       v-for="(rankingPair, index) in rankingPairs"

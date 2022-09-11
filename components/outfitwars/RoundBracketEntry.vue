@@ -8,7 +8,7 @@
     :event="match && match.state !== 0 ? 'click' : ''"
   >
     <div
-      class="flex gap-2 p-2 mb-2 border bg-tint rounded relative hover"
+      class="flex gap-2 p-2 mb-2 border bg-tint rounded relative hover text-xs sm:text-base"
       :class="getBackgroundColour()"
     >
       <div class="self-center">
@@ -23,9 +23,9 @@
         }}</span>
       </div>
       <div
-        class="grid grid-cols-7 gap-x-1 gap-y-2 justify-center content-center grow"
+        class="grid grid-cols-7 gap-x-1 gap-y-2 w-full content-center"
       >
-        <div class="col-start-1 col-span-3 text-base mb-2 lg:mb-0">
+        <div class="flex items-center align-middle justify-end col-start-1 col-span-3 mb-2 lg:mb-0">
           <div
             class="text-right mb-1 font-semibold"
             :class="formatOutfitFaction(getTeamFaction(rankings[0].id))"
@@ -33,10 +33,10 @@
             {{ formatOutfitName(rankings[0].displayName.trim()) }}
           </div>
         </div>
-        <div class="col-start-4 col-span-1 text-base mb-2 lg:mb-0">
+        <div class="flex items-center align-middle justify-center col-start-4 col-span-1 mb-2 lg:mb-0">
           <div class="text-center mb-1">vs</div>
         </div>
-        <div class="col-end-8 col-span-3 text-base mb-2 lg:mb-0">
+        <div class="flex items-center align-middle justify-start col-end-8 col-span-3 mb-2 lg:mb-0">
           <div
             class="text-left mb-1 font-semibold"
             :class="formatOutfitFaction(getTeamFaction(rankings[1].id))"
@@ -55,7 +55,7 @@
         </div>
         <FactionSegmentBar
           v-else-if="match && match.result"
-          class="col-start-2 col-span-5"
+          class="col-start-1 col-span-7"
           :vs="0"
           :nc="match.result.blue"
           :tr="match.result.red"
@@ -205,7 +205,7 @@ export default Vue.extend({
     },
     formatOutfitName(string: string): string {
       const length = string.length
-      const maxLength = 30
+      const maxLength = 64
       return length > maxLength
         ? `${string.substring(0, maxLength)}...`
         : string

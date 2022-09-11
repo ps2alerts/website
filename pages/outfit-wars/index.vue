@@ -326,14 +326,14 @@
           :eager="true"
           :value="getTabValue(world)"
         >
-          <section class="col-span-12 relative">
+          <section>
             <div
-              class="flex p-2 pb-0 gap-x-2 overflow-x-auto col-span-12 bg-tint rounded border border-gray-900 snap-x"
+              class="bg-tint rounded border border-gray-900"
             >
               <div
                 v-for="(round, index) in rounds"
                 :key="index"
-                class="col-span-1 flex-shrink-0"
+                class="my-2 py-2 border-b border-b-gray-500"
               >
                 <RoundBracket
                   :rankings="worldRankings(world)"
@@ -430,7 +430,8 @@ export default Vue.extend({
           rounds.push(ranking.round)
         }
       }
-      rounds.sort()
+      // Sort and revert it to show most recent ranks first
+      rounds.sort().reverse()
       console.log(`Rounds: ${JSON.stringify(rounds)}`)
       return rounds
     },
