@@ -28,7 +28,7 @@
       >
         <div class="flex items-center align-middle justify-end col-start-1 col-span-3 mb-2 lg:mb-0">
           <div
-            class="text-right mb-1 font-semibold"
+            class="text-right mb-1 font-semibold text-shadow"
             :class="formatOutfitFaction(getTeamFaction(redData.id))"
           >
             <span v-if="victor === 3" class="font-bold">{{ formatOutfitName(redData.displayName.trim()) }}</span>
@@ -41,7 +41,7 @@
         </div>
         <div class="flex items-center align-middle justify-start col-end-8 col-span-3 mb-2 lg:mb-0">
           <div
-            class="text-left mb-1 font-semibold"
+            class="text-left mb-1 font-semibold text-shadow"
             :class="formatOutfitFaction(getTeamFaction(blueData.id))"
           >
             <span v-if="victor === 2" class="font-bold">{{ formatOutfitName(blueData.displayName.trim()) }}</span>
@@ -83,6 +83,12 @@
     </div>
   </NuxtLink>
 </template>
+
+<style scoped lang="scss">
+.text-shadow {
+  text-shadow: 0 0 10px black
+}
+</style>
 
 <script lang="ts">
 import Vue from 'vue'
