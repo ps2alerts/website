@@ -334,6 +334,7 @@
                 v-for="(round, index) in rounds"
                 :key="index"
                 class="my-2 py-2 border-b border-b-gray-500"
+                :class="round === 1 ? {'border-b-0': true, 'pb-1': true} : {}"
               >
                 <RoundBracket
                   :rankings="worldRankings(world)"
