@@ -85,14 +85,20 @@ export default Vue.extend({
             return 1
           }
         })
-      for (let i = 0; i + 1 < sortedRankings.length; i += 2) {
-        if (this.round === 5 && i === 8) {
-          break
-        }
-        if (this.round > 5 && i === 4) {
-          break
-        }
-        this.pairs.push([sortedRankings[i], sortedRankings[i + 1]])
+      switch(this.round) {
+        case 5:
+          for (let i = 0; i < 4; i += 1) {
+            this.pairs.push([sortedRankings[i], sortedRankings[7 - i]])
+          }
+          break;
+        default:
+          for (let i = 0; i + 1 < sortedRankings.length; i += 2) {
+            if(this.round > 5 && i === 4){
+              break;
+            } 
+            this.pairs.push([sortedRankings[i], sortedRankings[i + 1]])
+          }
+          break;
       }
       return this.pairs
     },
