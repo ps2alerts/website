@@ -26,4 +26,5 @@ export interface ParsedOutfitDataInterface {
   outfitImageUrl: string
   metricsString: string
   instanceId: string | null
+  index?: number
 }
