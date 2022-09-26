@@ -370,10 +370,11 @@ export default Vue.extend({
       return FactionTextClass(faction)
     },
     getUserTime(datetime: Date): string {
-      // If match time is in the past which is a common occurrence for the future matches until we get official data, display TBA
+      // If match time is in the past which is a common occurrence for the future matches until we get official data, display TBA - unless we are in the 20 minute prep phase
       const now = new Date();
+      const twentyMinMS = 1200000;
 
-      if (datetime.getTime() < now.getTime() && this.rankings[0].round === this.currentRound) {
+      if ((datetime.getTime() + twentyMinMS) < now.getTime() && this.rankings[0].round === this.currentRound) {
         return 'Not yet scheduled'
       }
 
