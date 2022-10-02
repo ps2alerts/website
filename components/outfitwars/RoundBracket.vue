@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full xl:w-2/3 3xl:max-w-4xl m-auto px-2">
-    <div v-if="rankingPairs.length > 0" class="mb-2">
+  <div v-if="loaded" class="w-full xl:w-2/3 3xl:max-w-4xl m-auto px-2">
+    <div v-if="rankingPairs().length > 0" class="mb-2">
       <div class="text-xl">
         {{ phase | phaseName }}
       </div>
@@ -9,15 +9,13 @@
       </div>
       <div v-else class="text-sm">Final</div>
     </div>
-    <div v-if="loaded">
-      <RoundBracketEntry
-        v-for="(rankingPair, index) in rankingPairs()"
-        v-if="rankingPair[0].world !== 40"
-        :key="index"
-        :rankings="rankingPair"
-        :current-round="currentRound"
-      />
-    </div>
+    <RoundBracketEntry
+      v-for="(rankingPair, index) in rankingPairs()"
+      v-if="rankingPair[0].world !== 40"
+      :key="index"
+      :rankings="rankingPair"
+      :current-round="currentRound"
+    />
   </div>
 </template>
 
