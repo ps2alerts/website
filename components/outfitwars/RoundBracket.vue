@@ -211,33 +211,28 @@ export default Vue.extend({
           }
           break
         case 7: {
-          const matchOneWinner = filteredRankings.find((ranking) => {
-            return ranking.id === previousWinners[0].id
-          })
-          const matchOneLoser = filteredRankings.find((ranking) => {
-            return ranking.id === previousLosers[0].id
-          })
-          const matchTwoWinner = filteredRankings.find((ranking) => {
-            return ranking.id === previousWinners[1].id
-          })
-          const matchTwoLoser = filteredRankings.find((ranking) => {
-            return ranking.id === previousLosers[1].id
-          })
-          if (
-            matchOneWinner === undefined ||
-            matchTwoWinner === undefined ||
-            matchOneLoser === undefined ||
-            matchTwoLoser === undefined
-          ) {
-            console.error('Playoff 2 winners not found in current rankings?')
-            break
+          const winners: ParsedOutfitDataInterface[] = []
+          const losers: ParsedOutfitDataInterface[] = []
+          for (let i = 0; i < 2; i += 1) {
+            const winner = filteredRankings.find((ranking) => {
+              return ranking.id === previousWinners[i].id
+            })
+            const loser = filteredRankings.find((ranking) => {
+              return ranking.id === previousLosers[i].id
+            })
+            if (!winner || !loser) {
+              console.error(
+                'Playoff 2 winners/losers not found in current rankings?'
+              )
+              break
+            }
+            winner.index = previousWinners[i].index
+            loser.index = previousLosers[i].index
+            winners.push(winner)
+            losers.push(loser)
           }
-          matchOneWinner.index = previousWinners[0].index
-          matchTwoWinner.index = previousWinners[1].index
-          matchOneLoser.index = previousLosers[0].index
-          matchTwoLoser.index = previousLosers[1].index
-          this.pairs.push([matchOneWinner, matchTwoWinner])
-          this.pairs.push([matchOneLoser, matchTwoLoser])
+          this.pairs.push(winners)
+          this.pairs.push(losers)
           break
         }
         default:
