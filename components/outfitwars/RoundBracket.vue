@@ -126,6 +126,7 @@ export default Vue.extend({
       let playoffSeedingRankings: ParsedOutfitDataInterface[] = []
       const previousPairs: ParsedOutfitDataInterface[][] = []
       let previousWinners: ParsedOutfitDataInterface[] = []
+      let previousLosers: ParsedOutfitDataInterface[] = []
 
       if (this.round > 5) {
         winners = this.previousRoundMatches.map((match) => {
@@ -175,6 +176,13 @@ export default Vue.extend({
             return pair[1]
           }
         })
+        previousLosers = previousPairs.map((pair) => {
+          if (!winners.includes(pair[0].id)) {
+            return pair[0]
+          } else {
+            return pair[1]
+          }
+        })
       }
 
       switch (this.round) {
@@ -186,7 +194,6 @@ export default Vue.extend({
           }
           break
         case 6:
-        case 7:
           for (let i = 0; i < 2; i += 1) {
             let first = filteredRankings.find((ranking) => {
               return ranking.id === previousWinners[i].id
@@ -204,6 +211,35 @@ export default Vue.extend({
             this.pairs.push([first, second])
           }
           break
+        case 7: {
+          const matchOneWinner = filteredRankings.find((ranking) => {
+            return ranking.id === previousWinners[0].id
+          })
+          const matchOneLoser = filteredRankings.find((ranking) => {
+            return ranking.id === previousLosers[0].id
+          })
+          const matchTwoWinner = filteredRankings.find((ranking) => {
+            return ranking.id === previousWinners[1].id
+          })
+          const matchTwoLoser = filteredRankings.find((ranking) => {
+            return ranking.id === previousLosers[1].id
+          })
+          if (
+            matchOneWinner === undefined ||
+            matchTwoWinner === undefined ||
+            matchOneLoser === undefined ||
+            matchTwoLoser === undefined
+          ) {
+            break
+          }
+          matchOneWinner.index = previousWinners[0].index
+          matchTwoWinner.index = previousWinners[1].index
+          matchOneLoser.index = previousLosers[0].index
+          matchTwoLoser.index = previousLosers[1].index
+          this.pairs.push([matchOneWinner, matchTwoWinner])
+          this.pairs.push([matchOneLoser, matchTwoLoser])
+          break
+        }
         default:
           for (let i = 0; i + 1 < sortedRankings.length; i += 2) {
             if (this.round > 5 && i === 4) {
