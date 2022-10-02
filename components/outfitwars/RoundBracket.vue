@@ -195,16 +195,15 @@ export default Vue.extend({
           break
         case 6:
           for (let i = 0; i < 2; i += 1) {
-            let first = filteredRankings.find((ranking) => {
+            const first = filteredRankings.find((ranking) => {
               return ranking.id === previousWinners[i].id
             })
-            let second = filteredRankings.find((ranking) => {
+            const second = filteredRankings.find((ranking) => {
               return ranking.id === previousWinners[3 - i].id
             })
             if (first === undefined || second === undefined) {
-              console.error('Winners not found in current rankings?')
-              first = previousWinners[i]
-              second = previousWinners[3 - i]
+              console.error('Playoff 1 winners not found in current rankings?')
+              break
             }
             first.index = previousWinners[i].index
             second.index = previousWinners[3 - i].index
@@ -230,6 +229,7 @@ export default Vue.extend({
             matchOneLoser === undefined ||
             matchTwoLoser === undefined
           ) {
+            console.error('Playoff 2 winners not found in current rankings?')
             break
           }
           matchOneWinner.index = previousWinners[0].index
