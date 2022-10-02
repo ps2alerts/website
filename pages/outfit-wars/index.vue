@@ -246,8 +246,9 @@
               v-for="(outfit, index) in worldRankings(world, true)"
               :key="outfit.id"
               class="border-b border-b-gray-600 grid grid-cols-12"
-              :class="index === 7 || index === worldRankings(world, true).length - 1 ? {'border-b-0': true} : {}"
+              :class="index === 3 || index === 7 || index === worldRankings(world, true).length - 1 ? {'border-b-0': true} : {}"
             >
+              <div class="col-span-12 border border-y-red-500 border-y-2 border-x-0 py-2 text-xs" v-if="index === 4">Championship cutoff</div>
               <div class="col-span-12 border border-y-red-500 border-y-2 border-x-0 py-2 text-xs" v-if="index === 8">Qualifier cutoff</div>
               <div class="col-span-12 grid grid-cols-12 gap-x-2 p-2 content-center h-24">
                 <div class="col-span-1 text-center flex">
@@ -327,14 +328,12 @@
           :value="getTabValue(world)"
         >
           <section>
-            <div
-              class="bg-tint rounded border border-gray-900"
-            >
+            <div class="bg-tint rounded border border-gray-900">
               <div
                 v-for="(round, index) in rounds"
                 :key="index"
                 class="my-2 py-2 border-b border-b-gray-500"
-                :class="round === 1 ? {'border-b-0': true, 'pb-1': true} : {}"
+                :class="round === 1 ? { 'border-b-0': true, 'pb-1': true } : {}"
               >
                 <RoundBracket
                   :rankings="worldRankings(world)"
