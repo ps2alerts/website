@@ -63,7 +63,7 @@ export default Vue.extend({
   data() {
     return {
       pairs: [] as ParsedOutfitDataInterface[][],
-      playoffRoundOneMatches: [] as InstanceOutfitWarsResponseInterface[],
+      previousRoundMatches: [] as InstanceOutfitWarsResponseInterface[],
       loaded: false,
       CHAMPIONSHIPS: Phase.CHAMPIONSHIPS,
     }
@@ -84,12 +84,12 @@ export default Vue.extend({
   },
   methods: {
     async init() {
-      if (this.round === 6) {
-        this.playoffRoundOneMatches = await new ApiRequest().get<
+      if (this.round > 5 && this.round < 8) {
+        this.previousRoundMatches = await new ApiRequest().get<
           InstanceOutfitWarsResponseInterface[]
         >(
           ps2AlertsApiEndpoints.outfitwarsList +
-            `?world=${this.server.valueOf()}&round=5`
+            `?world=${this.server.valueOf()}&round=${this.round - 1}`
         )
       }
       this.loaded = true
@@ -121,6 +121,61 @@ export default Vue.extend({
       })
 
       const sortedRankings = filteredRankings.sort(this.rankingsSort)
+      let winners: string[] = []
+      let previousRankings: ParsedOutfitDataInterface[] = []
+      let playoffSeedingRankings: ParsedOutfitDataInterface[] = []
+      const previousPairs: ParsedOutfitDataInterface[][] = []
+      let previousWinners: ParsedOutfitDataInterface[] = []
+
+      if (this.round > 5) {
+        winners = this.previousRoundMatches.map((match) => {
+          if (!(match.outfitwars.teams?.blue && match.outfitwars.teams.red)) {
+            return ''
+          }
+          if (match.result.victor === 2) {
+            return match.outfitwars.teams?.blue?.id
+          } else {
+            return match.outfitwars.teams?.red?.id
+          }
+        })
+        previousRankings = this.rankings
+          .filter((ranking) => {
+            return (
+              ranking.round === this.round - 1 &&
+              ranking.world.valueOf() === this.server.valueOf()
+            )
+          })
+          .sort(this.rankingsSort)
+        playoffSeedingRankings = this.rankings
+          .filter((ranking) => {
+            return (
+              ranking.round === 5 &&
+              ranking.world.valueOf() === this.server.valueOf()
+            )
+          })
+          .sort(this.rankingsSort)
+        const indexOffset = this.round === 6 ? 7 : 3
+        for (let i = 0; i < (indexOffset + 1) / 2; i += 1) {
+          previousRankings[i].index = playoffSeedingRankings.findIndex(
+            (ranking) => ranking.id === previousRankings[i].id
+          )
+          previousRankings[indexOffset - i].index =
+            playoffSeedingRankings.findIndex(
+              (ranking) => ranking.id === previousRankings[indexOffset - i].id
+            )
+          previousPairs.push([
+            previousRankings[i],
+            previousRankings[indexOffset - i],
+          ])
+        }
+        previousWinners = previousPairs.map((pair) => {
+          if (winners.includes(pair[0].id)) {
+            return pair[0]
+          } else {
+            return pair[1]
+          }
+        })
+      }
 
       switch (this.round) {
         case 5:
@@ -130,56 +185,25 @@ export default Vue.extend({
             this.pairs.push([sortedRankings[i], sortedRankings[7 - i]])
           }
           break
-        case 6: {
-          const winners: string[] = this.playoffRoundOneMatches.map((match) => {
-            if (!(match.outfitwars.teams?.blue && match.outfitwars.teams.red)) {
-              return ''
-            }
-            if (match.result.victor === 2) {
-              return match.outfitwars.teams?.blue?.id
-            } else {
-              return match.outfitwars.teams?.red?.id
-            }
-          })
-          const playoff1Rankings = this.rankings
-            .filter((ranking) => {
-              return (
-                ranking.round === 5 &&
-                ranking.world.valueOf() === this.server.valueOf()
-              )
-            })
-            .sort(this.rankingsSort)
-          const playoff1Pairs: ParsedOutfitDataInterface[][] = []
-          for (let i = 0; i < 4; i += 1) {
-            playoff1Rankings[i].index = i
-            playoff1Rankings[7 - i].index = 7 - i
-            playoff1Pairs.push([playoff1Rankings[i], playoff1Rankings[7 - i]])
-          }
-          const playoff1Winners = playoff1Pairs.map((pair) => {
-            if (winners.includes(pair[0].id)) {
-              return pair[0]
-            } else {
-              return pair[1]
-            }
-          })
+        case 6:
+        case 7:
           for (let i = 0; i < 2; i += 1) {
             let first = filteredRankings.find((ranking) => {
-              return ranking.id === playoff1Winners[i].id
+              return ranking.id === previousWinners[i].id
             })
             let second = filteredRankings.find((ranking) => {
-              return ranking.id === playoff1Winners[3 - i].id
+              return ranking.id === previousWinners[3 - i].id
             })
             if (first === undefined || second === undefined) {
-              console.error('Winners not found in current rankings???')
-              first = playoff1Winners[i]
-              second = playoff1Winners[3 - i]
+              console.error('Winners not found in current rankings?')
+              first = previousWinners[i]
+              second = previousWinners[3 - i]
             }
-            first.index = playoff1Winners[i].index
-            second.index = playoff1Winners[3 - i].index
+            first.index = previousWinners[i].index
+            second.index = previousWinners[3 - i].index
             this.pairs.push([first, second])
           }
           break
-        }
         default:
           for (let i = 0; i + 1 < sortedRankings.length; i += 2) {
             if (this.round > 5 && i === 4) {
