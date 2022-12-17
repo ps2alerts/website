@@ -104,7 +104,7 @@ const subTabs: TabInterface[] = [
   {
     id: 2,
     name: 'Discord',
-    href: `https://discord.io/ps2alerts`,
+    href: `https://discord.gg/jEWfAJWHxa`,
     icon: ['fab', 'discord'],
   },
   {
