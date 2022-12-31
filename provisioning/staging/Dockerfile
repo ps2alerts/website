@@ -5,7 +5,7 @@ COPY --chown=node:node . /app
 
 ARG BUILD_SHA="abc12345"
 ARG BUILT="1970-01-01 00:00:00"
-ARG VERSION="v4.0.0"
+ARG VERSION="foo"
 
 ENV BUILT="$BUILT"
 ENV ENV="staging"
