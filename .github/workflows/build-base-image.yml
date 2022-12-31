@@ -42,4 +42,4 @@ jobs:
           file: provisioning/base/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: maelstromeous/applications:ps2alerts-website-base
+          tags: maelstromeous/ps2alerts:website-base

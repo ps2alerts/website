@@ -1,4 +1,4 @@
-FROM maelstromeous/applications:ps2alerts-website-base
+FROM maelstromeous/ps2alerts:website-base
 USER root
 COPY ./provisioning/staging/files/nginx/staging.conf /etc/nginx/conf.d
 COPY --chown=node:node . /app
