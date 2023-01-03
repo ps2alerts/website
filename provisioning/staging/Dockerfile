@@ -12,7 +12,7 @@ ENV ENV="staging"
 ENV VERSION="$VERSION"
 ENV BUILD="$BUILD_SHA"
 ENV BASE_URL="https://staging.ps2alerts.com"
-ENV API_HOST="https://staging.api.ps2alerts.com"
+ENV API_HOST="https://staging-api.ps2alerts.com"
 ENV GOOGLE_PROPERTY="G-FJDCBTJV5D"
 
 USER node
