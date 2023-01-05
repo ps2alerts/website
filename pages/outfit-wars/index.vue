@@ -89,105 +89,99 @@
       </div>
     </div>
 
-<!--    <div class="col-span-12 border-t border-t-gray-500">-->
-<!--      <span class="grayscale hidden"></span>-->
-<!--    </div>-->
-<!--    <div class="col-span-12 lg:col-span-8 lg:col-start-3">-->
-<!--      <div class="grid grid-cols-7 text-center my-4">-->
-<!--        <div class="col-span-4 grid grid-cols-4 border-r border-r-gray-600">-->
-<!--          <div-->
-<!--            class="col-span-4 text-center"-->
-<!--            :class="roundTextClass('qualifiers')"-->
-<!--          >-->
-<!--            Qualifiers-->
-<!--          </div>-->
-<!--          <div-->
-<!--            class="p-2 mx-0.5 rounded-xl col-span-1 border"-->
-<!--            :class="loaded ? roundClasses(1) : ''"-->
-<!--          >-->
-<!--            1-->
-<!--          </div>-->
-<!--          <div-->
-<!--            class="p-2 mx-0.5 rounded-xl col-span-1 border"-->
-<!--            :class="loaded ? roundClasses(2) : ''"-->
-<!--          >-->
-<!--            2-->
-<!--          </div>-->
-<!--          <div-->
-<!--            class="p-2 mx-0.5 rounded-xl col-span-1 border"-->
-<!--            :class="loaded ? roundClasses(3) : ''"-->
-<!--          >-->
-<!--            3-->
-<!--          </div>-->
-<!--          <div-->
-<!--            class="p-2 mx-0.5 rounded-xl col-span-1 border"-->
-<!--            :class="loaded ? roundClasses(4) : ''"-->
-<!--          >-->
-<!--            4-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-span-2 grid grid-cols-2 border-r border-r-gray-600">-->
-<!--          <div-->
-<!--            class="col-span-2 text-center"-->
-<!--            :class="roundTextClass('playoffs')"-->
-<!--          >-->
-<!--            Playoffs-->
-<!--          </div>-->
-<!--          <div-->
-<!--            class="p-2 mx-0.5 rounded-xl col-span-1 border"-->
-<!--            :class="loaded ? roundClasses(5) : ''"-->
-<!--          >-->
-<!--            5-->
-<!--          </div>-->
-<!--          <div-->
-<!--            class="p-2 mx-0.5 rounded-xl col-span-1 border"-->
-<!--            :class="loaded ? roundClasses(6) : ''"-->
-<!--          >-->
-<!--            6-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-span-1 grid grid-cols-1">-->
-<!--          <div-->
-<!--            class="col-span-2 text-center"-->
-<!--            :class="roundTextClass('championships')"-->
-<!--          >-->
-<!--            Finals-->
-<!--          </div>-->
-<!--          <div-->
-<!--            class="p-2 mx-0.5 rounded-xl col-span-1 border"-->
-<!--            :class="loaded ? roundClasses(7) : ''"-->
-<!--          >-->
-<!--            7-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <div class="col-span-12 hidden lg:col-span-8 lg:col-start-3">
+      <div class="grid grid-cols-7 text-center my-4">
+        <div class="col-span-4 grid grid-cols-4 border-r border-r-gray-600">
+          <div
+            class="col-span-4 text-center"
+            :class="roundTextClass('qualifiers')"
+          >
+            Qualifiers
+          </div>
+          <div
+            class="p-2 mx-0.5 rounded-xl col-span-1 border"
+            :class="loaded ? roundClasses(1) : ''"
+          >
+            1
+          </div>
+          <div
+            class="p-2 mx-0.5 rounded-xl col-span-1 border"
+            :class="loaded ? roundClasses(2) : ''"
+          >
+            2
+          </div>
+          <div
+            class="p-2 mx-0.5 rounded-xl col-span-1 border"
+            :class="loaded ? roundClasses(3) : ''"
+          >
+            3
+          </div>
+          <div
+            class="p-2 mx-0.5 rounded-xl col-span-1 border"
+            :class="loaded ? roundClasses(4) : ''"
+          >
+            4
+          </div>
+        </div>
+        <div class="col-span-2 grid grid-cols-2 border-r border-r-gray-600">
+          <div
+            class="col-span-2 text-center"
+            :class="roundTextClass('playoffs')"
+          >
+            Playoffs
+          </div>
+          <div
+            class="p-2 mx-0.5 rounded-xl col-span-1 border"
+            :class="loaded ? roundClasses(5) : ''"
+          >
+            5
+          </div>
+          <div
+            class="p-2 mx-0.5 rounded-xl col-span-1 border"
+            :class="loaded ? roundClasses(6) : ''"
+          >
+            6
+          </div>
+        </div>
+        <div class="col-span-1 grid grid-cols-1">
+          <div
+            class="col-span-2 text-center"
+            :class="roundTextClass('championships')"
+          >
+            Finals
+          </div>
+          <div
+            class="p-2 mx-0.5 rounded-xl col-span-1 border"
+            :class="loaded ? roundClasses(7) : ''"
+          >
+            7
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="col-span-12 pt-2 border-t border-t-gray-500">
       <h1 class="text-title text-center">Outfit Wars 2022 Rankings</h1>
       <div
-        class="bg-red-700 border-red-500 border w-full p-4 my-4 text-center rounded"
+        class="p-4 text-center rounded"
       >
-      <p>
-        <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
-        Is your outfit logo missing?
-        <a
-          href="https://www.outfit-tracker.com/outfitsearch/"
-          target="_blank"
-          class="text-red-600"
-          >Upload it to Outfit Tracker!</a
-        >
-      </p>
-      <p class="text-xs mb-2">
-        To add, search your outfit tag, press "update this page", go through the
-        claim process and upload the logo.<br />Shoutout to [VODE] MidddNC for
-        providing access to logos!
-      </p>
-      <p class="text-sm mb-2">
-        <font-awesome-icon icon="['fas', 'info']"></font-awesome-icon>
-        SolTech's rankings have been added to this rankings page, however their match statistics are not yet supported as RPG / DBG haven't yet fully fixed the missing data streams for the server.
-      </p>
-      <p class="text-sm mb-2">Rankings updated every 30 minutes</p>
+        <p>
+          <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
+          Is your outfit logo missing?
+          <a
+            href="https://www.outfit-tracker.com/outfitsearch/"
+            target="_blank"
+            class="text-red-600"
+            >Upload it to Outfit Tracker!</a
+          >
+        </p>
+        <p class="text-xs mb-2">
+          To add, search your outfit tag, press "update this page", go through the
+          claim process and upload the logo.<br />Shoutout to [VODE] MidddNC for
+          providing access to logos!
+        </p>
+        <p class="text-sm mb-2">Rankings updated every 30 minutes</p>
+      </div>
     </div>
     <!-- Server outfit lists -->
     <div
