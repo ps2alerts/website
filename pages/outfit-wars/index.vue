@@ -34,7 +34,7 @@
         <div class="col-span-12 lg:col-span-8">
           <div v-if="loaded" class="flex flex-col h-full justify-center">
             <p class="text-2xl my-2">
-              Welcome to Outfit Wars soldier! Saddle up and add some extra snow
+              Welcome to Outfit Wars 2022 soldier! Saddle up and add some extra snow
               boots to your gear, you're shipping off to Nexus!
             </p>
             <div class="mx-4 mb-2">
@@ -92,87 +92,82 @@
     <div class="col-span-12 border-t border-t-gray-500">
       <span class="grayscale hidden"></span>
     </div>
-    <div class="col-span-12 lg:col-span-8 lg:col-start-3">
-      <div class="grid grid-cols-7 text-center my-4">
-        <div class="col-span-4 grid grid-cols-4 border-r border-r-gray-600">
-          <div
-            class="col-span-4 text-center"
-            :class="roundTextClass('qualifiers')"
-          >
-            Qualifiers
-          </div>
-          <div
-            class="p-2 mx-0.5 rounded-xl col-span-1 border"
-            :class="loaded ? roundClasses(1) : ''"
-          >
-            1
-          </div>
-          <div
-            class="p-2 mx-0.5 rounded-xl col-span-1 border"
-            :class="loaded ? roundClasses(2) : ''"
-          >
-            2
-          </div>
-          <div
-            class="p-2 mx-0.5 rounded-xl col-span-1 border"
-            :class="loaded ? roundClasses(3) : ''"
-          >
-            3
-          </div>
-          <div
-            class="p-2 mx-0.5 rounded-xl col-span-1 border"
-            :class="loaded ? roundClasses(4) : ''"
-          >
-            4
-          </div>
-        </div>
-        <div class="col-span-2 grid grid-cols-2 border-r border-r-gray-600">
-          <div
-            class="col-span-2 text-center"
-            :class="roundTextClass('playoffs')"
-          >
-            Playoffs
-          </div>
-          <div
-            class="p-2 mx-0.5 rounded-xl col-span-1 border"
-            :class="loaded ? roundClasses(5) : ''"
-          >
-            5
-          </div>
-          <div
-            class="p-2 mx-0.5 rounded-xl col-span-1 border"
-            :class="loaded ? roundClasses(6) : ''"
-          >
-            6
-          </div>
-        </div>
-        <div class="col-span-1 grid grid-cols-1">
-          <div
-            class="col-span-2 text-center"
-            :class="roundTextClass('championships')"
-          >
-            Finals
-          </div>
-          <div
-            class="p-2 mx-0.5 rounded-xl col-span-1 border"
-            :class="loaded ? roundClasses(7) : ''"
-          >
-            7
-          </div>
-        </div>
-      </div>
-    </div>
+<!--    <div class="col-span-12 lg:col-span-8 lg:col-start-3">-->
+<!--      <div class="grid grid-cols-7 text-center my-4">-->
+<!--        <div class="col-span-4 grid grid-cols-4 border-r border-r-gray-600">-->
+<!--          <div-->
+<!--            class="col-span-4 text-center"-->
+<!--            :class="roundTextClass('qualifiers')"-->
+<!--          >-->
+<!--            Qualifiers-->
+<!--          </div>-->
+<!--          <div-->
+<!--            class="p-2 mx-0.5 rounded-xl col-span-1 border"-->
+<!--            :class="loaded ? roundClasses(1) : ''"-->
+<!--          >-->
+<!--            1-->
+<!--          </div>-->
+<!--          <div-->
+<!--            class="p-2 mx-0.5 rounded-xl col-span-1 border"-->
+<!--            :class="loaded ? roundClasses(2) : ''"-->
+<!--          >-->
+<!--            2-->
+<!--          </div>-->
+<!--          <div-->
+<!--            class="p-2 mx-0.5 rounded-xl col-span-1 border"-->
+<!--            :class="loaded ? roundClasses(3) : ''"-->
+<!--          >-->
+<!--            3-->
+<!--          </div>-->
+<!--          <div-->
+<!--            class="p-2 mx-0.5 rounded-xl col-span-1 border"-->
+<!--            :class="loaded ? roundClasses(4) : ''"-->
+<!--          >-->
+<!--            4-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="col-span-2 grid grid-cols-2 border-r border-r-gray-600">-->
+<!--          <div-->
+<!--            class="col-span-2 text-center"-->
+<!--            :class="roundTextClass('playoffs')"-->
+<!--          >-->
+<!--            Playoffs-->
+<!--          </div>-->
+<!--          <div-->
+<!--            class="p-2 mx-0.5 rounded-xl col-span-1 border"-->
+<!--            :class="loaded ? roundClasses(5) : ''"-->
+<!--          >-->
+<!--            5-->
+<!--          </div>-->
+<!--          <div-->
+<!--            class="p-2 mx-0.5 rounded-xl col-span-1 border"-->
+<!--            :class="loaded ? roundClasses(6) : ''"-->
+<!--          >-->
+<!--            6-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="col-span-1 grid grid-cols-1">-->
+<!--          <div-->
+<!--            class="col-span-2 text-center"-->
+<!--            :class="roundTextClass('championships')"-->
+<!--          >-->
+<!--            Finals-->
+<!--          </div>-->
+<!--          <div-->
+<!--            class="p-2 mx-0.5 rounded-xl col-span-1 border"-->
+<!--            :class="loaded ? roundClasses(7) : ''"-->
+<!--          >-->
+<!--            7-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
     <div class="col-span-12 pt-2 border-t border-t-gray-500">
-      <h1 class="text-title text-center">Rankings</h1>
+      <h1 class="text-title text-center">Outfit Wars 2022 Rankings</h1>
       <div
         class="bg-red-700 border-red-500 border w-full p-4 my-4 text-center rounded"
       >
-        <p class="mb-2">
-          We are aware that Cobalt and Miller are missing statistics for Friday's matches. This was due to an unexpected reset of a certain identifier due to server restarts. This issue will not occur for future matches and has already been fixed.<br>We are working on creating a re-play system where those statistics will be eventually back-filled.<br>This issue will not affect rankings.<br> <a href="https://www.reddit.com/r/Planetside/comments/xa4s3x/outfit_wars_ps2alerts_is_aware_of_missing_stats/" class="text-amber-500" target="_blank">Further details here</a>.
-        </p>
-        <p class="text-xs">Updated 9th Sep 19:58 UTC</p>
-      </div>
       <p>
         <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
         Is your outfit logo missing?
