@@ -168,7 +168,7 @@ export default Vue.extend({
   async created() {
     // TEMP polling until real time websocket is implemented
     await this.activeAlerts()
-    await this.activeOutfitWars()
+    // await this.activeOutfitWars()
     await this.alertPops()
 
     this.updateTerritoryCountdownInterval = window.setInterval(() => {
@@ -184,7 +184,7 @@ export default Vue.extend({
     setInterval(() => {
       this.error = null
       this.activeAlerts()
-      this.activeOutfitWars()
+      // this.activeOutfitWars()
     }, this.updateTerritoryRate)
     setInterval(() => {
       this.alertPops()
