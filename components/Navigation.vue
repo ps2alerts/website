@@ -85,7 +85,7 @@ const tabs: TabInterface[] = [
     name: 'Outfit Wars 2022',
     route: `/outfit-wars`,
     icon: ['fas', 'trophy'],
-    class: 'ow-tab',
+    // class: 'ow-tab',
   },
   {
     id: 4,
