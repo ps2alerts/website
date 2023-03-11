@@ -28,7 +28,7 @@
             <polyline points="56.25,70 75,70 75,47.09 56.25,30.42  43.75,30.42 25,47.09 25,70 43.75,70"/>
         </g>
         <g id="warpgate-fg" stroke="white" stroke-width="7.5" fill="none">
-            <path d="M 30 27.5 A 34 34 0 0 0 17.66 65.5 L 50 55 L 82.34 65.5 A 34 34 0 0 0 70 27.5"/>-->
+            <path d="M 30 27.5 A 34 34 0 0 0 17.66 65.5 L 50 55 L 82.34 65.5 A 34 34 0 0 0 70 27.5"/>
             <polygon stroke="none" fill="white" points="44,65 48,15 52,15 56,65"/>
         </g>
         <g id="interlink-fg" stroke="white" fill="white" stroke-width="3.89" stroke-linejoin="miter">
@@ -78,8 +78,30 @@
             <path fill="white" stroke="none" d="M 14.644 65.355 L 30 68 L 22.5 72.5 Z"/>
             <path fill="white" stroke="none" d="M 85.355 65.355 L 70 68 L 77.5 72.5 Z"/>
         </g>
+        <g id="ctf-bg" stroke="none">
+            <rect fill="white" fill-opacity="1.0" width="10" height="100"/>
+            <rect fill="white" fill-opacity="1.0" width="100" height="85"/>
+            <rect fill-opacity="0.75" x="2.5" y="2.5" width="5" height="95"/>
+            <rect fill-opacity="0.75" x="10" y="4.25" width="85" height="76.5"/>
+        </g>
+        <g id="ctf-amp-fg" stroke="white" fill="white" transform="translate(6.125 -2.875) scale(0.925 0.925)">
+            <polygon points="55,18.75 31.25,55 50,55 45,81.25 68.75,45 50,45"/>
+        </g>
+        <g id="ctf-lg-outpost-fg" stroke="white" fill="none" stroke-width="12.5" transform="translate(6.125 -2.875) scale(0.925 0.925)">
+            <polyline stroke-width="10" points="56.25,70 75,70 75,40.41 56.25,23.75  43.75,23.75 25,40.41 25,70 43.75,70"/>
+            <line x1="75" y1="40.41" x2="87.5" y2="40.41"/>
+            <line x1="25" y1="40.41" x2="12.5" y2="40.41"/>
+        </g>
+        <g id="ctf-sm-outpost-fg" stroke="white" fill="none" stroke-width="10" transform="translate(6.125 -2.875) scale(0.925 0.925)">
+            <polyline points="56.25,70 75,70 75,47.09 56.25,30.42  43.75,30.42 25,47.09 25,70 43.75,70"/>
+        </g>
+        <g id="ctf-const-outpost-fg" stroke="white" fill="white" stroke-linejoin="miter" transform="translate(6.125 -2.875) scale(0.925 0.925)">
+            <polygon points="50,50 67.5,67.5 50,85 32.5,67.5"/>
+            <polygon points="68.75,62.5 52.5,15 52.5,45"/>
+            <polygon points="31.25,62.5 47.5,15 47.5,45"/>
+        </g>
     </defs>
-    <!--<rect x="0" y="0" width="100" height="100" fill="black"/>
-    <use href="#facility-bg" fill="red"/>
-    <use href="#const-outpost-fg"/>-->
+    <rect x="0" y="0" width="100" height="100" fill="black"/>
+    <use href="#ctf-bg" fill="red"/>
+    <use href="#ctf-amp-fg"/>
 </svg>

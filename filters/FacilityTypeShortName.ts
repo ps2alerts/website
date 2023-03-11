@@ -29,6 +29,14 @@ const facilityTypeShortName = Vue.filter(
         return 'trid'
       case FacilityType.UNDERWATER:
         return 'seapost'
+      case FacilityType.CTF_AMP_STATION:
+        return 'ctf-amp'
+      case FacilityType.CTF_CONSTRUCTION_OUTPOST:
+        return 'ctf-const'
+      case FacilityType.CTF_LARGE_OUTPOST:
+        return 'ctf-lg-out'
+      case FacilityType.CTF_SMALL_OUTPOST:
+        return 'ctf-sm-out'
       default:
         return 'unknown'
     }
