@@ -39,6 +39,6 @@
         </client-only>
       </div>
     </div>
+    <component is="script" type="application/javascript" defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "19d104869b6c4c87aa963b807cfe5461"}'></component>
   </main>
-  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "19d104869b6c4c87aa963b807cfe5461"}'></script>
 </template>
