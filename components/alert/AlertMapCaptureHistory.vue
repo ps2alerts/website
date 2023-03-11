@@ -110,13 +110,36 @@ import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 import { OutfitwarsTerritoryResultInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsTerritoryResultInterface'
 import { MapControlInterface } from '~/interfaces/instance-entries/MapControlInterface'
 import teamName from '~/filters/TeamName'
+import { World } from '~/ps2alerts-constants/world'
 
 export default Vue.extend({
   name: 'AlertMapCaptureHistory',
   props: {
     alert: {
       type: Object as () => InstanceTerritoryControlResponseInterface,
-      default: {},
+      default(): InstanceTerritoryControlResponseInterface {
+        return {
+          instanceId: '',
+          censusInstanceId: '',
+          world: World.CONNERY,
+          zone: Zone.INDAR,
+          timeStarted: '1970-01-01T00:00:00',
+          censusMetagameEventType: 0,
+          duration: 0,
+          state: 0,
+          result: {
+            cutoff: 0,
+            outOfPlay: 0,
+            draw: false,
+            perBasePercentage: 0,
+            vs: 0,
+            nc: 0,
+            tr: 0,
+            victor: null,
+          },
+          bracket: 0,
+        }
+      },
       required: true,
     },
     // eslint-disable-next-line vue/require-prop-types

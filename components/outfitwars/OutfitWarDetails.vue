@@ -120,13 +120,33 @@ import { InstanceEventDetails } from '@/constants/InstanceEventDetails'
 import { MetagameDetailsInterface } from '@/interfaces/MetagameDetailsInterface'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import moment from 'moment'
+import { World } from '~/ps2alerts-constants/world'
+import { Zone } from '~/ps2alerts-constants/zone'
 
 export default Vue.extend({
   name: 'AlertDetails',
   props: {
     outfitwar: {
       type: Object as () => InstanceOutfitWarsResponseInterface,
-      default: {},
+      default(): InstanceOutfitWarsResponseInterface {
+        return {
+          instanceId: '',
+          world: World.CONNERY,
+          zone: Zone.INDAR,
+          timeStarted: '1970-01-01T00:00:00',
+          duration: 0,
+          state: 0,
+          result: {
+            cutoff: 0,
+            outOfPlay: 0,
+            perBasePercentage: 0,
+            victor: null,
+            blue: 0, red: 0
+          },
+          zoneInstanceId: 0,
+          outfitwars: {phase: 0, round: 0},
+        }
+      },
       required: true,
     },
   },

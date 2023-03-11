@@ -52,13 +52,37 @@ import { AlertLoadoutTableDataInterface } from '~/interfaces/alert/AlertLoadoutT
 import { AlertLoadoutLeaderboardConfig } from '@/constants/DataTableConfig'
 import { InstanceLoadoutResponseInterface } from '~/interfaces/aggregates/instance/InstanceLoadoutResponseInterface'
 import { LoadoutFaction, LoadoutName } from '@/constants/Loadout'
+import { World } from '~/ps2alerts-constants/world'
+import { Zone } from '~/ps2alerts-constants/zone'
 
 export default Vue.extend({
   name: 'AlertClassMetrics',
   props: {
     alert: {
       type: Object as () => InstanceTerritoryControlResponseInterface,
-      default: {},
+      default(): InstanceTerritoryControlResponseInterface {
+        return {
+          instanceId: '',
+          censusInstanceId: '',
+          world: World.CONNERY,
+          zone: Zone.INDAR,
+          timeStarted: '1970-01-01T00:00:00',
+          censusMetagameEventType: 0,
+          duration: 0,
+          state: 0,
+          result: {
+            cutoff: 0,
+            outOfPlay: 0,
+            draw: false,
+            perBasePercentage: 0,
+            vs: 0,
+            nc: 0,
+            tr: 0,
+            victor: null,
+          },
+          bracket: 0,
+        }
+      },
       required: true,
     },
   },

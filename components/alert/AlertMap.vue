@@ -327,6 +327,7 @@ import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoin
 import { OutfitwarsTerritoryResultInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsTerritoryResultInterface'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Team } from '~/ps2alerts-constants/outfitwars/team'
+import { World } from '~/ps2alerts-constants/world'
 
 export default Vue.extend({
   name: 'AlertMap',
@@ -334,7 +335,32 @@ export default Vue.extend({
   props: {
     alert: {
       type: Object as () => InstanceTerritoryControlResponseInterface & InstanceOutfitWarsResponseInterface,
-      default: {},
+      default(): InstanceTerritoryControlResponseInterface & InstanceOutfitWarsResponseInterface {
+        return {
+          instanceId: '',
+          censusInstanceId: '',
+          world: World.CONNERY,
+          zone: Zone.INDAR,
+          timeStarted: '1970-01-01T00:00:00',
+          censusMetagameEventType: 0,
+          duration: 0,
+          state: 0,
+          result: {
+            cutoff: 0,
+            outOfPlay: 0,
+            draw: false,
+            perBasePercentage: 0,
+            vs: 0,
+            nc: 0,
+            tr: 0,
+            victor: null,
+            blue: 0, red: 0
+          },
+          bracket: 0,
+          zoneInstanceId: 0,
+          outfitwars: {phase: 0, round: 0},
+        }
+      },
       required: true,
     },
   },

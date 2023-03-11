@@ -30,6 +30,8 @@ import { InstanceTerritoryControlResponseInterface } from '~/interfaces/Instance
 import { Faction } from '@/ps2alerts-constants/faction'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
+import { World } from '~/ps2alerts-constants/world'
+import { Zone } from '~/ps2alerts-constants/zone'
 
 interface BattlerankDistributionDataInterface {
   // Faction
@@ -47,12 +49,52 @@ export default Vue.extend({
   props: {
     alert: {
       type: Object as () => InstanceTerritoryControlResponseInterface,
-      default: {},
+      default(): InstanceTerritoryControlResponseInterface {
+        return {
+          instanceId: '',
+          censusInstanceId: '',
+          world: World.CONNERY,
+          zone: Zone.INDAR,
+          timeStarted: '1970-01-01T00:00:00',
+          censusMetagameEventType: 0,
+          duration: 0,
+          state: 0,
+          result: {
+            cutoff: 0,
+            outOfPlay: 0,
+            draw: false,
+            perBasePercentage: 0,
+            vs: 0,
+            nc: 0,
+            tr: 0,
+            victor: null,
+          },
+          bracket: 0,
+        }
+      },
       required: true,
     },
     outfitwar: {
       type: Object as () => InstanceOutfitWarsResponseInterface,
-      default: {},
+      default(): InstanceOutfitWarsResponseInterface {
+        return {
+          instanceId: '',
+          world: World.CONNERY,
+          zone: Zone.INDAR,
+          timeStarted: '1970-01-01T00:00:00',
+          duration: 0,
+          state: 0,
+          result: {
+            cutoff: 0,
+            outOfPlay: 0,
+            perBasePercentage: 0,
+            victor: null,
+            blue: 0, red: 0
+          },
+          zoneInstanceId: 0,
+          outfitwars: {phase: 0, round: 0},
+        }
+      },
       required: false,
     },
   },

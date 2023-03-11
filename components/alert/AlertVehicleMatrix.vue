@@ -139,13 +139,37 @@ import { Faction } from '@/ps2alerts-constants/faction'
 import { FactionBgClass } from '@/constants/FactionBgClass'
 import VehicleDataRequest from '@/libraries/VehicleDataRequest'
 import { allowedVehicleMatrixArray } from '@/constants/Vehicle'
+import { World } from '~/ps2alerts-constants/world'
+import { Zone } from '~/ps2alerts-constants/zone'
 
 export default Vue.extend({
   name: 'AlertVehicleMatrix',
   props: {
     alert: {
       type: Object as () => InstanceTerritoryControlResponseInterface,
-      default: {},
+      default(): InstanceTerritoryControlResponseInterface {
+        return {
+          instanceId: '',
+          censusInstanceId: '',
+          world: World.CONNERY,
+          zone: Zone.INDAR,
+          timeStarted: '1970-01-01T00:00:00',
+          censusMetagameEventType: 0,
+          duration: 0,
+          state: 0,
+          result: {
+            cutoff: 0,
+            outOfPlay: 0,
+            draw: false,
+            perBasePercentage: 0,
+            vs: 0,
+            nc: 0,
+            tr: 0,
+            victor: null,
+          },
+          bracket: 0,
+        }
+      },
       required: true,
     },
   },
