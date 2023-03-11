@@ -1248,7 +1248,7 @@ export default Vue.extend({
       }
       const regions = await new MapRegionDataRequest().pull(
         zone,
-        this.alert.mapVersion ?? '1.0'
+        this.alert.latticeVersion ?? '1.0'
       )
 
       regions.forEach((region) => {
