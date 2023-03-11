@@ -268,7 +268,7 @@ export class FacilityBadge {
     }
 
     this.svg
-      .use('facility-bg', FACILITY_ICON_PATH)
+      .use(FacilityBadge.SVGBackgroundDefinitionId(this.type), FACILITY_ICON_PATH)
       .addClass(this.region.id.toString())
       .fill(MAP_FACTION_COLORS[this.region.faction].toString())
 
@@ -289,7 +289,7 @@ export class FacilityBadge {
     const toReturn = SVG()
     toReturn.viewbox(0, 0, 100, 100)
     toReturn
-      .use('facility-bg', FACILITY_ICON_PATH)
+      .use(FacilityBadge.SVGBackgroundDefinitionId(this.type), FACILITY_ICON_PATH)
       .fill(MAP_FACTION_COLORS[faction].toString())
     toReturn.use(FacilityBadge.SVGDefinitionId(this.type), FACILITY_ICON_PATH)
     if (size) toReturn.width(size).height(size)
@@ -356,11 +356,39 @@ export class FacilityBadge {
     switch (type) {
       case FacilityType.SMALL_OUTPOST:
       case FacilityType.CONSTRUCTION_OUTPOST:
+      case FacilityType.CTF_SMALL_OUTPOST:
+      case FacilityType.CTF_CONSTRUCTION_OUTPOST:
         return 9
       case FacilityType.LARGE_OUTPOST:
+      case FacilityType.CTF_LARGE_OUTPOST:
         return 10
       default:
         return 0
+    }
+  }
+
+  static SVGBackgroundDefinitionId(type: FacilityType): string {
+    switch (type) {
+      case FacilityType.AMP_STATION:
+      case FacilityType.BIO_LAB:
+      case FacilityType.TECH_PLANT:
+      case FacilityType.LARGE_OUTPOST:
+      case FacilityType.SMALL_OUTPOST:
+      case FacilityType.WARPGATE:
+      case FacilityType.INTERLINK_FACILITY:
+      case FacilityType.CONSTRUCTION_OUTPOST:
+      case FacilityType.RELIC_OUTPOST:
+      case FacilityType.CONTAINMENT_SITE:
+      case FacilityType.TRIDENT:
+      case FacilityType.UNDERWATER:
+        return 'facility-bg'
+      case FacilityType.CTF_AMP_STATION:
+      case FacilityType.CTF_CONSTRUCTION_OUTPOST:
+      case FacilityType.CTF_LARGE_OUTPOST:
+      case FacilityType.CTF_SMALL_OUTPOST:
+        return 'ctf-bg'
+      default:
+        return ''
     }
   }
 
@@ -390,6 +418,14 @@ export class FacilityBadge {
         return 'trident-fg'
       case FacilityType.UNDERWATER:
         return 'seapost-fg'
+      case FacilityType.CTF_AMP_STATION:
+        return 'ctf-amp-fg'
+      case FacilityType.CTF_CONSTRUCTION_OUTPOST:
+        return 'ctf-const-outpost-fg'
+      case FacilityType.CTF_LARGE_OUTPOST:
+        return 'ctf-lg-outpost-fg'
+      case FacilityType.CTF_SMALL_OUTPOST: 
+        return 'ctf-sm-outpost-fg'
       default:
         return ''
     }
