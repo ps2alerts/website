@@ -17,6 +17,7 @@ export interface InstanceOutfitWarsResponseInterface {
   state: Ps2AlertsEventState
   outfitwars: OutfitWarsMetadataInterface
   mapVersion?: string
+  latticeVersion?: string
   result: OutfitwarsTerritoryResultInterface
   features?: PS2AlertsInstanceFeaturesInterface
   ps2AlertsEventType?: Ps2AlertsEventType
