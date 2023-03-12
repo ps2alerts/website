@@ -82,7 +82,7 @@ export class MapRegion implements MapRegionDrawingInterface {
     })
 
     this.hexes = []
-    region.map_hexes.forEach((hex) => {
+    region.map_hexes?.forEach((hex) => {
       const r: number = -parseInt(hex.y) - 1
       const s: number = -parseInt(hex.x)
       const cubehex = CubeHex.fromAxialRS(r, s)
