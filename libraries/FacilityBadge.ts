@@ -329,8 +329,12 @@ export class FacilityBadge {
       case FacilityType.SMALL_OUTPOST:
       case FacilityType.CONSTRUCTION_OUTPOST:
       case FacilityType.RELIC_OUTPOST:
+      case FacilityType.CTF_SMALL_OUTPOST:
+      case FacilityType.CTF_CONSTRUCTION_OUTPOST:
+      case FacilityType.UNDERWATER:
         return zoom >= 4
       case FacilityType.LARGE_OUTPOST:
+      case FacilityType.CTF_LARGE_OUTPOST:
         return zoom >= 3
       default:
         return false
@@ -358,11 +362,13 @@ export class FacilityBadge {
       case FacilityType.CONSTRUCTION_OUTPOST:
       case FacilityType.CTF_SMALL_OUTPOST:
       case FacilityType.CTF_CONSTRUCTION_OUTPOST:
+      case FacilityType.UNDERWATER:
         return 9
       case FacilityType.LARGE_OUTPOST:
       case FacilityType.CTF_LARGE_OUTPOST:
         return 10
       default:
+        console.debug(`FacilityBadge::radius: Got unknown FacilityType ${type.toString()}`)
         return 0
     }
   }

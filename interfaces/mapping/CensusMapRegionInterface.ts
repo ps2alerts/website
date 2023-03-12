@@ -9,5 +9,5 @@ export interface CensusMapRegionInterface {
   location_x: string | undefined
   location_z: string | undefined
   facility_links: Array<CensusFacilityLinkInterface> | undefined
-  map_hexes: Array<CensusMapHexInterface>
+  map_hexes: Array<CensusMapHexInterface> | undefined
 }
