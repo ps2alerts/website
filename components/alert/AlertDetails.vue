@@ -148,6 +148,8 @@ import { InstanceEventDetails } from '@/constants/InstanceEventDetails'
 import { MetagameDetailsInterface } from '@/interfaces/MetagameDetailsInterface'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
+import { World } from '~/ps2alerts-constants/world'
+import { Zone } from '~/ps2alerts-constants/zone'
 
 export default Vue.extend({
   name: 'AlertDetails',
