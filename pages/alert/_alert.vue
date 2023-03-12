@@ -314,70 +314,39 @@ export default Vue.extend({
         InstanceFacilityControlAggregateResponseInterface
       >()
 
-      // If Oshur, we need to do some craziness to get the facility data we want
-      if (this.alert.zone === Zone.OSHUR) {
-        await new ApiRequest()
-          .get<PS2AlertsApiOshurDataInterface[]>(Endpoints.CENSUS_OSHUR_DATA)
-          .then((oshurData) => {
-            oshurData.forEach(
-              (facilityData: PS2AlertsApiOshurDataInterface) => {
-                const tempData: InstanceFacilityControlAggregateResponseInterface =
-                  {
-                    instance: this.alert.instanceId,
-                    facility: {
-                      id: parseInt(facilityData.facility_id, 10),
-                      name: facilityData.facility_name,
-                      zone: this.alert.zone,
-                      type: parseInt(facilityData.facility_type_id, 10),
-                      typeName: facilityTypeName(
-                        parseInt(facilityData.facility_type_id, 10)
-                      ),
-                      region: parseInt(facilityData.map_region_id, 10),
-                    },
-                  }
+      console.log('Alert.pullFacilityData', instanceId)
+      await new ApiRequest()
+        .get<CensusMapRegionResponseInterface>(
+          CensusEndpoints.FACILITY_DATA.replace(
+            '{serviceId}',
+            'ps2alertsdotcom'
+          ).replace('{zone}', this.alert.zone.toString())
+        )
+        .then((censusZoneData) => {
+          censusZoneData.map_region_list.forEach(
+            (facilityData: CensusMapRegionResponseItem) => {
+              const tempData: InstanceFacilityControlAggregateResponseInterface =
+                {
+                  instance: this.alert.instanceId,
+                  facility: {
+                    id: parseInt(facilityData.facility_id, 10),
+                    name: facilityData.facility_name,
+                    zone: this.alert.zone,
+                    type: parseInt(facilityData.facility_type_id, 10),
+                    typeName: facilityTypeName(
+                      parseInt(facilityData.facility_type_id, 10)
+                    ),
+                    region: parseInt(facilityData.map_region_id, 10),
+                  },
+                }
 
-                newMap.set(tempData.facility.id, tempData)
-              }
-            )
-          })
-          .catch((e) => {
-            console.error('Unable to process Oshur Facility Data!', e)
-          })
-      } else {
-        console.log('Alert.pullFacilityData', instanceId)
-        await new ApiRequest()
-          .get<CensusMapRegionResponseInterface>(
-            CensusEndpoints.FACILITY_DATA.replace(
-              '{serviceId}',
-              'ps2alertsdotcom'
-            ).replace('{zone}', this.alert.zone.toString())
+              newMap.set(tempData.facility.id, tempData)
+            }
           )
-          .then((censusZoneData) => {
-            censusZoneData.map_region_list.forEach(
-              (facilityData: CensusMapRegionResponseItem) => {
-                const tempData: InstanceFacilityControlAggregateResponseInterface =
-                  {
-                    instance: this.alert.instanceId,
-                    facility: {
-                      id: parseInt(facilityData.facility_id, 10),
-                      name: facilityData.facility_name,
-                      zone: this.alert.zone,
-                      type: parseInt(facilityData.facility_type_id, 10),
-                      typeName: facilityTypeName(
-                        parseInt(facilityData.facility_type_id, 10)
-                      ),
-                      region: parseInt(facilityData.map_region_id, 10),
-                    },
-                  }
-
-                newMap.set(tempData.facility.id, tempData)
-              }
-            )
-          })
-          .catch((e) => {
-            console.error('Unable to process non-Oshur Facility Data!', e)
-          })
-      }
+        })
+        .catch((e) => {
+          console.error('Unable to process non-Oshur Facility Data!', e)
+        })
 
       return newMap
     },
