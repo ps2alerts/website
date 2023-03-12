@@ -10,6 +10,7 @@ const facilityTypeName = Vue.filter(
       case FacilityType.DEFAULT:
         return 'Default / Unknown'
       case FacilityType.AMP_STATION:
+      case FacilityType.CTF_AMP_STATION:
         return 'Amp Station'
       case FacilityType.BIO_LAB:
         return 'Biolab'
