@@ -144,6 +144,7 @@ export class FacilityBadge {
     const matchesLength = value.match(/ /g)?.length
     switch (this.region.facilityType) {
       case FacilityType.AMP_STATION:
+      case FacilityType.CTF_AMP_STATION:
       case FacilityType.BIO_LAB:
       case FacilityType.TECH_PLANT:
         value = value + '\n' + facilityTypeName(this.region.facilityType)
