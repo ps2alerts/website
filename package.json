@@ -1,6 +1,6 @@
 {
   "name": "ps2alerts",
-  "version": "4.3.0-beta",
+  "version": "4.4.0",
   "private": true,
   "license": "GNU",
   "scripts": {

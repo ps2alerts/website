@@ -69,11 +69,24 @@ export default Vue.extend({
       pageTitle: 'Change Log',
       pageDesc: "See what's recently been released for PS2Alerts!",
       version: this.$config.version,
-      panel: [0, 1, 2, 3, 4],
+      panel: [0],
       posts: [
         {
+          id: 19,
+          title: 'v4.4.0 - Backend updates',
+          date: '3rd April 2023',
+          type: 'major-update',
+          body: `
+             <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+              <div>
+                <p>A <a class="text-red-500" target="_blank" href="https://github.com/ps2alerts/aggregator/releases/tag/v4.4.0">massive refactor</a> of the backend systems for PS2Alerts was conducted, bringing various modules of the PS2Alerts project up to date. There were a number of bugfixes in addition to more monitoring metrics. There are no functional changes to the website in this update.</p>
+              </div>
+            </div>
+          `
+        },
+        {
           id: 18,
-          title: `v4.3.4 - Various cosmetic changes`,
+          title: 'v4.3.4 - Various Outfit Wars cosmetic changes',
           date: '11th September 2022',
           type: 'minor-update',
           body: `
@@ -104,7 +117,7 @@ export default Vue.extend({
         },
         {
           id: 17,
-          title: `v4.3.3 - SolTech added to rankings`,
+          title: 'v4.3.3 - Outfit Wars: SolTech added to rankings',
           date: '10th September 2022',
           type: 'minor-update',
           body: `
@@ -118,7 +131,7 @@ export default Vue.extend({
         },
         {
           id: 16,
-          title: `v4.3.2 - Vehicle Combat Data reinstated & Outfit Wars fixes`,
+          title: 'v4.3.2 - Outfit Wars: Vehicle Combat Data reinstated & fixes',
           date: '10th September 2022',
           type: 'minor-update',
           body: `
@@ -145,7 +158,7 @@ export default Vue.extend({
         },
         {
           id: 15,
-          title: `v4.3.1 - Outfit Wars release patches`,
+          title: 'v4.3.1 - Outfit Wars: Bugfixes',
           date: '3rd September 2022',
           type: 'minor-update',
           body: `
@@ -174,7 +187,7 @@ export default Vue.extend({
         },
         {
           id: 14,
-          title: `v4.3.0 - Outfit Wars`,
+          title: `v4.3.0 - Outfit Wars support`,
           date: '2nd September 2022',
           type: 'major-update',
           body: `
