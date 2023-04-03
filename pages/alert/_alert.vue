@@ -153,8 +153,6 @@ import AlertCombatHistory from '@/components/alert/AlertCombatHistory.vue'
 import AlertBattleranks from '~/components/alert/AlertBattleranks.vue'
 import { InstanceFacilityControlAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceFacilityControlAggregateResponseInterface'
 import facilityTypeName from '~/filters/FacilityTypeName'
-import { Zone } from '@/ps2alerts-constants/zone'
-import { PS2AlertsApiOshurDataInterface } from '~/interfaces/census/PS2AlertsApiOshurDataInterface'
 import { CensusMapRegionResponseInterface } from '~/interfaces/census/CensusMapRegionResponseInterface'
 import { CensusMapRegionResponseItem } from '~/interfaces/census/CensusMapRegionResponseItem'
 

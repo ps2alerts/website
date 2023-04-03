@@ -1,5 +1,5 @@
 {
-  "name": "ps2alerts",
+  "name": "ps2alerts-website",
   "version": "4.4.0",
   "private": true,
   "license": "GNU",
@@ -26,6 +26,7 @@
     "core-js": "^3.19.3",
     "dayjs": "^1.11.2",
     "leaflet": "^1.7.1",
+    "memory-fs": "^0.5.0",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.33",
     "nuxt": "^2.15.8",

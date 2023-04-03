@@ -6,20 +6,20 @@ const metaImg = `${process.env.BASE_URL}/og-image.png`
 export default {
   // We're forced to use env injection for this otherwise we can't build it into class constructors.
   env: {
-    apiHost: process.env.API_HOST ?? 'https://dev.api.ps2alerts.com',
+    apiHost: process.env.API_HOST ?? 'https://dev.api.ps2alerts.com'
   },
   publicRuntimeConfig: {
-    built: process.env.BUILT ?? 'UNKNOWN BUILD TIME',
-    environment: process.env.ENV ?? 'UNKNOWN ENVIRONMENT',
-    build: process.env.BUILD ?? 'UNKNOWN BUILD',
-    version: process.env.VERSION ?? 'UNKNOWN VERSION',
     baseUrl: process.env.BASE_URL ?? 'https://dev.ps2alerts.com',
-    maintenance: false,
+    build: process.env.BUILD ?? 'DEV',
+    built: process.env.BUILT ?? 'Now?',
+    environment: process.env.ENV ?? 'Development',
+    version: process.env.VERSION ?? 'DEV',
+    maintenance: false
   },
   server: {
     port: 3000,
     host: '0.0.0.0',
-    timing: false,
+    timing: false
   },
   target: 'static',
 
@@ -33,60 +33,60 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: metaDesc,
+        content: metaDesc
       },
       {
         hid: 'og:description',
         property: 'og:description',
-        content: metaDesc,
+        content: metaDesc
       },
       {
         hid: 'og:title',
         property: 'og:title',
-        content: metaTitle,
+        content: metaTitle
       },
       {
         hid: 'og:image',
         property: 'og:image',
-        content: metaImg,
+        content: metaImg
       },
       {
         hid: 'og:type',
         property: 'og:type',
-        content: 'website',
+        content: 'website'
       },
       {
         hid: 'og:site_name',
         property: 'og:site_name',
-        content: 'PS2Alerts',
+        content: 'PS2Alerts'
       },
       {
         hid: 'twitter:title',
         property: 'twitter:title',
-        content: metaTitle,
+        content: metaTitle
       },
       {
         hid: 'twitter:description',
         property: 'twitter:description',
-        content: metaTitle,
+        content: metaTitle
       },
       {
         hid: 'twitter:image',
         property: 'twitter:image',
-        content: metaImg,
+        content: metaImg
       },
       {
         hid: 'twitter:image:alt',
         property: 'twitter:image:alt',
-        content: metaTitle,
+        content: metaTitle
       },
       {
         hid: 'twitter:card',
         property: 'twitter:card',
-        content: 'summary_large_image',
-      },
+        content: 'summary_large_image'
+      }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
@@ -114,7 +114,7 @@ export default {
     { src: '@/filters/VehicleFaction', mode: 'client' },
     { src: '@/filters/WorldName', mode: 'client' },
     { src: '@/filters/ZoneName', mode: 'client' },
-    { src: '@/plugins/NumeralFilter', mode: 'client' },
+    { src: '@/plugins/NumeralFilter', mode: 'client' }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -127,7 +127,7 @@ export default {
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
     '@nuxtjs/vuetify',
-    '@nuxtjs/style-resources',
+    '@nuxtjs/style-resources'
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
@@ -139,10 +139,10 @@ export default {
     // https://go.nuxtjs.dev/content
     '@nuxt/content',
     'nuxt-leaflet',
-    '@nuxtjs/fontawesome',
+    '@nuxtjs/fontawesome'
   ],
   tailwindcss: {
-    configPath: 'tailwind.config.js',
+    configPath: 'tailwind.config.js'
   },
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
@@ -154,26 +154,26 @@ export default {
   fontawesome: {
     icons: {
       solid: true,
-      brands: true,
-    },
+      brands: true
+    }
   },
 
   // https://www.npmjs.com/package/@nuxtjs/vuetify
   vuetify: {
     theme: { dark: true },
-    treeShake: true, // required for scss vars to work
+    treeShake: true // required for scss vars to work
   },
 
   'google-gtag': {
     id: process.env.GOOGLE_PROPERTY,
-    debug: process.env.ENV !== 'production', // enable to track in dev / staging mode
+    debug: process.env.ENV !== 'production' // enable to track in dev / staging mode
   },
 
   router: {
     scrollBehavior() {
       const elem = document.getElementById('panel-right')
       return { x: 0, y: elem.offsetTop - 12 }
-    },
+    }
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
@@ -186,8 +186,8 @@ export default {
       plugins: [
         '@babel/syntax-dynamic-import',
         '@babel/transform-runtime',
-        '@babel/transform-async-to-generator',
-      ],
+        '@babel/transform-async-to-generator'
+      ]
     },
     postcss: {
       // Add plugin names as key and arguments as value
@@ -197,14 +197,14 @@ export default {
         'postcss-extend-rule': {},
         'postcss-import': {},
         'postcss-nested': {},
-        autoprefixer: {},
+        autoprefixer: {}
       },
       preset: {
         // Change the postcss-preset-env settings
         autoprefixer: {
-          grid: true,
-        },
-      },
-    },
-  },
+          grid: true
+        }
+      }
+    }
+  }
 }
