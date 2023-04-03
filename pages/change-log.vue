@@ -73,13 +73,26 @@ export default Vue.extend({
       posts: [
         {
           id: 19,
-          title: 'v4.4.0 - Backend updates',
+          title: 'v4.4.0 - Capture the Conduit & PS2Alerts module updates',
           date: '3rd April 2023',
           type: 'major-update',
           body: `
              <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
               <div>
-                <p>A <a class="text-red-500" target="_blank" href="https://github.com/ps2alerts/aggregator/releases/tag/v4.4.0">massive refactor</a> of the backend systems for PS2Alerts was conducted, bringing various modules of the PS2Alerts project up to date. There were a number of bugfixes in addition to more monitoring metrics. There are no functional changes to the website in this update.</p>
+                <p class="text-xl font-bold">Capture the Conduit support (Nov 2022)</p>
+                <p>Thanks to [UN17] RiderAnton yet again for providing updates to the mapping technology PS2Alerts uses, the website fully supports Capture the Conduit base types as of 17th November 2022 (yes this change log is well overdue!)</p>
+              </div>
+              <div class="pt-3">
+                <p class="text-xl font-bold">PS2Alerts module updates (April 2023)</p>
+                <p>PS2Alerts is constructed out of various modules. They needed a bit of love and care before an upcoming remodelling of PS2Alerts and how it records data.</p>
+                <p class="text-lg font-bold">Aggregator</p>
+                <p>A <a class="text-red-500" target="_blank" href="https://github.com/ps2alerts/aggregator/releases/tag/v4.4.0">massive refactor</a> of the Aggregator (the module that calculates the statistics for Alerts) was conducted, including migrating from a very troublesome method of Inversion of Control class injection into a better form. It also marks the introduction of NestJS to the Aggregator, to match API in terms of how the modules are configured and set up and increasing our development abilities. Many thanks to <a href="https://github.com/microwavekonijn" target="_blank" class="text-red-500">[DIG] Microwavekonijn</a> for the bulk of the refactor!</p>
+
+                <p class="text-lg font-bold">API</p>
+                <p>The API module was brought up to date in a major way as many of it's dependencies were out of date. Most importantly the NestJS version was bumped from 7->9 and the TypeScript version 3->4 meaning we are able to make sure of more modern development processes.</p>
+
+                <p class="text-lg font-bold">Website</p>
+                <p>Additionally, the website module was brought up to date in terms of it's dependencies as well. Nothing functionally was changed.</p>
               </div>
             </div>
           `
