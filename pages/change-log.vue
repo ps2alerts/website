@@ -25,10 +25,7 @@
               ></font-awesome-icon>
               Announcement
             </div>
-            <div
-              v-if="post.type === 'major-update'"
-              class="tag m-0 announcement"
-            >
+            <div v-if="post.type === 'major-update'" class="tag m-0 major">
               <font-awesome-icon :icon="['fas', 'star']"></font-awesome-icon>
               Major Update
             </div>
@@ -74,7 +71,7 @@ export default Vue.extend({
         {
           id: 19,
           title: 'v4.4.0 - Capture the Conduit & PS2Alerts module updates',
-          date: '3rd April 2023',
+          date: '4th April 2023',
           type: 'major-update',
           body: `
              <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">

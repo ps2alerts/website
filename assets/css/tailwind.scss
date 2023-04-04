@@ -605,6 +605,10 @@
       @apply bg-red-600;
     }
 
+    &.major {
+      @apply bg-orange-500;
+    }
+
     &.fix {
       @apply bg-red-800;
     }
