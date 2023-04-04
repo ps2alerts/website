@@ -39,11 +39,9 @@ export default Vue.extend({
     }
   },
   created() {
-    console.log('created()')
     this.init()
   },
   destroyed() {
-    console.log('destroyed()')
     clearInterval(this.interval)
   },
   methods: {
