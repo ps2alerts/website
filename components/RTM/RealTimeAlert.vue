@@ -35,10 +35,7 @@
         </div>
         <div class="col-span-3 justify-self-end">
           <span class="font-bold"
-            ><remaining-time
-              :started="timeStarted"
-              :duration="duration"
-            ></remaining-time
+            ><Countdown :started="timeStarted" :duration="duration"></Countdown
           ></span>
         </div>
       </div>
@@ -88,11 +85,13 @@ import { World } from '@/ps2alerts-constants/world'
 import { Zone } from '@/ps2alerts-constants/zone'
 import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
 import { OutfitWarsMetadataInterface } from '~/interfaces/OutfitWarsMetadataInterface'
+import Countdown from '~/components/Countdown.vue'
 
 export default Vue.extend({
   name: 'RealTimeAlert',
   components: {
     FactionSegmentBar,
+    Countdown,
   },
   props: {
     instanceId: {

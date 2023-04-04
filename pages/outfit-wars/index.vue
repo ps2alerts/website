@@ -20,9 +20,10 @@
               <h1
                 class="text-subtitle rounded-md py-2 px-4 inline-block bg-gray-700 border-yellow-500 border"
               >
-                <remaining-time
-                  :time-remaining="timeRemaining"
-                ></remaining-time>
+                <!--                <remaining-time-->
+                <!-- Removed when we removed moment, needs re-making and cba right now cos outfit wars is over -->
+                <!--                  :time-remaining="timeRemaining"-->
+                <!--                ></remaining-time>-->
               </h1>
               <p class="text-base">
                 Until the season begins<br />(including 20 min prep time)
@@ -363,7 +364,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import moment from 'moment-timezone'
 import MetaHead from '~/components/MetaHead.vue'
 import RoundBracket from '~/components/outfitwars/RoundBracket.vue'
 import { World } from '~/ps2alerts-constants/world'
@@ -372,13 +372,13 @@ import { Endpoints } from '~/constants/Endpoints'
 import { OutfitwarsRankingInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsRankingInterface'
 import { getOutfitWarPhase } from '~/ps2alerts-constants/outfitwars/utils'
 import worldName from '~/filters/WorldName'
-import TimeRemainingFromDuration from '~/utilities/timeRemainingFromDuration'
 import { ParsedOutfitDataInterface } from '~/interfaces/ParsedOutfitDataInterface'
 import factionShortName from '~/filters/FactionShortName'
 import { FactionNumbersInterface } from '~/ps2alerts-constants/interfaces/FactionNumbersInterface'
 import { Faction } from '~/ps2alerts-constants/faction'
 import { FactionTextClass } from '~/constants/FactionTextClass'
 import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
+import { utcDate } from '~/utilities/TimeHelper'
 
 export default Vue.extend({
   name: 'OutfitWarsRankings',
@@ -393,8 +393,8 @@ export default Vue.extend({
       loading: true,
       loaded: false,
       error: '',
-      now: parseInt(moment().tz('UTC').format('X'), 10),
-      end: parseInt(moment.tz('2022-09-02 18:20:00', 'UTC').format('X'), 10),
+      now: utcDate(new Date()),
+      end: utcDate(new Date('2022-09-02 18:20:00')),
       timeRemaining: 0,
       worlds: [
         World.COBALT,
@@ -473,10 +473,7 @@ export default Vue.extend({
   },
   methods: {
     async init() {
-      this.timeRemaining = TimeRemainingFromDuration(
-        this.now,
-        this.end - this.now
-      )
+      this.timeRemaining = this.end.getTime() - this.now.getTime()
       await this.pull()
     },
     async pull() {
@@ -484,7 +481,7 @@ export default Vue.extend({
         return
       }
 
-      console.log('OutfitwarsRankings.pull')
+      // console.log('OutfitwarsRankings.pull')
       const currentRoundRequests = []
       for (const world of this.worlds) {
         currentRoundRequests.push(

@@ -45,11 +45,11 @@
                   alt="Alert Icon"
                 />
               </div>
-              <remaining-time
+              <countdown
                 class="alert-timer text-xs xl:text-2xl"
                 :started="alert.timeStarted"
                 :duration="alert.duration"
-              ></remaining-time>
+              ></countdown>
             </l-control>
           </l-map>
         </client-only>
@@ -303,7 +303,6 @@ import Vue from 'vue'
 import { LControl, LMap } from 'vue2-leaflet'
 // eslint-disable-next-line import/named
 import { Constructor } from 'vue/types/options'
-import RemainingTime from '../RemainingTime.vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import { worldToMap } from '~/libraries/MapWorld'
 import { MAP_FACTION_COLORS } from '@/constants/FactionMapColors'
@@ -328,10 +327,11 @@ import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoin
 import { OutfitwarsTerritoryResultInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsTerritoryResultInterface'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Team } from '~/ps2alerts-constants/outfitwars/team'
+import Countdown from '~/components/Countdown.vue'
 
 export default Vue.extend({
   name: 'AlertMap',
-  components: { RemainingTime },
+  components: { Countdown },
   props: {
     alert: {
       type: Object as () => InstanceTerritoryControlResponseInterface &

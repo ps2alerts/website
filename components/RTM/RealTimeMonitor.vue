@@ -81,10 +81,12 @@
               </div>
             </div>
           </div>
+        </div>
+        <div>
           <div v-show="actives.length > 0 || outfitWars().length > 0">
             <p class="text-xs text-gray-400 mt-2">
-              Hover / tap over population bars to see pop numbers<br />
-              Non NSO players only
+              Hover / tap over population bars to see pop numbers.<br />
+              Non NSO players only.
               <v-tooltip bottom>
                 <template #activator="{ on, attrs }">
                   <font-awesome-icon
@@ -113,7 +115,7 @@
 <script lang="ts">
 /* eslint-disable nuxt/no-globals-in-created */
 import Vue from 'vue'
-import moment from 'moment-timezone'
+import { format } from 'date-fns'
 import ApiRequest from '@/api-request'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import { InstanceOutfitWarsResponseInterface } from '@/interfaces/InstanceOutfitWarsResponseInterface'
@@ -123,6 +125,7 @@ import { Endpoints } from '@/constants/Endpoints'
 import RealTimeAlert from '~/components/RTM/RealTimeAlert.vue'
 import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 import { World } from '~/ps2alerts-constants/world'
+import { utcDate } from '~/utilities/TimeHelper'
 
 export default Vue.extend({
   name: 'RealTimeMonitor',
@@ -290,7 +293,7 @@ export default Vue.extend({
             })
         }
       )
-      this.popsLastUpdated = moment().format(TIME_FORMAT)
+      this.popsLastUpdated = format(utcDate(new Date()), TIME_FORMAT)
     },
     getPops(
       instance: string

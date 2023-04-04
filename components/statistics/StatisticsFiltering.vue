@@ -63,7 +63,6 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
-import moment from 'moment/moment'
 import { World } from '@/ps2alerts-constants/world'
 import { Bracket } from '@/ps2alerts-constants/bracket'
 import { MetricSortInterface } from '~/interfaces/MetricSortInterface'
@@ -97,7 +96,7 @@ export default Vue.extend({
     },
   },
   data() {
-    const now = moment()
+    const now = new Date()
     return {
       metric: '',
       world: 0,

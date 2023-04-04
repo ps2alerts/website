@@ -31,6 +31,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { startOfDay } from 'date-fns'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '@/constants/Endpoints'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
@@ -38,6 +39,8 @@ import VictoriesCounts from '~/components/statistics/victories/VictoriesCounts.v
 import { Bracket, ps2alertsBracketArray } from '@/ps2alerts-constants/bracket'
 import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
+import { formatDateTime } from '~/utilities/TimeHelper'
+import { DATE_TIME_FORMAT, UNIX_SECONDS } from '~/constants/Time'
 
 export default Vue.extend({
   name: 'Victories',
@@ -74,8 +77,14 @@ export default Vue.extend({
 
       // This NEEDS to be in milliseconds!
       if (this.filter.dateFrom && this.filter.dateTo) {
-        filter.dateFrom = this.filter.dateFrom.startOf('day').format('x')
-        filter.dateTo = this.filter.dateTo.startOf('day').format('x')
+        filter.dateFrom = formatDateTime(
+          startOfDay(this.filter.dateFrom),
+          UNIX_SECONDS
+        )
+        filter.dateTo = formatDateTime(
+          startOfDay(this.filter.dateTo),
+          UNIX_SECONDS
+        )
       }
       filter.ps2AlertsEventType = Ps2AlertsEventType.LIVE_METAGAME
       return filter
@@ -101,7 +110,7 @@ export default Vue.extend({
     },
     beginningDate(): string {
       return this.filter.dateFrom
-        ? this.filter.dateFrom.format('Do MMM YYYY')
+        ? formatDateTime(this.filter.dateFrom, DATE_TIME_FORMAT)
         : '4th Jan 2021'
     },
   },

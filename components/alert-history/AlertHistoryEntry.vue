@@ -106,12 +106,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import moment from 'moment-timezone'
 import { DATE_TIME_FORMAT_SHORT } from '@/constants/Time'
 import { Faction } from '@/ps2alerts-constants/faction'
 import { FactionBgClass } from '@/constants/FactionBgClass'
 import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
 import { FactionBorderClass } from '@/constants/FactionBorderClass'
+import { formatDateTime, utcDate } from '~/utilities/TimeHelper'
 
 export default Vue.extend({
   name: 'AlertHistoryEntry',
@@ -126,10 +126,16 @@ export default Vue.extend({
   },
   computed: {
     started(): string {
-      return moment(this.alert.timeStarted).format(DATE_TIME_FORMAT_SHORT)
+      return formatDateTime(
+        utcDate(new Date(this.alert.timeStarted)),
+        DATE_TIME_FORMAT_SHORT
+      )
     },
     ended(): string {
-      return moment(this.alert.timeEnded).format(DATE_TIME_FORMAT_SHORT)
+      return formatDateTime(
+        utcDate(new Date(this.alert.timeEnded)),
+        DATE_TIME_FORMAT_SHORT
+      )
     },
     victorClass(): object {
       if (this.alert.state === 0) {

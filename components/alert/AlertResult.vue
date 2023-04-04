@@ -34,11 +34,11 @@
       </h2>
     </div>
     <div v-if="alert.state === 1" class="mb-2 text-center text-2xl">
-      <remaining-time
+      <Countdown
         :started="alert.timeStarted"
         :duration="alert.duration"
         show-remaining="true"
-      ></remaining-time>
+      ></Countdown>
     </div>
     <div class="rounded px-4 py-4 bg-tint relative" :class="victorClass">
       <div class="tag section">
@@ -103,11 +103,13 @@ import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfit
 import { Phase } from '~/ps2alerts-constants/outfitwars/phase'
 import factionOrTeamName from '~/filters/FactionOrTeamName'
 import { Team } from '~/ps2alerts-constants/outfitwars/team'
+import Countdown from '~/components/Countdown.vue'
 
 export default Vue.extend({
   name: 'AlertResult',
   components: {
     FactionSegmentBar,
+    Countdown,
   },
   props: {
     alert: {

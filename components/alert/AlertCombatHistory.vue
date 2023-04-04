@@ -65,7 +65,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import moment from 'moment-timezone'
 import LineChart from '../LineChart.js'
 import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import ApiRequest from '~/api-request'
@@ -74,6 +73,8 @@ import { InstanceTerritoryControlResponseInterface } from '~/interfaces/Instance
 import { InstanceCombatHistoryAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceCombatHistoryAggregateResponseInterface'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
+import { formatDateTime, utcDate } from '~/utilities/TimeHelper'
+import { TIME_FORMAT_SHORT } from '~/constants/Time'
 
 export default Vue.extend({
   name: 'AlertPopulations',
@@ -239,7 +240,12 @@ export default Vue.extend({
       if (this.mode === 'kd') {
         this.data.forEach(
           (row: InstanceCombatHistoryAggregateResponseInterface) => {
-            times.push(moment(row.timestamp).format('HH:mm'))
+            times.push(
+              formatDateTime(
+                utcDate(new Date(row.timestamp)),
+                TIME_FORMAT_SHORT
+              )
+            )
 
             vsData.push(
               /* @ts-ignore */
@@ -262,7 +268,12 @@ export default Vue.extend({
       } else {
         this.data.forEach(
           (row: InstanceCombatHistoryAggregateResponseInterface) => {
-            times.push(moment(row.timestamp).format('HH:mm'))
+            times.push(
+              formatDateTime(
+                utcDate(new Date(row.timestamp)),
+                TIME_FORMAT_SHORT
+              )
+            )
             /* @ts-ignore */
             vsData.push(row.vs ? row.vs[this.mode] ?? 0 : 0)
             /* @ts-ignore */

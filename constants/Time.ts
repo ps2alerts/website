@@ -1,10 +1,21 @@
-export const DATE_TIME_FORMAT = 'Do MMM YYYY HH:mm:ss'
-export const DATE_TIME_FORMAT_SHORT = 'DD/MMM/YY HH:mm'
+export const DATE_TIME_FORMAT = 'do MMM yyyy HH:mm:ss'
+export const DATE_TIME_FORMAT_SHORT = 'dd/MMM/yy HH:mm'
 export const TIME_FORMAT = 'HH:mm:ss'
-export const DATE_FORMAT = 'DD/MMM/YY'
+export const TIME_FORMAT_SHORT = 'HH:mm'
+export const DATE_FORMAT = 'dd/MMM/yy'
+export const UNIX_SECONDS = 't'
+export const UNIX_MILLISECONDS = 'T'
 export enum TimeGranularity {
   DAY = 'day',
   WEEK = 'week',
   MONTH = 'month',
   YEAR = 'year',
 }
+export type DATETIME_FORMATS =
+  | typeof DATE_TIME_FORMAT
+  | typeof DATE_TIME_FORMAT_SHORT
+  | typeof TIME_FORMAT
+  | typeof TIME_FORMAT_SHORT
+  | typeof DATE_FORMAT
+  | typeof UNIX_SECONDS
+  | typeof UNIX_MILLISECONDS
