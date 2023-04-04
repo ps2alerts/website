@@ -68,7 +68,7 @@
 
         <v-tab href="#weapons">
           Weapons
-          <font-awesome-icon :icon="['fab', 'sith']"></font-awesome-icon>
+          <font-awesome-icon :icon="['fas', 'gun']"></font-awesome-icon>
         </v-tab>
 
         <v-tab href="#combat">
