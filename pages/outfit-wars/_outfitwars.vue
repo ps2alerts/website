@@ -290,7 +290,7 @@ export default Vue.extend({
     async init(instanceId: string): Promise<void> {
       await this.pull(instanceId)
       if (this.alert.features?.captureHistory) {
-        this.alertFacilityAggregate = await this.pullFacilityData(instanceId)
+        this.alertFacilityAggregate = await this.pullFacilityData()
         this.alertFacilityDataReady = true
       }
 
@@ -312,7 +312,7 @@ export default Vue.extend({
       }
 
       if (this.alert.features?.captureHistory) {
-        this.alertFacilityAggregate = await this.pullFacilityData(instanceId)
+        this.alertFacilityAggregate = await this.pullFacilityData()
         this.alertFacilityDataReady = true
       }
 
