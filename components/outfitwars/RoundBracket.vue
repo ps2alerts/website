@@ -29,7 +29,6 @@ import { Phase } from '~/ps2alerts-constants/outfitwars/phase'
 import { ParsedOutfitDataInterface } from '~/interfaces/ParsedOutfitDataInterface'
 import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
-import { OutfitwarsRankingInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsRankingInterface'
 
 export default Vue.extend({
   name: 'RoundBracket',
