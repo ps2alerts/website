@@ -321,7 +321,7 @@ export default Vue.extend({
     datesChanged(dates: { from: number; to: number }) {
       console.log('Index: Caught event dates-change', dates)
       this.dateButtonsDisabled = true
-      // These are converted into UTC Dates from StatisticsFiltering <-- FilterDate. We convert it to a unix here as VictoryStatistics expects it.
+      // These are converted into UTC Dates from StatisticsFiltering <-- FilterDate. We convert it to a Date here as VictoryStatistics expects it.
       this.dateFrom = utcDate(new Date(dates.from))
       this.dateTo = utcDate(new Date(dates.to))
 
