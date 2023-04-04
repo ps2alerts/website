@@ -63,7 +63,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.2.0",
     "husky": "^8.0.3",
-    "lint-staged": "^13.0.3",
+    "lint-staged": "^13.2.0",
     "node-sass": "^7.0.1",
     "postcss": "^8.4.21",
     "postcss-extend-rule": "^4.0.0",
