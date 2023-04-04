@@ -44,9 +44,9 @@
           <div class="mb-1">
             <span v-if="match.outfitwars">
               {{
-                match.outfitwars.round
-                  | owRoundByPhase(match.outfitwars.phase)
-                  | ordinalSuffix
+                match.outfitwars.round |
+                  owRoundByPhase(match.outfitwars.phase) |
+                  ordinalSuffix
               }}
             </span>
             <span v-if="!match.outfitwars"> Unknown! </span>

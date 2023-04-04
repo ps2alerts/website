@@ -86,8 +86,8 @@
           >
             <div :class="controlData(captureIndex).bgClass">
               <span class="text-gray-300 text-xs absolute top-2 left-2">{{
-                historyCache[historyCache.length - captureIndex - 1].timestamp
-                  | dateTimeFormatShort
+                historyCache[historyCache.length - captureIndex - 1].timestamp |
+                  dateTimeFormatShort
               }}</span>
               <span
                 class="absolute top-2 right-2"
@@ -215,8 +215,8 @@
             <span class="p-2">
               <span class="text-gray-300"
                 >{{
-                  controlData(captureIndices[sliderVal - 1]).timestamp
-                    | dateTimeFormatShort
+                  controlData(captureIndices[sliderVal - 1]).timestamp |
+                    dateTimeFormatShort
                 }}:
               </span>
               {{ regionName(captureIndices[sliderVal - 1]) }} captured by
