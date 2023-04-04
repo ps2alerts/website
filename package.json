@@ -65,7 +65,7 @@
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "node-sass": "^7.0.1",
-    "postcss": "^8.4.12",
+    "postcss": "^8.4.21",
     "postcss-extend-rule": "^4.0.0",
     "prettier": "^2.6.1",
     "sass": "^1.54.3",
