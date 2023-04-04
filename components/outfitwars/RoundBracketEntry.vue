@@ -455,12 +455,16 @@ export default Vue.extend({
         return
       }
 
-      const blueData = this.rankings.filter((outfit) => {
-        return outfit.id === this.match?.outfitwars.teams?.blue?.id
-      })
-      const redData = this.rankings.filter((outfit) => {
-        return outfit.id === this.match?.outfitwars.teams?.red?.id
-      })
+      const blueData = this.rankings.filter(
+        (outfit: ParsedOutfitDataInterface) => {
+          return outfit.id === this.match?.outfitwars.teams?.blue?.id
+        }
+      )
+      const redData = this.rankings.filter(
+        (outfit: ParsedOutfitDataInterface) => {
+          return outfit.id === this.match?.outfitwars.teams?.red?.id
+        }
+      )
 
       this.blueData = blueData[0]
       this.redData = redData[0]

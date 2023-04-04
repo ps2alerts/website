@@ -250,10 +250,11 @@ export default Vue.extend({
 
       for (const [key, row] of Object.entries(this.totalCounts)) {
         times.push(dayjs(key).format(DATE_FORMAT))
-        vsData.push(row.vs)
-        ncData.push(row.nc)
-        trData.push(row.tr)
-        drawData.push(row.draws)
+        const rowTyped = row as FactionMetricsInterface
+        vsData.push(rowTyped.vs)
+        ncData.push(rowTyped.nc)
+        trData.push(rowTyped.tr)
+        drawData.push(rowTyped.draws)
       }
 
       const commonDatasetOptions = {

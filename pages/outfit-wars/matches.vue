@@ -252,7 +252,10 @@ export default Vue.extend({
           this.selectedRound = 2
         }
         filter.round = this.selectedRound
-        filter.round += filter.phase === Phase.PLAYOFFS ? 4 : 0
+        // eslint-disable-next-line no-unused-expressions
+        filter.round
+          ? (filter.round += filter.phase === Phase.PLAYOFFS ? 4 : 0)
+          : undefined
         if (filter.phase === Phase.CHAMPIONSHIPS) {
           filter.round = undefined
         }

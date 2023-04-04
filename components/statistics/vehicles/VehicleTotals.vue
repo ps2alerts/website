@@ -242,9 +242,9 @@ export default Vue.extend({
           vehicle.vehicleFaction = worldVehicle.vehicleFaction
 
           vehicle.kd =
-            vehicle.totals.kills && vehicle.totals.deaths
+            vehicle.totals?.kills && vehicle.totals?.deaths
               ? (vehicle.totals.kills / vehicle.totals.deaths).toFixed(2)
-              : vehicle.totals.kills?.toString() || '0'
+              : vehicle.totals?.kills?.toString() || '0'
 
           calcData[worldVehicle.vehicle] = vehicle
         }

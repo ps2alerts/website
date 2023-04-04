@@ -596,17 +596,20 @@ export default Vue.extend({
       console.log('world rankings', this.currentWorldRankingsMap)
 
       for (const world of this.worlds) {
-        this.worldRankings(world).sort((a, b) => {
-          if (
-            (a.rankings.totalScore !== 0 &&
-              a.rankings.totalScore !== undefined) ||
-            (b.rankings.totalScore !== 0 && b.rankings.totalScore !== undefined)
-          ) {
-            return b.rankings.totalScore - a.rankings.totalScore
-          }
+        this.worldRankings(world).sort(
+          (a: ParsedOutfitDataInterface, b: ParsedOutfitDataInterface) => {
+            if (
+              (a.rankings.totalScore && a.rankings.totalScore !== 0) ||
+              (b.rankings.totalScore && b.rankings.totalScore !== 0)
+            ) {
+              if (b.rankings.totalScore && a.rankings.totalScore) {
+                return b.rankings.totalScore - a.rankings.totalScore
+              }
+            }
 
-          return b.rankings.globalRank - a.rankings.globalRank
-        })
+            return b.rankings.globalRank - a.rankings.globalRank
+          }
+        )
       }
 
       // Generate some stats
@@ -665,7 +668,7 @@ export default Vue.extend({
     },
 
     totalOutfitsByFaction(): void {
-      if (!this.factionCount.every((value) => value === 0)) {
+      if (!this.factionCount.every((value: number) => value === 0)) {
         return
       }
 

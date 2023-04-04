@@ -153,7 +153,7 @@ export default Vue.extend({
   computed: {
     counts(): { 1: number; 2: number; 3: number; 4: number; total: number } {
       const counts = { 1: 0, 2: 0, 3: 0, 4: 0, total: 0 }
-      this.data.forEach((character) => {
+      this.data.forEach((character: AlertCharacterTableDataInterface) => {
         if (
           this.isOutfitWar &&
           this.outfitwar.outfitwars?.teams?.red &&

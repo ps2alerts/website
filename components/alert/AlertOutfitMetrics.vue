@@ -194,7 +194,7 @@ export default Vue.extend({
   computed: {
     counts(): { 1: number; 2: number; 3: number; 4: number; total: number } {
       const counts = { 1: 0, 2: 0, 3: 0, 4: 0, total: 0 }
-      this.data.forEach((outfit) => {
+      this.data.forEach((outfit: AlertOutfitTableDataInterface) => {
         switch (outfit.outfit.faction) {
           case Faction.VANU_SOVEREIGNTY:
             counts[Faction.VANU_SOVEREIGNTY]++

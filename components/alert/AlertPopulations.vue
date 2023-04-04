@@ -360,7 +360,7 @@ export default Vue.extend({
       const trData: number[] = []
       const nsoData: number[] = []
 
-      let data = this.data
+      let data: InstancePopulationAggregateResponseInterface[] = this.data
 
       if (avg) {
         data = this.avgData

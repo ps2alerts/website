@@ -234,46 +234,48 @@ export default Vue.extend({
         factionBattlerankData[faction] = []
       })
 
-      this.data.forEach((character) => {
-        const faction = character.character.faction
-        const battlerank = character.character.adjustedBattleRank
+      this.data.forEach(
+        (character: InstanceCharacterAggregateResponseInterface) => {
+          const faction = character.character.faction
+          const battlerank = character.character.adjustedBattleRank
 
-        ;[
-          Faction.VANU_SOVEREIGNTY,
-          Faction.NEW_CONGLOMERATE,
-          Faction.TERRAN_REPUBLIC,
-          Faction.NS_OPERATIVES,
-        ].forEach((faction) => {
-          if (!factionBattlerankData[faction][battlerank]) {
-            factionBattlerankData[faction][battlerank] = 0
+          ;[
+            Faction.VANU_SOVEREIGNTY,
+            Faction.NEW_CONGLOMERATE,
+            Faction.TERRAN_REPUBLIC,
+            Faction.NS_OPERATIVES,
+          ].forEach((faction) => {
+            if (!factionBattlerankData[faction][battlerank]) {
+              factionBattlerankData[faction][battlerank] = 0
+            }
+          })
+
+          // Excludes "World" players
+          if (faction === 0) {
+            return
           }
-        })
 
-        // Excludes "World" players
-        if (faction === 0) {
-          return
-        }
+          if (
+            this.isOutfitWar &&
+            this.outfitwar.outfitwars?.teams?.red &&
+            this.outfitwar.outfitwars.teams.blue &&
+            character.character.outfit
+          ) {
+            factionBattlerankData[
+              character.character.outfit.id ===
+              this.outfitwar.outfitwars.teams.red.id
+                ? Faction.TERRAN_REPUBLIC
+                : Faction.NEW_CONGLOMERATE
+            ][battlerank]++
+          } else {
+            factionBattlerankData[faction][battlerank]++
+          }
 
-        if (
-          this.isOutfitWar &&
-          this.outfitwar.outfitwars?.teams?.red &&
-          this.outfitwar.outfitwars.teams.blue &&
-          character.character.outfit
-        ) {
-          factionBattlerankData[
-            character.character.outfit.id ===
-            this.outfitwar.outfitwars.teams.red.id
-              ? Faction.TERRAN_REPUBLIC
-              : Faction.NEW_CONGLOMERATE
-          ][battlerank]++
-        } else {
-          factionBattlerankData[faction][battlerank]++
+          if (Number.isSafeInteger(battlerank)) {
+            maxBR = Math.max(maxBR, battlerank)
+          }
         }
-
-        if (Number.isSafeInteger(battlerank)) {
-          maxBR = Math.max(maxBR, battlerank)
-        }
-      })
+      )
 
       let limit: number = 121
 

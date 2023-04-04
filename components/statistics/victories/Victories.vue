@@ -97,7 +97,7 @@ export default Vue.extend({
         return 0
       }
       let count = 0
-      this.data.forEach((row) => {
+      this.data.forEach((row: GlobalVictoriesAggregateResponseInterface) => {
         if (row.bracket !== Bracket.TOTAL) {
           return
         }

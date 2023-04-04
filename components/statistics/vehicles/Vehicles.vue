@@ -175,13 +175,15 @@ export default Vue.extend({
           return
         }
 
-        const vehicleData = this.vehicleData.find((val, key) => {
-          if (val.id === vehicle.vehicle) {
-            return this.vehicleData[key]
-          }
+        const vehicleData = this.vehicleData.find(
+          (val: VehicleDataInterface, key: string | number) => {
+            if (val.id === vehicle.vehicle) {
+              return this.vehicleData[key]
+            }
 
-          return null
-        })
+            return null
+          }
+        )
 
         vehicle.suicides = vehicle.suicides ?? 0
         vehicle.roadkills = vehicle.roadkills ?? 0

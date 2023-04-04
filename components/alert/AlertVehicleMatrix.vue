@@ -227,13 +227,15 @@ export default Vue.extend({
         )
         .then((result) => {
           result.forEach((vehicle, key) => {
-            const vehicleData = this.vehicleData.find((val, key) => {
-              if (val.id === vehicle.vehicle) {
-                return this.vehicleData[key]
-              }
+            const vehicleData = this.vehicleData.find(
+              (val: VehicleDataInterface, key: string | number) => {
+                if (val.id === vehicle.vehicle) {
+                  return this.vehicleData[key]
+                }
 
-              return null
-            })
+                return null
+              }
+            )
             result[key].vehicleName = vehicleData
               ? this.$options.filters?.itemShortName(vehicleData.name)
               : `UNKNOWN (ID: ${vehicle.vehicle})`

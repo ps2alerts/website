@@ -767,7 +767,7 @@ export default Vue.extend({
           return false
         }
         // Check all connections and add them to the frontier if they match factions
-        curr.connections.forEach((connection) => {
+        curr.connections.forEach((connection: MapRegion) => {
           if (visited.get(connection.id)) {
             return
           }
@@ -838,7 +838,7 @@ export default Vue.extend({
       if (sliderOverride === undefined) {
         sliderOverride = this.sliderVal
       }
-      let nextVal = sliderOverride + 1
+      let nextVal = sliderOverride ? sliderOverride + 1 : 1
       if (
         sliderOverride === this.captureIndices.length &&
         !this.playback.repeat
@@ -991,7 +991,7 @@ export default Vue.extend({
           (this.currentIndex === -1 && indexLimit === undefined) ||
           (indexLimit !== undefined && index < this.captureIndices[indexLimit])
         ) {
-          let region = this.mapRegions.get(controlEvent.facility)
+          let region: MapRegion = this.mapRegions.get(controlEvent.facility)
           if (!region) {
             return
           }
@@ -1032,8 +1032,8 @@ export default Vue.extend({
                 ?.classList.add('captured', 'lastCaptured')
               this.lastCaptured.getElement()?.addEventListener(
                 'animationend',
-                (event) => {
-                  ;(event.target as Element).classList.remove('captured')
+                (event: { target: Element }) => {
+                  event.target.classList.remove('captured')
                 },
                 { once: true }
               )
@@ -1096,14 +1096,14 @@ export default Vue.extend({
       }
     },
     updateLinks(facility: number) {
-      const region = this.mapRegions.get(facility)
-      if (region === undefined) {
+      const region: MapRegion = this.mapRegions.get(facility)
+      if (!region) {
         return
       }
-      region.connections.forEach((connection) => {
+      region.connections.forEach((connection: MapRegion) => {
         const linkStamp = region.linkStamps.get(connection.id)
         const bgLinkStamp = region.bgLinkStamps.get(connection.id)
-        if (linkStamp === undefined || bgLinkStamp === undefined) {
+        if (!linkStamp || !bgLinkStamp) {
           console.error(
             'AlertMap.updateLinks: link between ' +
               region.name +

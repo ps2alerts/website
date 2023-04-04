@@ -29,6 +29,7 @@ import { Phase } from '~/ps2alerts-constants/outfitwars/phase'
 import { ParsedOutfitDataInterface } from '~/interfaces/ParsedOutfitDataInterface'
 import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
+import { OutfitwarsRankingInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsRankingInterface'
 
 export default Vue.extend({
   name: 'RoundBracket',
@@ -111,12 +112,13 @@ export default Vue.extend({
         return this.pairs
       }
 
-      const filteredRankings = this.rankings.filter((ranking) => {
-        return (
-          ranking.round === this.round &&
-          ranking.world.valueOf() === this.server.valueOf()
-        )
-      })
+      const filteredRankings: ParsedOutfitDataInterface[] =
+        this.rankings.filter((ranking: ParsedOutfitDataInterface) => {
+          return (
+            ranking.round === this.round &&
+            ranking.world.valueOf() === this.server.valueOf()
+          )
+        })
 
       const sortedRankings = filteredRankings.sort(this.rankingsSort)
       let winners: string[] = []
@@ -127,18 +129,20 @@ export default Vue.extend({
       let previousLosers: ParsedOutfitDataInterface[] = []
 
       if (this.round > 5) {
-        winners = this.previousRoundMatches.map((match) => {
-          if (!(match.outfitwars.teams?.blue && match.outfitwars.teams.red)) {
-            return ''
+        winners = this.previousRoundMatches.map(
+          (match: InstanceOutfitWarsResponseInterface) => {
+            if (!(match.outfitwars.teams?.blue && match.outfitwars.teams.red)) {
+              return ''
+            }
+            if (match.result.victor === 2) {
+              return match.outfitwars.teams?.blue?.id
+            } else {
+              return match.outfitwars.teams?.red?.id
+            }
           }
-          if (match.result.victor === 2) {
-            return match.outfitwars.teams?.blue?.id
-          } else {
-            return match.outfitwars.teams?.red?.id
-          }
-        })
+        )
         previousRankings = this.rankings
-          .filter((ranking) => {
+          .filter((ranking: ParsedOutfitDataInterface) => {
             return (
               ranking.round === this.round - 1 &&
               ranking.world.valueOf() === this.server.valueOf()
@@ -146,7 +150,7 @@ export default Vue.extend({
           })
           .sort(this.rankingsSort)
         playoffSeedingRankings = this.rankings
-          .filter((ranking) => {
+          .filter((ranking: ParsedOutfitDataInterface) => {
             return (
               ranking.round === 5 &&
               ranking.world.valueOf() === this.server.valueOf()
