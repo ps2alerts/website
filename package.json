@@ -32,7 +32,7 @@
     "memory-fs": "^0.5.0",
     "nuxt": "^2.15.8",
     "nuxt-leaflet": "^0.0.27",
-    "vue": "^2.7.14",
+    "vue": "^3.2.47",
     "vue-chartjs": "^3.5.1",
     "vue-numeral-filter": "^2.0.0",
     "vue-server-renderer": "^2.7.14",
