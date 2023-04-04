@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-12 gap-2">
     <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
-    <div class="col-span-12 xl:col-span-10 xl:col-start-2">
+    <div id="change-log" class="col-span-12 xl:col-span-10 xl:col-start-2">
       <div class="text-center h-full">
         <h1 class="text-title">Change Log</h1>
         <p class="mt-1">Last updated: {{ posts[0].date }}</p>
@@ -85,14 +85,22 @@ export default Vue.extend({
               <div class="pt-3">
                 <p class="text-xl font-bold">PS2Alerts module updates (April 2023)</p>
                 <p>PS2Alerts is constructed out of various modules. They needed a bit of love and care before an upcoming remodelling of PS2Alerts and how it records data.</p>
+
+                <p class="text-lg font-bold">Website</p>
+                <p>The website has received some minor improvements:</p>
+                <ul>
+                  <li><b>Fixed:</b> Alert clocks would de-sync when you've had the website open in an inactive browser tab for a while, or otherwise lost focus.</li>
+                  <li><b>Fixed:</b> Tooltip / information RE populations last updated on alert list on the left has been restored</li>
+                  <li><b>Improvement:</b> The site was loading in <b>all</b> font-awesome icons resulting in about <b>1.6MB on every page load</b>. This is now 91KB as we're using a subset of icons. With compression this is even lower at 26KB!</li>
+                  <li><b>House keeping:</b> We have removed a very old dependency called MomentJS, which should mean the site loads a bit quicker as everything is a bit smaller.</li>
+                  <li><b>House keeping:</b> Various dependencies have been updated including security fixes.</li>
+                </ul>
+
                 <p class="text-lg font-bold">Aggregator</p>
                 <p>A <a class="text-red-500" target="_blank" href="https://github.com/ps2alerts/aggregator/releases/tag/v4.4.0">massive refactor</a> of the Aggregator (the module that calculates the statistics for Alerts) was conducted, including migrating from a very troublesome method of Inversion of Control class injection into a better form. It also marks the introduction of NestJS to the Aggregator, to match API in terms of how the modules are configured and set up and increasing our development abilities. Many thanks to <a href="https://github.com/microwavekonijn" target="_blank" class="text-red-500">[DIG] Microwavekonijn</a> for the bulk of the refactor!</p>
 
                 <p class="text-lg font-bold">API</p>
                 <p>The API module was brought up to date in a major way as many of it's dependencies were out of date. Most importantly the NestJS version was bumped from 7->9 and the TypeScript version 3->4 meaning we are able to make sure of more modern development processes.</p>
-
-                <p class="text-lg font-bold">Website</p>
-                <p>Additionally, the website module was brought up to date in terms of it's dependencies as well. Nothing functionally was changed.</p>
               </div>
             </div>
           `,
@@ -910,3 +918,10 @@ export default Vue.extend({
   },
 })
 </script>
+<style lang="scss">
+#change-log {
+  ul {
+    padding-left: 2px;
+  }
+}
+</style>
