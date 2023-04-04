@@ -172,28 +172,28 @@
 /* eslint-disable import/no-named-as-default-member */
 import Vue from 'vue'
 // eslint-disable-next-line import/named
-import moment, { Moment } from 'moment'
 import StatisticsFiltering, {
   AvailableMetricsInterface,
 } from '~/components/statistics/StatisticsFiltering.vue'
 import { World } from '@/ps2alerts-constants/world'
 import { Bracket } from '@/ps2alerts-constants/bracket'
 import { Zone } from '@/ps2alerts-constants/zone'
+import { utcDate } from '~/utilities/TimeHelper'
 
 interface FilterInterface {
   metric: string
   world: World
   zone: Zone
   bracket: Bracket
-  dateFrom?: Moment
-  dateTo?: Moment
+  dateFrom?: Date
+  dateTo?: Date
 }
 
 export default Vue.extend({
   name: 'Home',
   components: { StatisticsFiltering },
   data() {
-    const now = moment()
+    const now = new Date()
     return {
       mode: 'percent',
       tab: '',
@@ -321,9 +321,9 @@ export default Vue.extend({
     datesChanged(dates: { from: number; to: number }) {
       console.log('Index: Caught event dates-change', dates)
       this.dateButtonsDisabled = true
-      // These are converted into UTC from StatisticsFiltering <-- FilterDate. We convert it to a moment here as VictoryStatistics expects it. This will be killed off in https://github.com/ps2alerts/website/issues/425
-      this.dateFrom = moment.unix(dates.from)
-      this.dateTo = moment.unix(dates.to)
+      // These are converted into UTC Dates from StatisticsFiltering <-- FilterDate. We convert it to a unix here as VictoryStatistics expects it.
+      this.dateFrom = utcDate(new Date(dates.from))
+      this.dateTo = utcDate(new Date(dates.to))
 
       console.log('Index: Set filter', this.filter)
     },

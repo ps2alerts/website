@@ -116,11 +116,13 @@
 <script lang="ts">
 /* eslint-disable import/no-named-as-default-member */
 import Vue from 'vue'
-import moment from 'moment'
+import { add } from 'date-fns'
 import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceEventDetails } from '@/constants/InstanceEventDetails'
 import { MetagameDetailsInterface } from '@/interfaces/MetagameDetailsInterface'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
+import { formatDateTime, utcDate } from '~/utilities/TimeHelper'
+import { TIME_FORMAT } from '~/constants/Time'
 
 export default Vue.extend({
   name: 'AlertDetails',
@@ -144,11 +146,12 @@ export default Vue.extend({
         return 'TBD'
       }
 
-      const start = moment.tz(this.outfitwar.timeStarted, 'UTC')
-      const end = moment.tz(this.outfitwar.timeEnded, 'UTC')
-      const diff = end.diff(start)
+      const start = utcDate(this.outfitwar.timeStarted)
+      const end = utcDate(this.outfitwar.timeEnded)
+      const diff = (end.getTime() - start.getTime()) / 1000
+      const nowWithDiff = add(utcDate(new Date()), { seconds: diff })
 
-      return moment.utc(diff).format('mm:ss')
+      return formatDateTime(nowWithDiff, TIME_FORMAT)
     },
     instanceEventDetails(): MetagameDetailsInterface | null | undefined {
       return InstanceEventDetails(227)

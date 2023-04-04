@@ -186,12 +186,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import moment from 'moment-timezone'
 import { DATE_TIME_FORMAT_SHORT } from '@/constants/Time'
 import { Team } from '@/ps2alerts-constants/outfitwars/team'
 import { FactionBgClass } from '@/constants/FactionBgClass'
 import FactionSegmentBar from '~/components/common/FactionSegmentBar.vue'
 import { FactionBorderClass } from '@/constants/FactionBorderClass'
+import { formatDateTime } from '~/utilities/TimeHelper'
 
 export default Vue.extend({
   name: 'MatchEntry',
@@ -206,10 +206,16 @@ export default Vue.extend({
   },
   computed: {
     started(): string {
-      return moment(this.match.timeStarted).format(DATE_TIME_FORMAT_SHORT)
+      return formatDateTime(
+        new Date(this.match.timeStarted),
+        DATE_TIME_FORMAT_SHORT
+      )
     },
     ended(): string {
-      return moment(this.match.timeEnded).format(DATE_TIME_FORMAT_SHORT)
+      return formatDateTime(
+        new Date(this.match.timeEnded),
+        DATE_TIME_FORMAT_SHORT
+      )
     },
     victorClass(): object {
       if (this.match.state === 0) {

@@ -117,7 +117,7 @@ import {
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { AlertCharacterTableDataInterface } from '~/interfaces/alert/AlertCharacterTableDataInterface'
 import { DataTableConfig } from '@/constants/DataTableConfig'
-import timeText from '~/utilities/timeText'
+import { timeText } from '~/utilities/TimeHelper'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 

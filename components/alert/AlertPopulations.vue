@@ -106,7 +106,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import moment from 'moment-timezone'
 import LineChart from '../LineChart.js'
 import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import ApiRequest from '~/api-request'
@@ -115,6 +114,8 @@ import { InstanceTerritoryControlResponseInterface } from '~/interfaces/Instance
 import { InstancePopulationAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstancePopulationAggregateResponseInterface'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
+import { TIME_FORMAT_SHORT } from '~/constants/Time'
+import { formatDateTime } from '~/utilities/TimeHelper'
 
 const commonChartOptions = {
   responsive: true,
@@ -381,7 +382,7 @@ export default Vue.extend({
             nsoData.push(row.nso)
           }
         }
-        times.push(moment(row.timestamp).format('HH:mm'))
+        times.push(formatDateTime(new Date(row.timestamp), TIME_FORMAT_SHORT))
       })
 
       const datasets = []

@@ -94,7 +94,6 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    { src: '@/filters/AlertEndTime', mode: 'client' },
     { src: '@/filters/BracketName', mode: 'client' },
     { src: '@/filters/DateTimeFormat', mode: 'client' },
     { src: '@/filters/FacilityTypeShortName', mode: 'client' },

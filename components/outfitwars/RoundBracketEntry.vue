@@ -235,7 +235,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import moment from 'moment-timezone'
 import { PropValidator } from 'vue/types/options'
 import { DATE_TIME_FORMAT_SHORT } from '@/constants/Time'
 import { Team } from '@/ps2alerts-constants/outfitwars/team'
@@ -257,6 +256,7 @@ import { Ps2AlertsEventState } from '~/ps2alerts-constants/ps2AlertsEventState'
 import { Faction } from '~/ps2alerts-constants/faction'
 import { FactionTextClass } from '~/constants/FactionTextClass'
 import factionShortName from '~/filters/FactionShortName'
+import { formatDateTime } from '~/utilities/TimeHelper'
 
 export default Vue.extend({
   name: 'RoundBracketEntry',
@@ -303,10 +303,16 @@ export default Vue.extend({
   },
   computed: {
     started(): string {
-      return moment(this.match?.timeStarted).format(DATE_TIME_FORMAT_SHORT)
+      return formatDateTime(
+        new Date(this.match?.timeStarted ?? new Date()),
+        DATE_TIME_FORMAT_SHORT
+      )
     },
     ended(): string {
-      return moment(this.match?.timeEnded).format(DATE_TIME_FORMAT_SHORT)
+      return formatDateTime(
+        new Date(this.match?.timeEnded ?? new Date()),
+        DATE_TIME_FORMAT_SHORT
+      )
     },
     victorClass(): object {
       if (!this.match || this.match.state === 0) {

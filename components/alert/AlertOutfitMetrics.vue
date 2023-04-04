@@ -158,7 +158,7 @@ import {
 } from '@/constants/FactionBgClass'
 import { DataTableConfig } from '@/constants/DataTableConfig'
 import { AlertOutfitTableDataInterface } from '~/interfaces/alert/AlertOutfitTableDataInterface'
-import timeText from '~/utilities/timeText'
+import { timeText } from '~/utilities/TimeHelper'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 

@@ -1,6 +1,22 @@
-// A modification of https://www.w3schools.com/howto/howto_js_countdown.asp
+import { formatInTimeZone } from 'date-fns-tz'
+import { format } from 'date-fns'
+import { DATETIME_FORMATS } from '~/constants/Time'
 
-const timeText = (timeSeconds: number): string => {
+export const utcDate = (date: Date): Date => {
+  return new Date(
+    formatInTimeZone(new Date(date), 'UTC', 'yyyy-MM-dd HH:mm:ss zzz')
+  )
+}
+
+export const formatDateTime = (
+  date: Date,
+  formatTo: DATETIME_FORMATS
+): string => {
+  return format(date, formatTo)
+}
+
+// Returns a string in the format of DD:HH:MM:SS, as for some reason date-fns doesn't support this...
+export const timeText = (timeSeconds: number): string => {
   const time = timeSeconds * 1000
 
   const days = Math.floor(time / (1000 * 60 * 60 * 24))
@@ -37,5 +53,3 @@ const timeText = (timeSeconds: number): string => {
 
   return `${daysString}${hoursString}:${minutesString}:${secondsString}`
 }
-
-export default timeText

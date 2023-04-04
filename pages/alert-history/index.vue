@@ -142,7 +142,6 @@
 <script lang="ts">
 /* eslint-disable import/no-named-as-default-member */
 import Vue from 'vue'
-import moment from 'moment'
 import MetaHead from '~/components/MetaHead.vue'
 import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
 import { Endpoints } from '@/constants/Endpoints'
@@ -159,6 +158,8 @@ import FilterZone from '~/components/common/FilterZone.vue'
 import FilterBracket from '~/components/common/FilterBracket.vue'
 import FilterVictor from '~/components/common/FilterVictor.vue'
 import FilterDate from '~/components/common/FilterDate.vue'
+import { formatDateTime, utcDate } from '~/utilities/TimeHelper'
+import { UNIX_SECONDS } from '~/constants/Time'
 
 export default Vue.extend({
   name: 'AlertHistory',
@@ -241,8 +242,11 @@ export default Vue.extend({
         this.selectedDateFrom !== this.dateNow &&
         this.selectedDateTo !== this.dateNow
       ) {
-        filter.timeStartedFrom = this.selectedDateFrom.format('x')
-        filter.timeStartedTo = this.selectedDateTo.format('x')
+        filter.timeStartedFrom = formatDateTime(
+          this.selectedDateFrom,
+          UNIX_SECONDS
+        )
+        filter.timeStartedTo = formatDateTime(this.selectedDateTo, UNIX_SECONDS)
       }
 
       return filter
@@ -353,8 +357,8 @@ export default Vue.extend({
     },
     updateDate(dates: { from: number; to: number }): void {
       console.log('Alert History: Updating Dates', dates)
-      this.selectedDateFrom = moment.unix(dates.from)
-      this.selectedDateTo = moment.unix(dates.to)
+      this.selectedDateFrom = utcDate(new Date(dates.from))
+      this.selectedDateTo = utcDate(new Date(dates.to))
       this.filterResults()
     },
     async filterResults(force = false): Promise<void> {
@@ -366,7 +370,7 @@ export default Vue.extend({
     },
     async clearFilter(): Promise<void> {
       this.ignoreChanges = true
-      const now = moment()
+      const now = new Date()
       this.selectedWorld = 0
       this.selectedZone = 0
       this.selectedBracket = Bracket.UNKNOWN

@@ -363,7 +363,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import moment from 'moment-timezone'
 import MetaHead from '~/components/MetaHead.vue'
 import RoundBracket from '~/components/outfitwars/RoundBracket.vue'
 import { World } from '~/ps2alerts-constants/world'
@@ -372,13 +371,13 @@ import { Endpoints } from '~/constants/Endpoints'
 import { OutfitwarsRankingInterface } from '~/ps2alerts-constants/interfaces/OutfitwarsRankingInterface'
 import { getOutfitWarPhase } from '~/ps2alerts-constants/outfitwars/utils'
 import worldName from '~/filters/WorldName'
-import TimeRemainingFromDuration from '~/utilities/timeRemainingFromDuration'
 import { ParsedOutfitDataInterface } from '~/interfaces/ParsedOutfitDataInterface'
 import factionShortName from '~/filters/FactionShortName'
 import { FactionNumbersInterface } from '~/ps2alerts-constants/interfaces/FactionNumbersInterface'
 import { Faction } from '~/ps2alerts-constants/faction'
 import { FactionTextClass } from '~/constants/FactionTextClass'
 import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
+import { utcDate } from '~/utilities/TimeHelper'
 
 export default Vue.extend({
   name: 'OutfitWarsRankings',
@@ -393,8 +392,8 @@ export default Vue.extend({
       loading: true,
       loaded: false,
       error: '',
-      now: parseInt(moment().tz('UTC').format('X'), 10),
-      end: parseInt(moment.tz('2022-09-02 18:20:00', 'UTC').format('X'), 10),
+      now: utcDate(new Date()),
+      end: utcDate(new Date('2022-09-02 18:20:00')),
       timeRemaining: 0,
       worlds: [
         World.COBALT,
