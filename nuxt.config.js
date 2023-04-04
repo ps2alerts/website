@@ -135,8 +135,6 @@ export default {
     '@nuxtjs/google-gtag',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    // https://go.nuxtjs.dev/content
-    '@nuxt/content',
     'nuxt-leaflet',
     '@nuxtjs/fontawesome',
   ],
