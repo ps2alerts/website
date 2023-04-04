@@ -40,7 +40,7 @@
     "vue-template-compiler": "^2.7.14",
     "vue2-leaflet": "^2.7.1",
     "vuejs-datatable": "^2.0.0-alpha.7",
-    "webpack": "^4.46.0"
+    "webpack": "^5.76.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.21.3",
