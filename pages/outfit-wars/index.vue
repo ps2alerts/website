@@ -20,9 +20,10 @@
               <h1
                 class="text-subtitle rounded-md py-2 px-4 inline-block bg-gray-700 border-yellow-500 border"
               >
-                <remaining-time
-                  :time-remaining="timeRemaining"
-                ></remaining-time>
+                <!--                <remaining-time-->
+                <!-- Removed when we removed moment, needs re-making and cba right now cos outfit wars is over -->
+                <!--                  :time-remaining="timeRemaining"-->
+                <!--                ></remaining-time>-->
               </h1>
               <p class="text-base">
                 Until the season begins<br />(including 20 min prep time)
