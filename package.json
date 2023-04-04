@@ -9,10 +9,8 @@
     "start": "nuxt start",
     "analyze": "nuxt build --analyze",
     "generate": "nuxt generate",
-    "lint:js": "eslint --ext \".js,.ts,.vue\" --ignore-path .gitignore .",
-    "lint:check": "prettier --check .",
-    "lint": "yarn lint:js && yarn lint:check",
-    "lintfix": "prettier --write --list-different . && yarn lint:js --fix",
+    "lint": "eslint --ext \".js,.ts,.vue\" --ignore-path .gitignore .",
+    "lintfix": "yarn lint --fix",
     "prepare": "husky install"
   },
   "dependencies": {

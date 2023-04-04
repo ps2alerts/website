@@ -1,3 +1,4 @@
 *.yml
 tsconfig.json
 .nuxt
+ps2alerts-constants

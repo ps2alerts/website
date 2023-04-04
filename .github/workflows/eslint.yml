@@ -24,4 +24,4 @@ jobs:
         run: yarn install
 
       - name: Run ESLint
-        run: yarn run lint:check
+        run: yarn run lint
