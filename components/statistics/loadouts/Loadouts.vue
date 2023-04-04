@@ -117,7 +117,7 @@ export default Vue.extend({
       this.setTimers()
     },
     async pull(): Promise<void> {
-      console.log('LoadoutStatistics.pull', this.apiFilter)
+      // console.log('LoadoutStatistics.pull', this.apiFilter)
 
       await new ApiRequest()
         .get<GlobalLoadoutAggregateResponseInterface[]>(

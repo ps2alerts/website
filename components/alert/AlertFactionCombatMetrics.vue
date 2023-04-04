@@ -339,7 +339,7 @@ export default Vue.extend({
         return
       }
 
-      console.log('AlertFactionCombatMetrics.pull', this.alert.instanceId)
+      // console.log('AlertFactionCombatMetrics.pull', this.alert.instanceId)
 
       await new ApiRequest()
         .get<InstanceFactionCombatAggregateResponseInterface>(

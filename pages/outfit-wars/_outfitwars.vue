@@ -403,7 +403,7 @@ export default Vue.extend({
             console.error('Unable to process Nexus Facility Data!', e)
           })
       } else {
-        console.log('Alert.pullFacilityData', instanceId)
+        // console.log('Alert.pullFacilityData', instanceId)
         await new ApiRequest()
           .get<CensusMapRegionResponseInterface>(
             CensusEndpoints.FACILITY_DATA.replace(

@@ -120,7 +120,7 @@ export default Vue.extend({
       this.setTimers()
     },
     async pull(): Promise<void> {
-      console.log('WeaponStatistics.pull', this.apiFilter)
+      // console.log('WeaponStatistics.pull', this.apiFilter)
 
       await new ApiRequest()
         .get<GlobalWeaponAggregateResponseInterface[]>(

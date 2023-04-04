@@ -126,7 +126,7 @@ export default Vue.extend({
       this.setTimers()
     },
     async pull(): Promise<void> {
-      console.log('CharacterStatistics.pull', this.apiFilter)
+      // console.log('CharacterStatistics.pull', this.apiFilter)
 
       await new ApiRequest()
         .get<GlobalCharacterAggregateResponseInterface[]>(

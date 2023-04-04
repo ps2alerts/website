@@ -128,7 +128,7 @@ export default Vue.extend({
       this.setTimers()
     },
     async pull(): Promise<void> {
-      console.log('CombatStatistics.pull', this.apiFilter)
+      // console.log('CombatStatistics.pull', this.apiFilter)
 
       await new ApiRequest()
         .get<GlobalFactionCombatAggregateResponseInterface[]>(

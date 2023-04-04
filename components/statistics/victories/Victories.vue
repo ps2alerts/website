@@ -149,7 +149,7 @@ export default Vue.extend({
       this.setTimers()
     },
     async pull(): Promise<void> {
-      console.log('VictoryStatistics.pull', this.apiFilter)
+      // console.log('VictoryStatistics.pull', this.apiFilter)
       this.loading = true
 
       const promises: Promise<GlobalVictoriesAggregateResponseInterface[]>[] =

@@ -367,7 +367,7 @@ export default Vue.extend({
         return
       }
 
-      console.log('AlertCharacterMetrics.pull', this.alert.instanceId)
+      // console.log('AlertCharacterMetrics.pull', this.alert.instanceId)
 
       await new ApiRequest()
         .get<InstanceCharacterAggregateResponseInterface[]>(

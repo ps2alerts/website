@@ -127,7 +127,7 @@ export default Vue.extend({
       this.setTimers()
     },
     async pull(): Promise<void> {
-      console.log('OutfitStatistics.pull', this.apiFilter)
+      // console.log('OutfitStatistics.pull', this.apiFilter)
 
       await new ApiRequest()
         .get<GlobalOutfitAggregateResponseInterface[]>(

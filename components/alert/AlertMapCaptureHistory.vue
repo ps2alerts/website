@@ -273,7 +273,7 @@ export default Vue.extend({
         return
       }
 
-      console.log('AlertMapCaptureHistory.pull', this.alert.instanceId)
+      // console.log('AlertMapCaptureHistory.pull', this.alert.instanceId)
 
       let endpoint = Endpoints.INSTANCE_FACILITY_CONTROL_ENTRIES.replace(
         '{instance}',

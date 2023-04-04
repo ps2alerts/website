@@ -208,7 +208,7 @@ export default Vue.extend({
         return
       }
 
-      console.log('AlertCombatHistory.pull', this.alert.instanceId)
+      // console.log('AlertCombatHistory.pull', this.alert.instanceId)
 
       await new ApiRequest()
         .get<InstanceCombatHistoryAggregateResponseInterface[]>(

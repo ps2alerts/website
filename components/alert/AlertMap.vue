@@ -1179,7 +1179,7 @@ export default Vue.extend({
         )
       }
 
-      console.log('AlertMap.pull', this.alert.instanceId)
+      // console.log('AlertMap.pull', this.alert.instanceId)
       await Promise.all([
         this.pullOutfitData(this.alert.instanceId ?? '12345'),
         new ApiRequest().get<InstanceFacilityControlEntriesResponseInterface[]>(
@@ -1237,7 +1237,7 @@ export default Vue.extend({
       // Taken from AlertMapCaptureHistory.vue
       const newMap = new Map<string, InstanceOutfitAggregateResponseInterface>()
 
-      console.log('AlertMap.pullOutfitData', instanceId)
+      // console.log('AlertMap.pullOutfitData', instanceId)
 
       await new ApiRequest()
         .get<InstanceOutfitAggregateResponseInterface[]>(

@@ -160,7 +160,7 @@ export default Vue.extend({
         return
       }
 
-      console.log('AlertVehicleMetrics.pull', this.alert.instanceId)
+      // console.log('AlertVehicleMetrics.pull', this.alert.instanceId)
 
       await new ApiRequest()
         .get<InstanceWeaponAggregateResponseInterface[]>(

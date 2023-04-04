@@ -248,7 +248,7 @@ export default Vue.extend({
         return
       }
 
-      console.log('AlertFactionVsFactionMetrics.pull', this.alert.instanceId)
+      // console.log('AlertFactionVsFactionMetrics.pull', this.alert.instanceId)
 
       const promises: Promise<any>[] = []
 

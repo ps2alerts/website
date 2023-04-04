@@ -315,7 +315,7 @@ export default Vue.extend({
         return
       }
 
-      console.log('AlertPopulations.pull', this.alert.instanceId)
+      // console.log('AlertPopulations.pull', this.alert.instanceId)
 
       const promises = []
 

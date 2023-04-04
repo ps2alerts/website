@@ -294,7 +294,7 @@ export default Vue.extend({
         this.alertFacilityDataReady = true
       }
 
-      console.log('Alert details pull', instanceId)
+      // console.log('Alert details pull', instanceId)
 
       await new ApiRequest()
         .get<InstanceTerritoryControlResponseInterface>(
@@ -302,7 +302,6 @@ export default Vue.extend({
         )
         .then((alert) => {
           this.alert = alert
-          console.log('alert', alert)
           this.loaded = true
           this.updateCountdown = this.updateRate / 1000
         })
@@ -318,7 +317,7 @@ export default Vue.extend({
         InstanceFacilityControlAggregateResponseInterface
       >()
 
-      console.log('Alert.pullFacilityData', instanceId)
+      // console.log('Alert.pullFacilityData', instanceId)
       await new ApiRequest()
         .get<CensusMapRegionResponseInterface>(
           CensusEndpoints.FACILITY_DATA.replace(

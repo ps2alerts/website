@@ -179,7 +179,7 @@ export default Vue.extend({
         return
       }
 
-      console.log('AlertLoadoutMetrics.pull', this.alert.instanceId)
+      // console.log('AlertLoadoutMetrics.pull', this.alert.instanceId)
 
       await new ApiRequest()
         .get<InstanceLoadoutResponseInterface[]>(

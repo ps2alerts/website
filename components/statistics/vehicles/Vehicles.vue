@@ -137,7 +137,7 @@ export default Vue.extend({
       this.setTimers()
     },
     async pull(): Promise<void> {
-      console.log('VehicleStatistics.pull', this.apiFilter)
+      // console.log('VehicleStatistics.pull', this.apiFilter)
 
       await new ApiRequest()
         .get<GlobalVehicleAggregateResponseInterface[]>(

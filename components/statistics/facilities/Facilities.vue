@@ -137,7 +137,7 @@ export default Vue.extend({
       this.setTimers()
     },
     async pull(): Promise<void> {
-      console.log('FacilityStatistics.pull', this.apiFilter)
+      // console.log('FacilityStatistics.pull', this.apiFilter)
 
       await new ApiRequest()
         .get<GlobalFacilityControlAggregateResponseInterface[]>(

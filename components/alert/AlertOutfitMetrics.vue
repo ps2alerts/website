@@ -403,7 +403,7 @@ export default Vue.extend({
         return
       }
 
-      console.log('AlertOutfitMetrics.pull', this.alert.instanceId)
+      // console.log('AlertOutfitMetrics.pull', this.alert.instanceId)
 
       await new ApiRequest()
         .get<InstanceOutfitAggregateResponseInterface[]>(
