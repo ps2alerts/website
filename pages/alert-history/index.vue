@@ -174,7 +174,7 @@ export default Vue.extend({
     FilterDate,
   },
   data() {
-    const now = moment()
+    const now = new Date()
     return {
       pageTitle: 'Alert History',
       pageDesc:
@@ -310,7 +310,7 @@ export default Vue.extend({
         console.log('Currently ignoring changes')
         return
       }
-      console.log('AlertHistory.pull')
+      // console.log('AlertHistory.pull')
       this.error = { message: '' }
 
       // Stops the blinking every time alert history is refreshed or page jumps loading more rows

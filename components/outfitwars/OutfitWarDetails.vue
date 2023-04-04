@@ -146,8 +146,8 @@ export default Vue.extend({
         return 'TBD'
       }
 
-      const start = utcDate(this.outfitwar.timeStarted)
-      const end = utcDate(this.outfitwar.timeEnded)
+      const start = utcDate(new Date(this.outfitwar.timeStarted))
+      const end = utcDate(new Date(this.outfitwar.timeEnded))
       const diff = (end.getTime() - start.getTime()) / 1000
       const nowWithDiff = add(utcDate(new Date()), { seconds: diff })
 

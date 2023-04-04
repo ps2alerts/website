@@ -268,7 +268,12 @@ export default Vue.extend({
       } else {
         this.data.forEach(
           (row: InstanceCombatHistoryAggregateResponseInterface) => {
-            times.push(moment(row.timestamp).format('HH:mm'))
+            times.push(
+              formatDateTime(
+                utcDate(new Date(row.timestamp)),
+                TIME_FORMAT_SHORT
+              )
+            )
             /* @ts-ignore */
             vsData.push(row.vs ? row.vs[this.mode] ?? 0 : 0)
             /* @ts-ignore */
