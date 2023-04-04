@@ -473,10 +473,7 @@ export default Vue.extend({
   },
   methods: {
     async init() {
-      this.timeRemaining = TimeRemainingFromDuration(
-        this.now,
-        this.end - this.now
-      )
+      this.timeRemaining = this.end.getTime() - this.now.getTime()
       await this.pull()
     },
     async pull() {
@@ -484,7 +481,7 @@ export default Vue.extend({
         return
       }
 
-      console.log('OutfitwarsRankings.pull')
+      // console.log('OutfitwarsRankings.pull')
       const currentRoundRequests = []
       for (const world of this.worlds) {
         currentRoundRequests.push(
