@@ -19,6 +19,8 @@ module.exports = {
     'vue/multi-word-component-names': 'off',
     'vue/require-valid-default-prop': 'off',
     'import/named': 'warn',
+    'vue/no-use-v-if-with-v-for': 'off',
+    'vue/no-v-html': 'off',
   },
   plugins: ['prettier'],
   ignorePatterns: ['ps2alerts-constants/**/*'],

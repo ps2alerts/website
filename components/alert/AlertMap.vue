@@ -301,6 +301,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { LControl, LMap } from 'vue2-leaflet'
+// eslint-disable-next-line import/named
 import { Constructor } from 'vue/types/options'
 import RemainingTime from '../RemainingTime.vue'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
@@ -333,7 +334,8 @@ export default Vue.extend({
   components: { RemainingTime },
   props: {
     alert: {
-      type: Object as () => InstanceTerritoryControlResponseInterface & InstanceOutfitWarsResponseInterface,
+      type: Object as () => InstanceTerritoryControlResponseInterface &
+        InstanceOutfitWarsResponseInterface,
       default: {},
       required: true,
     },
@@ -462,10 +464,10 @@ export default Vue.extend({
     init(): void {
       this.map = (this.$refs.map as LMap).mapObject as L.Map
       if (this.alert.zone === Zone.NEXUS) {
-        (this.$refs.map as Vue).$el.classList.add('bg-nexus')
+        ;(this.$refs.map as Vue).$el.classList.add('bg-nexus')
       }
       if (this.alert.zone === Zone.OSHUR) {
-        (this.$refs.map as Vue).$el.classList.add('bg-oshur')
+        ;(this.$refs.map as Vue).$el.classList.add('bg-oshur')
       }
       this.remaining = this.$refs.timer as LControl
       const centerIcon = (this.$refs.centerIcon as HTMLElement).cloneNode(
@@ -550,7 +552,11 @@ export default Vue.extend({
       const reverseIndex = this.historyCache.length - captureIndex - 1
       const controlEvent = this.historyCache[reverseIndex]
       const outfitId = controlEvent.outfitCaptured
-      if (outfitId && this.alert.ps2AlertsEventType !== Ps2AlertsEventType.OUTFIT_WARS_AUG_2022) {
+      if (
+        outfitId &&
+        this.alert.ps2AlertsEventType !==
+          Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+      ) {
         const outfitAggregate = this.outfitData.get(outfitId)
         if (outfitAggregate && outfitAggregate.outfit.tag) {
           // Nested if so that it will drop out of the if statements to return the faction name
@@ -561,18 +567,18 @@ export default Vue.extend({
         } else if (outfitAggregate && outfitAggregate.outfit.name) {
           return outfitAggregate.outfit.name
         }
-      }
-      else if (
-        this.alert.ps2AlertsEventType === Ps2AlertsEventType.OUTFIT_WARS_AUG_2022 
-        && this.alert.outfitwars?.teams?.red?.tag 
-        && this.alert.outfitwars?.teams?.blue?.tag
+      } else if (
+        this.alert.ps2AlertsEventType ===
+          Ps2AlertsEventType.OUTFIT_WARS_AUG_2022 &&
+        this.alert.outfitwars?.teams?.red?.tag &&
+        this.alert.outfitwars?.teams?.blue?.tag
       ) {
-        return controlEvent.newFaction.valueOf() === Team.RED 
-            ? `[${this.alert.outfitwars.teams.red.tag}]` 
-            : `[${this.alert.outfitwars.teams.blue.tag}]`
-      }
-      else if (
-        this.alert.ps2AlertsEventType === Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+        return controlEvent.newFaction.valueOf() === Team.RED
+          ? `[${this.alert.outfitwars.teams.red.tag}]`
+          : `[${this.alert.outfitwars.teams.blue.tag}]`
+      } else if (
+        this.alert.ps2AlertsEventType ===
+        Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
       ) {
         return controlEvent.newFaction.valueOf() === Team.RED
           ? 'Red Team'
@@ -583,23 +589,28 @@ export default Vue.extend({
     losingFactionOrOutfitTag(captureIndex: number): string {
       const reverseIndex = this.historyCache.length - captureIndex - 1
       const controlEvent = this.historyCache[reverseIndex]
-      if(this.alert.ps2AlertsEventType === Ps2AlertsEventType.OUTFIT_WARS_AUG_2022 
-        && this.alert.outfitwars?.teams?.red?.tag 
-        && this.alert.outfitwars?.teams?.blue?.tag
+      if (
+        this.alert.ps2AlertsEventType ===
+          Ps2AlertsEventType.OUTFIT_WARS_AUG_2022 &&
+        this.alert.outfitwars?.teams?.red?.tag &&
+        this.alert.outfitwars?.teams?.blue?.tag
       ) {
-        return controlEvent.oldFaction.valueOf() === Team.RED 
-            ? `[${this.alert.outfitwars.teams.red.tag}]` 
-            : controlEvent.oldFaction.valueOf() === Team.BLUE 
-              ? `[${this.alert.outfitwars.teams.blue.tag}]` 
-              : 'Neutral'
-      } else if(this.alert.ps2AlertsEventType === Ps2AlertsEventType.OUTFIT_WARS_AUG_2022) {
+        return controlEvent.oldFaction.valueOf() === Team.RED
+          ? `[${this.alert.outfitwars.teams.red.tag}]`
+          : controlEvent.oldFaction.valueOf() === Team.BLUE
+          ? `[${this.alert.outfitwars.teams.blue.tag}]`
+          : 'Neutral'
+      } else if (
+        this.alert.ps2AlertsEventType ===
+        Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+      ) {
         return controlEvent.oldFaction.valueOf() === Team.RED
           ? 'Red Team'
-          : controlEvent.oldFaction.valueOf() === Team.BLUE 
-              ? 'Blue Team' 
-              : 'Neutral'
+          : controlEvent.oldFaction.valueOf() === Team.BLUE
+          ? 'Blue Team'
+          : 'Neutral'
       }
-      return `the ${this.controlData(captureIndex).loser}`;
+      return `the ${this.controlData(captureIndex).loser}`
     },
     controlData(
       captureIndex: number
@@ -615,7 +626,8 @@ export default Vue.extend({
     },
     mapControlData(captureIndex: number): MapControlInterface {
       const reverseIndex = this.historyCache.length - captureIndex - 1
-      const mapControl = this.historyCache[reverseIndex].mapControl as MapControlInterface
+      const mapControl = this.historyCache[reverseIndex]
+        .mapControl as MapControlInterface
       if (!mapControl) {
         return {
           vs: 33,
@@ -1178,15 +1190,19 @@ export default Vue.extend({
           this.outfitData = values[0]
           const result = values[1]
           // Ensure the correct fields are filled from the map control embed
-          for (let facilityControl of result) {
+          for (const facilityControl of result) {
             if (
               this.alert.ps2AlertsEventType ===
                 Ps2AlertsEventType.OUTFIT_WARS_AUG_2022 &&
               facilityControl.mapControl
             ) {
-              (facilityControl.mapControl as MapControlInterface).tr = (facilityControl.mapControl as OutfitwarsTerritoryResultInterface).red;
-              (facilityControl.mapControl as MapControlInterface).nc = (facilityControl.mapControl as OutfitwarsTerritoryResultInterface).blue;
-              (facilityControl.mapControl as MapControlInterface).vs = 0
+              ;(facilityControl.mapControl as MapControlInterface).tr = (
+                facilityControl.mapControl as OutfitwarsTerritoryResultInterface
+              ).red
+              ;(facilityControl.mapControl as MapControlInterface).nc = (
+                facilityControl.mapControl as OutfitwarsTerritoryResultInterface
+              ).blue
+              ;(facilityControl.mapControl as MapControlInterface).vs = 0
             }
           }
           // Copy the history since updateTerritory reverses the provided list

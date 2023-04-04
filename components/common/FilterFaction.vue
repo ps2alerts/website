@@ -16,7 +16,7 @@
       class="text-center text-sm"
       for="faction"
       :class="{ 'text-gray-600': disabled }"
-      >{{label}}</label
+      >{{ label }}</label
     >
   </div>
 </template>
@@ -44,8 +44,8 @@ export default Vue.extend({
     },
     label: {
       type: String,
-      default: 'Faction'
-    }
+      default: 'Faction',
+    },
   },
   data() {
     return {

@@ -73,7 +73,12 @@
             </div>
           </td>
         </tr>
-        <tr v-if="alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022 && instanceEventDetails">
+        <tr
+          v-if="
+            alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022 &&
+            instanceEventDetails
+          "
+        >
           <td class="px-2 py-1 md:py-2 whitespace-nowrap">
             <div class="flex justify-between">
               <div class="mr-4 font-bold">Triggered by</div>
@@ -153,10 +158,16 @@ export default Vue.extend({
   name: 'AlertDetails',
   props: {
     alert: {
-      type: Object as () => InstanceTerritoryControlResponseInterface & InstanceOutfitWarsResponseInterface,
+      type: Object as () => InstanceTerritoryControlResponseInterface &
+        InstanceOutfitWarsResponseInterface,
       default: {},
       required: true,
     },
+  },
+  data() {
+    return {
+      OUTFIT_WARS_AUG_2022: Ps2AlertsEventType.OUTFIT_WARS_AUG_2022,
+    }
   },
   computed: {
     ended(): boolean {
@@ -166,10 +177,5 @@ export default Vue.extend({
       return InstanceEventDetails(this.alert.censusMetagameEventType || 0)
     },
   },
-  data() {
-    return {
-      OUTFIT_WARS_AUG_2022: Ps2AlertsEventType.OUTFIT_WARS_AUG_2022,
-    }
-  }
 })
 </script>

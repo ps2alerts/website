@@ -267,7 +267,10 @@ export default Vue.extend({
       return (100 / (this.updateRate / 1000)) * this.updateCountdown
     },
     isOutfitWar(): boolean {
-      return this.outfitwar?.ps2AlertsEventType === Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+      return (
+        this.outfitwar?.ps2AlertsEventType ===
+        Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
+      )
     },
   },
   watch: {

@@ -51,9 +51,16 @@
             />
           </div>
         </div>
-        <div class="mt-2" v-if="outfitWars().length > 0">
+        <div v-if="outfitWars().length > 0" class="mt-2">
           <div v-for="world in worlds" :key="world">
-            <div class="tag section" v-if="outfitWarsByWorld(world).length > 0">{{ world | worldName }} - {{ outfitWarsByWorld(world).length }} Active {{ outfitWarsByWorld(world)[0].outfitwars.phase | phaseName(false) }} {{ outfitWarWord(world) }}</div>
+            <div v-if="outfitWarsByWorld(world).length > 0" class="tag section">
+              {{ world | worldName }} -
+              {{ outfitWarsByWorld(world).length }} Active
+              {{
+                outfitWarsByWorld(world)[0].outfitwars.phase | phaseName(false)
+              }}
+              {{ outfitWarWord(world) }}
+            </div>
             <div v-show="outfitWarsByWorld(world).length > 0">
               <div
                 v-for="outfitwar in outfitWarsByWorld(world)"
@@ -158,8 +165,8 @@ export default Vue.extend({
       return this.actives.length !== 1 ? 'Alerts' : 'Alert'
     },
     worlds(): World[] {
-      return [World.COBALT, World.CONNERY, World.EMERALD, World.MILLER];
-    }
+      return [World.COBALT, World.CONNERY, World.EMERALD, World.MILLER]
+    },
   },
   watch: {
     $route: 'activeAlerts',
@@ -217,18 +224,18 @@ export default Vue.extend({
         .then((result) => {
           this.loading = false
           this.error = null
-          for(const world of this.worlds){
+          for (const world of this.worlds) {
             this.owactivesByWorld.set(world, [])
           }
 
-          for(const outfitwar of result) {
+          for (const outfitwar of result) {
             const worldArray = this.owactivesByWorld.get(outfitwar.world)
-            if(worldArray === undefined){
-              console.error("World array undefined?");
+            if (!worldArray) {
+              console.error('World array undefined?')
               continue
             }
-            worldArray.push(outfitwar);
-            this.owactivesByWorld.set(outfitwar.world, worldArray);
+            worldArray.push(outfitwar)
+            this.owactivesByWorld.set(outfitwar.world, worldArray)
           }
         })
         .catch((e) => {
@@ -237,21 +244,23 @@ export default Vue.extend({
         })
     },
     outfitWarWord(world: World): string {
-      return this.owactivesByWorld.get(world)?.length !== 1 ? 'Matches' : 'Match'
+      return this.owactivesByWorld.get(world)?.length !== 1
+        ? 'Matches'
+        : 'Match'
     },
     outfitWarsByWorld(world: World): InstanceOutfitWarsResponseInterface[] {
-      const result = this.owactivesByWorld.get(world);
-      if(!result) {
+      const result = this.owactivesByWorld.get(world)
+      if (!result) {
         return []
       }
-      return result;
+      return result
     },
     outfitWars(): InstanceOutfitWarsResponseInterface[] {
       const result = []
-      for(const world of this.worlds) {
+      for (const world of this.worlds) {
         result.unshift(...this.outfitWarsByWorld(world))
       }
-      return result;
+      return result
     },
     alertPops() {
       if (!this.actives) {

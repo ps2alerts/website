@@ -34,8 +34,8 @@
         <div class="col-span-12 lg:col-span-8">
           <div v-if="loaded" class="flex flex-col h-full justify-center">
             <p class="text-2xl my-2">
-              Welcome to Outfit Wars 2022 soldier! Saddle up and add some extra snow
-              boots to your gear, you're shipping off to Nexus!
+              Welcome to Outfit Wars 2022 soldier! Saddle up and add some extra
+              snow boots to your gear, you're shipping off to Nexus!
             </p>
             <div class="mx-4 mb-2">
               <p class="mb-2">
@@ -162,9 +162,7 @@
 
     <div class="col-span-12 pt-2 border-t border-t-gray-500">
       <h1 class="text-title text-center">Outfit Wars 2022 Rankings</h1>
-      <div
-        class="p-4 text-center rounded"
-      >
+      <div class="p-4 text-center rounded">
         <p>
           <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
           Is your outfit logo missing?
@@ -176,9 +174,9 @@
           >
         </p>
         <p class="text-xs mb-2">
-          To add, search your outfit tag, press "update this page", go through the
-          claim process and upload the logo.<br />Shoutout to [VODE] MidddNC for
-          providing access to logos!
+          To add, search your outfit tag, press "update this page", go through
+          the claim process and upload the logo.<br />Shoutout to [VODE] MidddNC
+          for providing access to logos!
         </p>
         <p class="text-sm mb-2">Rankings updated every 30 minutes</p>
       </div>
@@ -192,7 +190,13 @@
         :id="'world-' + world"
         :key="world"
         class="col-span-12 3xl:col-span-3 xl:col-span-4 md:col-span-6"
-        :class="world === 10 ? {'xl:col-start-3': true} : world === 40 ? {'3xl:col-start-5': true} : {}"
+        :class="
+          world === 10
+            ? { 'xl:col-start-3': true }
+            : world === 40
+            ? { '3xl:col-start-5': true }
+            : {}
+        "
       >
         <img
           alt="Server Logo"
@@ -227,19 +231,34 @@
             </p>
           </div>
 
-          <div
-            class="overflow-y-auto scrollbar-thin"
-            style="max-height: 600px"
-          >
+          <div class="overflow-y-auto scrollbar-thin" style="max-height: 600px">
             <div
               v-for="(outfit, index) in worldRankings(world, true)"
               :key="outfit.id"
               class="border-b border-b-gray-600 grid grid-cols-12"
-              :class="index === 3 || index === 7 || index === worldRankings(world, true).length - 1 ? {'border-b-0': true} : {}"
+              :class="
+                index === 3 ||
+                index === 7 ||
+                index === worldRankings(world, true).length - 1
+                  ? { 'border-b-0': true }
+                  : {}
+              "
             >
-              <div class="col-span-12 border border-y-red-500 border-y-2 border-x-0 py-2 text-xs" v-if="index === 4">Championship cutoff</div>
-              <div class="col-span-12 border border-y-red-500 border-y-2 border-x-0 py-2 text-xs" v-if="index === 8">Qualifier cutoff</div>
-              <div class="col-span-12 grid grid-cols-12 gap-x-2 p-2 content-center h-24">
+              <div
+                v-if="index === 4"
+                class="col-span-12 border border-y-red-500 border-y-2 border-x-0 py-2 text-xs"
+              >
+                Championship cutoff
+              </div>
+              <div
+                v-if="index === 8"
+                class="col-span-12 border border-y-red-500 border-y-2 border-x-0 py-2 text-xs"
+              >
+                Qualifier cutoff
+              </div>
+              <div
+                class="col-span-12 grid grid-cols-12 gap-x-2 p-2 content-center h-24"
+              >
                 <div class="col-span-1 text-center flex">
                   <div class="bg-gray-500 px-2 rounded-xl m-auto w-min">
                     {{ index + 1 }}
@@ -258,12 +277,14 @@
                   </p>
                   <p v-html="outfit.metricsString"></p>
                 </div>
-                <div class="col-span-2 flex text-right" v-if="world !== 40">
+                <div v-if="world !== 40" class="col-span-2 flex text-right">
                   <NuxtLink
                     :to="'/outfit-wars/matches?outfitName=' + outfit.name"
                     class="m-auto p-2 hover:bg-gray-500 rounded-lg transition-colors"
                   >
-                    <font-awesome-icon :icon="['fas', 'arrow-right']"></font-awesome-icon>
+                    <font-awesome-icon
+                      :icon="['fas', 'arrow-right']"
+                    ></font-awesome-icon>
                   </NuxtLink>
                 </div>
               </div>
@@ -283,8 +304,8 @@
           :key="world"
           class="btn mx-1"
           :class="activeBracketTabCheck(world)"
-          @click="changeBracketWorld(world)"
           :disabled="disabledTabCheck(world)"
+          @click="changeBracketWorld(world)"
         >
           {{ world | worldName }}
         </button>
@@ -375,7 +396,13 @@ export default Vue.extend({
       now: parseInt(moment().tz('UTC').format('X'), 10),
       end: parseInt(moment.tz('2022-09-02 18:20:00', 'UTC').format('X'), 10),
       timeRemaining: 0,
-      worlds: [World.COBALT, World.CONNERY, World.EMERALD, World.MILLER, World.SOLTECH],
+      worlds: [
+        World.COBALT,
+        World.CONNERY,
+        World.EMERALD,
+        World.MILLER,
+        World.SOLTECH,
+      ],
       worldRounds: [] as number[],
       currentWorldRankingsMap: new Map<World, ParsedOutfitDataInterface[]>(),
       factionCount: [0, 0, 0, 0, 0] as number[],
@@ -732,7 +759,7 @@ export default Vue.extend({
     },
     disabledTabCheck(world: World): boolean {
       return world === World.SOLTECH
-    }
+    },
   },
 })
 </script>

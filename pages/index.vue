@@ -169,6 +169,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable import/no-named-as-default-member */
 import Vue from 'vue'
 // eslint-disable-next-line import/named
 import moment, { Moment } from 'moment'

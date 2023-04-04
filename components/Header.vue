@@ -60,7 +60,7 @@ export default Vue.extend({
         'RIP ANT Cloak',
         'Pew pew!',
         'An salty OS a day keeps the doctor away',
-        'Dervish. The one true flying waffle.'
+        'Dervish. The one true flying waffle.',
       ],
       version: this.$config.version,
       lastVersionViewed: null,

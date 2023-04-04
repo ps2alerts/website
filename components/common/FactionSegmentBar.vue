@@ -63,9 +63,12 @@
           </div>
         </template>
         <span v-if="!isPercentage && numeral">
-          {{ outfitwars ? "Red" : "TR" }}: {{ trString(true, true) | numeral(numeral) }}
+          {{ outfitwars ? 'Red' : 'TR' }}:
+          {{ trString(true, true) | numeral(numeral) }}
         </span>
-        <span v-else>{{ outfitwars ? "Red" : "TR" }}: {{ trString(true, true) }}</span>
+        <span v-else
+          >{{ outfitwars ? 'Red' : 'TR' }}: {{ trString(true, true) }}</span
+        >
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -93,9 +96,12 @@
           </div>
         </template>
         <span v-if="!isPercentage && numeral">
-          {{ outfitwars ? "Blue" : "NC" }}: !isPercentage {{ ncString(true, true) | numeral(numeral) }}
+          {{ outfitwars ? 'Blue' : 'NC' }}: !isPercentage
+          {{ ncString(true, true) | numeral(numeral) }}
         </span>
-        <span v-else>{{ outfitwars ? "Blue" : "NC" }}: {{ ncString(true, true) }}</span>
+        <span v-else
+          >{{ outfitwars ? 'Blue' : 'NC' }}: {{ ncString(true, true) }}</span
+        >
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -230,7 +236,7 @@ export default Vue.extend({
       type: Boolean,
       default: false,
       required: false,
-    }
+    },
   },
   computed: {
     total(): number {

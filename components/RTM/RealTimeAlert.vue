@@ -1,17 +1,36 @@
 <template>
   <NuxtLink
-    :to="{ name: outfitwars === null ? 'alert-alert' : 'outfit-wars-outfitwars', params: outfitwars === null ? { alert: instanceId } : { outfitwars: instanceId } }"
+    :to="{
+      name: outfitwars === null ? 'alert-alert' : 'outfit-wars-outfitwars',
+      params: !outfitwars ? { alert: instanceId } : { outfitwars: instanceId },
+    }"
     class="block bg-tint hover rounded-md"
   >
     <div :instanceId="instanceId" class="p-2 pt-1">
       <div class="grid grid-cols-12 place-items-center mb-0.5">
-        <div class="col-span-6 col-start-3" v-if="outfitwars === null">
+        <div v-if="!outfitwars" class="col-span-6 col-start-3">
           {{ world | worldName }} - {{ zone | zoneName }}
         </div>
-        <div class="col-span-6 col-start-3" v-if="outfitwars !== null && (!outfitwars.teams || !outfitwars.teams.red || !outfitwars.teams.blue)">
+        <div
+          v-if="
+            outfitwars &&
+            (!outfitwars.teams ||
+              !outfitwars.teams.red ||
+              !outfitwars.teams.blue)
+          "
+          class="col-span-6 col-start-3"
+        >
           {{ world | worldName }} - {{ outfitwars.phase | phaseName }}
         </div>
-        <div class="col-span-6 col-start-3" v-else-if="outfitwars !== null && outfitwars.teams && outfitwars.teams.red && outfitwars.teams.blue">
+        <div
+          v-else-if="
+            outfitwars !== null &&
+            outfitwars.teams &&
+            outfitwars.teams.red &&
+            outfitwars.teams.blue
+          "
+          class="col-span-6 col-start-3"
+        >
           [{{ outfitwars.teams.red.tag }}] vs [{{ outfitwars.teams.blue.tag }}]
         </div>
         <div class="col-span-3 justify-self-end">
@@ -34,7 +53,7 @@
             :tr="!outfitwars ? result.tr : result.red"
             :other="result.cutoff"
             :out-of-play="result.outOfPlay"
-            :outfitwars="outfitwars !== null"
+            :outfitwars="!!outfitwars"
             dropoff-percent="8"
           />
         </div>
@@ -55,7 +74,7 @@
             :half-bar="true"
             :no-leader-highlight="true"
             :show-tooltip-as-number="true"
-            :outfitwars="outfitwars !== null"
+            :outfitwars="!!outfitwars"
           />
         </div>
       </div>

@@ -30,7 +30,7 @@
               ></font-awesome-icon>
             </div>
           </div>
-<!--          <NoticeBanner></NoticeBanner>-->
+          <!--          <NoticeBanner></NoticeBanner>-->
           <Navigation class="hidden lg:block" />
         </client-only>
         <client-only>
@@ -39,6 +39,10 @@
         </client-only>
       </div>
     </div>
-    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "19d104869b6c4c87aa963b807cfe5461"}'></script>
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "19d104869b6c4c87aa963b807cfe5461"}'
+    ></script>
   </main>
 </template>

@@ -16,7 +16,9 @@
         class="bg-gray-700 border-gray-500 border p-4 my-4 text-center rounded"
       >
         <p class="mb-2">
-          Currently, SolTech matches are not yet supported, despite the server showing up in the rankings. The developers are working on fixing data streaming issues. Until they do this, we cannot support SolTech stats.
+          Currently, SolTech matches are not yet supported, despite the server
+          showing up in the rankings. The developers are working on fixing data
+          streaming issues. Until they do this, we cannot support SolTech stats.
         </p>
         <p class="text-xs">Updated 10th Sep 17:10 UTC</p>
       </div>
@@ -248,6 +250,7 @@ export default Vue.extend({
       if (this.selectedPhase > 0) filter.phase = this.selectedPhase
       if (this.selectedRound > 0) {
         if (filter.phase === Phase.PLAYOFFS && this.selectedRound > 2) {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.selectedRound = 2
         }
         filter.round = this.selectedRound

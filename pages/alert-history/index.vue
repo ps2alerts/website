@@ -140,6 +140,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable import/no-named-as-default-member */
 import Vue from 'vue'
 import moment from 'moment'
 import MetaHead from '~/components/MetaHead.vue'

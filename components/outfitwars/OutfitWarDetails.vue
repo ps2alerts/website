@@ -114,12 +114,13 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable import/no-named-as-default-member */
 import Vue from 'vue'
+import moment from 'moment'
 import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceEventDetails } from '@/constants/InstanceEventDetails'
 import { MetagameDetailsInterface } from '@/interfaces/MetagameDetailsInterface'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
-import moment from 'moment'
 
 export default Vue.extend({
   name: 'AlertDetails',
@@ -145,9 +146,9 @@ export default Vue.extend({
 
       const start = moment.tz(this.outfitwar.timeStarted, 'UTC')
       const end = moment.tz(this.outfitwar.timeEnded, 'UTC')
-      const diff = end.diff(start);
+      const diff = end.diff(start)
 
-      return moment.utc(diff).format("mm:ss")
+      return moment.utc(diff).format('mm:ss')
     },
     instanceEventDetails(): MetagameDetailsInterface | null | undefined {
       return InstanceEventDetails(227)

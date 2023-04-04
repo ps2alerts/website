@@ -95,7 +95,7 @@ export default Vue.extend({
                 <p>Additionally, the website module was brought up to date in terms of it's dependencies as well. Nothing functionally was changed.</p>
               </div>
             </div>
-          `
+          `,
         },
         {
           id: 18,

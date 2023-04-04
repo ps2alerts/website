@@ -237,7 +237,9 @@
       >
         <p>*1 does not include NSO vs NSO kills.</p>
         <p>
-          *2 up until 31st August 2022, team ID was not available thus we were unable to determine NSO vs NSO faction kills, so they show up as teamkills.
+          *2 up until 31st August 2022, team ID was not available thus we were
+          unable to determine NSO vs NSO faction kills, so they show up as
+          teamkills.
         </p>
       </div>
     </div>

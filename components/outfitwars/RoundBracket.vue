@@ -238,6 +238,7 @@ export default Vue.extend({
           }
           break
       }
+
       return this.pairs
     },
   },

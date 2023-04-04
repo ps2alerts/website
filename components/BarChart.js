@@ -1,3 +1,4 @@
+/* eslint-disable import/named */
 import { Bar, mixins } from 'vue-chartjs'
 import 'chartjs-plugin-annotation'
 const { reactiveProp } = mixins
