@@ -228,7 +228,7 @@ export default Vue.extend({
         .then((result) => {
           result.forEach((vehicle, key) => {
             const vehicleData = this.vehicleData.find(
-              (val: VehicleDataInterface, key: string | number) => {
+              (val: VehicleDataInterface, key: any) => {
                 if (val.id === vehicle.vehicle) {
                   return this.vehicleData[key]
                 }

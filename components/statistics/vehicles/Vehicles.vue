@@ -176,7 +176,7 @@ export default Vue.extend({
         }
 
         const vehicleData = this.vehicleData.find(
-          (val: VehicleDataInterface, key: string | number) => {
+          (val: VehicleDataInterface, key: any) => {
             if (val.id === vehicle.vehicle) {
               return this.vehicleData[key]
             }

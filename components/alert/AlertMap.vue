@@ -991,7 +991,9 @@ export default Vue.extend({
           (this.currentIndex === -1 && indexLimit === undefined) ||
           (indexLimit !== undefined && index < this.captureIndices[indexLimit])
         ) {
-          let region: MapRegion = this.mapRegions.get(controlEvent.facility)
+          let region: MapRegion | undefined = this.mapRegions.get(
+            controlEvent.facility
+          )
           if (!region) {
             return
           }
@@ -1030,6 +1032,7 @@ export default Vue.extend({
               this.lastCaptured
                 .getElement()
                 ?.classList.add('captured', 'lastCaptured')
+              // @ts-ignore its fiiiiiiiine
               this.lastCaptured.getElement()?.addEventListener(
                 'animationend',
                 (event: { target: Element }) => {
@@ -1096,7 +1099,7 @@ export default Vue.extend({
       }
     },
     updateLinks(facility: number) {
-      const region: MapRegion = this.mapRegions.get(facility)
+      const region: MapRegion | undefined = this.mapRegions.get(facility)
       if (!region) {
         return
       }
