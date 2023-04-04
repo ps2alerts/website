@@ -148,7 +148,7 @@
       <div class="self-center">
         <TeamLogo
           class="self-center place-self-center w-12"
-          :outfit-id="0"
+          outfit-id="'0'"
           :outfit-faction="0"
           rounding="rounded"
         />
@@ -164,7 +164,7 @@
       <div class="self-center">
         <TeamLogo
           class="self-center place-self-center w-12"
-          :outfit-id="0"
+          outfit-id="0"
           :outfit-faction="0"
           rounding="rounded"
         />

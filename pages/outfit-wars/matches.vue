@@ -94,14 +94,14 @@
     <div class="col-span-12 text-center">
       <button
         class="btn"
-        :disabled="loaded === false || (loaded === true && filtered === false)"
+        :disabled="!loaded || (loaded && !filtered)"
         @click="clearFilter()"
       >
         <font-awesome-icon :icon="['fas', 'undo']" /> Reset Filters
       </button>
     </div>
     <div
-      v-if="matches.length === 0 && loaded && filtered === false"
+      v-if="matches.length === 0 && loaded && !filtered"
       class="col-span-12 text-center mb-2"
     >
       <h1 class="mb-2">No matches yet!</h1>
@@ -109,9 +109,7 @@
     </div>
     <div
       v-show="
-        !loaded ||
-        loading ||
-        (matches.length === 0 && loaded && filtered === false)
+        !loaded || loading || (matches.length === 0 && loaded && !filtered)
       "
       class="col-span-12 h-full items-center justify-center"
       :class="{ 'mt-7': !loaded }"
@@ -396,7 +394,6 @@ export default Vue.extend({
     },
     async clearFilter(): Promise<void> {
       this.ignoreChanges = true
-      // const now = moment()
       this.selectedWorld = 0
       this.selectedPhase = Phase.ANY
       this.selectedRound = 0
@@ -404,15 +401,6 @@ export default Vue.extend({
       this.selectedRedFaction = Faction.NONE
       this.selectedBlueFaction = Faction.NONE
       this.outfitTagOrNameFilter = ''
-      // this.selectedDateFrom = now
-      // this.selectedDateTo = now
-      // this.dateNow = now
-
-      // const dateComponent = this.$refs.dateComponent as any
-
-      // if (dateComponent) {
-      //   dateComponent.clearDates()
-      // }
 
       await this.filterResults(true)
       this.filtered = false

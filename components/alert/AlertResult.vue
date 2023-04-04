@@ -19,7 +19,7 @@
     <div v-if="alert.state === 2" class="mb-2 text-center">
       <h2 class="text-4xl">
         {{ victorText }}
-        <v-tooltip v-if="alert.result && alert.result.draw === true" bottom>
+        <v-tooltip v-if="alert.result && alert.result.draw" bottom>
           <template #activator="{ on, attrs }">
             <font-awesome-icon
               :icon="['fas', 'info-circle']"

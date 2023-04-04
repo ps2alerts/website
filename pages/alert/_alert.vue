@@ -309,9 +309,9 @@ export default Vue.extend({
           this.error = e.message
         })
     },
-    async pullFacilityData(
-      instanceId: string
-    ): Promise<Map<number, InstanceFacilityControlAggregateResponseInterface>> {
+    async pullFacilityData(): Promise<
+      Map<number, InstanceFacilityControlAggregateResponseInterface>
+    > {
       const newMap = new Map<
         number,
         InstanceFacilityControlAggregateResponseInterface

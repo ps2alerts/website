@@ -51,13 +51,13 @@
     <div class="col-span-12 text-center">
       <button
         class="btn"
-        :disabled="loaded === false || (loaded === true && filtered === false)"
+        :disabled="!loaded || (loaded && !filtered)"
         @click="clearFilter()"
       >
         <font-awesome-icon :icon="['fas', 'undo']" /> Reset Filters
       </button>
     </div>
-    <div v-show="loaded === true && length > 0" class="col-span-12 text-center">
+    <div v-show="loaded && length > 0" class="col-span-12 text-center">
       <p v-show="!filtered">
         {{ length }} alert{{ length > 1 ? 's' : '' }} found ({{
           maximumUnfilteredLength
@@ -72,14 +72,14 @@
       </p>
     </div>
     <div
-      v-show="loaded === true && error.message === '' && length === 0"
+      v-show="loaded && error.message === '' && length === 0"
       class="col-span-12 text-center"
     >
       <h1>No alerts found for specified criteria!</h1>
     </div>
     <div
       v-show="
-        loaded === true &&
+        loaded &&
         error.message === '' &&
         length === 0 &&
         (selectedDateFrom || selectedDateTo)
