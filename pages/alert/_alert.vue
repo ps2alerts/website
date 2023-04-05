@@ -164,10 +164,14 @@ import { InstanceFacilityControlAggregateResponseInterface } from '~/interfaces/
 import facilityTypeName from '~/filters/FacilityTypeName'
 import { CensusMapRegionResponseInterface } from '~/interfaces/census/CensusMapRegionResponseInterface'
 import { CensusMapRegionResponseItem } from '~/interfaces/census/CensusMapRegionResponseItem'
+import AlertMapCaptureHistory from '~/components/alert/AlertMapCaptureHistory.vue'
+import MetaHead from '~/components/MetaHead.vue'
 
 export default Vue.extend({
   name: 'Alert',
   components: {
+    MetaHead,
+    AlertMapCaptureHistory,
     AlertResult,
     AlertDetails,
     AlertFactionCombatMetrics,
