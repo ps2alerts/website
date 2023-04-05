@@ -35,7 +35,7 @@
     "memory-fs": "^0.5.0",
     "nuxt": "^2.16.3",
     "nuxt-leaflet": "^0.0.27",
-    "vue-chartjs": "^3.5.1",
+    "vue-chartjs": "^5.2.0",
     "vue-numeral-filter": "^2.0.0",
     "vue2-leaflet": "^2.7.1",
     "vuejs-datatable": "^2.0.0-alpha.7",
