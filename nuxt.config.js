@@ -228,14 +228,16 @@ export default {
       ],
     },
     postcss: {
-      // Add plugin names as key and arguments as value
-      // Install them before as dependencies with npm or yarn
-      plugins: {
-        tailwindcss: join(__dirname, 'tailwind.config.js'),
-        'postcss-extend-rule': {},
-        'postcss-import': {},
-        'postcss-nested': {},
-        autoprefixer: {},
+      postcssOptions: {
+        // Add plugin names as key and arguments as value
+        // Install them before as dependencies with npm or yarn
+        plugins: {
+          tailwindcss: join(__dirname, 'tailwind.config.js'),
+          'postcss-extend-rule': {},
+          'postcss-import': {},
+          'postcss-nested': {},
+          autoprefixer: {},
+        },
       },
       preset: {
         // Change the postcss-preset-env settings

@@ -10,8 +10,11 @@
     "analyze": "nuxt build --analyze",
     "generate": "nuxt generate",
     "lint": "eslint --ext \".js,.ts,.vue\" --ignore-path .gitignore .",
-    "lintfix": "yarn lint --fix",
+    "lint:fix": "yarn lint --fix",
     "prepare": "husky install"
+  },
+  "resolutions": {
+    "@nuxt/kit": "3.0.0-rc.13"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
@@ -30,13 +33,10 @@
     "dayjs": "^1.11.7",
     "leaflet": "^1.9.3",
     "memory-fs": "^0.5.0",
-    "nuxt": "^2.15.8",
+    "nuxt": "^2.16.3",
     "nuxt-leaflet": "^0.0.27",
-    "vue": "^2.7.14",
     "vue-chartjs": "^3.5.1",
     "vue-numeral-filter": "^2.0.0",
-    "vue-server-renderer": "^2.7.14",
-    "vue-template-compiler": "^2.7.14",
     "vue2-leaflet": "^2.7.1",
     "vuejs-datatable": "^2.0.0-alpha.7",
     "webpack": "^4.46.0"
