@@ -6,7 +6,7 @@
       <div v-if="loaded" class="text-center">
         <div class="grid grid-cols-12 gap-2">
           <FilterWorld
-            class="col-span-6 lg:col-span-4 lg:col-start-2 2xl:col-span-2 2xl:col-start-4"
+            class="col-span-6 lg:col-span-4 2xl:col-span-2 2xl:col-start-4"
             :world-filter="selectedWorld"
             @world-changed="updateWorld"
           />
