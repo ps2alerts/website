@@ -42,7 +42,7 @@ import { differenceInDays, formatISO } from 'date-fns'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import { FactionMetricsInterface } from '~/interfaces/FactionMetricsInterface'
 import LineChart from '~/components/LineChart'
-import { DATE_FORMAT_SHORT, TIME_GRANULARITY } from '@/constants/Time'
+import { DATE_FORMAT_ISO, TIME_GRANULARITY } from '@/constants/Time'
 import { World } from '@/ps2alerts-constants/world'
 import { Bracket } from '@/ps2alerts-constants/bracket'
 import FilterWorld from '~/components/common/FilterWorld.vue'
@@ -109,8 +109,11 @@ export default Vue.extend({
               time: {
                 unit: TIME_GRANULARITY.WEEK,
               },
-              min: formatISO(utcDate(new Date('2021-01-04'))),
-              max: formatISO(utcDate(new Date())),
+              min: formatDateTime(
+                utcDate(new Date('2021-01-04')),
+                DATE_FORMAT_ISO
+              ),
+              max: formatDateTime(utcDate(new Date()), DATE_FORMAT_ISO),
               ticks: {
                 fontColor: '#fff',
                 source: 'labels',
@@ -219,21 +222,21 @@ export default Vue.extend({
 
         // Get the correct date based on the time granularity
         if (this.selectedTimeOption === TIME_GRANULARITY.DAY) {
-          date = formatDateTime(new Date(row.date), DATE_FORMAT_SHORT)
+          date = formatDateTime(new Date(row.date), DATE_FORMAT_ISO)
         } else if (this.selectedTimeOption === TIME_GRANULARITY.WEEK) {
           date = formatDateTime(
             getStartOfWeek(new Date(row.date)),
-            DATE_FORMAT_SHORT
+            DATE_FORMAT_ISO
           )
         } else if (this.selectedTimeOption === TIME_GRANULARITY.MONTH) {
           date = formatDateTime(
             getStartOfMonth(new Date(row.date)),
-            DATE_FORMAT_SHORT
+            DATE_FORMAT_ISO
           )
         } else if (this.selectedTimeOption === TIME_GRANULARITY.YEAR) {
           date = formatDateTime(
             getStartOfYear(new Date(row.date)),
-            DATE_FORMAT_SHORT
+            DATE_FORMAT_ISO
           )
         }
 
