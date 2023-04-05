@@ -23,7 +23,7 @@
       <a href="https://census.daybreakgames.com" class="text-gray-400">Census</a
       >, provided by Daybreak Game Company LLC.
       <p class="mt-4">
-        Version: {{ version }} | Build: {{ build }} | Built: {{ built }} BST |
+        Version: {{ version }} | Build: {{ build }} | Built: {{ built }} UTC |
         Env:
         {{ env }}
       </p>
