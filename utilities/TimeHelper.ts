@@ -10,7 +10,7 @@ import { DATETIME_FORMATS } from '~/constants/Time'
 
 export const utcDate = (date: Date): Date => {
   return new Date(
-    formatInTimeZone(new Date(date), 'UTC', 'yyyy-MM-dd HH:mm:ss zzz')
+    formatInTimeZone(new Date(date), 'UTC', 'yyyy-MM-dd HH:mm:ssXX')
   )
 }
 

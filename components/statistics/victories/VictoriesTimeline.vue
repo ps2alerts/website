@@ -42,7 +42,7 @@ import { differenceInDays, formatISO } from 'date-fns'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import { FactionMetricsInterface } from '~/interfaces/FactionMetricsInterface'
 import LineChart from '~/components/LineChart'
-import { TIME_GRANULARITY } from '@/constants/Time'
+import { DATE_FORMAT_SHORT, TIME_GRANULARITY } from '@/constants/Time'
 import { World } from '@/ps2alerts-constants/world'
 import { Bracket } from '@/ps2alerts-constants/bracket'
 import FilterWorld from '~/components/common/FilterWorld.vue'
@@ -50,6 +50,7 @@ import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
 import FilterBracket from '~/components/common/FilterBracket.vue'
 import TimeGranularity from '~/components/common/TimeGranularity.vue'
 import {
+  formatDateTime,
   getStartOfMonth,
   getStartOfWeek,
   getStartOfYear,
@@ -218,13 +219,22 @@ export default Vue.extend({
 
         // Get the correct date based on the time granularity
         if (this.selectedTimeOption === TIME_GRANULARITY.DAY) {
-          date = formatISO(new Date(row.date))
+          date = formatDateTime(new Date(row.date), DATE_FORMAT_SHORT)
         } else if (this.selectedTimeOption === TIME_GRANULARITY.WEEK) {
-          date = formatISO(getStartOfWeek(new Date(row.date)))
+          date = formatDateTime(
+            getStartOfWeek(new Date(row.date)),
+            DATE_FORMAT_SHORT
+          )
         } else if (this.selectedTimeOption === TIME_GRANULARITY.MONTH) {
-          date = formatISO(getStartOfMonth(new Date(row.date)))
+          date = formatDateTime(
+            getStartOfMonth(new Date(row.date)),
+            DATE_FORMAT_SHORT
+          )
         } else if (this.selectedTimeOption === TIME_GRANULARITY.YEAR) {
-          date = formatISO(getStartOfYear(new Date(row.date)))
+          date = formatDateTime(
+            getStartOfYear(new Date(row.date)),
+            DATE_FORMAT_SHORT
+          )
         }
 
         if (!worldCounts[date]) {
