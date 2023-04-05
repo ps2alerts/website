@@ -149,6 +149,7 @@ export default Vue.extend({
   },
   watch: {
     rawData(): void {
+      console.log('VictoriesTimeline: rawData changed')
       this.render()
     },
     selectedWorld(): void {
@@ -164,18 +165,20 @@ export default Vue.extend({
         'VictoriesTimeline: Time option changed to',
         this.selectedTimeOption
       )
+      this.render()
     },
   },
   created() {
     this.render()
-    this.loaded = true
   },
   methods: {
     render() {
+      this.loaded = false
       this.optimiseTimeResolution()
       this.transformData()
       this.buildCollection()
       this.adjustChartOptions()
+      this.loaded = true
     },
     optimiseTimeResolution(): void {
       // Perform trickery to set the time granularity to appropriate levels based on time frame requested
@@ -211,16 +214,17 @@ export default Vue.extend({
           return
         }
 
-        // Day default
-        let date = formatISO(utcDate(new Date(row.date)))
+        let date = ''
 
-        // For weekly we must get the first date of the start of the week to properly render the chart
-        if (this.selectedTimeOption === TIME_GRANULARITY.WEEK) {
-          date = formatISO(getStartOfWeek(utcDate(new Date(row.date))))
+        // Get the correct date based on the time granularity
+        if (this.selectedTimeOption === TIME_GRANULARITY.DAY) {
+          date = formatISO(new Date(row.date))
+        } else if (this.selectedTimeOption === TIME_GRANULARITY.WEEK) {
+          date = formatISO(getStartOfWeek(new Date(row.date)))
         } else if (this.selectedTimeOption === TIME_GRANULARITY.MONTH) {
-          date = formatISO(getStartOfMonth(utcDate(new Date(row.date))))
+          date = formatISO(getStartOfMonth(new Date(row.date)))
         } else if (this.selectedTimeOption === TIME_GRANULARITY.YEAR) {
-          date = formatISO(getStartOfYear(utcDate(new Date(row.date))))
+          date = formatISO(getStartOfYear(new Date(row.date)))
         }
 
         if (!worldCounts[date]) {
@@ -320,7 +324,7 @@ export default Vue.extend({
         ],
       }
     },
-    // Maniuplates the chart against the currently set config to ensure it complies with custom settings
+    // Manipulates the chart against the currently set config to ensure it complies with custom settings
     adjustChartOptions(): void {
       const objectKeys = Object.keys(this.totalCounts)
 
@@ -346,7 +350,6 @@ export default Vue.extend({
     },
     updateTimeGranularity(option: TIME_GRANULARITY) {
       this.selectedTimeOption = option
-      this.render()
     },
   },
 })

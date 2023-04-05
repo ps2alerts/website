@@ -88,7 +88,6 @@ export default Vue.extend({
         )
       }
       filter.ps2AlertsEventType = Ps2AlertsEventType.LIVE_METAGAME
-      console.log('computed filter', filter)
       return filter
     },
     updateCountdownPercent(): number {
@@ -118,7 +117,6 @@ export default Vue.extend({
   },
   watch: {
     async filter() {
-      console.log('VictoryStatistics: Detected filter change')
       await this.filterResults()
     },
   },
@@ -151,7 +149,7 @@ export default Vue.extend({
       this.setTimers()
     },
     async pull(): Promise<void> {
-      // console.log('VictoryStatistics.pull', this.apiFilter)
+      console.log('VictoryStatistics.pull', this.apiFilter)
       this.loading = true
 
       const promises: Promise<GlobalVictoriesAggregateResponseInterface[]>[] =
@@ -190,8 +188,6 @@ export default Vue.extend({
     },
     async filterResults(): Promise<void> {
       this.clearTimers()
-      console.log('VictoryStatistics: New Filter', this.apiFilter)
-
       await this.pull()
       this.setTimers()
     },

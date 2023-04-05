@@ -201,14 +201,12 @@ export default Vue.extend({
       }
 
       if (this.dateFrom.length > 0 && this.dateTo.length > 0) {
-        console.log('ready to emit')
         this.emitDateUpdate()
       } else {
         console.log('NOT ready to emit, waiting for data?')
       }
     },
     updateFromDateDays(numOfDays: number): void {
-      console.log('updateFromDateDays', numOfDays)
       this.dateFrom = formatDateTime(
         sub(utcDate(new Date()), { days: numOfDays }),
         DATE_FORMAT_ISO
