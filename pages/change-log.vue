@@ -1,6 +1,6 @@
 <template>
   <div class="grid grid-cols-12 gap-2">
-    <MetaHead :title="pageTitle" :description="pageDesc"> </MetaHead>
+    <MetaHead :title="pageTitle" :description="pageDesc"></MetaHead>
     <div id="change-log" class="col-span-12 xl:col-span-10 xl:col-start-2">
       <div class="text-center h-full">
         <h1 class="text-title">Change Log</h1>
@@ -58,9 +58,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import MetaHead from '~/components/MetaHead.vue'
 
 export default Vue.extend({
   name: 'Changelog',
+  components: { MetaHead },
   data() {
     return {
       pageTitle: 'Change Log',
