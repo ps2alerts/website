@@ -80,13 +80,8 @@ export default Vue.extend({
               <div>
                 <p class="text-xl font-bold">Capture the Conduit support (Nov 2022)</p>
                 <p>Thanks to [UN17] RiderAnton yet again for providing updates to the mapping technology PS2Alerts uses, the website fully supports Capture the Conduit base types as of 17th November 2022 (yes this change log is well overdue!)</p>
-              </div>
-              <div class="pt-3">
-                <p class="text-xl font-bold">PS2Alerts module updates (April 2023)</p>
-                <p>PS2Alerts is constructed out of various modules. They needed a bit of love and care before an upcoming remodelling of PS2Alerts and how it records data.</p>
 
-                <p class="text-lg font-bold">Website</p>
-                <p>The website has received some minor improvements:</p>
+                <p>The website has also received some minor improvements:</p>
                 <ul>
                   <li><b>Fixed:</b> Applying a date filter on the homepage should now actually bring in alerts!</li>
                   <li><b>Fixed:</b> Alert clocks would de-sync when you've had the website open in an inactive browser tab for a while, or otherwise lost focus.</li>
@@ -96,6 +91,10 @@ export default Vue.extend({
                   <li><b>House keeping:</b> Removed yet another date library, using just one now (means less bandwidth for you!)</li>
                   <li><b>House keeping:</b> Various dependencies have been updated to more modern versions, including critical security fixes.</li>
                 </ul>
+              </div>
+              <div class="pt-3">
+                <p class="text-xl font-bold">PS2Alerts module updates (April 2023)</p>
+                <p>PS2Alerts is constructed out of various modules. They needed a bit of love and care before an upcoming remodelling of PS2Alerts and how it records data.</p>
 
                 <p class="text-lg font-bold">Aggregator</p>
                 <p>A <a class="text-red-500" target="_blank" href="https://github.com/ps2alerts/aggregator/releases/tag/v4.4.0">massive refactor</a> of the Aggregator (the module that calculates the statistics for Alerts) was conducted, including migrating from a very troublesome method of Inversion of Control class injection into a better form. It also marks the introduction of NestJS to the Aggregator, to match API in terms of how the modules are configured and set up and increasing our development abilities. Many thanks to <a href="https://github.com/microwavekonijn" target="_blank" class="text-red-500">[DIG] Microwavekonijn</a> for the bulk of the refactor!</p>
