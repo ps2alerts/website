@@ -87,6 +87,7 @@ export default Vue.extend({
                   <li><b>Fixed:</b> Alert clocks would de-sync when you've had the website open in an inactive browser tab for a while, or otherwise lost focus.</li>
                   <li><b>Fixed:</b> Tooltip / information RE populations last updated on alert list on the left has been restored.</li>
                   <li><b>Improvement:</b> The site was loading in <b>all</b> font-awesome icons resulting in about <b>1.6MB on every page load</b>. This is now 91KB as we're using a subset of icons. With compression this is even lower at 26KB!</li>
+                  <li><b>Improvement:</b> Various layout issues on mobile have been fixed and improved upon.</li>
                   <li><b>House keeping:</b> Removed a very old dependency called MomentJS, which should mean the site loads a bit quicker as everything is a bit smaller.</li>
                   <li><b>House keeping:</b> Removed yet another date library, using just one now (means less bandwidth for you!)</li>
                   <li><b>House keeping:</b> Various dependencies have been updated to more modern versions, including critical security fixes.</li>
