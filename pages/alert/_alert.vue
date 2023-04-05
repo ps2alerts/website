@@ -18,8 +18,11 @@
         :alert="alert"
       />
       <AlertFactionVsFaction :alert="alert" />
-      <div class="col-span-full md:col-span-4 md:col-start-5">
-        <v-tabs v-model="mapsTab" center-active dark fixed-tabs class="mt-2">
+
+      <div
+        class="col-span-12 md:col-start-3 md:col-span-8 lg:col-span-6 lg:col-start-4"
+      >
+        <v-tabs v-model="mapsTab" dark fixed-tabs show-arrows class="mt-2">
           <v-tabs-slider></v-tabs-slider>
 
           <v-tab href="#map">
