@@ -1,5 +1,11 @@
 import { formatInTimeZone } from 'date-fns-tz'
-import { format } from 'date-fns'
+import {
+  format,
+  startOfDay,
+  startOfMonth,
+  startOfWeek,
+  startOfYear,
+} from 'date-fns'
 import { DATETIME_FORMATS } from '~/constants/Time'
 
 export const utcDate = (date: Date): Date => {
@@ -13,6 +19,22 @@ export const formatDateTime = (
   formatTo: DATETIME_FORMATS
 ): string => {
   return format(date, formatTo)
+}
+
+export const getStartOfDay = (date: Date): Date => {
+  return startOfDay(date)
+}
+
+export const getStartOfWeek = (date: Date): Date => {
+  return startOfWeek(date, { weekStartsOn: 1 })
+}
+
+export const getStartOfMonth = (date: Date): Date => {
+  return startOfMonth(date)
+}
+
+export const getStartOfYear = (date: Date): Date => {
+  return startOfYear(date)
 }
 
 // Returns a string in the format of DD:HH:MM:SS, as for some reason date-fns doesn't support this...

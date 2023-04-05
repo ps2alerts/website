@@ -38,19 +38,31 @@
 <script lang="ts">
 /* eslint-disable import/no-named-as-default-member */
 import Vue, { PropOptions } from 'vue'
-import dayjs from 'dayjs'
-import advancedFormat from 'dayjs/plugin/advancedFormat'
-import isoWeek from 'dayjs/plugin/isoWeek'
+import { differenceInDays, formatISO } from 'date-fns'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import { FactionMetricsInterface } from '~/interfaces/FactionMetricsInterface'
 import LineChart from '~/components/LineChart'
-import { DATE_FORMAT, TimeGranularity } from '@/constants/Time'
+import { TIME_GRANULARITY } from '@/constants/Time'
 import { World } from '@/ps2alerts-constants/world'
 import { Bracket } from '@/ps2alerts-constants/bracket'
+import FilterWorld from '~/components/common/FilterWorld.vue'
+import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
+import FilterBracket from '~/components/common/FilterBracket.vue'
+import TimeGranularity from '~/components/common/TimeGranularity.vue'
+import {
+  getStartOfMonth,
+  getStartOfWeek,
+  getStartOfYear,
+  utcDate,
+} from '~/utilities/TimeHelper'
 
 export default Vue.extend({
   name: 'VictoriesTimeline',
   components: {
+    TimeGranularity,
+    FilterBracket,
+    CountdownSpinner,
+    FilterWorld,
     LineChart,
   },
   props: {
@@ -75,13 +87,13 @@ export default Vue.extend({
       loaded: false,
       selectedWorld: 0,
       selectedBracket: 0,
-      selectedTimeOption: TimeGranularity.WEEK,
+      selectedTimeOption: TIME_GRANULARITY.WEEK,
       totalCounts: {} as { [k: string]: FactionMetricsInterface },
       worldCounts: {} as {
         [k: string]: { [k: string]: FactionMetricsInterface }
       },
-      minDate: dayjs(),
-      maxDate: dayjs(),
+      minDate: new Date(),
+      maxDate: new Date(),
       dataCollection: {},
       chartOptions: {
         responsive: true,
@@ -94,10 +106,10 @@ export default Vue.extend({
             {
               type: 'time',
               time: {
-                unit: TimeGranularity.WEEK,
+                unit: TIME_GRANULARITY.WEEK,
               },
-              min: dayjs('2021-01-04').format(),
-              max: dayjs().format(),
+              min: formatISO(utcDate(new Date('2021-01-04'))),
+              max: formatISO(utcDate(new Date())),
               ticks: {
                 fontColor: '#fff',
                 source: 'labels',
@@ -140,15 +152,21 @@ export default Vue.extend({
       this.render()
     },
     selectedWorld(): void {
+      console.log('VictoriesTimeline: World changed to', this.selectedWorld)
       this.render()
     },
     selectedBracket(): void {
+      console.log('VictoriesTimeline: Bracket changed to', this.selectedBracket)
       this.render()
+    },
+    selectedTimeOption(): void {
+      console.log(
+        'VictoriesTimeline: Time option changed to',
+        this.selectedTimeOption
+      )
     },
   },
   created() {
-    dayjs.extend(advancedFormat)
-    dayjs.extend(isoWeek)
     this.render()
     this.loaded = true
   },
@@ -162,16 +180,16 @@ export default Vue.extend({
     optimiseTimeResolution(): void {
       // Perform trickery to set the time granularity to appropriate levels based on time frame requested
       if (this.filter.dateFrom && this.filter.dateTo) {
-        const date1 = dayjs(this.filter.dateFrom)
-        const date2 = dayjs(this.filter.dateTo)
+        const date1 = new Date(this.filter.dateFrom)
+        const date2 = new Date(this.filter.dateTo)
 
-        const difference = date2.diff(date1, 'days')
+        const difference = differenceInDays(date2, date1)
 
         // Set the time option to week to force a change in the TimeGranularity component upon re-draw, don't ask me why it just works ok.
-        this.selectedTimeOption = TimeGranularity.WEEK
+        this.selectedTimeOption = TIME_GRANULARITY.WEEK
 
         if (difference <= 60) {
-          this.selectedTimeOption = TimeGranularity.DAY
+          this.selectedTimeOption = TIME_GRANULARITY.DAY
         }
       }
     },
@@ -194,15 +212,15 @@ export default Vue.extend({
         }
 
         // Day default
-        let date = dayjs(row.date).format()
+        let date = formatISO(utcDate(new Date(row.date)))
 
         // For weekly we must get the first date of the start of the week to properly render the chart
-        if (this.selectedTimeOption === TimeGranularity.WEEK) {
-          date = dayjs(this.getMondayOfWeek(row.date)).utc().format()
-        } else if (this.selectedTimeOption === TimeGranularity.MONTH) {
-          date = dayjs(row.date).format('YYYY-MM-01 00:00:00')
-        } else if (this.selectedTimeOption === TimeGranularity.YEAR) {
-          date = dayjs(row.date).format('YYYY-01-01 00:00:00')
+        if (this.selectedTimeOption === TIME_GRANULARITY.WEEK) {
+          date = formatISO(getStartOfWeek(utcDate(new Date(row.date))))
+        } else if (this.selectedTimeOption === TIME_GRANULARITY.MONTH) {
+          date = formatISO(getStartOfMonth(utcDate(new Date(row.date))))
+        } else if (this.selectedTimeOption === TIME_GRANULARITY.YEAR) {
+          date = formatISO(getStartOfYear(utcDate(new Date(row.date))))
         }
 
         if (!worldCounts[date]) {
@@ -249,7 +267,7 @@ export default Vue.extend({
       const drawData: number[] = []
 
       for (const [key, row] of Object.entries(this.totalCounts)) {
-        times.push(dayjs(key).format(DATE_FORMAT))
+        times.push(formatISO(new Date(key)))
         const rowTyped = row as FactionMetricsInterface
         vsData.push(rowTyped.vs)
         ncData.push(rowTyped.nc)
@@ -308,18 +326,17 @@ export default Vue.extend({
 
       // For some reason Object.keys puts the result in reverse of actuality...
       const firstObject = objectKeys[objectKeys.length - 1]
-      const firstObjectDate = dayjs(firstObject).format()
+      const firstObjectDate = formatISO(new Date(firstObject))
 
       const lastObject = objectKeys[0]
-      const lastObjectDate = dayjs(lastObject).format()
+      const lastObjectDate = formatISO(new Date(lastObject))
       this.chartOptions.scales.xAxes[0].min = firstObjectDate
       this.chartOptions.scales.xAxes[0].max = lastObjectDate
 
       // Change unit based off data type
       this.chartOptions.scales.xAxes[0].time.unit = this.selectedTimeOption
 
-      // Generate labels based off data
-      console.log('chartOptions', this.chartOptions.scales.xAxes[0])
+      // console.log('chartOptions', this.chartOptions.scales.xAxes[0])
     },
     updateWorld(world: World) {
       this.selectedWorld = world
@@ -327,19 +344,9 @@ export default Vue.extend({
     updateBracket(bracket: Bracket) {
       this.selectedBracket = bracket
     },
-    updateTimeGranularity(option: TimeGranularity) {
+    updateTimeGranularity(option: TIME_GRANULARITY) {
       this.selectedTimeOption = option
       this.render()
-    },
-    getMondayOfWeek(d: string) {
-      // 👇️ clone date object, so we don't mutate it
-      const date = new Date(d)
-      const day = date.getDay() // get day of week
-
-      // 👇️ day of month - day of week (-6 if Sunday), otherwise +1
-      const diff = date.getDate() - day + (day === 0 ? -6 : 1)
-
-      return new Date(date.setDate(diff))
     },
   },
 })

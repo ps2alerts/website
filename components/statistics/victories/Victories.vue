@@ -31,7 +31,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { startOfDay } from 'date-fns'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '@/constants/Endpoints'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
@@ -39,12 +38,14 @@ import VictoriesCounts from '~/components/statistics/victories/VictoriesCounts.v
 import { Bracket, ps2alertsBracketArray } from '@/ps2alerts-constants/bracket'
 import { GlobalAggregateParamsInterface } from '~/interfaces/GlobalAggregateParamsInterface'
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
-import { formatDateTime } from '~/utilities/TimeHelper'
-import { DATE_TIME_FORMAT, UNIX_SECONDS } from '~/constants/Time'
+import { formatDateTime, getStartOfDay } from '~/utilities/TimeHelper'
+import { DATE_TIME_FORMAT, UNIX_MILLISECONDS } from '~/constants/Time'
+import VictoriesTimeline from '~/components/statistics/victories/VictoriesTimeline.vue'
 
 export default Vue.extend({
   name: 'Victories',
   components: {
+    VictoriesTimeline,
     VictoriesCounts,
   },
   props: {
@@ -78,15 +79,16 @@ export default Vue.extend({
       // This NEEDS to be in milliseconds!
       if (this.filter.dateFrom && this.filter.dateTo) {
         filter.dateFrom = formatDateTime(
-          startOfDay(this.filter.dateFrom),
-          UNIX_SECONDS
+          getStartOfDay(this.filter.dateFrom),
+          UNIX_MILLISECONDS
         )
         filter.dateTo = formatDateTime(
-          startOfDay(this.filter.dateTo),
-          UNIX_SECONDS
+          getStartOfDay(this.filter.dateTo),
+          UNIX_MILLISECONDS
         )
       }
       filter.ps2AlertsEventType = Ps2AlertsEventType.LIVE_METAGAME
+      console.log('computed filter', filter)
       return filter
     },
     updateCountdownPercent(): number {
@@ -156,7 +158,7 @@ export default Vue.extend({
         []
 
       ps2alertsBracketArray.slice(1).forEach((bracket) => {
-        const filter = JSON.parse(JSON.stringify(this.filter)) // Cheaty way to clone an object
+        const filter = JSON.parse(JSON.stringify(this.apiFilter)) // Cheaty way to clone an object
         filter.bracket = bracket
         promises.push(
           new ApiRequest().get<GlobalVictoriesAggregateResponseInterface[]>(
@@ -180,7 +182,6 @@ export default Vue.extend({
           this.loading = false
 
           this.updateCountdown = this.updateRate / 1000
-          console.log('VictoryStatistics: Emitting loaded')
           this.$emit('loaded', {})
         })
         .catch((e) => {

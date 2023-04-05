@@ -22,14 +22,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { TimeGranularity } from '@/constants/Time'
+import { TIME_GRANULARITY } from '@/constants/Time'
 
 export default Vue.extend({
   name: 'TimeGranularity',
   props: {
     timeFilter: {
       type: String,
-      default: TimeGranularity.WEEK,
+      default: TIME_GRANULARITY.WEEK,
     },
     disabled: {
       type: Boolean,
@@ -40,16 +40,16 @@ export default Vue.extend({
   data() {
     return {
       options: [
-        TimeGranularity.DAY,
-        TimeGranularity.WEEK,
-        TimeGranularity.MONTH,
-        TimeGranularity.YEAR,
+        TIME_GRANULARITY.DAY,
+        TIME_GRANULARITY.WEEK,
+        TIME_GRANULARITY.MONTH,
+        TIME_GRANULARITY.YEAR,
       ],
-      timeOption: TimeGranularity.WEEK,
+      timeOption: TIME_GRANULARITY.WEEK,
     }
   },
   watch: {
-    timeFilter(timeOption: TimeGranularity): void {
+    timeFilter(timeOption: TIME_GRANULARITY): void {
       this.timeOption = timeOption
     },
   },

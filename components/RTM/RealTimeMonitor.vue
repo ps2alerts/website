@@ -115,7 +115,6 @@
 <script lang="ts">
 /* eslint-disable nuxt/no-globals-in-created */
 import Vue from 'vue'
-import { format } from 'date-fns'
 import ApiRequest from '@/api-request'
 import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
 import { InstanceOutfitWarsResponseInterface } from '@/interfaces/InstanceOutfitWarsResponseInterface'
@@ -125,7 +124,7 @@ import { Endpoints } from '@/constants/Endpoints'
 import RealTimeAlert from '~/components/RTM/RealTimeAlert.vue'
 import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 import { World } from '~/ps2alerts-constants/world'
-import { utcDate } from '~/utilities/TimeHelper'
+import { formatDateTime, utcDate } from '~/utilities/TimeHelper'
 
 export default Vue.extend({
   name: 'RealTimeMonitor',
@@ -293,7 +292,7 @@ export default Vue.extend({
             })
         }
       )
-      this.popsLastUpdated = format(utcDate(new Date()), TIME_FORMAT)
+      this.popsLastUpdated = formatDateTime(utcDate(new Date()), TIME_FORMAT)
     },
     getPops(
       instance: string

@@ -127,12 +127,11 @@
 <script lang="ts">
 /* eslint-disable import/no-named-as-default-member */
 import Vue from 'vue'
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
-const dateFormat = 'YYYY-MM-DD'
+import { sub } from 'date-fns'
+import { formatDateTime, utcDate } from '~/utilities/TimeHelper'
+import { DATE_FORMAT_ISO } from '~/constants/Time'
 const dateStartedRecording = '2021-01-04'
-const dateNow = dayjs().format(dateFormat)
-dayjs.extend(utc)
+const dateNow = formatDateTime(utcDate(new Date()), DATE_FORMAT_ISO)
 
 export default Vue.extend({
   name: 'FilterDate',
@@ -210,8 +209,10 @@ export default Vue.extend({
     },
     updateFromDateDays(numOfDays: number): void {
       console.log('updateFromDateDays', numOfDays)
-      const date = dayjs().subtract(numOfDays, 'days')
-      this.dateFrom = date.format(dateFormat)
+      this.dateFrom = formatDateTime(
+        sub(utcDate(new Date()), { days: numOfDays }),
+        DATE_FORMAT_ISO
+      )
       this.dateTo = dateNow
     },
     clearDates(): void {
@@ -222,8 +223,8 @@ export default Vue.extend({
     },
     emitDateUpdate(): void {
       const args = {
-        from: dayjs(this.dateFrom).utc().unix(),
-        to: dayjs(this.dateTo).utc().unix(),
+        from: utcDate(new Date(this.dateFrom)).getTime(),
+        to: utcDate(new Date(this.dateTo)).getTime(),
       }
       this.waitingForData = true
       this.$emit('dates-changed', args)
