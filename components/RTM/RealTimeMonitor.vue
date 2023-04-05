@@ -125,10 +125,12 @@ import RealTimeAlert from '~/components/RTM/RealTimeAlert.vue'
 import { ps2AlertsApiEndpoints } from '~/ps2alerts-constants/ps2AlertsApiEndpoints'
 import { World } from '~/ps2alerts-constants/world'
 import { formatDateTime, utcDate } from '~/utilities/TimeHelper'
+import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
 
 export default Vue.extend({
   name: 'RealTimeMonitor',
   components: {
+    CountdownSpinner,
     RealTimeAlert,
   },
   data() {
