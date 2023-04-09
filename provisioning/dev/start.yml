@@ -28,10 +28,11 @@
         volumes:
           - "{{ root_dir | realpath }}:/app:rw"
         ports:
-          - "80"
+          - "3001"
         networks:
           - name: "ps2alerts"
         env:
+          APP_PORT: "3001" # Not 3000 as that conflicts with API, locally
           BUILT: "Now ;)"
           ENV: "development"
           VERSION: "DEV"

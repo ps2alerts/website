@@ -17,7 +17,7 @@ export default {
     maintenance: false,
   },
   server: {
-    port: 3000,
+    port: process.env.APP_PORT ?? 3000,
     host: '0.0.0.0',
     timing: false,
   },

@@ -85,7 +85,7 @@ export default Vue.extend({
 
     const lastVersionSeen = localStorage.lastVersionSeen
 
-    if (lastVersionSeen !== this.version) {
+    if (lastVersionSeen !== this.version && this.version !== 'DEV') {
       this.showVersionChange = true
     }
 
