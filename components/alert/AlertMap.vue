@@ -315,6 +315,7 @@ import { AssetsBaseUrl, Endpoints } from '@/constants/Endpoints'
 import zoneNameFilter from '~/filters/ZoneName'
 import { FacilityType } from '@/ps2alerts-constants/facilityType'
 import { MapRegion } from '~/libraries/MapRegion'
+import MapStateDataRequest from '~/libraries/MapStateDataRequest'
 import { Faction } from '@/ps2alerts-constants/faction'
 import { FacilityBadge } from '~/libraries/FacilityBadge'
 import factionShortName from '~/filters/FactionShortName'
@@ -328,6 +329,7 @@ import { OutfitwarsTerritoryResultInterface } from '~/ps2alerts-constants/interf
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Team } from '~/ps2alerts-constants/outfitwars/team'
 import Countdown from '~/components/Countdown.vue'
+import { World } from '~/ps2alerts-constants/world'
 
 export default Vue.extend({
   name: 'AlertMap',
@@ -1188,10 +1190,12 @@ export default Vue.extend({
         new ApiRequest().get<InstanceFacilityControlEntriesResponseInterface[]>(
           `${endpoint}?sortBy=timestamp&order=desc&noDefences=true`
         ),
+        new MapStateDataRequest().pull(this.alert.world ?? World.CONNERY, this.alert.zone ?? Zone.INDAR)
       ])
         .then((values) => {
           this.outfitData = values[0]
           const result = values[1]
+          console.log(values[2])
           // Ensure the correct fields are filled from the map control embed
           for (const facilityControl of result) {
             if (
