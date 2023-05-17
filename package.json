@@ -38,7 +38,7 @@
     "vue-numeral-filter": "^2.0.0",
     "vue2-leaflet": "^2.7.1",
     "vuejs-datatable": "^2.0.0-alpha.7",
-    "webpack": "^4.46.0"
+    "webpack": "^5.82.1"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.21.3",
