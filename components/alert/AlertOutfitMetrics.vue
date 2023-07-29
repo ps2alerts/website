@@ -41,7 +41,7 @@
             <span class="label mb-1 gray"><b>KD</b> = Kill / Death Ratio</span>
             <span class="label mb-1 gray"><b>HS</b> = Head Shots</span>
             <span class="label mb-1 gray"><b>HSR%</b> = Head Shot Ratio</span>
-            span class="label mb-1 gray"><b>TKs</b> = Team Kills</span>
+            <span class="label mb-1 gray"><b>TKs</b> = Team Kills</span>
             <span class="label mb-1 gray"
               ><b>TKed</b> = Team killed by same faction</span
             >
