@@ -89,7 +89,7 @@ export default Vue.extend({
     },
     outfitwar: {
       type: Object as () => InstanceOutfitWarsResponseInterface,
-      default: {},
+      default: () => ({}),
       required: false,
     },
   },

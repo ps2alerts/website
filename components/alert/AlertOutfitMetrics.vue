@@ -166,7 +166,10 @@ export default Vue.extend({
     },
     outfitwar: {
       type: Object as () => InstanceOutfitWarsResponseInterface,
-      default: {},
+      default: () => ({
+        ps2AlertsEventType: null,
+        outfitwars: null,
+      }),
       required: false,
     },
   },

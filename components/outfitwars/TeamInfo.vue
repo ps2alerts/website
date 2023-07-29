@@ -93,7 +93,11 @@ export default Vue.extend({
   props: {
     outfitwar: {
       type: Object as () => InstanceOutfitWarsResponseInterface,
-      default: {},
+      default: () => ({
+        result: {
+          victor: null,
+        },
+      }),
       required: true,
     },
   },

@@ -129,7 +129,11 @@ export default Vue.extend({
   props: {
     outfitwar: {
       type: Object as () => InstanceOutfitWarsResponseInterface,
-      default: {},
+      default: () => ({
+        state: Ps2AlertsEventState.STARTING,
+        timeStarted: null,
+        timeEnded: null,
+      }),
       required: true,
     },
   },
