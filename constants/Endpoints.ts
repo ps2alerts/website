@@ -82,6 +82,9 @@ export const Endpoints = {
   // 3rd party
   OUTFIT_TRACKER_OUTFIT_LOGO:
     'https://outfit-tracker.com/outfit-logo/{outfitId}.png',
+
+  // Searches
+  SEARCH: '/search',
 }
 
 export const CensusEndpoints = {
