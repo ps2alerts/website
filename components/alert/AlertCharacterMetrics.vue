@@ -28,16 +28,9 @@
           v-if="alert.features && alert.features.xpm"
           class="text-gray-400 text-sm mb-2 text-center"
         >
-          <p>
-            <span class="label bg-green-600 hover:bg-green-500 mr-2"
-              >New in v4.2</span
-            >Time played in alert, per minute metrics (kills, deaths, TKs,
-            suicides &amp; headshots) - scroll right on the table below to see
-            them! Updates every 15s.
-          </p>
           <p class="text-xs">
-            XPM starts counting upon the first kill or death of a player. "Time
-            Played" represents the time used for XPM calculations.
+            Per minute stats starts counting upon the first kill or death of a
+            player. "Time Played" represents the time used for XPM calculations.
           </p>
         </div>
         <p class="text-gray-400 text-sm mb-2 text-center">
