@@ -1,3 +1,4 @@
+<!--suppress CssInvalidFunction -->
 <template>
   <div class="card flex flex-col" :class="backgroundClass">
     <div class="tag section">Team Info</div>

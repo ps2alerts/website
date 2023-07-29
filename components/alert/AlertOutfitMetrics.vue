@@ -155,9 +155,11 @@ import { AlertOutfitTableDataInterface } from '~/interfaces/alert/AlertOutfitTab
 import { timeText } from '~/utilities/TimeHelper'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
+import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
 
 export default Vue.extend({
   name: 'AlertOutfitMetrics',
+  components: { CountdownSpinner },
   props: {
     alert: {
       type: Object as () => InstanceTerritoryControlResponseInterface,

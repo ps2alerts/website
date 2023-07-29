@@ -104,10 +104,12 @@ import { Phase } from '~/ps2alerts-constants/outfitwars/phase'
 import factionOrTeamName from '~/filters/FactionOrTeamName'
 import { Team } from '~/ps2alerts-constants/outfitwars/team'
 import Countdown from '~/components/Countdown.vue'
+import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
 
 export default Vue.extend({
   name: 'AlertResult',
   components: {
+    CountdownSpinner,
     FactionSegmentBar,
     Countdown,
   },

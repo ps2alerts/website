@@ -255,9 +255,11 @@ import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { InstanceFactionCombatAggregateResponseInterface } from '@/interfaces/aggregates/instance/InstanceFactionCombatAggregateResponseInterface'
 import { Endpoints } from '@/constants/Endpoints'
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
+import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
 
 export default Vue.extend({
   name: 'AlertFactionCombat',
+  components: { CountdownSpinner },
   props: {
     alert: {
       type: Object as () => InstanceTerritoryControlResponseInterface,

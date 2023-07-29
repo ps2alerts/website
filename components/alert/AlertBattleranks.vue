@@ -30,6 +30,7 @@ import { InstanceTerritoryControlResponseInterface } from '~/interfaces/Instance
 import { Faction } from '@/ps2alerts-constants/faction'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
+import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
 
 interface BattlerankDistributionDataInterface {
   // Faction
@@ -42,6 +43,7 @@ interface BattlerankDistributionDataInterface {
 export default Vue.extend({
   name: 'AlertBattleranks',
   components: {
+    CountdownSpinner,
     BarChart,
   },
   props: {

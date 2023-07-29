@@ -116,6 +116,7 @@ import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfit
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 import { TIME_FORMAT_SHORT } from '~/constants/Time'
 import { formatDateTime } from '~/utilities/TimeHelper'
+import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
 
 const commonChartOptions = {
   responsive: true,
@@ -179,6 +180,7 @@ const labelCommon = {
 export default Vue.extend({
   name: 'AlertPopulations',
   components: {
+    CountdownSpinner,
     LineChart,
   },
   props: {
