@@ -13,11 +13,7 @@
       <div class="col-span-full mb-2 flex flex-wrap justify-center">
         <div class="p-2">Player Counts</div>
         <div v-for="(count, index) in counts" :key="index">
-          <div
-            v-if="displayCount(parseInt(index, 10))"
-            :class="factionClass(parseInt(index, 10))"
-            class="p-2"
-          >
+          <div v-if="count > 0" :class="factionClass(index)" class="p-2">
             <span v-if="index === 'total'">= </span>
             <span>{{ count || 0 }}</span>
           </div>
@@ -113,9 +109,11 @@ import { DataTableConfig } from '@/constants/DataTableConfig'
 import { timeText } from '~/utilities/TimeHelper'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
+import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
 
 export default Vue.extend({
   name: 'AlertCharacterMetrics',
+  components: { CountdownSpinner },
   props: {
     alert: {
       type: Object as () => InstanceTerritoryControlResponseInterface,
@@ -381,8 +379,12 @@ export default Vue.extend({
           this.error = e.message
         })
     },
-    factionClass(faction: Faction): object {
-      return FactionBgClass(faction)
+    factionClass(index: Faction | 'total'): object {
+      if (index === 'total') {
+        return {}
+      }
+
+      return FactionBgClass(parseInt(String(index), 10)) // Don't ask
     },
     tableItemClass(item: AlertCharacterTableDataInterface): string {
       if (
@@ -478,7 +480,7 @@ export default Vue.extend({
 
       return newData
     },
-    displayCount(faction: Faction): boolean {
+    displayCounters(faction: Faction): boolean {
       if (!this.isOutfitWar) {
         return true
       }

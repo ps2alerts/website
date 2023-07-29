@@ -15,7 +15,7 @@
         <div
           v-for="(count, index) in counts"
           :key="index"
-          :class="factionClass(parseInt(index, 10))"
+          :class="factionClass(index)"
           class="p-2"
         >
           <span v-if="index === 'total'">= </span>
@@ -417,8 +417,12 @@ export default Vue.extend({
           this.error = e.message
         })
     },
-    factionClass(faction: Faction): object {
-      return FactionBgClass(faction)
+    factionClass(index: Faction | 'total'): object {
+      if (index === 'total') {
+        return {}
+      }
+
+      return FactionBgClass(parseInt(String(index), 10)) // Don't ask
     },
     tableItemClass(item: AlertOutfitTableDataInterface): string {
       if (
