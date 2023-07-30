@@ -6,37 +6,41 @@
     <div
       class="bg-tint rounded lg:rounded-bl-none text-base text-center relative"
     >
-      <div class="tag section">Search</div>
-      <form class="w-full">
-        <div class="p-2 flex items-center">
+      <div class="tag section">
+        Search <span class="label red">New in v4.5!</span>
+      </div>
+      <div class="p-2">
+        <div class="flex items-center">
           <input
             v-model="searchTerm"
             class="mr-2 appearance-none border border-solid border-transparent w-full text-white py-1 px-2 leading-tight bg-tint-light rounded-sm focus:bg-gray-500 focus:outline-none focus:border-white"
             type="text"
             placeholder="e.g. DIG, Maelstrome"
             aria-label="Full name"
+            @keyup="search"
           />
-          <button class="btn" :disabled="loading" @click="search">
-            <font-awesome-icon :icon="['fas', 'search']"></font-awesome-icon>
+          <button class="btn p-0" :disabled="loading" @click="clear">
+            <font-awesome-icon :icon="['fas', 'xmark']"></font-awesome-icon>
           </button>
         </div>
-      </form>
-      <div id="results" class="mb-2 px-2">
-        <SearchResult
-          v-for="result in results"
-          :key="result.name"
-          :result="result"
-        />
+        <div id="results" class="mb-2">
+          <SearchResult
+            v-for="result in results"
+            :key="result.name"
+            :result="result"
+          />
+        </div>
+        <div v-show="loading" class="text-center">
+          <i class="fas fa-spinner fa-spin"></i> Loading...
+        </div>
+        {{ error.message }}
       </div>
-      <div v-show="loading" class="text-center">
-        <i class="fas fa-spinner fa-spin"></i> Loading...
-      </div>
-      {{ error.message }}
     </div>
   </section>
 </template>
 
 <script lang="ts">
+/* eslint-disable import/no-named-as-default-member */
 import { defineComponent } from 'vue'
 import axios from 'axios'
 import ApiRequest from '~/api-request'
@@ -86,12 +90,8 @@ export default defineComponent({
         result.matchScore = score
         result.type = 'player'
         result.faction = result.character.faction
-
-        if (result.character.outfit?.tag) {
-          result.name = `[${result.character.outfit.tag}] ${result.character.name}`
-        } else {
-          result.name = result.character.name
-        }
+        result.name = result.character.name
+        result.tag = result.character?.outfit?.tag ?? undefined
       })
 
       // Sort Characters by score
@@ -119,20 +119,26 @@ export default defineComponent({
           }
         }
 
+        // If there's a space on the end of the string, rank them lower (e.g. 'Dignity of War Tactical ')
+        if (searchTermLower.endsWith(' ')) {
+          score = score / 2
+        }
+
         result.matchScore = score
         result.type = 'outfit'
         result.faction = result.outfit.faction
-
-        if (result.outfit.tag) {
-          result.name = `[${result.outfit.tag}] ${result.outfit.name}`
-        } else {
-          result.name = result.outfit.name
-        }
+        result.name = result.outfit.name
+        result.tag = result.outfit.tag
       })
 
       return [...characterResults, ...outfitResults].sort((a, b) =>
         this.searchScores(a.matchScore, b.matchScore)
       )
+    },
+    clear() {
+      this.searchTerm = ''
+      this.results = []
+      this.error = { message: '' }
     },
     async search(criteria: KeyboardEvent): Promise<void> {
       const target = criteria.target as HTMLInputElement
@@ -140,7 +146,18 @@ export default defineComponent({
 
       this.results = []
 
-      if (this.searchTerm === '' || this.loading) {
+      if (this.loading) {
+        if (this.source) {
+          this.source.cancel('Canceled due to new request')
+          console.log('Canceled due to new request')
+        }
+      }
+
+      // If less than 3 chars are entered, don't search and tell the user
+      if (this.searchTerm.length < 3) {
+        this.error = {
+          message: 'Please enter at least 3 chars.',
+        }
         return
       }
 
@@ -180,22 +197,18 @@ export default defineComponent({
         const characterResults: SearchCharacterInterface[] = searchResults[0]
         const outfitResults: SearchOutfitInterface[] = searchResults[1]
 
-        console.log('characterResults', characterResults)
-        console.log('outfitResults', outfitResults)
-
         if (characterResults.length === 0 && outfitResults.length === 0) {
           this.error = { message: 'No results found!' }
+          this.loading = false
           return
         }
 
-        // Parse the results into a SearchResult component friendly format
-        const results: SearchResultComponentInterface[] = this.parseResults(
-          characterResults,
-          outfitResults
-        )
+        // Limit the results to the top 5 so we're not rendering a million things
+        characterResults.splice(5)
+        outfitResults.splice(5)
 
-        console.log('Results parsed', results)
-        this.results = results
+        // Parse the results into a SearchResult component friendly format
+        this.results = this.parseResults(characterResults, outfitResults)
         this.loading = false
       } catch (error) {
         if (!axios.isCancel(error)) {

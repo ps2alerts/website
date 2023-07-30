@@ -4,11 +4,14 @@
     :class="classes"
   >
     <NuxtLink :to="link">
-      <p class="m-0">{{ result.name }}</p>
+      <p class="m-0">
+        <span v-if="result.tag" class="font-mono">[{{ result.tag }}]</span>
+        {{ result.name }}
+      </p>
       <p class="text-xs text-gray-400 font-semibold">
         {{ result.type | ucFirst }} | {{ result.world | worldName }}
-      </p></NuxtLink
-    >
+      </p>
+    </NuxtLink>
   </div>
 </template>
 
@@ -19,6 +22,7 @@ import { FactionBorderClassString } from '~/constants/FactionBorderClass'
 import {
   SearchCharacterInterface,
   SearchOutfitInterface,
+  SearchResultComponentInterface,
 } from '~/ps2alerts-constants/interfaces/PS2AlertsSearchResultInterface'
 import { Faction } from '~/ps2alerts-constants/faction'
 
@@ -26,7 +30,7 @@ export default defineComponent({
   name: 'SearchResult',
   props: {
     result: {
-      type: Object as () => SearchCharacterInterface | SearchOutfitInterface,
+      type: Object as () => SearchResultComponentInterface,
       default: () => {
         return {}
       },
