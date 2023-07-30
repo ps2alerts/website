@@ -180,6 +180,7 @@ export default {
         'faQuestionCircle',
         'faRankingStar',
         'faRepeat',
+        'faSearch',
         'faStar',
         'faSync',
         'faTasks',

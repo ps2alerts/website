@@ -84,7 +84,7 @@ export const Endpoints = {
     'https://outfit-tracker.com/outfit-logo/{outfitId}.png',
 
   // Searches
-  SEARCH: '/search',
+  SEARCH: '/search/{type}',
 }
 
 export const CensusEndpoints = {
