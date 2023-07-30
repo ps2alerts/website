@@ -91,7 +91,10 @@ export default Vue.extend({
     },
     outfitwar: {
       type: Object as () => InstanceOutfitWarsResponseInterface,
-      default: () => ({}),
+      default: () => ({
+        ps2AlertsEventType: Ps2AlertsEventType.OUTFIT_WARS_AUG_2022,
+        outfitwars: null,
+      }),
       required: false,
     },
   },
