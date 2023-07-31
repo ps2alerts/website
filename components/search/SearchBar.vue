@@ -84,7 +84,7 @@ export default defineComponent({
     ): (SearchCharacterInterface | SearchOutfitInterface)[] {
       const searchTermLower = this.searchTerm.toLowerCase()
 
-      characterResults.forEach((result) => {
+      characterResults.map((result) => {
         let score = 0
 
         // Higher weight for exact matches
@@ -97,25 +97,24 @@ export default defineComponent({
         result.faction = result.character.faction
         result.name = result.character.name
         result.tag = result.character?.outfit?.tag ?? undefined
+        return result
       })
 
       // Sort Characters by score
-      characterResults.sort((a, b) =>
-        this.searchScores(a.matchScore, b.matchScore)
-      )
+      characterResults.sort((a, b) => b.matchScore - a.matchScore)
 
-      outfitResults.forEach((result) => {
+      outfitResults.map((result) => {
         let score = 0
 
         // Higher weight for exact matches on tag and name
-        if (
-          result.outfit.tag?.toLowerCase() === searchTermLower ||
-          result.outfit.name.toLowerCase() === searchTermLower
-        ) {
+        // This also handles trolls who name outfits after tags e.g. the outfit "DIGT"
+        if (result.outfit.tag?.toLowerCase() === searchTermLower) {
           score = 100
+        } else if (result.outfit.name.toLowerCase() === searchTermLower) {
+          score = 75
         }
 
-        // If there's a space on the end of the string, rank them lower (e.g. 'Dignity of War Tactical ')
+        // If there's a space on the end of the string, rank them lower (e.g. 'Dignity of War Tactical ') to punish trolling
         if (searchTermLower.endsWith(' ')) {
           score = score / 2
         }
@@ -125,10 +124,17 @@ export default defineComponent({
         result.faction = result.outfit.faction
         result.name = result.outfit.name
         result.tag = result.outfit.tag
+        return result
       })
 
-      return [...characterResults, ...outfitResults].sort((a, b) =>
-        this.searchScores(a.matchScore, b.matchScore)
+      outfitResults.sort((a, b) => b.matchScore - a.matchScore)
+
+      // Trim results to top 5 results
+      outfitResults = outfitResults.slice(0, 5)
+      characterResults = characterResults.slice(0, 5)
+
+      return [...characterResults, ...outfitResults].sort(
+        (a, b) => b.matchScore - a.matchScore
       )
     },
     clear() {
@@ -209,10 +215,6 @@ export default defineComponent({
           return
         }
 
-        // Limit the results to the top 5 so we're not rendering a million things
-        characterResults.splice(5)
-        outfitResults.splice(5)
-
         // Parse the results into a SearchResult component friendly format
         this.results = this.parseResults(characterResults, outfitResults)
         this.loading = false
@@ -224,12 +226,6 @@ export default defineComponent({
           }
         }
       }
-    },
-    searchScores(a: number | undefined, b: number | undefined): number {
-      if (a && b) {
-        return b - a
-      }
-      return 0
     },
   },
 })

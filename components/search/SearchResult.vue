@@ -2,6 +2,7 @@
   <div
     class="my-2 py-2 text-center cursor-pointer hover border"
     :class="classes"
+    :score="result.matchScore"
   >
     <NuxtLink :to="link">
       <p class="m-0">
