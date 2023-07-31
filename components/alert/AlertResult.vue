@@ -2,7 +2,7 @@
   <div class="col-span-12">
     <div class="text-center">
       <div v-if="alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022">
-        <h1 class="text-4xl">Alert #{{ alert.instanceId }}</h1>
+        <h1 class="text-title">Alert #{{ alert.instanceId }}</h1>
       </div>
       <div
         v-if="
@@ -17,8 +17,10 @@
       </div>
     </div>
     <div v-if="alert.state === 2" class="mb-2 text-center">
-      <h2 class="text-4xl">
-        {{ victorText }}
+      <h2 class="text-3xl">
+        <span :class="alert.result.victor | factionTextClass">{{
+          victorText
+        }}</span>
         <v-tooltip v-if="alert.result && alert.result.draw" bottom>
           <template #activator="{ on, attrs }">
             <font-awesome-icon
@@ -105,6 +107,7 @@ import factionOrTeamName from '~/filters/FactionOrTeamName'
 import { Team } from '~/ps2alerts-constants/outfitwars/team'
 import Countdown from '~/components/Countdown.vue'
 import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
+import factionTextClass from '~/filters/FactionTextClass'
 
 export default Vue.extend({
   name: 'AlertResult',

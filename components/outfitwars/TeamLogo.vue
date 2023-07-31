@@ -5,7 +5,7 @@
         class="absolute inset-0 m-auto"
         :class="loser ? rounding + ' grayscale opacity-40' : rounding"
         :src="outfitId | outfitImage"
-        :alt="outfitFaction | factionShortName"
+        alt="Outfit logo"
         @error="imageUrlAlt"
       />
     </div>

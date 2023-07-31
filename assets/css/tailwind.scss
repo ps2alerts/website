@@ -403,6 +403,10 @@ select {
   @apply bg-red-600 text-white text-xs font-semibold px-1 py-0.5 rounded;
   line-height: 1.5rem;
 
+  &:hover {
+    @apply bg-red-500;
+  }
+
   &.green {
     @apply bg-green-600;
 
@@ -420,10 +424,10 @@ select {
   }
 
   &.gray {
-    @apply bg-gray-500;
+    @apply bg-gray-600;
 
     &:hover {
-      @apply bg-gray-600;
+      @apply bg-gray-500;
     }
   }
 
