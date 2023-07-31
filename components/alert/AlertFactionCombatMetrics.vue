@@ -298,10 +298,7 @@ export default Vue.extend({
       return this.outfitwar.outfitwars?.teams?.blue?.tag ?? 'Blue'
     },
     isOutfitWar(): boolean {
-      return (
-        this.outfitwar?.ps2AlertsEventType ===
-        Ps2AlertsEventType.OUTFIT_WARS_AUG_2022
-      )
+      return this.outfitwar.outfitwars !== null
     },
   },
   watch: {
