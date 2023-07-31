@@ -14,15 +14,23 @@
           {{ player.character.name }}
         </h1>
       </div>
-      <ProfileLogos
-        :outfit="player.character.outfit"
-        :faction="player.character.faction"
-        :world="player.world"
-      />
-      <div class="col-span-12 2xl:col-span-5 md:col-span-6 card">
-        <div class="tag section">Details</div>
+      <div class="col-span-12 grid grid-cols-12">
+        <div class="col-span-12 lg:col-span-4 lg:col-start-5">
+          <ProfileLogos
+            :outfit="player.character.outfit"
+            :faction="player.character.faction"
+            :world="player.world"
+          />
+        </div>
       </div>
-      <div class="col-span-12 lg:col-span-7 md:col-span-6">Kill stats</div>
+      <div class="col-span-12 2xl:col-span-4 md:col-span-6 card">
+        <div class="tag section">Combat Stats</div>
+        <ProfileCombatMetrics :statistics="statistics" />
+      </div>
+      <div class="col-span-12 card">
+        <div class="tag section">Alerts Involved</div>
+        <ProfileAlertsInvolved :statistics="statistics" :player="player" />
+      </div>
     </div>
   </section>
 </template>
@@ -33,17 +41,24 @@ import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
 import { GlobalCharacterAggregateInterface } from '~/ps2alerts-constants/interfaces/api-responses/GlobalCharacterAggregateInterface'
 import factionTextClass from '~/filters/FactionTextClass'
+import ProfileAlertsInvolved from '~/components/profiles/ProfileAlertsInvolved.vue'
 import ProfileLogos from '~/components/profiles/ProfileLogos.vue'
+import ProfileCombatMetrics from '~/components/profiles/ProfileCombatMetrics.vue'
+import { ProfileMetricsInterface } from '~/interfaces/profiles/ProfileMetricsInterface'
+import { InstanceCharacterInterface } from '~/ps2alerts-constants/interfaces/api-responses/InstanceCharacterInterface'
 
 export default Vue.extend({
   name: 'Player',
   components: {
+    ProfileAlertsInvolved,
     ProfileLogos,
+    ProfileCombatMetrics,
   },
   data() {
     return {
       loaded: false,
       player: {} as GlobalCharacterAggregateInterface,
+      statistics: {} as ProfileMetricsInterface,
       outfitLogoMissing: false,
     }
   },
@@ -73,10 +88,80 @@ export default Vue.extend({
         )
         .then((character) => {
           this.player = character
-          this.loaded = true
-          console.log('loaded!')
-          console.log(character)
         })
+
+      await this.createMetrics(this.player)
+      this.loaded = true
+    },
+    async createMetrics(
+      character: GlobalCharacterAggregateInterface
+    ): Promise<void> {
+      this.statistics = {
+        totals: {
+          kills: 0,
+          deaths: 0,
+          kd: 0,
+          headshots: 0,
+          hsr: 0,
+          teamKills: 0,
+          teamKilled: 0,
+          suicides: 0,
+          factionKills: {
+            vs: {
+              vs: 0,
+              nc: 0,
+              tr: 0,
+              nso: 0,
+            },
+          },
+        },
+        averages: {
+          kills: 0,
+          deaths: 0,
+          kd: 0,
+          headshots: 0,
+          hsr: 0,
+          teamKills: 0,
+          teamKilled: 0,
+          suicides: 0,
+          factionKills: {
+            vs: {
+              vs: 0,
+              nc: 0,
+              tr: 0,
+              nso: 0,
+            },
+          },
+        },
+        lastXAlertsPerformance: {
+          kills: 0,
+          deaths: 0,
+          kd: 0,
+          headshots: 0,
+          hsr: 0,
+          teamKills: 0,
+          teamKilled: 0,
+          suicides: 0,
+          factionKills: {
+            vs: {
+              vs: 0,
+              nc: 0,
+              tr: 0,
+              nso: 0,
+            },
+          },
+        },
+        alerts: await new ApiRequest()
+          .get<InstanceCharacterInterface[]>(
+            `${Endpoints.AGGREGATES_INSTANCE_CHARACTER_ALL.replace(
+              '{character}',
+              character.character.id
+            )}?getDetails=true`
+          )
+          .then((alerts) => {
+            return alerts
+          }),
+      }
     },
   },
 })

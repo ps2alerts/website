@@ -92,3 +92,9 @@ export const StatisticsFacilityServerMetricsLeaderboardConfig = {
   'multi-sort': true,
   'must-sort': false,
 }
+
+export const ProfileAlertsConfig = {
+  ...DataTableConfig,
+  'sort-by': ['instance'],
+  'sort-desc': [true],
+}

@@ -1,61 +1,59 @@
 <template>
-  <div class="col-span-12 lg:col-span-4 lg:col-start-5">
-    <div class="flex justify-center items-end gap-4 mb-2">
-      <div class="w-1/3">
-        <img
-          alt="Server Logo"
-          :src="world | worldImage"
-          class="mx-auto mb-2 w-full"
-        />
-        <div class="text-center">
-          <b>{{ world | worldName }}</b
-          ><br />
-          <span class="text-sm label gray">Server</span>
-        </div>
+  <div class="flex justify-center items-end gap-4 mb-2">
+    <div class="w-1/3">
+      <img
+        alt="Server Logo"
+        :src="world | worldImage"
+        class="mx-auto mb-2 w-full"
+      />
+      <div class="text-center">
+        <b>{{ world | worldName }}</b
+        ><br />
+        <span class="text-sm label gray">Server</span>
       </div>
-      <div class="w-1/3">
-        <img
-          alt="Faction Logo"
-          :src="faction | factionImage"
-          class="mx-auto mb-2 w-full"
-        />
-        <div class="text-center" :class="faction | factionTextClass">
-          <b>{{ faction | factionName }}</b
-          ><br />
-          <span class="text-sm label gray">Faction</span>
-        </div>
+    </div>
+    <div class="w-1/3">
+      <img
+        alt="Faction Logo"
+        :src="faction | factionImage"
+        class="mx-auto mb-2 w-full"
+      />
+      <div class="text-center" :class="faction | factionTextClass">
+        <b>{{ faction | factionName }}</b
+        ><br />
+        <span class="text-sm label gray">Faction</span>
       </div>
-      <div class="w-1/3">
+    </div>
+    <div class="w-1/3">
+      <NuxtLink :to="outfitLink" :disabled="!isInOutfit">
+        <img
+          v-if="outfit.id"
+          :alt="faction | factionShortName"
+          :src="outfit.id | outfitImage"
+          class="mx-auto mb-2 w-full"
+          @error="outfitImageAlt"
+        />
+      </NuxtLink>
+      <div class="text-center">
         <NuxtLink :to="outfitLink" :disabled="!isInOutfit">
-          <img
-            v-if="outfit.id"
-            :alt="faction | factionShortName"
-            :src="outfit.id | outfitImage"
-            class="mx-auto mb-2 w-full"
-            @error="outfitImageAlt"
-          />
-        </NuxtLink>
-        <div class="text-center">
-          <NuxtLink :to="outfitLink" :disabled="!isInOutfit">
-            <span class="font-bold">
-              <span v-if="outfit.tag" class="font-mono mr-1"
-                >[{{ outfit.tag }}]</span
-              >{{ outfit.name }}</span
-            ><br />
-            <span class="text-sm label gray mr-2">Outfit</span
-            ><span v-if="isInOutfit" class="label default"
-              ><font-awesome-icon :icon="['fas', 'link']"></font-awesome-icon>
-              Stats</span
-            >
-          </NuxtLink>
-          <a
-            v-if="outfitLogoMissing && isInOutfit"
-            href="https://www.outfit-tracker.com/outfit/edit/37509488620604883"
-            target="_blank"
-            class="text-red-400 text-sm"
-            >Upload your logo!</a
+          <span class="font-bold">
+            <span v-if="outfit.tag" class="font-mono mr-1"
+              >[{{ outfit.tag }}]</span
+            >{{ outfit.name }}</span
+          ><br />
+          <span class="text-sm label gray mr-2">Outfit</span
+          ><span v-if="isInOutfit" class="label default"
+            ><font-awesome-icon :icon="['fas', 'link']"></font-awesome-icon>
+            Stats</span
           >
-        </div>
+        </NuxtLink>
+        <a
+          v-if="outfitLogoMissing && isInOutfit"
+          href="https://www.outfit-tracker.com/outfit/edit/37509488620604883"
+          target="_blank"
+          class="text-red-400 text-sm"
+          >Upload your logo!</a
+        >
       </div>
     </div>
   </div>

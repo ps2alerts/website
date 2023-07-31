@@ -28,6 +28,8 @@ export const Endpoints = {
   AGGREGATES_INSTANCE_CHARACTER: '/aggregates/instance/{instance}/character',
   AGGREGATES_INSTANCE_CHARACTER_SINGLE:
     '/aggregates/instance/{instance}/character/{character}',
+  AGGREGATES_INSTANCE_CHARACTER_ALL:
+    '/aggregates/instance/character/{character}',
   AGGREGATES_INSTANCE_COMBAT_HISTORY:
     '/aggregates/instance/{instance}/combat-history',
   AGGREGATES_INSTANCE_FACILITY: '/aggregates/instance/{instance}/facility',

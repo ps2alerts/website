@@ -90,13 +90,6 @@ export default defineComponent({
         // Higher weight for exact matches
         if (result.character.name.toLowerCase() === searchTermLower) {
           score = 100
-        } else {
-          // Lower weight for partial matches
-          const searchTermRegex = new RegExp(searchTermLower, 'i')
-
-          if (result.character.name.match(searchTermRegex)) {
-            score = 5
-          }
         }
 
         result.matchScore = score
@@ -120,15 +113,6 @@ export default defineComponent({
           result.outfit.name.toLowerCase() === searchTermLower
         ) {
           score = 100
-        } else {
-          // Lower weight for partial matches
-          const searchTermRegex = new RegExp(searchTermLower, 'i')
-
-          if (result.outfit.tag?.match(searchTermRegex)) {
-            score = 20
-          } else if (result.outfit.name.match(searchTermRegex)) {
-            score = 10
-          }
         }
 
         // If there's a space on the end of the string, rank them lower (e.g. 'Dignity of War Tactical ')
