@@ -42,7 +42,7 @@
 <script lang="ts">
 /* eslint-disable import/no-named-as-default-member */
 import { defineComponent } from 'vue'
-import axios from 'axios'
+import axios, { CancelTokenSource } from 'axios'
 import ApiRequest from '~/api-request'
 import SearchResult from '~/components/search/SearchResult.vue'
 import { Endpoints } from '@/constants/Endpoints'
@@ -62,7 +62,7 @@ export default defineComponent({
       error: { message: '' },
       searchTerm: '',
       apiRequest: new ApiRequest(),
-      source: axios.CancelToken.source(),
+      source: axios.CancelToken.source() as CancelTokenSource,
     }
   },
   methods: {
@@ -180,12 +180,14 @@ export default defineComponent({
           this.apiRequest.get(
             Endpoints.SEARCH.replace('{type}', 'characters'),
             { searchTerm: this.searchTerm },
+            // @ts-ignore it's valid yet not valid :shrug:
             this.source
           )
         const outfitPromise: Promise<SearchOutfitInterface[]> =
           this.apiRequest.get(
             Endpoints.SEARCH.replace('{type}', 'outfits'),
             { searchTerm: this.searchTerm },
+            // @ts-ignore it's valid yet not valid :shrug:
             this.source
           )
 
