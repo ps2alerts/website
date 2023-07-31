@@ -7,7 +7,7 @@
       class="bg-tint rounded lg:rounded-bl-none text-base text-center relative"
     >
       <div class="tag section">
-        Search <span class="label red">New in v4.5!</span>
+        Search <span class="label green">New in v4.5!</span>
       </div>
       <div class="p-2">
         <div class="flex items-center">
@@ -19,8 +19,23 @@
             aria-label="Full name"
             @keyup="search"
           />
-          <button class="btn p-0" :disabled="loading" @click="clear">
-            <font-awesome-icon :icon="['fas', 'xmark']"></font-awesome-icon>
+          <button
+            id="clearButton"
+            class="btn"
+            :disabled="loading || !searchTerm"
+            @click="clear"
+          >
+            <font-awesome-icon
+              v-show="!loading"
+              :icon="['fas', 'xmark']"
+              fixed-width
+            ></font-awesome-icon>
+            <font-awesome-icon
+              v-show="loading"
+              :icon="['fas', 'sync']"
+              class="animate-spin"
+              fixed-width
+            ></font-awesome-icon>
           </button>
         </div>
         <div id="results" class="mb-2">
@@ -29,9 +44,6 @@
             :key="result.name"
             :result="result"
           />
-        </div>
-        <div v-show="loading" class="text-center">
-          <i class="fas fa-spinner fa-spin"></i> Loading...
         </div>
         {{ error.message }}
       </div>
@@ -139,13 +151,13 @@ export default defineComponent({
       this.searchTerm = ''
       this.results = []
       this.error = { message: '' }
+      this.loading = false
+      if (this.source) {
+        this.source.cancel('Canceled due to clearing')
+        console.log('Cancelled request due to clearing')
+      }
     },
-    async search(criteria: KeyboardEvent): Promise<void> {
-      const target = criteria.target as HTMLInputElement
-      const searchTerm = target.value
-
-      this.results = []
-
+    async search(): Promise<void> {
       if (this.loading) {
         if (this.source) {
           this.source.cancel('Canceled due to new request')
@@ -153,11 +165,20 @@ export default defineComponent({
         }
       }
 
+      this.loading = false
+
+      // If user deleted everything, reset
+      if (this.searchTerm.length === 0) {
+        this.clear()
+        return
+      }
+
       // If less than 3 chars are entered, don't search and tell the user
       if (this.searchTerm.length < 3) {
         this.error = {
-          message: 'Please enter at least 3 chars.',
+          message: 'Please enter at least 3 characters',
         }
+        this.results = []
         return
       }
 
@@ -170,8 +191,6 @@ export default defineComponent({
 
       // Re-initialize the token
       this.source = axios.CancelToken.source()
-
-      console.log('Searching for', searchTerm)
 
       this.error = { message: '' }
 
@@ -200,6 +219,7 @@ export default defineComponent({
         const outfitResults: SearchOutfitInterface[] = searchResults[1]
 
         if (characterResults.length === 0 && outfitResults.length === 0) {
+          this.results = []
           this.error = { message: 'No results found!' }
           this.loading = false
           return
@@ -236,6 +256,10 @@ export default defineComponent({
   .tag {
     margin: 0;
   }
+}
+
+#clearButton {
+  padding: 0.5rem 0.75rem;
 }
 
 #results {
