@@ -21,12 +21,11 @@
             @time-granularity-changed="updateTimeGranularity"
           />
         </div>
-
-        <line-chart
+        <LineChart
           :chart-data="dataCollection"
-          :options="chartOptions"
-          style="width: 100%; height: 350px"
-        ></line-chart>
+          :chart-options="chartOptions"
+          :styles="{ width: '100%', height: '350px' }"
+        ></LineChart>
       </div>
       <div v-if="!loaded" class="flex justify-center place-items-center h-full">
         <h1 class="mb-4">Loading...</h1>
@@ -38,10 +37,9 @@
 <script lang="ts">
 /* eslint-disable import/no-named-as-default-member */
 import Vue, { PropOptions } from 'vue'
-import { differenceInDays, formatISO } from 'date-fns'
+import { differenceInDays } from 'date-fns'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import { FactionMetricsInterface } from '~/interfaces/FactionMetricsInterface'
-import LineChart from '~/components/LineChart'
 import { DATE_FORMAT_ISO, TIME_GRANULARITY } from '@/constants/Time'
 import { World } from '@/ps2alerts-constants/world'
 import { Bracket } from '@/ps2alerts-constants/bracket'
@@ -64,7 +62,6 @@ export default Vue.extend({
     FilterBracket,
     CountdownSpinner,
     FilterWorld,
-    LineChart,
   },
   props: {
     rawData: {
@@ -99,53 +96,46 @@ export default Vue.extend({
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
-        tooltips: {
-          mode: 'x',
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: '#fff',
+            },
+          },
+          datalabels: {
+            display: false,
+          },
         },
         scales: {
-          xAxes: [
-            {
-              type: 'time',
-              time: {
-                unit: TIME_GRANULARITY.WEEK,
-              },
-              min: formatDateTime(
-                utcDate(new Date('2021-01-04')),
-                DATE_FORMAT_ISO
-              ),
-              max: formatDateTime(utcDate(new Date()), DATE_FORMAT_ISO),
-              ticks: {
-                fontColor: '#fff',
-                source: 'labels',
-              },
-              gridLines: {
-                display: true,
-                color: '#444b52',
-              },
-              scaleLabel: {
-                display: false,
-              },
+          x: {
+            type: 'timeseries',
+            distribution: 'linear',
+            time: {
+              unit: TIME_GRANULARITY.WEEK,
             },
-          ],
-          yAxes: [
-            {
-              ticks: {
-                fontColor: '#fff',
-              },
-              gridLines: {
-                color: '#718096',
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Victories',
-                fontColor: '#fff',
-              },
+            min: formatDateTime(
+              utcDate(new Date('2021-01-04')),
+              DATE_FORMAT_ISO
+            ),
+            max: formatDateTime(utcDate(new Date()), DATE_FORMAT_ISO),
+            ticks: {
+              color: '#fff',
             },
-          ],
-        },
-        legend: {
-          labels: {
-            fontColor: '#fff',
+            grid: {
+              color: '#50565d',
+            },
+          },
+          y: {
+            ticks: {
+              color: '#fff',
+            },
+            grid: {
+              color: '#7b8694',
+            },
           },
         },
       },
@@ -165,10 +155,6 @@ export default Vue.extend({
       this.render()
     },
     selectedTimeOption(): void {
-      console.log(
-        'VictoriesTimeline: Time option changed to',
-        this.selectedTimeOption
-      )
       this.render()
     },
   },
@@ -277,33 +263,30 @@ export default Vue.extend({
       this.worldCounts = worldCounts
     },
     buildCollection() {
-      const times: string[] = []
-      const vsData: number[] = []
-      const ncData: number[] = []
-      const trData: number[] = []
-      const drawData: number[] = []
+      const vsData: { x: string; y: number }[] = []
+      const ncData: { x: string; y: number }[] = []
+      const trData: { x: string; y: number }[] = []
+      const drawData: { x: string; y: number }[] = []
 
       for (const [key, row] of Object.entries(this.totalCounts)) {
-        times.push(formatISO(new Date(key)))
         const rowTyped = row as FactionMetricsInterface
-        vsData.push(rowTyped.vs)
-        ncData.push(rowTyped.nc)
-        trData.push(rowTyped.tr)
-        drawData.push(rowTyped.draws)
+        vsData.push({ x: key, y: rowTyped.vs })
+        ncData.push({ x: key, y: rowTyped.nc })
+        trData.push({ x: key, y: rowTyped.tr })
+        drawData.push({ x: key, y: rowTyped.draws })
       }
 
       const commonDatasetOptions = {
-        pointBorderWidth: 2,
-        pointHoverBorderWidth: 4,
-        lineTension: 0,
+        pointBorderWidth: 3,
+        pointHoverBorderWidth: 5,
       }
 
       this.dataCollection = {
-        labels: times,
         datasets: [
           {
             ...commonDatasetOptions,
             label: 'VS',
+            backgroundColor: '#6B46C1',
             borderColor: '#6B46C1',
             data: vsData,
             pointStyle: 'circle',
@@ -311,28 +294,25 @@ export default Vue.extend({
           {
             ...commonDatasetOptions,
             label: 'TR',
+            backgroundColor: '#9b2c2c',
             borderColor: '#9b2c2c',
             data: trData,
             pointStyle: 'rect',
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
           },
           {
             ...commonDatasetOptions,
             label: 'NC',
+            backgroundColor: '#2b6cb0',
             borderColor: '#2b6cb0',
             data: ncData,
-            pointStyle: 'triangle',
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
+            pointStyle: 'rectRot',
           },
           {
             ...commonDatasetOptions,
             label: 'Draws',
+            backgroundColor: '#4a5568',
             borderColor: '#4a5568',
             data: drawData,
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
           },
         ],
       }
@@ -342,18 +322,11 @@ export default Vue.extend({
       const objectKeys = Object.keys(this.totalCounts)
 
       // For some reason Object.keys puts the result in reverse of actuality...
-      const firstObject = objectKeys[objectKeys.length - 1]
-      const firstObjectDate = formatISO(new Date(firstObject))
-
-      const lastObject = objectKeys[0]
-      const lastObjectDate = formatISO(new Date(lastObject))
-      this.chartOptions.scales.xAxes[0].min = firstObjectDate
-      this.chartOptions.scales.xAxes[0].max = lastObjectDate
+      this.chartOptions.scales.x.min = objectKeys[0]
+      this.chartOptions.scales.x.max = objectKeys[objectKeys.length - 1]
 
       // Change unit based off data type
-      this.chartOptions.scales.xAxes[0].time.unit = this.selectedTimeOption
-
-      // console.log('chartOptions', this.chartOptions.scales.xAxes[0])
+      this.chartOptions.scales.x.time.unit = this.selectedTimeOption
     },
     updateWorld(world: World) {
       this.selectedWorld = world

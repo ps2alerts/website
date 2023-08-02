@@ -116,6 +116,7 @@ export default {
     { src: '@/filters/WorldImage', mode: 'client' },
     { src: '@/filters/ZoneName', mode: 'client' },
     { src: '@/plugins/NumeralFilter', mode: 'client' },
+    { src: '@/plugins/chart.js', mode: 'client' },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
