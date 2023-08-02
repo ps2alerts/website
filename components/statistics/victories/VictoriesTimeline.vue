@@ -54,6 +54,7 @@ import {
   getStartOfYear,
   utcDate,
 } from '~/utilities/TimeHelper'
+import { commonChartOptions } from '~/constants/CommonChartOptions'
 
 export default Vue.extend({
   name: 'VictoriesTimeline',
@@ -94,24 +95,10 @@ export default Vue.extend({
       maxDate: new Date(),
       dataCollection: {},
       chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: {
-          intersect: false,
-          mode: 'index',
-        },
-        plugins: {
-          legend: {
-            labels: {
-              color: '#fff',
-            },
-          },
-          datalabels: {
-            display: false,
-          },
-        },
+        ...commonChartOptions.root,
         scales: {
           x: {
+            ...commonChartOptions.scales,
             type: 'timeseries',
             distribution: 'linear',
             time: {
@@ -122,17 +109,9 @@ export default Vue.extend({
               DATE_FORMAT_ISO
             ),
             max: formatDateTime(utcDate(new Date()), DATE_FORMAT_ISO),
-            ticks: {
-              color: '#fff',
-            },
-            grid: {
-              color: '#50565d',
-            },
           },
           y: {
-            ticks: {
-              color: '#fff',
-            },
+            ...commonChartOptions.scales,
             grid: {
               color: '#7b8694',
             },
@@ -276,42 +255,27 @@ export default Vue.extend({
         drawData.push({ x: key, y: rowTyped.draws })
       }
 
-      const commonDatasetOptions = {
-        pointBorderWidth: 3,
-        pointHoverBorderWidth: 5,
-      }
-
       this.dataCollection = {
         datasets: [
           {
-            ...commonDatasetOptions,
-            label: 'VS',
-            backgroundColor: '#6B46C1',
-            borderColor: '#6B46C1',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.vs,
             data: vsData,
-            pointStyle: 'circle',
           },
           {
-            ...commonDatasetOptions,
-            label: 'TR',
-            backgroundColor: '#9b2c2c',
-            borderColor: '#9b2c2c',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.tr,
             data: trData,
-            pointStyle: 'rect',
           },
           {
-            ...commonDatasetOptions,
-            label: 'NC',
-            backgroundColor: '#2b6cb0',
-            borderColor: '#2b6cb0',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nc,
             data: ncData,
-            pointStyle: 'rectRot',
           },
           {
-            ...commonDatasetOptions,
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nsoDraws,
             label: 'Draws',
-            backgroundColor: '#4a5568',
-            borderColor: '#4a5568',
             data: drawData,
           },
         ],

@@ -58,8 +58,8 @@
         <line-chart
           v-if="data.length"
           :chart-data="dataCollection"
-          :options="popNumberChartOptions"
-          style="height: 400px"
+          :chart-options="popNumberChartOptions"
+          :styles="{ height: '400px' }"
           class="w-full"
         ></line-chart>
         <div
@@ -78,13 +78,13 @@
         </div>
       </div>
       <div v-show="mode === 'average'" v-if="!isOutfitWar" class="text-center">
-        <line-chart
+        <LineChart
           v-if="avgData.length"
           :chart-data="dataAvgCollection"
-          :options="activityChartOptions"
-          style="height: 400px"
+          :chart-options="popActivityChartOptions"
+          :styles="{ height: '400px' }"
           class="w-full"
-        ></line-chart>
+        ></LineChart>
         <div
           v-else
           style="height: 400px"
@@ -106,7 +106,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import LineChart from '../LineChart.js'
 import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '@/constants/Endpoints'
@@ -117,48 +116,29 @@ import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 import { TIME_FORMAT_SHORT } from '~/constants/Time'
 import { formatDateTime } from '~/utilities/TimeHelper'
 import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
+import { commonChartOptions } from '~/constants/CommonChartOptions'
 
-const commonChartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  tooltips: {
-    mode: 'x',
-  },
+const popChartOptions = {
+  ...commonChartOptions.root,
   scales: {
-    xAxes: [
-      {
-        ticks: {
-          fontColor: '#fff',
-        },
-        gridLines: {
-          display: false,
-        },
-        scaleLabel: {
-          display: true,
-          labelString: 'Time',
-          fontColor: '#fff',
-        },
+    x: {
+      ...commonChartOptions.scales,
+      title: {
+        display: true,
+        text: 'Time (in your timezone)',
+        color: '#fff',
       },
-    ],
-    yAxes: [
-      {
-        ticks: {
-          fontColor: '#fff',
-        },
-        gridLines: {
-          color: '#718096',
-        },
-        scaleLabel: {
-          display: true,
-          labelString: 'Players',
-          fontColor: '#fff',
-        },
+    },
+    y: {
+      ...commonChartOptions.scales,
+      grid: {
+        color: '#7b8694',
       },
-    ],
-  },
-  legend: {
-    labels: {
-      fontColor: '#fff',
+      title: {
+        display: true,
+        text: 'Players',
+        color: '#fff',
+      },
     },
   },
 }
@@ -181,7 +161,6 @@ export default Vue.extend({
   name: 'AlertPopulations',
   components: {
     CountdownSpinner,
-    LineChart,
   },
   props: {
     alert: {
@@ -202,58 +181,61 @@ export default Vue.extend({
     return {
       dataCollection: {},
       dataAvgCollection: {},
-      popNumberChartOptions: commonChartOptions,
-      activityChartOptions: {
-        ...commonChartOptions,
-        annotation: {
-          annotations: [
-            {
-              ...annotationCommon,
-              id: 'activityDead',
-              value: 1,
-              label: {
-                ...labelCommon,
-                content: 'Dead (>48)',
-                yAdjust: -13,
+      popNumberChartOptions: popChartOptions,
+      popActivityChartOptions: {
+        ...popChartOptions,
+        plugins: {
+          ...popChartOptions.plugins,
+          annotation: {
+            annotations: [
+              {
+                ...annotationCommon,
+                id: 'activityDead',
+                value: 1,
+                label: {
+                  ...labelCommon,
+                  content: 'Dead (>48)',
+                  yAdjust: -13,
+                },
               },
-            },
-            {
-              ...annotationCommon,
-              id: 'activityLow',
-              value: 48,
-              label: {
-                ...labelCommon,
-                content: 'Low (48)',
+              {
+                ...annotationCommon,
+                id: 'activityLow',
+                value: 48,
+                label: {
+                  ...labelCommon,
+                  content: 'Low (48)',
+                },
               },
-            },
-            {
-              ...annotationCommon,
-              id: 'activityMed',
-              value: 96,
-              label: {
-                ...labelCommon,
-                content: 'Med (96)',
+              {
+                ...annotationCommon,
+                id: 'activityMed',
+                value: 96,
+                label: {
+                  ...labelCommon,
+                  content: 'Med (96)',
+                },
               },
-            },
-            {
-              ...annotationCommon,
-              id: 'activityHigh',
-              value: 144,
-              label: {
-                ...labelCommon,
-                content: 'High (144)',
+              {
+                ...annotationCommon,
+                id: 'activityHigh',
+                value: 144,
+                label: {
+                  ...labelCommon,
+                  content: 'High (144)',
+                },
               },
-            },
-            {
-              ...annotationCommon,
-              id: 'activityPrime',
-              value: 192,
-              label: {
-                ...labelCommon,
-                content: 'Prime (192)',
+              {
+                ...annotationCommon,
+                id: 'activityPrime',
+                value: 192,
+                label: {
+                  ...labelCommon,
+                  content: 'Prime (192)',
+                },
               },
-            },
-          ],
+            ],
+          },
         },
       },
       error: null,
@@ -388,53 +370,38 @@ export default Vue.extend({
       })
 
       const datasets = []
-      const pointBorderWidth = 2
-      const pointHoverBorderWidth = 4
 
       if (this.isOutfitWar) {
         datasets.push(
           {
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.tr,
             label: this.outfitwar.outfitwars?.teams?.red?.tag ?? 'Red Team',
-            borderColor: '#9b2c2c',
             data: trData,
-            pointStyle: 'rect',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           },
           {
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nc,
             label: this.outfitwar.outfitwars?.teams?.blue?.tag ?? 'Blue Team',
-            borderColor: '#2b6cb0',
             data: ncData,
-            pointStyle: 'triangle',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           }
         )
       } else {
         datasets.push(
           {
-            label: 'VS',
-            borderColor: '#6B46C1',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.vs,
             data: vsData,
-            pointStyle: 'circle',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           },
           {
-            label: 'TR',
-            borderColor: '#9b2c2c',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.tr,
             data: trData,
-            pointStyle: 'rect',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           },
           {
-            label: 'NC',
-            borderColor: '#2b6cb0',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nc,
             data: ncData,
-            pointStyle: 'triangle',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           }
         )
       }
@@ -446,12 +413,10 @@ export default Vue.extend({
 
       if (!avg && !this.isOutfitWar) {
         collection.datasets.push({
+          ...commonChartOptions.datasets,
+          ...commonChartOptions.datasets.nsoDraws,
           label: 'NSO',
-          borderColor: '#4a5568',
           data: nsoData,
-          pointStyle: 'circle',
-          pointBorderWidth,
-          pointHoverBorderWidth,
         })
       }
 

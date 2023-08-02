@@ -164,6 +164,7 @@ export default {
         'faChartArea',
         'faCheck',
         'faCodeFork',
+        'faFaceFrown',
         'faEquals',
         'faExchangeAlt',
         'faExclamation',
