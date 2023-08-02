@@ -54,18 +54,17 @@
           Headshots
         </button>
       </div>
-      <line-chart
+      <LineChart
         :chart-data="dataCollection"
-        :options="chartOptions"
-        style="width: 100%; height: 400px"
-      ></line-chart>
+        :chart-options="chartOptions"
+        :styles="{ width: '100%', height: '400px' }"
+      ></LineChart>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import LineChart from '../LineChart.js'
 import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '@/constants/Endpoints'
@@ -76,12 +75,13 @@ import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 import { formatDateTime, utcDate } from '~/utilities/TimeHelper'
 import { TIME_FORMAT_SHORT } from '~/constants/Time'
 import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
+import { commonChartOptions } from '~/constants/CommonChartOptions'
+import ucFirst from '~/filters/UcFirst'
 
 export default Vue.extend({
   name: 'AlertPopulations',
   components: {
     CountdownSpinner,
-    LineChart,
   },
   props: {
     alert: {
@@ -102,46 +102,23 @@ export default Vue.extend({
     return {
       dataCollection: {},
       chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        tooltips: {
-          mode: 'x',
-        },
+        ...commonChartOptions.root,
         scales: {
-          xAxes: [
-            {
-              ticks: {
-                fontColor: '#fff',
-              },
-              gridLines: {
-                display: false,
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Time',
-                fontColor: '#fff',
-              },
+          x: {
+            ...commonChartOptions.scales,
+            title: {
+              display: true,
+              text: 'Time',
+              color: '#fff',
             },
-          ],
-          yAxes: [
-            {
-              ticks: {
-                fontColor: '#fff',
-              },
-              gridLines: {
-                color: '#718096',
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Count',
-                fontColor: '#fff',
-              },
+          },
+          y: {
+            ...commonChartOptions.scales,
+            title: {
+              display: true,
+              text: 'Kills',
+              color: '#fff',
             },
-          ],
-        },
-        legend: {
-          labels: {
-            fontColor: '#fff',
           },
         },
       },
@@ -355,7 +332,7 @@ export default Vue.extend({
     updateMode(mode: string) {
       this.mode = mode
       const options = this.chartOptions
-      options.scales.yAxes[0].scaleLabel.labelString = mode.toUpperCase()
+      options.scales.y.title.text = ucFirst(mode)
       this.chartOptions = options
     },
   },
