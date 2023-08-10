@@ -10,6 +10,15 @@
       <h1 class="mb-4">Loading...</h1>
     </div>
     <div v-if="loaded" class="text-center">
+      <div class="flex m-auto w-60 justify-center">
+        <span>Range size: </span>
+        <input
+          v-model="bucketSize"
+          class="w-16 ml-2 appearance-none border border-solid border-transparent text-white py-1 px-2 leading-tight bg-tint-light rounded-sm focus:bg-gray-500 focus:outline-none focus:border-white"
+          type="number"
+          aria-label="Bucket size"
+        />
+      </div>
       <BarChart
         :chart-data="dataCollection"
         :chart-options="chartOptions"
@@ -31,14 +40,6 @@ import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfit
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
 import { commonChartOptions } from '~/constants/CommonChartOptions'
-
-interface BattlerankDistributionDataInterface {
-  // Faction
-  [k: number]: {
-    // Per BR ranking
-    [k: number]: number
-  }
-}
 
 export default Vue.extend({
   name: 'AlertBattleranks',
@@ -72,6 +73,7 @@ export default Vue.extend({
       data: [] as InstanceCharacterAggregateResponseInterface[],
       dataCollection: {},
       dataCollectionFactions: {},
+      bucketSize: 5,
       chartOptions: {
         ...commonChartOptions.root,
         scales: {
@@ -146,6 +148,12 @@ export default Vue.extend({
         this.pull()
       }
     },
+    bucketSize(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        localStorage.setItem('alertBRBucketSize', newVal.toString())
+        this.buildCollection()
+      }
+    },
   },
   beforeDestroy() {
     this.reset()
@@ -165,6 +173,7 @@ export default Vue.extend({
     },
     init(): void {
       this.pull()
+      this.bucketSize = this.getBucketSizePref()
 
       if (this.alert.state === Ps2AlertsEventState.STARTED) {
         this.updateCountdownInterval = window.setInterval(() => {
@@ -203,39 +212,50 @@ export default Vue.extend({
         })
     },
     buildCollection() {
-      const factionBattlerankData: BattlerankDistributionDataInterface = {}
-      let maxBR: number = 0
+      if (this.bucketSize < 1) {
+        return
+      }
 
-      // Ensure all factions have at least zero
-      ;[
+      const factionBattlerankData: Map<
+        Faction,
+        Map<number, { x: number; y: number }>
+      > = new Map()
+      const factionBattlerankDataChart: Map<
+        Faction,
+        { x: number; y: number }[]
+      > = new Map()
+      const battleRanksRaw: Set<number> = new Set()
+      const factions = [
         Faction.VANU_SOVEREIGNTY,
         Faction.NEW_CONGLOMERATE,
         Faction.TERRAN_REPUBLIC,
         Faction.NS_OPERATIVES,
-      ].forEach((faction) => {
-        factionBattlerankData[faction] = []
+      ]
+      const maxBR = 420
+
+      // Ensure all factions have a map set and all battle ranks are in the set
+      factions.forEach((faction) => {
+        factionBattlerankData.set(faction, new Map())
+        factionBattlerankDataChart.set(faction, [])
+        for (let i = 0; i <= maxBR; i++) {
+          const br = this.roundToNearestSize(i, this.bucketSize)
+          factionBattlerankData.get(faction)?.set(br, { x: br, y: 0 })
+          battleRanksRaw.add(br)
+        }
       })
 
+      // Here, we are going to create buckets of the data in the scale of 1-10, 11-20 etc. This is to reduce the number of bars the graph has to render from potentially 420 max to 42.
+      // This has huge benefits on mobile and it still makes quite a lot of sense statistically.
       this.data.forEach(
         (character: InstanceCharacterAggregateResponseInterface) => {
           const faction = character.character.faction
-          const battlerank = character.character.adjustedBattleRank
-
-          ;[
-            Faction.VANU_SOVEREIGNTY,
-            Faction.NEW_CONGLOMERATE,
-            Faction.TERRAN_REPUBLIC,
-            Faction.NS_OPERATIVES,
-          ].forEach((faction) => {
-            if (!factionBattlerankData[faction][battlerank]) {
-              factionBattlerankData[faction][battlerank] = 0
-            }
-          })
 
           // Excludes "World" players
           if (faction === 0) {
             return
           }
+
+          let team: Faction
 
           if (
             this.isOutfitWar &&
@@ -243,28 +263,62 @@ export default Vue.extend({
             this.outfitwar.outfitwars.teams.blue &&
             character.character.outfit
           ) {
-            factionBattlerankData[
-              character.character.outfit.id ===
-              this.outfitwar.outfitwars.teams.red.id
-                ? Faction.TERRAN_REPUBLIC
-                : Faction.NEW_CONGLOMERATE
-            ][battlerank]++
+            team = this.outfitwar.outfitwars.teams.red.id
+              ? Faction.TERRAN_REPUBLIC
+              : Faction.NEW_CONGLOMERATE
           } else {
-            factionBattlerankData[faction][battlerank]++
+            team = faction
           }
 
-          if (Number.isSafeInteger(battlerank)) {
-            maxBR = Math.max(maxBR, battlerank)
+          const battleRankBucket = this.roundToNearestSize(
+            character.character.adjustedBattleRank,
+            this.bucketSize
+          )
+
+          battleRanksRaw.add(battleRankBucket)
+
+          const factionDataMap = factionBattlerankData.get(team) ?? new Map()
+
+          if (!factionDataMap.get(battleRankBucket)) {
+            factionDataMap.set(battleRankBucket, {
+              x: battleRankBucket,
+              y: 0,
+            })
           }
+
+          const bucketValue = factionDataMap.get(battleRankBucket).y
+
+          factionDataMap.set(battleRankBucket, {
+            x: battleRankBucket,
+            y: bucketValue + 1,
+          })
         }
       )
 
-      let limit: number = 121
+      // Sort all of the factionBattlerankDatas by the battlerank labels
+      factions.forEach((faction) => {
+        const factionDataMap = factionBattlerankData.get(faction)
 
-      while (limit < maxBR) {
-        limit += 100
-      }
-      const battleranks: number[] = [...Array(limit).keys()]
+        if (!factionDataMap) {
+          return
+        }
+
+        const sorted = new Map(
+          [...factionDataMap.entries()].sort((a, b) => a[0] - b[0])
+        )
+
+        factionBattlerankData.set(faction, sorted)
+
+        // Convert the map to an array for the graph
+        factionBattlerankDataChart.set(faction, Array.from(sorted.values()))
+      })
+
+      console.log(factionBattlerankDataChart)
+
+      // Sort the battleRanksRaw into an ordered array
+      const battleRanks = Array.from(battleRanksRaw).sort((a, b) => a - b)
+
+      console.log(battleRanks)
 
       const datasets = []
       const border = {
@@ -278,14 +332,14 @@ export default Vue.extend({
             ...commonChartOptions.datasets,
             ...commonChartOptions.datasets.tr,
             label: this.outfitwar.outfitwars?.teams?.red?.tag ?? 'Red Team',
-            data: factionBattlerankData[3],
+            data: factionBattlerankDataChart.get(Faction.TERRAN_REPUBLIC),
             border,
           },
           {
             ...commonChartOptions.datasets,
             ...commonChartOptions.datasets.nc,
             label: this.outfitwar.outfitwars?.teams?.blue?.tag ?? 'Blue Team',
-            data: factionBattlerankData[2],
+            data: factionBattlerankDataChart.get(Faction.NEW_CONGLOMERATE),
             border,
           }
         )
@@ -294,37 +348,50 @@ export default Vue.extend({
           {
             ...commonChartOptions.datasets,
             ...commonChartOptions.datasets.vs,
-            data: factionBattlerankData[1],
+            data: factionBattlerankDataChart.get(Faction.VANU_SOVEREIGNTY),
             border,
           },
           {
             ...commonChartOptions.datasets,
             ...commonChartOptions.datasets.tr,
-            data: factionBattlerankData[3],
+            data: factionBattlerankDataChart.get(Faction.TERRAN_REPUBLIC),
             border,
           },
           {
             ...commonChartOptions.datasets,
             ...commonChartOptions.datasets.nc,
-            data: factionBattlerankData[2],
+            data: factionBattlerankDataChart.get(Faction.NEW_CONGLOMERATE),
             border,
           },
           {
             ...commonChartOptions.datasets,
             ...commonChartOptions.datasets.nsoDraws,
-            data: factionBattlerankData[4],
+            data: factionBattlerankDataChart.get(Faction.NS_OPERATIVES),
             border,
           }
         )
       }
 
       this.dataCollection = {
-        labels: battleranks,
+        labels: battleRanks,
         datasets,
       }
     },
     updateMode(mode: string): void {
       this.mode = mode
+    },
+    getBucketSizePref(): number {
+      const bucketSize = localStorage.getItem('alertBRBucketSize')
+
+      if (!bucketSize) {
+        localStorage.setItem('alertBRBucketSize', '5')
+        return 5
+      }
+
+      return parseInt(bucketSize)
+    },
+    roundToNearestSize(num: number, size: number = 5): number {
+      return Math.floor(num / size) * size
     },
   },
 })
