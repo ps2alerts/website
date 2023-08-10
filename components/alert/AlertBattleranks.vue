@@ -10,18 +10,17 @@
       <h1 class="mb-4">Loading...</h1>
     </div>
     <div v-if="loaded" class="text-center">
-      <bar-chart
+      <BarChart
         :chart-data="dataCollection"
-        :options="chartOptions"
-        style="width: 100%; height: 300px"
-      ></bar-chart>
+        :chart-options="chartOptions"
+        :styles="{ width: '100%', height: '300px' }"
+      ></BarChart>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import BarChart from '../BarChart.js'
 import ApiRequest from '@/api-request'
 import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import { Endpoints } from '@/constants/Endpoints'
@@ -31,6 +30,7 @@ import { Faction } from '@/ps2alerts-constants/faction'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
+import { commonChartOptions } from '~/constants/CommonChartOptions'
 
 interface BattlerankDistributionDataInterface {
   // Faction
@@ -44,7 +44,6 @@ export default Vue.extend({
   name: 'AlertBattleranks',
   components: {
     CountdownSpinner,
-    BarChart,
   },
   props: {
     alert: {
@@ -74,78 +73,59 @@ export default Vue.extend({
       dataCollection: {},
       dataCollectionFactions: {},
       chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        tooltips: {
-          mode: 'x',
-        },
-        annotation: {
-          annotations: [
-            {
-              drawTime: 'afterDatasetsDraw',
-              type: 'line',
-              mode: 'vertical',
-              scaleID: 'x-axis-0',
-              borderColor: 'rgba(255, 0, 0, 0.25)',
-              borderWidth: 2,
-              value: 121,
-              label: {
-                content: 'ASP',
-                enabled: true,
-              },
-            },
-            {
-              drawTime: 'afterDatasetsDraw',
-              type: 'line',
-              mode: 'vertical',
-              scaleID: 'x-axis-0',
-              borderColor: 'rgba(255, 0, 0, 0.25)',
-              borderWidth: 2,
-              value: 221,
-              label: {
-                content: 'ASP2',
-                enabled: true,
-              },
-            },
-          ],
-        },
+        ...commonChartOptions.root,
         scales: {
-          xAxes: [
-            {
-              stacked: true,
-              ticks: {
-                fontColor: '#fff',
-              },
-              gridLines: {
-                display: false,
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'BR',
-                fontColor: '#fff',
-              },
+          x: {
+            ...commonChartOptions.scales,
+            stacked: true,
+            title: {
+              display: true,
+              text: 'BR',
+              color: '#fff',
             },
-          ],
-          yAxes: [
-            {
-              stacked: true,
-              ticks: {
-                fontColor: '#fff',
-              },
-              gridLines: {
-                color: '#718096',
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Players',
-                fontColor: '#fff',
-              },
+          },
+          y: {
+            ...commonChartOptions.scales,
+            grid: {
+              color: '#7b8694',
             },
-          ],
+            stacked: true,
+            title: {
+              display: true,
+              text: 'Players',
+              color: '#fff',
+            },
+          },
         },
-        legend: {
-          labels: {
-            fontColor: '#fff',
+        plugins: {
+          ...commonChartOptions.root.plugins,
+          annotation: {
+            annotations: [
+              {
+                drawTime: 'afterDatasetsDraw',
+                type: 'line',
+                mode: 'vertical',
+                borderColor: 'rgba(255, 0, 0, 0.25)',
+                borderWidth: 2,
+                value: 121,
+                label: {
+                  content: 'ASP',
+                  enabled: true,
+                },
+              },
+              {
+                drawTime: 'afterDatasetsDraw',
+                type: 'line',
+                mode: 'vertical',
+                borderColor: 'rgba(255, 0, 0, 0.25)',
+                borderWidth: 2,
+                value: 221,
+                label: {
+                  content: 'ASP2',
+                  enabled: true,
+                },
+              },
+            ],
           },
         },
       },
@@ -287,49 +267,53 @@ export default Vue.extend({
       const battleranks: number[] = [...Array(limit).keys()]
 
       const datasets = []
-      let borderWidth = 4
+      const border = {
+        width: 8,
+      }
 
       if (this.isOutfitWar) {
-        borderWidth = 8
+        border.width = 8
         datasets.push(
           {
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.tr,
             label: this.outfitwar.outfitwars?.teams?.red?.tag ?? 'Red Team',
-            backgroundColor: '#9b2c2c',
             data: factionBattlerankData[3],
-            borderWidth,
+            border,
           },
           {
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nc,
             label: this.outfitwar.outfitwars?.teams?.blue?.tag ?? 'Blue Team',
-            backgroundColor: '#2b6cb0',
             data: factionBattlerankData[2],
-            borderWidth,
+            border,
           }
         )
       } else {
         datasets.push(
           {
-            label: 'VS',
-            backgroundColor: '#6B46C1',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.vs,
             data: factionBattlerankData[1],
-            borderWidth,
+            border,
           },
           {
-            label: 'TR',
-            backgroundColor: '#9b2c2c',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.tr,
             data: factionBattlerankData[3],
-            borderWidth,
+            border,
           },
           {
-            label: 'NC',
-            backgroundColor: '#2b6cb0',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nc,
             data: factionBattlerankData[2],
-            borderWidth,
+            border,
           },
           {
-            label: 'NSO',
-            backgroundColor: '#64748B',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nsoDraws,
             data: factionBattlerankData[4],
-            borderWidth,
+            border,
           }
         )
       }

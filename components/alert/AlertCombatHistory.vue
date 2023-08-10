@@ -114,6 +114,9 @@ export default Vue.extend({
           },
           y: {
             ...commonChartOptions.scales,
+            grid: {
+              color: '#7b8694',
+            },
             title: {
               display: true,
               text: 'Kills',
@@ -266,60 +269,44 @@ export default Vue.extend({
       }
 
       const datasets = []
-      const pointBorderWidth = 2
-      const pointHoverBorderWidth = 4
 
       if (this.isOutfitWar) {
         datasets.push(
           {
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.tr,
             label: this.outfitwar.outfitwars?.teams?.red?.tag ?? 'Red Team',
-            borderColor: '#9b2c2c',
             data: trData,
-            pointStyle: 'rect',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           },
           {
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nc,
             label: this.outfitwar.outfitwars?.teams?.blue?.tag ?? 'Blue Team',
-            borderColor: '#2b6cb0',
             data: ncData,
-            pointStyle: 'triangle',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           }
         )
       } else {
         datasets.push(
           {
-            label: 'VS',
-            borderColor: '#6B46C1',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.vs,
             data: vsData,
-            pointStyle: 'circle',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           },
           {
-            label: 'TR',
-            borderColor: '#9b2c2c',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.tr,
             data: trData,
-            pointStyle: 'rect',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           },
           {
-            label: 'NC',
-            borderColor: '#2b6cb0',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nc,
             data: ncData,
-            pointStyle: 'triangle',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           },
           {
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nsoDraws,
             label: 'NSO',
-            borderColor: '#4a5568',
             data: nsoData,
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
           }
         )
       }
