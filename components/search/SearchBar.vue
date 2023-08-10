@@ -14,7 +14,7 @@
           <input
             v-model="searchTerm"
             class="mr-2 appearance-none border border-solid border-transparent w-full text-white py-1 px-2 leading-tight bg-tint-light rounded-sm focus:bg-gray-500 focus:outline-none focus:border-white"
-            type="text"
+            type="search"
             placeholder="e.g. DIG, Maelstrome"
             aria-label="Full name"
             @keyup="search"
