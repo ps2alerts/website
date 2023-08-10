@@ -43,6 +43,7 @@
             v-for="result in results"
             :key="result.name"
             :result="result"
+            @pinned="handlePinEvent"
           />
         </div>
         {{ error.message }}
@@ -75,7 +76,17 @@ export default defineComponent({
       searchTerm: '',
       apiRequest: new ApiRequest(),
       source: axios.CancelToken.source() as CancelTokenSource,
+      pinnedCharacters: new Map() as Map<
+        string,
+        SearchResultComponentInterface
+      >,
+      pinnedOutfits: new Map() as Map<string, SearchResultComponentInterface>,
     }
+  },
+  created() {
+    this.loadPinned()
+    this.injectPinned()
+    console.log(this.results)
   },
   methods: {
     parseResults(
@@ -92,6 +103,7 @@ export default defineComponent({
           score = 100
         }
 
+        result.id = result.character.id
         result.matchScore = score
         result.type = 'player'
         result.faction = result.character.faction
@@ -119,6 +131,7 @@ export default defineComponent({
           score = score / 2
         }
 
+        result.id = result.outfit.id
         result.matchScore = score
         result.type = 'outfit'
         result.faction = result.outfit.faction
@@ -140,6 +153,7 @@ export default defineComponent({
     clear() {
       this.searchTerm = ''
       this.results = []
+      this.injectPinned()
       this.error = { message: '' }
       this.loading = false
       if (this.source) {
@@ -169,6 +183,7 @@ export default defineComponent({
           message: 'Please enter at least 3 characters',
         }
         this.results = []
+        this.injectPinned()
         return
       }
 
@@ -210,6 +225,7 @@ export default defineComponent({
 
         if (characterResults.length === 0 && outfitResults.length === 0) {
           this.results = []
+          this.injectPinned()
           this.error = { message: 'No results found!' }
           this.loading = false
           return
@@ -217,6 +233,7 @@ export default defineComponent({
 
         // Parse the results into a SearchResult component friendly format
         this.results = this.parseResults(characterResults, outfitResults)
+        this.injectPinned()
         this.loading = false
       } catch (error) {
         if (!axios.isCancel(error)) {
@@ -226,6 +243,70 @@ export default defineComponent({
           }
         }
       }
+    },
+    handlePinEvent(result: SearchResultComponentInterface): void {
+      result.isPinned = !result.isPinned
+
+      if (result.isPinned) {
+        // Detect the type
+        if (result.type === 'player') {
+          this.pinnedCharacters.set(result.id, result)
+        } else if (result.type === 'outfit') {
+          this.pinnedOutfits.set(result.id, result)
+        }
+      } else {
+        if (result.type === 'player') {
+          this.pinnedCharacters.delete(result.id)
+        } else if (result.type === 'outfit') {
+          this.pinnedOutfits.delete(result.id)
+        }
+
+        // Remove from current result set
+        this.results = this.results.filter((r) => r.id !== result.id)
+      }
+
+      // Update local storage
+      localStorage.setItem(
+        'pinnedCharacters',
+        JSON.stringify(Array.from(this.pinnedCharacters.values()))
+      )
+      localStorage.setItem(
+        'pinnedOutfits',
+        JSON.stringify(Array.from(this.pinnedOutfits.values()))
+      )
+
+      this.injectPinned()
+    },
+    loadPinned(): void {
+      // Load pinned characters and outfits from local storage
+      this.pinnedCharacters = new Map(
+        JSON.parse(localStorage.getItem('pinnedCharacters') || '[]').map(
+          (pinned: SearchResultComponentInterface) => [pinned.id, pinned]
+        )
+      )
+      this.pinnedOutfits = new Map(
+        JSON.parse(localStorage.getItem('pinnedOutfits') || '[]').map(
+          (pinned: SearchResultComponentInterface) => [pinned.id, pinned]
+        )
+      )
+    },
+    injectPinned(): void {
+      // Take the current result set and inject the pinned results right at the top, and remove them from the result set if present
+      const pinnedCharacters = Array.from(this.pinnedCharacters.values())
+      const pinnedOutfits = Array.from(this.pinnedOutfits.values())
+
+      // Remove pinned results from the result set
+      this.results = this.results.filter((result) => {
+        return !(
+          (result.type === 'player' &&
+            pinnedCharacters.find((pinned) => pinned.id === result.id)) ||
+          (result.type === 'outfit' &&
+            pinnedOutfits.find((pinned) => pinned.id === result.id))
+        )
+      })
+
+      // Inject the pinned results at the top
+      this.results = [...pinnedCharacters, ...pinnedOutfits, ...this.results]
     },
   },
 })

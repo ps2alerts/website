@@ -1,9 +1,28 @@
 <template>
   <div
-    class="my-2 py-2 text-center cursor-pointer hover border"
+    class="my-2 py-2 px-4 text-center cursor-pointer hover border relative"
     :class="classes"
     :score="result.matchScore"
   >
+    <font-awesome-icon
+      v-show="result.isPinned || isPinned"
+      :icon="['fas', 'bookmark']"
+      class="text-sm absolute top-1 right-1"
+      @click="pinResult(false)"
+    ></font-awesome-icon>
+    <v-tooltip right>
+      <template #activator="{ on, attrs }">
+        <font-awesome-icon
+          v-show="!result.isPinned && !isPinned"
+          :icon="['far', 'bookmark']"
+          class="text-sm absolute top-1 right-1"
+          v-bind="attrs"
+          @click="pinResult(true)"
+          v-on="on"
+        ></font-awesome-icon>
+      </template>
+      Pin this result so you can find your characters / outfits easily!
+    </v-tooltip>
     <NuxtLink :to="link">
       <p class="m-0">
         <span v-if="result.tag" class="font-mono">[{{ result.tag }}]</span>
@@ -37,6 +56,11 @@ export default defineComponent({
       },
     },
   },
+  data: () => {
+    return {
+      isPinned: false,
+    }
+  },
   computed: {
     characterResult(): SearchCharacterInterface | undefined {
       return this.result.type === 'player'
@@ -68,6 +92,12 @@ export default defineComponent({
           ? FactionBorderClassString(this.result.faction)
           : 'border-gray-300',
       ]
+    },
+  },
+  methods: {
+    pinResult(value: boolean): void {
+      this.isPinned = value
+      this.$emit('pinned', this.result)
     },
   },
 })
