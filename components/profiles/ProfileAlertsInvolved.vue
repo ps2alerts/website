@@ -1,42 +1,62 @@
 <template>
-  <div class="col-span-12 lg:col-span-4 lg:col-start-5">
-    {{ statistics.alerts.length }} Alerts
-
-    <v-data-table
-      class="datatable"
-      item-key="instanceDetails.instanceId"
-      :headers="headers"
-      :items="parsedData"
-      v-bind="tableConfig"
-    >
-      <template #item.instance="{ item }">
-        <NuxtLink
-          :to="`/alert/${item.instanceDetails.instanceId}`"
-          class="text-red-500"
-        >
-          {{ item.instanceDetails.instanceId }}
-        </NuxtLink>
-      </template>
-      <template #item.victor="{ item }">
-        <span
-          v-if="item.victor === player.character.faction"
-          class="label green"
-          >Yes</span
-        >
-        <span v-else class="label">No</span>
-        <span class="label" :class="item.victor | factionShortName">{{
-          item.victor | factionShortName
-        }}</span>
-      </template>
-      <template #item.outfit="{ item }">
-        <NuxtLink :to="`/outfit/${item.outfit.id}`" class="text-red-500">
-          <span v-if="item.outfit.tag" class="font-mono"
-            >[{{ item.outfit.tag }}]</span
+  <div class="col-span-12 grid grid-cols-12">
+    <div class="col-span-12">{{ statistics.alerts.length }} Alerts</div>
+    <div class="col-span-12 md:col-span-4 lg:col-span-2">
+      <v-simple-table dark dense>
+        <thead>
+          <tr class="font-bold border-b border-white">
+            <td>Bracket</td>
+            <td>Count</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(count, bracket) in alertsByBrackets" :key="bracket">
+            <td>
+              {{ bracket | bracketName }}
+            </td>
+            <td>{{ count }}</td>
+          </tr>
+        </tbody>
+      </v-simple-table>
+      <PieChart v-bind="charts.bracketDistributions" />
+    </div>
+    <div class="col-span-12">
+      <v-data-table
+        class="datatable"
+        item-key="instanceDetails.instanceId"
+        :headers="headers"
+        :items="parsedData"
+        v-bind="tableConfig"
+      >
+        <template #item.instance="{ item }">
+          <NuxtLink
+            :to="`/alert/${item.instanceDetails.instanceId}`"
+            class="label gray border"
           >
-          {{ item.outfit.name }}
-        </NuxtLink>
-      </template>
-    </v-data-table>
+            {{ item.instanceDetails.instanceId }}
+          </NuxtLink>
+        </template>
+        <template #item.victor="{ item }">
+          <span
+            v-if="item.victor === player.character.faction"
+            class="label green"
+            >Yes</span
+          >
+          <span v-else class="label">No</span>
+          <span class="label" :class="item.victor | factionShortName">{{
+            item.victor | factionShortName
+          }}</span>
+        </template>
+        <template #item.outfit="{ item }">
+          <NuxtLink :to="`/outfit/${item.outfit.id}`" class="label gray border">
+            <span v-if="item.outfit.tag" class="font-mono"
+              >[{{ item.outfit.tag }}]</span
+            >
+            {{ item.outfit.name }}
+          </NuxtLink>
+        </template>
+      </v-data-table>
+    </div>
   </div>
 </template>
 
@@ -47,11 +67,12 @@ import { ProfileAlertsConfig } from '~/constants/DataTableConfig'
 import { GlobalCharacterAggregateInterface } from '~/ps2alerts-constants/interfaces/api-responses/GlobalCharacterAggregateInterface'
 import { dateTimeFormat } from '~/filters/DateTimeFormat'
 import zoneNameFilter from '~/filters/ZoneName'
-import factionShortName from '~/filters/FactionShortName'
+import { Bracket } from '~/ps2alerts-constants/bracket'
+import bracketName from '~/filters/BracketName'
+import { commonChartOptions } from '~/constants/CommonChartOptions'
 
 export default Vue.extend({
   name: 'ProfileAlertsInvolved',
-  components: {},
   props: {
     statistics: {
       type: Object as () => ProfileMetricsInterface,
@@ -64,8 +85,50 @@ export default Vue.extend({
   },
   data() {
     return {
+      charts: {
+        bracketDistributions: {
+          chartData: {
+            labels: [
+              bracketName(Bracket.DEAD),
+              bracketName(Bracket.LOW),
+              bracketName(Bracket.MEDIUM),
+              bracketName(Bracket.HIGH),
+              bracketName(Bracket.PRIME),
+            ],
+            datasets: [
+              {
+                backgroundColor: [
+                  '#5d2e2e',
+                  '#7e2f2f',
+                  '#ab2a2a',
+                  '#c92020',
+                  '#ff0d00',
+                ],
+                data: [40, 20, 80, 10, 100],
+              },
+            ],
+          },
+          chartOptions: {
+            ...commonChartOptions.root,
+            plugins: {
+              ...commonChartOptions.root.plugins,
+              datalabels: {
+                ...commonChartOptions.root.plugins.datalabels,
+                display: true,
+              },
+            },
+          },
+        },
+      },
       parsedData: {} as any,
       tableConfig: ProfileAlertsConfig,
+      alertsByBrackets: {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+      } as Record<number, number>,
       headers: [
         {
           text: 'ID',
@@ -84,6 +147,12 @@ export default Vue.extend({
           align: 'left',
           sortable: true,
           value: 'cont',
+        },
+        {
+          text: 'Bracket',
+          align: 'left',
+          sortable: true,
+          value: 'bracket',
         },
         {
           text: 'Victor',
@@ -164,12 +233,21 @@ export default Vue.extend({
   },
   computed: {},
   created(): void {
-    this.parsedData = this.parseForTable(this.statistics)
+    this.parsedData = this.parseData(this.statistics)
+    this.charts.bracketDistributions.chartData.datasets[0].data = [
+      this.alertsByBrackets[1],
+      this.alertsByBrackets[2],
+      this.alertsByBrackets[3],
+      this.alertsByBrackets[4],
+      this.alertsByBrackets[5],
+    ]
   },
   methods: {
-    factionShortName,
-    parseForTable(stats: ProfileMetricsInterface): any {
+    parseData(stats: ProfileMetricsInterface): any {
       return stats.alerts.map((alert) => {
+        // Update other stats as part of this loop
+        this.alertsByBrackets[Number(alert.instanceDetails?.bracket) ?? 0] += 1
+
         return {
           ...alert,
           kills: alert.kills ?? 0,
@@ -188,6 +266,7 @@ export default Vue.extend({
             ? zoneNameFilter(alert.instanceDetails.zone)
             : 'Unknown',
           victor: alert.instanceDetails?.result?.victor ?? null,
+          bracket: bracketName(alert.instanceDetails?.bracket ?? '?'),
           outfit: alert.character.outfit,
           // All the brackets
           // 1 is used instead of 0 to prevent division by zero

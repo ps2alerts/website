@@ -14,6 +14,7 @@ export const commonChartOptions = {
       },
       datalabels: {
         display: false,
+        color: '#fff',
       },
     },
   },

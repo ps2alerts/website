@@ -429,6 +429,9 @@ select {
     &:hover {
       @apply bg-gray-500;
     }
+    &.border {
+      @apply border-gray-400
+    }
   }
 
   &.TR {

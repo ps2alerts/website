@@ -28,7 +28,7 @@
         <ProfileCombatMetrics :statistics="statistics" />
       </div>
       <div class="col-span-12 card">
-        <div class="tag section">Alerts Involved</div>
+        <div class="tag section">Alerts Participated</div>
         <ProfileAlertsInvolved :statistics="statistics" :player="player" />
       </div>
     </div>
