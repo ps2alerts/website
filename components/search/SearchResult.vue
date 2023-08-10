@@ -29,7 +29,17 @@
         {{ result.name }}
       </p>
       <p class="text-xs text-gray-400 font-semibold">
-        {{ result.type | ucFirst }} | {{ result.world | worldName }}
+        <font-awesome-icon
+          v-if="result.type === 'player'"
+          :icon="['fas', 'user']"
+        ></font-awesome-icon>
+        <font-awesome-icon
+          v-if="result.type === 'outfit'"
+          :icon="['fas', 'users']"
+        ></font-awesome-icon>
+        {{ result.type | ucFirst }} |
+        <font-awesome-icon :icon="['fas', 'globe']"></font-awesome-icon>
+        {{ result.world | worldName }}
       </p>
     </NuxtLink>
   </div>

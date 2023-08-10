@@ -173,6 +173,7 @@ export default {
         'faFighterJet',
         'faFileVideo',
         'faFlag',
+        'faGlobe',
         'faGun',
         'faHourglass',
         'faInfoCircle',
