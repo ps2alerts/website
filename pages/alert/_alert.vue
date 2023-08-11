@@ -19,31 +19,38 @@
       />
       <AlertFactionVsFaction :alert="alert" />
 
-      <div
-        class="col-span-12 md:col-start-3 md:col-span-8 lg:col-span-6 lg:col-start-4"
-      >
-        <v-tabs v-model="mapsTab" dark fixed-tabs show-arrows class="mt-2">
-          <v-tabs-slider></v-tabs-slider>
-
-          <v-tab href="#map">
-            <font-awesome-icon
-              :icon="['fas', 'map']"
-              class="mr-2"
-            ></font-awesome-icon>
-            Map
-          </v-tab>
-
-          <v-tab
-            v-if="alert.features && alert.features.captureHistory"
-            href="#captureHistory"
+      <div class="col-span-12 mt-2">
+        <div class="flex justify-center">
+          <v-tabs
+            v-model="mapsTab"
+            dark
+            fixed-tabs
+            show-arrows
+            stacked
+            style="max-width: 640px"
           >
-            <font-awesome-icon
-              :icon="['fas', 'hourglass']"
-              class="mr-2"
-            ></font-awesome-icon>
-            Capture History
-          </v-tab>
-        </v-tabs>
+            <v-tabs-slider></v-tabs-slider>
+
+            <v-tab href="#map">
+              <font-awesome-icon
+                :icon="['fas', 'map']"
+                class="mr-2"
+              ></font-awesome-icon>
+              Map
+            </v-tab>
+
+            <v-tab
+              v-if="alert.features && alert.features.captureHistory"
+              href="#captureHistory"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'hourglass']"
+                class="mr-2"
+              ></font-awesome-icon>
+              Capture History
+            </v-tab>
+          </v-tabs>
+        </div>
       </div>
       <div class="col-span-12">
         <v-tabs-items v-model="mapsTab">
