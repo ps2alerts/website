@@ -86,7 +86,6 @@ export default defineComponent({
   created() {
     this.loadPinned()
     this.injectPinned()
-    console.log(this.results)
   },
   methods: {
     parseResults(

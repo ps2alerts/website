@@ -1,7 +1,9 @@
 <template>
   <section class="mb-2">
     <div class="col-span-12 card relative">
-      <div class="tag section">Victory Timeline</div>
+      <div class="tag section">
+        Victory Timeline <span class="label blue"> Improved in v4.5!</span>
+      </div>
       <CountdownSpinner :percent="updateCountdownPercent" update-rate="60000" />
       <div v-if="loaded" class="text-center">
         <div class="grid grid-cols-12 gap-2">

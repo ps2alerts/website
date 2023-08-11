@@ -2,18 +2,21 @@
   <div class="col-span-12 xl:col-span-6 card relative">
     <div class="tag section">
       Population History
-      <v-tooltip bottom>
-        <template #activator="{ on, attrs }">
-          <font-awesome-icon
-            :icon="['fas', 'info-circle']"
-            v-bind="attrs"
-            v-on="on"
-          ></font-awesome-icon>
-        </template>
-        The below chart is based on active players. If a player has died /
-        killed anyone or gained any XP in the last 3 minutes, they are classed
-        as active. This may mean the pops fluctuate between redeploys.
-      </v-tooltip>
+      <span class="label blue">
+        Improved in v4.5!
+        <v-tooltip bottom>
+          <template #activator="{ on, attrs }">
+            <font-awesome-icon
+              :icon="['fas', 'info-circle']"
+              v-bind="attrs"
+              v-on="on"
+            ></font-awesome-icon>
+          </template>
+          Graph was updated to be more readable. Activity levels are explained
+          (unfortunately not visualized yet) and broken down in the (i) tooltip
+          on the Activity Levels tab.
+        </v-tooltip>
+      </span>
     </div>
     <CountdownSpinner
       v-if="alert.state === 1"
@@ -50,7 +53,13 @@
               ></font-awesome-icon>
             </template>
             Shows the calculation for the Activity bracket. All factions must be
-            above the indicated level to achieve it (based on last entry).
+            above the threshold for the alert to achieve the bracket (based on
+            last entry).<br />
+            Prime = 4+ platoons (>192 players)<br />
+            High = 3+ platoons (>144 players)<br />
+            Medium = 2+ platoons (>96 players)<br />
+            Low = 1+ platoons (>48 players)<br />
+            Dead = <48 players
           </v-tooltip>
         </button>
       </div>
@@ -135,9 +144,9 @@ const popChartOptions = {
         color: '#7b8694',
       },
       title: {
+        ...commonChartOptions.scales.title,
         display: true,
         text: 'Players',
-        color: '#fff',
       },
     },
   },

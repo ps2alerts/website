@@ -1,6 +1,8 @@
 <template>
   <div class="col-span-12 card relative text-center">
-    <div class="tag section">Battlerank Distribution</div>
+    <div class="tag section">
+      Battlerank Distribution <span class="label blue"> Improved in v4.5!</span>
+    </div>
     <CountdownSpinner
       v-if="alert.state === 1"
       :percent="updateCountdownPercent"
@@ -313,12 +315,8 @@ export default Vue.extend({
         factionBattlerankDataChart.set(faction, Array.from(sorted.values()))
       })
 
-      console.log(factionBattlerankDataChart)
-
       // Sort the battleRanksRaw into an ordered array
       const battleRanks = Array.from(battleRanksRaw).sort((a, b) => a - b)
-
-      console.log(battleRanks)
 
       const datasets = []
       const border = {
