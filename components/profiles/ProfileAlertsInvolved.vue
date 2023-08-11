@@ -157,7 +157,7 @@ export default Vue.extend({
         {
           text: 'Victor',
           align: 'left',
-          sortable: true,
+          sortable: false,
           value: 'victor',
         },
         {
@@ -169,7 +169,7 @@ export default Vue.extend({
           text: 'BR',
           align: 'middle',
           filterable: false,
-          value: 'character.adjustedBattleRank',
+          value: 'br',
           cellClass: 'text-center',
         },
         {
@@ -272,6 +272,10 @@ export default Vue.extend({
           // 1 is used instead of 0 to prevent division by zero
           kd: ((alert.kills ?? 1) / (alert.deaths ?? 1)).toFixed(2),
           hsr: (((alert.headshots ?? 1) / (alert.kills ?? 1)) * 100).toFixed(2),
+          br:
+            alert.character.adjustedBattleRank ??
+            alert.character.battleRank ??
+            0,
         }
       })
     },

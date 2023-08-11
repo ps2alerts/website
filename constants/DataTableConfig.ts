@@ -98,3 +98,8 @@ export const ProfileAlertsConfig = {
   'sort-by': ['instance'],
   'sort-desc': [true],
 }
+
+export const ProfileAlertsCombatMetricsTableConfig = {
+  ...DataTableConfig,
+  'sort-by': [null],
+}

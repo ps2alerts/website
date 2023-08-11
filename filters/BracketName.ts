@@ -18,7 +18,7 @@ export const bracketName = Vue.filter(
       case Bracket.PRIME:
         return 'Prime'
       case Bracket.TOTAL:
-        return 'Totalled (UNUSED)'
+        return 'Total'
       default:
         return 'UNKNOWN!'
     }

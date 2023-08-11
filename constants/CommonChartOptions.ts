@@ -19,6 +19,11 @@ export const commonChartOptions = {
     },
   },
   scales: {
+    title: {
+      display: false,
+      size: 16,
+      color: '#fff',
+    },
     ticks: {
       color: '#fff',
     },
