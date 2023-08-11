@@ -423,6 +423,10 @@ select {
     }
   }
 
+  &.blue {
+    @apply bg-blue-500;
+  }
+
   &.gray {
     @apply bg-gray-600;
 
@@ -605,8 +609,9 @@ a.hyperlink {
 }
 
 .tag {
-  @apply py-1 px-2 rounded-tl-sm rounded-tr-sm text-xs text-center font-bold;
+  @apply rounded-tl-sm rounded-tr-sm text-sm text-center font-bold;
   margin: -1rem -1rem 1rem;
+  line-height: 2rem;
 
   &.section {
     background-color: rgba(48, 58, 64, 1);
@@ -712,6 +717,7 @@ td.text-middle {
 .theme--dark {
   &.v-tabs > .v-tabs-bar {
     background-color: #9b2c2c !important;
+    text-transform: uppercase !important;
 
     .v-tab--disabled {
       background-color: #000 !important;
