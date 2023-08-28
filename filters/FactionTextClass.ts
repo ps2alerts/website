@@ -12,7 +12,7 @@ const factionTextClass = Vue.filter('factionTextClass', (value: Faction) => {
     case Faction.NS_OPERATIVES:
       return 'text-nso'
     default:
-      return 'text-gray-600'
+      return 'text-gray-400'
   }
 })
 

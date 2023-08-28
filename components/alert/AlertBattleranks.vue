@@ -5,7 +5,7 @@
       <span class="label blue"
         ><InfoTooltip
           text="Improved in v4.5!"
-          tooltip='Battle Ranks have been moved into "Ranges" (e.g. BR 100-105), which is vastly more legible to read than 420 bars! You can adjust the range size below, which will be remembered. Default is 5. The value shown is inclusive of the rank, e.g. BR 100 will land under the 100-105 range.'
+          tooltip='Battle Ranks have been moved into "Ranges" (e.g. BR 100-105), which is vastly more legible to read than 420 bars! You can adjust the range size below, which will be remembered.'
         ></InfoTooltip
       ></span>
     </div>
@@ -18,7 +18,7 @@
       <h1 class="mb-4">Loading...</h1>
     </div>
     <div v-if="loaded" class="text-center">
-      <div class="flex m-auto w-60 justify-center">
+      <div class="flex m-auto justify-center">
         <span>Range size: </span>
         <input
           v-model="bucketSize"
@@ -26,7 +26,18 @@
           type="number"
           aria-label="Bucket size"
         />
+        <button class="btn btn-sm mx-1" @click="updateSize(5)">5</button>
+        <button class="btn btn-sm mx-1" @click="updateSize(10)">10</button>
+        <button class="btn btn-sm mx-1" @click="updateSize(20)">20</button>
       </div>
+      <p class="text-xs text-gray-400 mt-2">
+        Shows the distribution of battle ranks per faction in groups of
+        {{ bucketSize }}. The value shown is inclusive of the rank, e.g. BR 100
+        will land under the 100-109 range. <br />Adjust the range above to your
+        desired size, it will be saved across visits on your device. It is
+        <b>not</b> recommended to use 1, the graph becomes pretty unreadable.
+        Default (and recommended) size is {{ bucketDefault }}.
+      </p>
       <BarChart
         :chart-data="dataCollection"
         :chart-options="chartOptions"
@@ -48,6 +59,8 @@ import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfit
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
 import { commonChartOptions } from '~/constants/CommonChartOptions'
+
+const bucketDefault = 10
 
 export default Vue.extend({
   name: 'AlertBattleranks',
@@ -81,7 +94,8 @@ export default Vue.extend({
       data: [] as InstanceCharacterAggregateResponseInterface[],
       dataCollection: {},
       dataCollectionFactions: {},
-      bucketSize: 5,
+      bucketSize: bucketDefault,
+      bucketDefault,
       chartOptions: {
         ...commonChartOptions.root,
         scales: {
@@ -388,14 +402,18 @@ export default Vue.extend({
       const bucketSize = localStorage.getItem('alertBRBucketSize')
 
       if (!bucketSize) {
-        localStorage.setItem('alertBRBucketSize', '5')
-        return 5
+        localStorage.setItem('alertBRBucketSize', `${bucketDefault.toString()}`)
+        return bucketDefault
       }
 
       return parseInt(bucketSize)
     },
-    roundToNearestSize(num: number, size: number = 5): number {
+    roundToNearestSize(num: number, size: number = bucketDefault): number {
       return Math.floor(num / size) * size
+    },
+    updateSize(bucketSize: number): void {
+      this.bucketSize = bucketSize
+      this.buildCollection()
     },
   },
 })

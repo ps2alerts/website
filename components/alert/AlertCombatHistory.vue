@@ -54,10 +54,13 @@
           Headshots
         </button>
       </div>
+      <p class="text-xs text-gray-400 mt-2">
+        Shows running totals of {{ mode.toLowerCase() }} per faction.
+      </p>
       <LineChart
         :chart-data="dataCollection"
         :chart-options="chartOptions"
-        :styles="{ width: '100%', height: '400px' }"
+        :styles="{ height: '400px' }"
       ></LineChart>
     </div>
   </div>

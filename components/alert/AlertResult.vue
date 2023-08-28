@@ -21,18 +21,13 @@
         <span :class="alert.result.victor | factionTextClass">{{
           victorText
         }}</span>
-        <v-tooltip v-if="alert.result && alert.result.draw" bottom>
-          <template #activator="{ on, attrs }">
-            <font-awesome-icon
-              :icon="['fas', 'info-circle']"
-              v-bind="attrs"
-              v-on="on"
-            ></font-awesome-icon>
-          </template>
-          When alert reaches a draw, the game does a coin flip between the
+        <InfoTooltip
+          v-if="alert.result && alert.result.draw"
+          text=""
+          tooltip="When alert reaches a draw, the game does a coin flip between the
           drawing factions to gain the continent lock bonus. In terms of the
-          metagame, this is a draw.
-        </v-tooltip>
+          metagame, this is a draw."
+        ></InfoTooltip>
       </h2>
     </div>
     <div v-if="alert.state === 1" class="mb-2 text-center text-2xl">
@@ -107,7 +102,6 @@ import factionOrTeamName from '~/filters/FactionOrTeamName'
 import { Team } from '~/ps2alerts-constants/outfitwars/team'
 import Countdown from '~/components/Countdown.vue'
 import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
-import factionTextClass from '~/filters/FactionTextClass'
 
 export default Vue.extend({
   name: 'AlertResult',

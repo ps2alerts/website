@@ -50,6 +50,11 @@
         </button>
       </div>
       <div v-show="mode === 'number'">
+        <p class="text-xs text-gray-400 mt-2">
+          The first 5 data points always have a "lag" while the population
+          calculations "warm up". They are not used to calculate the Activity
+          Level.
+        </p>
         <line-chart
           v-if="data.length"
           :chart-data="dataCollection"
@@ -73,11 +78,16 @@
         </div>
       </div>
       <div v-show="mode === 'average'" v-if="!isOutfitWar" class="text-center">
+        <p class="text-xs text-gray-400 mt-2">
+          Shows the calculation for the Activity bracket. All factions must be
+          above the threshold for the alert to achieve the bracket (based on
+          last entry).
+        </p>
         <LineChart
           v-if="avgData.length"
           :chart-data="dataAvgCollection"
           :chart-options="popActivityChartOptions"
-          :styles="{ height: '400px' }"
+          :styles="{ 'min-height': '400px' }"
           class="w-full"
         ></LineChart>
         <div

@@ -29,6 +29,5 @@ export default Vue.extend({
       default: 'info-circle',
     },
   },
-  data() {},
 })
 </script>
