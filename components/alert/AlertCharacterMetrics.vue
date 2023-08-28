@@ -36,48 +36,71 @@
         </p>
         <p class="my-2 text-sm text-center">
           Key:
+          <span class="label mb-1 gray">
+            <InfoTooltip text="BR" tooltip="Battle Rank"></InfoTooltip>
+          </span>
+          <span class="label mb-1 gray">
+            <InfoTooltip
+              text="Kills"
+              tooltip="Kills inflicted on other factions"
+            >
+            </InfoTooltip>
+          </span>
+          <span class="label mb-1 gray">
+            <InfoTooltip
+              text="Deaths"
+              tooltip="Deaths at the hands of other factions"
+            >
+            </InfoTooltip>
+          </span>
+          <span class="label mb-1 gray">
+            <InfoTooltip text="KD" tooltip="Kills vs Deaths ratio %">
+            </InfoTooltip>
+          </span>
+          <span class="label mb-1 gray">
+            <InfoTooltip text="HS" tooltip="Headshots"> </InfoTooltip>
+          </span>
           <span class="label mb-1 gray"
-            ><b>BR</b><InfoTooltip message="Battle Rank"></InfoTooltip
-          ></span>
-          <span class="label mb-1 gray"
-            ><b>KD</b
-            ><InfoTooltip message="Kills vs Deaths ratio %"></InfoTooltip
-          ></span>
-          <span class="label mb-1 gray"
-            ><b>HS</b><InfoTooltip message="Headshots"></InfoTooltip
-          ></span>
-          <span class="label mb-1 gray"
-            ><b>HSR%</b
-            ><InfoTooltip message="Headshots vs kills ratio %"></InfoTooltip
-          ></span>
-          <span class="label mb-1 gray"
-            ><b>TKs</b><InfoTooltip message="Teamkills"></InfoTooltip
-          ></span>
-          <span class="label mb-1 gray"
-            ><InfoTooltip message="TKed by same faction"></InfoTooltip
-          ></span>
-          <span class="label mb-1 gray"
-            ><b>Sui</b><InfoTooltip message="Suicides"></InfoTooltip
-          ></span>
-          <span class="label mb-1 gray"
-            ><b>Time Played</b
             ><InfoTooltip
-              message="Amount of time played from the start of the alert until it's end. Logoffs are not counted to prevent inflating the stats"
-            ></InfoTooltip
-          ></span>
-          <span class="label mb-1 gray"
-            ><b>KPM</b><InfoTooltip message="Kills per minute"></InfoTooltip
-          ></span>
-          <span class="label mb-1 gray"><b>DPM</b> = Deaths Per Minute</span>
-          <span class="label mb-1 gray"
-            ><b>HSPM</b> = Head Shots Per Minute</span
-          >
-          <span class="label mb-1 gray"
-            ><b>TKPM</b> = Team Kills Per Minute</span
-          >
-          <span class="label mb-1 gray"
-            ><b>SuiPM</b> = Suicides Per Minute</span
-          >
+              text="HSR%"
+              tooltip="Headshots vs kills ratio %"
+            ></InfoTooltip>
+          </span>
+          <span class="label mb-1 gray">
+            <InfoTooltip text="TKs" tooltip="Teamkills"></InfoTooltip>
+          </span>
+          <span class="label mb-1 gray">
+            <InfoTooltip text="TKed" tooltip="TKed by same faction">
+            </InfoTooltip>
+          </span>
+          <span class="label mb-1 gray">
+            <InfoTooltip text="Sui" tooltip="Suicides"> </InfoTooltip>
+          </span>
+          <span class="label mb-1 gray">
+            <InfoTooltip
+              text="Time Played"
+              tooltip="Amount of time played from the start of the alert until it's end. Logoffs are not counted to prevent inflating the stats"
+            >
+            </InfoTooltip>
+          </span>
+          <span class="label mb-1 gray">
+            <InfoTooltip text="KPM" tooltip="Kills per minute"></InfoTooltip>
+          </span>
+          <span class="label mb-1 gray">
+            <InfoTooltip text="DPM" tooltip="Deaths per minute"></InfoTooltip>
+          </span>
+          <span class="label mb-1 gray">
+            <InfoTooltip text="HSPM" tooltip="Headshots per minute">
+            </InfoTooltip>
+          </span>
+          <span class="label mb-1 gray">
+            <InfoTooltip text="TKPM" tooltip="Team kills per minute">
+            </InfoTooltip>
+          </span>
+          <span class="label mb-1 gray">
+            <InfoTooltip text="SuiPM" tooltip="Suicides per minute">
+            </InfoTooltip>
+          </span>
         </p>
         <div class="mb-2">
           <input

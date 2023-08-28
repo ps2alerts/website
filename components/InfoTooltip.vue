@@ -1,13 +1,12 @@
 <template>
   <v-tooltip bottom>
     <template #activator="{ on, attrs }">
-      <font-awesome-icon
-        :icon="['fas', 'info-circle']"
-        v-bind="attrs"
-        v-on="on"
-      ></font-awesome-icon>
+      <span v-bind="attrs" v-on="on">
+        {{ text }}
+        <font-awesome-icon :icon="['fas', icon]"></font-awesome-icon>
+      </span>
     </template>
-    {{ message }}
+    {{ tooltip }}
   </v-tooltip>
 </template>
 <script lang="ts">
@@ -17,13 +16,17 @@ export default Vue.extend({
   name: 'InfoTooltip',
   components: {},
   props: {
-    direction: {
-      type: String,
-      default: 'bottom',
-    },
-    message: {
+    tooltip: {
       type: String,
       default: 'Foo',
+    },
+    text: {
+      type: String,
+      default: '',
+    },
+    icon: {
+      type: String,
+      default: 'info-circle',
     },
   },
   data() {},

@@ -12,70 +12,79 @@
       >
       </v-data-table>
       <div class="text-sm text-center mt-1">
+        [avg] = Average per alert across the
+        <InfoTooltip
+          :class="['text-red-500']"
+          text="bracket"
+          tooltip="Alerts are bracketed based on their population per faction. Prime = 5 platoons a side, High = 4, Medium = 3, Low = 2, Dead = <1"
+        ></InfoTooltip
+        ><br />
         Key:
-        <span class="label gray mb-1"
-          >Kills [avg]
+        <span class="label gray mb-1">
           <InfoTooltip
-            message="Total kills within the bracket with [average] across number of bracket alerts"
+            text="Kills [avg]"
+            tooltip="Total kills within the bracket with [average] across number of bracket alerts"
           ></InfoTooltip>
         </span>
-        <span class="label gray mb-1"
-          >Deaths [avg]
+        <span class="label gray mb-1">
           <InfoTooltip
-            message="Total deaths within the bracket with [average] across number of bracket alerts"
+            text="Deaths [avg]"
+            tooltip="Total deaths within the bracket with [average] across number of bracket alerts"
           ></InfoTooltip>
         </span>
-        <span class="label gray mb-1"
-          >KD
+        <span class="label gray mb-1">
           <InfoTooltip
-            message="Kills divided by deaths within the bracket"
+            text="KD"
+            tooltip="Kills divided by deaths within the bracket"
           ></InfoTooltip>
         </span>
-        <span class="label gray mb-1"
-          >Headshots [avg]
+        <span class="label gray mb-1">
           <InfoTooltip
-            message="Total headshots within the bracket with [average] across number of bracket alerts"
+            text="Headshots [avg]"
+            tooltip="Total headshots within the bracket with [average] across number of bracket alerts"
           ></InfoTooltip>
         </span>
-        <span class="label gray mb-1"
-          >HSR%
+        <span class="label gray mb-1">
           <InfoTooltip
-            message="Headshots divided by kills within the bracket"
+            text="HSR%"
+            tooltip="Headshots divided by kills within the bracket"
           ></InfoTooltip>
         </span>
-        <span class="label gray mb-1"
-          >TKs [avg]
+        <span class="label gray mb-1">
           <InfoTooltip
-            message="Total team kills within the bracket with [average] across number of bracket alerts"
+            text="TKs [avg]"
+            tooltip="Total team kills within the bracket with [average] across number of bracket alerts"
           ></InfoTooltip>
         </span>
-        <span class="label gray mb-1"
-          >TK%
+        <span class="label gray mb-1">
           <InfoTooltip
-            message="Team kills divided by kills within the bracket"
+            text="TK%"
+            tooltip="Team kills divided by kills within the bracket"
           ></InfoTooltip>
         </span>
-        <span class="label gray mb-1"
-          >TKed [avg]
+        <span class="label gray mb-1">
           <InfoTooltip
-            message="Total times killed by teammates within the bracket with [average] across number of bracket alerts"
+            text="TKed [avg]"
+            tooltip="Total times killed by teammates within the bracket with [average] across number of bracket alerts"
           ></InfoTooltip>
         </span>
-        <span class="label gray mb-1"
-          >TKed%
+        <span class="label gray mb-1">
           <InfoTooltip
-            message="Times killed by teammates divided by deaths within the bracket"
+            text="TKed%"
+            tooltip="Times killed by teammates divided by deaths within the bracket"
           ></InfoTooltip>
         </span>
-        <span class="label gray mb-1"
-          >Suicides [avg]
+        <span class="label gray mb-1">
           <InfoTooltip
-            message="Total suicides within the bracket with [average] across number of bracket alerts"
+            text="Sui [avg]"
+            tooltip="Total suicides within the bracket with [average] across number of bracket alerts"
           ></InfoTooltip>
         </span>
-        <span class="label gray mb-1"
-          >Sui%
-          <InfoTooltip message="Suicides vs deaths"></InfoTooltip>
+        <span class="label gray mb-1">
+          <InfoTooltip
+            text="Sui%"
+            tooltip="Suicides vs deaths within the bracket"
+          ></InfoTooltip>
         </span>
       </div>
     </div>
