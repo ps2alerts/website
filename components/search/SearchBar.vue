@@ -7,7 +7,13 @@
       class="bg-tint rounded lg:rounded-bl-none text-base text-center relative"
     >
       <div class="tag section">
-        Search <span class="label green">New in v4.5!</span>
+        Search
+        <span class="label green"
+          ><InfoTooltip
+            text="New in v4.5!"
+            tooltip='You are now able to search for your Character and Outfit! You can "Pin" (top right of the result) up to 5 results to easily search yourself again, which will be saved to your device.'
+          ></InfoTooltip>
+        </span>
       </div>
       <div class="p-2">
         <div class="flex items-center">

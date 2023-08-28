@@ -3,19 +3,12 @@
     <div class="tag section">
       Population History
       <span class="label blue">
-        Improved in v4.5!
-        <v-tooltip bottom>
-          <template #activator="{ on, attrs }">
-            <font-awesome-icon
-              :icon="['fas', 'info-circle']"
-              v-bind="attrs"
-              v-on="on"
-            ></font-awesome-icon>
-          </template>
-          Graph was updated to be more readable. Activity levels are explained
-          (unfortunately not visualized yet) and broken down in the (i) tooltip
-          on the Activity Levels tab.
-        </v-tooltip>
+        <InfoTooltip
+          text="Improved in v4.5!"
+          tooltip="Graph was updated to be more readable. Activity levels are explained
+          (unfortunately thresholds not visualized yet) and broken down in the (i) tooltip
+          on the Activity Levels tab."
+        ></InfoTooltip>
       </span>
     </div>
     <CountdownSpinner
@@ -43,24 +36,17 @@
           @click="updateMode('average')"
         >
           <font-awesome-icon fixed-width :icon="['fas', 'exchange-alt']" />
-          Activity Level
-          <v-tooltip bottom>
-            <template #activator="{ on, attrs }">
-              <font-awesome-icon
-                :icon="['fas', 'info-circle']"
-                v-bind="attrs"
-                v-on="on"
-              ></font-awesome-icon>
-            </template>
-            Shows the calculation for the Activity bracket. All factions must be
+          <InfoTooltip
+            text="Activity Level"
+            tooltip="Shows the calculation for the Activity bracket. All factions must be
             above the threshold for the alert to achieve the bracket (based on
             last entry).<br />
             Prime = 4+ platoons (>192 players)<br />
             High = 3+ platoons (>144 players)<br />
             Medium = 2+ platoons (>96 players)<br />
             Low = 1+ platoons (>48 players)<br />
-            Dead = <48 players
-          </v-tooltip>
+            Dead = <48 players"
+          ></InfoTooltip>
         </button>
       </div>
       <div v-show="mode === 'number'">

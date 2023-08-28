@@ -16,7 +16,12 @@
         <InfoTooltip
           :class="['text-red-500']"
           text="bracket"
-          tooltip="Alerts are bracketed based on their population per faction. Prime = 5 platoons a side, High = 4, Medium = 3, Low = 2, Dead = <1"
+          tooltip="Alerts are bracketed based on their population per faction.<br>
+            Prime = 4+ platoons (>192 players)<br />
+            High = 3+ platoons (>144 players)<br />
+            Medium = 2+ platoons (>96 players)<br />
+            Low = 1+ platoons (>48 players)<br />
+            Dead = <48 players"
         ></InfoTooltip
         ><br />
         Key:
