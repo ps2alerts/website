@@ -29,7 +29,7 @@
       </div>
       <div class="col-span-12 card">
         <div class="tag section">Alert Statistics</div>
-        <ProfileAlertsInvolved :statistics="statistics" :player="player" />
+        <ProfileAlertMetrics :statistics="statistics" :player="player" />
       </div>
     </div>
   </section>
@@ -41,7 +41,7 @@ import ApiRequest from '~/api-request'
 import { Endpoints } from '~/constants/Endpoints'
 import { GlobalCharacterAggregateInterface } from '~/ps2alerts-constants/interfaces/api-responses/GlobalCharacterAggregateInterface'
 import factionTextClass from '~/filters/FactionTextClass'
-import ProfileAlertsInvolved from '~/components/profiles/ProfileAlertsInvolved.vue'
+import ProfileAlertMetrics from '~/components/profiles/ProfileAlertMetrics.vue'
 import ProfileLogos from '~/components/profiles/ProfileLogos.vue'
 import ProfileCombatMetrics from '~/components/profiles/ProfileCombatMetrics.vue'
 import {
@@ -55,7 +55,7 @@ import { Bracket, ps2alertsBracketArray } from '~/ps2alerts-constants/bracket'
 export default Vue.extend({
   name: 'Player',
   components: {
-    ProfileAlertsInvolved,
+    ProfileAlertMetrics,
     ProfileLogos,
     ProfileCombatMetrics,
   },

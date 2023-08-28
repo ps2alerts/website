@@ -425,6 +425,13 @@ select {
 
   &.blue {
     @apply bg-blue-500;
+
+    &:hover {
+      @apply bg-blue-400;
+    }
+    &.border {
+      @apply border-blue-400
+    }
   }
 
   &.gray {

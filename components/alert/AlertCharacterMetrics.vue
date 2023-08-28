@@ -29,23 +29,45 @@
             player. "Time Played" represents the time used for XPM calculations.
           </p>
         </div>
-        <p class="text-gray-400 text-sm mb-2 text-center">
+        <p class="text-gray-400 text-xs mb-2 text-center">
           BR, ASP and Outfit Membership info is updated once every 24 hours
           (upon your next play session). Any players above BR 120 have ASPed
-          (320 max).
+          (420 max).
         </p>
         <p class="my-2 text-sm text-center">
           Key:
-          <span class="label mb-1 gray"><b>BR</b> = Battle Rank</span>
-          <span class="label mb-1 gray"><b>KD</b> = Kill / Death Ratio</span>
-          <span class="label mb-1 gray"><b>HS</b> = Head Shots</span>
-          <span class="label mb-1 gray"><b>HSR%</b> = Head Shot Ratio</span>
-          <span class="label mb-1 gray"><b>TKs</b> = Team Kills</span>
           <span class="label mb-1 gray"
-            ><b>TKed</b> = Team killed by same faction</span
-          >
-          <span class="label mb-1 gray"><b>Sui</b> = Suicides</span>
-          <span class="label mb-1 gray"><b>KPM</b> = Kills Per Minute</span>
+            ><b>BR</b><InfoTooltip message="Battle Rank"></InfoTooltip
+          ></span>
+          <span class="label mb-1 gray"
+            ><b>KD</b
+            ><InfoTooltip message="Kills vs Deaths ratio %"></InfoTooltip
+          ></span>
+          <span class="label mb-1 gray"
+            ><b>HS</b><InfoTooltip message="Headshots"></InfoTooltip
+          ></span>
+          <span class="label mb-1 gray"
+            ><b>HSR%</b
+            ><InfoTooltip message="Headshots vs kills ratio %"></InfoTooltip
+          ></span>
+          <span class="label mb-1 gray"
+            ><b>TKs</b><InfoTooltip message="Teamkills"></InfoTooltip
+          ></span>
+          <span class="label mb-1 gray"
+            ><InfoTooltip message="TKed by same faction"></InfoTooltip
+          ></span>
+          <span class="label mb-1 gray"
+            ><b>Sui</b><InfoTooltip message="Suicides"></InfoTooltip
+          ></span>
+          <span class="label mb-1 gray"
+            ><b>Time Played</b
+            ><InfoTooltip
+              message="Amount of time played from the start of the alert until it's end. Logoffs are not counted to prevent inflating the stats"
+            ></InfoTooltip
+          ></span>
+          <span class="label mb-1 gray"
+            ><b>KPM</b><InfoTooltip message="Kills per minute"></InfoTooltip
+          ></span>
           <span class="label mb-1 gray"><b>DPM</b> = Deaths Per Minute</span>
           <span class="label mb-1 gray"
             ><b>HSPM</b> = Head Shots Per Minute</span

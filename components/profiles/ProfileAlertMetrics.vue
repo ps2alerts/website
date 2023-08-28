@@ -72,7 +72,7 @@ import bracketName from '~/filters/BracketName'
 import { commonChartOptions } from '~/constants/CommonChartOptions'
 
 export default Vue.extend({
-  name: 'ProfileAlertsInvolved',
+  name: 'ProfileAlertMetrics',
   props: {
     statistics: {
       type: Object as () => ProfileMetricsInterface,
