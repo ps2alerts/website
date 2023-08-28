@@ -1,7 +1,13 @@
 <template>
   <div class="col-span-12 card relative text-center">
     <div class="tag section">
-      Battlerank Distribution <span class="label blue"> Improved in v4.5!</span>
+      Battle Rank Distribution
+      <span class="label blue"
+        ><InfoTooltip
+          text="Improved in v4.5!"
+          tooltip='Battle Ranks have been moved into "Ranges" (e.g. BR 100-105), which is vastly more legible to read than 420 bars! You can adjust the range size below, which will be remembered. Default is 5. The value shown is inclusive of the rank, e.g. BR 100 will land under the 100-105 range.'
+        ></InfoTooltip
+      ></span>
     </div>
     <CountdownSpinner
       v-if="alert.state === 1"
