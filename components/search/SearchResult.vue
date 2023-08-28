@@ -1,6 +1,6 @@
 <template>
   <div
-    class="my-2 py-2 px-4 text-center cursor-pointer hover border relative"
+    class="my-2 py-2 px-4 last:mb-0 text-center cursor-pointer hover border relative"
     :class="classes"
     :score="result.matchScore"
   >
