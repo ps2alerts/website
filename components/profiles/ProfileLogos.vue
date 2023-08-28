@@ -42,7 +42,7 @@
             >{{ outfit.name }}</span
           ><br />
           <span class="text-sm label gray mr-2">Outfit</span
-          ><span v-if="isInOutfit" class="label default"
+          ><span v-if="isInOutfit" class="label blue border"
             ><font-awesome-icon :icon="['fas', 'link']"></font-awesome-icon>
             Stats</span
           >
