@@ -1,16 +1,83 @@
 <template>
   <div v-if="loaded" class="grid grid-cols-12">
     <div class="col-span-12">
-      Kills Deaths etc
-
       <v-data-table
         class="datatable"
         item-key="title"
         :headers="headers"
         :items="parsedData"
         v-bind="tableConfig"
+        disable-pagination
+        hide-default-footer
       >
       </v-data-table>
+      <div class="text-sm text-center mt-1">
+        Key:
+        <span class="label gray mb-1"
+          >Kills [avg]
+          <InfoTooltip
+            message="Total kills within the bracket with [average] across number of bracket alerts"
+          ></InfoTooltip>
+        </span>
+        <span class="label gray mb-1"
+          >Deaths [avg]
+          <InfoTooltip
+            message="Total deaths within the bracket with [average] across number of bracket alerts"
+          ></InfoTooltip>
+        </span>
+        <span class="label gray mb-1"
+          >KD
+          <InfoTooltip
+            message="Kills divided by deaths within the bracket"
+          ></InfoTooltip>
+        </span>
+        <span class="label gray mb-1"
+          >Headshots [avg]
+          <InfoTooltip
+            message="Total headshots within the bracket with [average] across number of bracket alerts"
+          ></InfoTooltip>
+        </span>
+        <span class="label gray mb-1"
+          >HSR%
+          <InfoTooltip
+            message="Headshots divided by kills within the bracket"
+          ></InfoTooltip>
+        </span>
+        <span class="label gray mb-1"
+          >TKs [avg]
+          <InfoTooltip
+            message="Total team kills within the bracket with [average] across number of bracket alerts"
+          ></InfoTooltip>
+        </span>
+        <span class="label gray mb-1"
+          >TK%
+          <InfoTooltip
+            message="Team kills divided by kills within the bracket"
+          ></InfoTooltip>
+        </span>
+        <span class="label gray mb-1"
+          >TKed [avg]
+          <InfoTooltip
+            message="Total times killed by teammates within the bracket with [average] across number of bracket alerts"
+          ></InfoTooltip>
+        </span>
+        <span class="label gray mb-1"
+          >TKed%
+          <InfoTooltip
+            message="Times killed by teammates divided by deaths within the bracket"
+          ></InfoTooltip>
+        </span>
+        <span class="label gray mb-1"
+          >Suicides [avg]
+          <InfoTooltip
+            message="Total suicides within the bracket with [average] across number of bracket alerts"
+          ></InfoTooltip>
+        </span>
+        <span class="label gray mb-1"
+          >Sui%
+          <InfoTooltip message="Suicides vs deaths"></InfoTooltip>
+        </span>
+      </div>
     </div>
     <div class="col-span-12 md:col-span-6 lg:col-span-8">Table of weapons</div>
     <div class="col-span-12">Table of vehicles</div>
