@@ -6,7 +6,7 @@
         <font-awesome-icon :icon="['fas', icon]"></font-awesome-icon>
       </span>
     </template>
-    {{ tooltip }}
+    <span v-html="tooltip"></span>
   </v-tooltip>
 </template>
 <script lang="ts">
