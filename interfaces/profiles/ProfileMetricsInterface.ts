@@ -12,9 +12,13 @@ export interface ProfileCommonMetricsInterface {
   tkr: string // Calculated
   tkedr: string // Calculated
   suir: string // Calculated
+  kpm: string // Calculated
+  dpm: string // Calculated
+  xpmBracketCount?: number
   bracket: string
   bracketCount: number
   // factionKills: PS2AlertsFactionKillDataInterface
+  [key: string]: any
 }
 
 export interface BracketedProfileCommonMetricsInterface {

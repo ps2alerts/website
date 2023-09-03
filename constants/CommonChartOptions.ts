@@ -58,5 +58,11 @@ export const commonChartOptions = {
       borderColor: '#4a5568',
       pointStyle: 'circle',
     },
+    neutral: {
+      label: 'STAT',
+      backgroundColor: '#12d383',
+      borderColor: '#12d383',
+      pointStyle: 'circle',
+    },
   },
 }

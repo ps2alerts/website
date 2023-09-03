@@ -27,6 +27,12 @@
         <div class="tag section">Combat Stats</div>
         <ProfileCombatMetrics :statistics="statistics" :player="player" />
       </div>
+      <div class="col-span-12 card relative">
+        <div class="tag section">Bracketed Combat stat history</div>
+        <ProfileCombatMetricsGraph
+          :statistics="statistics"
+        ></ProfileCombatMetricsGraph>
+      </div>
       <div class="col-span-12 card">
         <div class="tag section">Alert Statistics</div>
         <ProfileAlertMetrics :statistics="statistics" :player="player" />
@@ -65,6 +71,9 @@ export default Vue.extend({
       player: {} as GlobalCharacterAggregateInterface,
       statistics: {} as ProfileMetricsInterface,
       outfitLogoMissing: false,
+      bracketXpmCountMap: new Map<Bracket, number>(),
+      kpmBracketMap: new Map<Bracket, number>(),
+      dpmBracketMap: new Map<Bracket, number>(),
     }
   },
   computed: {
@@ -84,6 +93,63 @@ export default Vue.extend({
       await this.pull(characterId)
     },
 
+    async pull(characterId: string): Promise<void> {
+      await new ApiRequest()
+        .get<GlobalCharacterAggregateInterface>(
+          Endpoints.AGGREGATES_GLOBAL_CHARACTER_SINGLE.replace(
+            '{character}',
+            characterId
+          )
+        )
+        .then((character) => {
+          this.player = character
+        })
+
+      const aggregateRequests: Promise<GlobalCharacterAggregateInterface>[] = []
+
+      // For each bracket, create a promise and add it to the array to pull all data for the player in one go
+      const brackets = ps2alertsBracketArray.filter((bracket) => {
+        return bracket !== Bracket.UNKNOWN
+      })
+
+      brackets.forEach((bracket) => {
+        aggregateRequests.push(
+          new ApiRequest()
+            .get<GlobalCharacterAggregateInterface>(
+              `${Endpoints.AGGREGATES_GLOBAL_CHARACTER_SINGLE.replace(
+                '{character}',
+                characterId
+              )}?bracket=${bracket}`
+            )
+            .then((character) => {
+              return character
+            })
+        )
+      })
+
+      // We have to do this magic to handle when an aggregate may return a 404 if a player hasn't played in say a dead alert yet.
+      const safePromise = (
+        promise: Promise<GlobalCharacterAggregateInterface>
+      ) => {
+        return promise.catch((error) => {
+          console.log('error', error)
+          return null
+        })
+      }
+
+      const bracketResults = await Promise.all(
+        aggregateRequests.map((p) => safePromise(p))
+      ).then((results) => {
+        return results
+      })
+
+      this.statistics = await this.createMetrics(this.player, bracketResults)
+
+      console.log('statistics', this.statistics)
+
+      this.loaded = true
+    },
+
     parseAggregateAverages(
       bracketData: GlobalCharacterAggregateInterface | null,
       bracketCount: number
@@ -91,6 +157,15 @@ export default Vue.extend({
       if (!bracketData) {
         return null
       }
+
+      // We have already hydrated the totals for KPM/DPM, now here we calculate the averages for the bracket
+      const kpmRaw = this.kpmBracketMap.get(bracketData.bracket) || 0
+      const dpmRaw = this.dpmBracketMap.get(bracketData.bracket) || 0
+      const xpmBracketCount =
+        this.bracketXpmCountMap.get(bracketData.bracket) || 0
+      const kpm = (kpmRaw / xpmBracketCount).toFixed(2)
+      const dpm = (dpmRaw / xpmBracketCount).toFixed(2)
+
       return {
         kills: ((bracketData.kills ?? 0) / bracketCount).toFixed(2),
         deaths: ((bracketData.deaths ?? 0) / bracketCount).toFixed(2),
@@ -115,6 +190,8 @@ export default Vue.extend({
           ((bracketData.suicides ?? 0) / (bracketData.deaths ?? 0)) *
           100
         ).toFixed(2),
+        kpm,
+        dpm,
         bracket: `Avg (${BracketName(bracketData.bracket)})`,
         bracketCount,
       }
@@ -128,6 +205,22 @@ export default Vue.extend({
         return null
       }
 
+      // We have already hydrated the totals for KPM/DPM, now here we calculate the averages for the bracket
+      const kpmRaw = this.kpmBracketMap.get(bracketData.bracket) || 0
+      const dpmRaw = this.dpmBracketMap.get(bracketData.bracket) || 0
+      const xpmBracketCount =
+        this.bracketXpmCountMap.get(bracketData.bracket) || 0
+      const kpm = (kpmRaw / xpmBracketCount).toFixed(2)
+      const dpm = (dpmRaw / xpmBracketCount).toFixed(2)
+
+      if (bracketData.bracket === Bracket.TOTAL) {
+        console.log(
+          'XPM Maps',
+          this.kpmBracketMap,
+          this.dpmBracketMap,
+          this.bracketXpmCountMap
+        )
+      }
       return {
         kills: `${bracketData.kills ?? 0} [${bracketAverageData?.kills ?? 0}]`,
         deaths: `${bracketData.deaths ?? 0} [${
@@ -162,67 +255,12 @@ export default Vue.extend({
           ((bracketData.suicides ?? 0) / (bracketData.deaths ?? 0)) *
           100
         ).toFixed(2),
+        kpm,
+        dpm,
+        xpmBracketCount,
         bracket: BracketName(bracketData.bracket),
         bracketCount,
       }
-    },
-    async pull(characterId: string): Promise<void> {
-      await new ApiRequest()
-        .get<GlobalCharacterAggregateInterface>(
-          Endpoints.AGGREGATES_GLOBAL_CHARACTER_SINGLE.replace(
-            '{character}',
-            characterId
-          )
-        )
-        .then((character) => {
-          this.player = character
-        })
-
-      console.log('player', this.player)
-
-      const aggregateRequests: Promise<GlobalCharacterAggregateInterface>[] = []
-
-      // For each bracket, create a promise and add it to the array to pull all data for the player in one go
-      const brackets = ps2alertsBracketArray.filter((bracket) => {
-        return bracket !== Bracket.UNKNOWN
-      })
-      brackets.forEach((bracket) => {
-        aggregateRequests.push(
-          new ApiRequest()
-            .get<GlobalCharacterAggregateInterface>(
-              `${Endpoints.AGGREGATES_GLOBAL_CHARACTER_SINGLE.replace(
-                '{character}',
-                characterId
-              )}?bracket=${bracket}`
-            )
-            .then((character) => {
-              return character
-            })
-        )
-      })
-
-      // We have to do this magic to handle when an aggregate may return a 404 if a player hasn't played in say a dead alert yet.
-      const safePromise = (
-        promise: Promise<GlobalCharacterAggregateInterface>
-      ) => {
-        return promise.catch((error) => {
-          console.log('error', error)
-          return null
-        })
-      }
-
-      const bracketResults = await Promise.all(
-        aggregateRequests.map((p) => safePromise(p))
-      ).then((results) => {
-        return results
-      })
-
-      console.log('bracketResults', bracketResults)
-
-      this.statistics = await this.createMetrics(this.player, bracketResults)
-
-      console.log('this.statistics', this.statistics)
-      this.loaded = true
     },
     async createMetrics(
       character: GlobalCharacterAggregateInterface,
@@ -248,24 +286,63 @@ export default Vue.extend({
         prime: 0,
       }
 
+      const totalXpms = (
+        alert: InstanceCharacterInterface,
+        isTotal = false
+      ) => {
+        // XPMs are partially available
+        if (!alert.xPerMinutes) {
+          return
+        }
+
+        let bracket = alert.instanceDetails?.bracket || Bracket.UNKNOWN
+        if (isTotal) {
+          bracket = Bracket.TOTAL
+        }
+
+        // We're using a special map here to hold the count of alerts with XPM metrics, cos it would be very low otherwise if divided by total number of alerts with no XPMs.
+        const bracketXpmCount = (this.bracketXpmCountMap.get(bracket) || 0) + 1
+        this.bracketXpmCountMap.set(bracket, bracketXpmCount)
+
+        // First get the total of the metrics per alert
+        const kpm = this.kpmBracketMap.get(bracket) || 0
+        const newKpm = kpm + alert.xPerMinutes?.killsPerMinute ?? 0
+        this.kpmBracketMap.set(bracket, newKpm)
+
+        const dpm = this.dpmBracketMap.get(bracket) || 0
+        const newDpm = dpm + alert.xPerMinutes?.deathsPerMinute ?? 0
+        this.dpmBracketMap.set(bracket, newDpm)
+
+        // We do the division later once all the alerts have been totalled up
+      }
+
       // Loop through all the alerts and get the counts out of them
+      // At the same time, calculate the KPM and DPM metrics and store it as a map to inject into the bracket data
+      // Saves us having to loop through all the alerts twice which is quite expensive
       alerts.forEach((alert) => {
         alertCounts.total++
+        totalXpms(alert, true)
+
         switch (alert.instanceDetails?.bracket) {
           case Bracket.DEAD:
             alertCounts.dead++
+            totalXpms(alert)
             break
           case Bracket.LOW:
             alertCounts.low++
+            totalXpms(alert)
             break
           case Bracket.MEDIUM:
             alertCounts.medium++
+            totalXpms(alert)
             break
           case Bracket.HIGH:
             alertCounts.high++
+            totalXpms(alert)
             break
           case Bracket.PRIME:
             alertCounts.prime++
+            totalXpms(alert)
             break
         }
       })

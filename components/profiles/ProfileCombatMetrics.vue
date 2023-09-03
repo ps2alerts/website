@@ -24,6 +24,11 @@
             Dead = <48 players"
         ></InfoTooltip
         ><br />
+        <span class="text-sm text-gray-400"
+          >* Only counts alerts with XPM metrics available. Number of XPM alerts
+          in the bracket is in (#)</span
+        >
+        <br />
         Key:
         <span class="label gray mb-1">
           <InfoTooltip
@@ -91,10 +96,20 @@
             tooltip="Suicides vs deaths within the bracket"
           ></InfoTooltip>
         </span>
+        <span class="label gray mb-1">
+          <InfoTooltip
+            text="[KPM]"
+            tooltip="Average Kills Per Minute within the bracket. Only counts alerts with XPM metrics available."
+          ></InfoTooltip>
+        </span>
+        <span class="label gray mb-1">
+          <InfoTooltip
+            text="[DPM]"
+            tooltip="Average Deaths Per Minute within the bracket. Only counts alerts with XPM metrics available."
+          ></InfoTooltip>
+        </span>
       </div>
     </div>
-    <div class="col-span-12 md:col-span-6 lg:col-span-8">Table of weapons</div>
-    <div class="col-span-12">Table of vehicles</div>
   </div>
 </template>
 
@@ -210,6 +225,20 @@ export default Vue.extend({
           value: 'suir',
           cellClass: 'text-center',
         },
+        {
+          text: '[KPM] (#)*',
+          align: 'middle',
+          filterable: false,
+          value: 'kpm',
+          cellClass: 'text-center',
+        },
+        {
+          text: '[DPM] (#)*',
+          align: 'middle',
+          filterable: false,
+          value: 'dpm',
+          cellClass: 'text-center',
+        },
       ],
     }
   },
@@ -224,13 +253,24 @@ export default Vue.extend({
     ): (ProfileCommonMetricsInterface | null)[] {
       const returnArray: (ProfileCommonMetricsInterface | null)[] = []
 
+      const transformXPMs = (bracket: ProfileCommonMetricsInterface | null) => {
+        if (!bracket) {
+          return null
+        }
+        return {
+          ...bracket,
+          kpm: `${bracket?.kpm} (${bracket?.xpmBracketCount})`,
+          dpm: `${bracket?.dpm} (${bracket?.xpmBracketCount})`,
+        }
+      }
+
       returnArray.push(
-        data.brackets[0],
-        data.brackets[5],
-        data.brackets[4],
-        data.brackets[3],
-        data.brackets[2],
-        data.brackets[1]
+        transformXPMs(data.brackets[0]),
+        transformXPMs(data.brackets[5]),
+        transformXPMs(data.brackets[4]),
+        transformXPMs(data.brackets[3]),
+        transformXPMs(data.brackets[2]),
+        transformXPMs(data.brackets[1])
       )
       return returnArray
     },
