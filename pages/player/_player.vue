@@ -23,6 +23,12 @@
           />
         </div>
       </div>
+      <div
+        class="col-span-12 flex justify-center sticky z-50"
+        style="top: 0.5rem"
+      >
+        <ProfileDaysFilter></ProfileDaysFilter>
+      </div>
       <div class="col-span-12 card">
         <div class="tag section">Combat Stats</div>
         <ProfileCombatMetrics :statistics="statistics" :player="player" />
@@ -50,6 +56,7 @@ import factionTextClass from '~/filters/FactionTextClass'
 import ProfileAlertMetrics from '~/components/profiles/ProfileAlertMetrics.vue'
 import ProfileLogos from '~/components/profiles/ProfileLogos.vue'
 import ProfileCombatMetrics from '~/components/profiles/ProfileCombatMetrics.vue'
+import ProfileDaysFilter from '~/components/profiles/ProfileDaysFilter.vue'
 import {
   ProfileCommonMetricsInterface,
   ProfileMetricsInterface,
@@ -64,6 +71,7 @@ export default Vue.extend({
     ProfileAlertMetrics,
     ProfileLogos,
     ProfileCombatMetrics,
+    ProfileDaysFilter,
   },
   data() {
     return {
@@ -297,6 +305,7 @@ export default Vue.extend({
 
         let bracket = alert.instanceDetails?.bracket || Bracket.UNKNOWN
         if (isTotal) {
+          // @ts-ignore It's trying to assign a value of 0 which TS doesn't like, but it is a valid bracket, so bugger off TS no-one likes you.
           bracket = Bracket.TOTAL
         }
 
