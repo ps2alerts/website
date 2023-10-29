@@ -19,31 +19,38 @@
       />
       <AlertFactionVsFaction :alert="alert" />
 
-      <div
-        class="col-span-12 md:col-start-3 md:col-span-8 lg:col-span-6 lg:col-start-4"
-      >
-        <v-tabs v-model="mapsTab" dark fixed-tabs show-arrows class="mt-2">
-          <v-tabs-slider></v-tabs-slider>
-
-          <v-tab href="#map">
-            <font-awesome-icon
-              :icon="['fas', 'map']"
-              class="mr-2"
-            ></font-awesome-icon>
-            Map
-          </v-tab>
-
-          <v-tab
-            v-if="alert.features && alert.features.captureHistory"
-            href="#captureHistory"
+      <div class="col-span-12 mt-2">
+        <div class="flex justify-center">
+          <v-tabs
+            v-model="mapsTab"
+            dark
+            fixed-tabs
+            show-arrows
+            stacked
+            style="max-width: 640px"
           >
-            <font-awesome-icon
-              :icon="['fas', 'hourglass']"
-              class="mr-2"
-            ></font-awesome-icon>
-            Capture History
-          </v-tab>
-        </v-tabs>
+            <v-tabs-slider></v-tabs-slider>
+
+            <v-tab href="#map">
+              <font-awesome-icon
+                :icon="['fas', 'map']"
+                class="mr-2"
+              ></font-awesome-icon>
+              Map
+            </v-tab>
+
+            <v-tab
+              v-if="alert.features && alert.features.captureHistory"
+              href="#captureHistory"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'hourglass']"
+                class="mr-2"
+              ></font-awesome-icon>
+              Capture History
+            </v-tab>
+          </v-tabs>
+        </div>
       </div>
       <div class="col-span-12">
         <v-tabs-items v-model="mapsTab">
@@ -142,23 +149,23 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { InstanceTerritoryControlResponseInterface } from '@/interfaces/InstanceTerritoryControlResponseInterface'
-import ApiRequest from '@/api-request'
-import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
-import { CensusEndpoints, Endpoints } from '@/constants/Endpoints'
-import AlertResult from '@/components/alert/AlertResult.vue'
-import AlertDetails from '@/components/alert/AlertDetails.vue'
-import AlertFactionCombatMetrics from '@/components/alert/AlertFactionCombatMetrics.vue'
-import AlertFactionVsFaction from '@/components/alert/AlertFactionVsFaction.vue'
-import AlertMap from '@/components/alert/AlertMap.vue'
-import AlertCharacterMetrics from '@/components/alert/AlertCharacterMetrics.vue'
-import AlertOutfitMetrics from '@/components/alert/AlertOutfitMetrics.vue'
-import AlertWeaponMetrics from '@/components/alert/AlertWeaponMetrics.vue'
-import AlertVehicleMetrics from '@/components/alert/AlertVehicleMetrics.vue'
-import AlertVehicleMatrix from '@/components/alert/AlertVehicleMatrix.vue'
-import AlertPopulations from '@/components/alert/AlertPopulations.vue'
-import AlertClassMetrics from '@/components/alert/AlertLoadoutMetrics.vue'
-import AlertCombatHistory from '@/components/alert/AlertCombatHistory.vue'
+import { InstanceTerritoryControlResponseInterface } from '~/interfaces/InstanceTerritoryControlResponseInterface'
+import ApiRequest from '~/api-request'
+import { Ps2AlertsEventState } from '~/ps2alerts-constants/ps2AlertsEventState'
+import { CensusEndpoints, Endpoints } from '~/constants/Endpoints'
+import AlertResult from '~/components/alert/AlertResult.vue'
+import AlertDetails from '~/components/alert/AlertDetails.vue'
+import AlertFactionCombatMetrics from '~/components/alert/AlertFactionCombatMetrics.vue'
+import AlertFactionVsFaction from '~/components/alert/AlertFactionVsFaction.vue'
+import AlertMap from '~/components/alert/AlertMap.vue'
+import AlertCharacterMetrics from '~/components/alert/AlertCharacterMetrics.vue'
+import AlertOutfitMetrics from '~/components/alert/AlertOutfitMetrics.vue'
+import AlertWeaponMetrics from '~/components/alert/AlertWeaponMetrics.vue'
+import AlertVehicleMetrics from '~/components/alert/AlertVehicleMetrics.vue'
+import AlertVehicleMatrix from '~/components/alert/AlertVehicleMatrix.vue'
+import AlertPopulations from '~/components/alert/AlertPopulations.vue'
+import AlertClassMetrics from '~/components/alert/AlertLoadoutMetrics.vue'
+import AlertCombatHistory from '~/components/alert/AlertCombatHistory.vue'
 import AlertBattleranks from '~/components/alert/AlertBattleranks.vue'
 import { InstanceFacilityControlAggregateResponseInterface } from '~/interfaces/aggregates/instance/InstanceFacilityControlAggregateResponseInterface'
 import facilityTypeName from '~/filters/FacilityTypeName'

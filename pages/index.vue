@@ -6,8 +6,7 @@
         <h1 class="text-title">Statistics</h1>
         <p class="mb-2 text-lg">
           Data collected since <b>4th January 2021 02:00 UTC</b> unless
-          otherwise stated.<br />Data is updated every 15 minutes except
-          victories (instant).
+          otherwise stated.<br />Data is updated every 15 minutes.
         </p>
       </div>
     </div>

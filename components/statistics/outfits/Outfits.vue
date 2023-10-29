@@ -2,8 +2,7 @@
   <section class="mb-4">
     <h1 class="text-3xl text-center mb-2">Outfit Statistics</h1>
     <p class="text-center mb-4">
-      Shows the top 1000 Outfits for the selected criteria. You'll be able to
-      search for your outfit in a future update.
+      Shows the top 1000 Outfits for the selected criteria.
     </p>
     <div v-if="loaded">
       <p v-if="filter.bracket !== 0" class="text-center mb-4">

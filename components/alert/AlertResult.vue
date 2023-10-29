@@ -2,7 +2,7 @@
   <div class="col-span-12">
     <div class="text-center">
       <div v-if="alert.ps2AlertsEventType !== OUTFIT_WARS_AUG_2022">
-        <h1 class="text-4xl">Alert #{{ alert.instanceId }}</h1>
+        <h1 class="text-title">Alert #{{ alert.instanceId }}</h1>
       </div>
       <div
         v-if="
@@ -17,20 +17,17 @@
       </div>
     </div>
     <div v-if="alert.state === 2" class="mb-2 text-center">
-      <h2 class="text-4xl">
-        {{ victorText }}
-        <v-tooltip v-if="alert.result && alert.result.draw" bottom>
-          <template #activator="{ on, attrs }">
-            <font-awesome-icon
-              :icon="['fas', 'info-circle']"
-              v-bind="attrs"
-              v-on="on"
-            ></font-awesome-icon>
-          </template>
-          When alert reaches a draw, the game does a coin flip between the
+      <h2 class="text-3xl">
+        <span :class="alert.result.victor | factionTextClass">{{
+          victorText
+        }}</span>
+        <InfoTooltip
+          v-if="alert.result && alert.result.draw"
+          text=""
+          tooltip="When alert reaches a draw, the game does a coin flip between the
           drawing factions to gain the continent lock bonus. In terms of the
-          metagame, this is a draw.
-        </v-tooltip>
+          metagame, this is a draw."
+        ></InfoTooltip>
       </h2>
     </div>
     <div v-if="alert.state === 1" class="mb-2 text-center text-2xl">

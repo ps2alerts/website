@@ -54,18 +54,20 @@
           Headshots
         </button>
       </div>
-      <line-chart
+      <p class="text-xs text-gray-400 mt-2">
+        Shows running totals of {{ mode.toLowerCase() }} per faction.
+      </p>
+      <LineChart
         :chart-data="dataCollection"
-        :options="chartOptions"
-        style="width: 100%; height: 400px"
-      ></line-chart>
+        :chart-options="chartOptions"
+        :styles="{ height: '400px' }"
+      ></LineChart>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import LineChart from '../LineChart.js'
 import { Ps2AlertsEventState } from '@/ps2alerts-constants/ps2AlertsEventState'
 import ApiRequest from '~/api-request'
 import { Endpoints } from '@/constants/Endpoints'
@@ -76,12 +78,13 @@ import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 import { formatDateTime, utcDate } from '~/utilities/TimeHelper'
 import { TIME_FORMAT_SHORT } from '~/constants/Time'
 import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
+import { commonChartOptions } from '~/constants/CommonChartOptions'
+import ucFirst from '~/filters/UcFirst'
 
 export default Vue.extend({
   name: 'AlertPopulations',
   components: {
     CountdownSpinner,
-    LineChart,
   },
   props: {
     alert: {
@@ -102,46 +105,26 @@ export default Vue.extend({
     return {
       dataCollection: {},
       chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        tooltips: {
-          mode: 'x',
-        },
+        ...commonChartOptions.root,
         scales: {
-          xAxes: [
-            {
-              ticks: {
-                fontColor: '#fff',
-              },
-              gridLines: {
-                display: false,
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Time',
-                fontColor: '#fff',
-              },
+          x: {
+            ...commonChartOptions.scales,
+            title: {
+              display: true,
+              text: 'Time',
+              color: '#fff',
             },
-          ],
-          yAxes: [
-            {
-              ticks: {
-                fontColor: '#fff',
-              },
-              gridLines: {
-                color: '#718096',
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Count',
-                fontColor: '#fff',
-              },
+          },
+          y: {
+            ...commonChartOptions.scales,
+            grid: {
+              color: '#7b8694',
             },
-          ],
-        },
-        legend: {
-          labels: {
-            fontColor: '#fff',
+            title: {
+              display: true,
+              text: 'Kills',
+              color: '#fff',
+            },
           },
         },
       },
@@ -289,60 +272,44 @@ export default Vue.extend({
       }
 
       const datasets = []
-      const pointBorderWidth = 2
-      const pointHoverBorderWidth = 4
 
       if (this.isOutfitWar) {
         datasets.push(
           {
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.tr,
             label: this.outfitwar.outfitwars?.teams?.red?.tag ?? 'Red Team',
-            borderColor: '#9b2c2c',
             data: trData,
-            pointStyle: 'rect',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           },
           {
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nc,
             label: this.outfitwar.outfitwars?.teams?.blue?.tag ?? 'Blue Team',
-            borderColor: '#2b6cb0',
             data: ncData,
-            pointStyle: 'triangle',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           }
         )
       } else {
         datasets.push(
           {
-            label: 'VS',
-            borderColor: '#6B46C1',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.vs,
             data: vsData,
-            pointStyle: 'circle',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           },
           {
-            label: 'TR',
-            borderColor: '#9b2c2c',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.tr,
             data: trData,
-            pointStyle: 'rect',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           },
           {
-            label: 'NC',
-            borderColor: '#2b6cb0',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nc,
             data: ncData,
-            pointStyle: 'triangle',
-            pointBorderWidth,
-            pointHoverBorderWidth,
           },
           {
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nsoDraws,
             label: 'NSO',
-            borderColor: '#4a5568',
             data: nsoData,
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
           }
         )
       }
@@ -355,7 +322,7 @@ export default Vue.extend({
     updateMode(mode: string) {
       this.mode = mode
       const options = this.chartOptions
-      options.scales.yAxes[0].scaleLabel.labelString = mode.toUpperCase()
+      options.scales.y.title.text = ucFirst(mode)
       this.chartOptions = options
     },
   },
