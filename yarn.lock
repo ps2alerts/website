@@ -3935,10 +3935,10 @@ core-js-compat@^3.25.1, core-js-compat@^3.29.1:
   dependencies:
     browserslist "^4.21.5"
 
-core-js@^3.19.0, core-js@^3.2.1, core-js@^3.30.2:
-  version "3.30.2"
-  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.30.2.tgz#6528abfda65e5ad728143ea23f7a14f0dcf503fc"
-  integrity sha512-uBJiDmwqsbJCWHAwjrx3cvjbMXP7xD72Dmsn5LOJpiRmE3WbBbN5rCqQ2Qh6Ek6/eOrjlWngEynBWo4VxerQhg==
+core-js@^3.19.0, core-js@^3.2.1, core-js@^3.33.2:
+  version "3.33.2"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.33.2.tgz#312bbf6996a3a517c04c99b9909cdd27138d1ceb"
+  integrity sha512-XeBzWI6QL3nJQiHmdzbAOiMYqjrb7hwU7A39Qhvd/POSa/t9E1AeZyEZx3fNvp/vtM8zXwhoL0FsiS0hD0pruQ==
 
 core-util-is@1.0.2:
   version "1.0.2"
