@@ -27,7 +27,7 @@
     "@svgdotjs/svg.js": "^3.1.2",
     "chart.js": "2.9.4",
     "chartjs-plugin-annotation": "^0.5.7",
-    "core-js": "^3.30.2",
+    "core-js": "^3.35.1",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
     "leaflet": "^1.9.4",
