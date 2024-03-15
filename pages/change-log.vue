@@ -71,6 +71,19 @@ export default Vue.extend({
       panel: [0],
       posts: [
         {
+          id: 20,
+          title: 'v4.4.1 - Oshur Meltdown alerts supported',
+          date: '10th September 2022',
+          type: 'minor-update',
+          body: `
+            <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+              <div>
+                <h1 class="text-3xl mb-4">Oshur meltdown alerts now supported</h1>
+                <p>Small update to add support for Oshur meltdown alerts. Credit to Yawhatnever on PS2 Community Devs discord for pointing out they were missing.</p>
+              </div>
+            </div>`,
+        },
+        {
           id: 19,
           title: 'v4.4.0 - Capture the Conduit & PS2Alerts module updates',
           date: '4th April 2023',
