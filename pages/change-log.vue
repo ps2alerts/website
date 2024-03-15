@@ -73,7 +73,7 @@ export default Vue.extend({
         {
           id: 20,
           title: 'v4.4.1 - Oshur Meltdown alerts supported',
-          date: '10th September 2022',
+          date: '15th March 2024',
           type: 'minor-update',
           body: `
             <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
