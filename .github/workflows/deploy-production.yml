@@ -3,6 +3,9 @@ name: Build & Deploy Production
 on:
   push:
     branches: [master]
+permissions:
+  contents: read
+
 jobs:
   build-docker-images:
     runs-on: ${{ matrix.os }}
