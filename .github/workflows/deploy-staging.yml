@@ -49,7 +49,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push staging image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v7
         with:
           file: provisioning/staging/Dockerfile
           platforms: linux/amd64
