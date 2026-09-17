@@ -3,6 +3,9 @@ name: Build & Deploy Staging
 on:
   push:
     branches: [staging]
+permissions:
+  contents: read
+
 jobs:
   build-docker-images:
     runs-on: ${{ matrix.os }}

@@ -7,13 +7,13 @@ const worldNameFilter = Vue.filter('worldName', (world: World) => {
     case World.COBALT:
       return 'Cobalt'
     case World.CONNERY:
-      return 'Connery'
+      return 'Osprey'
     case World.EMERALD:
       return 'Emerald'
     case World.JAEGER:
       return 'Jaeger'
     case World.MILLER:
-      return 'Miller'
+      return 'Wainwright'
     case World.SOLTECH:
       return 'SolTech'
     // PS4 Worlds
