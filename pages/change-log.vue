@@ -71,6 +71,19 @@ export default Vue.extend({
       panel: [0],
       posts: [
         {
+          id: 21,
+          title: 'v4.4.2 - Server name changes',
+          date: '17th September 2026',
+          type: 'minor-update',
+          body: `
+            <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+              <div>
+                <h1 class="text-3xl mb-4">Server name changes</h1>
+                <p>Small update to reflect the latest server name changes, Miller -> Wainwright, Connery -> Osprey.</p>
+              </div>
+            </div>`,
+        },
+        {
           id: 20,
           title: 'v4.4.1 - Oshur Meltdown alerts supported',
           date: '15th March 2024',
