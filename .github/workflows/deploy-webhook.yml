@@ -1,0 +1,49 @@
+name: Trigger Deployment Webhook
+
+# Reusable, and deliberately the last link in the chain. Pokes the webhooks
+# server, which SSHes to the PS2Alerts box and pulls this repo's image there.
+#
+#   POST <WEBHOOK_URL>   — the ps2alerts-website hook on the webhooks host
+#
+# The hook is selected by the URL path; the body is only what the HMAC signature
+# is computed over, so `application` is documentation rather than routing.
+#
+# Requires two repository secrets:
+#   WEBHOOK_URL     the URL above
+#   WEBHOOK_SECRET  the shared HMAC secret
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  send-webhook:
+    name: Trigger deployment
+    runs-on: ubuntu-latest
+    # Backstop only. --max-time below should resolve first.
+    timeout-minutes: 5
+    steps:
+      # curl rather than an action. Every Actions wrapper for this leaves Node's
+      # default agent in place, and since Node 19 https.globalAgent carries
+      # timeout: 5000 — so the socket is killed at 5s no matter what timeout the
+      # action was given. The hook waits for the whole deploy, so that fired on
+      # every single run.
+      - name: Trigger webhook
+        env:
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+          WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
+        run: |
+          body='{"application":"ps2alerts-website"}'
+          signature=$(printf '%s' "$body" | openssl dgst -sha256 -hmac "$WEBHOOK_SECRET" -r | cut -d' ' -f1)
+
+          # The hook answers 200 or 500 carrying the deploy's own output, so this
+          # step's result is the deploy's result. 180s clears the ~100s at which the
+          # proxy in front gives up — an overrun should surface as that 524, which
+          # at least says the deploy was still running.
+          curl --fail-with-body --silent --show-error --max-time 180 \
+            --header 'Content-Type: application/json' \
+            --header "X-Hub-Signature-256: sha256=$signature" \
+            --header "X-Hub-SHA: $GITHUB_SHA" \
+            --data "$body" \
+            "$WEBHOOK_URL"
