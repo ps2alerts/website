@@ -2,7 +2,7 @@
 name: Build & Deploy Production
 on:
   push:
-    branches: [master]
+    branches: [main]
   # Lets a deploy be re-run by hand after a failed webhook without an empty commit.
   workflow_dispatch:
 permissions:
