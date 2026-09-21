@@ -15,13 +15,21 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # The production image is FROM the base image, so rebuild the base first on every
+  # deploy. It is what keeps the OS and Node underneath patched instead of frozen at
+  # whatever the weekly job last pulled.
+  build-base-image:
+    uses: ./.github/workflows/build-base-image.yml
+    secrets: inherit
+
   build-docker-images:
+    needs: build-base-image
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node: [20]
+        node: [22]
 
     steps:
       - name: Checkout
@@ -61,6 +69,8 @@ jobs:
         with:
           file: provisioning/production/Dockerfile
           platforms: linux/amd64
+          # Always re-pull the base the job before this one just pushed, never a cached layer.
+          pull: true
           push: true
           tags: maelstromeous/ps2alerts:website-production-${{ github.sha }},maelstromeous/ps2alerts:website-production-latest
           build-args: |

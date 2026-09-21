@@ -2,5 +2,11 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
-  ]
+  ],
+  "description": [
+    "A release has to have been public for 14 days before Renovate proposes it, so a compromised or immediately-yanked publish gets found by someone else before it is offered here.",
+    "Security fixes are not delayed by this: Renovate's vulnerabilityAlerts defaults are minimumReleaseAge null and prCreation immediate, so a CVE fix is raised straight away.",
+    "Nothing automerges. This project has no test suite, so every bump gets a human look and lands through one deploy."
+  ],
+  "minimumReleaseAge": "14 days"
 }

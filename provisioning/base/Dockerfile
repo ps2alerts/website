@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:22-bookworm
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nginx \

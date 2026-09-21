@@ -16,4 +16,4 @@ ENV API_HOST="https://api.ps2alerts.com"
 ENV GOOGLE_PROPERTY="G-2X0XQFEBLT"
 
 USER node
-RUN cd /app && yarn install && yarn run generate
+RUN cd /app && yarn install --ignore-engines && yarn run generate
