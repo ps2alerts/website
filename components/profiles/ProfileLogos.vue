@@ -1,72 +1,37 @@
 <template>
-  <div class="flex justify-center items-end gap-4 mb-2">
-    <div class="w-1/3">
+  <div class="flex justify-center items-start gap-8 mb-2">
+    <div class="logo-block">
       <img
         alt="Server Logo"
         :src="world | worldImage"
-        class="mx-auto mb-2 w-full"
+        class="mx-auto mb-2 logo-image"
       />
-      <div class="text-center">
-        <b>{{ world | worldName }}</b
-        ><br />
-        <span class="text-sm label gray">Server</span>
-      </div>
+      <b class="whitespace-nowrap">{{ world | worldName }}</b
+      ><br />
+      <span class="text-sm label gray">Server</span>
     </div>
-    <div class="w-1/3">
+    <div class="logo-block">
       <img
         alt="Faction Logo"
         :src="faction | factionImage"
-        class="mx-auto mb-2 w-full"
+        class="mx-auto mb-2 logo-image"
       />
-      <div class="text-center" :class="faction | factionTextClass">
-        <b>{{ faction | factionName }}</b
-        ><br />
-        <span class="text-sm label gray">Faction</span>
-      </div>
-    </div>
-    <div class="w-1/3">
-      <NuxtLink
-        :to="outfitLink"
-        :disabled="!linksToOutfit"
-        :event="linksToOutfit ? 'click' : ''"
-      >
-        <div class="mx-auto mb-2 text-center">
-          <font-awesome-icon
-            :icon="['fas', 'users']"
-            class="outfit-icon"
-            :class="faction | factionTextClass"
-          ></font-awesome-icon>
-        </div>
-        <div class="text-center">
-          <span class="font-bold">
-            <span v-if="outfit.tag" class="font-mono mr-1"
-              >[{{ outfit.tag }}]</span
-            >{{ outfit.name }}</span
-          ><br />
-          <span class="text-sm label gray mr-2">Outfit</span
-          ><span v-if="linksToOutfit" class="label blue border"
-            ><font-awesome-icon :icon="['fas', 'link']"></font-awesome-icon>
-            Stats</span
-          >
-        </div>
-      </NuxtLink>
+      <b class="whitespace-nowrap" :class="faction | factionTextClass">{{
+        faction | factionName
+      }}</b
+      ><br />
+      <span class="text-sm label gray">Faction</span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { PS2AlertsOutfitInterface } from '~/ps2alerts-constants/interfaces/PS2AlertsOutfitInterface'
-import { profileLink } from '~/utilities/ProfileApi'
-import { World } from '~/ps2alerts-constants/world'
 
+// Server and faction badges under a profile title
 export default Vue.extend({
   name: 'ProfileLogos',
   props: {
-    outfit: {
-      type: Object as () => PS2AlertsOutfitInterface,
-      required: true,
-    },
     faction: {
       type: Number,
       required: true,
@@ -75,28 +40,17 @@ export default Vue.extend({
       type: Number,
       required: true,
     },
-    linkOutfit: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  computed: {
-    // Outfit IDs 1-4 are the per-faction "-- NONE --" placeholders
-    isInOutfit(): boolean {
-      return parseInt(this.outfit.id, 10) > 4
-    },
-    linksToOutfit(): boolean {
-      return this.linkOutfit && this.isInOutfit
-    },
-    outfitLink(): string {
-      return profileLink('outfit', this.outfit.id, this.world as World)
-    },
   },
 })
 </script>
 
 <style scoped lang="scss">
-.outfit-icon {
-  font-size: 5rem;
+.logo-block {
+  @apply text-center;
+  min-width: 10rem;
+}
+.logo-image {
+  height: 6rem;
+  width: auto;
 }
 </style>

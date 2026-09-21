@@ -11,16 +11,19 @@
         ></font-awesome-icon>
         {{ type === 'character' ? 'Player' : 'Outfit' }}
       </span>
+      <p v-if="type === 'character' && memberOf" class="mt-2">
+        Member of
+        <NuxtLink :to="memberOf.link" class="label gray border">
+          <span v-if="memberOf.tag" class="font-mono"
+            >[{{ memberOf.tag }}]</span
+          >
+          {{ memberOf.name }}
+          <font-awesome-icon :icon="['fas', 'link']"></font-awesome-icon>
+        </NuxtLink>
+      </p>
     </div>
-    <div class="col-span-12 grid grid-cols-12">
-      <div class="col-span-12 lg:col-span-4 lg:col-start-5">
-        <ProfileLogos
-          :outfit="outfit"
-          :faction="summary.faction"
-          :world="summary.world"
-          :link-outfit="type === 'character'"
-        />
-      </div>
+    <div class="col-span-12">
+      <ProfileLogos :faction="summary.faction" :world="summary.world" />
     </div>
     <div
       class="col-span-12 flex justify-center items-center gap-2 sticky z-50"
@@ -51,6 +54,10 @@
         <div class="tag section">Combat stats by bracket</div>
         <ProfileCombatMetrics :summary="summary" />
       </div>
+      <div v-if="type === 'outfit'" class="col-span-12 card">
+        <div class="tag section">Members</div>
+        <ProfileMembers :summary="summary" />
+      </div>
       <div class="col-span-12 card relative">
         <div class="tag section">Performance over time</div>
         <ProfileCombatMetricsGraph :summary="summary" />
@@ -76,6 +83,8 @@ import ProfileCombatMetrics from '~/components/profiles/ProfileCombatMetrics.vue
 import ProfileCombatMetricsGraph from '~/components/profiles/ProfileCombatMetricsGraph.vue'
 import ProfileDaysFilter from '~/components/profiles/ProfileDaysFilter.vue'
 import ProfileHeadline from '~/components/profiles/ProfileHeadline.vue'
+import ProfileMembers from '~/components/profiles/ProfileMembers.vue'
+import { profileLink } from '~/utilities/ProfileApi'
 import {
   ProfileSummaryInterface,
   ProfileType,
@@ -92,6 +101,7 @@ export default Vue.extend({
     ProfileCombatMetricsGraph,
     ProfileDaysFilter,
     ProfileHeadline,
+    ProfileMembers,
   },
   props: {
     type: {
@@ -125,6 +135,24 @@ export default Vue.extend({
     },
     tag(): string | null {
       return this.outfit?.tag ?? null
+    },
+    // Outfit ids 1-4 are the per-faction "no outfit" placeholders
+    memberOf(): { link: string; name: string; tag?: string } | null {
+      const outfit = this.outfit
+
+      if (!outfit || parseInt(outfit.id, 10) <= 4) {
+        return null
+      }
+
+      return {
+        link: profileLink(
+          'outfit',
+          outfit.id,
+          outfit.world ?? this.summary.world
+        ),
+        name: outfit.name,
+        tag: outfit.tag,
+      }
     },
   },
 })
