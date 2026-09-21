@@ -107,15 +107,7 @@
       </template>
     </p>
     <div class="relative">
-      <div
-        v-if="loading"
-        class="absolute inset-0 flex justify-center items-center z-10"
-      >
-        <font-awesome-icon
-          :icon="['fas', 'sync']"
-          class="animate-spin text-2xl"
-        ></font-awesome-icon>
-      </div>
+      <ChartLoadingOverlay :loading="loading" />
       <LineChart
         :chart-data="dataCollection"
         :chart-options="chartOptions"
@@ -146,6 +138,7 @@ import {
   rollingAverage,
 } from '~/utilities/ChartBuckets'
 import { profileApi } from '~/utilities/ProfileApi'
+import ChartLoadingOverlay from '~/components/ChartLoadingOverlay.vue'
 import { formatDateTime } from '~/utilities/TimeHelper'
 
 type StatMode =
@@ -173,6 +166,7 @@ interface Bucket {
 // The API buckets the alerts by day/week/month/year; this component picks the resolution, filters by bracket and draws
 export default Vue.extend({
   name: 'ProfileCombatMetricsGraph',
+  components: { ChartLoadingOverlay },
   props: {
     summary: {
       type: Object as () => ProfileSummaryInterface,

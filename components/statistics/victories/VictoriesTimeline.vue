@@ -29,11 +29,14 @@
             @time-granularity-changed="updateTimeGranularity"
           />
         </div>
-        <LineChart
-          :chart-data="dataCollection"
-          :chart-options="chartOptions"
-          :styles="{ width: '100%', height: '350px' }"
-        ></LineChart>
+        <div class="relative">
+          <ChartLoadingOverlay :loading="rendering" />
+          <LineChart
+            :chart-data="dataCollection"
+            :chart-options="chartOptions"
+            :styles="{ width: '100%', height: '350px' }"
+          ></LineChart>
+        </div>
       </div>
       <div v-if="!loaded" class="flex justify-center place-items-center h-full">
         <h1 class="mb-4">Loading...</h1>
@@ -63,11 +66,13 @@ import {
   utcDate,
 } from '~/utilities/TimeHelper'
 import { commonChartOptions } from '~/constants/CommonChartOptions'
+import ChartLoadingOverlay from '~/components/ChartLoadingOverlay.vue'
 
 export default Vue.extend({
   name: 'VictoriesTimeline',
   components: {
     TimeGranularity,
+    ChartLoadingOverlay,
     FilterBracket,
     CountdownSpinner,
     FilterWorld,
@@ -95,6 +100,8 @@ export default Vue.extend({
       selectedWorld: 0,
       selectedBracket: 0,
       selectedTimeOption: TIME_GRANULARITY.WEEK,
+      userPickedResolution: false,
+      rendering: false,
       totalCounts: {} as { [k: string]: FactionMetricsInterface },
       worldCounts: {} as {
         [k: string]: { [k: string]: FactionMetricsInterface }
@@ -150,16 +157,25 @@ export default Vue.extend({
   },
   methods: {
     render() {
-      this.loaded = false
-      this.optimiseTimeResolution()
-      this.transformData()
-      this.buildCollection()
-      this.adjustChartOptions()
-      this.loaded = true
+      // Bucketing 100k+ rows blocks the main thread, so paint the overlay first and rebuild on the next frame
+      this.rendering = true
+
+      window.setTimeout(() => {
+        this.optimiseTimeResolution()
+        this.transformData()
+        this.buildCollection()
+        this.adjustChartOptions()
+        this.loaded = true
+        this.rendering = false
+      }, 30)
     },
     optimiseTimeResolution(): void {
-      // Coarser buckets for longer ranges keep the point count readable; the user can still override below.
+      // Coarser buckets for longer ranges keep the point count readable, unless the user has picked one themselves.
       // Prefer the requested filter dates, otherwise span the data itself.
+      if (this.userPickedResolution) {
+        return
+      }
+
       let from = this.filter.dateFrom ? new Date(this.filter.dateFrom) : null
       let to = this.filter.dateTo ? new Date(this.filter.dateTo) : null
 
@@ -320,6 +336,7 @@ export default Vue.extend({
       this.selectedBracket = bracket
     },
     updateTimeGranularity(option: TIME_GRANULARITY) {
+      this.userPickedResolution = true
       this.selectedTimeOption = option
     },
   },

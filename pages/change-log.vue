@@ -71,6 +71,43 @@ export default Vue.extend({
       panel: [0],
       posts: [
         {
+          id: 22,
+          title: 'v4.5.0 - Player &amp; Outfit profiles and search',
+          date: '21st September 2026',
+          type: 'major-update',
+          body: `
+            <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+              <div>
+                <h1 class="text-3xl mb-4">Find yourself and your outfit</h1>
+                <p>A search bar now lives in the sidebar. Type part of a player name or an outfit tag or name and you'll get matches as you type, with exact matches first. You can pin up to five results to your device so your own characters are always one click away.</p>
+              </div>
+              <div>
+                <h1 class="text-3xl mb-4">Player and outfit profiles</h1>
+                <p>Every player and outfit now has a stats page, reachable from search results, the leaderboards and the alert pages. Each one shows:</p>
+                <ul>
+                  <li>Headline figures: alerts played, win rate, kills, K/D, headshot rate and kills per minute. Outfits also show facility captures and average members per alert.</li>
+                  <li>Combat stats broken down by activity bracket, with per-alert averages.</li>
+                  <li>Kills split by which faction they landed on, with team kills shown honestly.</li>
+                  <li>Per-minute rates for every bracket. Per-minute tracking started in June 2022, and the pages say so rather than pretending earlier alerts had none.</li>
+                  <li>A performance-over-time graph that picks a sensible resolution for the date range and draws a rolling average and trend line, with day, week, month and year views.</li>
+                  <li>A "last N days" filter that recalculates the whole page from just those alerts.</li>
+                  <li>The full alert history, paged and sortable, linking to each alert.</li>
+                  <li>Players: a per-vehicle breakdown of kills, deaths and roadkills. Outfits: a searchable members list linking to every member's profile, and the outfit leader.</li>
+                </ul>
+                <p>All of this is calculated on the server, so a profile with thousands of alerts loads in a few kilobytes instead of downloading everything.</p>
+              </div>
+              <div>
+                <h1 class="text-3xl mb-4">Charts and leaderboards</h1>
+                <ul>
+                  <li><b>Improvement:</b> The homepage victory timeline has been rebuilt on a proper time axis. It now picks daily, weekly, monthly or yearly resolution from the date range so long ranges stay readable, and you can still choose one yourself.</li>
+                  <li><b>Improvement:</b> Player and outfit names on the leaderboards link straight to their profiles, and the statistics tabs can be linked to directly.</li>
+                  <li><b>Fixed:</b> Outfit Tracker has closed, so outfit logos are no longer requested from it.</li>
+                  <li><b>House keeping:</b> The charting library has been upgraded, and the API's search and profile queries are indexed so they stay fast as the data grows.</li>
+                </ul>
+              </div>
+            </div>`,
+        },
+        {
           id: 21,
           title: 'v4.4.2 - Server name changes',
           date: '17th September 2026',
