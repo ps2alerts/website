@@ -2,7 +2,13 @@
   <section class="mb-2">
     <div class="col-span-12 card relative">
       <div class="tag section">
-        Victory Timeline <span class="label blue"> Improved in v4.5!</span>
+        Victory Timeline
+        <span class="label blue"
+          ><InfoTooltip
+            text="Improved in v4.5!"
+            tooltip="Rebuilt on a proper time axis. The resolution now picks itself from the date range (daily, weekly, monthly or yearly) so long ranges stay readable, and point markers only appear when there is room for them. You can still choose a resolution yourself below."
+          ></InfoTooltip
+        ></span>
       </div>
       <CountdownSpinner :percent="updateCountdownPercent" update-rate="60000" />
       <div v-if="loaded" class="text-center">

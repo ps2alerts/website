@@ -58,6 +58,10 @@
         ></ProfileCombatMetricsGraph>
       </div>
       <div class="col-span-12 card">
+        <div class="tag section">Alerts by bracket</div>
+        <ProfileAlertBrackets :key="renderKey" :statistics="statistics" />
+      </div>
+      <div class="col-span-12 card">
         <div class="tag section">Alert history</div>
         <ProfileAlertMetrics
           :key="renderKey"
@@ -73,6 +77,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import ProfileAlertMetrics from '~/components/profiles/ProfileAlertMetrics.vue'
+import ProfileAlertBrackets from '~/components/profiles/ProfileAlertBrackets.vue'
 import ProfileLogos from '~/components/profiles/ProfileLogos.vue'
 import ProfileCombatMetrics from '~/components/profiles/ProfileCombatMetrics.vue'
 import ProfileCombatMetricsGraph from '~/components/profiles/ProfileCombatMetricsGraph.vue'
@@ -89,6 +94,7 @@ export default Vue.extend({
   name: 'ProfileLayout',
   components: {
     ProfileAlertMetrics,
+    ProfileAlertBrackets,
     ProfileLogos,
     ProfileCombatMetrics,
     ProfileCombatMetricsGraph,

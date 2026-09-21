@@ -1,72 +1,40 @@
 <template>
-  <div class="grid grid-cols-12 gap-4">
-    <div class="col-span-12 lg:col-span-3 xl:col-span-2">
-      <div class="tag">Alerts by bracket</div>
-      <v-simple-table dark dense>
-        <thead>
-          <tr class="font-bold border-b border-white">
-            <td>Bracket</td>
-            <td class="text-right">Count</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(count, bracket) in alertsByBrackets" :key="bracket">
-            <td>{{ bracket | bracketName }}</td>
-            <td class="text-right">{{ count }}</td>
-          </tr>
-          <tr class="font-bold border-t border-white">
-            <td>Total</td>
-            <td class="text-right">{{ statistics.alerts.length }}</td>
-          </tr>
-        </tbody>
-      </v-simple-table>
-      <PieChart
-        v-bind="charts.bracketDistributions"
-        :styles="{ height: '220px' }"
-        class="mt-4"
-      />
-    </div>
-    <div class="col-span-12 lg:col-span-9 xl:col-span-10">
-      <v-data-table
-        class="datatable"
-        item-key="instance"
-        :headers="headers"
-        :items="parsedData"
-        v-bind="tableConfig"
+  <v-data-table
+    class="datatable"
+    item-key="instance"
+    :headers="headers"
+    :items="parsedData"
+    v-bind="tableConfig"
+  >
+    <template #[`item.instance`]="{ item }">
+      <NuxtLink :to="`/alert/${item.instance}`" class="label gray border">
+        {{ item.instance }}
+      </NuxtLink>
+    </template>
+    <template #[`item.victor`]="{ item }">
+      <span v-if="item.victor === null" class="label">-</span>
+      <span v-else-if="item.victor === 'draw'" class="label gray">Draw</span>
+      <template v-else>
+        <span v-if="item.victor === faction" class="label green">Yes</span>
+        <span v-else class="label">No</span>
+        <span class="label" :class="item.victor | factionShortName">{{
+          item.victor | factionShortName
+        }}</span>
+      </template>
+    </template>
+    <template #[`item.outfit`]="{ item }">
+      <NuxtLink
+        v-if="item.outfit && item.outfit.id"
+        :to="`/outfit/${item.outfit.id}`"
+        class="label gray border"
       >
-        <template #[`item.instance`]="{ item }">
-          <NuxtLink :to="`/alert/${item.instance}`" class="label gray border">
-            {{ item.instance }}
-          </NuxtLink>
-        </template>
-        <template #[`item.victor`]="{ item }">
-          <span v-if="item.victor === null" class="label">-</span>
-          <span v-else-if="item.victor === 'draw'" class="label gray"
-            >Draw</span
-          >
-          <template v-else>
-            <span v-if="item.victor === faction" class="label green">Yes</span>
-            <span v-else class="label">No</span>
-            <span class="label" :class="item.victor | factionShortName">{{
-              item.victor | factionShortName
-            }}</span>
-          </template>
-        </template>
-        <template #[`item.outfit`]="{ item }">
-          <NuxtLink
-            v-if="item.outfit && item.outfit.id"
-            :to="`/outfit/${item.outfit.id}`"
-            class="label gray border"
-          >
-            <span v-if="item.outfit.tag" class="font-mono"
-              >[{{ item.outfit.tag }}]</span
-            >
-            {{ item.outfit.name }}
-          </NuxtLink>
-        </template>
-      </v-data-table>
-    </div>
-  </div>
+        <span v-if="item.outfit.tag" class="font-mono"
+          >[{{ item.outfit.tag }}]</span
+        >
+        {{ item.outfit.name }}
+      </NuxtLink>
+    </template>
+  </v-data-table>
 </template>
 
 <script lang="ts">
@@ -81,7 +49,6 @@ import { dateTimeFormat } from '~/filters/DateTimeFormat'
 import zoneNameFilter from '~/filters/ZoneName'
 import { Bracket } from '~/ps2alerts-constants/bracket'
 import bracketName from '~/filters/BracketName'
-import { commonChartOptions } from '~/constants/CommonChartOptions'
 
 interface Header {
   text: string
@@ -121,50 +88,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      charts: {
-        bracketDistributions: {
-          chartData: {
-            labels: [
-              bracketName(Bracket.DEAD),
-              bracketName(Bracket.LOW),
-              bracketName(Bracket.MEDIUM),
-              bracketName(Bracket.HIGH),
-              bracketName(Bracket.PRIME),
-            ],
-            datasets: [
-              {
-                backgroundColor: [
-                  '#5d2e2e',
-                  '#7e2f2f',
-                  '#ab2a2a',
-                  '#c92020',
-                  '#ff0d00',
-                ],
-                data: [0, 0, 0, 0, 0],
-              },
-            ],
-          },
-          chartOptions: {
-            ...commonChartOptions.root,
-            plugins: {
-              ...commonChartOptions.root.plugins,
-              datalabels: {
-                ...commonChartOptions.root.plugins.datalabels,
-                display: true,
-              },
-            },
-          },
-        },
-      },
       parsedData: [] as Record<string, any>[],
       tableConfig: ProfileAlertsConfig,
-      alertsByBrackets: {
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0,
-      } as Record<number, number>,
     }
   },
   computed: {
@@ -197,23 +122,11 @@ export default Vue.extend({
   },
   created(): void {
     this.parsedData = this.parseData(this.statistics)
-    this.charts.bracketDistributions.chartData.datasets[0].data = [
-      this.alertsByBrackets[1],
-      this.alertsByBrackets[2],
-      this.alertsByBrackets[3],
-      this.alertsByBrackets[4],
-      this.alertsByBrackets[5],
-    ]
   },
   methods: {
     parseData(stats: ProfileMetricsInterface): Record<string, any>[] {
       return stats.alerts.map((alert: ProfileAlertInterface) => {
         const bracket = alert.instanceDetails?.bracket
-
-        if (bracket !== undefined && bracket in this.alertsByBrackets) {
-          this.alertsByBrackets[bracket] += 1
-        }
-
         const kills = alert.kills ?? 0
         const deaths = alert.deaths ?? 0
         const headshots = alert.headshots ?? 0
