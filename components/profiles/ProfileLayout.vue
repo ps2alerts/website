@@ -13,7 +13,7 @@
       </span>
       <p
         v-if="type === 'character'"
-        class="mt-2 flex flex-wrap justify-center items-center gap-2"
+        class="mt-2 mb-6 flex flex-wrap justify-center items-center gap-2"
       >
         <span v-if="battleRank" class="label gray">
           BR {{ battleRank.rank }}
@@ -32,7 +32,7 @@
           </NuxtLink>
         </span>
       </p>
-      <p v-if="type === 'outfit' && summary.leader" class="mt-2">
+      <p v-if="type === 'outfit' && summary.leader" class="mt-2 mb-6">
         Led by
         <NuxtLink :to="leaderLink" class="label gray border">
           {{ summary.leader.name }}
