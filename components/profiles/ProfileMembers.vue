@@ -4,6 +4,16 @@
       Characters whose last known outfit is this one. Membership updates once a
       day when a player is next seen, and is not affected by the days filter.
     </p>
+    <div class="mb-2">
+      <input
+        v-model="search"
+        class="appearance-none bg-tint-light rounded border-none w-full text-white p-2 leading-tight"
+        type="search"
+        placeholder="Find a member by name"
+        aria-label="Find a member by name"
+        @keydown="$event.stopImmediatePropagation()"
+      />
+    </div>
     <p v-if="error" class="text-center text-red-400 mb-2">
       {{ error }}
       <button class="btn btn-sm ml-2" @click="fetchPage">Retry</button>
@@ -82,6 +92,8 @@ export default Vue.extend({
       total: 0,
       loading: false,
       error: '',
+      search: '',
+      searchTimer: null as ReturnType<typeof setTimeout> | null,
       options: {
         page: 1,
         itemsPerPage: 20,
@@ -115,6 +127,20 @@ export default Vue.extend({
       },
       deep: true,
     },
+    // Wait for typing to pause, then start again from page one
+    search() {
+      if (this.searchTimer) {
+        clearTimeout(this.searchTimer)
+      }
+
+      this.searchTimer = setTimeout(() => {
+        if (this.options.page === 1) {
+          this.fetchPage()
+        } else {
+          this.options = { ...this.options, page: 1 }
+        }
+      }, 300)
+    },
   },
   created() {
     this.fetchPage()
@@ -132,7 +158,8 @@ export default Vue.extend({
           page,
           itemsPerPage,
           SORTABLE[sortBy[0]] ?? 'kills',
-          sortDesc[0] === false ? 'asc' : 'desc'
+          sortDesc[0] === false ? 'asc' : 'desc',
+          this.search.trim()
         )
 
         this.rows = result.items.map((row) => this.parseRow(row))

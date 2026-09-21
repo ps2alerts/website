@@ -71,11 +71,19 @@ export const outfitMembers = (
   page: number,
   pageSize: number,
   sortBy: string,
-  order: 'asc' | 'desc'
+  order: 'asc' | 'desc',
+  search = ''
 ): Promise<ProfileMembersPageInterface> =>
   new ApiRequest().get<ProfileMembersPageInterface>(
     Endpoints.PROFILE_OUTFIT_MEMBERS.replace('{id}', id),
-    { ...(world ? { world } : {}), page, pageSize, sortBy, order }
+    {
+      ...(world ? { world } : {}),
+      ...(search ? { search } : {}),
+      page,
+      pageSize,
+      sortBy,
+      order,
+    }
   )
 
 export const profileLink = (
