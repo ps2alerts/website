@@ -1014,8 +1014,9 @@ export default Vue.extend({
 
   // Post bodies are authored HTML: give their sections, headings and lists consistent breathing room
   .editorial {
-    > div > div {
-      padding: 1.25rem 0;
+    // Each post body is a divide-y grid of sections; the divider needs air on both sides
+    .divide-y > div {
+      padding: 1.5rem 0;
 
       &:first-child {
         padding-top: 0;
@@ -1042,7 +1043,7 @@ export default Vue.extend({
 
     ul {
       list-style: disc;
-      padding-left: 1.5rem;
+      padding-left: 1.1rem;
       margin-bottom: 0.75rem;
     }
 
