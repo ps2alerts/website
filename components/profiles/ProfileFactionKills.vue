@@ -33,7 +33,7 @@
         <span class="label" :style="{ backgroundColor: segment.colour }">{{
           segment.label
         }}</span>
-        {{ segment.count.toLocaleString() }}
+        {{ abbreviate(segment.count) }}
       </span>
     </div>
   </div>
@@ -43,6 +43,7 @@
 import Vue from 'vue'
 import { ProfileSummaryInterface } from '~/interfaces/profiles/ProfileMetricsInterface'
 import { commonChartOptions } from '~/constants/CommonChartOptions'
+import { abbreviate } from '~/utilities/NumberFormat'
 
 interface Segment {
   key: string
@@ -111,6 +112,7 @@ export default Vue.extend({
       })).filter((segment) => segment.count > 0)
     },
   },
+  methods: { abbreviate },
 })
 </script>
 

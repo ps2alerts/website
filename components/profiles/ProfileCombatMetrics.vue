@@ -122,6 +122,7 @@ import {
 import { ProfileAlertsCombatMetricsTableConfig } from '~/constants/DataTableConfig'
 import { Bracket } from '~/ps2alerts-constants/bracket'
 import bracketName from '~/filters/BracketName'
+import { abbreviate } from '~/utilities/NumberFormat'
 import { formatDateTime } from '~/utilities/TimeHelper'
 import { DATE_FORMAT } from '~/constants/Time'
 
@@ -129,7 +130,7 @@ const ratio = (numerator: number, denominator: number, scale = 1): string =>
   denominator > 0 ? ((numerator / denominator) * scale).toFixed(2) : '0.00'
 
 const withAverage = (total: number, alerts: number): string =>
-  `${total} [${ratio(total, alerts)}]`
+  `${abbreviate(total)} [${ratio(total, alerts)}]`
 
 export default Vue.extend({
   name: 'ProfileCombatMetrics',
@@ -269,7 +270,7 @@ export default Vue.extend({
         .filter((entry): entry is ProfileBracketTotalsInterface => !!entry)
         .map((entry) => ({
           bracket: bracketName(entry.bracket),
-          bracketCount: entry.alerts,
+          bracketCount: entry.alerts.toLocaleString('en-GB'),
           kills: withAverage(entry.kills, entry.alerts),
           deaths: withAverage(entry.deaths, entry.alerts),
           kd: ratio(entry.kills, entry.deaths),

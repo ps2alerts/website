@@ -16,6 +16,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { ProfileSummaryInterface } from '~/interfaces/profiles/ProfileMetricsInterface'
+import { abbreviate } from '~/utilities/NumberFormat'
 
 interface Tile {
   label: string
@@ -23,12 +24,6 @@ interface Tile {
   classes?: string
   tooltip?: string
 }
-
-const compact = (value: number): string =>
-  new Intl.NumberFormat('en-GB', {
-    notation: value >= 100000 ? 'compact' : 'standard',
-    maximumFractionDigits: 1,
-  }).format(value)
 
 // The at-a-glance strip at the top of a profile
 export default Vue.extend({
@@ -48,14 +43,14 @@ export default Vue.extend({
       const hsr = totals.kills > 0 ? (totals.headshots / totals.kills) * 100 : 0
 
       return [
-        { label: 'Alerts', value: compact(totals.alerts) },
+        { label: 'Alerts', value: totals.alerts.toLocaleString('en-GB') },
         {
           label: 'Win rate',
           value: `${winRate.toFixed(1)}%`,
           classes: winRate >= 50 ? 'text-green-400' : 'text-red-400',
           tooltip: `${totals.wins} won of ${totals.decided} decided alerts. Draws and alerts still in progress are left out.`,
         },
-        { label: 'Kills', value: compact(totals.kills) },
+        { label: 'Kills', value: abbreviate(totals.kills) },
         {
           label: 'K/D',
           value: kd.toFixed(2),
@@ -71,7 +66,7 @@ export default Vue.extend({
           ? [
               {
                 label: 'Captures',
-                value: compact(totals.captures),
+                value: abbreviate(totals.captures),
                 tooltip: 'Facilities captured by this outfit during alerts.',
               },
               {
