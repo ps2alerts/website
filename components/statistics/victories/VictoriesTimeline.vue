@@ -48,7 +48,7 @@
 <script lang="ts">
 /* eslint-disable import/no-named-as-default-member */
 import Vue, { PropOptions } from 'vue'
-import { pickGranularity, pointRadiusFor } from '~/utilities/ChartBuckets'
+import { pickGranularity } from '~/utilities/ChartBuckets'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import { FactionMetricsInterface } from '~/interfaces/FactionMetricsInterface'
 import { DATE_FORMAT_ISO, TIME_GRANULARITY } from '@/constants/Time'
@@ -282,8 +282,13 @@ export default Vue.extend({
         drawData.push({ x: key, y: rowTyped.draws })
       }
 
+      // Keep the markers visible at every resolution, just smaller as they get denser; hover still enlarges them
+      const points = vsData.length
       const density = {
-        pointRadius: pointRadiusFor(vsData.length),
+        pointRadius: points > 300 ? 2.5 : points > 60 ? 3 : 4,
+        pointHoverRadius: 6,
+        pointBorderWidth: 1,
+        pointHoverBorderWidth: 2,
         borderWidth: 2,
         tension: 0.25,
       }
