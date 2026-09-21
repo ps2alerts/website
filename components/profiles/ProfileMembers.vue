@@ -28,6 +28,14 @@
       :loading="loading"
       v-bind="tableConfig"
     >
+      <template
+        v-for="col in ['kills', 'deaths', 'headshots', 'teamKills', 'suicides']"
+        #[`item.${col}`]="{ value }"
+      >
+        <span :key="col" :title="exactNumber(value)">{{
+          abbreviate(value)
+        }}</span>
+      </template>
       <template #[`item.name`]="{ item }">
         <NuxtLink :to="item.link" class="label gray border whitespace-nowrap">
           {{ item.name }}
@@ -39,6 +47,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import AbbreviateNumbers from '~/mixins/AbbreviateNumbers'
 import {
   ProfileMemberRowInterface,
   ProfileSummaryInterface,
@@ -80,6 +89,7 @@ const column = (text: string, value: string, centred = true) => ({
 // One page of an outfit's members at a time, sorted and paged by the API
 export default Vue.extend({
   name: 'ProfileMembers',
+  mixins: [AbbreviateNumbers],
   props: {
     summary: {
       type: Object as () => ProfileSummaryInterface,

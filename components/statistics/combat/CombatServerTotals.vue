@@ -19,6 +19,20 @@
             :items="items"
             v-bind="tableConfig"
           >
+            <template
+              v-for="col in [
+                'kills',
+                'deaths',
+                'teamKills',
+                'suicides',
+                'headshots',
+              ]"
+              #[`item.${col}`]="{ value }"
+            >
+              <span :key="col" :title="exactNumber(value)">{{
+                abbreviate(value)
+              }}</span>
+            </template>
           </v-data-table>
         </div>
       </div>
@@ -28,6 +42,7 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
+import AbbreviateNumbers from '~/mixins/AbbreviateNumbers'
 import { StatisticsCombatServerTotalsLeaderboardConfig } from '@/constants/DataTableConfig'
 import {
   GlobalCombatMetricsInterface,
@@ -47,6 +62,7 @@ interface StatisticsServerCombatTableDataInterface
 
 export default Vue.extend({
   name: 'CombatServerTotals',
+  mixins: [AbbreviateNumbers],
   props: {
     rawData: {
       type: Array,

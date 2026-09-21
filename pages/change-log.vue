@@ -11,39 +11,21 @@
           class="theme--dark mt-4"
           multiple
         >
-          <v-expansion-panel v-for="post in posts" :key="post.id">
-            <div v-if="post.type === 'feature'" class="tag m-0 feature">
-              <font-awesome-icon :icon="['fas', 'plus']"></font-awesome-icon>
-              New feature
-            </div>
-            <div
-              v-if="post.type === 'announcement'"
-              class="tag m-0 announcement"
-            >
-              <font-awesome-icon
-                :icon="['fas', 'bullhorn']"
-              ></font-awesome-icon>
-              Announcement
-            </div>
-            <div v-if="post.type === 'major-update'" class="tag m-0 major">
-              <font-awesome-icon :icon="['fas', 'star']"></font-awesome-icon>
-              Major Update
-            </div>
-            <div
-              v-if="post.type === 'minor-update'"
-              class="tag m-0 enhancement"
-            >
-              <font-awesome-icon :icon="['fas', 'wrench']"></font-awesome-icon>
-              Minor Update
-            </div>
-            <div v-if="post.type === 'wip'" class="tag m-0 wip">
-              <font-awesome-icon :icon="['fas', 'wrench']"></font-awesome-icon>
-              Upcoming Update / WIP
-            </div>
+          <v-expansion-panel
+            v-for="post in posts"
+            :key="post.id"
+            class="change-log-entry"
+          >
             <v-expansion-panel-header>
               <div>
-                <h1 class="text-xl mb-2 font-bold" v-html="post.title"></h1>
-                <p>{{ post.date }}</p>
+                <span class="label mb-2" :class="typeOf(post.type).cls">
+                  <font-awesome-icon
+                    :icon="['fas', typeOf(post.type).icon]"
+                  ></font-awesome-icon>
+                  {{ typeOf(post.type).text }}
+                </span>
+                <h1 class="text-xl mb-1 font-bold" v-html="post.title"></h1>
+                <p class="text-sm text-gray-300">{{ post.date }}</p>
               </div>
             </v-expansion-panel-header>
             <v-expansion-panel-content class="editorial text-left">
@@ -59,6 +41,24 @@
 <script lang="ts">
 import Vue from 'vue'
 import MetaHead from '~/components/MetaHead.vue'
+
+const POST_TYPES: Record<string, { cls: string; icon: string; text: string }> =
+  {
+    feature: { cls: 'feature', icon: 'plus', text: 'New feature' },
+    announcement: {
+      cls: 'announcement',
+      icon: 'bullhorn',
+      text: 'Announcement',
+    },
+    'major-update': { cls: 'major', icon: 'star', text: 'Major update' },
+    'minor-update': {
+      cls: 'enhancement',
+      icon: 'wrench',
+      text: 'Minor update',
+    },
+    fix: { cls: 'fix', icon: 'wrench', text: 'Fix' },
+    wip: { cls: 'wip', icon: 'wrench', text: 'Upcoming update' },
+  }
 
 export default Vue.extend({
   name: 'Changelog',
@@ -980,12 +980,75 @@ export default Vue.extend({
       })
     )
   },
+  methods: {
+    typeOf(type: string) {
+      return POST_TYPES[type] ?? POST_TYPES['minor-update']
+    },
+  },
 })
 </script>
 <style lang="scss">
 #change-log {
-  ul {
-    padding-left: 2px;
+  .change-log-entry + .change-log-entry {
+    margin-top: 0.75rem;
+  }
+
+  .label.feature {
+    @apply bg-green-800;
+  }
+  .label.enhancement {
+    @apply bg-blue-500;
+  }
+  .label.announcement {
+    @apply bg-red-600;
+  }
+  .label.major {
+    @apply bg-orange-500;
+  }
+  .label.fix {
+    @apply bg-gray-600;
+  }
+  .label.wip {
+    @apply bg-green-700;
+  }
+
+  // Post bodies are authored HTML: give their sections, headings and lists consistent breathing room
+  .editorial {
+    > div > div {
+      padding: 1.25rem 0;
+
+      &:first-child {
+        padding-top: 0;
+      }
+
+      &:last-child {
+        padding-bottom: 0.5rem;
+      }
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      line-height: 2rem;
+      margin: 0 0 0.75rem;
+    }
+
+    p {
+      margin-bottom: 0.75rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    ul {
+      list-style: disc;
+      padding-left: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    li {
+      margin-bottom: 0.35rem;
+    }
   }
 }
 </style>

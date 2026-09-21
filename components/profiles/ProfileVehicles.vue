@@ -20,6 +20,23 @@
       disable-pagination
       hide-default-footer
     >
+      <template
+        v-for="col in [
+          'kills',
+          'vehicleKills',
+          'infantryKills',
+          'deaths',
+          'roadkills',
+          'teamKills',
+          'teamKilled',
+          'suicides',
+        ]"
+        #[`item.${col}`]="{ value }"
+      >
+        <span :key="col" :title="exactNumber(value)">{{
+          abbreviate(value)
+        }}</span>
+      </template>
     </v-data-table>
     <p class="text-xs text-gray-400 text-center mt-1">
       Kills and deaths while in the vehicle. K/D counts kills of both vehicles
@@ -30,6 +47,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import AbbreviateNumbers from '~/mixins/AbbreviateNumbers'
 import {
   ProfileSummaryInterface,
   ProfileVehicleRowInterface,
@@ -65,6 +83,7 @@ const vehicleName = (id: number): string => {
 // Per-vehicle combat for a player
 export default Vue.extend({
   name: 'ProfileVehicles',
+  mixins: [AbbreviateNumbers],
   props: {
     summary: {
       type: Object as () => ProfileSummaryInterface,

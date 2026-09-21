@@ -34,6 +34,22 @@
             :search="filter"
             v-bind="tableConfig"
           >
+            <template
+              v-for="col in [
+                'kills',
+                'deaths',
+                'captures',
+                'teamKills',
+                'teamKilled',
+                'suicides',
+                'headshots',
+              ]"
+              #[`item.${col}`]="{ value }"
+            >
+              <span :key="col" :title="exactNumber(value)">{{
+                abbreviate(value)
+              }}</span>
+            </template>
             <template slot="item.rank" slot-scope="props">
               {{ items.indexOf(props.item) + 1 }}
             </template>
@@ -56,6 +72,7 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
+import AbbreviateNumbers from '~/mixins/AbbreviateNumbers'
 import { StatisticsOutfitLeaderboardConfig } from '@/constants/DataTableConfig'
 import { StatisticsOutfitTableDataInterface } from '~/interfaces/statistics/StatisticsOutfitTableDataInterface'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
@@ -64,6 +81,7 @@ import { PS2AlertsOutfitInterface } from '~/ps2alerts-constants/interfaces/PS2Al
 
 export default Vue.extend({
   name: 'OutfitLeaderboard',
+  mixins: [AbbreviateNumbers],
   props: {
     rawData: {
       type: Array,
