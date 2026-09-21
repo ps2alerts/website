@@ -56,6 +56,7 @@ export interface ProfileSummaryInterface {
   brackets: Record<number, ProfileBracketTotalsInterface | undefined>
   firstAlert: string | null
   lastAlert: string | null
+  firstTrackedAlert: string | null
 }
 
 export interface ProfileTimelineRowInterface {

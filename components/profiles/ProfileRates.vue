@@ -11,8 +11,9 @@
     >
     </v-data-table>
     <p class="text-xs text-gray-400 text-center mt-1">
-      Averages per alert over the alerts with per-minute tracking (count in
-      brackets).
+      Averages per alert over the alerts with per-minute tracking, which only
+      began <b>{{ trackingSince }}</b
+      >; earlier alerts are not counted here.
       <span v-if="summary.type === 'outfit'">
         Outfit rates add up every member; "per member" divides by the members
         taking part.</span
@@ -30,6 +31,8 @@ import {
 import { ProfileAlertsCombatMetricsTableConfig } from '~/constants/DataTableConfig'
 import { Bracket } from '~/ps2alerts-constants/bracket'
 import bracketName from '~/filters/BracketName'
+import { formatDateTime } from '~/utilities/TimeHelper'
+import { DATE_FORMAT } from '~/constants/Time'
 
 const centred = (text: string, value: string) => ({
   text,
@@ -56,6 +59,12 @@ export default Vue.extend({
     }
   },
   computed: {
+    trackingSince(): string {
+      const since = this.summary.firstTrackedAlert
+      return since
+        ? formatDateTime(new Date(since), DATE_FORMAT)
+        : 'part-way through'
+    },
     headers() {
       const perMember =
         this.summary.type === 'outfit'

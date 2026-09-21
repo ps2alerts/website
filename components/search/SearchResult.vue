@@ -23,7 +23,7 @@
       </template>
       Pin this result so you can find your characters / outfits easily!
     </v-tooltip>
-    <NuxtLink :to="link">
+    <NuxtLink :to="link" @click.native="$emit('selected')">
       <p class="m-0">
         <span v-if="result.tag" class="font-mono">[{{ result.tag }}]</span>
         {{ result.name }}

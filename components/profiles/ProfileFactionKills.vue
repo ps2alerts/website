@@ -1,8 +1,8 @@
 <template>
   <div>
     <p class="text-xs text-gray-400 text-center mb-2">
-      Who the kills landed on. NSO kills count wherever the operative was
-      fighting for the other side.
+      Who the kills landed on. Kills on your own faction are team kills. NSO
+      kills count wherever the operative was fighting for the other side.
     </p>
     <div class="faction-bar flex rounded overflow-hidden text-sm font-bold">
       <div
@@ -42,10 +42,10 @@ interface Segment {
 }
 
 const FACTIONS = [
-  { key: 'vs', label: 'VS', classes: 'bg-vs' },
-  { key: 'nc', label: 'NC', classes: 'bg-nc' },
-  { key: 'tr', label: 'TR', classes: 'bg-tr' },
-  { key: 'nso', label: 'NSO', classes: 'bg-nso' },
+  { key: 'vs', faction: 1, label: 'VS', classes: 'bg-vs' },
+  { key: 'nc', faction: 2, label: 'NC', classes: 'bg-nc' },
+  { key: 'tr', faction: 3, label: 'TR', classes: 'bg-tr' },
+  { key: 'nso', faction: 4, label: 'NSO', classes: 'bg-nso' },
 ] as const
 
 // Kills split by the victim's faction
@@ -59,15 +59,23 @@ export default Vue.extend({
   },
   computed: {
     segments(): Segment[] {
-      const kills = this.summary.totals.factionKills
-      const total = FACTIONS.reduce((sum, f) => sum + (kills[f.key] ?? 0), 0)
+      const totals = this.summary.totals
+      // The aggregator books kills on the subject's own faction as team kills, not under factionKills
+      const countOf = (f: (typeof FACTIONS)[number]): number =>
+        f.faction === this.summary.faction
+          ? totals.teamKills
+          : totals.factionKills[f.key] ?? 0
+      const total = FACTIONS.reduce((sum, f) => sum + countOf(f), 0)
 
       return FACTIONS.map((f) => ({
         key: f.key,
-        label: f.label,
+        label:
+          f.faction === this.summary.faction
+            ? `${f.label} (team kills)`
+            : f.label,
         classes: f.classes,
-        count: kills[f.key] ?? 0,
-        share: total > 0 ? ((kills[f.key] ?? 0) / total) * 100 : 0,
+        count: countOf(f),
+        share: total > 0 ? (countOf(f) / total) * 100 : 0,
       })).filter((segment) => segment.count > 0)
     },
   },

@@ -50,6 +50,7 @@
             :key="`${result.type}-${result.id}`"
             :result="result"
             @pinned="handlePinEvent"
+            @selected="clear"
           />
         </div>
         {{ error.message }}

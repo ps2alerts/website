@@ -97,6 +97,12 @@
         <span v-if="resolution === 'auto'"
           >Resolution is chosen automatically from the date range.</span
         >
+        <span v-if="isRate" class="block text-yellow-300 mt-1">
+          <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
+          Per-minute tracking only began
+          <b>{{ trackingSince }}</b
+          >; earlier alerts have no KPM or DPM and are left off this graph.
+        </span>
       </template>
     </p>
     <div class="relative">
@@ -127,7 +133,7 @@ import {
   TimelineGranularity,
 } from '~/interfaces/profiles/ProfileMetricsInterface'
 import { Bracket } from '~/ps2alerts-constants/bracket'
-import { TIME_GRANULARITY } from '~/constants/Time'
+import { TIME_GRANULARITY, DATE_FORMAT } from '~/constants/Time'
 import {
   AUTO_GRANULARITY,
   bucketLabel,
@@ -139,6 +145,7 @@ import {
   rollingAverage,
 } from '~/utilities/ChartBuckets'
 import { profileApi } from '~/utilities/ProfileApi'
+import { formatDateTime } from '~/utilities/TimeHelper'
 
 type StatMode =
   | 'kills'
@@ -240,6 +247,15 @@ export default Vue.extend({
     // Ratios and per-minute stats are already averages, so "total" makes no sense for them
     isRatio(): boolean {
       return ['kd', 'kpm', 'dpm'].includes(this.statMode)
+    },
+    isRate(): boolean {
+      return this.statMode === 'kpm' || this.statMode === 'dpm'
+    },
+    trackingSince(): string {
+      const since = this.summary.firstTrackedAlert
+      return since
+        ? formatDateTime(new Date(since), DATE_FORMAT)
+        : 'part-way through'
     },
     chartOptions(): Record<string, any> {
       return {
@@ -383,7 +399,10 @@ export default Vue.extend({
         buckets.set(row.bucket, bucket)
       })
 
-      const keys = [...buckets.keys()].sort()
+      // Buckets from before per-minute tracking existed would drag a rate graph and its trend down to zero
+      const keys = [...buckets.keys()]
+        .filter((key) => !this.isRate || buckets.get(key)!.xpmAlerts > 0)
+        .sort()
       const values = keys.map((key) => this.bucketValue(buckets.get(key)!))
       const pointRadius = pointRadiusFor(keys.length)
       const average = this.overallAverage()

@@ -25,8 +25,8 @@
         ></InfoTooltip
         ><br />
         <span class="text-sm text-gray-400"
-          >* Only counts alerts with XPM metrics available. Number of XPM alerts
-          in the bracket is in (#)</span
+          >* Per-minute tracking only began {{ trackingSince }}. KPM and DPM
+          average the alerts recorded since then; that count is in (#)</span
         >
         <br />
         Key:
@@ -122,6 +122,8 @@ import {
 import { ProfileAlertsCombatMetricsTableConfig } from '~/constants/DataTableConfig'
 import { Bracket } from '~/ps2alerts-constants/bracket'
 import bracketName from '~/filters/BracketName'
+import { formatDateTime } from '~/utilities/TimeHelper'
+import { DATE_FORMAT } from '~/constants/Time'
 
 const ratio = (numerator: number, denominator: number, scale = 1): string =>
   denominator > 0 ? ((numerator / denominator) * scale).toFixed(2) : '0.00'
@@ -244,6 +246,12 @@ export default Vue.extend({
     }
   },
   computed: {
+    trackingSince(): string {
+      const since = this.summary.firstTrackedAlert
+      return since
+        ? formatDateTime(new Date(since), DATE_FORMAT)
+        : 'part-way through'
+    },
     parsedData(): Record<string, string | number>[] {
       const order = [
         Bracket.PRIME,
