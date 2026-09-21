@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { ProfileMetricsInterface } from '~/interfaces/profiles/ProfileMetricsInterface'
+import { ProfileSummaryInterface } from '~/interfaces/profiles/ProfileMetricsInterface'
 import { Bracket } from '~/ps2alerts-constants/bracket'
 import bracketName from '~/filters/BracketName'
 import { commonChartOptions } from '~/constants/CommonChartOptions'
@@ -58,26 +58,19 @@ const BRACKETS = [
 export default Vue.extend({
   name: 'ProfileAlertBrackets',
   props: {
-    statistics: {
-      type: Object as () => ProfileMetricsInterface,
+    summary: {
+      type: Object as () => ProfileSummaryInterface,
       required: true,
     },
   },
   computed: {
     counts(): Map<Bracket, number> {
-      const counts = new Map<Bracket, number>(
-        BRACKETS.map((entry) => [entry.bracket, 0])
+      return new Map<Bracket, number>(
+        BRACKETS.map((entry) => [
+          entry.bracket,
+          this.summary.brackets[entry.bracket]?.alerts ?? 0,
+        ])
       )
-
-      this.statistics.alerts.forEach((alert) => {
-        const bracket = alert.instanceDetails?.bracket
-
-        if (bracket !== undefined && counts.has(bracket)) {
-          counts.set(bracket, counts.get(bracket)! + 1)
-        }
-      })
-
-      return counts
     },
     total(): number {
       return [...this.counts.values()].reduce((sum, count) => sum + count, 0)

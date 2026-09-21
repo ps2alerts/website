@@ -42,7 +42,6 @@ export const Endpoints = {
   AGGREGATES_INSTANCE_OUTFIT: '/aggregates/instance/{instance}/outfit',
   AGGREGATES_INSTANCE_OUTFIT_SINGLE:
     '/aggregates/instance/{instance}/outfit/{outfit}',
-  AGGREGATES_INSTANCE_OUTFIT_ALL: '/aggregates/instance/outfit/{outfit}',
   AGGREGATES_INSTANCE_POPULATION: '/aggregates/instance/{instance}/population',
   AGGREGATES_INSTANCE_POPULATION_AVERAGES:
     '/aggregates/instance/{instance}/population/averages',
@@ -81,6 +80,11 @@ export const Endpoints = {
   // Outfitwars
   OW_RANKINGS_ALL: '/outfit-wars/rankings?sortBy=order&order=asc',
   OW_RANKINGS_WORLD: '/outfit-wars/rankings/{world}',
+
+  // Profiles
+  PROFILE_SUMMARY: '/profiles/{type}/{id}',
+  PROFILE_TIMELINE: '/profiles/{type}/{id}/timeline',
+  PROFILE_ALERTS: '/profiles/{type}/{id}/alerts',
 
   // Searches
   SEARCH: '/search/{type}',

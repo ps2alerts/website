@@ -116,32 +116,33 @@
 <script lang="ts">
 import Vue from 'vue'
 import {
-  ProfileCommonMetricsInterface,
-  ProfileMetricsInterface,
+  ProfileBracketTotalsInterface,
+  ProfileSummaryInterface,
 } from '~/interfaces/profiles/ProfileMetricsInterface'
 import { ProfileAlertsCombatMetricsTableConfig } from '~/constants/DataTableConfig'
+import { Bracket } from '~/ps2alerts-constants/bracket'
+import bracketName from '~/filters/BracketName'
+
+const ratio = (numerator: number, denominator: number, scale = 1): string =>
+  denominator > 0 ? ((numerator / denominator) * scale).toFixed(2) : '0.00'
+
+const withAverage = (total: number, alerts: number): string =>
+  `${total} [${ratio(total, alerts)}]`
 
 export default Vue.extend({
   name: 'ProfileCombatMetrics',
-  components: {},
   props: {
-    statistics: {
-      type: Object as () => ProfileMetricsInterface,
+    summary: {
+      type: Object as () => ProfileSummaryInterface,
       required: true,
     },
   },
   data() {
     return {
-      loaded: false,
+      loaded: true,
       tableConfig: ProfileAlertsCombatMetricsTableConfig,
-      parsedData: [] as (ProfileCommonMetricsInterface | null)[],
       headers: [
-        {
-          text: 'Bracket',
-          align: 'left',
-          sortable: true,
-          value: 'bracket',
-        },
+        { text: 'Bracket', align: 'left', sortable: true, value: 'bracket' },
         {
           text: '# of alerts',
           align: 'left',
@@ -242,37 +243,39 @@ export default Vue.extend({
       ],
     }
   },
-  computed: {},
-  created() {
-    this.parsedData = this.parseData(this.statistics)
-    this.loaded = true
-  },
-  methods: {
-    parseData(
-      data: ProfileMetricsInterface
-    ): (ProfileCommonMetricsInterface | null)[] {
-      const returnArray: (ProfileCommonMetricsInterface | null)[] = []
+  computed: {
+    parsedData(): Record<string, string | number>[] {
+      const order = [
+        Bracket.PRIME,
+        Bracket.HIGH,
+        Bracket.MEDIUM,
+        Bracket.LOW,
+        Bracket.DEAD,
+      ]
+      const rows = [
+        this.summary.totals,
+        ...order.map((b) => this.summary.brackets[b]),
+      ]
 
-      const transformXPMs = (bracket: ProfileCommonMetricsInterface | null) => {
-        if (!bracket) {
-          return null
-        }
-        return {
-          ...bracket,
-          kpm: `${bracket?.kpm} (${bracket?.xpmBracketCount})`,
-          dpm: `${bracket?.dpm} (${bracket?.xpmBracketCount})`,
-        }
-      }
-
-      returnArray.push(
-        transformXPMs(data.brackets[0]),
-        transformXPMs(data.brackets[5]),
-        transformXPMs(data.brackets[4]),
-        transformXPMs(data.brackets[3]),
-        transformXPMs(data.brackets[2]),
-        transformXPMs(data.brackets[1])
-      )
-      return returnArray
+      return rows
+        .filter((entry): entry is ProfileBracketTotalsInterface => !!entry)
+        .map((entry) => ({
+          bracket: bracketName(entry.bracket),
+          bracketCount: entry.alerts,
+          kills: withAverage(entry.kills, entry.alerts),
+          deaths: withAverage(entry.deaths, entry.alerts),
+          kd: ratio(entry.kills, entry.deaths),
+          headshots: withAverage(entry.headshots, entry.alerts),
+          hsr: ratio(entry.headshots, entry.kills, 100),
+          teamKills: withAverage(entry.teamKills, entry.alerts),
+          tkr: ratio(entry.teamKills, entry.kills, 100),
+          teamKilled: withAverage(entry.teamKilled, entry.alerts),
+          tkedr: ratio(entry.teamKilled, entry.deaths, 100),
+          suicides: withAverage(entry.suicides, entry.alerts),
+          suir: ratio(entry.suicides, entry.deaths, 100),
+          kpm: `${entry.kpm.toFixed(2)} (${entry.xpmAlerts})`,
+          dpm: `${entry.dpm.toFixed(2)} (${entry.xpmAlerts})`,
+        }))
     },
   },
 })

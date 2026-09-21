@@ -1,64 +1,20 @@
-import { CombatMetricsInterface } from '~/ps2alerts-constants/interfaces/CombatMetricsInterface'
-import { PS2AlertsTerritoryInstanceInterface } from '~/ps2alerts-constants/interfaces/PS2AlertsTerritoryInstanceInterface'
-import { XPerMinuteInterface } from '~/ps2alerts-constants/interfaces/api-responses/InstanceCharacterInterface'
-import { PS2AlertsCharacterInterface } from '~/ps2alerts-constants/interfaces/PS2AlertsCharacterInterface'
-import { PS2AlertsOutfitInterface } from '~/ps2alerts-constants/interfaces/PS2AlertsOutfitInterface'
 import { Bracket } from '~/ps2alerts-constants/bracket'
 import { Faction } from '~/ps2alerts-constants/faction'
-import TerritoryResultInterface from '~/ps2alerts-constants/interfaces/TerritoryResultInterface'
+import { World } from '~/ps2alerts-constants/world'
+import { Zone } from '~/ps2alerts-constants/zone'
+import { Ps2AlertsEventState } from '~/ps2alerts-constants/ps2AlertsEventState'
+import { PS2AlertsOutfitInterface } from '~/ps2alerts-constants/interfaces/PS2AlertsOutfitInterface'
+import { GlobalCharacterAggregateInterface } from '~/ps2alerts-constants/interfaces/api-responses/GlobalCharacterAggregateInterface'
+import { GlobalOutfitAggregateInterface } from '~/ps2alerts-constants/interfaces/api-responses/GlobalOutfitAggregateInterface'
 
-// The constants' result interface stops short of the victor, which the API does send
-export interface ProfileInstanceDetailsInterface
-  extends Omit<PS2AlertsTerritoryInstanceInterface, 'result'> {
-  result?: TerritoryResultInterface & {
-    victor?: Faction | null
-    draw?: boolean
-  }
-}
+// Shapes returned by the API's /profiles endpoints, which do all the aggregation server-side
 
-// A per-alert aggregate for either a character or an outfit, as returned by the instance aggregate endpoints
-export interface ProfileAlertInterface extends CombatMetricsInterface {
-  instance: string
-  instanceDetails?: ProfileInstanceDetailsInterface
-  xPerMinutes?: XPerMinuteInterface
-  character?: PS2AlertsCharacterInterface
-  outfit?: PS2AlertsOutfitInterface
-  participants?: number
-  [key: string]: any
-}
+export type ProfileType = 'character' | 'outfit'
 
-// The all-time aggregate for a single bracket, from the global aggregate endpoints
-export interface ProfileGlobalAggregateInterface
-  extends CombatMetricsInterface {
+export type TimelineGranularity = 'day' | 'week' | 'month' | 'year'
+
+export interface ProfileBracketTotalsInterface {
   bracket: Bracket
-  [key: string]: any
-}
-
-export interface ProfileCommonMetricsInterface {
-  kills?: number | string
-  deaths?: number | string
-  teamKills?: number | string
-  teamKilled?: number | string
-  suicides?: number | string
-  headshots?: number | string
-  kd: string // Calculated
-  hsr: string // Calculated
-  tkr: string // Calculated
-  tkedr: string // Calculated
-  suir: string // Calculated
-  kpm: string // Calculated
-  dpm: string // Calculated
-  xpmBracketCount?: number
-  bracket: string
-  bracketCount: number
-  [key: string]: any
-}
-
-export interface BracketedProfileCommonMetricsInterface {
-  [bracket: number]: ProfileCommonMetricsInterface | null
-}
-
-export interface ProfileTotalsInterface {
   alerts: number
   kills: number
   deaths: number
@@ -69,13 +25,73 @@ export interface ProfileTotalsInterface {
   xpmAlerts: number
   kpm: number
   dpm: number
+  wins: number
+  decided: number
 }
 
-export interface ProfileMetricsInterface {
-  brackets: BracketedProfileCommonMetricsInterface
-  averages: BracketedProfileCommonMetricsInterface
-  totals: ProfileTotalsInterface
-  alerts: ProfileAlertInterface[]
+export interface ProfileSummaryInterface {
+  type: ProfileType
+  id: string
+  world: World
+  days: number | null
+  identity: GlobalCharacterAggregateInterface | GlobalOutfitAggregateInterface
+  faction: Faction
+  totals: ProfileBracketTotalsInterface
+  brackets: Record<number, ProfileBracketTotalsInterface | undefined>
+  firstAlert: string | null
+  lastAlert: string | null
 }
 
-export type ProfileType = 'player' | 'outfit'
+export interface ProfileTimelineRowInterface {
+  bucket: string
+  bracket: Bracket
+  alerts: number
+  kills: number
+  deaths: number
+  headshots: number
+  teamKills: number
+  teamKilled: number
+  suicides: number
+  xpmAlerts: number
+  kpmTotal: number
+  dpmTotal: number
+}
+
+export interface ProfileAlertRowInterface {
+  instance: string
+  kills?: number
+  deaths?: number
+  headshots?: number
+  teamKills?: number
+  teamKilled?: number
+  suicides?: number
+  participants?: number
+  battleRank?: number
+  outfit?: PS2AlertsOutfitInterface
+  details: {
+    world: World
+    zone: Zone
+    bracket: Bracket
+    state: Ps2AlertsEventState
+    timeStarted: string
+    timeEnded: string | null
+    victor: Faction | null
+    draw: boolean
+  } | null
+}
+
+export interface ProfileAlertsPageInterface {
+  items: ProfileAlertRowInterface[]
+  total: number
+  page: number
+  pageSize: number
+}
+
+// Everything a profile page has loaded, handed down to the layout
+export interface ProfileDataInterface {
+  type: ProfileType
+  id: string
+  world: World
+  days: number | null
+  summary: ProfileSummaryInterface
+}

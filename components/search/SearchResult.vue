@@ -55,6 +55,7 @@ import {
   SearchResultComponentInterface,
 } from '~/ps2alerts-constants/interfaces/PS2AlertsSearchResultInterface'
 import { Faction } from '~/ps2alerts-constants/faction'
+import { profileLink } from '~/utilities/ProfileApi'
 
 export default defineComponent({
   name: 'SearchResult',
@@ -84,11 +85,19 @@ export default defineComponent({
     },
     link(): string {
       if (this.characterResult) {
-        return `/player/${this.characterResult.character.id}`
+        return profileLink(
+          'character',
+          this.characterResult.character.id,
+          this.result.world
+        )
       }
 
       if (this.outfitResult) {
-        return `/outfit/${this.outfitResult.outfit.id}`
+        return profileLink(
+          'outfit',
+          this.outfitResult.outfit.id,
+          this.result.world
+        )
       }
 
       throw new Error('Unexpected result type')

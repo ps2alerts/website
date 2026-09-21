@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { ProfileMetricsInterface } from '~/interfaces/profiles/ProfileMetricsInterface'
+import { ProfileSummaryInterface } from '~/interfaces/profiles/ProfileMetricsInterface'
 
 interface Tile {
   label: string
@@ -31,36 +31,16 @@ const compact = (value: number): string =>
 export default Vue.extend({
   name: 'ProfileHeadline',
   props: {
-    statistics: {
-      type: Object as () => ProfileMetricsInterface,
-      required: true,
-    },
-    faction: {
-      type: Number,
+    summary: {
+      type: Object as () => ProfileSummaryInterface,
       required: true,
     },
   },
   computed: {
     tiles(): Tile[] {
-      const totals = this.statistics.totals
-      let wins = 0
-      let decided = 0
-
-      this.statistics.alerts.forEach((alert) => {
-        const result = alert.instanceDetails?.result
-
-        if (!result || result.draw || !result.victor) {
-          return
-        }
-
-        decided++
-
-        if (result.victor === this.faction) {
-          wins++
-        }
-      })
-
-      const winRate = decided > 0 ? (wins / decided) * 100 : 0
+      const totals = this.summary.totals
+      const winRate =
+        totals.decided > 0 ? (totals.wins / totals.decided) * 100 : 0
       const kd = totals.deaths > 0 ? totals.kills / totals.deaths : totals.kills
       const hsr = totals.kills > 0 ? (totals.headshots / totals.kills) * 100 : 0
 
@@ -70,7 +50,7 @@ export default Vue.extend({
           label: 'Win rate',
           value: `${winRate.toFixed(1)}%`,
           classes: winRate >= 50 ? 'text-green-400' : 'text-red-400',
-          tooltip: `${wins} won of ${decided} decided alerts. Draws and alerts still in progress are left out.`,
+          tooltip: `${totals.wins} won of ${totals.decided} decided alerts. Draws and alerts still in progress are left out.`,
         },
         { label: 'Kills', value: compact(totals.kills) },
         {

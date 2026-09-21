@@ -37,6 +37,16 @@
             <template slot="item.rank" slot-scope="props">
               {{ items.indexOf(props.item) + 1 }}
             </template>
+            <template #[`item.outfit.name`]="{ item }">
+              <NuxtLink
+                v-if="hasOutfit(item.outfit)"
+                :to="profileLink('outfit', item.outfit.id, item.outfit.world)"
+                class="label gray border whitespace-nowrap"
+              >
+                {{ item.outfit.name }}
+              </NuxtLink>
+              <span v-else class="text-gray-400">{{ item.outfit.name }}</span>
+            </template>
           </v-data-table>
         </div>
       </div>
@@ -49,6 +59,8 @@ import Vue, { PropOptions } from 'vue'
 import { StatisticsOutfitLeaderboardConfig } from '@/constants/DataTableConfig'
 import { StatisticsOutfitTableDataInterface } from '~/interfaces/statistics/StatisticsOutfitTableDataInterface'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
+import { profileLink } from '~/utilities/ProfileApi'
+import { PS2AlertsOutfitInterface } from '~/ps2alerts-constants/interfaces/PS2AlertsOutfitInterface'
 
 export default Vue.extend({
   name: 'OutfitLeaderboard',
@@ -174,6 +186,11 @@ export default Vue.extend({
     this.loaded = true
   },
   methods: {
+    profileLink,
+    // Outfit ids 1-4 are the per-faction "no outfit" placeholders
+    hasOutfit(outfit?: PS2AlertsOutfitInterface): boolean {
+      return !!outfit && parseInt(outfit.id, 10) > 4
+    },
     tableItemClass(item: StatisticsOutfitTableDataInterface): string {
       return FactionBgClassString(item.outfit.faction)
     },

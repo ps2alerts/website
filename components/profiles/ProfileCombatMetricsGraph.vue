@@ -82,22 +82,39 @@
       </div>
     </div>
     <p class="text-xs text-gray-400 mt-2 text-center">
-      <b>{{ statLabel }}</b>
-      {{ perAlert ? 'per alert, averaged' : 'in total' }} per
-      <b>{{ granularityText }}</b> across {{ pointCount }}
-      {{ granularityText }}s
-      <span v-if="bracketMode">
-        within the <b>{{ bracketMode | bracketName }}</b> bracket</span
-      ><span v-else> across all brackets</span>.
-      <span v-if="resolution === 'auto'"
-        >Resolution is chosen automatically from the date range.</span
-      >
+      <template v-if="error">
+        <span class="text-red-400">{{ error }}</span>
+        <button class="btn btn-sm ml-2" @click="fetchTimeline">Retry</button>
+      </template>
+      <template v-else>
+        <b>{{ statLabel }}</b>
+        {{ perAlert || isRatio ? 'per alert, averaged' : 'in total' }} per
+        <b>{{ granularityText }}</b> across {{ pointCount }}
+        {{ granularityText }}s
+        <span v-if="bracketMode">
+          within the <b>{{ bracketMode | bracketName }}</b> bracket</span
+        ><span v-else> across all brackets</span>.
+        <span v-if="resolution === 'auto'"
+          >Resolution is chosen automatically from the date range.</span
+        >
+      </template>
     </p>
-    <LineChart
-      :chart-data="dataCollection"
-      :chart-options="chartOptions"
-      :styles="{ height: '420px' }"
-    ></LineChart>
+    <div class="relative">
+      <div
+        v-if="loading"
+        class="absolute inset-0 flex justify-center items-center z-10"
+      >
+        <font-awesome-icon
+          :icon="['fas', 'sync']"
+          class="animate-spin text-2xl"
+        ></font-awesome-icon>
+      </div>
+      <LineChart
+        :chart-data="dataCollection"
+        :chart-options="chartOptions"
+        :styles="{ height: '420px' }"
+      ></LineChart>
+    </div>
   </div>
 </template>
 
@@ -105,15 +122,14 @@
 import Vue from 'vue'
 import { commonChartOptions } from '~/constants/CommonChartOptions'
 import {
-  ProfileAlertInterface,
-  ProfileMetricsInterface,
+  ProfileSummaryInterface,
+  ProfileTimelineRowInterface,
+  TimelineGranularity,
 } from '~/interfaces/profiles/ProfileMetricsInterface'
 import { Bracket } from '~/ps2alerts-constants/bracket'
-import { Ps2AlertsEventState } from '~/ps2alerts-constants/ps2AlertsEventState'
 import { TIME_GRANULARITY } from '~/constants/Time'
 import {
   AUTO_GRANULARITY,
-  bucketKey,
   bucketLabel,
   ChartResolution,
   granularityNoun,
@@ -122,6 +138,7 @@ import {
   pointRadiusFor,
   rollingAverage,
 } from '~/utilities/ChartBuckets'
+import { profileApi } from '~/utilities/ProfileApi'
 
 type StatMode =
   | 'kills'
@@ -137,23 +154,30 @@ interface Bucket {
   alerts: number
   kills: number
   deaths: number
-  sum: number
+  headshots: number
+  teamKills: number
+  suicides: number
   xpmAlerts: number
-  xpmSum: number
+  kpmTotal: number
+  dpmTotal: number
 }
 
+// The API buckets the alerts by day/week/month/year; this component picks the resolution, filters by bracket and draws
 export default Vue.extend({
   name: 'ProfileCombatMetricsGraph',
   props: {
-    statistics: {
-      type: Object as () => ProfileMetricsInterface,
+    summary: {
+      type: Object as () => ProfileSummaryInterface,
       required: true,
     },
   },
   data() {
     return {
+      rows: [] as ProfileTimelineRowInterface[],
+      loadedGranularity: null as TimelineGranularity | null,
+      loading: false,
+      error: '',
       dataCollection: {},
-      granularity: TIME_GRANULARITY.DAY as TIME_GRANULARITY,
       pointCount: 0,
       statMode: 'kills' as StatMode,
       statModes: [
@@ -195,8 +219,23 @@ export default Vue.extend({
         'Stat'
       )
     },
+    granularity(): TimelineGranularity {
+      if (this.resolution !== AUTO_GRANULARITY) {
+        return this.resolution as TimelineGranularity
+      }
+
+      const first = this.summary.firstAlert
+      const last = this.summary.lastAlert
+
+      return first && last
+        ? (pickGranularity(
+            new Date(first),
+            new Date(last)
+          ) as TimelineGranularity)
+        : 'month'
+    },
     granularityText(): string {
-      return granularityNoun(this.granularity)
+      return granularityNoun(this.granularity as TIME_GRANULARITY)
     },
     // Ratios and per-minute stats are already averages, so "total" makes no sense for them
     isRatio(): boolean {
@@ -225,13 +264,16 @@ export default Vue.extend({
     },
   },
   watch: {
+    summary() {
+      this.fetchTimeline()
+    },
+    granularity() {
+      this.fetchTimeline()
+    },
     statMode() {
       this.buildCollection()
     },
     bracketMode() {
-      this.buildCollection()
-    },
-    resolution() {
       this.buildCollection()
     },
     perAlert() {
@@ -242,36 +284,38 @@ export default Vue.extend({
     },
   },
   created() {
-    this.buildCollection()
+    this.fetchTimeline()
   },
   methods: {
-    finishedAlerts(): ProfileAlertInterface[] {
-      return (this.statistics.alerts ?? [])
-        .filter((alert) => {
-          const details = alert.instanceDetails
+    async fetchTimeline(): Promise<void> {
+      const granularity = this.granularity
+      this.loading = true
+      this.error = ''
 
-          if (!details || details.state !== Ps2AlertsEventState.ENDED) {
-            return false
-          }
-
-          return !this.bracketMode || details.bracket === this.bracketMode
-        })
-        .sort(
-          (a, b) =>
-            new Date(a.instanceDetails!.timeStarted).getTime() -
-            new Date(b.instanceDetails!.timeStarted).getTime()
+      try {
+        const rows = await profileApi.timeline(
+          {
+            type: this.summary.type,
+            id: this.summary.id,
+            world: this.summary.world,
+            days: this.summary.days,
+          },
+          granularity
         )
-    },
-    statOf(alert: ProfileAlertInterface): number {
-      if (this.statMode === 'kpm') {
-        return alert.xPerMinutes?.killsPerMinute ?? 0
-      }
 
-      if (this.statMode === 'dpm') {
-        return alert.xPerMinutes?.deathsPerMinute ?? 0
+        // A slower earlier request must not overwrite a newer resolution
+        if (granularity === this.granularity) {
+          this.rows = rows
+          this.loadedGranularity = granularity
+          this.buildCollection()
+        }
+      } catch (e: any) {
+        this.error = `The timeline could not be loaded (${
+          e?.message ?? 'network error'
+        }).`
+      } finally {
+        this.loading = false
       }
-
-      return Number(alert[this.statMode] ?? 0)
     },
     bucketValue(bucket: Bucket): number {
       if (this.statMode === 'kd') {
@@ -279,68 +323,70 @@ export default Vue.extend({
       }
 
       if (this.statMode === 'kpm' || this.statMode === 'dpm') {
-        return bucket.xpmAlerts > 0 ? bucket.xpmSum / bucket.xpmAlerts : 0
+        const total =
+          this.statMode === 'kpm' ? bucket.kpmTotal : bucket.dpmTotal
+        return bucket.xpmAlerts > 0 ? total / bucket.xpmAlerts : 0
       }
 
-      return this.perAlert && bucket.alerts > 0
-        ? bucket.sum / bucket.alerts
-        : bucket.sum
+      const total = bucket[this.statMode]
+      return this.perAlert && bucket.alerts > 0 ? total / bucket.alerts : total
+    },
+    overallAverage(): number | null {
+      const source = this.bracketMode
+        ? this.summary.brackets[this.bracketMode]
+        : this.summary.totals
+
+      if (!source) {
+        return null
+      }
+
+      if (this.statMode === 'kd') {
+        return source.deaths > 0 ? source.kills / source.deaths : source.kills
+      }
+
+      if (this.statMode === 'kpm' || this.statMode === 'dpm') {
+        return source[this.statMode]
+      }
+
+      return source.alerts > 0 ? source[this.statMode] / source.alerts : 0
     },
     buildCollection() {
-      const alerts = this.finishedAlerts()
-
-      if (alerts.length === 0) {
-        this.pointCount = 0
-        this.dataCollection = { labels: [], datasets: [] }
-        return
-      }
-
-      const first = new Date(alerts[0].instanceDetails!.timeStarted)
-      const last = new Date(
-        alerts[alerts.length - 1].instanceDetails!.timeStarted
-      )
-      this.granularity =
-        this.resolution === AUTO_GRANULARITY
-          ? pickGranularity(first, last)
-          : this.resolution
-
+      // Rows arrive per bucket per bracket; fold the brackets we want into one bucket each
       const buckets = new Map<string, Bucket>()
 
-      alerts.forEach((alert) => {
-        const key = bucketKey(
-          new Date(alert.instanceDetails!.timeStarted),
-          this.granularity
-        )
-        const bucket = buckets.get(key) ?? {
+      this.rows.forEach((row) => {
+        if (this.bracketMode && row.bracket !== this.bracketMode) {
+          return
+        }
+
+        const bucket = buckets.get(row.bucket) ?? {
           alerts: 0,
           kills: 0,
           deaths: 0,
-          sum: 0,
+          headshots: 0,
+          teamKills: 0,
+          suicides: 0,
           xpmAlerts: 0,
-          xpmSum: 0,
+          kpmTotal: 0,
+          dpmTotal: 0,
         }
 
-        bucket.alerts++
-        bucket.kills += alert.kills ?? 0
-        bucket.deaths += alert.deaths ?? 0
-        bucket.sum += this.statOf(alert)
-
-        if (alert.xPerMinutes) {
-          bucket.xpmAlerts++
-          bucket.xpmSum += this.statOf(alert)
-        }
-
-        buckets.set(key, bucket)
+        bucket.alerts += row.alerts
+        bucket.kills += row.kills
+        bucket.deaths += row.deaths
+        bucket.headshots += row.headshots
+        bucket.teamKills += row.teamKills
+        bucket.suicides += row.suicides
+        bucket.xpmAlerts += row.xpmAlerts
+        bucket.kpmTotal += row.kpmTotal
+        bucket.dpmTotal += row.dpmTotal
+        buckets.set(row.bucket, bucket)
       })
 
       const keys = [...buckets.keys()].sort()
       const values = keys.map((key) => this.bucketValue(buckets.get(key)!))
-      const alertCounts = keys.map((key) => buckets.get(key)!.alerts)
       const pointRadius = pointRadiusFor(keys.length)
-      const overallAverage =
-        this.statistics.averages?.[this.bracketMode ?? Bracket.TOTAL]?.[
-          this.statMode
-        ]
+      const average = this.overallAverage()
 
       this.pointCount = keys.length
 
@@ -359,7 +405,6 @@ export default Vue.extend({
             this.perAlert || this.isRatio ? 'avg per alert' : 'total'
           })`,
           data: values,
-          alertCounts,
         },
         {
           ...commonChartOptions.datasets.nc,
@@ -379,21 +424,26 @@ export default Vue.extend({
         },
       ]
 
-      // The all-time bracket average only lines up with the per-alert view
-      if ((this.perAlert || this.isRatio) && overallAverage !== undefined) {
+      // The overall average only lines up with the per-alert view
+      if ((this.perAlert || this.isRatio) && average !== null) {
         datasets.push({
-          label: 'All-time avg',
+          label: this.summary.days ? 'Period avg' : 'All-time avg',
           borderColor: '#a0aec0',
           backgroundColor: '#a0aec0',
           borderWidth: 1,
           borderDash: [3, 4],
           pointRadius: 0,
-          data: values.map(() => Number(overallAverage)),
+          data: values.map(() => average),
         })
       }
 
       this.dataCollection = {
-        labels: keys.map((key) => bucketLabel(key, this.granularity)),
+        labels: keys.map((key) =>
+          bucketLabel(
+            key,
+            (this.loadedGranularity ?? this.granularity) as TIME_GRANULARITY
+          )
+        ),
         datasets,
       }
     },

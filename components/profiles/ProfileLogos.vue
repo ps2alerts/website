@@ -57,6 +57,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { PS2AlertsOutfitInterface } from '~/ps2alerts-constants/interfaces/PS2AlertsOutfitInterface'
+import { profileLink } from '~/utilities/ProfileApi'
+import { World } from '~/ps2alerts-constants/world'
 
 export default Vue.extend({
   name: 'ProfileLogos',
@@ -87,7 +89,7 @@ export default Vue.extend({
       return this.linkOutfit && this.isInOutfit
     },
     outfitLink(): string {
-      return `/outfit/${this.outfit.id}`
+      return profileLink('outfit', this.outfit.id, this.world as World)
     },
   },
 })

@@ -39,6 +39,36 @@
             <template slot="item.rank" slot-scope="props">
               {{ items.indexOf(props.item) + 1 }}
             </template>
+            <template #[`item.character.name`]="{ item }">
+              <NuxtLink
+                :to="
+                  profileLink(
+                    'character',
+                    item.character.id,
+                    item.character.world
+                  )
+                "
+                class="label gray border whitespace-nowrap"
+              >
+                {{ item.character.name }}
+              </NuxtLink>
+            </template>
+            <template #[`item.character.outfit.name`]="{ item }">
+              <NuxtLink
+                v-if="hasOutfit(item.character.outfit)"
+                :to="
+                  profileLink(
+                    'outfit',
+                    item.character.outfit.id,
+                    item.character.world
+                  )
+                "
+                class="label gray border whitespace-nowrap"
+              >
+                {{ item.character.outfit.name }}
+              </NuxtLink>
+              <span v-else class="text-gray-500">-</span>
+            </template>
           </v-data-table>
         </div>
       </div>
@@ -51,6 +81,8 @@ import Vue, { PropOptions } from 'vue'
 import { StatisticsCharactersLeaderboardConfig } from '@/constants/DataTableConfig'
 import { StatisticsCharacterTableDataInterface } from '~/interfaces/statistics/StatisticsCharacterTableDataInterface'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
+import { profileLink } from '~/utilities/ProfileApi'
+import { PS2AlertsOutfitInterface } from '~/ps2alerts-constants/interfaces/PS2AlertsOutfitInterface'
 
 export default Vue.extend({
   name: 'CharactersLeaderboard',
@@ -181,6 +213,11 @@ export default Vue.extend({
     this.loaded = true
   },
   methods: {
+    profileLink,
+    // Outfit ids 1-4 are the per-faction "no outfit" placeholders
+    hasOutfit(outfit?: PS2AlertsOutfitInterface): boolean {
+      return !!outfit && parseInt(outfit.id, 10) > 4
+    },
     tableItemClass(item: StatisticsCharacterTableDataInterface): string {
       return FactionBgClassString(item.character.faction)
     },
