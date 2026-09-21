@@ -39,19 +39,26 @@
       </p>
     </div>
     <template v-else>
+      <div class="col-span-12">
+        <ProfileHeadline
+          :key="renderKey"
+          :statistics="statistics"
+          :faction="faction"
+        />
+      </div>
       <div class="col-span-12 card">
-        <div class="tag section">Combat Stats</div>
+        <div class="tag section">Combat stats by bracket</div>
         <ProfileCombatMetrics :key="renderKey" :statistics="statistics" />
       </div>
       <div class="col-span-12 card relative">
-        <div class="tag section">Bracketed Combat stat history</div>
+        <div class="tag section">Performance over time</div>
         <ProfileCombatMetricsGraph
           :key="renderKey"
           :statistics="statistics"
         ></ProfileCombatMetricsGraph>
       </div>
       <div class="col-span-12 card">
-        <div class="tag section">Alert Statistics</div>
+        <div class="tag section">Alert history</div>
         <ProfileAlertMetrics
           :key="renderKey"
           :statistics="statistics"
@@ -70,6 +77,7 @@ import ProfileLogos from '~/components/profiles/ProfileLogos.vue'
 import ProfileCombatMetrics from '~/components/profiles/ProfileCombatMetrics.vue'
 import ProfileCombatMetricsGraph from '~/components/profiles/ProfileCombatMetricsGraph.vue'
 import ProfileDaysFilter from '~/components/profiles/ProfileDaysFilter.vue'
+import ProfileHeadline from '~/components/profiles/ProfileHeadline.vue'
 import {
   ProfileMetricsInterface,
   ProfileType,
@@ -85,6 +93,7 @@ export default Vue.extend({
     ProfileCombatMetrics,
     ProfileCombatMetricsGraph,
     ProfileDaysFilter,
+    ProfileHeadline,
   },
   props: {
     type: {

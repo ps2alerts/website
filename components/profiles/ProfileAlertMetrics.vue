@@ -1,26 +1,32 @@
 <template>
-  <div class="col-span-12 grid grid-cols-12">
-    <div class="col-span-12">{{ statistics.alerts.length }} Alerts</div>
-    <div class="col-span-12 md:col-span-4 lg:col-span-2">
+  <div class="grid grid-cols-12 gap-4">
+    <div class="col-span-12 lg:col-span-3 xl:col-span-2">
+      <div class="tag">Alerts by bracket</div>
       <v-simple-table dark dense>
         <thead>
           <tr class="font-bold border-b border-white">
             <td>Bracket</td>
-            <td>Count</td>
+            <td class="text-right">Count</td>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(count, bracket) in alertsByBrackets" :key="bracket">
-            <td>
-              {{ bracket | bracketName }}
-            </td>
-            <td>{{ count }}</td>
+            <td>{{ bracket | bracketName }}</td>
+            <td class="text-right">{{ count }}</td>
+          </tr>
+          <tr class="font-bold border-t border-white">
+            <td>Total</td>
+            <td class="text-right">{{ statistics.alerts.length }}</td>
           </tr>
         </tbody>
       </v-simple-table>
-      <PieChart v-bind="charts.bracketDistributions" />
+      <PieChart
+        v-bind="charts.bracketDistributions"
+        :styles="{ height: '220px' }"
+        class="mt-4"
+      />
     </div>
-    <div class="col-span-12">
+    <div class="col-span-12 lg:col-span-9 xl:col-span-10">
       <v-data-table
         class="datatable"
         item-key="instance"
@@ -35,6 +41,9 @@
         </template>
         <template #[`item.victor`]="{ item }">
           <span v-if="item.victor === null" class="label">-</span>
+          <span v-else-if="item.victor === 'draw'" class="label gray"
+            >Draw</span
+          >
           <template v-else>
             <span v-if="item.victor === faction" class="label green">Yes</span>
             <span v-else class="label">No</span>
@@ -217,7 +226,9 @@ export default Vue.extend({
           cont: alert.instanceDetails?.zone
             ? zoneNameFilter(alert.instanceDetails.zone)
             : 'Unknown',
-          victor: alert.instanceDetails?.result?.victor ?? null,
+          victor: alert.instanceDetails?.result?.draw
+            ? 'draw'
+            : alert.instanceDetails?.result?.victor ?? null,
           bracket: bracketName(bracket ?? Bracket.UNKNOWN),
           outfit: alert.character?.outfit,
           br:

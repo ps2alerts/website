@@ -1,142 +1,228 @@
 <template>
   <div>
-    <div v-if="!loaded" class="flex justify-center place-items-center h-full">
-      <h1 class="mb-4">Loading...</h1>
-    </div>
-    <div v-if="loaded" class="text-center">
-      <div class="col-span-12">
-        <div class="md:btn-group justify-center grid grid-cols-3 md:flex">
-          <span class="mr-1">Stat:</span>
+    <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+      <div class="flex items-center">
+        <span class="control-label">Stat</span>
+        <div class="btn-group flex flex-wrap">
           <button
             v-for="mode in statModes"
             :key="mode.stat"
-            class="btn btn-sm mx-1 my-1 md:mx-0 md:my-0 col-span-1"
+            class="btn btn-sm"
             :class="{ 'btn-active': statMode === mode.stat }"
-            @click="updateMode(mode.stat)"
+            @click="statMode = mode.stat"
           >
             {{ mode.text }}
           </button>
         </div>
-        <div class="col-span-12 mt-1">
-          <div class="md:btn-group justify-center grid grid-cols-3 md:flex">
-            <span class="mr-1">Bracket:</span>
-            <button
-              v-for="mode in bracketModes"
-              :key="mode.bracket"
-              class="btn btn-sm mx-1 my-1 md:mx-0 md:my-0 col-span-1"
-              :class="{ 'btn-active': bracketMode === mode.bracket }"
-              @click="updateBracket(mode.bracket)"
-            >
-              {{ mode.text }}
-            </button>
-          </div>
-          <div class="flex m-auto justify-center mt-1">
-            <span class="mr-1">Rolling average days:</span>
-            <input
-              v-model="averageSize"
-              class="w-16 appearance-none border border-solid border-transparent text-white py-1 px-2 leading-tight bg-tint-light rounded-sm focus:bg-gray-500 focus:outline-none focus:border-white"
-              type="number"
-              aria-label="Bucket size"
-            />
-            <button
-              v-for="size in averageSizeOptions"
-              :key="size"
-              class="btn btn-sm mx-1"
-              @click="updateAverage(size)"
-            >
-              {{ size }}
-            </button>
-          </div>
+      </div>
+      <div class="flex items-center">
+        <span class="control-label">Bracket</span>
+        <div class="btn-group flex flex-wrap">
+          <button
+            v-for="mode in bracketModes"
+            :key="String(mode.bracket)"
+            class="btn btn-sm"
+            :class="{ 'btn-active': bracketMode === mode.bracket }"
+            @click="bracketMode = mode.bracket"
+          >
+            {{ mode.text }}
+          </button>
         </div>
       </div>
-      <p class="text-xs text-gray-400 mt-2">
-        Shows <b>{{ statMode.toLowerCase() }}</b> over time per day
-        <span v-if="bracketMode"
-          >within the <b>{{ bracketMode | bracketName }}</b> bracket.</span
-        >
-        <span v-if="!bracketMode">amongst <b>all</b> brackets</span>
-        <br />Last X "alert days" is an average based on full days where there
-        is data (which multiple alerts can be included in one day)
-      </p>
-      <LineChart
-        :chart-data="dataCollection"
-        :chart-options="chartOptions"
-        :styles="{ height: '400px' }"
-      ></LineChart>
+      <div class="flex items-center">
+        <span class="control-label">Per</span>
+        <div class="btn-group flex flex-wrap">
+          <button
+            v-for="option in resolutionOptions"
+            :key="option.value"
+            class="btn btn-sm"
+            :class="{ 'btn-active': resolution === option.value }"
+            @click="resolution = option.value"
+          >
+            {{ option.text }}
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center">
+        <div class="btn-group flex">
+          <button
+            class="btn btn-sm"
+            :class="{ 'btn-active': perAlert }"
+            @click="perAlert = true"
+          >
+            Average per alert
+          </button>
+          <button
+            class="btn btn-sm"
+            :class="{ 'btn-active': !perAlert }"
+            @click="perAlert = false"
+          >
+            Total
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center">
+        <span class="control-label"
+          >Rolling average
+          <InfoTooltip
+            tooltip="Number of points the blue rolling average looks back over. The dashed trend line is a straight best fit through every point shown."
+          ></InfoTooltip
+        ></span>
+        <div class="btn-group flex">
+          <button
+            v-for="size in rollingOptions"
+            :key="size"
+            class="btn btn-sm"
+            :class="{ 'btn-active': rollingWindow === size }"
+            @click="rollingWindow = size"
+          >
+            {{ size }}
+          </button>
+        </div>
+      </div>
     </div>
+    <p class="text-xs text-gray-400 mt-2 text-center">
+      <b>{{ statLabel }}</b>
+      {{ perAlert ? 'per alert, averaged' : 'in total' }} per
+      <b>{{ granularityText }}</b> across {{ pointCount }}
+      {{ granularityText }}s
+      <span v-if="bracketMode">
+        within the <b>{{ bracketMode | bracketName }}</b> bracket</span
+      ><span v-else> across all brackets</span>.
+      <span v-if="resolution === 'auto'"
+        >Resolution is chosen automatically from the date range.</span
+      >
+    </p>
+    <LineChart
+      :chart-data="dataCollection"
+      :chart-options="chartOptions"
+      :styles="{ height: '420px' }"
+    ></LineChart>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { commonChartOptions } from '~/constants/CommonChartOptions'
-import { ProfileMetricsInterface } from '~/interfaces/profiles/ProfileMetricsInterface'
+import {
+  ProfileAlertInterface,
+  ProfileMetricsInterface,
+} from '~/interfaces/profiles/ProfileMetricsInterface'
 import { Bracket } from '~/ps2alerts-constants/bracket'
-import { formatDateTime, utcDate } from '~/utilities/TimeHelper'
-import { DATE_FORMAT } from '~/constants/Time'
 import { Ps2AlertsEventState } from '~/ps2alerts-constants/ps2AlertsEventState'
+import { TIME_GRANULARITY } from '~/constants/Time'
+import {
+  AUTO_GRANULARITY,
+  bucketKey,
+  bucketLabel,
+  ChartResolution,
+  granularityNoun,
+  linearTrend,
+  pickGranularity,
+  pointRadiusFor,
+  rollingAverage,
+} from '~/utilities/ChartBuckets'
+
+type StatMode =
+  | 'kills'
+  | 'deaths'
+  | 'kd'
+  | 'teamKills'
+  | 'suicides'
+  | 'headshots'
+  | 'kpm'
+  | 'dpm'
+
+interface Bucket {
+  alerts: number
+  kills: number
+  deaths: number
+  sum: number
+  xpmAlerts: number
+  xpmSum: number
+}
 
 export default Vue.extend({
   name: 'ProfileCombatMetricsGraph',
   props: {
     statistics: {
       type: Object as () => ProfileMetricsInterface,
-      default: {},
       required: true,
     },
   },
   data() {
     return {
       dataCollection: {},
-      chartOptions: {
-        ...commonChartOptions.root,
-        scales: {
-          x: {
-            ...commonChartOptions.scales,
-            title: {
-              display: true,
-              text: 'Date',
-              color: '#fff',
-            },
-          },
-          y: {
-            ...commonChartOptions.scales,
-            grid: {
-              color: '#7b8694',
-            },
-            title: {
-              display: true,
-              text: 'Kills',
-              color: '#fff',
-            },
-          },
-        },
-      },
-      loaded: false,
-      data: [] as ProfileMetricsInterface[],
-      statMode: 'kills',
+      granularity: TIME_GRANULARITY.DAY as TIME_GRANULARITY,
+      pointCount: 0,
+      statMode: 'kills' as StatMode,
       statModes: [
         { stat: 'kills', text: 'Kills' },
         { stat: 'deaths', text: 'Deaths' },
         { stat: 'kd', text: 'KD' },
+        { stat: 'headshots', text: 'Headshots' },
         { stat: 'teamKills', text: 'Teamkills' },
         { stat: 'suicides', text: 'Suicides' },
-        { stat: 'headshots', text: 'Headshots' },
         { stat: 'kpm', text: 'KPM' },
         { stat: 'dpm', text: 'DPM' },
-      ],
+      ] as { stat: StatMode; text: string }[],
       bracketMode: null as Bracket | null,
       bracketModes: [
-        { bracket: null, text: 'All Alerts' },
-        { bracket: 5, text: 'Prime' },
-        { bracket: 4, text: 'High' },
-        { bracket: 3, text: 'Medium' },
-        { bracket: 2, text: 'Low' },
-        { bracket: 1, text: 'Dead' },
+        { bracket: null, text: 'All' },
+        { bracket: Bracket.PRIME, text: 'Prime' },
+        { bracket: Bracket.HIGH, text: 'High' },
+        { bracket: Bracket.MEDIUM, text: 'Medium' },
+        { bracket: Bracket.LOW, text: 'Low' },
+        { bracket: Bracket.DEAD, text: 'Dead' },
       ],
-      averageSize: 7,
-      averageSizeOptions: [7, 14, 28, 30],
+      resolution: AUTO_GRANULARITY as ChartResolution,
+      resolutionOptions: [
+        { value: AUTO_GRANULARITY, text: 'Auto' },
+        { value: TIME_GRANULARITY.DAY, text: 'Day' },
+        { value: TIME_GRANULARITY.WEEK, text: 'Week' },
+        { value: TIME_GRANULARITY.MONTH, text: 'Month' },
+        { value: TIME_GRANULARITY.YEAR, text: 'Year' },
+      ],
+      perAlert: true,
+      rollingWindow: 4,
+      rollingOptions: [2, 4, 8, 12],
     }
+  },
+  computed: {
+    statLabel(): string {
+      return (
+        this.statModes.find((mode) => mode.stat === this.statMode)?.text ??
+        'Stat'
+      )
+    },
+    granularityText(): string {
+      return granularityNoun(this.granularity)
+    },
+    // Ratios and per-minute stats are already averages, so "total" makes no sense for them
+    isRatio(): boolean {
+      return ['kd', 'kpm', 'dpm'].includes(this.statMode)
+    },
+    chartOptions(): Record<string, any> {
+      return {
+        ...commonChartOptions.root,
+        scales: {
+          x: {
+            ...commonChartOptions.scales,
+            ticks: {
+              ...commonChartOptions.scales.ticks,
+              maxTicksLimit: 14,
+              maxRotation: 45,
+            },
+          },
+          y: {
+            ...commonChartOptions.scales,
+            beginAtZero: true,
+            grid: { color: '#7b8694' },
+            title: { display: true, text: this.statLabel, color: '#fff' },
+          },
+        },
+      }
+    },
   },
   watch: {
     statMode() {
@@ -145,154 +231,179 @@ export default Vue.extend({
     bracketMode() {
       this.buildCollection()
     },
-    averageSize() {
+    resolution() {
+      this.buildCollection()
+    },
+    perAlert() {
+      this.buildCollection()
+    },
+    rollingWindow() {
       this.buildCollection()
     },
   },
-  beforeDestroy() {
-    this.reset()
-  },
   created() {
-    this.reset()
     this.buildCollection()
   },
   methods: {
-    reset() {
-      this.loaded = false
+    finishedAlerts(): ProfileAlertInterface[] {
+      return (this.statistics.alerts ?? [])
+        .filter((alert) => {
+          const details = alert.instanceDetails
+
+          if (!details || details.state !== Ps2AlertsEventState.ENDED) {
+            return false
+          }
+
+          return !this.bracketMode || details.bracket === this.bracketMode
+        })
+        .sort(
+          (a, b) =>
+            new Date(a.instanceDetails!.timeStarted).getTime() -
+            new Date(b.instanceDetails!.timeStarted).getTime()
+        )
+    },
+    statOf(alert: ProfileAlertInterface): number {
+      if (this.statMode === 'kpm') {
+        return alert.xPerMinutes?.killsPerMinute ?? 0
+      }
+
+      if (this.statMode === 'dpm') {
+        return alert.xPerMinutes?.deathsPerMinute ?? 0
+      }
+
+      return Number(alert[this.statMode] ?? 0)
+    },
+    bucketValue(bucket: Bucket): number {
+      if (this.statMode === 'kd') {
+        return bucket.deaths > 0 ? bucket.kills / bucket.deaths : bucket.kills
+      }
+
+      if (this.statMode === 'kpm' || this.statMode === 'dpm') {
+        return bucket.xpmAlerts > 0 ? bucket.xpmSum / bucket.xpmAlerts : 0
+      }
+
+      return this.perAlert && bucket.alerts > 0
+        ? bucket.sum / bucket.alerts
+        : bucket.sum
     },
     buildCollection() {
-      const times: string[] = []
-      const playerData: number[] = []
-      const averageData: number[] = []
-      const runningAverageData: number[] = []
-      const datasets = []
-      const dateMap = new Map<string, number>()
-      let firstDate = ''
+      const alerts = this.finishedAlerts()
 
-      if (!this.statistics.alerts) {
+      if (alerts.length === 0) {
+        this.pointCount = 0
+        this.dataCollection = { labels: [], datasets: [] }
         return
       }
 
-      this.statistics.alerts.forEach((statistic) => {
-        // If the statistic is not for the target bracket, skip it
-        if (
-          this.bracketMode &&
-          statistic.instanceDetails?.bracket !== this.bracketMode
-        ) {
-          return
-        }
+      const first = new Date(alerts[0].instanceDetails!.timeStarted)
+      const last = new Date(
+        alerts[alerts.length - 1].instanceDetails!.timeStarted
+      )
+      this.granularity =
+        this.resolution === AUTO_GRANULARITY
+          ? pickGranularity(first, last)
+          : this.resolution
 
-        // If alert isn't finished yet don't bother counting it
-        if (statistic.instanceDetails?.state !== Ps2AlertsEventState.ENDED) {
-          return
-        }
+      const buckets = new Map<string, Bucket>()
 
-        // Convert alert time into a readable format using our defined formats for alert history etc
-        const time = formatDateTime(
-          utcDate(new Date(statistic.instanceDetails?.timeStarted || '')),
-          DATE_FORMAT
+      alerts.forEach((alert) => {
+        const key = bucketKey(
+          new Date(alert.instanceDetails!.timeStarted),
+          this.granularity
         )
-
-        const dateData = dateMap.get(time)
-        let stat = statistic[this.statMode] || 0
-
-        if (this.statMode === 'kd') {
-          stat = (statistic.kills || 1) / (statistic.deaths || 1)
-        }
-        if (this.statMode === 'kpm') {
-          stat = statistic.xPerMinutes?.killsPerMinute || 0
-        }
-        if (this.statMode === 'dpm') {
-          stat = statistic.xPerMinutes?.deathsPerMinute || 0
+        const bucket = buckets.get(key) ?? {
+          alerts: 0,
+          kills: 0,
+          deaths: 0,
+          sum: 0,
+          xpmAlerts: 0,
+          xpmSum: 0,
         }
 
-        if (!firstDate) {
-          firstDate = time
+        bucket.alerts++
+        bucket.kills += alert.kills ?? 0
+        bucket.deaths += alert.deaths ?? 0
+        bucket.sum += this.statOf(alert)
+
+        if (alert.xPerMinutes) {
+          bucket.xpmAlerts++
+          bucket.xpmSum += this.statOf(alert)
         }
 
-        if (!dateData) {
-          dateMap.set(time, stat)
-        } else {
-          dateMap.set(time, dateData + stat)
-        }
+        buckets.set(key, bucket)
       })
 
-      // Loop through all the date data and generate the final dataset
-      dateMap.forEach((value, key) => {
-        times.push(key)
-        playerData.push(value)
+      const keys = [...buckets.keys()].sort()
+      const values = keys.map((key) => this.bucketValue(buckets.get(key)!))
+      const alertCounts = keys.map((key) => buckets.get(key)!.alerts)
+      const pointRadius = pointRadiusFor(keys.length)
+      const overallAverage =
+        this.statistics.averages?.[this.bracketMode ?? Bracket.TOTAL]?.[
+          this.statMode
+        ]
 
-        const bracket = this.bracketMode ?? 0
+      this.pointCount = keys.length
 
-        averageData.push(
-          this.statistics?.averages?.[bracket]?.[this.statMode] ?? 0
-        )
-
-        const lastTen = playerData.slice(-this.averageSize)
-
-        // If it's the first entry, just use that
-        if (lastTen.length === 0) {
-          runningAverageData.push(value)
-        }
-
-        // Calculate the sum of the last 10 elements
-        const sum = lastTen.reduce((acc, val) => acc + val, 0)
-
-        // Calculate the average of the last 10 elements and push
-        runningAverageData.push(sum / lastTen.length)
-      })
-
-      const datasetOptions = {
-        ...commonChartOptions.datasets,
-        ...commonChartOptions.datasets.neutral,
-        // Find the stat out of the statModes and pull it's text
-        label:
-          this.statModes.find((mode) => mode.stat === this.statMode)?.text ||
-          'ERROR',
-      }
-      const averageDatasetOptions = {
-        ...commonChartOptions.datasets,
-        ...commonChartOptions.datasets.tr,
-        label: 'Avg for bracket',
-        pointStyle: 'line',
-      }
-      const runningAverageDatasetOptions = {
-        ...commonChartOptions.datasets,
-        ...commonChartOptions.datasets.nc,
-        label: `Last X alert days rolling avg`,
+      const lineDefaults = {
+        borderWidth: 2,
+        pointRadius,
+        pointHoverRadius: 5,
+        tension: 0.25,
       }
 
-      datasets.push({
-        ...datasetOptions,
-        data: playerData,
-      })
+      const datasets: Record<string, any>[] = [
+        {
+          ...commonChartOptions.datasets.neutral,
+          ...lineDefaults,
+          label: `${this.statLabel} (${
+            this.perAlert || this.isRatio ? 'avg per alert' : 'total'
+          })`,
+          data: values,
+          alertCounts,
+        },
+        {
+          ...commonChartOptions.datasets.nc,
+          ...lineDefaults,
+          pointRadius: 0,
+          label: `Rolling avg (${this.rollingWindow} ${this.granularityText}s)`,
+          data: rollingAverage(values, this.rollingWindow),
+        },
+        {
+          label: 'Trend',
+          borderColor: '#f6e05e',
+          backgroundColor: '#f6e05e',
+          borderWidth: 2,
+          borderDash: [8, 5],
+          pointRadius: 0,
+          data: linearTrend(values),
+        },
+      ]
 
-      datasets.push({
-        ...averageDatasetOptions,
-        data: averageData,
-      })
-
-      datasets.push({
-        ...runningAverageDatasetOptions,
-        data: runningAverageData,
-      })
+      // The all-time bracket average only lines up with the per-alert view
+      if ((this.perAlert || this.isRatio) && overallAverage !== undefined) {
+        datasets.push({
+          label: 'All-time avg',
+          borderColor: '#a0aec0',
+          backgroundColor: '#a0aec0',
+          borderWidth: 1,
+          borderDash: [3, 4],
+          pointRadius: 0,
+          data: values.map(() => Number(overallAverage)),
+        })
+      }
 
       this.dataCollection = {
-        labels: times,
+        labels: keys.map((key) => bucketLabel(key, this.granularity)),
         datasets,
       }
-
-      this.loaded = true
-    },
-    updateMode(mode: string) {
-      this.statMode = mode
-    },
-    updateBracket(bracket: Bracket | null) {
-      this.bracketMode = bracket
-    },
-    updateAverage(averageSize: number) {
-      this.averageSize = averageSize
     },
   },
 })
 </script>
+
+<style scoped lang="scss">
+.control-label {
+  @apply text-sm text-gray-300 mr-2;
+  line-height: 30px;
+}
+</style>

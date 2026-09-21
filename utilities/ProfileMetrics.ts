@@ -181,5 +181,23 @@ export const buildProfileMetrics = (
     brackets[bracket] = buildBracket(bracketTotals, bracketAverages, bracket)
   })
 
-  return { brackets, averages, alerts }
+  const total = totals.get(Bracket.TOTAL)!
+
+  return {
+    brackets,
+    averages,
+    alerts,
+    totals: {
+      alerts: total.alerts,
+      kills: total.kills,
+      deaths: total.deaths,
+      headshots: total.headshots,
+      teamKills: total.teamKills,
+      teamKilled: total.teamKilled,
+      suicides: total.suicides,
+      xpmAlerts: total.xpmAlerts,
+      kpm: total.xpmAlerts > 0 ? total.kpm / total.xpmAlerts : 0,
+      dpm: total.xpmAlerts > 0 ? total.dpm / total.xpmAlerts : 0,
+    },
+  }
 }

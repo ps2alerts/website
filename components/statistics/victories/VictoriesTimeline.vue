@@ -39,7 +39,7 @@
 <script lang="ts">
 /* eslint-disable import/no-named-as-default-member */
 import Vue, { PropOptions } from 'vue'
-import { differenceInDays } from 'date-fns'
+import { pickGranularity, pointRadiusFor } from '~/utilities/ChartBuckets'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import { FactionMetricsInterface } from '~/interfaces/FactionMetricsInterface'
 import { DATE_FORMAT_ISO, TIME_GRANULARITY } from '@/constants/Time'
@@ -152,20 +152,23 @@ export default Vue.extend({
       this.loaded = true
     },
     optimiseTimeResolution(): void {
-      // Perform trickery to set the time granularity to appropriate levels based on time frame requested
-      if (this.filter.dateFrom && this.filter.dateTo) {
-        const date1 = new Date(this.filter.dateFrom)
-        const date2 = new Date(this.filter.dateTo)
+      // Coarser buckets for longer ranges keep the point count readable; the user can still override below.
+      // Prefer the requested filter dates, otherwise span the data itself.
+      let from = this.filter.dateFrom ? new Date(this.filter.dateFrom) : null
+      let to = this.filter.dateTo ? new Date(this.filter.dateTo) : null
 
-        const difference = differenceInDays(date2, date1)
+      if (!from || !to) {
+        const times = this.rawData.map((row) => new Date(row.date).getTime())
 
-        // Set the time option to week to force a change in the TimeGranularity component upon re-draw, don't ask me why it just works ok.
-        this.selectedTimeOption = TIME_GRANULARITY.WEEK
-
-        if (difference <= 60) {
-          this.selectedTimeOption = TIME_GRANULARITY.DAY
+        if (times.length === 0) {
+          return
         }
+
+        from = new Date(Math.min(...times))
+        to = new Date(Math.max(...times))
       }
+
+      this.selectedTimeOption = pickGranularity(from, to)
     },
     transformData(): void {
       // Tot up all brackets and worlds together
@@ -257,26 +260,36 @@ export default Vue.extend({
         drawData.push({ x: key, y: rowTyped.draws })
       }
 
+      const density = {
+        pointRadius: pointRadiusFor(vsData.length),
+        borderWidth: 2,
+        tension: 0.25,
+      }
+
       this.dataCollection = {
         datasets: [
           {
             ...commonChartOptions.datasets,
             ...commonChartOptions.datasets.vs,
+            ...density,
             data: vsData,
           },
           {
             ...commonChartOptions.datasets,
             ...commonChartOptions.datasets.tr,
+            ...density,
             data: trData,
           },
           {
             ...commonChartOptions.datasets,
             ...commonChartOptions.datasets.nc,
+            ...density,
             data: ncData,
           },
           {
             ...commonChartOptions.datasets,
             ...commonChartOptions.datasets.nsoDraws,
+            ...density,
             label: 'Draws',
             data: drawData,
           },

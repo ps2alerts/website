@@ -58,9 +58,23 @@ export interface BracketedProfileCommonMetricsInterface {
   [bracket: number]: ProfileCommonMetricsInterface | null
 }
 
+export interface ProfileTotalsInterface {
+  alerts: number
+  kills: number
+  deaths: number
+  headshots: number
+  teamKills: number
+  teamKilled: number
+  suicides: number
+  xpmAlerts: number
+  kpm: number
+  dpm: number
+}
+
 export interface ProfileMetricsInterface {
   brackets: BracketedProfileCommonMetricsInterface
   averages: BracketedProfileCommonMetricsInterface
+  totals: ProfileTotalsInterface
   alerts: ProfileAlertInterface[]
 }
 
