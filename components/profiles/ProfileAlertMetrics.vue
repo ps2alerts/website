@@ -103,11 +103,29 @@ export default Vue.extend({
             ]
 
       return [
-        { text: 'ID', align: 'left', sortable: true, value: 'instance' },
-        { text: 'Date', align: 'left', sortable: true, value: 'timeStarted' },
+        {
+          text: 'ID',
+          align: 'left',
+          sortable: true,
+          value: 'instance',
+          cellClass: 'whitespace-nowrap',
+        },
+        {
+          text: 'Date',
+          align: 'left',
+          sortable: true,
+          value: 'timeStarted',
+          cellClass: 'whitespace-nowrap',
+        },
         { text: 'Cont', align: 'left', sortable: true, value: 'cont' },
         { text: 'Bracket', align: 'left', sortable: true, value: 'bracket' },
-        { text: 'Victor', align: 'left', sortable: false, value: 'victor' },
+        {
+          text: 'Victor',
+          align: 'left',
+          sortable: false,
+          value: 'victor',
+          cellClass: 'whitespace-nowrap',
+        },
         ...identity,
         centred('Kills', 'kills'),
         centred('Deaths', 'deaths'),
