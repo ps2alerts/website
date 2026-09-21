@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
-      <div class="flex items-center">
+    <div class="controls mx-auto">
+      <div class="control-row">
         <span class="control-label">Stat</span>
         <div class="btn-group flex flex-wrap">
           <button
@@ -15,7 +15,7 @@
           </button>
         </div>
       </div>
-      <div class="flex items-center">
+      <div class="control-row">
         <span class="control-label">Bracket</span>
         <div class="btn-group flex flex-wrap">
           <button
@@ -29,7 +29,7 @@
           </button>
         </div>
       </div>
-      <div class="flex items-center">
+      <div class="control-row">
         <span class="control-label">Per</span>
         <div class="btn-group flex flex-wrap">
           <button
@@ -43,7 +43,8 @@
           </button>
         </div>
       </div>
-      <div class="flex items-center">
+      <div class="control-row">
+        <span class="control-label">Show</span>
         <div class="btn-group flex">
           <button
             class="btn btn-sm"
@@ -61,9 +62,9 @@
           </button>
         </div>
       </div>
-      <div class="flex items-center">
+      <div class="control-row">
         <span class="control-label"
-          >Rolling average
+          >Rolling avg
           <InfoTooltip
             tooltip="Number of points the blue rolling average looks back over. The dashed trend line is a straight best fit through every point shown."
           ></InfoTooltip
@@ -471,8 +472,21 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
+// Labels share one column so every row of toggles lines up
+.controls {
+  display: grid;
+  width: max-content;
+  max-width: 100%;
+  grid-template-columns: 7rem auto;
+  row-gap: 0.4rem;
+  column-gap: 0.5rem;
+  align-items: center;
+}
+.control-row {
+  display: contents;
+}
 .control-label {
-  @apply text-sm text-gray-300 mr-2;
+  @apply text-sm text-gray-300 text-right;
   line-height: 30px;
 }
 </style>
