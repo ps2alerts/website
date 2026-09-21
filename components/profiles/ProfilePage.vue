@@ -60,6 +60,8 @@ export default Vue.extend({
       days: null as number | null,
       loading: false,
       error: null as { title: string; message: string } | null,
+      // Only the newest request may write state; an older, slower one is dropped
+      requestSeq: 0,
     }
   },
   computed: {
@@ -89,22 +91,47 @@ export default Vue.extend({
         : `${this.noun} alert combat statistics`
     },
   },
+  watch: {
+    // The same id can exist on several servers, so a change of world is a different subject
+    id() {
+      this.reset()
+    },
+    world() {
+      this.reset()
+    },
+  },
   created() {
     this.load()
   },
   methods: {
+    reset(): void {
+      this.summary = null
+      this.days = null
+      this.load()
+    },
     async load(): Promise<void> {
+      const seq = ++this.requestSeq
       this.error = null
       this.loading = true
 
       try {
-        this.summary = await profileApi.summary({
+        const summary = await profileApi.summary({
           type: this.type,
           id: this.id,
           world: this.world,
           days: this.days,
         })
+
+        if (seq !== this.requestSeq) {
+          return
+        }
+
+        this.summary = summary
       } catch (e: any) {
+        if (seq !== this.requestSeq) {
+          return
+        }
+
         const status = e?.response?.status
 
         this.error =
@@ -120,7 +147,9 @@ export default Vue.extend({
                 }).`,
               }
       } finally {
-        this.loading = false
+        if (seq === this.requestSeq) {
+          this.loading = false
+        }
       }
     },
     updateDays(days: number | null): void {

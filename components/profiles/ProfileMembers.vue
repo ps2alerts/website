@@ -47,6 +47,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { killDeathRatio } from '~/utilities/NumberFormat'
 import AbbreviateNumbers from '~/mixins/AbbreviateNumbers'
 import {
   ProfileMemberRowInterface,
@@ -102,6 +103,7 @@ export default Vue.extend({
       total: 0,
       loading: false,
       error: '',
+      requestSeq: 0,
       search: '',
       searchTimer: null as ReturnType<typeof setTimeout> | null,
       options: {
@@ -157,6 +159,7 @@ export default Vue.extend({
   },
   methods: {
     async fetchPage(): Promise<void> {
+      const seq = ++this.requestSeq
       const { page, itemsPerPage, sortBy, sortDesc } = this.options
       this.loading = true
       this.error = ''
@@ -172,14 +175,24 @@ export default Vue.extend({
           this.search.trim()
         )
 
+        if (seq !== this.requestSeq) {
+          return
+        }
+
         this.rows = result.items.map((row) => this.parseRow(row))
         this.total = result.total
       } catch (e: any) {
+        if (seq !== this.requestSeq) {
+          return
+        }
+
         this.error = `The member list could not be loaded (${
           e?.message ?? 'network error'
         }).`
       } finally {
-        this.loading = false
+        if (seq === this.requestSeq) {
+          this.loading = false
+        }
       }
     },
     parseRow(member: ProfileMemberRowInterface): Record<string, any> {
@@ -204,7 +217,7 @@ export default Vue.extend({
         headshots,
         teamKills: member.teamKills ?? 0,
         suicides: member.suicides ?? 0,
-        kd: ratio(kills, deaths),
+        kd: killDeathRatio(kills, deaths),
         hsr: ratio(headshots, kills, 100),
       }
     },

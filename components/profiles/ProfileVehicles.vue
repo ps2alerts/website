@@ -47,6 +47,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { killDeathRatio } from '~/utilities/NumberFormat'
 import AbbreviateNumbers from '~/mixins/AbbreviateNumbers'
 import {
   ProfileSummaryInterface,
@@ -95,6 +96,7 @@ export default Vue.extend({
       rows: [] as Record<string, string | number>[],
       loaded: false,
       error: '',
+      requestSeq: 0,
       tableConfig: {
         ...ProfileAlertsCombatMetricsTableConfig,
         'sort-by': ['kills'],
@@ -124,6 +126,7 @@ export default Vue.extend({
   },
   methods: {
     async load(): Promise<void> {
+      const seq = ++this.requestSeq
       this.loaded = false
       this.error = ''
 
@@ -135,6 +138,10 @@ export default Vue.extend({
           days: this.summary.days,
         })
 
+        if (seq !== this.requestSeq) {
+          return
+        }
+
         this.rows = rows.map((row: ProfileVehicleRowInterface) => {
           const kills = row.vehicleKills + row.infantryKills
 
@@ -145,10 +152,7 @@ export default Vue.extend({
             vehicleKills: row.vehicleKills,
             infantryKills: row.infantryKills,
             deaths: row.deaths,
-            kd:
-              row.deaths > 0
-                ? (kills / row.deaths).toFixed(2)
-                : kills.toFixed(2),
+            kd: killDeathRatio(kills, row.deaths),
             roadkills: row.roadkills,
             teamKills: row.teamKills,
             teamKilled: row.teamKilled,
@@ -156,11 +160,17 @@ export default Vue.extend({
           }
         })
       } catch (e: any) {
+        if (seq !== this.requestSeq) {
+          return
+        }
+
         this.error = `Vehicle stats could not be loaded (${
           e?.message ?? 'network error'
         }).`
       } finally {
-        this.loaded = true
+        if (seq === this.requestSeq) {
+          this.loaded = true
+        }
       }
     },
   },

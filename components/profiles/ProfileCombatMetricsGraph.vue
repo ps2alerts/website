@@ -177,6 +177,7 @@ export default Vue.extend({
     return {
       rows: [] as ProfileTimelineRowInterface[],
       loadedGranularity: null as TimelineGranularity | null,
+      requestSeq: 0,
       loading: false,
       error: '',
       dataCollection: {},
@@ -300,6 +301,7 @@ export default Vue.extend({
   methods: {
     async fetchTimeline(): Promise<void> {
       const granularity = this.granularity
+      const seq = ++this.requestSeq
       this.loading = true
       this.error = ''
 
@@ -314,18 +316,26 @@ export default Vue.extend({
           granularity
         )
 
-        // A slower earlier request must not overwrite a newer resolution
-        if (granularity === this.granularity) {
-          this.rows = rows
-          this.loadedGranularity = granularity
-          this.buildCollection()
+        // A slower earlier request (other resolution, other days filter) must not overwrite a newer one
+        if (seq !== this.requestSeq) {
+          return
         }
+
+        this.rows = rows
+        this.loadedGranularity = granularity
+        this.buildCollection()
       } catch (e: any) {
+        if (seq !== this.requestSeq) {
+          return
+        }
+
         this.error = `The timeline could not be loaded (${
           e?.message ?? 'network error'
         }).`
       } finally {
-        this.loading = false
+        if (seq === this.requestSeq) {
+          this.loading = false
+        }
       }
     },
     bucketValue(bucket: Bucket): number {

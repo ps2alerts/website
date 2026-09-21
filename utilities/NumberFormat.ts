@@ -12,3 +12,7 @@ export const abbreviate = (value: number): string => {
 
   return Math.round(value).toLocaleString('en-GB')
 }
+
+// K/D with no deaths reads as the kill count, the same convention everywhere on the profiles
+export const killDeathRatio = (kills: number, deaths: number): string =>
+  (deaths > 0 ? kills / deaths : kills).toFixed(2)

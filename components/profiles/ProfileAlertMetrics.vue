@@ -51,6 +51,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { killDeathRatio } from '~/utilities/NumberFormat'
 import {
   ProfileAlertRowInterface,
   ProfileSummaryInterface,
@@ -121,6 +122,7 @@ export default Vue.extend({
       total: 0,
       loading: false,
       error: '',
+      requestSeq: 0,
       options: {
         page: 1,
         itemsPerPage: 20,
@@ -178,6 +180,7 @@ export default Vue.extend({
   },
   methods: {
     async fetchPage(): Promise<void> {
+      const seq = ++this.requestSeq
       const { page, itemsPerPage, sortBy, sortDesc } = this.options
       this.loading = true
       this.error = ''
@@ -196,14 +199,24 @@ export default Vue.extend({
           sortDesc[0] === false ? 'asc' : 'desc'
         )
 
+        if (seq !== this.requestSeq) {
+          return
+        }
+
         this.rows = result.items.map((row) => this.parseRow(row))
         this.total = result.total
       } catch (e: any) {
+        if (seq !== this.requestSeq) {
+          return
+        }
+
         this.error = `The alert history could not be loaded (${
           e?.message ?? 'network error'
         }).`
       } finally {
-        this.loading = false
+        if (seq === this.requestSeq) {
+          this.loading = false
+        }
       }
     },
     parseRow(alert: ProfileAlertRowInterface): Record<string, any> {
@@ -232,7 +245,7 @@ export default Vue.extend({
         teamKills: alert.teamKills ?? 0,
         teamKilled: alert.teamKilled ?? 0,
         suicides: alert.suicides ?? 0,
-        kd: ratio(kills, deaths),
+        kd: killDeathRatio(kills, deaths),
         hsr: ratio(headshots, kills, 100),
       }
     },

@@ -1,5 +1,10 @@
 <template>
-  <ProfilePage :id="id" type="character" :world="world" />
+  <ProfilePage
+    :id="id"
+    :key="`character-${id}-${world}`"
+    type="character"
+    :world="world"
+  />
 </template>
 
 <script lang="ts">

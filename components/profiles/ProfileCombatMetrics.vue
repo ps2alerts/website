@@ -115,6 +115,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { killDeathRatio, abbreviate } from '~/utilities/NumberFormat'
 import {
   ProfileBracketTotalsInterface,
   ProfileSummaryInterface,
@@ -122,7 +123,6 @@ import {
 import { ProfileAlertsCombatMetricsTableConfig } from '~/constants/DataTableConfig'
 import { Bracket } from '~/ps2alerts-constants/bracket'
 import bracketName from '~/filters/BracketName'
-import { abbreviate } from '~/utilities/NumberFormat'
 import { formatDateTime } from '~/utilities/TimeHelper'
 import { DATE_FORMAT } from '~/constants/Time'
 
@@ -273,7 +273,7 @@ export default Vue.extend({
           bracketCount: entry.alerts.toLocaleString('en-GB'),
           kills: withAverage(entry.kills, entry.alerts),
           deaths: withAverage(entry.deaths, entry.alerts),
-          kd: ratio(entry.kills, entry.deaths),
+          kd: killDeathRatio(entry.kills, entry.deaths),
           headshots: withAverage(entry.headshots, entry.alerts),
           hsr: ratio(entry.headshots, entry.kills, 100),
           teamKills: withAverage(entry.teamKills, entry.alerts),

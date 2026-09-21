@@ -274,7 +274,9 @@ export default Vue.extend({
       const trData: { x: string; y: number }[] = []
       const drawData: { x: string; y: number }[] = []
 
-      for (const [key, row] of Object.entries(this.totalCounts)) {
+      for (const [key, row] of Object.entries(this.totalCounts).sort(
+        ([a], [b]) => a.localeCompare(b)
+      )) {
         const rowTyped = row as FactionMetricsInterface
         vsData.push({ x: key, y: rowTyped.vs })
         ncData.push({ x: key, y: rowTyped.nc })
@@ -325,9 +327,9 @@ export default Vue.extend({
     },
     // Manipulates the chart against the currently set config to ensure it complies with custom settings
     adjustChartOptions(): void {
-      const objectKeys = Object.keys(this.totalCounts)
+      // Bucket keys arrive in response order, which is not chronological
+      const objectKeys = Object.keys(this.totalCounts).sort()
 
-      // For some reason Object.keys puts the result in reverse of actuality...
       this.chartOptions.scales.x.min = objectKeys[0]
       this.chartOptions.scales.x.max = objectKeys[objectKeys.length - 1]
 

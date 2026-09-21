@@ -6,7 +6,7 @@
       <span class="mr-1" style="line-height: 30px"
         >Last # days
         <InfoTooltip
-          tooltip="Filter all of the below data by the last X number of days. This is useful for seeing how a player/outfit has been performing recently."
+          tooltip="Filter the stats, graph and alert history below by the last X days. Outfit membership is a current fact and stays as it is."
         ></InfoTooltip
       ></span>
       <input
