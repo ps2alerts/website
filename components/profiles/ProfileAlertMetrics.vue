@@ -56,6 +56,7 @@ interface Header {
   align?: string
   sortable?: boolean
   filterable?: boolean
+  class?: string
   cellClass?: string
 }
 
@@ -64,6 +65,7 @@ const centred = (text: string, value: string): Header => ({
   value,
   align: 'middle',
   filterable: false,
+  class: 'whitespace-nowrap',
   cellClass: 'text-center',
 })
 
@@ -98,7 +100,13 @@ export default Vue.extend({
         this.type === 'outfit'
           ? [centred('Players', 'participants')]
           : [
-              { text: 'Outfit', align: 'left', value: 'outfit' },
+              {
+                text: 'Outfit',
+                align: 'left',
+                value: 'outfit',
+                class: 'whitespace-nowrap',
+                cellClass: 'whitespace-nowrap',
+              },
               centred('BR', 'br'),
             ]
 
@@ -108,6 +116,7 @@ export default Vue.extend({
           align: 'left',
           sortable: true,
           value: 'instance',
+          class: 'whitespace-nowrap',
           cellClass: 'whitespace-nowrap',
         },
         {
@@ -115,15 +124,29 @@ export default Vue.extend({
           align: 'left',
           sortable: true,
           value: 'timeStarted',
+          class: 'whitespace-nowrap',
           cellClass: 'whitespace-nowrap',
         },
-        { text: 'Cont', align: 'left', sortable: true, value: 'cont' },
-        { text: 'Bracket', align: 'left', sortable: true, value: 'bracket' },
+        {
+          text: 'Cont',
+          align: 'left',
+          sortable: true,
+          value: 'cont',
+          class: 'whitespace-nowrap',
+        },
+        {
+          text: 'Bracket',
+          align: 'left',
+          sortable: true,
+          value: 'bracket',
+          class: 'whitespace-nowrap',
+        },
         {
           text: 'Victor',
           align: 'left',
           sortable: false,
           value: 'victor',
+          class: 'whitespace-nowrap',
           cellClass: 'whitespace-nowrap',
         },
         ...identity,
