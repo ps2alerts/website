@@ -11,39 +11,21 @@
           class="theme--dark mt-4"
           multiple
         >
-          <v-expansion-panel v-for="post in posts" :key="post.id">
-            <div v-if="post.type === 'feature'" class="tag m-0 feature">
-              <font-awesome-icon :icon="['fas', 'plus']"></font-awesome-icon>
-              New feature
-            </div>
-            <div
-              v-if="post.type === 'announcement'"
-              class="tag m-0 announcement"
-            >
-              <font-awesome-icon
-                :icon="['fas', 'bullhorn']"
-              ></font-awesome-icon>
-              Announcement
-            </div>
-            <div v-if="post.type === 'major-update'" class="tag m-0 major">
-              <font-awesome-icon :icon="['fas', 'star']"></font-awesome-icon>
-              Major Update
-            </div>
-            <div
-              v-if="post.type === 'minor-update'"
-              class="tag m-0 enhancement"
-            >
-              <font-awesome-icon :icon="['fas', 'wrench']"></font-awesome-icon>
-              Minor Update
-            </div>
-            <div v-if="post.type === 'wip'" class="tag m-0 wip">
-              <font-awesome-icon :icon="['fas', 'wrench']"></font-awesome-icon>
-              Upcoming Update / WIP
-            </div>
+          <v-expansion-panel
+            v-for="post in posts"
+            :key="post.id"
+            class="change-log-entry"
+          >
             <v-expansion-panel-header>
               <div>
-                <h1 class="text-xl mb-2 font-bold" v-html="post.title"></h1>
-                <p>{{ post.date }}</p>
+                <span class="label mb-2" :class="typeOf(post.type).cls">
+                  <font-awesome-icon
+                    :icon="['fas', typeOf(post.type).icon]"
+                  ></font-awesome-icon>
+                  {{ typeOf(post.type).text }}
+                </span>
+                <h1 class="text-xl mb-1 font-bold" v-html="post.title"></h1>
+                <p class="text-sm text-gray-300">{{ post.date }}</p>
               </div>
             </v-expansion-panel-header>
             <v-expansion-panel-content class="editorial text-left">
@@ -60,6 +42,24 @@
 import Vue from 'vue'
 import MetaHead from '~/components/MetaHead.vue'
 
+const POST_TYPES: Record<string, { cls: string; icon: string; text: string }> =
+  {
+    feature: { cls: 'feature', icon: 'plus', text: 'New feature' },
+    announcement: {
+      cls: 'announcement',
+      icon: 'bullhorn',
+      text: 'Announcement',
+    },
+    'major-update': { cls: 'major', icon: 'star', text: 'Major update' },
+    'minor-update': {
+      cls: 'enhancement',
+      icon: 'wrench',
+      text: 'Minor update',
+    },
+    fix: { cls: 'fix', icon: 'wrench', text: 'Fix' },
+    wip: { cls: 'wip', icon: 'wrench', text: 'Upcoming update' },
+  }
+
 export default Vue.extend({
   name: 'Changelog',
   components: { MetaHead },
@@ -70,6 +70,43 @@ export default Vue.extend({
       version: this.$config.version,
       panel: [0],
       posts: [
+        {
+          id: 22,
+          title: 'v4.5.0 - Player &amp; Outfit profiles and search',
+          date: '21st September 2026',
+          type: 'major-update',
+          body: `
+            <div class="grid grid-cols-1 divide-y gap-y-3 divide-gray-400">
+              <div>
+                <h1 class="text-3xl mb-4">Find yourself and your outfit</h1>
+                <p>A search bar now lives in the sidebar. Type part of a player name or an outfit tag or name and you'll get matches as you type, with exact matches first. You can pin up to five results to your device so your own characters are always one click away.</p>
+              </div>
+              <div>
+                <h1 class="text-3xl mb-4">Player and outfit profiles</h1>
+                <p>Every player and outfit now has a stats page, reachable from search results, the leaderboards and the alert pages. Each one shows:</p>
+                <ul>
+                  <li>Headline figures: alerts played, win rate, kills, K/D, headshot rate and kills per minute. Outfits also show facility captures and average members per alert.</li>
+                  <li>Combat stats broken down by activity bracket, with per-alert averages.</li>
+                  <li>Kills split by which faction they landed on, with team kills shown honestly.</li>
+                  <li>Per-minute rates for every bracket. Per-minute tracking started in June 2022, and the pages say so rather than pretending earlier alerts had none.</li>
+                  <li>A performance-over-time graph that picks a sensible resolution for the date range and draws a rolling average and trend line, with day, week, month and year views.</li>
+                  <li>A "last N days" filter that recalculates the whole page from just those alerts.</li>
+                  <li>The full alert history, paged and sortable, linking to each alert.</li>
+                  <li>Players: a per-vehicle breakdown of kills, deaths and roadkills. Outfits: a searchable members list linking to every member's profile, and the outfit leader.</li>
+                </ul>
+                <p>All of this is calculated on the server, so a profile with thousands of alerts loads in a few kilobytes instead of downloading everything.</p>
+              </div>
+              <div>
+                <h1 class="text-3xl mb-4">Charts and leaderboards</h1>
+                <ul>
+                  <li><b>Improvement:</b> The homepage victory timeline has been rebuilt on a proper time axis. It now picks daily, weekly, monthly or yearly resolution from the date range so long ranges stay readable, and you can still choose one yourself.</li>
+                  <li><b>Improvement:</b> Player and outfit names on the leaderboards link straight to their profiles, and the statistics tabs can be linked to directly.</li>
+                  <li><b>Fixed:</b> Outfit Tracker has closed, so outfit logos are no longer requested from it.</li>
+                  <li><b>House keeping:</b> The charting library has been upgraded, and the API's search and profile queries are indexed so they stay fast as the data grows.</li>
+                </ul>
+              </div>
+            </div>`,
+        },
         {
           id: 21,
           title: 'v4.4.2 - Server name changes',
@@ -943,12 +980,76 @@ export default Vue.extend({
       })
     )
   },
+  methods: {
+    typeOf(type: string) {
+      return POST_TYPES[type] ?? POST_TYPES['minor-update']
+    },
+  },
 })
 </script>
 <style lang="scss">
 #change-log {
-  ul {
-    padding-left: 2px;
+  .change-log-entry + .change-log-entry {
+    margin-top: 0.75rem;
+  }
+
+  .label.feature {
+    @apply bg-green-800;
+  }
+  .label.enhancement {
+    @apply bg-blue-500;
+  }
+  .label.announcement {
+    @apply bg-red-600;
+  }
+  .label.major {
+    @apply bg-orange-500;
+  }
+  .label.fix {
+    @apply bg-gray-600;
+  }
+  .label.wip {
+    @apply bg-green-700;
+  }
+
+  // Post bodies are authored HTML: give their sections, headings and lists consistent breathing room
+  .editorial {
+    // Each post body is a divide-y grid of sections; the divider needs air on both sides
+    .divide-y > div {
+      padding: 1.5rem 0;
+
+      &:first-child {
+        padding-top: 0;
+      }
+
+      &:last-child {
+        padding-bottom: 0.5rem;
+      }
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      line-height: 2rem;
+      margin: 0 0 0.75rem;
+    }
+
+    p {
+      margin-bottom: 0.75rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    ul {
+      list-style: disc;
+      padding-left: 1.1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    li {
+      margin-bottom: 0.35rem;
+    }
   }
 }
 </style>

@@ -32,10 +32,7 @@
             </div>
           </div>
         </template>
-        <span v-if="!isPercentage && numeral">
-          VS: {{ vsString(true, true) | numeral(numeral) }}
-        </span>
-        <span v-else>VS: {{ vsString(true, true) }}</span>
+        <span>VS: {{ tooltipFor(vs, percentVS) }}</span>
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -62,12 +59,9 @@
             </div>
           </div>
         </template>
-        <span v-if="!isPercentage && numeral">
-          {{ outfitwars ? 'Red' : 'TR' }}:
-          {{ trString(true, true) | numeral(numeral) }}
-        </span>
-        <span v-else
-          >{{ outfitwars ? 'Red' : 'TR' }}: {{ trString(true, true) }}</span
+        <span
+          >{{ outfitwars ? 'Red' : 'TR' }}:
+          {{ tooltipFor(tr, percentTR) }}</span
         >
       </v-tooltip>
 
@@ -95,12 +89,9 @@
             </div>
           </div>
         </template>
-        <span v-if="!isPercentage && numeral">
-          {{ outfitwars ? 'Blue' : 'NC' }}: !isPercentage
-          {{ ncString(true, true) | numeral(numeral) }}
-        </span>
-        <span v-else
-          >{{ outfitwars ? 'Blue' : 'NC' }}: {{ ncString(true, true) }}</span
+        <span
+          >{{ outfitwars ? 'Blue' : 'NC' }}:
+          {{ tooltipFor(nc, percentNC) }}</span
         >
       </v-tooltip>
 
@@ -127,10 +118,9 @@
             </div>
           </div>
         </template>
-        <span v-if="!isPercentage && numeral">
-          {{ otherSegmentText }}: {{ otherString(true) | numeral(numeral) }}
-        </span>
-        <span v-else>{{ otherSegmentText }}: {{ otherString(true) }}</span>
+        <span
+          >{{ otherSegmentText }}: {{ tooltipFor(other, percentOther) }}</span
+        >
       </v-tooltip>
 
       <v-tooltip bottom>
@@ -143,7 +133,7 @@
             v-on="on"
           ></div>
         </template>
-        <span>Out of play: {{ outOfPlayString(true) }}</span>
+        <span>Out of play: {{ tooltipFor(outOfPlay, percentOutOfPlay) }}</span>
       </v-tooltip>
     </div>
   </div>
@@ -274,6 +264,21 @@ export default Vue.extend({
     },
   },
   methods: {
+    // The bar already shows one form, so the tooltip shows the other: the count under a percentage, the share under a count
+    tooltipFor(value: number, percent: number): string {
+      const share = `${percent.toFixed(1)}%`
+
+      if (!this.isPercentage) {
+        return share
+      }
+
+      // Percentage bars fed raw percentages (territory control) have no count to offer, so show the share exactly
+      if (!this.showAsCalculatedPercentage) {
+        return `${value}%`
+      }
+
+      return value.toLocaleString('en-GB')
+    },
     vsString(bypassDropoff = false, tooltip = false): string {
       const value = this.showAsCalculatedPercentage
         ? this.percentVS.toFixed(parseInt(this.fractionDigits, 10))

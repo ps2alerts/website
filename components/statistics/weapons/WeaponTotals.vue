@@ -26,6 +26,14 @@
           :item-class="tableItemClass"
           v-bind="tableConfig"
         >
+          <template
+            v-for="col in ['kills', 'teamKills', 'suicides', 'headshots']"
+            #[`item.${col}`]="{ value }"
+          >
+            <span :key="col" :title="exactNumber(value)">{{
+              abbreviate(value)
+            }}</span>
+          </template>
           <template slot="item.rank" slot-scope="props">
             {{ items.indexOf(props.item) + 1 }}
           </template>
@@ -37,6 +45,7 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
+import AbbreviateNumbers from '~/mixins/AbbreviateNumbers'
 import { StatisticsWeaponsLeaderboardConfig } from '@/constants/DataTableConfig'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { StatisticsWeaponTableDataInterface } from '~/interfaces/statistics/StatisticsWeaponTableDataInterface'
@@ -51,6 +60,7 @@ interface TotalWeaponInterface extends GlobalWeaponAggregateResponseInterface {
 
 export default Vue.extend({
   name: 'WeaponTotals',
+  mixins: [AbbreviateNumbers],
   props: {
     rawData: {
       type: Array,

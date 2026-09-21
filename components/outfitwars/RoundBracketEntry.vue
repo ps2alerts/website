@@ -16,7 +16,6 @@
       <div class="self-center">
         <TeamLogo
           class="self-center place-self-center w-12"
-          :outfit-id="redData.id"
           :outfit-faction="redData.faction"
           rounding="rounded"
         />
@@ -75,7 +74,6 @@
       <div class="self-center">
         <TeamLogo
           class="self-center place-self-center w-12"
-          :outfit-id="blueData.id"
           :outfit-faction="blueData.faction"
           rounding="rounded"
         />
@@ -91,7 +89,6 @@
       <div class="self-center">
         <TeamLogo
           class="self-center place-self-center w-12"
-          :outfit-id="redData.id"
           :outfit-faction="redData.faction"
           rounding="rounded"
         />
@@ -148,7 +145,6 @@
       <div class="self-center">
         <TeamLogo
           class="self-center place-self-center w-12"
-          outfit-id="'0'"
           :outfit-faction="0"
           rounding="rounded"
         />
@@ -164,7 +160,6 @@
       <div class="self-center">
         <TeamLogo
           class="self-center place-self-center w-12"
-          outfit-id="0"
           :outfit-faction="0"
           rounding="rounded"
         />
@@ -221,7 +216,6 @@
       <div class="self-center">
         <TeamLogo
           class="self-center place-self-center w-12"
-          :outfit-id="blueData.id"
           :outfit-faction="blueData.faction"
           rounding="rounded"
         />

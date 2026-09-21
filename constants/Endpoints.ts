@@ -28,6 +28,8 @@ export const Endpoints = {
   AGGREGATES_INSTANCE_CHARACTER: '/aggregates/instance/{instance}/character',
   AGGREGATES_INSTANCE_CHARACTER_SINGLE:
     '/aggregates/instance/{instance}/character/{character}',
+  AGGREGATES_INSTANCE_CHARACTER_ALL:
+    '/aggregates/instance/character/{character}',
   AGGREGATES_INSTANCE_COMBAT_HISTORY:
     '/aggregates/instance/{instance}/combat-history',
   AGGREGATES_INSTANCE_FACILITY: '/aggregates/instance/{instance}/facility',
@@ -79,9 +81,15 @@ export const Endpoints = {
   OW_RANKINGS_ALL: '/outfit-wars/rankings?sortBy=order&order=asc',
   OW_RANKINGS_WORLD: '/outfit-wars/rankings/{world}',
 
-  // 3rd party
-  OUTFIT_TRACKER_OUTFIT_LOGO:
-    'https://outfit-tracker.com/outfit-logo/{outfitId}.png',
+  // Profiles
+  PROFILE_SUMMARY: '/profiles/{type}/{id}',
+  PROFILE_TIMELINE: '/profiles/{type}/{id}/timeline',
+  PROFILE_ALERTS: '/profiles/{type}/{id}/alerts',
+  PROFILE_OUTFIT_MEMBERS: '/profiles/outfit/{id}/members',
+  PROFILE_CHARACTER_VEHICLES: '/profiles/character/{id}/vehicles',
+
+  // Searches
+  SEARCH: '/search/{type}',
 }
 
 export const CensusEndpoints = {

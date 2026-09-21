@@ -60,6 +60,18 @@ body {
 .border-tint {
   border: 1px solid #5d6265;
 }
+.text-vs {
+  color: rgba(107, 70, 193, 1)
+}
+.text-nc {
+  color: rgba(43, 108, 176, 1)
+}
+.text-tr {
+  color: rgba(197, 48, 48, 1)
+}
+.text-nso {
+  color: rgba(134, 148, 167, 1)
+}
 .outofplay {
   @apply bg-gray-800;
   background: repeating-linear-gradient(
@@ -144,6 +156,9 @@ body {
   &.hover:hover {
     background-color: rgba(100, 130, 140, 1);
   }
+}
+.bg-tint-solid {
+  background-color: #303a40;
 }
 .bg-vs {
   background-color: rgba(85, 60, 154, 0.5);
@@ -391,6 +406,10 @@ select {
   @apply bg-red-600 text-white text-xs font-semibold px-1 py-0.5 rounded;
   line-height: 1.5rem;
 
+  &:hover {
+    @apply bg-red-500;
+  }
+
   &.green {
     @apply bg-green-600;
 
@@ -407,11 +426,25 @@ select {
     }
   }
 
-  &.gray {
-    @apply bg-gray-500;
+  &.blue {
+    @apply bg-blue-500;
 
     &:hover {
-      @apply bg-gray-600;
+      @apply bg-blue-400;
+    }
+    &.border {
+      @apply border-blue-400
+    }
+  }
+
+  &.gray {
+    @apply bg-gray-600;
+
+    &:hover {
+      @apply bg-gray-500;
+    }
+    &.border {
+      @apply border-gray-400
     }
   }
 
@@ -586,8 +619,9 @@ a.hyperlink {
 }
 
 .tag {
-  @apply py-1 px-2 rounded-tl-sm rounded-tr-sm text-xs text-center font-bold;
+  @apply rounded-tl-sm rounded-tr-sm text-sm text-center font-bold;
   margin: -1rem -1rem 1rem;
+  line-height: 2rem;
 
   &.section {
     background-color: rgba(48, 58, 64, 1);
@@ -693,6 +727,7 @@ td.text-middle {
 .theme--dark {
   &.v-tabs > .v-tabs-bar {
     background-color: #9b2c2c !important;
+    text-transform: uppercase !important;
 
     .v-tab--disabled {
       background-color: #000 !important;
