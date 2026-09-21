@@ -300,6 +300,14 @@ export default Vue.extend({
       }
     },
   },
+  // Deep links such as /#players open straight on that tab
+  mounted() {
+    const tab = this.$route.hash.replace('#', '')
+
+    if (tab) {
+      this.tab = tab
+    }
+  },
   methods: {
     toggleMode(mode: string) {
       this.mode = mode
