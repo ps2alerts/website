@@ -47,7 +47,7 @@
         <div id="results" class="mb-2">
           <SearchResult
             v-for="result in results"
-            :key="`${result.type}-${result.id}`"
+            :key="identityOf(result)"
             :result="result"
             @pinned="handlePinEvent"
             @selected="clear"
@@ -95,6 +95,10 @@ export default defineComponent({
     this.injectPinned()
   },
   methods: {
+    // The same character or outfit id can exist on more than one server, so a list key needs both
+    identityOf(result: SearchResultComponentInterface): string {
+      return `${result.type}-${result.id}-${result.world}`
+    },
     parseResults(
       characterResults: SearchCharacterInterface[],
       outfitResults: SearchOutfitInterface[]
@@ -246,22 +250,24 @@ export default defineComponent({
     handlePinEvent(result: SearchResultComponentInterface): void {
       result.isPinned = !result.isPinned
 
+      const key = this.identityOf(result)
+
       if (result.isPinned) {
         // Detect the type
         if (result.type === 'player') {
-          this.pinnedCharacters.set(result.id, result)
+          this.pinnedCharacters.set(key, result)
         } else if (result.type === 'outfit') {
-          this.pinnedOutfits.set(result.id, result)
+          this.pinnedOutfits.set(key, result)
         }
       } else {
         if (result.type === 'player') {
-          this.pinnedCharacters.delete(result.id)
+          this.pinnedCharacters.delete(key)
         } else if (result.type === 'outfit') {
-          this.pinnedOutfits.delete(result.id)
+          this.pinnedOutfits.delete(key)
         }
 
         // Remove from current result set
-        this.results = this.results.filter((r) => r.id !== result.id)
+        this.results = this.results.filter((r) => this.identityOf(r) !== key)
       }
 
       // Update local storage
@@ -280,12 +286,18 @@ export default defineComponent({
       // Load pinned characters and outfits from local storage
       this.pinnedCharacters = new Map(
         JSON.parse(localStorage.getItem('pinnedCharacters') || '[]').map(
-          (pinned: SearchResultComponentInterface) => [pinned.id, pinned]
+          (pinned: SearchResultComponentInterface) => [
+            this.identityOf(pinned),
+            pinned,
+          ]
         )
       )
       this.pinnedOutfits = new Map(
         JSON.parse(localStorage.getItem('pinnedOutfits') || '[]').map(
-          (pinned: SearchResultComponentInterface) => [pinned.id, pinned]
+          (pinned: SearchResultComponentInterface) => [
+            this.identityOf(pinned),
+            pinned,
+          ]
         )
       )
     },
@@ -295,14 +307,14 @@ export default defineComponent({
       const pinnedOutfits = Array.from(this.pinnedOutfits.values())
 
       // Remove pinned results from the result set
-      this.results = this.results.filter((result) => {
-        return !(
-          (result.type === 'player' &&
-            pinnedCharacters.find((pinned) => pinned.id === result.id)) ||
-          (result.type === 'outfit' &&
-            pinnedOutfits.find((pinned) => pinned.id === result.id))
+      const pinnedKeys = new Set(
+        [...pinnedCharacters, ...pinnedOutfits].map((pinned) =>
+          this.identityOf(pinned)
         )
-      })
+      )
+      this.results = this.results.filter(
+        (result) => !pinnedKeys.has(this.identityOf(result))
+      )
 
       // Inject the pinned results at the top
       this.results = [...pinnedCharacters, ...pinnedOutfits, ...this.results]
