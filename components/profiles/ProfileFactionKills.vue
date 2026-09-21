@@ -5,24 +5,34 @@
       kills count wherever the operative was fighting for the other side.
     </p>
     <div class="faction-bar flex rounded overflow-hidden text-sm font-bold">
-      <div
-        v-for="segment in segments"
-        :key="segment.key"
-        class="flex items-center justify-center whitespace-nowrap"
-        :class="segment.classes"
-        :style="{ width: `${segment.share}%` }"
-        :title="`${segment.label}: ${
-          segment.count
-        } kills (${segment.share.toFixed(1)}%)`"
-      >
-        <span v-if="segment.share >= 8"
-          >{{ segment.label }} {{ segment.share.toFixed(1) }}%</span
+      <v-tooltip v-for="segment in segments" :key="segment.key" bottom>
+        <template #activator="{ on, attrs }">
+          <div
+            class="flex items-center justify-center whitespace-nowrap cursor-default"
+            :style="{
+              width: `${segment.share}%`,
+              backgroundColor: segment.colour,
+            }"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <span v-if="segment.share >= 8"
+              >{{ segment.label }} {{ segment.share.toFixed(1) }}%</span
+            >
+          </div>
+        </template>
+        <span
+          >{{ segment.label }}: {{ segment.count.toLocaleString() }} kills ({{
+            segment.share.toFixed(1)
+          }}%)</span
         >
-      </div>
+      </v-tooltip>
     </div>
     <div class="flex flex-wrap justify-center gap-4 mt-2 text-sm">
       <span v-for="segment in segments" :key="segment.key">
-        <span class="label" :class="segment.classes">{{ segment.label }}</span>
+        <span class="label" :style="{ backgroundColor: segment.colour }">{{
+          segment.label
+        }}</span>
         {{ segment.count.toLocaleString() }}
       </span>
     </div>
@@ -32,20 +42,42 @@
 <script lang="ts">
 import Vue from 'vue'
 import { ProfileSummaryInterface } from '~/interfaces/profiles/ProfileMetricsInterface'
+import { commonChartOptions } from '~/constants/CommonChartOptions'
 
 interface Segment {
   key: string
   label: string
-  classes: string
+  colour: string
   count: number
   share: number
 }
 
+// Same faction colours the charts use
 const FACTIONS = [
-  { key: 'vs', faction: 1, label: 'VS', classes: 'bg-vs' },
-  { key: 'nc', faction: 2, label: 'NC', classes: 'bg-nc' },
-  { key: 'tr', faction: 3, label: 'TR', classes: 'bg-tr' },
-  { key: 'nso', faction: 4, label: 'NSO', classes: 'bg-nso' },
+  {
+    key: 'vs',
+    faction: 1,
+    label: 'VS',
+    colour: commonChartOptions.datasets.vs.backgroundColor,
+  },
+  {
+    key: 'nc',
+    faction: 2,
+    label: 'NC',
+    colour: commonChartOptions.datasets.nc.backgroundColor,
+  },
+  {
+    key: 'tr',
+    faction: 3,
+    label: 'TR',
+    colour: commonChartOptions.datasets.tr.backgroundColor,
+  },
+  {
+    key: 'nso',
+    faction: 4,
+    label: 'NSO',
+    colour: commonChartOptions.datasets.nsoDraws.backgroundColor,
+  },
 ] as const
 
 // Kills split by the victim's faction
@@ -73,7 +105,7 @@ export default Vue.extend({
           f.faction === this.summary.faction
             ? `${f.label} (team kills)`
             : f.label,
-        classes: f.classes,
+        colour: f.colour,
         count: countOf(f),
         share: total > 0 ? (countOf(f) / total) * 100 : 0,
       })).filter((segment) => segment.count > 0)
