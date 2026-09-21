@@ -2,7 +2,18 @@
 name: Build & Deploy Production
 on:
   push:
-    branches: [master]
+    branches: [main]
+  # Lets a deploy be re-run by hand after a failed webhook without an empty commit.
+  workflow_dispatch:
+permissions:
+  contents: read
+
+# Never cancel a deploy that is already publishing or calling the webhook; queue the
+# next one behind it. Cancelling mid-push can leave the -latest tag on a half-pushed manifest.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
 jobs:
   build-docker-images:
     runs-on: ${{ matrix.os }}
@@ -56,3 +67,9 @@ jobs:
             BUILD_SHA=${{ env.SHORT_SHA }}
             BUILT=${{ env.NOW }}
             VERSION=${{ steps.latesttag.outputs.tag }}
+
+  deploy:
+    name: Deploy
+    needs: build-docker-images
+    uses: ./.github/workflows/deploy-webhook.yml
+    secrets: inherit

@@ -2,8 +2,11 @@
 name: ESLint
 on:
   push:
-    branches: [dev]
+    branches: [main]
   pull_request:
+permissions:
+  contents: read
+
 jobs:
   eslint:
     name: ESLint
