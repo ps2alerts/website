@@ -30,20 +30,14 @@
         :disabled="!linksToOutfit"
         :event="linksToOutfit ? 'click' : ''"
       >
-        <img
-          v-if="outfit.id"
-          :alt="faction | factionShortName"
-          :src="outfit.id | outfitImage"
-          class="mx-auto mb-2 w-full"
-          @error="outfitImageAlt"
-        />
-      </NuxtLink>
-      <div class="text-center">
-        <NuxtLink
-          :to="outfitLink"
-          :disabled="!linksToOutfit"
-          :event="linksToOutfit ? 'click' : ''"
-        >
+        <div class="mx-auto mb-2 text-center">
+          <font-awesome-icon
+            :icon="['fas', 'users']"
+            class="outfit-icon"
+            :class="faction | factionTextClass"
+          ></font-awesome-icon>
+        </div>
+        <div class="text-center">
           <span class="font-bold">
             <span v-if="outfit.tag" class="font-mono mr-1"
               >[{{ outfit.tag }}]</span
@@ -54,27 +48,18 @@
             ><font-awesome-icon :icon="['fas', 'link']"></font-awesome-icon>
             Stats</span
           >
-        </NuxtLink>
-        <a
-          v-if="outfitLogoMissing && isInOutfit"
-          href="https://www.outfit-tracker.com/outfit/edit/37509488620604883"
-          target="_blank"
-          class="text-red-400 text-sm"
-          >Upload your logo!</a
-        >
-      </div>
+        </div>
+      </NuxtLink>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import factionImage from '~/filters/FactionImage'
 import { PS2AlertsOutfitInterface } from '~/ps2alerts-constants/interfaces/PS2AlertsOutfitInterface'
 
 export default Vue.extend({
   name: 'ProfileLogos',
-  components: {},
   props: {
     outfit: {
       type: Object as () => PS2AlertsOutfitInterface,
@@ -93,11 +78,6 @@ export default Vue.extend({
       default: true,
     },
   },
-  data() {
-    return {
-      outfitLogoMissing: false,
-    }
-  },
   computed: {
     // Outfit IDs 1-4 are the per-faction "-- NONE --" placeholders
     isInOutfit(): boolean {
@@ -110,13 +90,11 @@ export default Vue.extend({
       return `/outfit/${this.outfit.id}`
     },
   },
-  methods: {
-    outfitImageAlt(event: Event) {
-      if (event.target) {
-        ;(event.target as HTMLImageElement).src = factionImage(this.faction)
-        this.outfitLogoMissing = true
-      }
-    },
-  },
 })
 </script>
+
+<style scoped lang="scss">
+.outfit-icon {
+  font-size: 5rem;
+}
+</style>

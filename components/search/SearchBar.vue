@@ -23,7 +23,7 @@
             type="search"
             placeholder="e.g. DIG, Maelstrome"
             aria-label="Full name"
-            @keyup="search"
+            @input="search"
           />
           <button
             id="clearButton"

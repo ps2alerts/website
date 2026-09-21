@@ -106,7 +106,6 @@ export default {
     { src: '@/filters/FactionTextClass', mode: 'client' },
     { src: '@/filters/ItemShortName', mode: 'client' },
     { src: '@/filters/OrdinalSuffix', mode: 'client' },
-    { src: '@/filters/OutfitImage', mode: 'client' },
     { src: '@/filters/OWRoundByPhase', mode: 'client' },
     { src: '@/filters/PhaseName', mode: 'client' },
     { src: '@/filters/TeamName', mode: 'client' },

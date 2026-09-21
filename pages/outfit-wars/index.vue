@@ -164,21 +164,6 @@
     <div class="col-span-12 pt-2 border-t border-t-gray-500">
       <h1 class="text-title text-center">Outfit Wars 2022 Rankings</h1>
       <div class="p-4 text-center rounded">
-        <p>
-          <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
-          Is your outfit logo missing?
-          <a
-            href="https://www.outfit-tracker.com/outfitsearch/"
-            target="_blank"
-            class="text-red-600"
-            >Upload it to Outfit Tracker!</a
-          >
-        </p>
-        <p class="text-xs mb-2">
-          To add, search your outfit tag, press "update this page", go through
-          the claim process and upload the logo.<br />Shoutout to [VODE] MidddNC
-          for providing access to logos!
-        </p>
         <p class="text-sm mb-2">Rankings updated every 30 minutes</p>
       </div>
     </div>
@@ -267,7 +252,6 @@
                 </div>
                 <TeamLogo
                   class="col-span-2 self-center object-contain p-1"
-                  :outfit-id="outfit.id"
                   :outfit-faction="outfit.faction"
                   rounding="rounded"
                 />
@@ -512,11 +496,6 @@ export default Vue.extend({
     },
     parse(data: OutfitwarsRankingInterface[]) {
       for (const record of data) {
-        const outfitImageUrl = Endpoints.OUTFIT_TRACKER_OUTFIT_LOGO.replace(
-          '{outfitId}',
-          record.outfit.id
-        )
-
         let score = parseInt(record.rankingParameters.TiebreakerPoints, 10)
         let wins = parseInt(record.rankingParameters.Wins, 10)
         let defeats = parseInt(record.rankingParameters.Losses, 10)
@@ -563,7 +542,6 @@ export default Vue.extend({
             factionRank: parseInt(record.rankingParameters.FactionRank),
             globalRank: parseInt(record.rankingParameters.GlobalRank),
           },
-          outfitImageUrl,
           metricsString,
           instanceId: record.instanceId,
         }

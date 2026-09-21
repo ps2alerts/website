@@ -4,11 +4,22 @@ import { XPerMinuteInterface } from '~/ps2alerts-constants/interfaces/api-respon
 import { PS2AlertsCharacterInterface } from '~/ps2alerts-constants/interfaces/PS2AlertsCharacterInterface'
 import { PS2AlertsOutfitInterface } from '~/ps2alerts-constants/interfaces/PS2AlertsOutfitInterface'
 import { Bracket } from '~/ps2alerts-constants/bracket'
+import { Faction } from '~/ps2alerts-constants/faction'
+import TerritoryResultInterface from '~/ps2alerts-constants/interfaces/TerritoryResultInterface'
+
+// The constants' result interface stops short of the victor, which the API does send
+export interface ProfileInstanceDetailsInterface
+  extends Omit<PS2AlertsTerritoryInstanceInterface, 'result'> {
+  result?: TerritoryResultInterface & {
+    victor?: Faction | null
+    draw?: boolean
+  }
+}
 
 // A per-alert aggregate for either a character or an outfit, as returned by the instance aggregate endpoints
 export interface ProfileAlertInterface extends CombatMetricsInterface {
   instance: string
-  instanceDetails?: PS2AlertsTerritoryInstanceInterface
+  instanceDetails?: ProfileInstanceDetailsInterface
   xPerMinutes?: XPerMinuteInterface
   character?: PS2AlertsCharacterInterface
   outfit?: PS2AlertsOutfitInterface

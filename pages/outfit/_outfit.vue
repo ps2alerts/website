@@ -111,17 +111,16 @@ export default Vue.extend({
           .catch(() => null)
       )
 
-      const [alerts, ...brackets] = await Promise.all([
-        api.get<ProfileAlertInterface[]>(
-          `${Endpoints.AGGREGATES_INSTANCE_OUTFIT_ALL.replace(
-            '{outfit}',
-            outfitId
-          )}?getDetails=true`
-        ),
-        ...bracketRequests,
-      ])
+      const alertsRequest = api.get<ProfileAlertInterface[]>(
+        `${Endpoints.AGGREGATES_INSTANCE_OUTFIT_ALL.replace(
+          '{outfit}',
+          outfitId
+        )}?getDetails=true`
+      )
 
-      this.alerts = alerts
+      const brackets = await Promise.all(bracketRequests)
+      this.alerts = await alertsRequest
+
       profileBrackets.forEach((bracket, index) =>
         this.globals.set(bracket, brackets[index])
       )

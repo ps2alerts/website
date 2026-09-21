@@ -82,10 +82,6 @@ export const Endpoints = {
   OW_RANKINGS_ALL: '/outfit-wars/rankings?sortBy=order&order=asc',
   OW_RANKINGS_WORLD: '/outfit-wars/rankings/{world}',
 
-  // 3rd party
-  OUTFIT_TRACKER_OUTFIT_LOGO:
-    'https://outfit-tracker.com/outfit-logo/{outfitId}.png',
-
   // Searches
   SEARCH: '/search/{type}',
 }

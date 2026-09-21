@@ -18,7 +18,6 @@
     <div v-else class="flex relative justify-between items-center flex-1">
       <TeamLogo
         class="self-center place-self-center w-12 lg:w-24 2xl:w-32"
-        :outfit-id="outfitwar.outfitwars.teams.red.id"
         :outfit-faction="outfitwar.outfitwars.teams.red.faction"
         :loser="outfitwar.result && outfitwar.result.victor === 2"
       />
@@ -70,7 +69,6 @@
       </div>
       <TeamLogo
         class="self-center place-self-center w-12 lg:w-24 2xl:w-32"
-        :outfit-id="outfitwar.outfitwars.teams.blue.id"
         :outfit-faction="outfitwar.outfitwars.teams.blue.faction"
         :badge-left="true"
         :loser="outfitwar.result && outfitwar.result.victor === 3"
