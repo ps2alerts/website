@@ -32,13 +32,16 @@ ChartJS.register(
 )
 
 Vue.component('LineChart', {
+  name: 'LineChart',
   extends: Line,
 })
 
 Vue.component('PieChart', {
+  name: 'PieChart',
   extends: Pie,
 })
 
 Vue.component('BarChart', {
+  name: 'BarChart',
   extends: Bar,
 })

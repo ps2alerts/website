@@ -25,7 +25,11 @@
       </div>
     </div>
     <div class="w-1/3">
-      <NuxtLink :to="outfitLink" :disabled="!isInOutfit">
+      <NuxtLink
+        :to="outfitLink"
+        :disabled="!linksToOutfit"
+        :event="linksToOutfit ? 'click' : ''"
+      >
         <img
           v-if="outfit.id"
           :alt="faction | factionShortName"
@@ -35,14 +39,18 @@
         />
       </NuxtLink>
       <div class="text-center">
-        <NuxtLink :to="outfitLink" :disabled="!isInOutfit">
+        <NuxtLink
+          :to="outfitLink"
+          :disabled="!linksToOutfit"
+          :event="linksToOutfit ? 'click' : ''"
+        >
           <span class="font-bold">
             <span v-if="outfit.tag" class="font-mono mr-1"
               >[{{ outfit.tag }}]</span
             >{{ outfit.name }}</span
           ><br />
           <span class="text-sm label gray mr-2">Outfit</span
-          ><span v-if="isInOutfit" class="label blue border"
+          ><span v-if="linksToOutfit" class="label blue border"
             ><font-awesome-icon :icon="['fas', 'link']"></font-awesome-icon>
             Stats</span
           >
@@ -80,6 +88,10 @@ export default Vue.extend({
       type: Number,
       required: true,
     },
+    linkOutfit: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -87,9 +99,12 @@ export default Vue.extend({
     }
   },
   computed: {
+    // Outfit IDs 1-4 are the per-faction "-- NONE --" placeholders
     isInOutfit(): boolean {
-      console.log(parseInt(this.outfit.id, 10))
       return parseInt(this.outfit.id, 10) > 4
+    },
+    linksToOutfit(): boolean {
+      return this.linkOutfit && this.isInOutfit
     },
     outfitLink(): string {
       return `/outfit/${this.outfit.id}`

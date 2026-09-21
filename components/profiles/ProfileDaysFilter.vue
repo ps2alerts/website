@@ -10,7 +10,7 @@
         ></InfoTooltip
       ></span>
       <input
-        v-model="days"
+        v-model.number="days"
         class="w-16 appearance-none border border-solid border-transparent text-white py-1 px-2 leading-tight bg-tint-light rounded-sm focus:bg-gray-500 focus:outline-none focus:border-white mr-1"
         type="number"
         aria-label="Days"
@@ -34,7 +34,12 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'ProfileDaysFilter',
-  props: {},
+  props: {
+    value: {
+      type: Number,
+      default: null,
+    },
+  },
   data() {
     return {
       dateModes: [
@@ -47,13 +52,19 @@ export default Vue.extend({
         { days: 365, text: '365' },
         { days: null, text: 'All Time' },
       ],
-      days: null as number | null,
+      days: this.value as number | null,
     }
+  },
+  watch: {
+    days(days: number | string | null) {
+      // The text input hands back '' when cleared, which means "all time"
+      const parsed = typeof days === 'number' && days > 0 ? days : null
+      this.$emit('updatedDaysFilter', parsed)
+    },
   },
   methods: {
     updateDays(days: number | null) {
       this.days = days
-      this.$emit('updatedDaysFilter', days)
     },
   },
 })

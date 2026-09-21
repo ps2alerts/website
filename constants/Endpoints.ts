@@ -42,6 +42,7 @@ export const Endpoints = {
   AGGREGATES_INSTANCE_OUTFIT: '/aggregates/instance/{instance}/outfit',
   AGGREGATES_INSTANCE_OUTFIT_SINGLE:
     '/aggregates/instance/{instance}/outfit/{outfit}',
+  AGGREGATES_INSTANCE_OUTFIT_ALL: '/aggregates/instance/outfit/{outfit}',
   AGGREGATES_INSTANCE_POPULATION: '/aggregates/instance/{instance}/population',
   AGGREGATES_INSTANCE_POPULATION_AVERAGES:
     '/aggregates/instance/{instance}/population/averages',

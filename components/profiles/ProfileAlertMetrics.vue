@@ -23,32 +23,32 @@
     <div class="col-span-12">
       <v-data-table
         class="datatable"
-        item-key="instanceDetails.instanceId"
+        item-key="instance"
         :headers="headers"
         :items="parsedData"
         v-bind="tableConfig"
       >
-        <template #item.instance="{ item }">
-          <NuxtLink
-            :to="`/alert/${item.instanceDetails.instanceId}`"
-            class="label gray border"
-          >
-            {{ item.instanceDetails.instanceId }}
+        <template #[`item.instance`]="{ item }">
+          <NuxtLink :to="`/alert/${item.instance}`" class="label gray border">
+            {{ item.instance }}
           </NuxtLink>
         </template>
-        <template #item.victor="{ item }">
-          <span
-            v-if="item.victor === player.character.faction"
-            class="label green"
-            >Yes</span
-          >
-          <span v-else class="label">No</span>
-          <span class="label" :class="item.victor | factionShortName">{{
-            item.victor | factionShortName
-          }}</span>
+        <template #[`item.victor`]="{ item }">
+          <span v-if="item.victor === null" class="label">-</span>
+          <template v-else>
+            <span v-if="item.victor === faction" class="label green">Yes</span>
+            <span v-else class="label">No</span>
+            <span class="label" :class="item.victor | factionShortName">{{
+              item.victor | factionShortName
+            }}</span>
+          </template>
         </template>
-        <template #item.outfit="{ item }">
-          <NuxtLink :to="`/outfit/${item.outfit.id}`" class="label gray border">
+        <template #[`item.outfit`]="{ item }">
+          <NuxtLink
+            v-if="item.outfit && item.outfit.id"
+            :to="`/outfit/${item.outfit.id}`"
+            class="label gray border"
+          >
             <span v-if="item.outfit.tag" class="font-mono"
               >[{{ item.outfit.tag }}]</span
             >
@@ -62,14 +62,37 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { ProfileMetricsInterface } from '~/interfaces/profiles/ProfileMetricsInterface'
+import {
+  ProfileAlertInterface,
+  ProfileMetricsInterface,
+  ProfileType,
+} from '~/interfaces/profiles/ProfileMetricsInterface'
 import { ProfileAlertsConfig } from '~/constants/DataTableConfig'
-import { GlobalCharacterAggregateInterface } from '~/ps2alerts-constants/interfaces/api-responses/GlobalCharacterAggregateInterface'
 import { dateTimeFormat } from '~/filters/DateTimeFormat'
 import zoneNameFilter from '~/filters/ZoneName'
 import { Bracket } from '~/ps2alerts-constants/bracket'
 import bracketName from '~/filters/BracketName'
 import { commonChartOptions } from '~/constants/CommonChartOptions'
+
+interface Header {
+  text: string
+  value: string
+  align?: string
+  sortable?: boolean
+  filterable?: boolean
+  cellClass?: string
+}
+
+const centred = (text: string, value: string): Header => ({
+  text,
+  value,
+  align: 'middle',
+  filterable: false,
+  cellClass: 'text-center',
+})
+
+const ratio = (numerator: number, denominator: number, scale = 1): string =>
+  denominator > 0 ? ((numerator / denominator) * scale).toFixed(2) : '0.00'
 
 export default Vue.extend({
   name: 'ProfileAlertMetrics',
@@ -78,9 +101,13 @@ export default Vue.extend({
       type: Object as () => ProfileMetricsInterface,
       required: true,
     },
-    player: {
-      type: Object as () => GlobalCharacterAggregateInterface,
+    faction: {
+      type: Number,
       required: true,
+    },
+    type: {
+      type: String as () => ProfileType,
+      default: 'player',
     },
   },
   data() {
@@ -104,7 +131,7 @@ export default Vue.extend({
                   '#c92020',
                   '#ff0d00',
                 ],
-                data: [40, 20, 80, 10, 100],
+                data: [0, 0, 0, 0, 0],
               },
             ],
           },
@@ -120,7 +147,7 @@ export default Vue.extend({
           },
         },
       },
-      parsedData: {} as any,
+      parsedData: [] as Record<string, any>[],
       tableConfig: ProfileAlertsConfig,
       alertsByBrackets: {
         1: 0,
@@ -129,109 +156,36 @@ export default Vue.extend({
         4: 0,
         5: 0,
       } as Record<number, number>,
-      headers: [
-        {
-          text: 'ID',
-          align: 'left',
-          sortable: true,
-          value: 'instance',
-        },
-        {
-          text: 'Date',
-          align: 'left',
-          sortable: false,
-          value: 'instanceDetails.timeEnded',
-        },
-        {
-          text: 'Cont',
-          align: 'left',
-          sortable: true,
-          value: 'cont',
-        },
-        {
-          text: 'Bracket',
-          align: 'left',
-          sortable: true,
-          value: 'bracket',
-        },
-        {
-          text: 'Victor',
-          align: 'left',
-          sortable: false,
-          value: 'victor',
-        },
-        {
-          text: 'Outfit',
-          align: 'left',
-          value: 'outfit',
-        },
-        {
-          text: 'BR',
-          align: 'middle',
-          filterable: false,
-          value: 'br',
-          cellClass: 'text-center',
-        },
-        {
-          text: 'Kills',
-          align: 'middle',
-          filterable: false,
-          value: 'kills',
-          cellClass: 'text-center',
-        },
-        {
-          text: 'Deaths',
-          align: 'middle',
-          filterable: false,
-          value: 'deaths',
-          cellClass: 'text-center',
-        },
-        {
-          text: 'KD',
-          align: 'middle',
-          filterable: false,
-          value: 'kd',
-          cellClass: 'text-center',
-        },
-        {
-          text: 'HS',
-          align: 'middle',
-          filterable: false,
-          value: 'headshots',
-          cellClass: 'text-center',
-        },
-        {
-          text: 'HSR%',
-          align: 'middle',
-          filterable: false,
-          value: 'hsr',
-          cellClass: 'text-center',
-        },
-        {
-          text: 'TKs',
-          align: 'middle',
-          filterable: false,
-          value: 'teamKills',
-          cellClass: 'text-center',
-        },
-        {
-          text: 'TKed',
-          align: 'middle',
-          filterable: false,
-          value: 'teamKilled',
-          cellClass: 'text-center',
-        },
-        {
-          text: 'Sui',
-          align: 'middle',
-          filterable: false,
-          value: 'suicides',
-          cellClass: 'text-center',
-        },
-      ],
     }
   },
-  computed: {},
+  computed: {
+    headers(): Header[] {
+      const identity: Header[] =
+        this.type === 'outfit'
+          ? [centred('Players', 'participants')]
+          : [
+              { text: 'Outfit', align: 'left', value: 'outfit' },
+              centred('BR', 'br'),
+            ]
+
+      return [
+        { text: 'ID', align: 'left', sortable: true, value: 'instance' },
+        { text: 'Date', align: 'left', sortable: true, value: 'timeStarted' },
+        { text: 'Cont', align: 'left', sortable: true, value: 'cont' },
+        { text: 'Bracket', align: 'left', sortable: true, value: 'bracket' },
+        { text: 'Victor', align: 'left', sortable: false, value: 'victor' },
+        ...identity,
+        centred('Kills', 'kills'),
+        centred('Deaths', 'deaths'),
+        centred('KD', 'kd'),
+        centred('HS', 'headshots'),
+        centred('HSR%', 'hsr'),
+        centred('TKs', 'teamKills'),
+        centred('TKed', 'teamKilled'),
+        centred('Sui', 'suicides'),
+      ]
+    },
+  },
   created(): void {
     this.parsedData = this.parseData(this.statistics)
     this.charts.bracketDistributions.chartData.datasets[0].data = [
@@ -243,39 +197,42 @@ export default Vue.extend({
     ]
   },
   methods: {
-    parseData(stats: ProfileMetricsInterface): any {
-      return stats.alerts.map((alert) => {
-        // Update other stats as part of this loop
-        this.alertsByBrackets[Number(alert.instanceDetails?.bracket) ?? 0] += 1
+    parseData(stats: ProfileMetricsInterface): Record<string, any>[] {
+      return stats.alerts.map((alert: ProfileAlertInterface) => {
+        const bracket = alert.instanceDetails?.bracket
+
+        if (bracket !== undefined && bracket in this.alertsByBrackets) {
+          this.alertsByBrackets[bracket] += 1
+        }
+
+        const kills = alert.kills ?? 0
+        const deaths = alert.deaths ?? 0
+        const headshots = alert.headshots ?? 0
 
         return {
-          ...alert,
-          kills: alert.kills ?? 0,
-          deaths: alert.deaths ?? 0,
-          headshots: alert.headshots ?? 0,
-          teamKills: alert.teamKills ?? 0,
-          teamKilled: alert.teamKilled ?? 0,
-          suicides: alert.suicides ?? 0,
-          instanceDetails: {
-            ...alert.instanceDetails,
-            timeEnded: alert.instanceDetails?.timeEnded
-              ? dateTimeFormat(alert.instanceDetails.timeEnded)
-              : 'Ongoing',
-          },
+          instance: alert.instance,
+          timeStarted: alert.instanceDetails?.timeStarted
+            ? dateTimeFormat(alert.instanceDetails.timeStarted)
+            : 'Unknown',
           cont: alert.instanceDetails?.zone
             ? zoneNameFilter(alert.instanceDetails.zone)
             : 'Unknown',
           victor: alert.instanceDetails?.result?.victor ?? null,
-          bracket: bracketName(alert.instanceDetails?.bracket ?? '?'),
-          outfit: alert.character.outfit,
-          // All the brackets
-          // 1 is used instead of 0 to prevent division by zero
-          kd: ((alert.kills ?? 1) / (alert.deaths ?? 1)).toFixed(2),
-          hsr: (((alert.headshots ?? 1) / (alert.kills ?? 1)) * 100).toFixed(2),
+          bracket: bracketName(bracket ?? Bracket.UNKNOWN),
+          outfit: alert.character?.outfit,
           br:
-            alert.character.adjustedBattleRank ??
-            alert.character.battleRank ??
+            alert.character?.adjustedBattleRank ??
+            alert.character?.battleRank ??
             0,
+          participants: alert.participants ?? 0,
+          kills,
+          deaths,
+          headshots,
+          teamKills: alert.teamKills ?? 0,
+          teamKilled: alert.teamKilled ?? 0,
+          suicides: alert.suicides ?? 0,
+          kd: ratio(kills, deaths),
+          hsr: ratio(headshots, kills, 100),
         }
       })
     },

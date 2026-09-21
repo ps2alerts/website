@@ -47,7 +47,7 @@
         <div id="results" class="mb-2">
           <SearchResult
             v-for="result in results"
-            :key="result.name"
+            :key="`${result.type}-${result.id}`"
             :result="result"
             @pinned="handlePinEvent"
           />
@@ -98,62 +98,57 @@ export default defineComponent({
       characterResults: SearchCharacterInterface[],
       outfitResults: SearchOutfitInterface[]
     ): (SearchCharacterInterface | SearchOutfitInterface)[] {
-      const searchTermLower = this.searchTerm.toLowerCase()
+      const term = this.searchTerm.trim().toLowerCase()
 
-      characterResults.map((result) => {
-        let score = 0
+      // Exact matches outrank prefix matches, and outfits outrank characters at the same level:
+      // searching "DIG" should surface the outfit tag first, then the outfit name, then players called Dig...
+      const scoreOf = (
+        exactTag: boolean,
+        exactName: boolean,
+        prefixTag: boolean
+      ): number => {
+        if (exactTag) return 100
+        if (exactName) return 90
+        if (prefixTag) return 30
+        return 20
+      }
 
-        // Higher weight for exact matches
-        if (result.character.name.toLowerCase() === searchTermLower) {
-          score = 100
-        }
-
+      characterResults.forEach((result) => {
         result.id = result.character.id
-        result.matchScore = score
+        result.matchScore =
+          result.character.name.toLowerCase() === term ? 80 : 10
         result.type = 'player'
         result.faction = result.character.faction
         result.name = result.character.name
         result.tag = result.character?.outfit?.tag ?? undefined
-        return result
       })
 
-      // Sort Characters by score
-      characterResults.sort((a, b) => b.matchScore - a.matchScore)
-
-      outfitResults.map((result) => {
-        let score = 0
-
-        // Higher weight for exact matches on tag and name
-        // This also handles trolls who name outfits after tags e.g. the outfit "DIGT"
-        if (result.outfit.tag?.toLowerCase() === searchTermLower) {
-          score = 100
-        } else if (result.outfit.name.toLowerCase() === searchTermLower) {
-          score = 75
-        }
-
-        // If there's a space on the end of the string, rank them lower (e.g. 'Dignity of War Tactical ') to punish trolling
-        if (searchTermLower.endsWith(' ')) {
-          score = score / 2
-        }
+      outfitResults.forEach((result) => {
+        const tag = result.outfit.tag?.toLowerCase() ?? ''
+        const name = result.outfit.name.toLowerCase()
 
         result.id = result.outfit.id
-        result.matchScore = score
+        result.matchScore = scoreOf(
+          tag === term,
+          name === term,
+          tag.startsWith(term)
+        )
         result.type = 'outfit'
         result.faction = result.outfit.faction
         result.name = result.outfit.name
         result.tag = result.outfit.tag
-        return result
       })
 
-      outfitResults.sort((a, b) => b.matchScore - a.matchScore)
+      // Both lists arrive sorted by name, so exact matches are first and ties keep alphabetical order
+      const byScore = (
+        a: SearchResultComponentInterface,
+        b: SearchResultComponentInterface
+      ) => b.matchScore - a.matchScore
 
-      // Trim results to top 5 results
-      outfitResults = outfitResults.slice(0, 5)
-      characterResults = characterResults.slice(0, 5)
-
-      return [...characterResults, ...outfitResults].sort(
-        (a, b) => b.matchScore - a.matchScore
-      )
+      return [
+        ...outfitResults.sort(byScore).slice(0, 5),
+        ...characterResults.sort(byScore).slice(0, 5),
+      ].sort(byScore)
     },
     clear() {
       this.searchTerm = ''
@@ -163,14 +158,12 @@ export default defineComponent({
       this.loading = false
       if (this.source) {
         this.source.cancel('Canceled due to clearing')
-        console.log('Cancelled request due to clearing')
       }
     },
     async search(): Promise<void> {
       if (this.loading) {
         if (this.source) {
           this.source.cancel('Canceled due to new request')
-          console.log('Canceled due to new request')
         }
       }
 
@@ -208,14 +201,14 @@ export default defineComponent({
         const characterPromise: Promise<SearchCharacterInterface[]> =
           this.apiRequest.get(
             Endpoints.SEARCH.replace('{type}', 'characters'),
-            { searchTerm: this.searchTerm },
+            { searchTerm: this.searchTerm.trim() },
             // @ts-ignore it's valid yet not valid :shrug:
             this.source
           )
         const outfitPromise: Promise<SearchOutfitInterface[]> =
           this.apiRequest.get(
             Endpoints.SEARCH.replace('{type}', 'outfits'),
-            { searchTerm: this.searchTerm },
+            { searchTerm: this.searchTerm.trim() },
             // @ts-ignore it's valid yet not valid :shrug:
             this.source
           )
