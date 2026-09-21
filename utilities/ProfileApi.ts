@@ -6,6 +6,7 @@ import {
   ProfileSummaryInterface,
   ProfileTimelineRowInterface,
   ProfileType,
+  ProfileVehicleRowInterface,
   TimelineGranularity,
 } from '~/interfaces/profiles/ProfileMetricsInterface'
 import { World } from '~/ps2alerts-constants/world'
@@ -64,6 +65,14 @@ export const profileApi = {
     )
   },
 }
+
+export const characterVehicles = (
+  scope: ProfileScope
+): Promise<ProfileVehicleRowInterface[]> =>
+  new ApiRequest().get<ProfileVehicleRowInterface[]>(
+    Endpoints.PROFILE_CHARACTER_VEHICLES.replace('{id}', scope.id),
+    scopeParams(scope)
+  )
 
 export const outfitMembers = (
   id: string,

@@ -11,13 +11,31 @@
         ></font-awesome-icon>
         {{ type === 'character' ? 'Player' : 'Outfit' }}
       </span>
-      <p v-if="type === 'character' && memberOf" class="mt-2">
-        Member of
-        <NuxtLink :to="memberOf.link" class="label gray border">
-          <span v-if="memberOf.tag" class="font-mono"
-            >[{{ memberOf.tag }}]</span
+      <p
+        v-if="type === 'character'"
+        class="mt-2 flex flex-wrap justify-center items-center gap-2"
+      >
+        <span v-if="battleRank" class="label gray">
+          BR {{ battleRank.rank }}
+          <span v-if="battleRank.asp">
+            · ASP {{ battleRank.asp }} ({{ battleRank.adjusted }})</span
           >
-          {{ memberOf.name }}
+        </span>
+        <span v-if="memberOf">
+          Member of
+          <NuxtLink :to="memberOf.link" class="label gray border">
+            <span v-if="memberOf.tag" class="font-mono"
+              >[{{ memberOf.tag }}]</span
+            >
+            {{ memberOf.name }}
+            <font-awesome-icon :icon="['fas', 'link']"></font-awesome-icon>
+          </NuxtLink>
+        </span>
+      </p>
+      <p v-if="type === 'outfit' && summary.leader" class="mt-2">
+        Led by
+        <NuxtLink :to="leaderLink" class="label gray border">
+          {{ summary.leader.name }}
           <font-awesome-icon :icon="['fas', 'link']"></font-awesome-icon>
         </NuxtLink>
       </p>
@@ -54,6 +72,18 @@
         <div class="tag section">Combat stats by bracket</div>
         <ProfileCombatMetrics :summary="summary" />
       </div>
+      <div class="col-span-12 card">
+        <div class="tag section">Kills by faction</div>
+        <ProfileFactionKills :summary="summary" />
+      </div>
+      <div class="col-span-12 card">
+        <div class="tag section">Per-minute rates</div>
+        <ProfileRates :summary="summary" />
+      </div>
+      <div v-if="type === 'character'" class="col-span-12 card">
+        <div class="tag section">Vehicles</div>
+        <ProfileVehicles :summary="summary" />
+      </div>
       <div v-if="type === 'outfit'" class="col-span-12 card">
         <div class="tag section">Members</div>
         <ProfileMembers :summary="summary" />
@@ -84,6 +114,9 @@ import ProfileCombatMetricsGraph from '~/components/profiles/ProfileCombatMetric
 import ProfileDaysFilter from '~/components/profiles/ProfileDaysFilter.vue'
 import ProfileHeadline from '~/components/profiles/ProfileHeadline.vue'
 import ProfileMembers from '~/components/profiles/ProfileMembers.vue'
+import ProfileFactionKills from '~/components/profiles/ProfileFactionKills.vue'
+import ProfileRates from '~/components/profiles/ProfileRates.vue'
+import ProfileVehicles from '~/components/profiles/ProfileVehicles.vue'
 import { profileLink } from '~/utilities/ProfileApi'
 import {
   ProfileSummaryInterface,
@@ -102,6 +135,9 @@ export default Vue.extend({
     ProfileDaysFilter,
     ProfileHeadline,
     ProfileMembers,
+    ProfileFactionKills,
+    ProfileRates,
+    ProfileVehicles,
   },
   props: {
     type: {
@@ -135,6 +171,21 @@ export default Vue.extend({
     },
     tag(): string | null {
       return this.outfit?.tag ?? null
+    },
+    battleRank(): { rank: number; asp: number; adjusted: number } | null {
+      if (this.type !== 'character' || !this.subject.battleRank) {
+        return null
+      }
+
+      return {
+        rank: this.subject.battleRank,
+        asp: this.subject.asp ?? 0,
+        adjusted: this.subject.adjustedBattleRank ?? this.subject.battleRank,
+      }
+    },
+    leaderLink(): string {
+      const leader = this.summary.leader
+      return leader ? profileLink('character', leader.id, leader.world) : ''
     },
     // Outfit ids 1-4 are the per-faction "no outfit" placeholders
     memberOf(): { link: string; name: string; tag?: string } | null {

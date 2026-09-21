@@ -13,6 +13,13 @@ export type ProfileType = 'character' | 'outfit'
 
 export type TimelineGranularity = 'day' | 'week' | 'month' | 'year'
 
+export interface FactionKillsInterface {
+  vs: number
+  nc: number
+  tr: number
+  nso: number
+}
+
 export interface ProfileBracketTotalsInterface {
   bracket: Bracket
   alerts: number
@@ -22,11 +29,19 @@ export interface ProfileBracketTotalsInterface {
   teamKills: number
   teamKilled: number
   suicides: number
+  captures: number
+  participants: number
   xpmAlerts: number
   kpm: number
   dpm: number
+  tkpm: number
+  spm: number
+  hspm: number
+  ppKpm: number
+  ppDpm: number
   wins: number
   decided: number
+  factionKills: FactionKillsInterface
 }
 
 export interface ProfileSummaryInterface {
@@ -36,6 +51,7 @@ export interface ProfileSummaryInterface {
   days: number | null
   identity: GlobalCharacterAggregateInterface | GlobalOutfitAggregateInterface
   faction: Faction
+  leader?: { id: string; name: string; world: World } | null
   totals: ProfileBracketTotalsInterface
   brackets: Record<number, ProfileBracketTotalsInterface | undefined>
   firstAlert: string | null
@@ -118,4 +134,15 @@ export interface ProfileMembersPageInterface {
   total: number
   page: number
   pageSize: number
+}
+
+export interface ProfileVehicleRowInterface {
+  vehicle: number
+  vehicleKills: number
+  infantryKills: number
+  deaths: number
+  teamKills: number
+  teamKilled: number
+  roadkills: number
+  suicides: number
 }

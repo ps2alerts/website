@@ -86,6 +86,7 @@ export const Endpoints = {
   PROFILE_TIMELINE: '/profiles/{type}/{id}/timeline',
   PROFILE_ALERTS: '/profiles/{type}/{id}/alerts',
   PROFILE_OUTFIT_MEMBERS: '/profiles/outfit/{id}/members',
+  PROFILE_CHARACTER_VEHICLES: '/profiles/character/{id}/vehicles',
 
   // Searches
   SEARCH: '/search/{type}',

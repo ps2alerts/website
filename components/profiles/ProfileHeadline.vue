@@ -1,5 +1,8 @@
 <template>
-  <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2">
+  <div
+    class="grid grid-cols-2 md:grid-cols-4 gap-2"
+    :class="tiles.length > 6 ? 'xl:grid-cols-8' : 'xl:grid-cols-6'"
+  >
     <div v-for="tile in tiles" :key="tile.label" class="stat-tile">
       <div class="stat-value" :class="tile.classes">{{ tile.value }}</div>
       <div class="stat-label">
@@ -64,6 +67,20 @@ export default Vue.extend({
           value: totals.kpm.toFixed(2),
           tooltip: `Average kills per minute across the ${totals.xpmAlerts} alerts with per-minute tracking.`,
         },
+        ...(this.summary.type === 'outfit'
+          ? [
+              {
+                label: 'Captures',
+                value: compact(totals.captures),
+                tooltip: 'Facilities captured by this outfit during alerts.',
+              },
+              {
+                label: 'Avg members',
+                value: totals.participants.toFixed(1),
+                tooltip: 'Average number of members taking part in an alert.',
+              },
+            ]
+          : []),
       ]
     },
   },
