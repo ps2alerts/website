@@ -107,6 +107,26 @@
         <ProfileRates :summary="summary" />
       </div>
       <div class="col-span-12 card">
+        <div class="tag section">
+          Weapons and classes
+          <span class="label blue ml-1">Coming soon</span>
+        </div>
+        <div class="text-center max-w-3xl mx-auto p-2 text-sm">
+          <p class="mb-2">
+            We have never recorded weapon or class stats per player. Storing
+            every weapon for every player in every alert looked like far too
+            much data, so we only kept combined totals across everyone. Looking
+            back, that was an oversight on our part: there is a much cheaper way
+            to store it, and we are working on it now.
+          </p>
+          <p class="text-gray-400">
+            Recording will start from the day it goes live. Past alerts can't be
+            filled in, because only those combined totals were ever kept for
+            them.
+          </p>
+        </div>
+      </div>
+      <div class="col-span-12 card">
         <div class="tag section">Vehicles</div>
         <ProfileVehicles :summary="summary" />
       </div>
