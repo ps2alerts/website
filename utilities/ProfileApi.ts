@@ -7,6 +7,7 @@ import {
   ProfileTimelineRowInterface,
   ProfileType,
   ProfileVehicleRowInterface,
+  ProfileOutfitVehiclesInterface,
   TimelineGranularity,
 } from '~/interfaces/profiles/ProfileMetricsInterface'
 import { World } from '~/ps2alerts-constants/world'
@@ -108,3 +109,12 @@ export const profileLink = (
   const path = type === 'character' ? `/player/${id}` : `/outfit/${id}`
   return world ? `${path}?world=${world}` : path
 }
+
+export const outfitVehicles = (
+  id: string,
+  world: World | null | undefined
+): Promise<ProfileOutfitVehiclesInterface> =>
+  profileRequest().get<ProfileOutfitVehiclesInterface>(
+    Endpoints.PROFILE_OUTFIT_VEHICLES.replace('{id}', id),
+    world ? { world } : {}
+  )

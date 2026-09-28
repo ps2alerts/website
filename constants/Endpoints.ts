@@ -87,6 +87,7 @@ export const Endpoints = {
   PROFILE_ALERTS: '/profiles/{type}/{id}/alerts',
   PROFILE_OUTFIT_MEMBERS: '/profiles/outfit/{id}/members',
   PROFILE_CHARACTER_VEHICLES: '/profiles/character/{id}/vehicles',
+  PROFILE_OUTFIT_VEHICLES: '/profiles/outfit/{id}/vehicles',
 
   // Searches
   SEARCH: '/search/{type}',

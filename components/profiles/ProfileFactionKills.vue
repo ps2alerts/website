@@ -1,8 +1,8 @@
 <template>
   <div>
     <p class="text-xs text-gray-400 text-center mb-2">
-      Who the kills landed on. Kills on your own faction are team kills. NSO
-      kills count wherever the operative was fighting for the other side.
+      Who the kills landed on. Kills on your own faction are team kills (TKs).
+      NSO kills count wherever the operative was fighting for the other side.
     </p>
     <div class="faction-bar flex rounded overflow-hidden text-sm font-bold">
       <v-tooltip v-for="segment in segments" :key="segment.key" bottom>
@@ -103,9 +103,7 @@ export default Vue.extend({
       return FACTIONS.map((f) => ({
         key: f.key,
         label:
-          f.faction === this.summary.faction
-            ? `${f.label} (team kills)`
-            : f.label,
+          f.faction === this.summary.faction ? `${f.label} (TKs)` : f.label,
         colour: f.colour,
         count: countOf(f),
         share: total > 0 ? (countOf(f) / total) * 100 : 0,

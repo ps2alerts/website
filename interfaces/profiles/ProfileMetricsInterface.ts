@@ -32,6 +32,8 @@ export interface ProfileBracketTotalsInterface {
   captures: number
   participants: number
   xpmAlerts: number
+  // Seconds in the alerts that recorded it
+  timeInAlerts: number
   kpm: number
   dpm: number
   tkpm: number
@@ -146,4 +148,10 @@ export interface ProfileVehicleRowInterface {
   teamKilled: number
   roadkills: number
   suicides: number
+}
+
+export interface ProfileOutfitVehiclesInterface {
+  members: number
+  truncated: boolean
+  rows: ProfileVehicleRowInterface[]
 }

@@ -88,11 +88,12 @@ export default Vue.extend({
                   <li>Headline figures: alerts played, win rate, kills, K/D, headshot rate and kills per minute. Outfits also show facility captures and average members per alert.</li>
                   <li>Combat stats broken down by activity bracket, with per-alert averages.</li>
                   <li>Kills split by which faction they landed on, with team kills shown honestly.</li>
-                  <li>Per-minute rates for every bracket. Per-minute tracking started in June 2022, and the pages say so rather than pretending earlier alerts had none.</li>
+                  <li>Per-minute rates and time spent in alerts for every bracket, with a chart of what an average minute looks like. Per-minute tracking started in June 2022, and the pages say so rather than pretending earlier alerts had none.</li>
                   <li>A performance-over-time graph that picks a sensible resolution for the date range and draws a rolling average and trend line, with day, week, month and year views.</li>
                   <li>A "last N days" filter that recalculates the whole page from just those alerts.</li>
                   <li>The full alert history, paged and sortable, linking to each alert.</li>
-                  <li>Players: a per-vehicle breakdown of kills, deaths and roadkills. Outfits: a searchable members list linking to every member's profile, and the outfit leader.</li>
+                  <li>A per-vehicle breakdown of kills, deaths and roadkills. For outfits it totals every current member and refreshes daily.</li>
+                  <li>Players show their battle rank, ASP and outfit. Outfits show their leader and a searchable members list linking to every member's profile.</li>
                 </ul>
                 <p>All of this is calculated on the server, so a profile with thousands of alerts loads in a few kilobytes instead of downloading everything.</p>
               </div>

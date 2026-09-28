@@ -5,25 +5,26 @@
         <span v-if="tag" class="font-mono">[{{ tag }}]</span>
         {{ name }}
       </h1>
-      <span class="label gray">
-        <font-awesome-icon
-          :icon="['fas', type === 'character' ? 'user' : 'users']"
-        ></font-awesome-icon>
-        {{ type === 'character' ? 'Player' : 'Outfit' }}
-      </span>
-      <p
-        v-if="type === 'character'"
-        class="mt-2 mb-6 flex flex-wrap justify-center items-center gap-2"
-      >
+      <div class="mt-2 mb-6 flex flex-wrap justify-center items-center gap-2">
+        <span class="label gray">
+          <font-awesome-icon
+            :icon="['fas', type === 'character' ? 'user' : 'users']"
+          ></font-awesome-icon>
+          {{ type === 'character' ? 'Player' : 'Outfit' }}
+        </span>
         <span v-if="battleRank" class="label gray">
           BR {{ battleRank.rank }}
-          <span v-if="battleRank.asp">
-            · ASP {{ battleRank.asp }} ({{ battleRank.adjusted }})</span
-          >
         </span>
-        <span v-if="memberOf">
+        <span
+          v-if="battleRank && battleRank.asp"
+          class="label gold"
+          :title="`Adjusted battle rank ${battleRank.adjusted}`"
+        >
+          ASP {{ battleRank.asp }}
+        </span>
+        <span v-if="memberOf" class="ml-2">
           Member of
-          <NuxtLink :to="memberOf.link" class="label gray border">
+          <NuxtLink :to="memberOf.link" class="label gray border ml-1">
             <span v-if="memberOf.tag" class="font-mono"
               >[{{ memberOf.tag }}]</span
             >
@@ -31,14 +32,14 @@
             <font-awesome-icon :icon="['fas', 'link']"></font-awesome-icon>
           </NuxtLink>
         </span>
-      </p>
-      <p v-if="type === 'outfit' && summary.leader" class="mt-2 mb-6">
-        Led by
-        <NuxtLink :to="leaderLink" class="label gray border">
-          {{ summary.leader.name }}
-          <font-awesome-icon :icon="['fas', 'link']"></font-awesome-icon>
-        </NuxtLink>
-      </p>
+        <span v-if="type === 'outfit' && summary.leader" class="ml-2">
+          Led by
+          <NuxtLink :to="leaderLink" class="label gray border ml-1">
+            {{ summary.leader.name }}
+            <font-awesome-icon :icon="['fas', 'link']"></font-awesome-icon>
+          </NuxtLink>
+        </span>
+      </div>
     </div>
     <div class="col-span-12">
       <ProfileLogos :faction="summary.faction" :world="summary.world" />
@@ -76,21 +77,21 @@
         <div class="tag section">Kills by faction</div>
         <ProfileFactionKills :summary="summary" />
       </div>
+      <div class="col-span-12 card relative">
+        <div class="tag section">Performance over time</div>
+        <ProfileCombatMetricsGraph :summary="summary" />
+      </div>
       <div class="col-span-12 card">
         <div class="tag section">Per-minute rates</div>
         <ProfileRates :summary="summary" />
       </div>
-      <div v-if="type === 'character'" class="col-span-12 card">
+      <div class="col-span-12 card">
         <div class="tag section">Vehicles</div>
         <ProfileVehicles :summary="summary" />
       </div>
       <div v-if="type === 'outfit'" class="col-span-12 card">
         <div class="tag section">Members</div>
         <ProfileMembers :summary="summary" />
-      </div>
-      <div class="col-span-12 card relative">
-        <div class="tag section">Performance over time</div>
-        <ProfileCombatMetricsGraph :summary="summary" />
       </div>
       <div class="col-span-12 card">
         <div class="tag section">Alerts by bracket</div>
@@ -191,7 +192,11 @@ export default Vue.extend({
     memberOf(): { link: string; name: string; tag?: string } | null {
       const outfit = this.outfit
 
-      if (!outfit || parseInt(outfit.id, 10) <= 4) {
+      if (
+        this.type !== 'character' ||
+        !outfit ||
+        parseInt(outfit.id, 10) <= 4
+      ) {
         return null
       }
 

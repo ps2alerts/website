@@ -4,43 +4,78 @@
       {{ error }}
       <button class="btn btn-sm ml-2" @click="load">Retry</button>
     </p>
-    <p v-else-if="loaded && rows.length === 0" class="text-center p-2">
-      No vehicle activity recorded<span v-if="summary.days">
+    <p v-else-if="!loaded" class="text-center p-2">Loading...</p>
+    <p v-else-if="truncated" class="text-center p-2">
+      This outfit has too many members to total their vehicle stats.
+    </p>
+    <p v-else-if="rows.length === 0" class="text-center p-2">
+      No vehicle activity recorded<span v-if="daysApply">
         in the last {{ summary.days }} days</span
       >.
     </p>
-    <v-data-table
-      v-else
-      class="datatable"
-      item-key="vehicle"
-      :headers="headers"
-      :items="rows"
-      :loading="!loaded"
-      v-bind="tableConfig"
-      disable-pagination
-      hide-default-footer
-    >
-      <template
-        v-for="col in [
-          'kills',
-          'vehicleKills',
-          'infantryKills',
-          'deaths',
-          'roadkills',
-          'teamKills',
-          'teamKilled',
-          'suicides',
-        ]"
-        #[`item.${col}`]="{ value }"
-      >
-        <span :key="col" :title="exactNumber(value)">{{
-          abbreviate(value)
-        }}</span>
-      </template>
-    </v-data-table>
-    <p class="text-xs text-gray-400 text-center mt-1">
+    <div v-else class="grid grid-cols-12 gap-4 items-center">
+      <div class="col-span-12 lg:col-span-9 overflow-x-auto">
+        <v-simple-table dark dense class="compact">
+          <thead>
+            <tr class="font-bold border-b border-white whitespace-nowrap">
+              <td>Vehicle</td>
+              <td v-for="col in columns" :key="col.key" class="text-right">
+                {{ col.label }}
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in rows" :key="row.vehicle">
+              <td class="whitespace-nowrap">
+                <span
+                  class="inline-block w-3 h-3 rounded-sm mr-2 align-middle"
+                  :style="{ backgroundColor: row.colour }"
+                ></span
+                >{{ row.name }}
+              </td>
+              <td
+                v-for="col in columns"
+                :key="col.key"
+                class="text-right"
+                :title="col.abbreviated ? exactNumber(row[col.key]) : ''"
+              >
+                {{ col.abbreviated ? abbreviate(row[col.key]) : row[col.key] }}
+              </td>
+            </tr>
+            <tr class="font-bold border-t border-white">
+              <td>Total</td>
+              <td
+                v-for="col in columns"
+                :key="col.key"
+                class="text-right"
+                :title="col.abbreviated ? exactNumber(totals[col.key]) : ''"
+              >
+                {{
+                  col.abbreviated
+                    ? abbreviate(totals[col.key])
+                    : totals[col.key]
+                }}
+              </td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+      </div>
+      <div class="col-span-12 lg:col-span-3">
+        <PieChart
+          :chart-data="chartData"
+          :chart-options="chartOptions"
+          :styles="{ height: '260px' }"
+        />
+      </div>
+    </div>
+    <p class="text-xs text-gray-400 text-center mt-2">
       Kills and deaths while in the vehicle. K/D counts kills of both vehicles
       and infantry.
+      <span v-if="summary.type === 'outfit' && members">
+        Totalled across the outfit's {{ members.toLocaleString() }} current
+        members over their whole history, including time before they joined.
+        Refreshed daily; the days filter does not apply.</span
+      >
     </p>
   </div>
 </template>
@@ -53,18 +88,44 @@ import {
   ProfileSummaryInterface,
   ProfileVehicleRowInterface,
 } from '~/interfaces/profiles/ProfileMetricsInterface'
-import { ProfileAlertsCombatMetricsTableConfig } from '~/constants/DataTableConfig'
 import { Vehicle } from '~/ps2alerts-constants/vehicle'
-import { characterVehicles } from '~/utilities/ProfileApi'
+import { characterVehicles, outfitVehicles } from '~/utilities/ProfileApi'
+import { commonChartOptions } from '~/constants/CommonChartOptions'
 
-const centred = (text: string, value: string) => ({
-  text,
-  value,
-  align: 'middle',
-  filterable: false,
-  class: 'whitespace-nowrap',
-  cellClass: 'text-center',
-})
+const PALETTE = [
+  '#e53e3e',
+  '#dd6b20',
+  '#d69e2e',
+  '#38a169',
+  '#319795',
+  '#3182ce',
+  '#5a67d8',
+  '#805ad5',
+]
+const OTHER_COLOUR = '#718096'
+
+const COLUMNS = [
+  { key: 'kills', label: 'Kills', abbreviated: true },
+  { key: 'vehicleKills', label: 'vs Vehicles', abbreviated: true },
+  { key: 'infantryKills', label: 'vs Infantry', abbreviated: true },
+  { key: 'deaths', label: 'Deaths', abbreviated: true },
+  { key: 'kd', label: 'K/D', abbreviated: false },
+  { key: 'roadkills', label: 'Roadkills', abbreviated: true },
+  { key: 'teamKills', label: 'TKs', abbreviated: true },
+  { key: 'teamKilled', label: 'TKed', abbreviated: true },
+  { key: 'suicides', label: 'Suicides', abbreviated: true },
+]
+
+const SUMMED = [
+  'kills',
+  'vehicleKills',
+  'infantryKills',
+  'deaths',
+  'roadkills',
+  'teamKills',
+  'teamKilled',
+  'suicides',
+] as const
 
 // "MAGRIDER" -> "Magrider", "ANT" stays as the constants spell it
 const vehicleName = (id: number): string => {
@@ -81,7 +142,10 @@ const vehicleName = (id: number): string => {
     .join(' ')
 }
 
-// Per-vehicle combat for a player
+const share = (part: number, whole: number): string =>
+  `${(whole > 0 ? (part / whole) * 100 : 0).toFixed(1)}%`
+
+// Per-vehicle combat for a player, or summed over an outfit's members
 export default Vue.extend({
   name: 'ProfileVehicles',
   mixins: [AbbreviateNumbers],
@@ -93,28 +157,101 @@ export default Vue.extend({
   },
   data() {
     return {
-      rows: [] as Record<string, string | number>[],
+      raw: [] as ProfileVehicleRowInterface[],
+      members: 0,
+      truncated: false,
       loaded: false,
       error: '',
       requestSeq: 0,
-      tableConfig: {
-        ...ProfileAlertsCombatMetricsTableConfig,
-        'sort-by': ['kills'],
-        'sort-desc': [true],
-      },
-      headers: [
-        { text: 'Vehicle', align: 'left', sortable: true, value: 'name' },
-        centred('Kills', 'kills'),
-        centred('Vehicle kills', 'vehicleKills'),
-        centred('Infantry kills', 'infantryKills'),
-        centred('Deaths', 'deaths'),
-        centred('K/D', 'kd'),
-        centred('Roadkills', 'roadkills'),
-        centred('TKs', 'teamKills'),
-        centred('TKed', 'teamKilled'),
-        centred('Suicides', 'suicides'),
-      ],
+      columns: COLUMNS,
     }
+  },
+  computed: {
+    daysApply(): boolean {
+      return this.summary.type === 'character' && !!this.summary.days
+    },
+    totalKills(): number {
+      return this.raw.reduce(
+        (sum, row) => sum + row.vehicleKills + row.infantryKills,
+        0
+      )
+    },
+    rows(): Record<string, any>[] {
+      return this.raw.map((row, index) => {
+        const kills = row.vehicleKills + row.infantryKills
+
+        return {
+          ...row,
+          name: vehicleName(row.vehicle),
+          colour: PALETTE[index] ?? OTHER_COLOUR,
+          kills,
+          kd: killDeathRatio(kills, row.deaths),
+        }
+      })
+    },
+    totals(): Record<string, number | string> {
+      const totals: Record<string, number | string> = {}
+
+      SUMMED.forEach((key) => {
+        totals[key] = this.rows.reduce((sum, row) => sum + row[key], 0)
+      })
+      totals.kd = killDeathRatio(
+        totals.kills as number,
+        totals.deaths as number
+      )
+
+      return totals
+    },
+    // The top vehicles by kills get a slice each; everything past the palette shares one
+    slices(): { label: string; colour: string; kills: number }[] {
+      const named = this.rows.slice(0, PALETTE.length).map((row) => ({
+        label: row.name,
+        colour: row.colour,
+        kills: row.kills,
+      }))
+      const rest = this.rows
+        .slice(PALETTE.length)
+        .reduce((sum, row) => sum + row.kills, 0)
+
+      return rest > 0
+        ? [...named, { label: 'Other', colour: OTHER_COLOUR, kills: rest }]
+        : named
+    },
+    chartData(): Record<string, any> {
+      return {
+        labels: this.slices.map((slice) => slice.label),
+        datasets: [
+          {
+            backgroundColor: this.slices.map((slice) => slice.colour),
+            borderColor: '#2d3748',
+            borderWidth: 2,
+            data: this.slices.map((slice) => slice.kills),
+          },
+        ],
+      }
+    },
+    chartOptions(): Record<string, any> {
+      return {
+        ...commonChartOptions.root,
+        interaction: { intersect: true, mode: 'nearest' },
+        plugins: {
+          ...commonChartOptions.root.plugins,
+          legend: { display: false },
+          datalabels: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (context: { label: string; parsed: number }) =>
+                ` ${
+                  context.label
+                }: ${context.parsed.toLocaleString()} kills (${share(
+                  context.parsed,
+                  this.totalKills
+                )})`,
+            },
+          },
+        },
+      }
+    },
   },
   watch: {
     summary() {
@@ -131,43 +268,45 @@ export default Vue.extend({
       this.error = ''
 
       try {
-        const rows = await characterVehicles({
-          type: 'character',
-          id: this.summary.id,
-          world: this.summary.world,
-          days: this.summary.days,
-        })
+        let rows: ProfileVehicleRowInterface[]
+        let members = 0
+        let truncated = false
+
+        if (this.summary.type === 'outfit') {
+          const result = await outfitVehicles(
+            this.summary.id,
+            this.summary.world
+          )
+          rows = result.rows
+          members = result.members
+          truncated = result.truncated
+        } else {
+          rows = await characterVehicles({
+            type: 'character',
+            id: this.summary.id,
+            world: this.summary.world,
+            days: this.summary.days,
+          })
+        }
 
         if (seq !== this.requestSeq) {
           return
         }
 
-        this.rows = rows.map((row: ProfileVehicleRowInterface) => {
-          const kills = row.vehicleKills + row.infantryKills
-
-          return {
-            vehicle: row.vehicle,
-            name: vehicleName(row.vehicle),
-            kills,
-            vehicleKills: row.vehicleKills,
-            infantryKills: row.infantryKills,
-            deaths: row.deaths,
-            kd: killDeathRatio(kills, row.deaths),
-            roadkills: row.roadkills,
-            teamKills: row.teamKills,
-            teamKilled: row.teamKilled,
-            suicides: row.suicides,
-          }
-        })
+        this.raw = rows
+        this.members = members
+        this.truncated = truncated
       } catch (e: any) {
         if (seq !== this.requestSeq) {
           return
         }
-        // Old rows would sit under the newly chosen page or filter
-        this.rows = []
 
+        // Old rows would sit under the newly chosen filter
+        this.raw = []
         this.error = `Vehicle stats could not be loaded (${
-          e?.message ?? 'network error'
+          e?.response?.status === 503
+            ? 'still warming up after an update'
+            : e?.message ?? 'network error'
         }).`
       } finally {
         if (seq === this.requestSeq) {
@@ -178,3 +317,10 @@ export default Vue.extend({
   },
 })
 </script>
+
+<style scoped>
+/* Nine stat columns have to share the row with the pie */
+.compact >>> td {
+  padding: 0 8px !important;
+}
+</style>

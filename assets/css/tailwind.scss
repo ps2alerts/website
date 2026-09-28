@@ -426,6 +426,14 @@ select {
     }
   }
 
+  &.gold {
+    @apply bg-yellow-600;
+
+    &:hover {
+      @apply bg-yellow-500;
+    }
+  }
+
   &.blue {
     @apply bg-blue-500;
 

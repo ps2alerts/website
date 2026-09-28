@@ -39,9 +39,9 @@
           class="label gray border"
           :title="item.outfit.name"
         >
-          <span v-if="item.outfit.tag" class="font-mono">{{
-            item.outfit.tag
-          }}</span>
+          <span v-if="item.outfit.tag" class="font-mono"
+            >[{{ item.outfit.tag }}]</span
+          >
           <span v-else>{{ item.outfit.name }}</span>
         </NuxtLink>
       </template>
