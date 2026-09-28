@@ -1,23 +1,27 @@
-import axios, { AxiosInstance } from 'axios'
+import axios, { AxiosInstance, CancelTokenSource } from 'axios'
 import { CommonApiParamsInterface } from '~/interfaces/CommonApiParmsInterface'
 
 export default class ApiRequest {
   public client: AxiosInstance
 
-  constructor(baseUrl?: string) {
+  // timeoutMs 0 waits forever, which is axios' default and what existing callers rely on
+  constructor(baseUrl?: string, timeoutMs = 0) {
     this.client = axios.create({
       baseURL: baseUrl ?? process.env.apiHost,
       responseType: 'json',
+      timeout: timeoutMs,
     })
   }
 
   public async get<T>(
     endpoint: string,
-    params?: CommonApiParamsInterface
+    params?: CommonApiParamsInterface,
+    cancelToken?: CancelTokenSource
   ): Promise<T> {
     return await this.client
       .get(endpoint, {
         params,
+        cancelToken: cancelToken?.token,
       })
       .then((response) => {
         // console.log('Api Client Request', { endpoint, params, response })

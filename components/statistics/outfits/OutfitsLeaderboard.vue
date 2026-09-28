@@ -34,8 +34,34 @@
             :search="filter"
             v-bind="tableConfig"
           >
+            <template
+              v-for="col in [
+                'kills',
+                'deaths',
+                'captures',
+                'teamKills',
+                'teamKilled',
+                'suicides',
+                'headshots',
+              ]"
+              #[`item.${col}`]="{ value }"
+            >
+              <span :key="col" :title="exactNumber(value)">{{
+                abbreviate(value)
+              }}</span>
+            </template>
             <template slot="item.rank" slot-scope="props">
               {{ items.indexOf(props.item) + 1 }}
+            </template>
+            <template #[`item.outfit.name`]="{ item }">
+              <NuxtLink
+                v-if="hasOutfit(item.outfit)"
+                :to="profileLink('outfit', item.outfit.id, item.outfit.world)"
+                class="label gray border whitespace-nowrap"
+              >
+                {{ item.outfit.name }}
+              </NuxtLink>
+              <span v-else class="text-gray-400">{{ item.outfit.name }}</span>
             </template>
           </v-data-table>
         </div>
@@ -46,12 +72,16 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
+import AbbreviateNumbers from '~/mixins/AbbreviateNumbers'
 import { StatisticsOutfitLeaderboardConfig } from '@/constants/DataTableConfig'
 import { StatisticsOutfitTableDataInterface } from '~/interfaces/statistics/StatisticsOutfitTableDataInterface'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
+import { profileLink } from '~/utilities/ProfileApi'
+import { PS2AlertsOutfitInterface } from '~/ps2alerts-constants/interfaces/PS2AlertsOutfitInterface'
 
 export default Vue.extend({
   name: 'OutfitLeaderboard',
+  mixins: [AbbreviateNumbers],
   props: {
     rawData: {
       type: Array,
@@ -174,6 +204,11 @@ export default Vue.extend({
     this.loaded = true
   },
   methods: {
+    profileLink,
+    // Outfit ids 1-4 are the per-faction "no outfit" placeholders
+    hasOutfit(outfit?: PS2AlertsOutfitInterface): boolean {
+      return !!outfit && parseInt(outfit.id, 10) > 4
+    },
     tableItemClass(item: StatisticsOutfitTableDataInterface): string {
       return FactionBgClassString(item.outfit.faction)
     },

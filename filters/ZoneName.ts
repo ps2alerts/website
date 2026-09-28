@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Zone } from '@/ps2alerts-constants/zone'
 
-const zoneNameFilter = Vue.filter('zoneName', (value: Zone) => {
+export const zoneNameFilter = Vue.filter('zoneName', (value: Zone) => {
   switch (value) {
     case Zone.INDAR:
       return 'Indar'

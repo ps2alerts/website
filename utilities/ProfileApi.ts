@@ -1,0 +1,120 @@
+import ApiRequest from '~/api-request'
+import { Endpoints } from '~/constants/Endpoints'
+import {
+  ProfileAlertsPageInterface,
+  ProfileMembersPageInterface,
+  ProfileSummaryInterface,
+  ProfileTimelineRowInterface,
+  ProfileType,
+  ProfileVehicleRowInterface,
+  ProfileOutfitVehiclesInterface,
+  TimelineGranularity,
+} from '~/interfaces/profiles/ProfileMetricsInterface'
+import { World } from '~/ps2alerts-constants/world'
+
+export interface ProfileScope {
+  type: ProfileType
+  id: string
+  world?: World | null
+  days?: number | null
+}
+
+const scopeParams = (scope: ProfileScope): Record<string, string | number> => {
+  const params: Record<string, string | number> = {}
+
+  if (scope.world) {
+    params.world = scope.world
+  }
+
+  if (scope.days) {
+    params.days = scope.days
+  }
+
+  return params
+}
+
+// Past the API's own 30s query deadline plus time queued behind other cold profiles
+const PROFILE_TIMEOUT_MS = 45000
+const profileRequest = (): ApiRequest =>
+  new ApiRequest(undefined, PROFILE_TIMEOUT_MS)
+
+const endpoint = (template: string, scope: ProfileScope): string =>
+  template.replace('{type}', scope.type).replace('{id}', scope.id)
+
+// Thin client for the API's /profiles endpoints
+export const profileApi = {
+  summary(scope: ProfileScope): Promise<ProfileSummaryInterface> {
+    return profileRequest().get<ProfileSummaryInterface>(
+      endpoint(Endpoints.PROFILE_SUMMARY, scope),
+      scopeParams(scope)
+    )
+  },
+  timeline(
+    scope: ProfileScope,
+    granularity: TimelineGranularity
+  ): Promise<ProfileTimelineRowInterface[]> {
+    return profileRequest().get<ProfileTimelineRowInterface[]>(
+      endpoint(Endpoints.PROFILE_TIMELINE, scope),
+      { ...scopeParams(scope), granularity }
+    )
+  },
+  alerts(
+    scope: ProfileScope,
+    page: number,
+    pageSize: number,
+    sortBy: string,
+    order: 'asc' | 'desc'
+  ): Promise<ProfileAlertsPageInterface> {
+    return profileRequest().get<ProfileAlertsPageInterface>(
+      endpoint(Endpoints.PROFILE_ALERTS, scope),
+      { ...scopeParams(scope), page, pageSize, sortBy, order }
+    )
+  },
+}
+
+export const characterVehicles = (
+  scope: ProfileScope
+): Promise<ProfileVehicleRowInterface[]> =>
+  profileRequest().get<ProfileVehicleRowInterface[]>(
+    Endpoints.PROFILE_CHARACTER_VEHICLES.replace('{id}', scope.id),
+    scopeParams(scope)
+  )
+
+export const outfitMembers = (
+  id: string,
+  world: World | null | undefined,
+  page: number,
+  pageSize: number,
+  sortBy: string,
+  order: 'asc' | 'desc',
+  search = ''
+): Promise<ProfileMembersPageInterface> =>
+  profileRequest().get<ProfileMembersPageInterface>(
+    Endpoints.PROFILE_OUTFIT_MEMBERS.replace('{id}', id),
+    {
+      ...(world ? { world } : {}),
+      ...(search ? { search } : {}),
+      page,
+      pageSize,
+      sortBy,
+      order,
+    }
+  )
+
+export const profileLink = (
+  type: ProfileType,
+  id: string,
+  world?: World | null
+): string => {
+  const path = type === 'character' ? `/player/${id}` : `/outfit/${id}`
+  return world ? `${path}?world=${world}` : path
+}
+
+export const outfitVehicles = (
+  id: string,
+  world: World | null | undefined
+): Promise<ProfileOutfitVehiclesInterface> =>
+  profileRequest().get<ProfileOutfitVehiclesInterface>(
+    Endpoints.PROFILE_OUTFIT_VEHICLES.replace('{id}', id),
+    world ? { world } : {}
+  )

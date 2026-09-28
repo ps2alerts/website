@@ -11,4 +11,5 @@ export interface CommonApiParamsInterface {
   pageSize?: number
   bracket?: Bracket
   ps2AlertsEventType?: Ps2AlertsEventType
+  [key: string]: any
 }

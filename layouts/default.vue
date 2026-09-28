@@ -6,6 +6,7 @@
         <client-only>
           <Header />
           <Navigation class="block lg:hidden" />
+          <SearchBar />
           <RealTimeMonitor />
           <LazyFooter class="hidden lg:block" />
         </client-only>

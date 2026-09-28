@@ -26,6 +26,21 @@
           :item-class="tableItemClass"
           v-bind="tableConfig"
         >
+          <template
+            v-for="col in [
+              'kills',
+              'deaths',
+              'teamKills',
+              'teamKilled',
+              'suicides',
+              'headshots',
+            ]"
+            #[`item.${col}`]="{ value }"
+          >
+            <span :key="col" :title="exactNumber(value)">{{
+              abbreviate(value)
+            }}</span>
+          </template>
           <template slot="item.rank" slot-scope="props">
             {{ items.indexOf(props.item) + 1 }}
           </template>
@@ -37,6 +52,7 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
+import AbbreviateNumbers from '~/mixins/AbbreviateNumbers'
 import { LoadoutFaction } from '@/constants/Loadout'
 import { StatisticsLoadoutServerMetricsLeaderboardConfig } from '@/constants/DataTableConfig'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
@@ -44,6 +60,7 @@ import { StatisticsLoadoutTableDataInterface } from '~/interfaces/statistics/Sta
 
 export default Vue.extend({
   name: 'LoadoutsServerMetrics',
+  mixins: [AbbreviateNumbers],
   props: {
     rawData: {
       type: Array,

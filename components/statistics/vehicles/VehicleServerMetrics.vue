@@ -26,6 +26,29 @@
           :item-class="tableItemClass"
           v-bind="tableConfig"
         >
+          <template
+            v-for="col in [
+              'totals.kills',
+              'totals.deaths',
+              'totals.teamkills',
+              'totals.teamkilled',
+              'suicides',
+              'vehicles.kills',
+              'vehicles.deaths',
+              'vehicles.teamkills',
+              'vehicles.teamkilled',
+              'infantry.kills',
+              'infantry.deaths',
+              'infantry.teamkills',
+              'infantry.teamkilled',
+              'roadkills',
+            ]"
+            #[`item.${col}`]="{ value }"
+          >
+            <span :key="col" :title="exactNumber(value)">{{
+              abbreviate(value)
+            }}</span>
+          </template>
         </v-data-table>
       </div>
     </div>
@@ -34,6 +57,7 @@
 
 <script lang="ts">
 import Vue, { PropOptions } from 'vue'
+import AbbreviateNumbers from '~/mixins/AbbreviateNumbers'
 import { StatisticsVehicleLeaderboardConfig } from '@/constants/DataTableConfig'
 import { FactionBgClassString } from '@/constants/FactionBgClass'
 import { StatisticsVehicleMetricsTableDataInterface } from '~/interfaces/statistics/StatisticsVehicleMetricsTableDataInterface'
@@ -41,6 +65,7 @@ import { VehicleDataInterface } from '~/interfaces/VehicleDataInterface'
 
 export default Vue.extend({
   name: 'VehicleServerMetrics',
+  mixins: [AbbreviateNumbers],
   props: {
     rawData: {
       type: Array,

@@ -1,7 +1,15 @@
 <template>
   <section class="mb-2">
     <div class="col-span-12 card relative">
-      <div class="tag section">Victory Timeline</div>
+      <div class="tag section">
+        Victory Timeline
+        <span class="label blue"
+          ><InfoTooltip
+            text="Improved in v4.5!"
+            tooltip="Rebuilt on a proper time axis. The resolution now picks itself from the date range (daily, weekly, monthly or yearly) so long ranges stay readable, and point markers only appear when there is room for them. You can still choose a resolution yourself below."
+          ></InfoTooltip
+        ></span>
+      </div>
       <CountdownSpinner :percent="updateCountdownPercent" update-rate="60000" />
       <div v-if="loaded" class="text-center">
         <div class="grid grid-cols-12 gap-2">
@@ -21,12 +29,14 @@
             @time-granularity-changed="updateTimeGranularity"
           />
         </div>
-
-        <line-chart
-          :chart-data="dataCollection"
-          :options="chartOptions"
-          style="width: 100%; height: 350px"
-        ></line-chart>
+        <div class="relative">
+          <ChartLoadingOverlay :loading="rendering" />
+          <LineChart
+            :chart-data="dataCollection"
+            :chart-options="chartOptions"
+            :styles="{ width: '100%', height: '350px' }"
+          ></LineChart>
+        </div>
       </div>
       <div v-if="!loaded" class="flex justify-center place-items-center h-full">
         <h1 class="mb-4">Loading...</h1>
@@ -38,10 +48,9 @@
 <script lang="ts">
 /* eslint-disable import/no-named-as-default-member */
 import Vue, { PropOptions } from 'vue'
-import { differenceInDays, formatISO } from 'date-fns'
+import { pickGranularity } from '~/utilities/ChartBuckets'
 import { GlobalVictoriesAggregateResponseInterface } from '~/interfaces/aggregates/global/GlobalVictoriesAggregateResponseInterface'
 import { FactionMetricsInterface } from '~/interfaces/FactionMetricsInterface'
-import LineChart from '~/components/LineChart'
 import { DATE_FORMAT_ISO, TIME_GRANULARITY } from '@/constants/Time'
 import { World } from '@/ps2alerts-constants/world'
 import { Bracket } from '@/ps2alerts-constants/bracket'
@@ -56,15 +65,17 @@ import {
   getStartOfYear,
   utcDate,
 } from '~/utilities/TimeHelper'
+import { commonChartOptions } from '~/constants/CommonChartOptions'
+import ChartLoadingOverlay from '~/components/ChartLoadingOverlay.vue'
 
 export default Vue.extend({
   name: 'VictoriesTimeline',
   components: {
     TimeGranularity,
+    ChartLoadingOverlay,
     FilterBracket,
     CountdownSpinner,
     FilterWorld,
-    LineChart,
   },
   props: {
     rawData: {
@@ -89,6 +100,8 @@ export default Vue.extend({
       selectedWorld: 0,
       selectedBracket: 0,
       selectedTimeOption: TIME_GRANULARITY.WEEK,
+      userPickedResolution: false,
+      rendering: false,
       totalCounts: {} as { [k: string]: FactionMetricsInterface },
       worldCounts: {} as {
         [k: string]: { [k: string]: FactionMetricsInterface }
@@ -97,55 +110,26 @@ export default Vue.extend({
       maxDate: new Date(),
       dataCollection: {},
       chartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        tooltips: {
-          mode: 'x',
-        },
+        ...commonChartOptions.root,
         scales: {
-          xAxes: [
-            {
-              type: 'time',
-              time: {
-                unit: TIME_GRANULARITY.WEEK,
-              },
-              min: formatDateTime(
-                utcDate(new Date('2021-01-04')),
-                DATE_FORMAT_ISO
-              ),
-              max: formatDateTime(utcDate(new Date()), DATE_FORMAT_ISO),
-              ticks: {
-                fontColor: '#fff',
-                source: 'labels',
-              },
-              gridLines: {
-                display: true,
-                color: '#444b52',
-              },
-              scaleLabel: {
-                display: false,
-              },
+          x: {
+            ...commonChartOptions.scales,
+            type: 'timeseries',
+            distribution: 'linear',
+            time: {
+              unit: TIME_GRANULARITY.WEEK,
             },
-          ],
-          yAxes: [
-            {
-              ticks: {
-                fontColor: '#fff',
-              },
-              gridLines: {
-                color: '#718096',
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Victories',
-                fontColor: '#fff',
-              },
+            min: formatDateTime(
+              utcDate(new Date('2021-01-04')),
+              DATE_FORMAT_ISO
+            ),
+            max: formatDateTime(utcDate(new Date()), DATE_FORMAT_ISO),
+          },
+          y: {
+            ...commonChartOptions.scales,
+            grid: {
+              color: '#7b8694',
             },
-          ],
-        },
-        legend: {
-          labels: {
-            fontColor: '#fff',
           },
         },
       },
@@ -165,10 +149,6 @@ export default Vue.extend({
       this.render()
     },
     selectedTimeOption(): void {
-      console.log(
-        'VictoriesTimeline: Time option changed to',
-        this.selectedTimeOption
-      )
       this.render()
     },
   },
@@ -177,28 +157,40 @@ export default Vue.extend({
   },
   methods: {
     render() {
-      this.loaded = false
-      this.optimiseTimeResolution()
-      this.transformData()
-      this.buildCollection()
-      this.adjustChartOptions()
-      this.loaded = true
+      // Bucketing 100k+ rows blocks the main thread, so paint the overlay first and rebuild on the next frame
+      this.rendering = true
+
+      window.setTimeout(() => {
+        this.optimiseTimeResolution()
+        this.transformData()
+        this.buildCollection()
+        this.adjustChartOptions()
+        this.loaded = true
+        this.rendering = false
+      }, 30)
     },
     optimiseTimeResolution(): void {
-      // Perform trickery to set the time granularity to appropriate levels based on time frame requested
-      if (this.filter.dateFrom && this.filter.dateTo) {
-        const date1 = new Date(this.filter.dateFrom)
-        const date2 = new Date(this.filter.dateTo)
-
-        const difference = differenceInDays(date2, date1)
-
-        // Set the time option to week to force a change in the TimeGranularity component upon re-draw, don't ask me why it just works ok.
-        this.selectedTimeOption = TIME_GRANULARITY.WEEK
-
-        if (difference <= 60) {
-          this.selectedTimeOption = TIME_GRANULARITY.DAY
-        }
+      // Coarser buckets for longer ranges keep the point count readable, unless the user has picked one themselves.
+      // Prefer the requested filter dates, otherwise span the data itself.
+      if (this.userPickedResolution) {
+        return
       }
+
+      let from = this.filter.dateFrom ? new Date(this.filter.dateFrom) : null
+      let to = this.filter.dateTo ? new Date(this.filter.dateTo) : null
+
+      if (!from || !to) {
+        const times = this.rawData.map((row) => new Date(row.date).getTime())
+
+        if (times.length === 0) {
+          return
+        }
+
+        from = new Date(Math.min(...times))
+        to = new Date(Math.max(...times))
+      }
+
+      this.selectedTimeOption = pickGranularity(from, to)
     },
     transformData(): void {
       // Tot up all brackets and worlds together
@@ -277,83 +269,72 @@ export default Vue.extend({
       this.worldCounts = worldCounts
     },
     buildCollection() {
-      const times: string[] = []
-      const vsData: number[] = []
-      const ncData: number[] = []
-      const trData: number[] = []
-      const drawData: number[] = []
+      const vsData: { x: string; y: number }[] = []
+      const ncData: { x: string; y: number }[] = []
+      const trData: { x: string; y: number }[] = []
+      const drawData: { x: string; y: number }[] = []
 
-      for (const [key, row] of Object.entries(this.totalCounts)) {
-        times.push(formatISO(new Date(key)))
+      for (const [key, row] of Object.entries(this.totalCounts).sort(
+        ([a], [b]) => a.localeCompare(b)
+      )) {
         const rowTyped = row as FactionMetricsInterface
-        vsData.push(rowTyped.vs)
-        ncData.push(rowTyped.nc)
-        trData.push(rowTyped.tr)
-        drawData.push(rowTyped.draws)
+        vsData.push({ x: key, y: rowTyped.vs })
+        ncData.push({ x: key, y: rowTyped.nc })
+        trData.push({ x: key, y: rowTyped.tr })
+        drawData.push({ x: key, y: rowTyped.draws })
       }
 
-      const commonDatasetOptions = {
-        pointBorderWidth: 2,
-        pointHoverBorderWidth: 4,
-        lineTension: 0,
+      // Keep the markers visible at every resolution, just smaller as they get denser; hover still enlarges them
+      const points = vsData.length
+      const density = {
+        pointRadius: points > 300 ? 2.5 : points > 60 ? 3 : 4,
+        pointHoverRadius: 6,
+        pointBorderWidth: 1,
+        pointHoverBorderWidth: 2,
+        borderWidth: 2,
+        tension: 0.25,
       }
 
       this.dataCollection = {
-        labels: times,
         datasets: [
           {
-            ...commonDatasetOptions,
-            label: 'VS',
-            borderColor: '#6B46C1',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.vs,
+            ...density,
             data: vsData,
-            pointStyle: 'circle',
           },
           {
-            ...commonDatasetOptions,
-            label: 'TR',
-            borderColor: '#9b2c2c',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.tr,
+            ...density,
             data: trData,
-            pointStyle: 'rect',
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
           },
           {
-            ...commonDatasetOptions,
-            label: 'NC',
-            borderColor: '#2b6cb0',
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nc,
+            ...density,
             data: ncData,
-            pointStyle: 'triangle',
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
           },
           {
-            ...commonDatasetOptions,
+            ...commonChartOptions.datasets,
+            ...commonChartOptions.datasets.nsoDraws,
+            ...density,
             label: 'Draws',
-            borderColor: '#4a5568',
             data: drawData,
-            pointBorderWidth: 2,
-            pointHoverBorderWidth: 4,
           },
         ],
       }
     },
     // Manipulates the chart against the currently set config to ensure it complies with custom settings
     adjustChartOptions(): void {
-      const objectKeys = Object.keys(this.totalCounts)
+      // Bucket keys arrive in response order, which is not chronological
+      const objectKeys = Object.keys(this.totalCounts).sort()
 
-      // For some reason Object.keys puts the result in reverse of actuality...
-      const firstObject = objectKeys[objectKeys.length - 1]
-      const firstObjectDate = formatISO(new Date(firstObject))
-
-      const lastObject = objectKeys[0]
-      const lastObjectDate = formatISO(new Date(lastObject))
-      this.chartOptions.scales.xAxes[0].min = firstObjectDate
-      this.chartOptions.scales.xAxes[0].max = lastObjectDate
+      this.chartOptions.scales.x.min = objectKeys[0]
+      this.chartOptions.scales.x.max = objectKeys[objectKeys.length - 1]
 
       // Change unit based off data type
-      this.chartOptions.scales.xAxes[0].time.unit = this.selectedTimeOption
-
-      // console.log('chartOptions', this.chartOptions.scales.xAxes[0])
+      this.chartOptions.scales.x.time.unit = this.selectedTimeOption
     },
     updateWorld(world: World) {
       this.selectedWorld = world
@@ -362,6 +343,7 @@ export default Vue.extend({
       this.selectedBracket = bracket
     },
     updateTimeGranularity(option: TIME_GRANULARITY) {
+      this.userPickedResolution = true
       this.selectedTimeOption = option
     },
   },

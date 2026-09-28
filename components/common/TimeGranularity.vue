@@ -45,7 +45,8 @@ export default Vue.extend({
         TIME_GRANULARITY.MONTH,
         TIME_GRANULARITY.YEAR,
       ],
-      timeOption: TIME_GRANULARITY.WEEK,
+      // Start from whatever the parent already chose, not a hard-coded default
+      timeOption: this.timeFilter as TIME_GRANULARITY,
     }
   },
   watch: {

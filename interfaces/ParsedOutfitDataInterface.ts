@@ -23,7 +23,6 @@ export interface ParsedOutfitDataInterface {
   round: number
   phase: Phase
   rankings: RankingInterface
-  outfitImageUrl: string
   metricsString: string
   instanceId: string | null
   index?: number
