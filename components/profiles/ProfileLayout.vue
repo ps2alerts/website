@@ -58,13 +58,26 @@
         class="animate-spin"
       ></font-awesome-icon>
     </div>
-    <div v-if="summary.totals.alerts === 0" class="col-span-12 card">
-      <div class="tag section">No alerts</div>
-      <p class="text-center p-2">
-        No alerts were found
-        <span v-if="days">within the last {{ days }} days</span>.
-      </p>
-    </div>
+    <template v-if="summary.totals.alerts === 0">
+      <div class="col-span-12 card">
+        <div class="tag section">No alerts</div>
+        <p class="text-center p-2">
+          No alerts were found
+          <span v-if="days">within the last {{ days }} days</span>.
+        </p>
+      </div>
+      <!-- Members and outfit vehicles cover all time, so an empty date range still has them -->
+      <template v-if="type === 'outfit'">
+        <div class="col-span-12 card">
+          <div class="tag section">Members</div>
+          <ProfileMembers :summary="summary" />
+        </div>
+        <div class="col-span-12 card">
+          <div class="tag section">Vehicles</div>
+          <ProfileVehicles :summary="summary" />
+        </div>
+      </template>
+    </template>
     <template v-else>
       <div class="col-span-12">
         <ProfileHeadline :summary="summary" />
@@ -81,14 +94,6 @@
         <div class="tag section">Performance over time</div>
         <ProfileCombatMetricsGraph :summary="summary" />
       </div>
-      <div class="col-span-12 card">
-        <div class="tag section">Per-minute rates</div>
-        <ProfileRates :summary="summary" />
-      </div>
-      <div class="col-span-12 card">
-        <div class="tag section">Vehicles</div>
-        <ProfileVehicles :summary="summary" />
-      </div>
       <div v-if="type === 'outfit'" class="col-span-12 card">
         <div class="tag section">Members</div>
         <ProfileMembers :summary="summary" />
@@ -96,6 +101,14 @@
       <div class="col-span-12 card">
         <div class="tag section">Alerts by bracket</div>
         <ProfileAlertBrackets :summary="summary" />
+      </div>
+      <div class="col-span-12 card">
+        <div class="tag section">Per-minute rates</div>
+        <ProfileRates :summary="summary" />
+      </div>
+      <div class="col-span-12 card">
+        <div class="tag section">Vehicles</div>
+        <ProfileVehicles :summary="summary" />
       </div>
       <div class="col-span-12 card">
         <div class="tag section">Alert history</div>

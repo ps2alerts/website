@@ -176,18 +176,18 @@ export default Vue.extend({
         0
       )
     },
+    // Sorted here too, so the pie's named slices are always the top vehicles whatever order the API sends
     rows(): Record<string, any>[] {
-      return this.raw.map((row, index) => {
-        const kills = row.vehicleKills + row.infantryKills
-
-        return {
+      return this.raw
+        .map((row) => ({ row, kills: row.vehicleKills + row.infantryKills }))
+        .sort((a, b) => b.kills - a.kills)
+        .map(({ row, kills }, index) => ({
           ...row,
           name: vehicleName(row.vehicle),
           colour: PALETTE[index] ?? OTHER_COLOUR,
           kills,
           kd: killDeathRatio(kills, row.deaths),
-        }
-      })
+        }))
     },
     totals(): Record<string, number | string> {
       const totals: Record<string, number | string> = {}
