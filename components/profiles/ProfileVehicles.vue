@@ -8,7 +8,7 @@
       </template>
     </p>
     <p class="text-xs text-gray-400 text-center mb-3">
-      Vehicle kills were never recorded before this date, so earlier alerts are
+      We hold no per-player vehicle data before this date, so earlier alerts are
       left out. Counts kills and deaths while in a vehicle; destroying a vehicle
       on foot is not counted here. K/D counts kills of both vehicles and
       infantry.
@@ -115,8 +115,8 @@ const PALETTE = [
   '#805ad5',
 ]
 const OTHER_COLOUR = '#718096'
-// v4.3.2 reinstated per-player vehicle stats; matches the API's constant
-const VEHICLE_TRACKING_START = '2022-09-10T00:00:00Z'
+// First date with per-player vehicle rows; matches the API's constant
+const VEHICLE_TRACKING_START = '2023-01-07T00:00:00Z'
 
 const COLUMNS = [
   { key: 'kills', label: 'Kills', abbreviated: true },
