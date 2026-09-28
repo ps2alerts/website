@@ -285,9 +285,11 @@ export default Vue.extend({
             this.outfitwar.outfitwars.teams.blue &&
             character.character.outfit
           ) {
-            team = this.outfitwar.outfitwars.teams.red.id
-              ? Faction.TERRAN_REPUBLIC
-              : Faction.NEW_CONGLOMERATE
+            team =
+              character.character.outfit.id ===
+              this.outfitwar.outfitwars.teams.red.id
+                ? Faction.TERRAN_REPUBLIC
+                : Faction.NEW_CONGLOMERATE
           } else {
             team = faction
           }

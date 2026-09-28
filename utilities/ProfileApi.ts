@@ -32,13 +32,18 @@ const scopeParams = (scope: ProfileScope): Record<string, string | number> => {
   return params
 }
 
+// Past the API's own 30s query deadline plus time queued behind other cold profiles
+const PROFILE_TIMEOUT_MS = 45000
+const profileRequest = (): ApiRequest =>
+  new ApiRequest(undefined, PROFILE_TIMEOUT_MS)
+
 const endpoint = (template: string, scope: ProfileScope): string =>
   template.replace('{type}', scope.type).replace('{id}', scope.id)
 
 // Thin client for the API's /profiles endpoints
 export const profileApi = {
   summary(scope: ProfileScope): Promise<ProfileSummaryInterface> {
-    return new ApiRequest().get<ProfileSummaryInterface>(
+    return profileRequest().get<ProfileSummaryInterface>(
       endpoint(Endpoints.PROFILE_SUMMARY, scope),
       scopeParams(scope)
     )
@@ -47,7 +52,7 @@ export const profileApi = {
     scope: ProfileScope,
     granularity: TimelineGranularity
   ): Promise<ProfileTimelineRowInterface[]> {
-    return new ApiRequest().get<ProfileTimelineRowInterface[]>(
+    return profileRequest().get<ProfileTimelineRowInterface[]>(
       endpoint(Endpoints.PROFILE_TIMELINE, scope),
       { ...scopeParams(scope), granularity }
     )
@@ -59,7 +64,7 @@ export const profileApi = {
     sortBy: string,
     order: 'asc' | 'desc'
   ): Promise<ProfileAlertsPageInterface> {
-    return new ApiRequest().get<ProfileAlertsPageInterface>(
+    return profileRequest().get<ProfileAlertsPageInterface>(
       endpoint(Endpoints.PROFILE_ALERTS, scope),
       { ...scopeParams(scope), page, pageSize, sortBy, order }
     )
@@ -69,7 +74,7 @@ export const profileApi = {
 export const characterVehicles = (
   scope: ProfileScope
 ): Promise<ProfileVehicleRowInterface[]> =>
-  new ApiRequest().get<ProfileVehicleRowInterface[]>(
+  profileRequest().get<ProfileVehicleRowInterface[]>(
     Endpoints.PROFILE_CHARACTER_VEHICLES.replace('{id}', scope.id),
     scopeParams(scope)
   )
@@ -83,7 +88,7 @@ export const outfitMembers = (
   order: 'asc' | 'desc',
   search = ''
 ): Promise<ProfileMembersPageInterface> =>
-  new ApiRequest().get<ProfileMembersPageInterface>(
+  profileRequest().get<ProfileMembersPageInterface>(
     Endpoints.PROFILE_OUTFIT_MEMBERS.replace('{id}', id),
     {
       ...(world ? { world } : {}),

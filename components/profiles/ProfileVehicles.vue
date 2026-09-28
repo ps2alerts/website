@@ -163,6 +163,8 @@ export default Vue.extend({
         if (seq !== this.requestSeq) {
           return
         }
+        // Old rows would sit under the newly chosen page or filter
+        this.rows = []
 
         this.error = `Vehicle stats could not be loaded (${
           e?.message ?? 'network error'

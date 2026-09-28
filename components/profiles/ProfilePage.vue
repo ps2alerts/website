@@ -133,19 +133,28 @@ export default Vue.extend({
         }
 
         const status = e?.response?.status
+        // Only the profile service's own 404 means the subject is missing; a bare 404 means the API lacks the route
+        const subjectMissing =
+          status === 404 &&
+          /found with ID/.test(String(e?.response?.data?.message ?? ''))
 
-        this.error =
-          status === 404
-            ? {
-                title: `${this.noun} not found`,
-                message: `No alert data exists for ${this.type} ID ${this.id}.`,
-              }
-            : {
-                title: 'Something went wrong',
-                message: `The stats could not be loaded (${
-                  status ? `HTTP ${status}` : e?.message ?? 'network error'
-                }).`,
-              }
+        this.error = subjectMissing
+          ? {
+              title: `${this.noun} not found`,
+              message: `No alert data exists for ${this.type} ID ${this.id}.`,
+            }
+          : status === 503 || status === 404
+          ? {
+              title: 'Stats are warming up',
+              message:
+                'Profiles are still being prepared after an update. Try again in a minute.',
+            }
+          : {
+              title: 'Something went wrong',
+              message: `The stats could not be loaded (${
+                status ? `HTTP ${status}` : e?.message ?? 'network error'
+              }).`,
+            }
       } finally {
         if (seq === this.requestSeq) {
           this.loading = false

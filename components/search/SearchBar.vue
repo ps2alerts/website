@@ -81,7 +81,7 @@ export default defineComponent({
       loading: false,
       error: { message: '' },
       searchTerm: '',
-      apiRequest: new ApiRequest(),
+      apiRequest: new ApiRequest(undefined, 15000),
       source: axios.CancelToken.source() as CancelTokenSource,
       pinnedCharacters: new Map() as Map<
         string,
@@ -239,11 +239,19 @@ export default defineComponent({
         this.injectPinned()
         this.loading = false
       } catch (error) {
+        // A cancelled request was replaced by a newer one, which owns the loading state
         if (!axios.isCancel(error)) {
           console.error(error)
+          const status = (error as any)?.response?.status
+          this.results = []
+          this.injectPinned()
           this.error = {
-            message: `An error occurred while searching! Message: ${error}`,
+            message:
+              status === 503
+                ? 'Search is warming up after an update, try again in a minute.'
+                : 'Search is unavailable right now, try again shortly.',
           }
+          this.loading = false
         }
       }
     },

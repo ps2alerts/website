@@ -328,6 +328,8 @@ export default Vue.extend({
         if (seq !== this.requestSeq) {
           return
         }
+        // Old rows would sit under the newly chosen page or filter
+        this.rows = []
 
         this.error = `The timeline could not be loaded (${
           e?.message ?? 'network error'

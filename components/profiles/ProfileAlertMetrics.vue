@@ -209,6 +209,9 @@ export default Vue.extend({
         if (seq !== this.requestSeq) {
           return
         }
+        // Old rows would sit under the newly chosen page or filter
+        this.rows = []
+        this.total = 0
 
         this.error = `The alert history could not be loaded (${
           e?.message ?? 'network error'
