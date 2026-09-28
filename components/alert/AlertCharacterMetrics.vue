@@ -176,6 +176,7 @@ import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfit
 import { Ps2AlertsEventType } from '~/ps2alerts-constants/ps2AlertsEventType'
 import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
 import { profileLink } from '~/utilities/ProfileApi'
+import { World } from '~/ps2alerts-constants/world'
 
 export default Vue.extend({
   name: 'AlertCharacterMetrics',
@@ -273,7 +274,9 @@ export default Vue.extend({
   methods: {
     // Links use the alert's own server; an outfit record's embedded world can be stale
     profileHref(type: 'character' | 'outfit', id: string): string {
-      return profileLink(type, id, this.alert?.world ?? this.outfitwar?.world)
+      // The outfitwar prop defaults to a placeholder with no world
+      const outfitwar = this.outfitwar as { world?: World } | undefined
+      return profileLink(type, id, this.alert?.world ?? outfitwar?.world)
     },
     // Outfit ids 0 to 4 are the "no outfit" placeholders
     hasOutfit(outfit?: { id: string }): boolean {
