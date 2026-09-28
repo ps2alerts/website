@@ -3,7 +3,7 @@
     <p class="text-sm text-center mb-1">
       <span class="label amber mr-1">Tracked since {{ trackingSince }}</span>
       <template v-if="showCoverage">
-        Covers <b>{{ summary.totals.vehicleAlerts.toLocaleString() }}</b> of
+        Covers <b>{{ vehicleAlerts.toLocaleString() }}</b> of
         {{ summary.totals.alerts.toLocaleString() }} alerts.
       </template>
     </p>
@@ -115,6 +115,8 @@ const PALETTE = [
   '#805ad5',
 ]
 const OTHER_COLOUR = '#718096'
+// v4.3.2 reinstated per-player vehicle stats; matches the API's constant
+const VEHICLE_TRACKING_START = '2022-09-10T00:00:00Z'
 
 const COLUMNS = [
   { key: 'kills', label: 'Kills', abbreviated: true },
@@ -179,15 +181,20 @@ export default Vue.extend({
     }
   },
   computed: {
+    // Fallbacks keep the section working against an API that predates these fields
     trackingSince(): string {
       return formatDateTime(
-        new Date(this.summary.vehiclesTrackedSince),
+        new Date(this.summary.vehiclesTrackedSince ?? VEHICLE_TRACKING_START),
         DATE_FORMAT
       )
+    },
+    vehicleAlerts(): number {
+      return this.summary.totals.vehicleAlerts ?? 0
     },
     // Outfit totals ignore the days filter, so a filtered alert count would not match them
     showCoverage(): boolean {
       return (
+        this.summary.totals.vehicleAlerts !== undefined &&
         this.summary.totals.alerts > 0 &&
         (this.summary.type === 'character' || !this.summary.days)
       )
