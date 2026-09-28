@@ -1,17 +1,7 @@
 <template>
   <div v-if="loaded" class="grid grid-cols-12">
     <div class="col-span-12">
-      <v-data-table
-        class="datatable"
-        item-key="title"
-        :headers="headers"
-        :items="parsedData"
-        v-bind="tableConfig"
-        disable-pagination
-        hide-default-footer
-      >
-      </v-data-table>
-      <div class="text-sm text-center mt-1">
+      <p class="text-xs text-gray-400 text-center mb-2">
         [avg] = Average per alert across the
         <InfoTooltip
           :class="['text-red-500']"
@@ -23,12 +13,22 @@
             Low = 1+ platoons (>48 players)<br />
             Dead = <48 players"
         ></InfoTooltip
-        ><br />
-        <span class="text-sm text-gray-400"
-          >* Per-minute tracking only began {{ trackingSince }}. KPM and DPM
-          average the alerts recorded since then; that count is in (#)</span
-        >
-        <br />
+        >.<br />
+        * Per-minute tracking only began <b>{{ trackingSince }}</b
+        >. KPM and DPM average the alerts recorded since then; that count is in
+        (#).
+      </p>
+      <v-data-table
+        class="datatable"
+        item-key="title"
+        :headers="headers"
+        :items="parsedData"
+        v-bind="tableConfig"
+        disable-pagination
+        hide-default-footer
+      >
+      </v-data-table>
+      <div class="text-sm text-center mt-2">
         Key:
         <span class="label gray mb-1">
           <InfoTooltip

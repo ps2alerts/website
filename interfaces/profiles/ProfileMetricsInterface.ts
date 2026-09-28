@@ -34,6 +34,8 @@ export interface ProfileBracketTotalsInterface {
   xpmAlerts: number
   // Seconds in the alerts that recorded it
   timeInAlerts: number
+  // Alerts since per-player vehicle tracking began
+  vehicleAlerts: number
   kpm: number
   dpm: number
   tkpm: number
@@ -59,6 +61,7 @@ export interface ProfileSummaryInterface {
   firstAlert: string | null
   lastAlert: string | null
   firstTrackedAlert: string | null
+  vehiclesTrackedSince: string
 }
 
 export interface ProfileTimelineRowInterface {

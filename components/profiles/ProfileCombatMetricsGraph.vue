@@ -1,5 +1,29 @@
 <template>
   <div>
+    <p class="text-xs text-gray-400 mb-3 text-center">
+      <template v-if="error">
+        <span class="text-red-400">{{ error }}</span>
+        <button class="btn btn-sm ml-2" @click="fetchTimeline">Retry</button>
+      </template>
+      <template v-else>
+        <b>{{ statLabel }}</b>
+        {{ perAlert || isRatio ? 'per alert, averaged' : 'in total' }} per
+        <b>{{ granularityText }}</b> across {{ pointCount }}
+        {{ granularityText }}s
+        <span v-if="bracketMode">
+          within the <b>{{ bracketMode | bracketName }}</b> bracket</span
+        ><span v-else> across all brackets</span>.
+        <span v-if="resolution === 'auto'"
+          >Resolution is chosen automatically from the date range.</span
+        >
+        <span v-if="isRate" class="block text-yellow-300 mt-1">
+          <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
+          Per-minute tracking only began
+          <b>{{ trackingSince }}</b
+          >; earlier alerts have no KPM or DPM and are left off this graph.
+        </span>
+      </template>
+    </p>
     <div class="controls mx-auto">
       <div class="control-row">
         <span class="control-label">Stat</span>
@@ -82,30 +106,6 @@
         </div>
       </div>
     </div>
-    <p class="text-xs text-gray-400 mt-2 text-center">
-      <template v-if="error">
-        <span class="text-red-400">{{ error }}</span>
-        <button class="btn btn-sm ml-2" @click="fetchTimeline">Retry</button>
-      </template>
-      <template v-else>
-        <b>{{ statLabel }}</b>
-        {{ perAlert || isRatio ? 'per alert, averaged' : 'in total' }} per
-        <b>{{ granularityText }}</b> across {{ pointCount }}
-        {{ granularityText }}s
-        <span v-if="bracketMode">
-          within the <b>{{ bracketMode | bracketName }}</b> bracket</span
-        ><span v-else> across all brackets</span>.
-        <span v-if="resolution === 'auto'"
-          >Resolution is chosen automatically from the date range.</span
-        >
-        <span v-if="isRate" class="block text-yellow-300 mt-1">
-          <font-awesome-icon :icon="['fas', 'info-circle']"></font-awesome-icon>
-          Per-minute tracking only began
-          <b>{{ trackingSince }}</b
-          >; earlier alerts have no KPM or DPM and are left off this graph.
-        </span>
-      </template>
-    </p>
     <div class="relative">
       <ChartLoadingOverlay :loading="loading" />
       <LineChart

@@ -92,7 +92,7 @@ export default Vue.extend({
                   <li>A performance-over-time graph that picks a sensible resolution for the date range and draws a rolling average and trend line, with day, week, month and year views.</li>
                   <li>A "last N days" filter that recalculates the whole page from just those alerts.</li>
                   <li>The full alert history, paged and sortable, linking to each alert.</li>
-                  <li>A per-vehicle breakdown of kills, deaths and roadkills. For outfits it totals every current member and refreshes daily.</li>
+                  <li>A per-vehicle breakdown of kills, deaths and roadkills, covering alerts from 10 September 2022 when per-player vehicle tracking began. For outfits it totals every current member and refreshes daily.</li>
                   <li>Players show their battle rank, ASP and outfit. Outfits show their leader and a searchable members list linking to every member's profile.</li>
                 </ul>
                 <p>All of this is calculated on the server, so a profile with thousands of alerts loads in a few kilobytes instead of downloading everything.</p>

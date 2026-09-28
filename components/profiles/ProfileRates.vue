@@ -1,5 +1,19 @@
 <template>
   <div>
+    <p class="text-sm text-center mb-1">
+      <span class="label amber mr-1">Tracked since {{ trackingSince }}</span>
+      Covers <b>{{ summary.totals.xpmAlerts.toLocaleString() }}</b> of
+      {{ summary.totals.alerts.toLocaleString() }} alerts.
+    </p>
+    <p class="text-xs text-gray-400 text-center mb-3">
+      Averages per alert over the alerts with per-minute tracking. Earlier
+      alerts never recorded it, so they are not counted here.
+      <span v-if="summary.type === 'outfit'">
+        Outfit rates add up every member; "per member" divides by the members
+        taking part. Time in alerts is how long the outfit had anyone
+        there.</span
+      >
+    </p>
     <div class="grid grid-cols-12 gap-4 items-center">
       <div class="col-span-12 lg:col-span-9 overflow-x-auto">
         <v-simple-table dark dense>
@@ -55,16 +69,6 @@
         </p>
       </div>
     </div>
-    <p class="text-xs text-gray-400 text-center mt-2">
-      Averages per alert over the alerts with per-minute tracking, which only
-      began <b>{{ trackingSince }}</b
-      >; earlier alerts are not counted here.
-      <span v-if="summary.type === 'outfit'">
-        Outfit rates add up every member; "per member" divides by the members
-        taking part. Time in alerts is how long the outfit had anyone
-        there.</span
-      >
-    </p>
   </div>
 </template>
 

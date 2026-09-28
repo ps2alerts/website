@@ -1,5 +1,24 @@
 <template>
   <div>
+    <p class="text-sm text-center mb-1">
+      <span class="label amber mr-1">Tracked since {{ trackingSince }}</span>
+      <template v-if="showCoverage">
+        Covers <b>{{ summary.totals.vehicleAlerts.toLocaleString() }}</b> of
+        {{ summary.totals.alerts.toLocaleString() }} alerts.
+      </template>
+    </p>
+    <p class="text-xs text-gray-400 text-center mb-3">
+      Vehicle kills were never recorded before this date, so earlier alerts are
+      left out. Counts kills and deaths while in a vehicle; destroying a vehicle
+      on foot is not counted here. K/D counts kills of both vehicles and
+      infantry.
+      <span v-if="summary.type === 'outfit'">
+        Totalled across the outfit's
+        <template v-if="members">{{ members.toLocaleString() }} </template
+        >current members, including time before they joined. Refreshed daily;
+        the days filter does not apply.</span
+      >
+    </p>
     <p v-if="error" class="text-center text-red-400 mb-2">
       {{ error }}
       <button class="btn btn-sm ml-2" @click="load">Retry</button>
@@ -68,15 +87,6 @@
         />
       </div>
     </div>
-    <p class="text-xs text-gray-400 text-center mt-2">
-      Kills and deaths while in the vehicle. K/D counts kills of both vehicles
-      and infantry.
-      <span v-if="summary.type === 'outfit' && members">
-        Totalled across the outfit's {{ members.toLocaleString() }} current
-        members over their whole history, including time before they joined.
-        Refreshed daily; the days filter does not apply.</span
-      >
-    </p>
   </div>
 </template>
 
@@ -91,6 +101,8 @@ import {
 import { Vehicle } from '~/ps2alerts-constants/vehicle'
 import { characterVehicles, outfitVehicles } from '~/utilities/ProfileApi'
 import { commonChartOptions } from '~/constants/CommonChartOptions'
+import { formatDateTime } from '~/utilities/TimeHelper'
+import { DATE_FORMAT } from '~/constants/Time'
 
 const PALETTE = [
   '#e53e3e',
@@ -167,6 +179,19 @@ export default Vue.extend({
     }
   },
   computed: {
+    trackingSince(): string {
+      return formatDateTime(
+        new Date(this.summary.vehiclesTrackedSince),
+        DATE_FORMAT
+      )
+    },
+    // Outfit totals ignore the days filter, so a filtered alert count would not match them
+    showCoverage(): boolean {
+      return (
+        this.summary.totals.alerts > 0 &&
+        (this.summary.type === 'character' || !this.summary.days)
+      )
+    },
     daysApply(): boolean {
       return this.summary.type === 'character' && !!this.summary.days
     },
