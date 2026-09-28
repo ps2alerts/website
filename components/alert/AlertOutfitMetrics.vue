@@ -155,6 +155,16 @@
           <template #no-results>
             <div class="text-2xl text-white font-bold my-6">No results!</div>
           </template>
+          <template #[`item.outfit.name`]="{ item }">
+            <NuxtLink
+              v-if="hasOutfit(item.outfit)"
+              :to="profileHref('outfit', item.outfit.id)"
+              class="label gray border whitespace-nowrap"
+            >
+              {{ item.outfit.name }}
+            </NuxtLink>
+            <span v-else class="text-gray-500">{{ item.outfit.name }}</span>
+          </template>
           <template
             v-if="alert.features && alert.features.xpm"
             #expanded-item="{ item }"
@@ -217,6 +227,7 @@ import { AlertOutfitTableDataInterface } from '~/interfaces/alert/AlertOutfitTab
 import { timeText } from '~/utilities/TimeHelper'
 import { InstanceOutfitWarsResponseInterface } from '~/interfaces/InstanceOutfitWarsResponseInterface'
 import CountdownSpinner from '~/components/common/CountdownSpinner.vue'
+import { profileLink } from '~/utilities/ProfileApi'
 
 export default Vue.extend({
   name: 'AlertOutfitMetrics',
@@ -300,6 +311,14 @@ export default Vue.extend({
     this.init()
   },
   methods: {
+    // Links use the alert's own server; an outfit record's embedded world can be stale
+    profileHref(type: 'character' | 'outfit', id: string): string {
+      return profileLink(type, id, this.alert?.world ?? this.outfitwar?.world)
+    },
+    // Outfit ids 0 to 4 are the "no outfit" placeholders
+    hasOutfit(outfit?: { id: string }): boolean {
+      return !!outfit && parseInt(outfit.id, 10) > 4
+    },
     reset() {
       this.loaded = false
       this.clearTimers()
